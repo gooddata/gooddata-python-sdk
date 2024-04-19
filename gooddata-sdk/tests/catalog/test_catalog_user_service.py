@@ -503,6 +503,9 @@ def test_user_replace_user_groups(test_config):
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "test_get_user_permissions.yaml"))
 def test_get_user_permissions(test_config):
+    """
+    TODO: tests above corrupts result for permissions tests – the fix is required
+    """
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     user_id = test_config["test_user"]
     workspace_id = test_config["workspace"]

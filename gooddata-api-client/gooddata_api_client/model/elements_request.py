@@ -102,6 +102,7 @@ class ElementsRequest(ModelNormal):
         lazy_import()
         return {
             'label': (str,),  # noqa: E501
+            'cache_id': (str,),  # noqa: E501
             'complement_filter': (bool,),  # noqa: E501
             'data_sampling_percentage': (float,),  # noqa: E501
             'depends_on': ([ElementsRequestDependsOnInner],),  # noqa: E501
@@ -120,6 +121,7 @@ class ElementsRequest(ModelNormal):
 
     attribute_map = {
         'label': 'label',  # noqa: E501
+        'cache_id': 'cacheId',  # noqa: E501
         'complement_filter': 'complementFilter',  # noqa: E501
         'data_sampling_percentage': 'dataSamplingPercentage',  # noqa: E501
         'depends_on': 'dependsOn',  # noqa: E501
@@ -175,6 +177,7 @@ class ElementsRequest(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            cache_id (str): If specified, the element data will be taken from the result with the same cacheId if it is available.. [optional]  # noqa: E501
             complement_filter (bool): Inverse filters: * ```false``` - return items matching ```patternFilter``` and ```exactFilter``` * ```true``` - return items not matching ```patternFilter``` and ```exactFilter```. [optional] if omitted the server will use the default value of False  # noqa: E501
             data_sampling_percentage (float): Specifies percentage of source table data scanned during the computation. This field is deprecated and is no longer used during the elements computation.. [optional] if omitted the server will use the default value of 100.0  # noqa: E501
             depends_on ([ElementsRequestDependsOnInner]): Return only items, whose are not filtered out by the parent filters.. [optional]  # noqa: E501
@@ -273,6 +276,7 @@ class ElementsRequest(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            cache_id (str): If specified, the element data will be taken from the result with the same cacheId if it is available.. [optional]  # noqa: E501
             complement_filter (bool): Inverse filters: * ```false``` - return items matching ```patternFilter``` and ```exactFilter``` * ```true``` - return items not matching ```patternFilter``` and ```exactFilter```. [optional] if omitted the server will use the default value of False  # noqa: E501
             data_sampling_percentage (float): Specifies percentage of source table data scanned during the computation. This field is deprecated and is no longer used during the elements computation.. [optional] if omitted the server will use the default value of 100.0  # noqa: E501
             depends_on ([ElementsRequestDependsOnInner]): Return only items, whose are not filtered out by the parent filters.. [optional]  # noqa: E501

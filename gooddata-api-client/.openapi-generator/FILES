@@ -44,6 +44,8 @@ docs/AttributesApi.md
 docs/AvailableAssignees.md
 docs/AvailableDriversApi.md
 docs/CSPDirectivesApi.md
+docs/ClusteringRequest.md
+docs/ClusteringResult.md
 docs/ColumnWarning.md
 docs/ComparisonMeasureValueFilter.md
 docs/ComparisonMeasureValueFilterComparisonMeasureValueFilter.md
@@ -165,13 +167,15 @@ docs/ExecutionResultGrandTotal.md
 docs/ExecutionResultHeader.md
 docs/ExecutionResultPaging.md
 docs/ExecutionSettings.md
+docs/ExportDefinitionsApi.md
 docs/ExportResponse.md
-docs/ExportingApi.md
 docs/FactsApi.md
 docs/File.md
 docs/FilterBy.md
 docs/FilterDefinition.md
 docs/FilterDefinitionForSimpleMeasure.md
+docs/ForecastRequest.md
+docs/ForecastResult.md
 docs/GenerateLdmRequest.md
 docs/GenerateLogicalDataModelApi.md
 docs/GrainIdentifier.md
@@ -350,7 +354,6 @@ docs/JsonApiExportDefinitionIn.md
 docs/JsonApiExportDefinitionInAttributes.md
 docs/JsonApiExportDefinitionInDocument.md
 docs/JsonApiExportDefinitionInRelationships.md
-docs/JsonApiExportDefinitionInRelationshipsFilterContext.md
 docs/JsonApiExportDefinitionInRelationshipsVisualizationObject.md
 docs/JsonApiExportDefinitionOut.md
 docs/JsonApiExportDefinitionOutAttributes.md
@@ -362,6 +365,8 @@ docs/JsonApiExportDefinitionOutWithLinks.md
 docs/JsonApiExportDefinitionPatch.md
 docs/JsonApiExportDefinitionPatchAttributes.md
 docs/JsonApiExportDefinitionPatchDocument.md
+docs/JsonApiExportDefinitionPostOptionalId.md
+docs/JsonApiExportDefinitionPostOptionalIdDocument.md
 docs/JsonApiFactLinkage.md
 docs/JsonApiFactOut.md
 docs/JsonApiFactOutAttributes.md
@@ -384,7 +389,6 @@ docs/JsonApiFilterContextPatchDocument.md
 docs/JsonApiFilterContextPostOptionalId.md
 docs/JsonApiFilterContextPostOptionalIdDocument.md
 docs/JsonApiFilterContextToManyLinkage.md
-docs/JsonApiFilterContextToOneLinkage.md
 docs/JsonApiJwkIn.md
 docs/JsonApiJwkInAttributes.md
 docs/JsonApiJwkInAttributesContent.md
@@ -550,6 +554,7 @@ docs/JsonApiWorkspaceDataFilterToManyLinkage.md
 docs/JsonApiWorkspaceDataFilterToOneLinkage.md
 docs/JsonApiWorkspaceIn.md
 docs/JsonApiWorkspaceInAttributes.md
+docs/JsonApiWorkspaceInAttributesDataSource.md
 docs/JsonApiWorkspaceInDocument.md
 docs/JsonApiWorkspaceInRelationships.md
 docs/JsonApiWorkspaceInRelationshipsParent.md
@@ -655,6 +660,8 @@ docs/Settings.md
 docs/SimpleMeasureDefinition.md
 docs/SimpleMeasureDefinitionMeasure.md
 docs/Skeleton.md
+docs/SmartFunctionResponse.md
+docs/SmartFunctionsApi.md
 docs/SortKey.md
 docs/SortKeyAttribute.md
 docs/SortKeyAttributeAttribute.md
@@ -664,6 +671,7 @@ docs/SortKeyValue.md
 docs/SortKeyValueValue.md
 docs/SqlColumn.md
 docs/TableWarning.md
+docs/TabularExportApi.md
 docs/TabularExportRequest.md
 docs/TestConnectionApi.md
 docs/TestDefinitionRequest.md
@@ -700,7 +708,9 @@ docs/UserSettingsApi.md
 docs/UsersDeclarativeAPIsApi.md
 docs/UsersEntityAPIsApi.md
 docs/ValidateByItem.md
+docs/VisualExportApi.md
 docs/VisualizationObjectApi.md
+docs/WorkspaceDataSource.md
 docs/WorkspaceIdentifier.md
 docs/WorkspaceObjectControllerApi.md
 docs/WorkspacePermissionAssignment.md
@@ -729,7 +739,7 @@ gooddata_api_client/api/datasets_api.py
 gooddata_api_client/api/dependency_graph_api.py
 gooddata_api_client/api/entities_api.py
 gooddata_api_client/api/entitlement_api.py
-gooddata_api_client/api/exporting_api.py
+gooddata_api_client/api/export_definitions_api.py
 gooddata_api_client/api/facts_api.py
 gooddata_api_client/api/generate_logical_data_model_api.py
 gooddata_api_client/api/hierarchy_api.py
@@ -748,6 +758,8 @@ gooddata_api_client/api/permissions_api.py
 gooddata_api_client/api/plugins_api.py
 gooddata_api_client/api/reporting_settings_api.py
 gooddata_api_client/api/scanning_api.py
+gooddata_api_client/api/smart_functions_api.py
+gooddata_api_client/api/tabular_export_api.py
 gooddata_api_client/api/test_connection_api.py
 gooddata_api_client/api/translations_api.py
 gooddata_api_client/api/usage_api.py
@@ -760,6 +772,7 @@ gooddata_api_client/api/user_model_controller_api.py
 gooddata_api_client/api/user_settings_api.py
 gooddata_api_client/api/users_declarative_apis_api.py
 gooddata_api_client/api/users_entity_apis_api.py
+gooddata_api_client/api/visual_export_api.py
 gooddata_api_client/api/visualization_object_api.py
 gooddata_api_client/api/workspace_object_controller_api.py
 gooddata_api_client/api/workspaces_declarative_apis_api.py
@@ -806,6 +819,8 @@ gooddata_api_client/model/attribute_header_out_attribute_header.py
 gooddata_api_client/model/attribute_item.py
 gooddata_api_client/model/attribute_result_header.py
 gooddata_api_client/model/available_assignees.py
+gooddata_api_client/model/clustering_request.py
+gooddata_api_client/model/clustering_result.py
 gooddata_api_client/model/column_warning.py
 gooddata_api_client/model/comparison_measure_value_filter.py
 gooddata_api_client/model/comparison_measure_value_filter_comparison_measure_value_filter.py
@@ -921,6 +936,8 @@ gooddata_api_client/model/file.py
 gooddata_api_client/model/filter_by.py
 gooddata_api_client/model/filter_definition.py
 gooddata_api_client/model/filter_definition_for_simple_measure.py
+gooddata_api_client/model/forecast_request.py
+gooddata_api_client/model/forecast_result.py
 gooddata_api_client/model/generate_ldm_request.py
 gooddata_api_client/model/grain_identifier.py
 gooddata_api_client/model/granted_permission.py
@@ -1095,7 +1112,6 @@ gooddata_api_client/model/json_api_export_definition_in.py
 gooddata_api_client/model/json_api_export_definition_in_attributes.py
 gooddata_api_client/model/json_api_export_definition_in_document.py
 gooddata_api_client/model/json_api_export_definition_in_relationships.py
-gooddata_api_client/model/json_api_export_definition_in_relationships_filter_context.py
 gooddata_api_client/model/json_api_export_definition_in_relationships_visualization_object.py
 gooddata_api_client/model/json_api_export_definition_out.py
 gooddata_api_client/model/json_api_export_definition_out_attributes.py
@@ -1107,6 +1123,8 @@ gooddata_api_client/model/json_api_export_definition_out_with_links.py
 gooddata_api_client/model/json_api_export_definition_patch.py
 gooddata_api_client/model/json_api_export_definition_patch_attributes.py
 gooddata_api_client/model/json_api_export_definition_patch_document.py
+gooddata_api_client/model/json_api_export_definition_post_optional_id.py
+gooddata_api_client/model/json_api_export_definition_post_optional_id_document.py
 gooddata_api_client/model/json_api_fact_linkage.py
 gooddata_api_client/model/json_api_fact_out.py
 gooddata_api_client/model/json_api_fact_out_attributes.py
@@ -1129,7 +1147,6 @@ gooddata_api_client/model/json_api_filter_context_patch_document.py
 gooddata_api_client/model/json_api_filter_context_post_optional_id.py
 gooddata_api_client/model/json_api_filter_context_post_optional_id_document.py
 gooddata_api_client/model/json_api_filter_context_to_many_linkage.py
-gooddata_api_client/model/json_api_filter_context_to_one_linkage.py
 gooddata_api_client/model/json_api_jwk_in.py
 gooddata_api_client/model/json_api_jwk_in_attributes.py
 gooddata_api_client/model/json_api_jwk_in_attributes_content.py
@@ -1295,6 +1312,7 @@ gooddata_api_client/model/json_api_workspace_data_filter_to_many_linkage.py
 gooddata_api_client/model/json_api_workspace_data_filter_to_one_linkage.py
 gooddata_api_client/model/json_api_workspace_in.py
 gooddata_api_client/model/json_api_workspace_in_attributes.py
+gooddata_api_client/model/json_api_workspace_in_attributes_data_source.py
 gooddata_api_client/model/json_api_workspace_in_document.py
 gooddata_api_client/model/json_api_workspace_in_relationships.py
 gooddata_api_client/model/json_api_workspace_in_relationships_parent.py
@@ -1387,6 +1405,7 @@ gooddata_api_client/model/settings.py
 gooddata_api_client/model/simple_measure_definition.py
 gooddata_api_client/model/simple_measure_definition_measure.py
 gooddata_api_client/model/skeleton.py
+gooddata_api_client/model/smart_function_response.py
 gooddata_api_client/model/sort_key.py
 gooddata_api_client/model/sort_key_attribute.py
 gooddata_api_client/model/sort_key_attribute_attribute.py
@@ -1420,6 +1439,7 @@ gooddata_api_client/model/user_management_users_item.py
 gooddata_api_client/model/user_management_workspace_permission_assignment.py
 gooddata_api_client/model/user_permission.py
 gooddata_api_client/model/validate_by_item.py
+gooddata_api_client/model/workspace_data_source.py
 gooddata_api_client/model/workspace_identifier.py
 gooddata_api_client/model/workspace_permission_assignment.py
 gooddata_api_client/model/xliff.py

@@ -156,7 +156,7 @@ class Settings(ModelNormal):
             pdf_table_style ([PdfTableStyle]): Custom CSS styles for the table. (PDF, HTML). [optional]  # noqa: E501
             pdf_top_left_content (str): Top left header content. (PDF). [optional]  # noqa: E501
             pdf_top_right_content (str): Top right header content. (PDF). [optional]  # noqa: E501
-            show_filters (bool): Print applied filters on top of the document. (Not supported yet). [optional]  # noqa: E501
+            show_filters (bool): Print applied filters on top of the document. (PDF/HTML when visualizationObject is given). [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -247,7 +247,7 @@ class Settings(ModelNormal):
             pdf_table_style ([PdfTableStyle]): Custom CSS styles for the table. (PDF, HTML). [optional]  # noqa: E501
             pdf_top_left_content (str): Top left header content. (PDF). [optional]  # noqa: E501
             pdf_top_right_content (str): Top right header content. (PDF). [optional]  # noqa: E501
-            show_filters (bool): Print applied filters on top of the document. (Not supported yet). [optional]  # noqa: E501
+            show_filters (bool): Print applied filters on top of the document. (PDF/HTML when visualizationObject is given). [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

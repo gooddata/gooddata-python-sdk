@@ -15,7 +15,7 @@ Method | HTTP request | Description
 
 Cleans up translations.
 
-Cleans up all translations for a particular locale. Cleaning up the special 'default' locale value is forbidden.
+Cleans up all translations for a particular locale.
 
 ### Example
 
@@ -85,7 +85,7 @@ No authorization required
 
 Get translation tags.
 
-Provides a list of effective translation tags. The resulting array always contains a special 'default' value which points to original not-translated values specified directly in entity attributes.
+Provides a list of effective translation tags.
 
 ### Example
 
@@ -151,7 +151,7 @@ No authorization required
 
 Retrieve translations for entities.
 
-Retrieve all translation for existing entities in a particular locale. The source translations returned by this endpoint are always original, not translated, texts. Because the XLIFF schema definition has the 'xs:language' constraint for the 'srcLang' attribute, it is always set to 'en-US' value. If you use the special 'default' locale value in the request, only source translations are returned.
+Retrieve all translation for existing entities in a particular locale. The source translations returned by this endpoint are always original, not translated, texts. Because the XLIFF schema definition has the 'xs:language' constraint for the 'srcLang' attribute, it is always set to 'en-US' value.
 
 ### Example
 

@@ -518,6 +518,17 @@
               },
               "primaryLabel": {
                 "$ref": "#/components/schemas/RestApiIdentifier"
+              },
+              "valueType": {
+                "enum": [
+                  "TEXT",
+                  "HYPERLINK",
+                  "GEO",
+                  "GEO_LONGITUDE",
+                  "GEO_LATITUDE",
+                  "IMAGE"
+                ],
+                "type": "string"
               }
             },
             "required": [
@@ -574,6 +585,73 @@
         "required": [
           "labelValue",
           "primaryLabelValue"
+        ],
+        "type": "object"
+      },
+      "ClusteringRequest": {
+        "properties": {
+          "numberOfClusters": {
+            "description": "Number of clusters to create",
+            "format": "int32",
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "numberOfClusters"
+        ],
+        "type": "object"
+      },
+      "ClusteringResult": {
+        "properties": {
+          "attribute": {
+            "items": {
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "clusters": {
+            "items": {
+              "format": "int32",
+              "nullable": true,
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "xCoord": {
+            "items": {
+              "nullable": true,
+              "type": "number"
+            },
+            "type": "array",
+            "writeOnly": true
+          },
+          "xcoord": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array"
+          },
+          "yCoord": {
+            "items": {
+              "nullable": true,
+              "type": "number"
+            },
+            "type": "array",
+            "writeOnly": true
+          },
+          "ycoord": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "attribute",
+          "clusters",
+          "xcoord",
+          "ycoord"
         ],
         "type": "object"
       },
@@ -808,6 +886,10 @@
       },
       "ElementsRequest": {
         "properties": {
+          "cacheId": {
+            "description": "If specified, the element data will be taken from the result with the same cacheId if it is available.",
+            "type": "string"
+          },
           "complementFilter": {
             "default": false,
             "description": "Inverse filters:\n* ```false``` - return items matching ```patternFilter``` and ```exactFilter```\n* ```true``` - return items not matching ```patternFilter``` and ```exactFilter```",
@@ -884,6 +966,10 @@
       "ElementsResponse": {
         "description": "Entity holding list of sorted & filtered label elements, related primary label of attribute owning requested label and paging.",
         "properties": {
+          "cacheId": {
+            "description": "The client can use this in subsequent requests (like paging or search) to get results from the same point in time as the previous request. This is useful when the underlying data source has caches disabled and the client wants to avoid seeing inconsistent results and to also avoid excessive queries to the database itself.",
+            "type": "string"
+          },
           "elements": {
             "description": "List of returned elements.",
             "items": {
@@ -1177,6 +1263,80 @@
           {
             "$ref": "#/components/schemas/AttributeFilter"
           }
+        ],
+        "type": "object"
+      },
+      "ForecastRequest": {
+        "properties": {
+          "confidenceLevel": {
+            "default": 0.95,
+            "description": "Confidence interval boundary value.",
+            "exclusiveMaximum": true,
+            "exclusiveMinimum": true,
+            "format": "float",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "type": "number"
+          },
+          "forecastPeriod": {
+            "description": "Number of future periods that should be forecasted",
+            "format": "int32",
+            "type": "integer"
+          },
+          "seasonal": {
+            "default": false,
+            "description": "Whether the input data is seasonal",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "forecastPeriod"
+        ],
+        "type": "object"
+      },
+      "ForecastResult": {
+        "properties": {
+          "attribute": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "lowerBound": {
+            "items": {
+              "nullable": true,
+              "type": "number"
+            },
+            "type": "array"
+          },
+          "origin": {
+            "items": {
+              "nullable": true,
+              "type": "number"
+            },
+            "type": "array"
+          },
+          "prediction": {
+            "items": {
+              "nullable": true,
+              "type": "number"
+            },
+            "type": "array"
+          },
+          "upperBound": {
+            "items": {
+              "nullable": true,
+              "type": "number"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "attribute",
+          "lowerBound",
+          "origin",
+          "prediction",
+          "upperBound"
         ],
         "type": "object"
       },
@@ -1809,6 +1969,17 @@
         },
         "required": [
           "measure"
+        ],
+        "type": "object"
+      },
+      "SmartFunctionResponse": {
+        "properties": {
+          "links": {
+            "$ref": "#/components/schemas/ExecutionLinks"
+          }
+        },
+        "required": [
+          "links"
         ],
         "type": "object"
       },
@@ -2529,6 +2700,262 @@
             "VIEW"
           ]
         }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/functions/clustering/result/{resultId}": {
+      "get": {
+        "description": "(EXPERIMENTAL) Gets clustering result.",
+        "operationId": "clusteringResult",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Result ID",
+            "example": "a9b28f9dc55f37ea9f4a5fb0c76895923591e781",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClusteringResult"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "(EXPERIMENTAL) Smart functions - Clustering Result",
+        "tags": [
+          "Smart Functions",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/functions/clustering/{resultId}": {
+      "post": {
+        "description": "(EXPERIMENTAL) Computes clusters for data points from the provided execution result and parameters.",
+        "operationId": "clustering",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Input result ID to be used in the computation",
+            "example": "9bd52018570364264fcf62d373da6bed313120e8",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Ignore all caches during execution of current request.",
+            "in": "header",
+            "name": "skip-cache",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClusteringRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SmartFunctionResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "(EXPERIMENTAL) Smart functions - Clustering",
+        "tags": [
+          "Smart Functions",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/result/{resultId}": {
+      "get": {
+        "description": "(BETA) Gets forecast result.",
+        "operationId": "forecastResult",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Result ID",
+            "example": "a9b28f9dc55f37ea9f4a5fb0c76895923591e781",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForecastResult"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "(BETA) Smart functions - Forecast Result",
+        "tags": [
+          "Smart Functions",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/{resultId}": {
+      "post": {
+        "description": "(BETA) Computes forecasted data points from the provided execution result and parameters.",
+        "operationId": "forecast",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Input result ID to be used in the computation",
+            "example": "9bd52018570364264fcf62d373da6bed313120e8",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Ignore all caches during execution of current request.",
+            "in": "header",
+            "name": "skip-cache",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForecastRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SmartFunctionResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "(BETA) Smart functions - Forecast",
+        "tags": [
+          "Smart Functions",
+          "actions"
+        ]
       }
     }
   },

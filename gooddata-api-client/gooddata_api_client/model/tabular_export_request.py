@@ -102,6 +102,7 @@ class TabularExportRequest(ModelNormal):
             'execution_result': (str,),  # noqa: E501
             'settings': (Settings,),  # noqa: E501
             'visualization_object': (str,),  # noqa: E501
+            'visualization_object_custom_filters': ([{str: (bool, date, datetime, dict, float, int, list, str, none_type)}],),  # noqa: E501
         }
 
     @cached_property
@@ -116,6 +117,7 @@ class TabularExportRequest(ModelNormal):
         'execution_result': 'executionResult',  # noqa: E501
         'settings': 'settings',  # noqa: E501
         'visualization_object': 'visualizationObject',  # noqa: E501
+        'visualization_object_custom_filters': 'visualizationObjectCustomFilters',  # noqa: E501
     }
 
     read_only_vars = {
@@ -167,6 +169,7 @@ class TabularExportRequest(ModelNormal):
             execution_result (str): Execution result identifier.. [optional]  # noqa: E501
             settings (Settings): [optional]  # noqa: E501
             visualization_object (str): Visualization object identifier. Alternative to executionResult property. (HTML/PDF only). [optional]  # noqa: E501
+            visualization_object_custom_filters ([{str: (bool, date, datetime, dict, float, int, list, str, none_type)}]): Optional custom filters (as array of IFilter objects defined in UI SDK) to be applied when visualizationObject is given. (HTML/PDF only). [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -262,6 +265,7 @@ class TabularExportRequest(ModelNormal):
             execution_result (str): Execution result identifier.. [optional]  # noqa: E501
             settings (Settings): [optional]  # noqa: E501
             visualization_object (str): Visualization object identifier. Alternative to executionResult property. (HTML/PDF only). [optional]  # noqa: E501
+            visualization_object_custom_filters ([{str: (bool, date, datetime, dict, float, int, list, str, none_type)}]): Optional custom filters (as array of IFilter objects defined in UI SDK) to be applied when visualizationObject is given. (HTML/PDF only). [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

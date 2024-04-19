@@ -784,6 +784,12 @@ with gooddata_api_client.ApiClient() as api_client:
         data=JsonApiWorkspaceIn(
             attributes=JsonApiWorkspaceInAttributes(
                 cache_extra_limit=1,
+                data_source=JsonApiWorkspaceInAttributesDataSource(
+                    id="snowflake.instance.1",
+                    schema_path=[
+                        "subPath",
+                    ],
+                ),
                 description="description_example",
                 early_access="early_access_example",
                 name="name_example",
@@ -4231,6 +4237,12 @@ with gooddata_api_client.ApiClient() as api_client:
         data=JsonApiWorkspacePatch(
             attributes=JsonApiWorkspaceInAttributes(
                 cache_extra_limit=1,
+                data_source=JsonApiWorkspaceInAttributesDataSource(
+                    id="snowflake.instance.1",
+                    schema_path=[
+                        "subPath",
+                    ],
+                ),
                 description="description_example",
                 early_access="early_access_example",
                 name="name_example",
@@ -5092,6 +5104,12 @@ with gooddata_api_client.ApiClient() as api_client:
         data=JsonApiWorkspaceIn(
             attributes=JsonApiWorkspaceInAttributes(
                 cache_extra_limit=1,
+                data_source=JsonApiWorkspaceInAttributesDataSource(
+                    id="snowflake.instance.1",
+                    schema_path=[
+                        "subPath",
+                    ],
+                ),
                 description="description_example",
                 early_access="early_access_example",
                 name="name_example",

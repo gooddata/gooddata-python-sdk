@@ -20,7 +20,7 @@ Method | HTTP request | Description
 [**delete_entity_attribute_hierarchies**](WorkspaceObjectControllerApi.md#delete_entity_attribute_hierarchies) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/attributeHierarchies/{objectId} | Delete an Attribute Hierarchy
 [**delete_entity_custom_application_settings**](WorkspaceObjectControllerApi.md#delete_entity_custom_application_settings) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/{objectId} | Delete a Custom Application Setting
 [**delete_entity_dashboard_plugins**](WorkspaceObjectControllerApi.md#delete_entity_dashboard_plugins) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | Delete a Plugin
-[**delete_entity_export_definitions**](WorkspaceObjectControllerApi.md#delete_entity_export_definitions) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/{objectId} | 
+[**delete_entity_export_definitions**](WorkspaceObjectControllerApi.md#delete_entity_export_definitions) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/{objectId} | Delete an Export Definition
 [**delete_entity_filter_contexts**](WorkspaceObjectControllerApi.md#delete_entity_filter_contexts) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | Delete a Context Filter
 [**delete_entity_metrics**](WorkspaceObjectControllerApi.md#delete_entity_metrics) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | Delete a Metric
 [**delete_entity_user_data_filters**](WorkspaceObjectControllerApi.md#delete_entity_user_data_filters) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId} | Delete a User Data Filter
@@ -34,7 +34,7 @@ Method | HTTP request | Description
 [**get_all_entities_custom_application_settings**](WorkspaceObjectControllerApi.md#get_all_entities_custom_application_settings) | **GET** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings | Get all Custom Application Settings
 [**get_all_entities_dashboard_plugins**](WorkspaceObjectControllerApi.md#get_all_entities_dashboard_plugins) | **GET** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins | Get all Plugins
 [**get_all_entities_datasets**](WorkspaceObjectControllerApi.md#get_all_entities_datasets) | **GET** /api/v1/entities/workspaces/{workspaceId}/datasets | Get all Datasets
-[**get_all_entities_export_definitions**](WorkspaceObjectControllerApi.md#get_all_entities_export_definitions) | **GET** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions | 
+[**get_all_entities_export_definitions**](WorkspaceObjectControllerApi.md#get_all_entities_export_definitions) | **GET** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions | Get all Export Definitions
 [**get_all_entities_facts**](WorkspaceObjectControllerApi.md#get_all_entities_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/facts | Get all Facts
 [**get_all_entities_filter_contexts**](WorkspaceObjectControllerApi.md#get_all_entities_filter_contexts) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterContexts | Get all Context Filters
 [**get_all_entities_labels**](WorkspaceObjectControllerApi.md#get_all_entities_labels) | **GET** /api/v1/entities/workspaces/{workspaceId}/labels | Get all Labels
@@ -50,7 +50,7 @@ Method | HTTP request | Description
 [**get_entity_custom_application_settings**](WorkspaceObjectControllerApi.md#get_entity_custom_application_settings) | **GET** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/{objectId} | Get a Custom Application Setting
 [**get_entity_dashboard_plugins**](WorkspaceObjectControllerApi.md#get_entity_dashboard_plugins) | **GET** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | Get a Plugin
 [**get_entity_datasets**](WorkspaceObjectControllerApi.md#get_entity_datasets) | **GET** /api/v1/entities/workspaces/{workspaceId}/datasets/{objectId} | Get a Dataset
-[**get_entity_export_definitions**](WorkspaceObjectControllerApi.md#get_entity_export_definitions) | **GET** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/{objectId} | 
+[**get_entity_export_definitions**](WorkspaceObjectControllerApi.md#get_entity_export_definitions) | **GET** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/{objectId} | Get an Export Definition
 [**get_entity_facts**](WorkspaceObjectControllerApi.md#get_entity_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/facts/{objectId} | Get a Fact
 [**get_entity_filter_contexts**](WorkspaceObjectControllerApi.md#get_entity_filter_contexts) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | Get a Context Filter
 [**get_entity_labels**](WorkspaceObjectControllerApi.md#get_entity_labels) | **GET** /api/v1/entities/workspaces/{workspaceId}/labels/{objectId} | Get a Label
@@ -64,7 +64,7 @@ Method | HTTP request | Description
 [**patch_entity_attribute_hierarchies**](WorkspaceObjectControllerApi.md#patch_entity_attribute_hierarchies) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/attributeHierarchies/{objectId} | Patch an Attribute Hierarchy
 [**patch_entity_custom_application_settings**](WorkspaceObjectControllerApi.md#patch_entity_custom_application_settings) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/{objectId} | Patch a Custom Application Setting
 [**patch_entity_dashboard_plugins**](WorkspaceObjectControllerApi.md#patch_entity_dashboard_plugins) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | Patch a Plugin
-[**patch_entity_export_definitions**](WorkspaceObjectControllerApi.md#patch_entity_export_definitions) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/{objectId} | 
+[**patch_entity_export_definitions**](WorkspaceObjectControllerApi.md#patch_entity_export_definitions) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/{objectId} | Patch an Export Definition
 [**patch_entity_filter_contexts**](WorkspaceObjectControllerApi.md#patch_entity_filter_contexts) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | Patch a Context Filter
 [**patch_entity_metrics**](WorkspaceObjectControllerApi.md#patch_entity_metrics) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | Patch a Metric
 [**patch_entity_user_data_filters**](WorkspaceObjectControllerApi.md#patch_entity_user_data_filters) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId} | Patch a User Data Filter
@@ -76,7 +76,7 @@ Method | HTTP request | Description
 [**update_entity_attribute_hierarchies**](WorkspaceObjectControllerApi.md#update_entity_attribute_hierarchies) | **PUT** /api/v1/entities/workspaces/{workspaceId}/attributeHierarchies/{objectId} | Put an Attribute Hierarchy
 [**update_entity_custom_application_settings**](WorkspaceObjectControllerApi.md#update_entity_custom_application_settings) | **PUT** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/{objectId} | Put a Custom Application Setting
 [**update_entity_dashboard_plugins**](WorkspaceObjectControllerApi.md#update_entity_dashboard_plugins) | **PUT** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | Put a Plugin
-[**update_entity_export_definitions**](WorkspaceObjectControllerApi.md#update_entity_export_definitions) | **PUT** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/{objectId} | 
+[**update_entity_export_definitions**](WorkspaceObjectControllerApi.md#update_entity_export_definitions) | **PUT** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/{objectId} | Put an Export Definition
 [**update_entity_filter_contexts**](WorkspaceObjectControllerApi.md#update_entity_filter_contexts) | **PUT** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | Put a Context Filter
 [**update_entity_metrics**](WorkspaceObjectControllerApi.md#update_entity_metrics) | **PUT** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | Put a Metric
 [**update_entity_user_data_filters**](WorkspaceObjectControllerApi.md#update_entity_user_data_filters) | **PUT** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId} | Put a User Data Filter
@@ -474,7 +474,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **create_entity_export_definitions**
-> JsonApiExportDefinitionOutDocument create_entity_export_definitions(workspace_id, json_api_export_definition_in_document)
+> JsonApiExportDefinitionOutDocument create_entity_export_definitions(workspace_id, json_api_export_definition_post_optional_id_document)
 
 Post Export Definitions
 
@@ -486,7 +486,7 @@ import time
 import gooddata_api_client
 from gooddata_api_client.api import workspace_object_controller_api
 from gooddata_api_client.model.json_api_export_definition_out_document import JsonApiExportDefinitionOutDocument
-from gooddata_api_client.model.json_api_export_definition_in_document import JsonApiExportDefinitionInDocument
+from gooddata_api_client.model.json_api_export_definition_post_optional_id_document import JsonApiExportDefinitionPostOptionalIdDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -500,8 +500,8 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = workspace_object_controller_api.WorkspaceObjectControllerApi(api_client)
     workspace_id = "workspaceId_example" # str | 
-    json_api_export_definition_in_document = JsonApiExportDefinitionInDocument(
-        data=JsonApiExportDefinitionIn(
+    json_api_export_definition_post_optional_id_document = JsonApiExportDefinitionPostOptionalIdDocument(
+        data=JsonApiExportDefinitionPostOptionalId(
             attributes=JsonApiExportDefinitionInAttributes(
                 are_relations_valid=True,
                 description="description_example",
@@ -513,24 +513,21 @@ with gooddata_api_client.ApiClient() as api_client:
             ),
             id="id1",
             relationships=JsonApiExportDefinitionInRelationships(
-                filter_context=JsonApiExportDefinitionInRelationshipsFilterContext(
-                    data=JsonApiFilterContextToOneLinkage(None),
-                ),
                 visualization_object=JsonApiExportDefinitionInRelationshipsVisualizationObject(
                     data=JsonApiVisualizationObjectToOneLinkage(None),
                 ),
             ),
             type="exportDefinition",
         ),
-    ) # JsonApiExportDefinitionInDocument | 
+    ) # JsonApiExportDefinitionPostOptionalIdDocument | 
     include = [
-        "include=visualizationObject,filterContext,createdBy,modifiedBy",
+        "include=visualizationObject,createdBy,modifiedBy",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
 
     # example passing only required values which don't have defaults set
     try:
         # Post Export Definitions
-        api_response = api_instance.create_entity_export_definitions(workspace_id, json_api_export_definition_in_document)
+        api_response = api_instance.create_entity_export_definitions(workspace_id, json_api_export_definition_post_optional_id_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling WorkspaceObjectControllerApi->create_entity_export_definitions: %s\n" % e)
@@ -539,7 +536,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # and optional values
     try:
         # Post Export Definitions
-        api_response = api_instance.create_entity_export_definitions(workspace_id, json_api_export_definition_in_document, include=include)
+        api_response = api_instance.create_entity_export_definitions(workspace_id, json_api_export_definition_post_optional_id_document, include=include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling WorkspaceObjectControllerApi->create_entity_export_definitions: %s\n" % e)
@@ -551,7 +548,7 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
- **json_api_export_definition_in_document** | [**JsonApiExportDefinitionInDocument**](JsonApiExportDefinitionInDocument.md)|  |
+ **json_api_export_definition_post_optional_id_document** | [**JsonApiExportDefinitionPostOptionalIdDocument**](JsonApiExportDefinitionPostOptionalIdDocument.md)|  |
  **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
 
 ### Return type
@@ -1583,7 +1580,7 @@ No authorization required
 # **delete_entity_export_definitions**
 > delete_entity_export_definitions(workspace_id, object_id)
 
-
+Delete an Export Definition
 
 ### Example
 
@@ -1606,10 +1603,11 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = workspace_object_controller_api.WorkspaceObjectControllerApi(api_client)
     workspace_id = "workspaceId_example" # str | 
     object_id = "objectId_example" # str | 
-    filter = "filter=title==someString;description==someString;visualizationObject.id==321;filterContext.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=title==someString;description==someString;visualizationObject.id==321;createdBy.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
+        # Delete an Export Definition
         api_instance.delete_entity_export_definitions(workspace_id, object_id)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling WorkspaceObjectControllerApi->delete_entity_export_definitions: %s\n" % e)
@@ -1617,6 +1615,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Delete an Export Definition
         api_instance.delete_entity_export_definitions(workspace_id, object_id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling WorkspaceObjectControllerApi->delete_entity_export_definitions: %s\n" % e)
@@ -2753,7 +2752,7 @@ No authorization required
 # **get_all_entities_export_definitions**
 > JsonApiExportDefinitionOutList get_all_entities_export_definitions(workspace_id)
 
-
+Get all Export Definitions
 
 ### Example
 
@@ -2777,9 +2776,9 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = workspace_object_controller_api.WorkspaceObjectControllerApi(api_client)
     workspace_id = "workspaceId_example" # str | 
     origin = "ALL" # str |  (optional) if omitted the server will use the default value of "ALL"
-    filter = "filter=title==someString;description==someString;visualizationObject.id==321;filterContext.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=title==someString;description==someString;visualizationObject.id==321;createdBy.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     include = [
-        "include=visualizationObject,filterContext,createdBy,modifiedBy",
+        "include=visualizationObject,createdBy,modifiedBy",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
     page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
     size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
@@ -2793,6 +2792,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get all Export Definitions
         api_response = api_instance.get_all_entities_export_definitions(workspace_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -2801,6 +2801,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get all Export Definitions
         api_response = api_instance.get_all_entities_export_definitions(workspace_id, origin=origin, filter=filter, include=include, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -4231,7 +4232,7 @@ No authorization required
 # **get_entity_export_definitions**
 > JsonApiExportDefinitionOutDocument get_entity_export_definitions(workspace_id, object_id)
 
-
+Get an Export Definition
 
 ### Example
 
@@ -4255,14 +4256,15 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = workspace_object_controller_api.WorkspaceObjectControllerApi(api_client)
     workspace_id = "workspaceId_example" # str | 
     object_id = "objectId_example" # str | 
-    filter = "filter=title==someString;description==someString;visualizationObject.id==321;filterContext.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=title==someString;description==someString;visualizationObject.id==321;createdBy.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     include = [
-        "include=visualizationObject,filterContext,createdBy,modifiedBy",
+        "include=visualizationObject,createdBy,modifiedBy",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
 
     # example passing only required values which don't have defaults set
     try:
+        # Get an Export Definition
         api_response = api_instance.get_entity_export_definitions(workspace_id, object_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -4271,6 +4273,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get an Export Definition
         api_response = api_instance.get_entity_export_definitions(workspace_id, object_id, filter=filter, include=include, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -5488,7 +5491,7 @@ No authorization required
 # **patch_entity_export_definitions**
 > JsonApiExportDefinitionOutDocument patch_entity_export_definitions(workspace_id, object_id, json_api_export_definition_patch_document)
 
-
+Patch an Export Definition
 
 ### Example
 
@@ -5526,9 +5529,6 @@ with gooddata_api_client.ApiClient() as api_client:
             ),
             id="id1",
             relationships=JsonApiExportDefinitionInRelationships(
-                filter_context=JsonApiExportDefinitionInRelationshipsFilterContext(
-                    data=JsonApiFilterContextToOneLinkage(None),
-                ),
                 visualization_object=JsonApiExportDefinitionInRelationshipsVisualizationObject(
                     data=JsonApiVisualizationObjectToOneLinkage(None),
                 ),
@@ -5536,13 +5536,14 @@ with gooddata_api_client.ApiClient() as api_client:
             type="exportDefinition",
         ),
     ) # JsonApiExportDefinitionPatchDocument | 
-    filter = "filter=title==someString;description==someString;visualizationObject.id==321;filterContext.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=title==someString;description==someString;visualizationObject.id==321;createdBy.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     include = [
-        "include=visualizationObject,filterContext,createdBy,modifiedBy",
+        "include=visualizationObject,createdBy,modifiedBy",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
 
     # example passing only required values which don't have defaults set
     try:
+        # Patch an Export Definition
         api_response = api_instance.patch_entity_export_definitions(workspace_id, object_id, json_api_export_definition_patch_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -5551,6 +5552,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Patch an Export Definition
         api_response = api_instance.patch_entity_export_definitions(workspace_id, object_id, json_api_export_definition_patch_document, filter=filter, include=include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -6684,7 +6686,7 @@ No authorization required
 # **update_entity_export_definitions**
 > JsonApiExportDefinitionOutDocument update_entity_export_definitions(workspace_id, object_id, json_api_export_definition_in_document)
 
-
+Put an Export Definition
 
 ### Example
 
@@ -6722,9 +6724,6 @@ with gooddata_api_client.ApiClient() as api_client:
             ),
             id="id1",
             relationships=JsonApiExportDefinitionInRelationships(
-                filter_context=JsonApiExportDefinitionInRelationshipsFilterContext(
-                    data=JsonApiFilterContextToOneLinkage(None),
-                ),
                 visualization_object=JsonApiExportDefinitionInRelationshipsVisualizationObject(
                     data=JsonApiVisualizationObjectToOneLinkage(None),
                 ),
@@ -6732,13 +6731,14 @@ with gooddata_api_client.ApiClient() as api_client:
             type="exportDefinition",
         ),
     ) # JsonApiExportDefinitionInDocument | 
-    filter = "filter=title==someString;description==someString;visualizationObject.id==321;filterContext.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=title==someString;description==someString;visualizationObject.id==321;createdBy.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     include = [
-        "include=visualizationObject,filterContext,createdBy,modifiedBy",
+        "include=visualizationObject,createdBy,modifiedBy",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
 
     # example passing only required values which don't have defaults set
     try:
+        # Put an Export Definition
         api_response = api_instance.update_entity_export_definitions(workspace_id, object_id, json_api_export_definition_in_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -6747,6 +6747,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Put an Export Definition
         api_response = api_instance.update_entity_export_definitions(workspace_id, object_id, json_api_export_definition_in_document, filter=filter, include=include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

@@ -5,6 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **label** | **str** | Requested label. | 
+**cache_id** | **str** | If specified, the element data will be taken from the result with the same cacheId if it is available. | [optional] 
 **complement_filter** | **bool** | Inverse filters: * &#x60;&#x60;&#x60;false&#x60;&#x60;&#x60; - return items matching &#x60;&#x60;&#x60;patternFilter&#x60;&#x60;&#x60; and &#x60;&#x60;&#x60;exactFilter&#x60;&#x60;&#x60; * &#x60;&#x60;&#x60;true&#x60;&#x60;&#x60; - return items not matching &#x60;&#x60;&#x60;patternFilter&#x60;&#x60;&#x60; and &#x60;&#x60;&#x60;exactFilter&#x60;&#x60;&#x60; | [optional]  if omitted the server will use the default value of False
 **data_sampling_percentage** | **float** | Specifies percentage of source table data scanned during the computation. This field is deprecated and is no longer used during the elements computation. | [optional]  if omitted the server will use the default value of 100.0
 **depends_on** | [**[ElementsRequestDependsOnInner]**](ElementsRequestDependsOnInner.md) | Return only items, whose are not filtered out by the parent filters. | [optional] 
