@@ -200,12 +200,16 @@ class DataFrameMetadata:
 
     row_totals_indexes: List[List[int]]
     execution_response: BareExecutionResponse
+    primary_labels_from_index: Dict[int, Dict[str, str]]
+    primary_labels_from_columns: Dict[int, Dict[str, str]]
 
     @classmethod
     def from_data(
         cls,
         headers: Tuple[_DataHeaders, Optional[_DataHeaders]],
         execution_response: BareExecutionResponse,
+        primary_labels_from_index: Dict[int, Dict[str, str]],
+        primary_labels_from_columns: Dict[int, Dict[str, str]],
     ) -> "DataFrameMetadata":
         """This method constructs a DataFrameMetadata object from data headers and an execution response.
 
@@ -219,6 +223,8 @@ class DataFrameMetadata:
         return cls(
             row_totals_indexes=row_totals_indexes,
             execution_response=execution_response,
+            primary_labels_from_index=primary_labels_from_index,
+            primary_labels_from_columns=primary_labels_from_columns,
         )
 
 
@@ -304,6 +310,7 @@ def _read_complete_execution_result(
 def _create_header_mapper(
     response: BareExecutionResponse,
     dim: int,
+    primary_attribute_labels_mapping: Dict[int, Dict[str, str]],
     label_overrides: Optional[LabelOverrides] = None,
     use_local_ids_in_headers: bool = False,
     use_primary_labels_in_attributes: bool = False,
@@ -315,6 +322,8 @@ def _create_header_mapper(
     Args:
         response (BareExecutionResponse): Response structure to gather dimension header details.
         dim (int): Dimension id.
+        primary_attribute_labels_mapping (Dict[int, Dict[str, str]]): Dict to be filled by mapping of primary labels to
+            custom labels per level identified by integer.
         label_overrides (Optional[LabelOverrides]): Label overrides. Defaults to None.
         use_local_ids_in_headers (bool): Use local identifiers of header attributes and metrics. Optional.
             Defaults to False.
@@ -336,10 +345,17 @@ def _create_header_mapper(
             pass
         elif "attributeHeader" in header:
             if "labelValue" in header["attributeHeader"]:
+                label_value = header["attributeHeader"]["labelValue"]
+                primary_label_value = header["attributeHeader"]["primaryLabelValue"]
                 if use_primary_labels_in_attributes:
-                    label = header["attributeHeader"]["primaryLabelValue"]
+                    label = primary_label_value
                 else:
-                    label = header["attributeHeader"]["labelValue"]
+                    label = label_value
+                if header_idx is not None:
+                    if header_idx in primary_attribute_labels_mapping:
+                        primary_attribute_labels_mapping[header_idx][primary_label_value] = label_value
+                    else:
+                        primary_attribute_labels_mapping[header_idx] = {primary_label_value: label_value}
                 # explicitly handle '(empty value)' if it's None otherwise it's not recognizable in final MultiIndex
                 # backend represents ^^^ by "" (datasource value is "") or None (datasource value is NULL) therefore
                 # if both representation are used it's necessary to set label to unique header label (space) to avoid
@@ -382,7 +398,7 @@ def _headers_to_index(
     label_overrides: LabelOverrides,
     use_local_ids_in_headers: bool = False,
     use_primary_labels_in_attributes: bool = False,
-) -> Optional[pandas.Index]:
+) -> Tuple[Optional[pandas.Index], Dict[int, Dict[str, str]]]:
     """Converts headers to a pandas MultiIndex.
 
     This function converts the headers present in the response to a pandas MultiIndex (can be used in pandas dataframes)
@@ -398,10 +414,14 @@ def _headers_to_index(
             Defaults to False.
 
     Returns:
-        Optional[pandas.Index]: A pandas MultiIndex object created from the headers, or None if the headers are empty.
+        Tuple[Optional[pandas.Index], Dict[int, Dict[str, str]]: A pandas MultiIndex object created from the headers
+        with primary attribute labels mapping as Dict, or None with empty Dict if the headers are empty.
     """
+    # dict of primary labels and it's custom labels for attributes per level as key
+    primary_attribute_labels_mapping: Dict[int, Dict[str, str]] = {}
+
     if len(response.dimensions) <= dim_idx or not len(response.dimensions[dim_idx]["headers"]):
-        return None
+        return None, primary_attribute_labels_mapping
 
     mapper = _create_header_mapper(
         response=response,
@@ -409,6 +429,7 @@ def _headers_to_index(
         label_overrides=label_overrides,
         use_local_ids_in_headers=use_local_ids_in_headers,
         use_primary_labels_in_attributes=use_primary_labels_in_attributes,
+        primary_attribute_labels_mapping=primary_attribute_labels_mapping,
     )
 
     return pandas.MultiIndex.from_arrays(
@@ -417,7 +438,7 @@ def _headers_to_index(
             for header_idx, header_group in enumerate(cast(_DataHeaders, headers[dim_idx]))
         ],
         names=[mapper(dim_header, None) for dim_header in (response.dimensions[dim_idx]["headers"])],
-    )
+    ), primary_attribute_labels_mapping
 
 
 def _merge_grand_totals_into_data(extract: _DataWithHeaders) -> Union[_DataArray, List[_DataArray]]:
@@ -507,24 +528,33 @@ def convert_execution_response_to_dataframe(
     full_data = _merge_grand_totals_into_data(extract)
     full_headers = _merge_grand_total_headers_into_headers(extract)
 
-    df = pandas.DataFrame(
-        data=full_data,
-        index=_headers_to_index(
-            dim_idx=0,
-            headers=full_headers,
-            response=execution_response,
-            label_overrides=label_overrides,
-            use_local_ids_in_headers=use_local_ids_in_headers,
-            use_primary_labels_in_attributes=use_primary_labels_in_attributes,
-        ),
-        columns=_headers_to_index(
-            dim_idx=1,
-            headers=full_headers,
-            response=execution_response,
-            label_overrides=label_overrides,
-            use_local_ids_in_headers=use_local_ids_in_headers,
-            use_primary_labels_in_attributes=use_primary_labels_in_attributes,
-        ),
+    index, primary_labels_from_index = _headers_to_index(
+        dim_idx=0,
+        headers=full_headers,
+        response=execution_response,
+        label_overrides=label_overrides,
+        use_local_ids_in_headers=use_local_ids_in_headers,
+        use_primary_labels_in_attributes=use_primary_labels_in_attributes,
     )
 
-    return df, DataFrameMetadata.from_data(headers=full_headers, execution_response=execution_response)
+    columns, primary_labels_from_columns = _headers_to_index(
+        dim_idx=1,
+        headers=full_headers,
+        response=execution_response,
+        label_overrides=label_overrides,
+        use_local_ids_in_headers=use_local_ids_in_headers,
+        use_primary_labels_in_attributes=use_primary_labels_in_attributes,
+    )
+
+    df = pandas.DataFrame(
+        data=full_data,
+        index=index,
+        columns=columns,
+    )
+
+    return df, DataFrameMetadata.from_data(
+        headers=full_headers,
+        execution_response=execution_response,
+        primary_labels_from_index=primary_labels_from_index,
+        primary_labels_from_columns=primary_labels_from_columns,
+    )
