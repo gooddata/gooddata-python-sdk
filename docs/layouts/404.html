@@ -1,0 +1,51 @@
+{{ define "main" -}}
+<div class="row default-404">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-lg-6">
+        <h2 class="mt-0">404 Page</h2>
+        <h1>Ohh, there is nothing in here!</h1>
+
+        {{ if and (isset .Site.Params "404") (isset (index .Site.Params "404") "links") }}
+          <div class="mt-7">
+            <h2 class="mb-4">But you can try:</h2>
+            <ul class="mt-2">
+              {{ range index (index .Site.Params "404") "links" }}
+                <li>
+                  <a href="{{ .link }}">{{ .title }}</a>
+                </li>
+              {{ end }}
+            </ul>
+          </div>
+        {{ end }}
+      </div>
+      <div class="col-12 col-lg-6 d-flex align-items-center justify-content-end">
+        <img class="mw-100" src="https://www.gooddata.com/img/pages/error/error-404_animation.svg" alt="Where did it go?">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row old-version__404 d-none">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-lg-6">
+        <h2 class="mt-0">404 Page</h2>
+        <h1>This version is no longer live</h1>
+
+        {{ if and (isset .Site.Params "404") (isset (index .Site.Params "404") "links") }}
+          <div class="mt-7">
+            <h2 class="mb-4">But you can try:</h2>
+            <a href="https://gooddata.com/docs/python-sdk/latest/">Latest version of Python SDK</a>
+            <p>You can find past versions of the documentation in the Python SDK <a href="https://github.com/gooddata/gooddata-python-sdk">GitHub repository</a>. To retrieve older version, follow the instructions in the <a href="https://github.com/gooddata/gooddata-python-sdk/blob/master/CONTRIBUTING.md">README</a>.</p>
+          </div>
+        {{ end }}
+
+      </div>
+      <div class="col-12 col-lg-6 d-flex align-items-center justify-content-end">
+        <img class="mw-100" src="https://www.gooddata.com/img/pages/error/error-404_animation.svg" alt="Where did it go?">
+      </div>
+    </div>
+  </div>
+</div>
+{{- end }}
