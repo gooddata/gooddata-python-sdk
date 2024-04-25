@@ -35,6 +35,9 @@ def bump_toml(file_path: Path, version: list[int]):
     new_version_data["url"] = "/latest/"
     versions.insert(1, new_version_data)
 
+    # Pop the last version
+    versions.pop()
+
     with open(file_path, "w") as file:
         file.write(tomlkit.dumps(data))
 
