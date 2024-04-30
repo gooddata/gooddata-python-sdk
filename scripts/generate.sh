@@ -9,7 +9,7 @@ remote_name=${1:-origin}
 # target branch where changes will be applied (master, rel/0.7, ...)
 target_branch=${2:-master}
 # Number of the versions to persist. Older ones are accesible only from GitHub.
-num_versions=${4:-4}
+num_versions=${3:-4}
 
 echo "Validating target branch '$target_branch'"
 case "$target_branch" in
@@ -42,6 +42,7 @@ fi
 
 git fetch "$remote_name"
 
+
 latest_branches=()
 # Get all relevant rel/* branches, sort them, and pick the latest num_versions
 while IFS= read -r vers; do
@@ -49,7 +50,7 @@ while IFS= read -r vers; do
 done < <(git branch -rl "$remote_name/rel/*" | sed 's|.*/rel/||' | sort -t. -k1,1n -k2,2n | tail -n"$num_versions")
 
 # Add special branches to the array (only rel/dev and master for now)
-special_branches=("$remote_name/rel/dev")
+special_branches=("$remote_name/rel/dev" "$remote_name/master")
 
 branches_to_process=("${latest_branches[@]}" "${special_branches[@]}")
 
@@ -63,9 +64,17 @@ for branch in "${branches_to_process[@]}" ; do
     target_section=${branch#"$remote_name"/}
     target_section=${target_section#rel/}
     target_section=${target_section%.*}
-    # number of path segments to throw away by tar: content/en/x.y => 3
-    strip_count=3
-    src_section=docs
+    if [ "$target_section" == "master" ] ; then
+        # handle master branch specially, all contents is copied, not just docs
+        target_section=""
+        # number of path segments to throw away by tar: content/en => 2
+        strip_count=2
+        src_section=""
+    else
+        # number of path segments to throw away by tar: content/en/x.y => 3
+        strip_count=3
+        src_section=docs
+    fi
     if [ "$target_section" == "$current_section" ] ; then
         # copy the current docs to proper section
         echo "Getting data from workdir for $branch"
@@ -81,15 +90,19 @@ for branch in "${branches_to_process[@]}" ; do
     if git cat-file -e $API_GEN_FILE; then
         echo "$API_GEN_FILE exists."
         echo "Generating API ref..."
-        if git ls-tree --name-only "$branch" | grep -q "^api_spec.toml$"; then
-            git checkout "$branch" -- api_spec.toml
+        if [ "$target_section" == "" ] ; then
+            echo "Skipping master api ref"
         else
-          echo "removing the API_spec"
-          rm -rf api_spec.toml
+            if git ls-tree --name-only "$branch" | grep -q "^api_spec.toml$"; then
+                git checkout "$branch" -- api_spec.toml
+            else
+              echo "removing the API_spec"
+              rm -rf api_spec.toml
+            fi
+            python3 ../scripts/docs/json_builder.py
+            mv -f data.json ./versioned_docs/"$target_section"/
+            python3 ../scripts/docs/python_ref_builder.py api_spec.toml ./versioned_docs/"$target_section"/data.json "$target_section" versioned_docs
         fi
-        python3 ../scripts/docs/json_builder.py
-        mv -f data.json ./versioned_docs/"$target_section"/
-        python3 ../scripts/docs/python_ref_builder.py api_spec.toml ./versioned_docs/"$target_section"/data.json "$target_section" versioned_docs
     fi
 done
 
@@ -104,4 +117,6 @@ sed "s|${highest_version}|latest|g" ./versioned_docs/latest/links.json > temp.js
 
 mv temp.json ./versioned_docs/latest/links.json
 
+echo "master docs will not be published, removing"
+rm -rf "${content_dir}/docs"
 popd

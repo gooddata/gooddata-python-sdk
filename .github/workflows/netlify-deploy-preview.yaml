@@ -14,41 +14,35 @@ jobs:
   netlify-deploy:
     runs-on: infra1-rxa-xlarge
     steps:
-      - name: Checkout
+      - name: "Checkout Recursive"
         uses: actions/checkout@v4
         with:
           submodules: recursive
-      - name: Checkout
+      - name: "Checkout to PR-tmp"
         uses: actions/checkout@v4
         with:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
           path: 'PR-tmp'
-      - name: Get only changed docs
+      - name: "Get only changed docs"
         run: |
           rsync --delete -av PR-tmp/docs/content/en/ docs/content/en/
           rm -rf PR-tmp
-      - name: Generate Docs
+      - name: "Generate Docs"
         uses: gooddata/gooddata-python-sdk/.github/actions/hugo-build-action@master
         with:
           base-url: https://preview-${{ env.GITHUB_PR_NUMBER }}--${{ env.NETLIFY_SITE_NAME }}.netlify.app
-      - name: Publish
+      - name: "Publish"
         uses: netlify/actions/cli@master
         with:
           args: deploy -d docs/public --alias=preview-${{ env.GITHUB_PR_NUMBER }}
         env:
           NETLIFY_SITE_ID: 93e23db0-d31a-4a12-801a-b9479ffef486 # Not a secret
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-# `htmltest` is after publishing, so we can see the artifact.
-      - name: htmltest
+      # `htmltest` is after publishing, so we can see the artifact.
+      - name: "htmltest"
         run: |
           rm -f htmltest.sh
           wget https://raw.githubusercontent.com/gooddata/gooddata-python-sdk/master/scripts/htmltest.sh
           chmod +x ./htmltest.sh
           ./htmltest.sh -c docs/.htmltest.yml docs/public
-# Commented out, because it has been failing. Check up later.
-#      - name: Comment PR
-#        uses: thollander/actions-comment-pull-request@v2
-#        with:
-#          message: |
-#            https://preview-${{ env.GITHUB_PR_NUMBER }}--${{ env.NETLIFY_SITE_NAME }}.netlify.app/
