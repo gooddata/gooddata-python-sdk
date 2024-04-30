@@ -2,35 +2,18 @@ name: Hugo Build
 description: Builds documentation using Hugo
 inputs:
   base-url:
-    required: false
-    description: Optional base url used during build
-  working-directory:
-    required: false
-    description: Path to documentation directory
-    default: docs
-  hugo-env:
-    required: false
-    description: Environment variable
-    default: public
-  fetch-from:
-    required: false
-    description: repo to fetch the versions from
-    default: origin
+    required: true
+    description: Base url used during build
 
 runs:
   using: "composite"
   steps:
-  - uses: actions/checkout@v4
-  - name: Setup Python
-    uses: actions/setup-python@v5
-    with:
-      python-version-file: ".python-version"
-      cache: 'pip'
-      cache-dependency-path: scripts/script-requirements.txt
-  - uses: actions/setup-go@v4
+  - name: "Setup GO"
+    uses: actions/setup-go@v4
     with:
       go-version: '>=1.20.1'
-  - uses: actions/setup-node@v3
+  - name: "Setup Node"
+    uses: actions/setup-node@v3
     with:
       node-version: 18
   - name: "Setup Hugo"
@@ -45,4 +28,4 @@ runs:
     run: |
       cd docs
       npm install
-      hugo --minify ${BASE_URL:+--baseURL $BASE_URL}
+      hugo --minify ${BASE_URL:+--baseURL $BASE_URL} -e _default
