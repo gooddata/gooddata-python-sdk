@@ -32,28 +32,34 @@ runs:
       run: |
         python -m pip install --upgrade pip
         pip install -r scripts/script-requirements.txt
-    - uses: actions/setup-go@v4
+    - uses: actions/setup-go@v5
       with:
         go-version: '>=1.20.1'
-    - uses: actions/setup-node@v3
+    - name: "Setup Node"
+      uses: actions/setup-node@v4
       with:
-        node-version: 18
-    - name: "Setup Hugo"
-      uses: peaceiris/actions-hugo@v3
-      with:
-        extended: true
-        hugo-version: '0.110.0'
-    - name: "Build"
+        node-version: 20
+        cache: 'npm'
+        cache-dependency-path: docs/package-lock.json
+    - name: "Install Dependencies"
+      working-directory: ./docs
+      shell: bash
+      run: |
+        npm ci
+    - name: "Generate version docs"
+      working-directory: ./docs
+      shell: bash
+      run: |
+        rm -f generate.sh
+        wget https://raw.githubusercontent.com/gooddata/gooddata-python-sdk/master/scripts/generate.sh
+        chmod +x ./generate.sh
+        ./generate.sh ${{ inputs.fetch-from }} master
+    - name: "Build documentation"
+      working-directory: ./docs
       env:
         THIS_BRANCH: ${{ inputs.this-branch }}
         BASE_URL: ${{ inputs.base-url }}
         HUGO_ENV: ${{ inputs.hugo-env }}
       shell: bash
       run: |
-        cd docs
-        rm -f generate.sh
-        wget https://raw.githubusercontent.com/gooddata/gooddata-python-sdk/master/scripts/generate.sh
-        chmod +x ./generate.sh
-        ./generate.sh ${{ inputs.fetch-from }} master
-        npm install
         hugo --minify ${BASE_URL:+--baseURL $BASE_URL}
