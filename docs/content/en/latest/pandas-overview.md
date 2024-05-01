@@ -19,7 +19,7 @@ pip install gooddata-pandas
 
 ### Requirements
 
-- Python 3.8 or newer
+- Python 3.8 or newer???
 - GoodData.CN or GoodData Cloud
 
 
