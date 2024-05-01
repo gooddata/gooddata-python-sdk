@@ -8,7 +8,7 @@ content_dir=versioned_docs
 remote_name=${1:-origin}
 # target branch where changes will be applied (master, rel/0.7, ...)
 target_branch=${2:-master}
-# Number of the versions to persist. Older ones are accesible only from GitHub.
+# Number of the versions to persist. Older ones are accessible only from GitHub.
 num_versions=${3:-4}
 
 echo "Validating target branch '$target_branch'"
@@ -106,6 +106,9 @@ for branch in "${branches_to_process[@]}" ; do
     fi
 done
 
+# Master has to be erased first, as it is in '/latest' and we want to move the latest version there.
+echo "master docs will not be published, removing"
+rm -rf "${content_dir}/latest"
 
 ## Moving the highest version to latest
 highest_version=$(ls -v1 ./versioned_docs/ | grep -E '^[0-9]+.[0-9]+$' | sort -V | tail -n 1)
@@ -117,6 +120,4 @@ sed "s|${highest_version}|latest|g" ./versioned_docs/latest/links.json > temp.js
 
 mv temp.json ./versioned_docs/latest/links.json
 
-echo "master docs will not be published, removing"
-rm -rf "${content_dir}/docs"
 popd
