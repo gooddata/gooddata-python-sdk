@@ -72,7 +72,7 @@ class ExportRequest(Base):
         """
         Validates that the provided format is supported and raises ValueError if not.
         """
-        supported_formats = ["CSV", "XLSX"]
+        supported_formats = ["CSV", "XLSX", "HTML", "PDF"]
         if self.format not in supported_formats:
             raise ValueError(
                 f"format '{self.format}' is not presented " f"in supported formats {','.join(supported_formats)}"
