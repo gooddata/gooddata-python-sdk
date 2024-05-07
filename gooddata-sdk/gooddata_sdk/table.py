@@ -746,6 +746,19 @@ def get_exec_for_non_pivot(visualization: Visualization) -> ExecutionDefinition:
     )
 
 
+def _vis_is_table(visualization: Visualization) -> bool:
+    attributes = visualization._vo.get("attributes")
+    if not attributes:
+        return False
+    content = attributes.get("content")
+    if not content:
+        return False
+    vis_url = content.get("visualizationUrl")
+    if not vis_url:
+        return False
+    return vis_url.split(":")[-1] == "table"
+
+
 class TableService:
     """
     The TableService provides a convenient way to drive computations and access the results in a tabular fashion.
@@ -760,10 +773,13 @@ class TableService:
         self._compute = ComputeService(api_client)
 
     def for_visualization(self, workspace_id: str, visualization: Visualization) -> ExecutionTable:
-        # Assume the received visualization is a pivot table if it contains row ("attribute") bucket
+        # Assume the received visualization is a pivot table if:
+        # - we can parse out "table" suffix from the attributes.contents.visualizationUrl
+        # or
+        # - it contains row ("attribute") bucket
         exec_def = (
             _get_exec_for_pivot(visualization)
-            if visualization.has_bucket_of_type(BucketType.ROWS)
+            if _vis_is_table(visualization) or visualization.has_bucket_of_type(BucketType.ROWS)
             else get_exec_for_non_pivot(visualization)
         )
         response = self._compute.for_exec_def(workspace_id=workspace_id, exec_def=exec_def)
