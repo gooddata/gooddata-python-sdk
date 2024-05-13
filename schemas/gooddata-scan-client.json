@@ -1,6 +1,121 @@
 {
   "components": {
     "schemas": {
+      "ColumnLocation": {
+        "type": "object"
+      },
+      "ColumnStatistic": {
+        "properties": {
+          "type": {
+            "enum": [
+              "COUNT",
+              "COUNT_NULL",
+              "COUNT_UNIQUE",
+              "AVG",
+              "STDDEV",
+              "MIN",
+              "MAX",
+              "PERCENTILE_25",
+              "PERCENTILE_50",
+              "PERCENTILE_75"
+            ],
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "type": "object"
+      },
+      "ColumnStatisticWarning": {
+        "properties": {
+          "action": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "action",
+          "message"
+        ],
+        "type": "object"
+      },
+      "ColumnStatisticsRequest": {
+        "description": "A request to retrieve statistics for a column.",
+        "properties": {
+          "columnName": {
+            "type": "string"
+          },
+          "frequency": {
+            "$ref": "#/components/schemas/FrequencyProperties"
+          },
+          "from": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SqlQuery"
+              },
+              {
+                "$ref": "#/components/schemas/Table"
+              }
+            ]
+          },
+          "histogram": {
+            "$ref": "#/components/schemas/HistogramProperties"
+          },
+          "statistics": {
+            "items": {
+              "enum": [
+                "COUNT",
+                "COUNT_NULL",
+                "COUNT_UNIQUE",
+                "AVG",
+                "STDDEV",
+                "MIN",
+                "MAX",
+                "PERCENTILE_25",
+                "PERCENTILE_50",
+                "PERCENTILE_75"
+              ],
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "columnName",
+          "from"
+        ],
+        "type": "object"
+      },
+      "ColumnStatisticsResponse": {
+        "properties": {
+          "frequency": {
+            "$ref": "#/components/schemas/Frequency"
+          },
+          "histogram": {
+            "$ref": "#/components/schemas/Histogram"
+          },
+          "statistics": {
+            "items": {
+              "$ref": "#/components/schemas/ColumnStatistic"
+            },
+            "type": "array"
+          },
+          "warnings": {
+            "items": {
+              "$ref": "#/components/schemas/ColumnStatisticWarning"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
       "ColumnWarning": {
         "description": "Warning related to single column.",
         "properties": {
@@ -163,6 +278,94 @@
         ],
         "type": "object"
       },
+      "Frequency": {
+        "properties": {
+          "buckets": {
+            "items": {
+              "$ref": "#/components/schemas/FrequencyBucket"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "buckets"
+        ],
+        "type": "object"
+      },
+      "FrequencyBucket": {
+        "properties": {
+          "count": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "count"
+        ],
+        "type": "object"
+      },
+      "FrequencyProperties": {
+        "properties": {
+          "valueLimit": {
+            "default": 10,
+            "description": "The maximum number of distinct values to return.",
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "Histogram": {
+        "properties": {
+          "buckets": {
+            "items": {
+              "$ref": "#/components/schemas/HistogramBucket"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "buckets"
+        ],
+        "type": "object"
+      },
+      "HistogramBucket": {
+        "properties": {
+          "count": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "lowerBound": {
+            "format": "double",
+            "type": "number"
+          },
+          "upperBound": {
+            "format": "double",
+            "type": "number"
+          }
+        },
+        "required": [
+          "count",
+          "lowerBound",
+          "upperBound"
+        ],
+        "type": "object"
+      },
+      "HistogramProperties": {
+        "properties": {
+          "bucketCount": {
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "bucketCount"
+        ],
+        "type": "object"
+      },
       "ScanRequest": {
         "description": "A request containing all information critical to model scanning.",
         "properties": {
@@ -299,6 +502,44 @@
         ],
         "type": "object"
       },
+      "SqlQuery": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ColumnLocation"
+          },
+          {
+            "properties": {
+              "sql": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "sql"
+        ],
+        "type": "object"
+      },
+      "Table": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ColumnLocation"
+          },
+          {
+            "properties": {
+              "tableName": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "tableName"
+        ],
+        "type": "object"
+      },
       "TableWarning": {
         "description": "Warnings related to single table.",
         "properties": {
@@ -367,7 +608,10 @@
               "CLICKHOUSE",
               "MYSQL",
               "MARIADB",
-              "ORACLE"
+              "ORACLE",
+              "PINOT",
+              "SINGLESTORE",
+              "MOTHERDUCK"
             ],
             "example": "POSTGRESQL",
             "type": "string"
@@ -542,6 +786,48 @@
             "MANAGE"
           ]
         }
+      }
+    },
+    "/api/v1/actions/dataSources/{dataSourceId}/computeColumnStatistics": {
+      "post": {
+        "description": "(EXPERIMENTAL) Computes the requested statistical parameters of a column in a data source.",
+        "operationId": "columnStatistics",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "dataSourceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ColumnStatisticsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ColumnStatisticsResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "(EXPERIMENTAL) Compute column statistics",
+        "tags": [
+          "actions"
+        ]
       }
     },
     "/api/v1/actions/dataSources/{dataSourceId}/scan": {

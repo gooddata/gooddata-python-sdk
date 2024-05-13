@@ -125,6 +125,8 @@ Class | Method | HTTP request | Description
 *ComputationApi* | [**compute_valid_descendants**](docs/ComputationApi.md#compute_valid_descendants) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidDescendants | (BETA) Valid descendants
 *ComputationApi* | [**compute_valid_objects**](docs/ComputationApi.md#compute_valid_objects) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidObjects | Valid objects
 *ComputationApi* | [**explain_afm**](docs/ComputationApi.md#explain_afm) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/explain | AFM explain resource.
+*ComputationApi* | [**key_driver_analysis**](docs/ComputationApi.md#key_driver_analysis) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/computeKeyDrivers | (EXPERIMENTAL) Compute key driver analysis
+*ComputationApi* | [**key_driver_analysis_result**](docs/ComputationApi.md#key_driver_analysis_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/computeKeyDrivers/result/{resultId} | (EXPERIMENTAL) Get key driver analysis result
 *ComputationApi* | [**retrieve_execution_metadata**](docs/ComputationApi.md#retrieve_execution_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId}/metadata | Get a single execution result&#39;s metadata.
 *ComputationApi* | [**retrieve_result**](docs/ComputationApi.md#retrieve_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId} | Get a single execution result
 *ContextFiltersApi* | [**create_entity_filter_contexts**](docs/ContextFiltersApi.md#create_entity_filter_contexts) | **POST** /api/v1/entities/workspaces/{workspaceId}/filterContexts | Post Context Filters
@@ -248,6 +250,8 @@ Class | Method | HTTP request | Description
 *ScanningApi* | [**get_data_source_schemata**](docs/ScanningApi.md#get_data_source_schemata) | **GET** /api/v1/actions/dataSources/{dataSourceId}/scanSchemata | Get a list of schema names of a database
 *ScanningApi* | [**scan_data_source**](docs/ScanningApi.md#scan_data_source) | **POST** /api/v1/actions/dataSources/{dataSourceId}/scan | Scan a database to get a physical data model (PDM)
 *ScanningApi* | [**scan_sql**](docs/ScanningApi.md#scan_sql) | **POST** /api/v1/actions/dataSources/{dataSourceId}/scanSql | Collect metadata about SQL query
+*SmartFunctionsApi* | [**anomaly_detection**](docs/SmartFunctionsApi.md#anomaly_detection) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/{resultId} | (EXPERIMENTAL) Smart functions - Anomaly Detection
+*SmartFunctionsApi* | [**anomaly_detection_result**](docs/SmartFunctionsApi.md#anomaly_detection_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/result/{resultId} | (EXPERIMENTAL) Smart functions - Anomaly Detection Result
 *SmartFunctionsApi* | [**clustering**](docs/SmartFunctionsApi.md#clustering) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/clustering/{resultId} | (EXPERIMENTAL) Smart functions - Clustering
 *SmartFunctionsApi* | [**clustering_result**](docs/SmartFunctionsApi.md#clustering_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/clustering/result/{resultId} | (EXPERIMENTAL) Smart functions - Clustering Result
 *SmartFunctionsApi* | [**forecast**](docs/SmartFunctionsApi.md#forecast) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/{resultId} | (BETA) Smart functions - Forecast
@@ -335,11 +339,14 @@ Class | Method | HTTP request | Description
 *WorkspacesSettingsApi* | [**workspace_resolve_all_settings**](docs/WorkspacesSettingsApi.md#workspace_resolve_all_settings) | **GET** /api/v1/actions/workspaces/{workspaceId}/resolveSettings | Values for all settings.
 *WorkspacesSettingsApi* | [**workspace_resolve_settings**](docs/WorkspacesSettingsApi.md#workspace_resolve_settings) | **POST** /api/v1/actions/workspaces/{workspaceId}/resolveSettings | Values for selected settings.
 *ActionsApi* | [**all_platform_usage**](docs/ActionsApi.md#all_platform_usage) | **GET** /api/v1/actions/collectUsage | Info about the platform usage.
+*ActionsApi* | [**anomaly_detection**](docs/ActionsApi.md#anomaly_detection) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/{resultId} | (EXPERIMENTAL) Smart functions - Anomaly Detection
+*ActionsApi* | [**anomaly_detection_result**](docs/ActionsApi.md#anomaly_detection_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/result/{resultId} | (EXPERIMENTAL) Smart functions - Anomaly Detection Result
 *ActionsApi* | [**available_assignees**](docs/ActionsApi.md#available_assignees) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/availableAssignees | Get Available Assignees
 *ActionsApi* | [**check_entity_overrides**](docs/ActionsApi.md#check_entity_overrides) | **POST** /api/v1/actions/workspaces/{workspaceId}/checkEntityOverrides | Finds entities with given ID in hierarchy.
 *ActionsApi* | [**clean_translations**](docs/ActionsApi.md#clean_translations) | **POST** /api/v1/actions/workspaces/{workspaceId}/translations/clean | Cleans up translations.
 *ActionsApi* | [**clustering**](docs/ActionsApi.md#clustering) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/clustering/{resultId} | (EXPERIMENTAL) Smart functions - Clustering
 *ActionsApi* | [**clustering_result**](docs/ActionsApi.md#clustering_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/clustering/result/{resultId} | (EXPERIMENTAL) Smart functions - Clustering Result
+*ActionsApi* | [**column_statistics**](docs/ActionsApi.md#column_statistics) | **POST** /api/v1/actions/dataSources/{dataSourceId}/computeColumnStatistics | (EXPERIMENTAL) Compute column statistics
 *ActionsApi* | [**compute_label_elements_post**](docs/ActionsApi.md#compute_label_elements_post) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/collectLabelElements | Listing of label values. The resulting data are limited by the static platform limit to the maximum of 10000 rows.
 *ActionsApi* | [**compute_report**](docs/ActionsApi.md#compute_report) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute | Executes analytical request and returns link to the result
 *ActionsApi* | [**compute_valid_descendants**](docs/ActionsApi.md#compute_valid_descendants) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidDescendants | (BETA) Valid descendants
@@ -360,6 +367,8 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**get_translation_tags**](docs/ActionsApi.md#get_translation_tags) | **GET** /api/v1/actions/workspaces/{workspaceId}/translations | Get translation tags.
 *ActionsApi* | [**inherited_entity_conflicts**](docs/ActionsApi.md#inherited_entity_conflicts) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityConflicts | Finds identifier conflicts in workspace hierarchy.
 *ActionsApi* | [**inherited_entity_prefixes**](docs/ActionsApi.md#inherited_entity_prefixes) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityPrefixes | Get used entity prefixes in hierarchy
+*ActionsApi* | [**key_driver_analysis**](docs/ActionsApi.md#key_driver_analysis) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/computeKeyDrivers | (EXPERIMENTAL) Compute key driver analysis
+*ActionsApi* | [**key_driver_analysis_result**](docs/ActionsApi.md#key_driver_analysis_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/computeKeyDrivers/result/{resultId} | (EXPERIMENTAL) Get key driver analysis result
 *ActionsApi* | [**manage_dashboard_permissions**](docs/ActionsApi.md#manage_dashboard_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/managePermissions | Manage Permissions for a Dashboard
 *ActionsApi* | [**manage_data_source_permissions**](docs/ActionsApi.md#manage_data_source_permissions) | **POST** /api/v1/actions/dataSources/{dataSourceId}/managePermissions | Manage Permissions for a Data Source
 *ActionsApi* | [**manage_organization_permissions**](docs/ActionsApi.md#manage_organization_permissions) | **POST** /api/v1/actions/organization/managePermissions | Manage Permissions for a Organization
@@ -752,6 +761,8 @@ Class | Method | HTTP request | Description
  - [AfmValidDescendantsResponse](docs/AfmValidDescendantsResponse.md)
  - [AfmValidObjectsQuery](docs/AfmValidObjectsQuery.md)
  - [AfmValidObjectsResponse](docs/AfmValidObjectsResponse.md)
+ - [AnomalyDetectionRequest](docs/AnomalyDetectionRequest.md)
+ - [AnomalyDetectionResult](docs/AnomalyDetectionResult.md)
  - [ApiEntitlement](docs/ApiEntitlement.md)
  - [ArithmeticMeasureDefinition](docs/ArithmeticMeasureDefinition.md)
  - [ArithmeticMeasureDefinitionArithmeticMeasure](docs/ArithmeticMeasureDefinitionArithmeticMeasure.md)
@@ -768,6 +779,12 @@ Class | Method | HTTP request | Description
  - [AvailableAssignees](docs/AvailableAssignees.md)
  - [ClusteringRequest](docs/ClusteringRequest.md)
  - [ClusteringResult](docs/ClusteringResult.md)
+ - [ColumnLocation](docs/ColumnLocation.md)
+ - [ColumnStatistic](docs/ColumnStatistic.md)
+ - [ColumnStatisticWarning](docs/ColumnStatisticWarning.md)
+ - [ColumnStatisticsRequest](docs/ColumnStatisticsRequest.md)
+ - [ColumnStatisticsRequestFrom](docs/ColumnStatisticsRequestFrom.md)
+ - [ColumnStatisticsResponse](docs/ColumnStatisticsResponse.md)
  - [ColumnWarning](docs/ColumnWarning.md)
  - [ComparisonMeasureValueFilter](docs/ComparisonMeasureValueFilter.md)
  - [ComparisonMeasureValueFilterComparisonMeasureValueFilter](docs/ComparisonMeasureValueFilterComparisonMeasureValueFilter.md)
@@ -885,12 +902,18 @@ Class | Method | HTTP request | Description
  - [FilterDefinitionForSimpleMeasure](docs/FilterDefinitionForSimpleMeasure.md)
  - [ForecastRequest](docs/ForecastRequest.md)
  - [ForecastResult](docs/ForecastResult.md)
+ - [Frequency](docs/Frequency.md)
+ - [FrequencyBucket](docs/FrequencyBucket.md)
+ - [FrequencyProperties](docs/FrequencyProperties.md)
  - [GenerateLdmRequest](docs/GenerateLdmRequest.md)
  - [GrainIdentifier](docs/GrainIdentifier.md)
  - [GrantedPermission](docs/GrantedPermission.md)
  - [GranularitiesFormatting](docs/GranularitiesFormatting.md)
  - [HeaderGroup](docs/HeaderGroup.md)
  - [HierarchyObjectIdentification](docs/HierarchyObjectIdentification.md)
+ - [Histogram](docs/Histogram.md)
+ - [HistogramBucket](docs/HistogramBucket.md)
+ - [HistogramProperties](docs/HistogramProperties.md)
  - [IdentifierDuplications](docs/IdentifierDuplications.md)
  - [InlineFilterDefinition](docs/InlineFilterDefinition.md)
  - [InlineFilterDefinitionInline](docs/InlineFilterDefinitionInline.md)
@@ -1285,6 +1308,10 @@ Class | Method | HTTP request | Description
  - [JsonApiWorkspaceSettingPostOptionalId](docs/JsonApiWorkspaceSettingPostOptionalId.md)
  - [JsonApiWorkspaceSettingPostOptionalIdDocument](docs/JsonApiWorkspaceSettingPostOptionalIdDocument.md)
  - [JsonApiWorkspaceToOneLinkage](docs/JsonApiWorkspaceToOneLinkage.md)
+ - [KeyDriversDimension](docs/KeyDriversDimension.md)
+ - [KeyDriversRequest](docs/KeyDriversRequest.md)
+ - [KeyDriversResponse](docs/KeyDriversResponse.md)
+ - [KeyDriversResult](docs/KeyDriversResult.md)
  - [LabelIdentifier](docs/LabelIdentifier.md)
  - [ListLinks](docs/ListLinks.md)
  - [ListLinksAllOf](docs/ListLinksAllOf.md)
@@ -1361,6 +1388,10 @@ Class | Method | HTTP request | Description
  - [SortKeyValue](docs/SortKeyValue.md)
  - [SortKeyValueValue](docs/SortKeyValueValue.md)
  - [SqlColumn](docs/SqlColumn.md)
+ - [SqlQuery](docs/SqlQuery.md)
+ - [SqlQueryAllOf](docs/SqlQueryAllOf.md)
+ - [Table](docs/Table.md)
+ - [TableAllOf](docs/TableAllOf.md)
  - [TableWarning](docs/TableWarning.md)
  - [TabularExportRequest](docs/TabularExportRequest.md)
  - [TestDefinitionRequest](docs/TestDefinitionRequest.md)

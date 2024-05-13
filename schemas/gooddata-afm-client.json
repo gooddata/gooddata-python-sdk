@@ -374,6 +374,49 @@
         ],
         "type": "object"
       },
+      "AnomalyDetectionRequest": {
+        "properties": {
+          "sensitivity": {
+            "description": "Anomaly detection sensitivity.",
+            "format": "float",
+            "type": "number"
+          }
+        },
+        "required": [
+          "sensitivity"
+        ],
+        "type": "object"
+      },
+      "AnomalyDetectionResult": {
+        "properties": {
+          "anomalyFlag": {
+            "items": {
+              "nullable": true,
+              "type": "boolean"
+            },
+            "type": "array"
+          },
+          "attribute": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "values": {
+            "items": {
+              "nullable": true,
+              "type": "number"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "anomalyFlag",
+          "attribute",
+          "values"
+        ],
+        "type": "object"
+      },
       "ArithmeticMeasureDefinition": {
         "description": "Metric representing arithmetics between metrics.",
         "properties": {
@@ -1396,6 +1439,119 @@
         },
         "required": [
           "inline"
+        ],
+        "type": "object"
+      },
+      "KeyDriversDimension": {
+        "properties": {
+          "attribute": {
+            "$ref": "#/components/schemas/RestApiIdentifier"
+          },
+          "attributeName": {
+            "type": "string"
+          },
+          "format": {
+            "$ref": "#/components/schemas/AttributeFormat"
+          },
+          "granularity": {
+            "enum": [
+              "MINUTE",
+              "HOUR",
+              "DAY",
+              "WEEK",
+              "MONTH",
+              "QUARTER",
+              "YEAR",
+              "MINUTE_OF_HOUR",
+              "HOUR_OF_DAY",
+              "DAY_OF_WEEK",
+              "DAY_OF_MONTH",
+              "DAY_OF_YEAR",
+              "WEEK_OF_YEAR",
+              "MONTH_OF_YEAR",
+              "QUARTER_OF_YEAR"
+            ],
+            "type": "string"
+          },
+          "label": {
+            "$ref": "#/components/schemas/RestApiIdentifier"
+          },
+          "labelName": {
+            "type": "string"
+          },
+          "valueType": {
+            "enum": [
+              "TEXT",
+              "HYPERLINK",
+              "GEO",
+              "GEO_LONGITUDE",
+              "GEO_LATITUDE",
+              "IMAGE"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "attribute",
+          "attributeName",
+          "label",
+          "labelName"
+        ],
+        "type": "object"
+      },
+      "KeyDriversRequest": {
+        "properties": {
+          "auxMetrics": {
+            "description": "Additional metrics to be included in the computation, but excluded from the analysis.",
+            "items": {
+              "$ref": "#/components/schemas/MeasureItem"
+            },
+            "type": "array"
+          },
+          "metric": {
+            "$ref": "#/components/schemas/MeasureItem"
+          },
+          "sortDirection": {
+            "default": "DESC",
+            "description": "Sorting elements - ascending/descending order.",
+            "enum": [
+              "ASC",
+              "DESC"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "metric"
+        ],
+        "type": "object"
+      },
+      "KeyDriversResponse": {
+        "properties": {
+          "dimensions": {
+            "items": {
+              "$ref": "#/components/schemas/KeyDriversDimension"
+            },
+            "type": "array"
+          },
+          "links": {
+            "$ref": "#/components/schemas/ExecutionLinks"
+          }
+        },
+        "required": [
+          "dimensions",
+          "links"
+        ],
+        "type": "object"
+      },
+      "KeyDriversResult": {
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
         ],
         "type": "object"
       },
@@ -2700,6 +2856,252 @@
             "VIEW"
           ]
         }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/computeKeyDrivers": {
+      "post": {
+        "description": "(EXPERIMENTAL) Computes key driver analysis for the provided execution definition.",
+        "operationId": "keyDriverAnalysis",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Ignore all caches during execution of current request.",
+            "in": "header",
+            "name": "skip-cache",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/KeyDriversRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KeyDriversResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "(EXPERIMENTAL) Compute key driver analysis",
+        "tags": [
+          "Computation",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/computeKeyDrivers/result/{resultId}": {
+      "get": {
+        "description": "(EXPERIMENTAL) Gets key driver analysis.",
+        "operationId": "keyDriverAnalysisResult",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Result ID",
+            "example": "a9b28f9dc55f37ea9f4a5fb0c76895923591e781",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KeyDriversResult"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "(EXPERIMENTAL) Get key driver analysis result",
+        "tags": [
+          "Computation",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/result/{resultId}": {
+      "get": {
+        "description": "(EXPERIMENTAL) Gets anomalies.",
+        "operationId": "anomalyDetectionResult",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Result ID",
+            "example": "a9b28f9dc55f37ea9f4a5fb0c76895923591e781",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnomalyDetectionResult"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "(EXPERIMENTAL) Smart functions - Anomaly Detection Result",
+        "tags": [
+          "Smart Functions",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/{resultId}": {
+      "post": {
+        "description": "(EXPERIMENTAL) Computes anomaly detection.",
+        "operationId": "anomalyDetection",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Input result ID to be used in the computation",
+            "example": "9bd52018570364264fcf62d373da6bed313120e8",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Ignore all caches during execution of current request.",
+            "in": "header",
+            "name": "skip-cache",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnomalyDetectionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SmartFunctionResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "(EXPERIMENTAL) Smart functions - Anomaly Detection",
+        "tags": [
+          "Smart Functions",
+          "actions"
+        ]
       }
     },
     "/api/v1/actions/workspaces/{workspaceId}/execution/functions/clustering/result/{resultId}": {
