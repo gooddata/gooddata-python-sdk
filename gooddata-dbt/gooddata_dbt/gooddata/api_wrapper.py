@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Any, List, Union
 
 from gooddata_sdk import (
+    CatalogDataSourceMotherDuck,
     CatalogDataSourcePostgres,
     CatalogDataSourceSnowflake,
     CatalogDataSourceVertica,
@@ -20,7 +21,12 @@ from gooddata_sdk import (
 
 from gooddata_dbt.gooddata.config import GoodDataConfigLocalizationTo, GoodDataConfigProduct
 
-DataSource = Union[CatalogDataSourcePostgres, CatalogDataSourceSnowflake, CatalogDataSourceVertica]
+DataSource = Union[
+    CatalogDataSourcePostgres,
+    CatalogDataSourceSnowflake,
+    CatalogDataSourceVertica,
+    CatalogDataSourceMotherDuck,
+]
 
 
 class GoodDataApiWrapper:

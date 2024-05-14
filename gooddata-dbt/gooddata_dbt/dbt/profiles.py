@@ -9,11 +9,14 @@ import attrs
 import yaml
 from gooddata_sdk import (
     BasicCredentials,
+    CatalogDataSourceMotherDuck,
     CatalogDataSourcePostgres,
     CatalogDataSourceSnowflake,
     CatalogDataSourceVertica,
+    MotherDuckAttributes,
     PostgresAttributes,
     SnowflakeAttributes,
+    TokenCredentialsFromEnvVar,
     VerticaAttributes,
 )
 
@@ -112,13 +115,50 @@ class DbtOutputVertica(Base):
         )
 
 
-DbtOutput = Union[DbtOutputPostgreSQL, DbtOutputSnowflake, DbtOutputVertica]
+@attrs.define(auto_attribs=True, kw_only=True)
+class DbtOutputMotherDuck(Base):
+    name: str
+    title: str
+    path: str
+    schema: str
+    database: str = ""
+
+    def __attrs_post_init__(self) -> None:
+        self.database = self.validate_connection_props()
+
+    def validate_connection_props(self) -> str:
+        if not self.path.startswith("md:"):
+            raise ValueError(f"Path {self.path} is not a valid MotherDuck path.")
+        _, db_name = self.path.split(":", 1)
+        if db_name:
+            return db_name
+        elif self.database:
+            return self.database
+        else:
+            raise ValueError(f"Database name is neither specified in {self.path=} nor in {self.database=}")
+
+    def to_gooddata(self, data_source_id: str, schema_name: str) -> CatalogDataSourceMotherDuck:
+        return CatalogDataSourceMotherDuck(
+            id=data_source_id,
+            name=self.title,
+            db_specific_attributes=MotherDuckAttributes(
+                db_name=quote_plus(self.database),
+            ),
+            # Schema name is collected from dbt manifest from relevant tables
+            schema=schema_name,
+            credentials=TokenCredentialsFromEnvVar(
+                env_var_name="MOTHERDUCK_TOKEN",
+            ),
+        )
+
+
+DbtOutput = Union[DbtOutputPostgreSQL, DbtOutputSnowflake, DbtOutputVertica, DbtOutputMotherDuck]
 
 
 @attrs.define(auto_attribs=True, kw_only=True)
 class DbtProfile(Base):
     name: str
-    outputs: List[Union[DbtOutputPostgreSQL, DbtOutputSnowflake, DbtOutputVertica]]
+    outputs: List[DbtOutput]
 
 
 class DbtProfiles:
@@ -135,14 +175,17 @@ class DbtProfiles:
 
     @staticmethod
     def inject_env_vars(output_def: Dict) -> None:
-        env_re = re.compile(r"env_var\('([^']+)'(,\s*'([^']+)')?\)")
+        env_re = re.compile(r"\{\{ env_var\('([^']+)'(,\s*'([^']+)')?\) \}\}")
         for output_key, output_value in output_def.items():
             if (env_match := env_re.search(str(output_value))) is not None:
                 default_value = None
                 if len(env_match.groups()) == 3:
                     default_value = env_match.group(3)
                 final_value = os.getenv(env_match.group(1)) or default_value
-                output_def[output_key] = final_value
+                if final_value is None:
+                    output_def[output_key] = ""
+                else:
+                    output_def[output_key] = env_re.sub(final_value, str(output_value))
             # else do nothing, real value seems to be stored in dbt profile
 
     @staticmethod
@@ -154,6 +197,8 @@ class DbtProfiles:
             return DbtOutputSnowflake.from_dict({"name": output, **output_def})
         elif db_type == "vertica":
             return DbtOutputVertica.from_dict({"name": output, **output_def})
+        elif db_type == "duckdb":
+            return DbtOutputMotherDuck.from_dict({"name": output, **output_def})
         else:
             raise Exception(f"Unsupported database type {output=} {db_type=}")
 

@@ -80,6 +80,9 @@ class TestDefinitionRequest(ModelNormal):
             'MYSQL': "MYSQL",
             'MARIADB': "MARIADB",
             'ORACLE': "ORACLE",
+            'PINOT': "PINOT",
+            'SINGLESTORE': "SINGLESTORE",
+            'MOTHERDUCK': "MOTHERDUCK",
         },
     }
 

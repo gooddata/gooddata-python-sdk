@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import base64
+import os
 from pathlib import Path
 from typing import Any, ClassVar, Dict, List, Optional, Type, TypeVar
 
@@ -179,6 +180,34 @@ class TokenCredentialsFromFile(Credentials):
     def token_from_file(file_path: Path) -> str:
         with open(file_path, "rb") as fp:
             return base64.b64encode(fp.read()).decode("utf-8")
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class TokenCredentialsFromEnvVar(Credentials):
+    env_var_name: str
+    token: str = attr.field(init=False, repr=lambda value: "***")
+
+    def __attrs_post_init__(self) -> None:
+        self.token = self.token_from_env_var(self.env_var_name)
+
+    def to_api_args(self) -> dict[str, Any]:
+        return {self.TOKEN_KEY: self.token}
+
+    @classmethod
+    def is_part_of_api(cls, entity: dict[str, Any]) -> bool:
+        return cls.USER_KEY not in entity
+
+    @classmethod
+    def from_api(cls, entity: dict[str, Any]) -> TokenCredentialsFromEnvVar:
+        # Credentials are not returned for security reasons
+        raise NotImplementedError
+
+    @staticmethod
+    def token_from_env_var(env_var_name: str) -> str:
+        token = os.getenv(env_var_name)
+        if token is None or token == "":
+            raise ValueError(f"Environment variable {env_var_name} is not set")
+        return base64.b64encode(token.encode("utf-8")).decode("utf-8")
 
 
 @attr.s(auto_attribs=True, kw_only=True)
