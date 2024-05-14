@@ -279,3 +279,14 @@ class CatalogDataSourceMySql(CatalogDataSource):
 class CatalogDataSourceMariaDb(CatalogDataSourceMySql):
     type: str = "MARIADB"
     db_vendor: str = "mariadb"
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class MotherDuckAttributes(DatabaseAttributes):
+    db_name: str
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogDataSourceMotherDuck(CatalogDataSource):
+    _URL_TMPL: ClassVar[str] = "jdbc:duckdb:md:{db_name}"
+    type: str = "MOTHERDUCK"

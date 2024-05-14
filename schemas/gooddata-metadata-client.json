@@ -976,7 +976,10 @@
               "CLICKHOUSE",
               "MYSQL",
               "MARIADB",
-              "ORACLE"
+              "ORACLE",
+              "PINOT",
+              "SINGLESTORE",
+              "MOTHERDUCK"
             ],
             "example": "POSTGRESQL",
             "type": "string"
@@ -1909,7 +1912,8 @@
               "WEEK_START",
               "SHOW_HIDDEN_CATALOG_ITEMS",
               "OPERATOR_OVERRIDES",
-              "TIMEZONE_VALIDATION_ENABLED"
+              "TIMEZONE_VALIDATION_ENABLED",
+              "OPENAI_CONFIG"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -5790,7 +5794,10 @@
                   "CLICKHOUSE",
                   "MYSQL",
                   "MARIADB",
-                  "ORACLE"
+                  "ORACLE",
+                  "PINOT",
+                  "SINGLESTORE",
+                  "MOTHERDUCK"
                 ],
                 "type": "string"
               }
@@ -5982,7 +5989,10 @@
                   "CLICKHOUSE",
                   "MYSQL",
                   "MARIADB",
-                  "ORACLE"
+                  "ORACLE",
+                  "PINOT",
+                  "SINGLESTORE",
+                  "MOTHERDUCK"
                 ],
                 "type": "string"
               },
@@ -6138,7 +6148,10 @@
                   "CLICKHOUSE",
                   "MYSQL",
                   "MARIADB",
-                  "ORACLE"
+                  "ORACLE",
+                  "PINOT",
+                  "SINGLESTORE",
+                  "MOTHERDUCK"
                 ],
                 "type": "string"
               },
@@ -6342,7 +6355,10 @@
                   "CLICKHOUSE",
                   "MYSQL",
                   "MARIADB",
-                  "ORACLE"
+                  "ORACLE",
+                  "PINOT",
+                  "SINGLESTORE",
+                  "MOTHERDUCK"
                 ],
                 "type": "string"
               },
@@ -8920,6 +8936,7 @@
               },
               "earlyAccess": {
                 "maxLength": 255,
+                "nullable": true,
                 "type": "string"
               },
               "hostname": {
@@ -8932,6 +8949,7 @@
               },
               "name": {
                 "maxLength": 255,
+                "nullable": true,
                 "type": "string"
               },
               "oauthClientId": {
@@ -9023,6 +9041,7 @@
               },
               "earlyAccess": {
                 "maxLength": 255,
+                "nullable": true,
                 "type": "string"
               },
               "hostname": {
@@ -9035,6 +9054,7 @@
               },
               "name": {
                 "maxLength": 255,
+                "nullable": true,
                 "type": "string"
               },
               "oauthClientId": {
@@ -9169,6 +9189,7 @@
               },
               "earlyAccess": {
                 "maxLength": 255,
+                "nullable": true,
                 "type": "string"
               },
               "hostname": {
@@ -9181,6 +9202,7 @@
               },
               "name": {
                 "maxLength": 255,
+                "nullable": true,
                 "type": "string"
               },
               "oauthClientId": {
@@ -9265,7 +9287,8 @@
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
-                  "TIMEZONE_VALIDATION_ENABLED"
+                  "TIMEZONE_VALIDATION_ENABLED",
+                  "OPENAI_CONFIG"
                 ],
                 "type": "string"
               }
@@ -9327,7 +9350,8 @@
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
-                  "TIMEZONE_VALIDATION_ENABLED"
+                  "TIMEZONE_VALIDATION_ENABLED",
+                  "OPENAI_CONFIG"
                 ],
                 "type": "string"
               }
@@ -9429,7 +9453,8 @@
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
-                  "TIMEZONE_VALIDATION_ENABLED"
+                  "TIMEZONE_VALIDATION_ENABLED",
+                  "OPENAI_CONFIG"
                 ],
                 "type": "string"
               }
@@ -10897,7 +10922,8 @@
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
-                  "TIMEZONE_VALIDATION_ENABLED"
+                  "TIMEZONE_VALIDATION_ENABLED",
+                  "OPENAI_CONFIG"
                 ],
                 "type": "string"
               }
@@ -10959,7 +10985,8 @@
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
-                  "TIMEZONE_VALIDATION_ENABLED"
+                  "TIMEZONE_VALIDATION_ENABLED",
+                  "OPENAI_CONFIG"
                 ],
                 "type": "string"
               }
@@ -12211,19 +12238,23 @@
               },
               "description": {
                 "maxLength": 255,
+                "nullable": true,
                 "type": "string"
               },
               "earlyAccess": {
                 "maxLength": 255,
+                "nullable": true,
                 "type": "string"
               },
               "name": {
                 "maxLength": 255,
+                "nullable": true,
                 "type": "string"
               },
               "prefix": {
                 "description": "Custom prefix of entity identifiers in workspace",
                 "maxLength": 255,
+                "nullable": true,
                 "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
                 "type": "string"
               }
@@ -12331,19 +12362,23 @@
               },
               "description": {
                 "maxLength": 255,
+                "nullable": true,
                 "type": "string"
               },
               "earlyAccess": {
                 "maxLength": 255,
+                "nullable": true,
                 "type": "string"
               },
               "name": {
                 "maxLength": 255,
+                "nullable": true,
                 "type": "string"
               },
               "prefix": {
                 "description": "Custom prefix of entity identifiers in workspace",
                 "maxLength": 255,
+                "nullable": true,
                 "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
                 "type": "string"
               }
@@ -12554,19 +12589,23 @@
               },
               "description": {
                 "maxLength": 255,
+                "nullable": true,
                 "type": "string"
               },
               "earlyAccess": {
                 "maxLength": 255,
+                "nullable": true,
                 "type": "string"
               },
               "name": {
                 "maxLength": 255,
+                "nullable": true,
                 "type": "string"
               },
               "prefix": {
                 "description": "Custom prefix of entity identifiers in workspace",
                 "maxLength": 255,
+                "nullable": true,
                 "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
                 "type": "string"
               }
@@ -12644,7 +12683,8 @@
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
-                  "TIMEZONE_VALIDATION_ENABLED"
+                  "TIMEZONE_VALIDATION_ENABLED",
+                  "OPENAI_CONFIG"
                 ],
                 "type": "string"
               }
@@ -12706,7 +12746,8 @@
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
-                  "TIMEZONE_VALIDATION_ENABLED"
+                  "TIMEZONE_VALIDATION_ENABLED",
+                  "OPENAI_CONFIG"
                 ],
                 "type": "string"
               }
@@ -12834,7 +12875,8 @@
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
-                  "TIMEZONE_VALIDATION_ENABLED"
+                  "TIMEZONE_VALIDATION_ENABLED",
+                  "OPENAI_CONFIG"
                 ],
                 "type": "string"
               }
@@ -12896,7 +12938,8 @@
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
-                  "TIMEZONE_VALIDATION_ENABLED"
+                  "TIMEZONE_VALIDATION_ENABLED",
+                  "OPENAI_CONFIG"
                 ],
                 "type": "string"
               }
@@ -13399,7 +13442,8 @@
               "WEEK_START",
               "SHOW_HIDDEN_CATALOG_ITEMS",
               "OPERATOR_OVERRIDES",
-              "TIMEZONE_VALIDATION_ENABLED"
+              "TIMEZONE_VALIDATION_ENABLED",
+              "OPENAI_CONFIG"
             ],
             "example": "TIMEZONE",
             "type": "string"
