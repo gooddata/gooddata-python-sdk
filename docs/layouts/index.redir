@@ -1,9 +1,10 @@
 # Redirect homepage to the latest version
 / {{ .Site.BaseURL }}/latest/ 301!
 /docs/ {{ .Site.BaseURL }}/latest/ 301!
-/1.18/ {{ .Site.BaseURL }}/latest 301!
-/1.18.1/ {{ .Site.BaseURL }}/latest 301!
-/1.18.0/ {{ .Site.BaseURL }}/latest 301!
+/1.19/ {{ .Site.BaseURL }}/latest 301!
+/1.19.0/ {{ .Site.BaseURL }}/latest 301!
+/1.18.1/ {{ .Site.BaseURL }}/1.18 301!
+/1.18.0/ {{ .Site.BaseURL }}/1.18 301!
 /1.17.0/ {{ .Site.BaseURL }}/1.17 301!
 /1.16.0/ {{ .Site.BaseURL }}/1.16 301!
 /1.15.0/ {{ .Site.BaseURL }}/1.15 301!
