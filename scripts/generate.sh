@@ -73,7 +73,11 @@ for branch in "${branches_to_process[@]}" ; do
     else
         # number of path segments to throw away by tar: content/en/x.y => 3
         strip_count=3
-        src_section=docs
+        if git ls-tree -d "$branch" -- "content/en/docs" | grep -q "content/en/docs"; then
+          src_section=docs
+        else
+          src_section=latest
+        fi
     fi
     if [ "$target_section" == "$current_section" ] ; then
         # copy the current docs to proper section
