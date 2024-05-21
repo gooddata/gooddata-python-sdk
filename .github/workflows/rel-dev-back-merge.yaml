@@ -12,7 +12,9 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-    runs-on: infra1-small
+    runs-on:
+      group: infra1-runners-arc
+      labels: runners-small
     steps:
       - uses: gooddata/gooddata-python-sdk/.github/actions/merge@master
         with:
