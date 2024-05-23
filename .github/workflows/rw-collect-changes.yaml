@@ -16,7 +16,9 @@ on:
 
 jobs:
   collect-changes:
-    runs-on: infra1-small
+    runs-on:
+      group: infra1-runners-arc
+      labels: runners-small
     outputs:
       docs: "${{ steps.filter.outputs.docs}}"
       python-modules: "${{ steps.filter.outputs.python-modules}}"

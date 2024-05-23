@@ -32,7 +32,9 @@ jobs:
     # do not change the name of this job, it is used by the required status check
     # in GitHub, you WILL break merging if you change it
     name: status-check
-    runs-on: infra1-small
+    runs-on:
+      group: infra1-runners-arc
+      labels: runners-small
     if: always()
     needs:
       - test-python
