@@ -3,7 +3,6 @@ from __future__ import annotations
 
 from pathlib import Path
 from typing import Optional
-from warnings import warn
 
 from gooddata_sdk.catalog.data_source.service import CatalogDataSourceService
 from gooddata_sdk.catalog.export.service import ExportService
@@ -17,7 +16,7 @@ from gooddata_sdk.compute.service import ComputeService
 from gooddata_sdk.support import SupportService
 from gooddata_sdk.table import TableService
 from gooddata_sdk.utils import PROFILES_FILE_PATH, profile_content
-from gooddata_sdk.visualization import InsightService, VisualizationService
+from gooddata_sdk.visualization import VisualizationService
 
 
 class GoodDataSdk:
@@ -74,7 +73,6 @@ class GoodDataSdk:
         self._catalog_organization = CatalogOrganizationService(self._client)
         self._catalog_user = CatalogUserService(self._client)
         self._compute = ComputeService(self._client)
-        self._insights = InsightService(self._client)
         self._visualizations = VisualizationService(self._client)
         self._tables = TableService(self._client)
         self._support = SupportService(self._client)
@@ -100,16 +98,6 @@ class GoodDataSdk:
     @property
     def compute(self) -> ComputeService:
         return self._compute
-
-    @property
-    def insights(self) -> InsightService:
-        warn(
-            "This property is deprecated and it will be removed in v1.20.0 release. "
-            "Please use 'visualizations' property instead.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        return self._insights
 
     @property
     def visualizations(self) -> VisualizationService:

@@ -27,7 +27,7 @@ There are three important things to remember:
 
 ### Type conversion tests
 
-There are a bunch of tests in [compute_model](./compute_model) and [insight](./visualization) whose purpose is to verify
+There are a bunch of tests in [compute_model](./compute_model) and [visualization](./visualization) whose purpose is to verify
 that conversion from internal models to the API models (stored in gooddata-api-client) work
 as intended.
 

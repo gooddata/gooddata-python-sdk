@@ -2,7 +2,6 @@
 import time
 from pathlib import Path
 from typing import Callable, Optional, Tuple, Union
-from warnings import warn
 
 from gooddata_api_client.exceptions import NotFoundException
 from gooddata_api_client.model.pdf_export_request import PdfExportRequest
@@ -284,15 +283,6 @@ class ExportService(CatalogServiceBase):
                 f"or visualization visualization_id='{visualization_id}' does not exist."
             )
 
-    def _get_insight_exec_table(self, workspace_id: str, insight_id: str) -> Tuple[ExecutionTable, str]:
-        warn(
-            "This method is deprecated and it will be removed in v1.20.0 release. "
-            "Please use '_get_visualization_exec_table' method instead.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        return self._get_visualization_exec_table(workspace_id, insight_id)
-
     def export_tabular_by_visualization_id(
         self,
         workspace_id: str,
@@ -340,34 +330,4 @@ class ExportService(CatalogServiceBase):
             timeout=timeout,
             retry=retry,
             max_retry=max_retry,
-        )
-
-    def export_tabular_by_insight_id(
-        self,
-        workspace_id: str,
-        insight_id: str,
-        file_format: str,
-        file_name: Optional[str] = None,
-        settings: Optional[ExportSettings] = None,
-        store_path: Union[str, Path] = Path.cwd(),
-        timeout: float = 60.0,
-        retry: float = 0.2,
-        max_retry: float = 5.0,
-    ) -> None:
-        warn(
-            "This method is deprecated and it will be removed in v1.20.0 release. "
-            "Please use 'export_tabular_by_visualization_id' method instead.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        self.export_tabular_by_visualization_id(
-            workspace_id,
-            insight_id,
-            file_format,
-            file_name,
-            settings,
-            store_path,
-            timeout,
-            retry,
-            max_retry,
         )

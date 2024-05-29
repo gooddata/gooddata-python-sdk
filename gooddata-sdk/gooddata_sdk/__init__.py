@@ -230,11 +230,6 @@ from gooddata_sdk.sdk import GoodDataSdk
 from gooddata_sdk.table import ExecutionTable, TableService
 from gooddata_sdk.utils import SideLoads
 from gooddata_sdk.visualization import (
-    Insight,
-    InsightAttribute,
-    InsightBucket,
-    InsightMetric,
-    InsightService,
     Visualization,
     VisualizationAttribute,
     VisualizationBucket,

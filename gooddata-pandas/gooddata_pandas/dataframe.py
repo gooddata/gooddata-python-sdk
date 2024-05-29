@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 from typing import Optional, Tuple, Union
-from warnings import warn
 
 import pandas
 from gooddata_api_client import models
@@ -183,15 +182,6 @@ class DataFrameFactory:
         }
 
         return self.for_items(columns, filter_by=filter_by, auto_index=auto_index)
-
-    def for_insight(self, insight_id: str, auto_index: bool = True) -> pandas.DataFrame:
-        warn(
-            "This method is deprecated and it will be removed in v1.20.0 release. "
-            "Please use 'for_visualization' method instead.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        return self.for_visualization(insight_id, auto_index)
 
     def result_cache_metadata_for_exec_result_id(self, result_id: str) -> ResultCacheMetadata:
         """

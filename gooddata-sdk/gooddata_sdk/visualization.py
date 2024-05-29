@@ -5,7 +5,6 @@ import functools
 from collections import defaultdict
 from enum import Enum
 from typing import Any, Optional, Union, cast
-from warnings import warn
 
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.model.attribute import Attribute
@@ -661,7 +660,7 @@ class Visualization:
 
     def get_labels_and_formats(self) -> tuple[dict[str, str], dict[str, str]]:
         """
-        Extracts labels and custom measure formats from the insight.
+        Extracts labels and custom measure formats from the visualization.
 
         :return: tuple of labels dict ({"label_id":"Label"}) and formats dict ({"measure_id":"#,##0.00"})
         """
@@ -759,105 +758,3 @@ class VisualizationService:
         side_loads = SideLoads(vis_obj.included)
 
         return Visualization(vis_obj.data, side_loads)
-
-    def get_insights(self, workspace_id: str) -> list[Visualization]:
-        warn(
-            "This method is deprecated and it will be removed in v1.20.0 release. "
-            "Please use 'get_visualizations' method instead.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        return self.get_visualizations(workspace_id)
-
-    def get_insight(self, workspace_id: str, insight_id: str) -> Visualization:
-        warn(
-            "This method is deprecated and it will be removed in v1.20.0 release. "
-            "Please use 'get_visualization' method instead.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        return self.get_visualization(workspace_id, insight_id)
-
-
-# Note: the classes below are going to be deprecated
-
-
-class InsightMetric(VisualizationMetric):
-    def __init__(self, metric: dict[str, Any]) -> None:
-        warn(
-            "This class is deprecated and it will be removed in v1.20.0 release. "
-            "Please use 'VisualizationMetric' class instead.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        super().__init__(metric)
-
-
-class InsightAttribute(VisualizationAttribute):
-    def __init__(self, attribute: dict[str, Any]) -> None:
-        warn(
-            "This class is deprecated and it will be removed in v1.20.0 release. "
-            "Please use 'VisualizationAttribute' class instead.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        super().__init__(attribute)
-
-
-class InsightTotal(VisualizationTotal):
-    def __init__(self, total: dict[str, Any]) -> None:
-        warn(
-            "This class is deprecated and it will be removed in v1.20.0 release. "
-            "Please use 'VisualizationTotal' class instead.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        super().__init__(total)
-
-
-class InsightFilter(VisualizationFilter):
-    def __init__(self, f: dict[str, Any]) -> None:
-        warn(
-            "This class is deprecated and it will be removed in v1.20.0 release. "
-            "Please use 'VisualizationFilter' class instead.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        super().__init__(f)
-
-
-class InsightBucket(VisualizationBucket):
-    def __init__(self, bucket: dict[str, Any]) -> None:
-        warn(
-            "This class is deprecated and it will be removed in v1.20.0 release. "
-            "Please use 'VisualizationBucket' class instead.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        super().__init__(bucket)
-
-
-class Insight(Visualization):
-    def __init__(
-        self,
-        from_vis_obj: dict[str, Any],
-        side_loads: Optional[SideLoads] = None,
-    ) -> None:
-        warn(
-            "This class is deprecated and it will be removed in v1.20.0 release. "
-            "Please use 'Visualization' class instead.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        super().__init__(from_vis_obj, side_loads)
-
-
-class InsightService(VisualizationService):
-    def __init__(self, api_client: GoodDataApiClient) -> None:
-        warn(
-            "This class is deprecated and it will be removed in v1.20.0 release. "
-            "Please use 'VisualizationService' class instead.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        super().__init__(api_client)

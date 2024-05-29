@@ -178,7 +178,7 @@ But there is one disadvantage. One needs GD.CN instance with the original setup 
 `docker-compose.yaml` in root of the repository is here to help. It starts:
 - GD.CN AIO in selected version
 - postgres with gooddata-fdw extension
-- service which setups GD.CN AIO demo project including PDM, LDM, metrics and insights
+- service which setups GD.CN AIO demo project including PDM, LDM, metrics and visualizations
 
 When a vcrpy supported test needs to be updated:
 - start GD.CN using above `docker-compose.yaml`
