@@ -5,9 +5,11 @@ import functools
 import os
 import re
 from collections.abc import KeysView
+from enum import Enum, auto
 from pathlib import Path
 from shutil import rmtree
 from typing import Any, Callable, Dict, List, NamedTuple, Tuple, Union, cast, no_type_check
+from xml.etree import ElementTree as ET
 
 import yaml
 from gooddata_api_client import ApiAttributeError
@@ -23,6 +25,16 @@ PROFILES_DIRECTORY = ".gooddata"
 PROFILES_FILE_PATH = Path.home() / PROFILES_DIRECTORY / PROFILES_FILE
 SDK_PROFILE_MANDATORY_KEYS = ["host", "token"]
 SDK_PROFILE_KEYS = SDK_PROFILE_MANDATORY_KEYS + ["custom_headers", "extra_user_agent"]
+
+
+class HttpMethod(Enum):
+    """Enum representing HTTP methods."""
+
+    GET = auto()
+    POST = auto()
+    PUT = auto()
+    DELETE = auto()
+    PATCH = auto()
 
 
 def id_obj_to_key(id_obj: IdObjType) -> str:
@@ -306,3 +318,17 @@ def safeget_list(var: Any, path: List[str]) -> List[Any]:
         return []
     else:
         raise Exception("safeget_list: result is not iterable! result={0}".format(result))
+
+
+def get_namespace_from_xliff(xliff_content: str) -> Dict:
+    """Extract the XML namespace from the given XLIFF content.
+
+    Args:
+        xliff_content (str): The XLIFF content as bytes.
+
+    Returns:
+        dict: A dictionary containing the namespace with the key 'ns'.
+    """
+    tree = ET.ElementTree(ET.fromstring(xliff_content))
+    root = tree.getroot()
+    return {"ns": root.tag.split("}")[0].strip("{")}

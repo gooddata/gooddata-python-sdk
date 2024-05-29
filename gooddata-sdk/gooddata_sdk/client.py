@@ -3,12 +3,15 @@
 
 from __future__ import annotations
 
+from builtins import bytes
 from typing import Optional
 
 import gooddata_api_client as api_client
+import requests
 from gooddata_api_client import apis
 
 from gooddata_sdk import __version__
+from gooddata_sdk.utils import HttpMethod
 
 USER_AGENT = f"gooddata-python-sdk/{__version__}"
 
@@ -55,6 +58,62 @@ class GoodDataApiClient:
         self._layout_api = apis.LayoutApi(self._api_client)
         self._actions_api = apis.ActionsApi(self._api_client)
         self._user_management_api = apis.UserManagementApi(self._api_client)
+
+    def _do_post_request(
+        self,
+        data: bytes,
+        endpoint: str,
+        content_type: str,
+    ) -> requests.Response:
+        """Perform a POST request to a specified endpoint.
+
+        Args:
+            data (bytes): The data to be sent in the POST request.
+            endpoint (str): The endpoint URL to which the request is made.
+            content_type (str): The content type of the data being sent.
+
+        Returns:
+            None
+        """
+        if not self._hostname.endswith("/"):
+            endpoint = f"/{endpoint}"
+
+        response = requests.post(
+            url=f"{self._hostname}{endpoint}",
+            headers={
+                "Content-Type": content_type,
+                "Authorization": f"Bearer {self._token}",
+            },
+            data=data,
+        )
+
+        return response
+
+    def do_request(
+        self,
+        data: bytes,
+        endpoint: str,
+        content_type: str,
+        method: HttpMethod,
+    ) -> requests.Response:
+        """Perform an HTTP request using the specified method.
+
+        Args:
+            data (bytes): The data to be sent in the request.
+            endpoint (str): The endpoint URL to which the request is made.
+            content_type (str): The content type of the data being sent.
+            method (HttpMethod): The HTTP method to be used for the request.
+
+        Returns:
+            None
+
+        Raises:
+            NotImplementedError: If the specified HTTP method is not supported.
+        """
+        if method == HttpMethod.POST:
+            self._do_post_request(data, endpoint, content_type)
+        else:
+            raise NotImplementedError("Currently only supports the POST method.")
 
     @staticmethod
     def _set_default_headers(headers: dict) -> None:
