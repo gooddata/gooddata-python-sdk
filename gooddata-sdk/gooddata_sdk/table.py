@@ -4,7 +4,6 @@ from __future__ import annotations
 import logging
 from operator import attrgetter
 from typing import Any, Callable, Dict, Generator, List, Optional, Union
-from warnings import warn
 
 from attrs import define, field, frozen
 from attrs.setters import frozen as frozen_attr
@@ -25,7 +24,6 @@ from gooddata_sdk.compute.service import ComputeService
 from gooddata_sdk.visualization import (
     AttributeSortType,
     BucketType,
-    Insight,
     LocatorItemType,
     SortDirection,
     SortType,
@@ -784,15 +782,6 @@ class TableService:
         )
         response = self._compute.for_exec_def(workspace_id=workspace_id, exec_def=exec_def)
         return _as_table(response)
-
-    def for_insight(self, workspace_id: str, insight: Insight) -> ExecutionTable:
-        warn(
-            "This method is deprecated and it will be removed in v1.20.0 release. "
-            "Please use 'for_visualization' method instead.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        return self.for_visualization(workspace_id=workspace_id, visualization=insight)
 
     def for_items(
         self, workspace_id: str, items: list[Union[Attribute, Metric]], filters: Optional[list[Filter]] = None

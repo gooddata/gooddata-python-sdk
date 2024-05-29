@@ -9,7 +9,7 @@ At the moment the SDK provides services to inspect and interact with the Semanti
 * Catalog User Service
 * Catalog Permission Service
 * Catalog Organization Service
-* Insights Service
+* Visualizations Service
 * Compute Service
 * Table Service
 
@@ -28,7 +28,7 @@ Run the following command to install the `gooddata-sdk` package on your system:
 
 ## Example
 
-Compute an insight:
+Compute an visualization:
 ```python
 import gooddata_sdk
 
@@ -39,11 +39,11 @@ token = "some_user_token"
 sdk = gooddata_sdk.GoodDataSdk.create(host, token)
 
 workspace_id = "demo"
-insight_id = "customers_trend"
-# reads insight from workspace
-insight = sdk.visualizations.get_visualization(workspace_id, insight_id)
-# triggers computation for the insight. the result will be returned in a tabular form
-table = sdk.tables.for_visualization(workspace_id, insight)
+visualization_id = "customers_trend"
+# reads visualization from workspace
+visualization = sdk.visualizations.get_visualization(workspace_id, visualization_id)
+# triggers computation for the visualization. the result will be returned in a tabular form
+table = sdk.tables.for_visualization(workspace_id, visualization)
 
 # and this is how you can read data row-by-row and do something with it
 for row in table.read_all():

@@ -71,9 +71,9 @@ Data Frames
         )
     )
 
-    # create data frame based on the contents of the insight. if the insight contains labels and
+    # create data frame based on the contents of the visualization. if the visualization contains labels and
     #  measures, the data frame will contain index or hierarchical index.
-    insight_df = frames.for_insight('insight_id')
+    visualization_df = frames.for_visualization('visualization_id')
 
     # create data frame based on the content of the items dict. if the dict contains both labels
     # and measures, the frame will contain index or hierarchical index.

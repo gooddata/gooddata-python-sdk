@@ -37,7 +37,7 @@ class GoodDataApiWrapper:
 
     def get_visualizations(self, workspace_id: str) -> List[Visualization]:
         if self.dry_run:
-            self.logger.info("Dry run - skipping insights listing")
+            self.logger.info("Dry run - skipping visualizations listing")
             return []
         else:
             return self.sdk.visualizations.get_visualizations(workspace_id)
