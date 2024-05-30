@@ -10,8 +10,10 @@ from math import ceil
 from pathlib import Path
 from time import time
 from typing import Any, Callable, Dict, List, Optional, Set
+from xml.etree import ElementTree as ET
 
 import attrs
+from gooddata_api_client.api.translations_api import LocaleRequest
 from gooddata_api_client.exceptions import NotFoundException
 from gooddata_api_client.model.resolve_settings_request import ResolveSettingsRequest
 
@@ -32,7 +34,9 @@ from gooddata_sdk.catalog.workspace.entity_model.user_data_filter import (
 from gooddata_sdk.catalog.workspace.entity_model.workspace import CatalogWorkspace
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.utils import (
+    HttpMethod,
     create_directory,
+    get_namespace_from_xliff,
     load_all_entities,
     load_all_entities_dict,
     read_layout_from_file,
@@ -805,6 +809,182 @@ class CatalogWorkspaceService(CatalogServiceBase):
                             section["header"]["title"] = translated.get(section["header"]["title"])
                         if "description" in section["header"]:
                             section["header"]["description"] = translated.get(section["header"]["description"])
+
+    @staticmethod
+    def _add_target_tags(xliff_content: str, translate_func: Callable) -> bytes:
+        """Add target tags to the XLIFF content for translation purposes.
+
+        Args:
+            xliff_content (str): The XLIFF content as a string.
+            translate_func (Optional[Callable]):
+                A function that translates the source text. It can take an optional argument
+                `already_translated` and `old_translation` for updating existing translations.
+
+        Returns:
+            bytes: The modified XLIFF content with target tags, encoded as UTF-8.
+        """
+        namespace = get_namespace_from_xliff(xliff_content)
+
+        ET.register_namespace("", namespace["ns"])
+        tree = ET.ElementTree(ET.fromstring(xliff_content))
+        root = tree.getroot()
+
+        # Segment is always parent of source/target - no need to find parents
+        for segment in root.findall(".//ns:segment", namespaces=namespace):
+            source = segment.find("ns:source", namespaces=namespace)
+            if source is not None and "".join(source.itertext()).strip():
+                to_translate = "".join(source.itertext()).strip()
+                target = segment.find("ns:target", namespaces=namespace)
+                if target is None:
+                    target = ET.Element("target")
+                    segment.append(target)
+                if not target.text or not target.text.strip():
+                    target.text = translate_func(to_translate)
+                else:
+                    old_translation = "".join(target.itertext()).strip()
+                    target.text = translate_func(
+                        to_translate=to_translate,
+                        already_translated=True,
+                        old_translation=old_translation,
+                    )
+
+        return ET.tostring(root, encoding="utf-8", xml_declaration=True)
+
+    def get_metadata_localization(
+        self,
+        workspace_id: str,
+        target_language: str,
+    ) -> bytes:
+        """Retrieve the metadata localization for a workspace.
+
+        Args:
+            workspace_id (str): The ID of the workspace for which to retrieve the metadata localization.
+            target_language (str): The target language code for the localization.
+
+        Returns:
+            bytes: The encoded metadata localization in the target language.
+        """
+        ans = self._actions_api.retrieve_translations(
+            workspace_id=workspace_id,
+            locale_request=LocaleRequest(locale=target_language),
+            _preload_content=False,
+        )
+        return ans.data
+
+    def set_metadata_localization(
+        self,
+        workspace_id: str,
+        encoded_xml: bytes,
+    ) -> None:
+        """Set the metadata localization for a workspace.
+
+        Args:
+            workspace_id (str): The ID of the workspace to which the metadata localization applies.
+            encoded_xml (bytes): The encoded XML metadata to be set.
+
+        Returns:
+            None
+        """
+        self._client.do_request(
+            method=HttpMethod.POST,
+            endpoint=f"api/v1/actions/workspaces/{workspace_id}/translations/set",
+            content_type="application/xml",
+            data=encoded_xml,
+        )
+
+    def clean_metadata_localization(
+        self,
+        workspace_id: str,
+        target_language: str,
+    ) -> None:
+        """Clean the metadata localization for a workspace.
+
+        Args:
+            workspace_id (str): The ID of the workspace for which to clean the metadata localization.
+            target_language (str): The target language code for the localization to be cleaned.
+
+        Returns:
+            None
+        """
+        self._client.actions_api.clean_translations(
+            workspace_id=workspace_id, locale_request=LocaleRequest(target_language)
+        )
+
+    def add_metadata_locale(
+        self,
+        workspace_id: str,
+        target_language: str,
+        translator_func: Callable,
+        set_locale: bool = True,
+    ) -> None:
+        """Add and optionally set the metadata localization for a workspace in a target language.
+
+        Args:
+            workspace_id (str): The ID of the workspace.
+            target_language (str): The target language for the metadata localization.
+            translator_func (Optional[Callable]): A function to translate the source text.
+            set_locale (bool): Flag to indicate if the locale settings should be updated in the workspace.
+
+        Returns:
+            None
+        """
+        ans = self._actions_api.retrieve_translations(
+            workspace_id=workspace_id,
+            locale_request=LocaleRequest(locale=target_language),
+            _preload_content=False,
+        )
+
+        encoded_xml = self._add_target_tags(ans.data.decode(), translator_func)
+
+        self.set_metadata_localization(workspace_id=workspace_id, encoded_xml=encoded_xml)
+        if set_locale:
+            metadata_locale = "METADATA_LOCALE"
+            locale = "LOCALE"
+
+            self.create_or_update_workspace_setting(
+                workspace_id,
+                CatalogWorkspaceSetting(
+                    id=metadata_locale, setting_type=metadata_locale, content={"value": target_language}
+                ),
+            )
+            self.create_or_update_workspace_setting(
+                workspace_id,
+                CatalogWorkspaceSetting(id=locale, setting_type=locale, content={"value": target_language}),
+            )
+
+    def save_metadata_locale_to_disk(self, workspace_id: str, target_language: str, file_path: Path) -> None:
+        """Save the metadata localization for a workspace to a file.
+
+        Args:
+            workspace_id (str): The ID of the workspace.
+            target_language (str): The target language for the metadata localization.
+            file_path (Path): The path to the file where the XLIFF content will be saved.
+
+        Returns:
+            None
+        """
+        xliff_content = self.get_metadata_localization(workspace_id, target_language)
+
+        ns = get_namespace_from_xliff(xliff_content.decode())
+
+        ET.register_namespace("", ns["ns"])
+        tree = ET.ElementTree(ET.fromstring(xliff_content))
+
+        tree.write(file_path, "utf-8")
+
+    def set_metadata_locale_from_disk(self, workspace_id: str, file_path: Path) -> None:
+        """Load and set the metadata localization for a workspace from a file.
+
+        Args:
+            workspace_id (str): The ID of the workspace to which the metadata localization applies.
+            file_path (Path): The path to the file containing the encoded XML metadata.
+
+        Returns:
+            None
+        """
+        with open(file_path, "rb") as f:
+            encoded_xml = f.read()
+            self.set_metadata_localization(workspace_id=workspace_id, encoded_xml=encoded_xml)
 
     # Declarative methods - workspace data filters
 
