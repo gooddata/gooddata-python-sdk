@@ -12,7 +12,9 @@ env:
   NETLIFY_SITE_NAME: ${{ github.event.repository.name }}
 jobs:
   netlify-deploy:
-    runs-on: infra1-rxa-xlarge
+    runs-on:
+      group: infra1-runners-arc
+      labels: runners-rxa-xlarge
     steps:
       - name: "Checkout Recursive"
         uses: actions/checkout@v4
