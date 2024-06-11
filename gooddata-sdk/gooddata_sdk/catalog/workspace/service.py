@@ -922,7 +922,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
         Args:
             workspace_id (str): The ID of the workspace.
             target_language (str): The target language for the metadata localization.
-            translator_func (Optional[Callable]): A function to translate the source text.
+            translator_func (Callable): A function to translate the source text.
             set_locale (bool): Flag to indicate if the locale settings should be updated in the workspace.
 
         Returns:

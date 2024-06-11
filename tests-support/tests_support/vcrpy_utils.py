@@ -42,10 +42,16 @@ class CustomSerializerYaml:
             request_body = interaction["request"]["body"]
             response_body = interaction["response"]["body"]
             if request_body is not None:
-                interaction["request"]["body"] = json.dumps(request_body)
+                if isinstance(request_body, str) and request_body.startswith("<?xml"):
+                    interaction["request"]["body"] = request_body
+                else:
+                    interaction["request"]["body"] = json.dumps(request_body)
             if response_body is not None and response_body["string"] != "":
                 try:
-                    interaction["response"]["body"]["string"] = json.dumps(response_body["string"])
+                    if isinstance(response_body["string"], str) and response_body["string"].startswith("<?xml"):
+                        interaction["response"]["body"]["string"] = response_body["string"]
+                    else:
+                        interaction["response"]["body"]["string"] = json.dumps(response_body["string"])
                 except TypeError:
                     # this exception is expected while getting XLSX file content
                     continue
@@ -56,7 +62,11 @@ class CustomSerializerYaml:
             request_body = interaction["request"]["body"]
             response_body = interaction["response"]["body"]
             if request_body is not None:
-                interaction["request"]["body"] = json.loads(request_body)
+                try:
+                    interaction["request"]["body"] = json.loads(request_body)
+                except (JSONDecodeError, UnicodeDecodeError):
+                    # The response can be in XML
+                    interaction["request"]["body"] = request_body
             if response_body is not None and response_body["string"] != "":
                 try:
                     interaction["response"]["body"]["string"] = json.loads(response_body["string"])
