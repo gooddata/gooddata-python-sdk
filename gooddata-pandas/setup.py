@@ -8,7 +8,7 @@ long_description = (this_directory / "README.md").read_text(encoding="utf-8")
 
 REQUIRES = [
     "gooddata-sdk~=1.21.0",
-    "pandas>=1.0.0,<2.0.0",
+    "pandas>=2.0.0,<3.0.0",
 ]
 
 setup(
