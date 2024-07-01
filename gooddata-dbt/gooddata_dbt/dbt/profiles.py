@@ -221,7 +221,7 @@ class DbtProfiles:
             # else do nothing, real value seems to be stored in dbt profile
 
     @staticmethod
-    def to_data_class(output: str, output_def: Dict) -> DbtOutput:
+    def to_data_class(output: str, output_def: Dict) -> Optional[DbtOutput]:
         db_type = output_def["type"]
         if db_type == "postgres":
             return DbtOutputPostgreSQL.from_dict({"name": output, **output_def})
@@ -231,8 +231,11 @@ class DbtProfiles:
             return DbtOutputSnowflake.from_dict({"name": output, **output_def})
         elif db_type == "vertica":
             return DbtOutputVertica.from_dict({"name": output, **output_def})
-        elif db_type == "duckdb":
+        elif db_type == "duckdb" and output_def["path"].startswith("md:"):
             return DbtOutputMotherDuck.from_dict({"name": output, **output_def})
+        elif db_type == "duckdb":
+            # No logging available here. Pass because GoodData cannot connect to DuckDB file.
+            return None
         else:
             raise Exception(f"Unsupported database type {output=} {db_type=}")
 
@@ -244,7 +247,8 @@ class DbtProfiles:
             for output, output_def in profile_def["outputs"].items():
                 self.inject_env_vars(output_def)
                 dbt_output = self.to_data_class(output, output_def)
-                outputs.append(dbt_output)
+                if dbt_output:
+                    outputs.append(dbt_output)
             profiles.append(DbtProfile(name=profile, outputs=outputs))
         return profiles
 
