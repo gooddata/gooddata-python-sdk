@@ -11,7 +11,7 @@ jobs:
     if: ${{inputs.changed-python-modules == 'true'}}
     strategy:
       matrix:
-        python_version: [py311, py310, py39, py38]
+        python_version: [py312, py311, py310, py39, py38]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -21,7 +21,7 @@ jobs:
         env:
           TEST_ENVS: ${{ matrix.python_version }}
       - name: Upload coverage to Codecov
-        if: ${{ matrix.python_version == 'py311' }}
+        if: ${{ matrix.python_version == 'py312' }}
         uses: codecov/codecov-action@v3
         with:
           files: ./gooddata-sdk/coverage.xml,./gooddata-pandas/coverage.xml,./gooddata-fdw/coverage.xml
@@ -31,7 +31,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Set up Python 3.11
+      - name: Set up Python 3.12
         uses: actions/setup-python@v5
         with:
           python-version-file: '.python-version'
@@ -50,7 +50,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Set up Python 3.11
+      - name: Set up Python 3.12
         uses: actions/setup-python@v5
         with:
           python-version-file: '.python-version'
