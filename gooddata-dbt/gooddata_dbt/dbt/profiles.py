@@ -15,6 +15,7 @@ from gooddata_sdk import (
     CatalogDataSourceVertica,
     MotherDuckAttributes,
     PostgresAttributes,
+    RedshiftAttributes,
     SnowflakeAttributes,
     TokenCredentialsFromEnvVar,
     VerticaAttributes,
@@ -40,6 +41,37 @@ class DbtOutputPostgreSQL(Base):
             id=data_source_id,
             name=self.title,
             db_specific_attributes=PostgresAttributes(
+                host=self.host,
+                port=self.port,
+                # TODO - adopt this in Python SDK
+                db_name=quote_plus(self.dbname),
+            ),
+            # Schema name is collected from dbt manifest from relevant tables
+            schema=schema_name,
+            credentials=BasicCredentials(
+                username=self.user,
+                password=self.password,
+            ),
+        )
+
+
+@attrs.define(auto_attribs=True, kw_only=True)
+class DbtOutputRedshift(Base):
+    name: str
+    title: str
+    host: str
+    port: str
+    user: str
+    password: str = attrs.field(repr=lambda value: "***")
+    dbname: str
+    database: str = attrs.field(default=attrs.Factory(lambda self: self.dbname, takes_self=True))
+    schema: str
+
+    def to_gooddata(self, data_source_id: str, schema_name: str) -> CatalogDataSourcePostgres:
+        return CatalogDataSourcePostgres(
+            id=data_source_id,
+            name=self.title,
+            db_specific_attributes=RedshiftAttributes(
                 host=self.host,
                 port=self.port,
                 # TODO - adopt this in Python SDK
@@ -152,7 +184,7 @@ class DbtOutputMotherDuck(Base):
         )
 
 
-DbtOutput = Union[DbtOutputPostgreSQL, DbtOutputSnowflake, DbtOutputVertica, DbtOutputMotherDuck]
+DbtOutput = Union[DbtOutputPostgreSQL, DbtOutputRedshift, DbtOutputSnowflake, DbtOutputVertica, DbtOutputMotherDuck]
 
 
 @attrs.define(auto_attribs=True, kw_only=True)
@@ -193,6 +225,8 @@ class DbtProfiles:
         db_type = output_def["type"]
         if db_type == "postgres":
             return DbtOutputPostgreSQL.from_dict({"name": output, **output_def})
+        elif db_type == "redshift":
+            return DbtOutputRedshift.from_dict({"name": output, **output_def})
         elif db_type == "snowflake":
             return DbtOutputSnowflake.from_dict({"name": output, **output_def})
         elif db_type == "vertica":
