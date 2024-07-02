@@ -11,6 +11,7 @@ from gooddata_sdk import (
     BasicCredentials,
     CatalogDataSourceMotherDuck,
     CatalogDataSourcePostgres,
+    CatalogDataSourceRedshift,
     CatalogDataSourceSnowflake,
     CatalogDataSourceVertica,
     MotherDuckAttributes,
@@ -67,8 +68,8 @@ class DbtOutputRedshift(Base):
     database: str = attrs.field(default=attrs.Factory(lambda self: self.dbname, takes_self=True))
     schema: str
 
-    def to_gooddata(self, data_source_id: str, schema_name: str) -> CatalogDataSourcePostgres:
-        return CatalogDataSourcePostgres(
+    def to_gooddata(self, data_source_id: str, schema_name: str) -> CatalogDataSourceRedshift:
+        return CatalogDataSourceRedshift(
             id=data_source_id,
             name=self.title,
             db_specific_attributes=RedshiftAttributes(
