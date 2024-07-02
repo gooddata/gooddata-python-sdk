@@ -1,0 +1,160 @@
+# (C) 2024 GoodData Corporation
+[server]
+
+#######################################################################
+# Flight RPC Setup
+#######################################################################
+
+# host to bind Flight RPC server to. Default is 127.0.0.1 - listening on
+# localhost only.
+#
+# use:
+#
+# - 0.0.0.0 - to bind to all addressed = reachable via network
+# - 127.0.0.1 - to bind to localhost only (unreachable via outside network)
+# - custom address to bind to
+#
+listen_host = "127.0.0.1"
+
+# port on which the Flight RPC server should listen
+listen_port = 17001
+
+# host name to use when sending this server's Flight RPC location to clients.
+# Defaults to current hostname.
+#
+# Advertising different host from the one that the server is bound to is
+# often needed in Dockerized environments.
+#
+# ---
+#
+# Example: you run the server inside Docker on localhost and have port forwarding
+# setup. You want to access the server from your workstation. In this setup,
+# the 'listen_host' is set to "0.0.0.0" (server listens on all interfaces within
+# the container) and the 'advertise_host' is set to "localhost".
+#
+# When you make a GetFlightInfo call to the server (running inside docker), it will
+# generate a Flight accordingly and the returned Locations will again point at
+# "localhost" so the subsequent DoGet call goes again to the Dockerized server.
+#
+# Without the 'advertise_host', the GetFlightInfo would return Location referencing
+# some internal / randomly assigned hostname that is unreachable from your workstation.
+advertise_host = "127.0.0.1"
+
+# port number to use when sending this server's Flight RPC location to clients.
+# Defaults to value of 'listen_port'.
+#
+# Advertising different port from the one that the server is listening is often
+# needed in environments where port forwarding is in effect.
+#
+# ---
+#
+# Example: you run multiple servers inside Docker on localhost and have port
+# forwarding setup. Each server goes to different port.
+#
+# Analogous to the host example (see above), the Dockerized server needs to send
+# location with port number that can be reached from your workstation.
+advertise_port = 17001
+
+#######################################################################
+# Task Handling
+#######################################################################
+
+# number of threads available for tasks which generate flights or
+# flight listing. Default is 32.
+#
+# Each GetFlightInfo request that generates a flight delegates this
+# to a task. The task executes in a thread pool of this size.
+task_threads = 32
+
+#######################################################################
+# Server Infrastructure & Maintenance
+#######################################################################
+
+# host to bind prometheus metrics endpoint; disabled by default
+#
+# use:
+#
+# - 0.0.0.0 - to bind to all addressed
+# - 127.0.0.1 - to bind to localhost only (unreachable via outside network)
+# - custom address to bind to
+#
+# if not specified, the prometheus metrics endpoint will not be started
+metrics_host = "0.0.0.0"
+
+# port for prometheus metrics endpoint; default is 17101
+#
+# will only be used if `metrics_host` is specified
+metrics_port = 17101
+
+# host to bind health check endpoint; disabled by default
+#
+# use:
+#
+# - 0.0.0.0 - to bind to all addressed
+# - 127.0.0.1 - to bind to localhost only (unreachable via outside network)
+# - custom address to bind to
+#
+# if not specified, the health check endpoint will not be started
+health_check_host = "0.0.0.0"
+
+# port for health check endpoint; default is 8877
+#
+# will only be used if `health_check_host` is specified
+health_check_port = 8877
+
+# optionally specify interval, in seconds, of calls to malloc_trim - this
+# helps to release unused memory back to the system. Default is 30 seconds.
+#
+# especially useful in memory constrained and memory-limited environments.
+malloc_trim_interval_sec = 30
+
+# optionally specify key name under which the log event name should appear
+# in the structured logs. Default is 'event'
+#
+# you may want to override this in case you want to align the event's key
+# name with the rest of your environment
+log_event_key_name = "event"
+
+# optionally specify mapping for telemetry (tracing) key names that will appear
+# in structured logs. by default, server writes trace information into 'trace_id',
+# 'span_id' and 'parent_span_id'
+#
+# you may want to override these in case you want to align those logs key names
+# with the rest of your enviornment
+log_trace_keys = { "trace_id" = "trace_id", "span_id" = "trace_id", "parent_span_id" = "parent_span_id" }
+
+# optionally enable exports of OpenTelemetry tracing. Default is no exports
+# which also means most of the tracing code and instrumentation will be noop.
+#
+# Allowed values are: zipkin, otlp+grpc, otlp+http or console (for debug)
+#
+# IMPORTANT: If you want to enable the trace exports, you must install one
+# the appropriate OpenTelemetry exporter package yourself and then configure
+# the exporter using the appropriate environment variables (these are typically
+# documented by the exporter)
+otel_exporter_type = "none"
+
+# optionally specify OpenTelemetry service name to associate with the server's
+# resource.
+#
+# If you do not specify the service name, then the tracing infrastructure and
+# instrumentation will be no-op.
+#
+# IMPORTANT: if you want to enable and export OpenTelemetry tracing, then you
+# must specify both the `otel_exporter_type` and this option.
+otel_service_name = "your-service-name"
+
+# optionally specify OpenTelemetry namespace to associate with this server's resource.
+#
+# Default is no namespace.
+otel_service_namespace = "your-namespace"
+
+# optionally specify OpenTelemetry service instance id to associate with this server's
+# resource.
+#
+# Usually, this is a unique identifier of the running server instance. In environments
+# such as k8s, you typically want to associate the instance id to pod name. In other
+# environments, it may be the hostname.
+#
+# Default is to use current hostname.
+otel_service_instance_id = "your-service-instance-id"

@@ -1,6 +1,7 @@
 #  (C) 2024 GoodData Corporation
 import os
 import platform
+import socket
 import sys
 from typing import Optional
 
@@ -71,6 +72,10 @@ def _create_exporter(config: OtelConfig) -> SpanExporter:
     raise AssertionError(f"Unsupported exporter type '{config.exporter_type}'.")
 
 
+def _default_service_instance_id() -> str:
+    return socket.gethostbyaddr("127.0.0.1")[0] if platform.system() == "Darwin" else socket.getfqdn()
+
+
 def _create_resource(config: OtelConfig) -> Resource:
     # all PROCESS_RUNTIME_* attribute values including the code below picked as-is
     # from recommendations written in:
@@ -84,13 +89,14 @@ def _create_resource(config: OtelConfig) -> Resource:
         )
     )
 
-    # TODO: allow configuring instance id & namespace
+    service_instance_id = config.service_instance_id or _default_service_instance_id()
+
     return Resource.create(
         attributes={
             SERVICE_NAME: config.service_name,
             SERVICE_VERSION: __version__,
-            SERVICE_INSTANCE_ID: config.service_instance_id,
-            SERVICE_NAMESPACE: config.service_namespace,
+            SERVICE_INSTANCE_ID: service_instance_id,
+            SERVICE_NAMESPACE: config.service_namespace or "",
             OS_TYPE: platform.system().lower(),
             OS_DESCRIPTION: platform.platform(terse=True),
             PROCESS_PID: os.getpid(),
