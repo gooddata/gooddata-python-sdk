@@ -6,8 +6,8 @@ version: '3.7'
 
 services:
   gooddata-cn-ce:
-    # Use the stable tag, which points to the latest stable development
-    image: 020413372491.dkr.ecr.us-east-1.amazonaws.com/nas/gooddata-cn-ce:stable
+    # Use the master tag, which points to the latest stable development
+    image: 020413372491.dkr.ecr.us-east-1.amazonaws.com/nas/gooddata-cn-ce:master
     ports:
       - "3000:3000"
       - "5432:5432"
