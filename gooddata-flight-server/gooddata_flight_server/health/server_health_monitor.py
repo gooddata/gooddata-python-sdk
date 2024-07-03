@@ -19,11 +19,9 @@ class ModuleHealthStatus(enum.Enum):
 
 class ServerHealthMonitor:
     """
-    Default implementation of health monitor. Uses a separate resource monitoring which periodically
-    pushes essential metrics to the monitor - the monitor then sets various threshold-exceeded indicators
-    based on those values.
+    Server health monitor and maintenance.
 
-    The monitor also includes a thread doing regular maintenance - namely periodically performing
+    The monitor includes a thread doing regular maintenance - namely periodically performing
     malloc trim() to make system throw away the garbage. This is essential to survive in runtime environments
     that impose memory (RSS) limits and kill the server if it exceeds it - the malloc does not
     free the used memory back to the system; the RSS keeps growing and growing until the server
