@@ -9,13 +9,17 @@ from enum import Enum, auto
 from pathlib import Path
 from shutil import rmtree
 from typing import Any, Callable, Dict, List, NamedTuple, Tuple, Union, cast, no_type_check
+from warnings import warn
 from xml.etree import ElementTree as ET
 
 import yaml
+from cattrs import structure
+from cattrs.errors import ClassValidationError
 from gooddata_api_client import ApiAttributeError
 from gooddata_api_client.model_utils import OpenApiModel
 
 from gooddata_sdk.compute.model.base import ObjId
+from gooddata_sdk.config import AacConfig, Profile
 
 # Use typing collection types to support python < py3.9
 IdObjType = Union[str, ObjId, Dict[str, Dict[str, str]], Dict[str, str]]
@@ -241,6 +245,43 @@ def mandatory_profile_content_check(profile: str, profile_content_keys: KeysView
         raise ValueError(f"Profile {profile} is missing mandatory parameter or parameters {missing_str}.")
 
 
+def _create_profile_legacy(content: Dict) -> Dict:
+    try:
+        return structure(content, Profile).to_dict()
+    except ClassValidationError as e:
+        errors = []
+        for error in e.exceptions:
+            if isinstance(error, KeyError):
+                errors.append(f"Profile file does not contain mandatory parameter: {e}")
+        msg = "\n".join(errors)
+        if not msg:
+            msg = "An error occurred while parsing the profile file."
+        raise ValueError(msg)
+
+
+def _create_profile_aac(profile: str, content: Dict) -> Dict:
+    aac_config = AacConfig.from_dict(content)
+    selected_profile = aac_config.default_profile if profile == "default" else profile
+    if selected_profile not in aac_config.profiles:
+        raise ValueError(f"Profile file does not contain the specified profile: {profile}")
+    return aac_config.profiles[selected_profile].to_dict(use_env=True)
+
+
+def _get_profile(profile: str, content: Dict) -> Dict[str, Any]:
+    is_aac_config = AacConfig.can_structure(content)
+    if not is_aac_config and profile not in content:
+        raise ValueError("Configuration is invalid. Please check the documentation for the valid configuration.")
+    if is_aac_config:
+        return _create_profile_aac(profile, content)
+    else:
+        warn(
+            "Used configuration is deprecated and will be removed in the future. Please use the new configuration.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return _create_profile_legacy(content[profile])
+
+
 def profile_content(profile: str = "default", profiles_path: Path = PROFILES_FILE_PATH) -> dict[str, Any]:
     """Get the profile content from a given file.
 
@@ -263,10 +304,9 @@ def profile_content(profile: str = "default", profiles_path: Path = PROFILES_FIL
     if not profiles_path.exists():
         raise ValueError(f"There is no profiles file located for path {profiles_path}.")
     content = read_layout_from_file(profiles_path)
-    if not content.get(profile):
-        raise ValueError(f"Profiles file does not contain profile {profile}.")
-    mandatory_profile_content_check(profile, content[profile].keys())
-    return {key: content[profile][key] for key in content[profile] if key in SDK_PROFILE_KEYS}
+    if content is None:
+        raise ValueError(f"The config file is empty {profiles_path}.")
+    return _get_profile(profile, content)
 
 
 def good_pandas_profile_content(
@@ -288,7 +328,7 @@ def good_pandas_profile_content(
             The content and custom Headers.
     """
     content = profile_content(profile, profiles_path)
-    custom_headers = content.pop("custom_headers", {})
+    custom_headers = content.pop("custom_headers", {}) or {}
     content.pop("extra_user_agent", None)
     return content, custom_headers
 
