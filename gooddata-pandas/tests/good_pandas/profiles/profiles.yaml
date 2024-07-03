@@ -1,30 +1,30 @@
 # (C) 2023 GoodData Corporation
 default:
   host: http://abc:3000
-  token: 123
+  token: "123"
   custom_headers:
     Host: localhost
   extra_user_agent: xyz
 correct_1:
   host: http://abc:3000
-  token: 123
+  token: "123"
 correct_2:
   host: http://abc:3000
-  token: 123
+  token: "123"
   custom_headers:
     Host: localhost
 correct_3:
   host: http://abc:3000
-  token: 123
+  token: "123"
   extra_user_agent: xyz
 correct_4:
   host: http://abc:3000
-  token: 123
+  token: "123"
   analytics_as_code_things:
     cool: True
 custom:
   host: http://xyz:3000
-  token: 456
+  token: "456"
   custom_headers:
     Host: localhost123
   extra_user_agent: abc

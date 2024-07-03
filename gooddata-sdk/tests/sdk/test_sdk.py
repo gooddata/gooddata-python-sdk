@@ -1,18 +1,22 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
+import os
 from pathlib import Path
-from typing import Any
+from typing import Any, Union
 
+import pytest
 import yaml
 from gooddata_sdk import GoodDataSdk
 
 _current_dir = Path(__file__).parent.absolute()
 PROFILES_PATH = _current_dir / "profiles" / "profiles.yaml"
+AAC_PROFILES_PATH = _current_dir / "profiles" / "gooddata.yaml"
+CORRUPTED_PROFILES = _current_dir / "profiles" / "corrupted.yaml"
 
 
-def load_profiles_content() -> dict:
-    with open(PROFILES_PATH, "r", encoding="utf-8") as f:
+def load_profiles_content(path: Union[str, Path]) -> dict:
+    with open(path, "r", encoding="utf-8") as f:
         return yaml.safe_load(f)
 
 
@@ -25,59 +29,53 @@ def are_same_check(profile_data: dict[str, Any], sdk: GoodDataSdk):
         assert profile_data["extra_user_agent"] in sdk.client._api_client.user_agent
 
 
-def test_default_profile():
-    profile = "default"
-    sdk = GoodDataSdk.create_from_profile(profiles_path=PROFILES_PATH)
-    data = load_profiles_content()
-
-    are_same_check(data[profile], sdk)
-
-
-def test_other_profile():
-    profile = "custom"
+@pytest.mark.parametrize(
+    "profile",
+    [
+        "custom",
+        "default",
+        "correct_1",
+        "correct_2",
+        "correct_3",
+        "correct_4",
+    ],
+)
+def test_legacy_config(profile):
     sdk = GoodDataSdk.create_from_profile(profile=profile, profiles_path=PROFILES_PATH)
-    data = load_profiles_content()
-
+    data = load_profiles_content(PROFILES_PATH)
     are_same_check(data[profile], sdk)
 
 
-def test_wrong_profile():
+def test_legacy_wrong_profile():
     profile = "wrong"
-    try:
+    with pytest.raises(ValueError):
         GoodDataSdk.create_from_profile(profile=profile, profiles_path=PROFILES_PATH)
-    except ValueError:
-        assert True
-    else:
-        assert False, "The ValueError was expected to be raised."
 
 
-def test_correct_1_profile():
-    profile = "correct_1"
-    sdk = GoodDataSdk.create_from_profile(profile=profile, profiles_path=PROFILES_PATH)
-    data = load_profiles_content()
-
-    are_same_check(data[profile], sdk)
-
-
-def test_correct_2_profile():
-    profile = "correct_2"
-    sdk = GoodDataSdk.create_from_profile(profile=profile, profiles_path=PROFILES_PATH)
-    data = load_profiles_content()
-
-    are_same_check(data[profile], sdk)
+def test_new_config_default(setenvvar):
+    sdk = GoodDataSdk.create_from_profile(profiles_path=AAC_PROFILES_PATH)
+    data = load_profiles_content(AAC_PROFILES_PATH)
+    profile = data["default_profile"]
+    profile_data = data["profiles"][profile]
+    assert profile_data["host"] == sdk.client._hostname
+    assert os.environ[profile_data["token"][1:]] == sdk.client._token
 
 
-def test_correct_3_profile():
-    profile = "correct_3"
-    sdk = GoodDataSdk.create_from_profile(profile=profile, profiles_path=PROFILES_PATH)
-    data = load_profiles_content()
+def test_new_config_selected(setenvvar):
+    profile = "xyz"
+    sdk = GoodDataSdk.create_from_profile(profile=profile, profiles_path=AAC_PROFILES_PATH)
+    data = load_profiles_content(AAC_PROFILES_PATH)
+    profile_data = data["profiles"][profile]
+    assert profile_data["host"] == sdk.client._hostname
+    assert os.environ[profile_data["token"][1:]] == sdk.client._token
 
-    are_same_check(data[profile], sdk)
+
+def test_non_existing_token(setenvvar):
+    profile = "def"
+    with pytest.raises(ValueError):
+        GoodDataSdk.create_from_profile(profile=profile, profiles_path=AAC_PROFILES_PATH)
 
 
-def test_correct_4_profile():
-    profile = "correct_4"
-    sdk = GoodDataSdk.create_from_profile(profile=profile, profiles_path=PROFILES_PATH)
-    data = load_profiles_content()
-
-    are_same_check(data[profile], sdk)
+def test_corrupted_config():
+    with pytest.raises(ValueError):
+        GoodDataSdk.create_from_profile(profiles_path=CORRUPTED_PROFILES)
