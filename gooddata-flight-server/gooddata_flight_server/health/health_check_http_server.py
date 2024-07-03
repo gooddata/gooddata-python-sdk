@@ -11,7 +11,7 @@ from gooddata_flight_server.health.server_health_monitor import ModuleHealthStat
 LIVENESS_ENDPOINT_PATH = "/live"
 READINESS_ENDPOINT_PATH = "/ready"
 
-FLIGHT_SERVER_MODULE_DEBUG_NAME = "flight_rpc_server"
+SERVER_MODULE_DEBUG_NAME = "server"
 
 LOGGER = structlog.get_logger("gooddata_flight_server.health_check_http_server")
 
@@ -46,8 +46,8 @@ class _HealthCheckHandler(BaseHTTPRequestHandler):
         """
         LOGGER.debug("checking_flight_server_ready")
         if (
-            FLIGHT_SERVER_MODULE_DEBUG_NAME in self._server_health_monitor.module_statuses
-            and self._server_health_monitor.module_statuses[FLIGHT_SERVER_MODULE_DEBUG_NAME] == ModuleHealthStatus.OK
+            SERVER_MODULE_DEBUG_NAME in self._server_health_monitor.module_statuses
+            and self._server_health_monitor.module_statuses[SERVER_MODULE_DEBUG_NAME] == ModuleHealthStatus.OK
         ):
             LOGGER.debug("flight_server_ready")
             return True
@@ -62,10 +62,12 @@ class _HealthCheckHandler(BaseHTTPRequestHandler):
         :return: True if server is healthy otherwise False
         """
         LOGGER.debug("checking_flight_server_healthy")
+
         for module, status in self._server_health_monitor.module_statuses.items():
             if status == ModuleHealthStatus.NOT_OK:
-                LOGGER.warning("unhealthy_nodule", module=module)
+                LOGGER.warning("unhealthy_module", module=module)
                 return False
+
         LOGGER.debug("flight_server_healthy")
         return True
 
@@ -88,7 +90,7 @@ class HealthCheckHttpServer:
 
         def serve_forever(httpd_instance: HTTPServer) -> None:
             with httpd_instance:
-                LOGGER.info("health_server_started", host=host, port=port)
+                LOGGER.info("health_check_started", host=host, port=port)
                 httpd_instance.serve_forever()
 
         Thread(target=serve_forever, args=(httpd,), daemon=True).start()

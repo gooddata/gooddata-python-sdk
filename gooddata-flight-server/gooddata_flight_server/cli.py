@@ -1,20 +1,15 @@
 #  (C) 2024 GoodData Corporation
 import argparse
-import os
 import sys
 import traceback
 from typing import Optional, TypeVar
 
 from dynaconf import ValidationError
 
-from gooddata_flight_server.config.config import read_config
-from gooddata_flight_server.server.server_main import GoodDataFlightServer, ServerStartupInterrupted
-from gooddata_flight_server.utils.logging import init_logging
-from gooddata_flight_server.utils.otel_tracing import initialize_otel_tracing
+from gooddata_flight_server.server.server_base import DEFAULT_LOGGING_INI, ServerStartupInterrupted
+from gooddata_flight_server.server.server_main import GoodDataFlightServer, create_server
 
 TConfig = TypeVar("TConfig")
-
-DEFAULT_LOGGING_INI = os.path.join(os.path.dirname(__file__), "default.logging.ini")
 
 
 def _add_start_cmd(parser: argparse.ArgumentParser) -> None:
@@ -68,19 +63,12 @@ def _create_std_server_argparser() -> argparse.ArgumentParser:
 def _create_server(args: argparse.Namespace) -> GoodDataFlightServer:
     _config_files: tuple[str, ...] = args.config or ()
     config_files = tuple(f for f in _config_files if f is not None)
-    settings, config = read_config(files=config_files)
 
-    init_logging(
-        args.logging_config or DEFAULT_LOGGING_INI,
+    return create_server(
+        config_files=config_files,
+        logging_config=args.logging_config or DEFAULT_LOGGING_INI,
         dev_log=args.dev_log or False,
-        event_key=config.log_event_key_name,
-        trace_ctx_keys=config.log_trace_keys,
-        add_trace_ctx=config.otel_config.exporter_type is not None,
     )
-
-    initialize_otel_tracing(config=config.otel_config)
-
-    return GoodDataFlightServer(config=config)
 
 
 # not really needed to be global, keeping it here so that instance of server is reachable

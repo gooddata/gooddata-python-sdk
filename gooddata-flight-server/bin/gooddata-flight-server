@@ -3,7 +3,7 @@
 import re
 import sys
 
-import gooddata_flight_server.server.server_cli as server
+import gooddata_flight_server.cli as server
 
 if __name__ == "__main__":
     sys.argv[0] = re.sub(r"(-script\.pyw?|\.exe)?$", "", sys.argv[0])

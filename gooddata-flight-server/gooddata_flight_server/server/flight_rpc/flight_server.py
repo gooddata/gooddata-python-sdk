@@ -1,7 +1,6 @@
 # (C) 2022 GoodData Corporation
 """
-This is a thin wrapper around the PyArrow FlightServerBase. It exists to provide a saner/cleaner interface
-to use in the shard's Flight Server.
+This is a thin wrapper around the PyArrow FlightServerBase. It exists to provide a typed interface.
 
 There are two main pieces:
 
@@ -15,7 +14,7 @@ from typing import Optional, TypeAlias, Union
 
 import pyarrow.flight
 
-from gooddata_flight_server.server.base.server_methods import FlightServerMethods
+from gooddata_flight_server.server.flight_rpc.server_methods import FlightServerMethods
 
 FlightServerLocation: TypeAlias = Union[str, bytes, Optional[tuple[str, int]], pyarrow.flight.Location]
 FlightTlsCertificates: TypeAlias = list[tuple[bytes, bytes]]
@@ -33,8 +32,6 @@ class FlightServer(pyarrow.flight.FlightServerBase):
     `serve_with_signals` are merely a synchronization mechanism to wait until the server gets stopped.
 
     When managing the lifecycle of the Flight RPC from outside, it is better not to use the serve() methods.
-
-    See:
     """
 
     def __init__(

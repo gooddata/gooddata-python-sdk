@@ -122,7 +122,7 @@ def initialize_otel_tracing(config: Optional[OtelConfig]) -> None:
     :param config: server's open telemetry configuration
     :return: None
     """
-    if config is None:
+    if config is None or config.exporter_type is None:
         trace.set_tracer_provider(trace.NoOpTracerProvider())
         return
 
