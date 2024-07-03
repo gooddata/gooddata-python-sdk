@@ -158,3 +158,11 @@ otel_service_namespace = "your-namespace"
 #
 # Default is to use current hostname.
 otel_service_instance_id = "your-service-instance-id"
+
+[flexfun]
+
+# specify one or more modules that contain FlexFun implementations
+#
+functions = [
+    "my_python_package.some_module"
+]

@@ -5,9 +5,13 @@ import pyarrow.flight
 from dynaconf import Dynaconf
 
 from gooddata_flight_server.config.config import ServerConfig, read_config
+from gooddata_flight_server.flexfun.flight_methods import create_flexfun_flight_methods
+from gooddata_flight_server.server.base import (
+    FlightServerMethodsFactory,
+    ServerContext,
+)
 from gooddata_flight_server.server.flight_rpc.flight_service import FlightRpcService
 from gooddata_flight_server.server.flight_rpc.server_methods import FlightServerMethods
-from gooddata_flight_server.server.method_factory import FlightServerMethodsFactory, ServerContext
 from gooddata_flight_server.server.server_base import DEFAULT_LOGGING_INI, ServerBase
 from gooddata_flight_server.tasks.task_executor import TaskExecutor
 from gooddata_flight_server.tasks.thread_task_executor import ThreadTaskExecutor
@@ -17,15 +21,18 @@ from gooddata_flight_server.utils.otel_tracing import initialize_otel_tracing
 
 class GoodDataFlightServer(ServerBase):
     def __init__(
-        self, settings: Dynaconf, config: ServerConfig, methods: Union[FlightServerMethods, FlightServerMethodsFactory]
+        self,
+        settings: Dynaconf,
+        config: ServerConfig,
+        methods: Union[FlightServerMethods, FlightServerMethodsFactory],
     ):
         super().__init__(config)
 
         self._settings = settings
         self._methods = methods if isinstance(methods, FlightServerMethods) else None
-        self._methods_factory = methods if isinstance(methods, FlightServerMethodsFactory) else None
+        self._methods_factory = methods if not isinstance(methods, FlightServerMethods) else None
 
-        self._flight_service = FlightRpcService(config=config, methods=methods)
+        self._flight_service = FlightRpcService(config=config)
         self._location = pyarrow.flight.Location(self._flight_service.client_url)
 
         # TODO: make metric prefix configurable
@@ -57,16 +64,26 @@ class GoodDataFlightServer(ServerBase):
         self._flight_service.start()
 
         if self._methods_factory is not None:
-            self._methods = self._methods_factory.create_methods(
-                ServerContext(
-                    settings=self._settings,
-                    config=self._config,
-                    location=self._location,
+            self.logger.info("flight_service_init_methods")
+
+            try:
+                self._methods = self._methods_factory(
+                    ServerContext(
+                        settings=self._settings,
+                        config=self._config,
+                        location=self._location,
+                        task_executor=self._task_executor,
+                        health=self.health,
+                    )
                 )
-            )
+            except Exception as e:
+                self.logger.critical("flight_service_init_failed", exc_info=e)
+                raise
 
         assert self._methods is not None
         self._flight_service.switch_to_serving(self._methods)
+
+        self.logger.info("rpc_enabled", methods=type(self._methods).__name__)
 
     def _shutdown_services(self) -> None:
         self._flight_service.stop()
@@ -93,7 +110,6 @@ def create_server(
     )
 
     initialize_otel_tracing(config=config.otel_config)
-    # TODO: by default use the factory that supports pluggable functions
-    _methods = methods or FlightServerMethods()
+    _methods = methods or create_flexfun_flight_methods
 
     return GoodDataFlightServer(settings=settings, config=config, methods=_methods)

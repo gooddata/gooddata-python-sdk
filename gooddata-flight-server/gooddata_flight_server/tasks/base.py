@@ -5,7 +5,7 @@ import pyarrow
 from typing_extensions import TypeAlias
 
 # TODO: may be move to some more 'common' place
-ArrowData: TypeAlias = Union[pyarrow.lib.RecordBatch, pyarrow.lib.Table, pyarrow.lib.RecordBatchReader]
+ArrowData: TypeAlias = Union[pyarrow.lib.Table, pyarrow.lib.RecordBatchReader]
 
 
 class TaskWaitTimeoutError(TimeoutError):

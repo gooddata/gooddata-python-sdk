@@ -6,8 +6,15 @@ from typing import Optional, TypeVar
 
 from dynaconf import ValidationError
 
-from gooddata_flight_server.server.server_base import DEFAULT_LOGGING_INI, ServerStartupInterrupted
-from gooddata_flight_server.server.server_main import GoodDataFlightServer, create_server
+from gooddata_flight_server.flexfun.flight_methods import create_flexfun_flight_methods
+from gooddata_flight_server.server.server_base import (
+    DEFAULT_LOGGING_INI,
+    ServerStartupInterrupted,
+)
+from gooddata_flight_server.server.server_main import (
+    GoodDataFlightServer,
+    create_server,
+)
 
 TConfig = TypeVar("TConfig")
 
@@ -65,6 +72,7 @@ def _create_server(args: argparse.Namespace) -> GoodDataFlightServer:
     config_files = tuple(f for f in _config_files if f is not None)
 
     return create_server(
+        methods=create_flexfun_flight_methods,
         config_files=config_files,
         logging_config=args.logging_config or DEFAULT_LOGGING_INI,
         dev_log=args.dev_log or False,

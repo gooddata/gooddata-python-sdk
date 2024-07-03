@@ -48,13 +48,17 @@ def _create_zipkin_span_exporter() -> SpanExporter:
 
 
 def _create_otlp_grpc_exporter() -> SpanExporter:
-    from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter  # type: ignore
+    from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import (
+        OTLPSpanExporter,  # type: ignore
+    )
 
     return OTLPSpanExporter()
 
 
 def _create_otlp_http_exporter() -> SpanExporter:
-    from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter  # type: ignore
+    from opentelemetry.exporter.otlp.proto.http.trace_exporter import (
+        OTLPSpanExporter,  # type: ignore
+    )
 
     return OTLPSpanExporter()
 

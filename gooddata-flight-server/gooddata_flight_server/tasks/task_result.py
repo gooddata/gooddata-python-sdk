@@ -117,7 +117,9 @@ class FlightDataTaskResult(abc.ABC):
         raise NotImplementedError
 
     @final
-    def acquire_data(self) -> tuple[rwlock.Lockable, Union[Iterable[ArrowData], ArrowData]]:
+    def acquire_data(
+        self,
+    ) -> tuple[rwlock.Lockable, Union[Iterable[ArrowData], ArrowData]]:
         """
         Acquires this result's data. This method will first ensure that the data is
         still available for reading:

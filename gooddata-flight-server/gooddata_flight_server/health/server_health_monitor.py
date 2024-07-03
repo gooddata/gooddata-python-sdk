@@ -38,7 +38,9 @@ class ServerHealthMonitor:
         self._module_statuses: dict[str, ModuleHealthStatus] = {}
 
         self._thread = threading.Thread(
-            name="gooddata_flight_server.maintenance", target=self._maintenance, daemon=True
+            name="gooddata_flight_server.maintenance",
+            target=self._maintenance,
+            daemon=True,
         )
         self._thread.start()
 

@@ -13,8 +13,14 @@ from prometheus_client import start_http_server
 
 from gooddata_flight_server._version import __version__
 from gooddata_flight_server.config.config import ServerConfig
-from gooddata_flight_server.health.health_check_http_server import SERVER_MODULE_DEBUG_NAME, HealthCheckHttpServer
-from gooddata_flight_server.health.server_health_monitor import ModuleHealthStatus, ServerHealthMonitor
+from gooddata_flight_server.health.health_check_http_server import (
+    SERVER_MODULE_DEBUG_NAME,
+    HealthCheckHttpServer,
+)
+from gooddata_flight_server.health.server_health_monitor import (
+    ModuleHealthStatus,
+    ServerHealthMonitor,
+)
 from gooddata_flight_server.utils.otel_tracing import SERVER_TRACER
 
 # DEV ONLY - heap usage debugger
@@ -79,7 +85,9 @@ class ServerBase(abc.ABC):
         """
         if self._config.health_check_host is not None:
             self._logger.debug(
-                "health_check_starting", host=self._config.health_check_host, port=self._config.health_check_port
+                "health_check_starting",
+                host=self._config.health_check_host,
+                port=self._config.health_check_port,
             )
 
             HealthCheckHttpServer(
@@ -95,14 +103,22 @@ class ServerBase(abc.ABC):
         :return: nothing
         """
         if self._config.metrics_host is not None:
-            self._logger.debug("metrics_starting", host=self._config.metrics_host, port=self._config.metrics_port)
+            self._logger.debug(
+                "metrics_starting",
+                host=self._config.metrics_host,
+                port=self._config.metrics_port,
+            )
 
             start_http_server(
                 addr=self._config.metrics_host,
                 port=self._config.metrics_port,
             )
 
-            self._logger.info("metrics_started", host=self._config.metrics_host, port=self._config.metrics_port)
+            self._logger.info(
+                "metrics_started",
+                host=self._config.metrics_host,
+                port=self._config.metrics_port,
+            )
 
     def _server_main(self) -> None:
         self._logger.info(
@@ -145,6 +161,11 @@ class ServerBase(abc.ABC):
                 self._abort_services()
         except Exception as e:
             self._startup_interrupted = e
+
+            # wake up anyone who may be waiting for the server to start
+            with self._start_cond:
+                self._start_cond.notify_all()
+
             return
         finally:
             self._logger.info("server_main_finished")
@@ -224,7 +245,16 @@ class ServerBase(abc.ABC):
         :return: true if started, false if not
         """
         with self._start_cond:
-            return self._start_cond.wait_for(lambda: self._started is True, timeout=timeout)
+            completed = self._start_cond.wait_for(
+                lambda: self._started is True or self._startup_interrupted is not None, timeout=timeout
+            )
+            if not completed:
+                return False
+
+            if self._startup_interrupted is not None:
+                raise self._startup_interrupted
+
+            return True
 
     def wait_for_stop(self, timeout: Optional[float] = None) -> bool:
         """

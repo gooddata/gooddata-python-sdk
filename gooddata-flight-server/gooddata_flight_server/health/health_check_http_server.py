@@ -6,7 +6,10 @@ from threading import Thread
 from typing import Any
 
 import structlog
-from gooddata_flight_server.health.server_health_monitor import ModuleHealthStatus, ServerHealthMonitor
+from gooddata_flight_server.health.server_health_monitor import (
+    ModuleHealthStatus,
+    ServerHealthMonitor,
+)
 
 LIVENESS_ENDPOINT_PATH = "/live"
 READINESS_ENDPOINT_PATH = "/ready"

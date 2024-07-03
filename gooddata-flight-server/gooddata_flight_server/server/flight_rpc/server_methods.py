@@ -3,6 +3,8 @@ from collections.abc import Generator
 
 import pyarrow.flight
 
+from gooddata_flight_server.server.flight_rpc.flight_middleware import CallFinalizer, CallInfo
+
 
 class FlightServerMethods:
     """
@@ -10,6 +12,42 @@ class FlightServerMethods:
 
     Typings reverse-engineered from PyArrow's Cython code.
     """
+
+    @staticmethod
+    def call_info_middleware(
+        from_context: pyarrow.flight.ServerCallContext,
+    ) -> CallInfo:
+        """
+        Utility method to obtain CallInfo middleware from the call context. The
+        CallInfo middleware can be used to access Flight's CallInfo AND all headers
+        that were passed during the call.
+
+        :param from_context: server call context
+        :return: middleware
+        """
+        mw = from_context.get_middleware(CallInfo.MiddlewareName)
+        assert isinstance(mw, CallInfo)
+
+        return mw
+
+    @staticmethod
+    def call_finalizer_middleware(
+        from_context: pyarrow.flight.ServerCallContext,
+    ) -> CallFinalizer:
+        """
+        Utility method to obtain CallFinalizer middleware from the call context. The
+        CallFinalizer middleware can be used to register functions that should be
+        called after the entire Flight RPC completes.
+
+        See CallFinalizer documentation for more details..
+
+        :param from_context: server call context
+        :return: middleware
+        """
+        mw = from_context.get_middleware(CallFinalizer.MiddlewareName)
+        assert isinstance(mw, CallFinalizer)
+
+        return mw
 
     def list_flights(
         self, context: pyarrow.flight.ServerCallContext, criteria: bytes

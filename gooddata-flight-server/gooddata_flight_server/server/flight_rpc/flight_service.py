@@ -11,6 +11,7 @@ import structlog
 from gooddata_flight_server.config.config import ServerConfig
 from gooddata_flight_server.errors.error_code import ErrorCode
 from gooddata_flight_server.errors.error_info import ErrorInfo
+from gooddata_flight_server.server.flight_rpc.flight_middleware import CallFinalizer, CallInfo
 from gooddata_flight_server.server.flight_rpc.flight_server import FlightServer
 from gooddata_flight_server.server.flight_rpc.server_methods import FlightServerMethods
 
@@ -27,7 +28,7 @@ def _get_flight_server_locations(config: ServerConfig) -> tuple[str, str]:
     )
 
 
-class AvailabilityMiddlewareFactory(pyarrow.flight.ServerMiddlewareFactory):
+class _AvailabilityMiddlewareFactory(pyarrow.flight.ServerMiddlewareFactory):
     """
     Optionally rejects calls with FlightUnavailableError & some reason.
 
@@ -39,11 +40,27 @@ class AvailabilityMiddlewareFactory(pyarrow.flight.ServerMiddlewareFactory):
 
         self.unavailable_reason: Optional[ErrorInfo] = unavailable_reason
 
-    def start_call(self, info: pyarrow.flight.CallInfo, headers: dict[str, list[str]]):
+    def start_call(
+        self, info: pyarrow.flight.CallInfo, headers: dict[str, list[str]]
+    ) -> Optional[pyarrow.flight.ServerMiddleware]:
         if self.unavailable_reason is None:
-            return
+            return None
 
         raise self.unavailable_reason.to_unavailable_error()
+
+
+class _CallInfoMiddlewareFactory(pyarrow.flight.ServerMiddlewareFactory):
+    def start_call(
+        self, info: pyarrow.flight.CallInfo, headers: dict[str, list[str]]
+    ) -> Optional[pyarrow.flight.ServerMiddleware]:
+        return CallInfo(info, headers)
+
+
+class _CallFinalizerMiddlewareFactory(pyarrow.flight.ServerMiddlewareFactory):
+    def start_call(
+        self, info: pyarrow.flight.CallInfo, headers: dict[str, list[str]]
+    ) -> Optional[pyarrow.flight.ServerMiddleware]:
+        return CallFinalizer()
 
 
 class FlightRpcService:
@@ -66,7 +83,7 @@ class FlightRpcService:
 
         self._logger = structlog.get_logger("gooddata_flight_server.rpc")
 
-        self._availability = AvailabilityMiddlewareFactory(
+        self._availability = _AvailabilityMiddlewareFactory(
             unavailable_reason=ErrorInfo.for_reason(ErrorCode.NOT_READY, "Try again later.")
         )
         # internal mutable state
@@ -111,6 +128,8 @@ class FlightRpcService:
             root_certificates=self._config.tls_root,
             middleware={
                 "_availability": self._availability,
+                CallInfo.MiddlewareName: _CallInfoMiddlewareFactory(),
+                CallFinalizer.MiddlewareName: _CallFinalizerMiddlewareFactory(),
             },
         )
 
@@ -125,6 +144,7 @@ class FlightRpcService:
             raise AssertionError("Flight server was never started")
 
         self._methods = methods
+        self._server.switch_methods(methods)
         self._availability.unavailable_reason = None
 
     def switch_to_unavailable(self, err: ErrorInfo) -> None:

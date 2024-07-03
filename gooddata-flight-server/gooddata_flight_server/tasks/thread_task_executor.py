@@ -18,7 +18,11 @@ from gooddata_flight_server.tasks.metrics import TaskExecutorMetrics
 from gooddata_flight_server.tasks.task import Task
 from gooddata_flight_server.tasks.task_error import TaskError
 from gooddata_flight_server.tasks.task_executor import TaskAttributes, TaskExecutor
-from gooddata_flight_server.tasks.task_result import FlightDataTaskResult, TaskExecutionResult, TaskResult
+from gooddata_flight_server.tasks.task_result import (
+    FlightDataTaskResult,
+    TaskExecutionResult,
+    TaskResult,
+)
 from gooddata_flight_server.tasks.temporal_container import TemporalContainer
 from gooddata_flight_server.utils.otel_tracing import SERVER_TRACER
 from opentelemetry import trace
@@ -111,7 +115,9 @@ class _TaskExecutionCallbacks(abc.ABC):
         raise NotImplementedError
 
     def process_task_result(
-        self, task_execution: "_TaskExecution", result: Future[Union[TaskResult, TaskError]]
+        self,
+        task_execution: "_TaskExecution",
+        result: Future[Union[TaskResult, TaskError]],
     ) -> TaskExecutionResult:
         """
         This will be called when the task run itself completes. It is guaranteed
@@ -522,7 +528,9 @@ class ThreadTaskExecutor(TaskExecutor, _TaskExecutionCallbacks):
                 return self._executor.submit(self._task_run_wrapper, task_execution)
 
     def process_task_result(
-        self, task_execution: "_TaskExecution", future: Future[Union[TaskResult, TaskError]]
+        self,
+        task_execution: "_TaskExecution",
+        future: Future[Union[TaskResult, TaskError]],
     ) -> TaskExecutionResult:
         result = self._create_task_exec_result(task_execution, future)
         self._finish_task_with_result(task_execution, result)
