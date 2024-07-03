@@ -9,6 +9,8 @@ from gooddata_flight_server.server.flight_rpc.flight_service import FlightRpcSer
 from gooddata_flight_server.server.flight_rpc.server_methods import FlightServerMethods
 from gooddata_flight_server.server.method_factory import FlightServerMethodsFactory, ServerContext
 from gooddata_flight_server.server.server_base import DEFAULT_LOGGING_INI, ServerBase
+from gooddata_flight_server.tasks.task_executor import TaskExecutor
+from gooddata_flight_server.tasks.thread_task_executor import ThreadTaskExecutor
 from gooddata_flight_server.utils.logging import init_logging
 from gooddata_flight_server.utils.otel_tracing import initialize_otel_tracing
 
@@ -26,6 +28,14 @@ class GoodDataFlightServer(ServerBase):
         self._flight_service = FlightRpcService(config=config, methods=methods)
         self._location = pyarrow.flight.Location(self._flight_service.client_url)
 
+        # TODO: make metric prefix configurable
+        self._task_executor = ThreadTaskExecutor(
+            metric_prefix="gdfs",
+            task_threads=config.task_threads,
+            result_close_threads=config.task_close_threads,
+            keep_results_for=config.task_result_ttl_sec,
+        )
+
     @property
     def location(self) -> pyarrow.flight.Location:
         """
@@ -34,6 +44,14 @@ class GoodDataFlightServer(ServerBase):
         :return: location
         """
         return self._location
+
+    @property
+    def task_executor(self) -> TaskExecutor:
+        """
+
+        :return:
+        """
+        return self._task_executor
 
     def _startup_services(self) -> None:
         self._flight_service.start()

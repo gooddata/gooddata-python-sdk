@@ -1,10 +1,8 @@
 #  (C) 2024 GoodData Corporation
-from typing import Any, TypeVar, Union
+from typing import Any, Union
 
 import pyarrow
 from typing_extensions import TypeAlias
-
-TPayload = TypeVar("TPayload")
 
 # TODO: may be move to some more 'common' place
 ArrowData: TypeAlias = Union[pyarrow.lib.RecordBatch, pyarrow.lib.Table, pyarrow.lib.RecordBatchReader]

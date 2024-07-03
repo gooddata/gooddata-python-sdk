@@ -7,6 +7,7 @@ from dynaconf import Dynaconf
 
 from gooddata_flight_server.config.config import ServerConfig
 from gooddata_flight_server.server.flight_rpc.server_methods import FlightServerMethods
+from gooddata_flight_server.tasks.task_executor import TaskExecutor
 
 
 @dataclass(slots=True, frozen=True)
@@ -14,6 +15,7 @@ class ServerContext:
     settings: Dynaconf
     config: ServerConfig
     location: pyarrow.flight.Location
+    task_executor: TaskExecutor
 
 
 class FlightServerMethodsFactory(abc.ABC):

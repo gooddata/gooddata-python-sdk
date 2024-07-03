@@ -3,14 +3,13 @@ import abc
 import threading
 import uuid
 from concurrent.futures import CancelledError
-from typing import Generic, Literal, Optional, Union, final
+from typing import Literal, Optional, Union, final
 
-from gooddata_flight_server.tasks.base import TPayload
 from gooddata_flight_server.tasks.task_error import TaskError
 from gooddata_flight_server.tasks.task_result import TaskResult
 
 
-class Task(abc.ABC, Generic[TPayload]):
+class Task(abc.ABC):
     """
     Abstract base class for executable tasks.
 
@@ -43,7 +42,7 @@ class Task(abc.ABC, Generic[TPayload]):
         "_triggers",
     )
 
-    def __init__(self, cmd: TPayload, cancellable: bool = True, task_id: Optional[str] = None):
+    def __init__(self, cmd: bytes, cancellable: bool = True, task_id: Optional[str] = None):
         self._task_id = task_id or uuid.uuid4().hex
         self._cmd = cmd
         self._cancel_lock = threading.Lock()
@@ -57,7 +56,7 @@ class Task(abc.ABC, Generic[TPayload]):
 
     @final
     @property
-    def cmd(self) -> TPayload:
+    def cmd(self) -> bytes:
         return self._cmd
 
     @final
@@ -189,7 +188,7 @@ class Task(abc.ABC, Generic[TPayload]):
         raise NotImplementedError
 
 
-class TaskFactory(abc.ABC, Generic[TPayload]):
+class TaskFactory(abc.ABC):
     """
     Interface for factories that create concrete implementations of tasks.
     """
@@ -199,7 +198,7 @@ class TaskFactory(abc.ABC, Generic[TPayload]):
         cmd: bytes,
         headers: dict[str, list[str]],
         method: Union[Literal["get-flight-info", "list-flights"], str] = "get-flight-info",
-    ) -> Task[TPayload]:
+    ) -> Task:
         """
         Creates a new task to execute a particular command.
 

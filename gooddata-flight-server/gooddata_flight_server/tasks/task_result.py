@@ -3,12 +3,12 @@ import abc
 import threading
 from collections.abc import Generator, Iterable
 from dataclasses import dataclass
-from typing import Generic, Optional, TypeAlias, Union, final
+from typing import Optional, TypeAlias, Union, final
 
 import pyarrow.flight
 from gooddata_flight_server.errors.error_code import ErrorCode
 from gooddata_flight_server.errors.error_info import ErrorInfo
-from gooddata_flight_server.tasks.base import ArrowData, TPayload
+from gooddata_flight_server.tasks.base import ArrowData
 from gooddata_flight_server.tasks.task_error import TaskError
 from readerwriterlock import rwlock
 
@@ -184,7 +184,7 @@ class ListFlightsTaskResult:
 TaskResult: TypeAlias = Union[FlightDataTaskResult, ListFlightsTaskResult]
 
 
-class TaskExecutionResult(Generic[TPayload]):
+class TaskExecutionResult:
     """
     Represents result of particular task execution. This indicates to the caller
     whether the task finished successfully or not or whether it was cancelled.
@@ -195,7 +195,7 @@ class TaskExecutionResult(Generic[TPayload]):
     def __init__(
         self,
         task_id: str,
-        cmd: TPayload,
+        cmd: bytes,
         result: Optional[TaskResult],
         cancelled: bool,
         error: Optional[TaskError],
@@ -214,9 +214,10 @@ class TaskExecutionResult(Generic[TPayload]):
         return self._task_id
 
     @property
-    def cmd(self) -> TPayload:
+    def cmd(self) -> bytes:
         """
-        :return: payload (typically command) used by task
+        :return: command from Flight descriptor which resulted in the creation of the task that
+         created this result
         """
         return self._cmd
 

@@ -6,16 +6,16 @@ from collections.abc import Generator
 from concurrent.futures import CancelledError, Future, ThreadPoolExecutor
 from contextlib import contextmanager
 from dataclasses import dataclass
-from typing import Any, Literal, Optional, Union
+from typing import Any, Optional, Union
 
 import opentelemetry.context as otelctx
 import pyarrow.flight
 import structlog
 from gooddata_flight_server.errors.error_code import ErrorCode
 from gooddata_flight_server.errors.error_info import ErrorInfo
-from gooddata_flight_server.tasks.base import TaskWaitTimeoutError, TPayload
+from gooddata_flight_server.tasks.base import TaskWaitTimeoutError
 from gooddata_flight_server.tasks.metrics import TaskExecutorMetrics
-from gooddata_flight_server.tasks.task import Task, TaskFactory
+from gooddata_flight_server.tasks.task import Task
 from gooddata_flight_server.tasks.task_error import TaskError
 from gooddata_flight_server.tasks.task_executor import TaskAttributes, TaskExecutor
 from gooddata_flight_server.tasks.task_result import FlightDataTaskResult, TaskExecutionResult, TaskResult
@@ -318,7 +318,7 @@ def _create_task_error(e: Exception) -> TaskError:
     )
 
 
-class ThreadTaskExecutor(TaskExecutor[TPayload], _TaskExecutionCallbacks):
+class ThreadTaskExecutor(TaskExecutor, _TaskExecutionCallbacks):
     """
     Implementation of TaskExecutor interface that uses a pluggable TaskFactory
     to create tasks to run and then submits those into a ThreadPoolExecutor.
@@ -326,14 +326,12 @@ class ThreadTaskExecutor(TaskExecutor[TPayload], _TaskExecutionCallbacks):
 
     def __init__(
         self,
-        task_factory: TaskFactory,
         metric_prefix: str,
         task_threads: int = 4,
         result_close_threads: int = 2,
         keep_results_for: int = 15,
     ) -> None:
         self._logger = structlog.get_logger("gooddata_flight_server.task_executor")
-        self._task_factory = task_factory
         self._metric_prefix = metric_prefix
 
         self._metrics = TaskExecutorMetrics(prefix=metric_prefix)
@@ -361,7 +359,7 @@ class ThreadTaskExecutor(TaskExecutor[TPayload], _TaskExecutionCallbacks):
         except Exception:
             self._logger.warning("expired_result_close_failed", task_id=task_id, exc_info=True)
 
-    def _on_finished_task_evicted(self, result: TaskExecutionResult[TPayload]) -> None:
+    def _on_finished_task_evicted(self, result: TaskExecutionResult) -> None:
         """
         When a finished task is evicted from the temporal container, it means the
         GetFlightInfo for this particular task can no longer be answered on this node.
@@ -501,7 +499,7 @@ class ThreadTaskExecutor(TaskExecutor[TPayload], _TaskExecutionCallbacks):
                     self._metrics.task_duration.observe(stats.run_duration)
                     self._metrics.task_e2e_duration.observe(stats.duration)
 
-    def _finish_task_with_result(self, task_execution: "_TaskExecution", result: TaskExecutionResult[TPayload]) -> None:
+    def _finish_task_with_result(self, task_execution: "_TaskExecution", result: TaskExecutionResult) -> None:
         task = task_execution.task
         with self._task_lock:
             self._executions.pop(task.task_id)
@@ -533,13 +531,9 @@ class ThreadTaskExecutor(TaskExecutor[TPayload], _TaskExecutionCallbacks):
 
     def submit(
         self,
-        cmd: bytes,
-        headers: dict[str, list[str]],
-        method: Union[Literal["get-flight-info", "list-flights"], str] = "get-flight-info",
-    ) -> str:
-        task = self._task_factory.create_task(cmd=cmd, headers=headers, method=method)
-
-        # note: task creation will snapshot current logging and tracing context
+        task: Task,
+    ) -> None:
+        # note: task execution constructor will snapshot current logging and tracing context
         execution = _TaskExecution(task=task, cb=self)
 
         with self._task_lock:
@@ -549,9 +543,7 @@ class ThreadTaskExecutor(TaskExecutor[TPayload], _TaskExecutionCallbacks):
         execution.start()
         self._metrics.queue_size.set(self._queue_size)
 
-        return task.task_id
-
-    def wait_for_result(self, task_id: str, timeout: Optional[float] = None) -> Optional[TaskExecutionResult[TPayload]]:
+    def wait_for_result(self, task_id: str, timeout: Optional[float] = None) -> Optional[TaskExecutionResult]:
         with self._task_lock:
             execution = self._executions.get(task_id)
             result = self._results.get_entry(task_id)

@@ -1,8 +1,8 @@
 #  (C) 2023 GoodData Corporation
 import abc
-from typing import Generic, Literal, Optional, Union
+from typing import Optional
 
-from gooddata_flight_server.tasks.base import TPayload
+from gooddata_flight_server.tasks.task import Task
 from gooddata_flight_server.tasks.task_result import TaskExecutionResult
 
 
@@ -15,7 +15,7 @@ class TaskAttributes:
     TaskErrorDetail = "gooddata_flight_server.task_error.detail"
 
 
-class TaskExecutor(Generic[TPayload], abc.ABC):
+class TaskExecutor(abc.ABC):
     """
     Declares interface for Task Executors. These allow asynchronous execution
     of tasks which 'somehow' generate flight data.
@@ -44,22 +44,18 @@ class TaskExecutor(Generic[TPayload], abc.ABC):
     @abc.abstractmethod
     def submit(
         self,
-        cmd: bytes,
-        headers: dict[str, list[str]],
-        method: Union[Literal["get-flight-info", "list-flights"], str] = "get-flight-info",
-    ) -> str:
+        task: Task,
+    ) -> None:
         """
         Submit a new task that will perform all work as described in the provided command.
 
-        :param cmd: command included in the FlightDescriptor
-        :param headers: request headers at the time of submit
-        :param method: Flight RPC method or action name through which the command envelope was received
-        :return: identifier of task which will run the command
+        :param task: task to run
+        :return: nothing, task is always submitted
         """
         raise NotImplementedError
 
     @abc.abstractmethod
-    def wait_for_result(self, task_id: str, timeout: Optional[float] = None) -> Optional[TaskExecutionResult[TPayload]]:
+    def wait_for_result(self, task_id: str, timeout: Optional[float] = None) -> Optional[TaskExecutionResult]:
         """
         Wait for the task with the provided task id to finish.
 

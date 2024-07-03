@@ -38,6 +38,8 @@ class ServerConfig:
     advertise_port: int
 
     task_threads: int
+    task_close_threads: int
+    task_result_ttl_sec: int
 
     metrics_host: Optional[str]
     metrics_port: int
@@ -64,6 +66,8 @@ class _Settings:
     AdvertiseHost = "advertise_host"
     AdvertisePort = "advertise_port"
     TaskThreads = "task_threads"
+    TaskCloseThreads = "task_close_threads"
+    TaskResultTtlSec = "task_result_ttl_sec"
     MetricsHost = "metrics_host"
     MetricsPort = "metrics_port"
     HealthcheckHost = "health_check_host"
@@ -81,10 +85,13 @@ _LOCALHOST = "127.0.0.1"
 _DEFAULT_ADVERTISE_HOST = socket.gethostbyaddr("127.0.0.1")[0] if platform.system() == "Darwin" else socket.getfqdn()
 _DEFAULT_LISTEN_PORT = 17001
 _DEFAULT_TASK_THREADS = 32
+_DEFAULT_TASK_CLOSE_THREADS = 2
+_DEFAULT_TASK_RESULT_TTL_SEC = 60
 _DEFAULT_MALLOC_TRIM_INTERVAL_SEC = 30
 _DEFAULT_METRICS_PORT = 17101
 _DEFAULT_HEALTHCHECK_PORT = 8877
 _DEFAULT_LOG_EVENT_KEY_NAME = "event"
+
 _SUPPORTED_EXPORTERS = [
     "none",
     OtelExporterType.Zipkin.value,
@@ -160,6 +167,24 @@ _VALIDATORS = [
         cast=int,
         messages={
             "condition": f"{_Settings.TaskThreads} must be a positive number.",
+        },
+    ),
+    Validator(
+        _s(_Settings.TaskCloseThreads),
+        default=_DEFAULT_TASK_CLOSE_THREADS,
+        condition=_validate_non_negative_number,
+        cast=int,
+        messages={
+            "condition": f"{_Settings.TaskCloseThreads} must be a positive number.",
+        },
+    ),
+    Validator(
+        _s(_Settings.TaskResultTtlSec),
+        default=_DEFAULT_TASK_RESULT_TTL_SEC,
+        condition=_validate_non_negative_number,
+        cast=int,
+        messages={
+            "condition": f"{_Settings.TaskResultTtlSec} must be a positive number (number of seconds).",
         },
     ),
     Validator(
@@ -271,6 +296,8 @@ def _create_server_config(settings: Dynaconf) -> ServerConfig:
         advertise_host=server_settings.get(_Settings.AdvertiseHost),
         advertise_port=advertise_port,
         task_threads=server_settings.get(_Settings.TaskThreads),
+        task_close_threads=server_settings.get(_Settings.TaskCloseThreads),
+        task_result_ttl_sec=server_settings.get(_Settings.TaskResultTtlSec),
         metrics_host=server_settings.get(_Settings.MetricsHost),
         metrics_port=server_settings.get(_Settings.MetricsPort),
         health_check_host=server_settings.get(_Settings.HealthcheckHost),

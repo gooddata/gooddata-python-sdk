@@ -127,8 +127,8 @@ class ServerBase(abc.ABC):
         try:
             self._metrics_server_start()
             self._health_check_http_server_start()
-            self._startup_services()
 
+            self._startup_services()
             self._health.set_module_status(SERVER_MODULE_DEBUG_NAME, ModuleHealthStatus.OK)
 
             with self._start_cond:
