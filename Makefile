@@ -33,8 +33,8 @@ format-diff:
 
 .PHONY: format-fix
 format-fix:
-	.venv/bin/ruff check .
 	.venv/bin/ruff format .
+	.venv/bin/ruff check . --fix --fixable I
 
 
 define download_client

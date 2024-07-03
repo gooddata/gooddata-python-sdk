@@ -2,8 +2,9 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any
+from typing import Any, Union
 
+import pytest
 import yaml
 from gooddata_pandas import GoodPandas
 
@@ -11,8 +12,8 @@ _current_dir = Path(__file__).parent.absolute()
 PROFILES_PATH = _current_dir / "profiles" / "profiles.yaml"
 
 
-def load_profiles_content() -> dict:
-    with open(PROFILES_PATH, "r", encoding="utf-8") as f:
+def load_profiles_content(path: Union[str, Path]) -> dict:
+    with open(path, "r", encoding="utf-8") as f:
         return yaml.safe_load(f)
 
 
@@ -23,59 +24,24 @@ def are_same_check(profile_data: dict[str, Any], good_pandas: GoodPandas):
         assert profile_data["custom_headers"] == good_pandas.sdk.client._custom_headers
 
 
-def test_default_profile():
-    profile = "default"
-    good_pandas = GoodPandas.create_from_profile(profiles_path=PROFILES_PATH)
-    data = load_profiles_content()
-
-    are_same_check(data[profile], good_pandas)
-
-
-def test_other_profile():
-    profile = "custom"
+@pytest.mark.parametrize(
+    "profile",
+    [
+        "custom",
+        "default",
+        "correct_1",
+        "correct_2",
+        "correct_3",
+        "correct_4",
+    ],
+)
+def test_legacy_config(profile):
     good_pandas = GoodPandas.create_from_profile(profile=profile, profiles_path=PROFILES_PATH)
-    data = load_profiles_content()
-
+    data = load_profiles_content(PROFILES_PATH)
     are_same_check(data[profile], good_pandas)
 
 
 def test_wrong_profile():
     profile = "wrong"
-    try:
+    with pytest.raises(ValueError):
         GoodPandas.create_from_profile(profile=profile, profiles_path=PROFILES_PATH)
-    except ValueError:
-        assert True
-    else:
-        assert False, "The ValueError was expected to be raised."
-
-
-def test_correct_1_profile():
-    profile = "correct_1"
-    sdk = GoodPandas.create_from_profile(profile=profile, profiles_path=PROFILES_PATH)
-    data = load_profiles_content()
-
-    are_same_check(data[profile], sdk)
-
-
-def test_correct_2_profile():
-    profile = "correct_2"
-    sdk = GoodPandas.create_from_profile(profile=profile, profiles_path=PROFILES_PATH)
-    data = load_profiles_content()
-
-    are_same_check(data[profile], sdk)
-
-
-def test_correct_3_profile():
-    profile = "correct_3"
-    sdk = GoodPandas.create_from_profile(profile=profile, profiles_path=PROFILES_PATH)
-    data = load_profiles_content()
-
-    are_same_check(data[profile], sdk)
-
-
-def test_correct_4_profile():
-    profile = "correct_4"
-    sdk = GoodPandas.create_from_profile(profile=profile, profiles_path=PROFILES_PATH)
-    data = load_profiles_content()
-
-    are_same_check(data[profile], sdk)

@@ -1,0 +1,22 @@
+# (C) 2024 GoodData Corporation
+profiles:
+  abc:
+    host: https://abc.com/
+    token: $OK_TOKEN
+    workspace_id: demo
+    data_source_id: demo_ds
+  def:
+    host: https://def.com/
+    token: $NOT_EXISTING_ENV_VAR
+    workspace_id: demo
+    data_source_id: demo_ds
+  xyz:
+    host: https://xyz.com/
+    token: $ENV_VAR
+    workspace_id: demo
+    data_source_id: demo_ds
+source_dir: analytics
+default_profile: abc
+
+access:
+  demo_ds: $DS_PASSWORD
