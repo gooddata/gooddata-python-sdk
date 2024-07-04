@@ -23,6 +23,10 @@ lint.select = [
     "SIM9", # simplify dict values
     "W" # pycodestyle warnings
 ]
+lint.ignore = [
+    # rules recommended to be ignored when using ruff format
+    "E501", "W191", "W291", "W293"
+]
 
 [tool.ruff.lint.per-file-ignores]
 "gooddata-pandas/gooddata_pandas/__init__.py" = ["F401"]
