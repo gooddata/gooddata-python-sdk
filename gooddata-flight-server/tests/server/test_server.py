@@ -41,3 +41,12 @@ def test_smoke():
         listing = tuple(c.list_flights())
 
         assert len(listing) == len(_LISTING)
+
+
+def test_smoke_tls(tls_ca_cert):
+    with server(_TestingMethods(), tls=True) as s:
+        print(s.location)
+        c = pyarrow.flight.FlightClient(s.location, tls_root_certs=tls_ca_cert)
+        listing = tuple(c.list_flights())
+
+        assert len(listing) == len(_LISTING)

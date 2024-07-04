@@ -45,3 +45,18 @@ def test_read_empty():
     assert server_config.otel_config.service_name is None
     assert server_config.otel_config.service_namespace is None
     assert server_config.otel_config.service_instance_id is None
+
+
+def test_read_tls():
+    keyfile = os.path.join(_CURRENT_DIR, "private_key.pem")
+    os.environ["GOODDATA_FLIGHT_SERVER__TLS_PRIVATE_KEY"] = f"@{keyfile}"
+
+    _, server_config = read_config((_config_file("tls-config.toml"),))
+
+    assert server_config.use_tls is True
+    assert server_config.use_mutual_tls is True
+    assert server_config.tls_cert_and_key is not None
+    assert server_config.tls_cert_and_key[0] == b"inlined cert"
+    assert server_config.tls_cert_and_key[1] == b"The matrix has you :D\n"
+    assert server_config.tls_root_cert is not None
+    assert server_config.tls_root_cert == b"inlined ca cert"

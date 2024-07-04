@@ -102,6 +102,7 @@ class FlightRpcService:
 
         :return:  nothing
         """
+        # massaging before sending these out to PyArrow
         tls_certificates = (
             [self._config.tls_cert_and_key]
             if self._config.use_tls and self._config.tls_cert_and_key is not None
@@ -125,7 +126,7 @@ class FlightRpcService:
             location=self._listen_url,
             tls_certificates=tls_certificates,
             verify_client=self._config.use_mutual_tls,
-            root_certificates=self._config.tls_root,
+            root_certificates=self._config.tls_root_cert,
             middleware={
                 "_availability": self._availability,
                 CallInfo.MiddlewareName: _CallInfoMiddlewareFactory(),

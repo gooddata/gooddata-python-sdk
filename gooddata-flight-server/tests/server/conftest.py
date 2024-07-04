@@ -4,8 +4,10 @@ import os
 import socket
 from collections.abc import Iterable
 from contextlib import closing
+from pathlib import Path
 from typing import Union
 
+import pytest
 from gooddata_flight_server.flexfun.flight_methods import create_flexfun_flight_methods
 from gooddata_flight_server.server.base import FlightServerMethodsFactory
 from gooddata_flight_server.server.flight_rpc.server_methods import FlightServerMethods
@@ -13,6 +15,9 @@ from gooddata_flight_server.server.server_main import (
     GoodDataFlightServer,
     create_server,
 )
+
+_CURRENT_DIR = Path(__file__).parent
+_TLS_DIR = _CURRENT_DIR / "tls"
 
 
 def _find_free_port():
@@ -25,13 +30,36 @@ def _find_free_port():
         return s.getsockname()[1]
 
 
+def _clean_env_vars():
+    to_drop = []
+    for key in os.environ.keys():
+        if key.startswith("GOODDATA_FLIGHT_SERVER"):
+            to_drop.append(key)
+
+    for key in to_drop:
+        os.environ.pop(key, None)
+
+
 @contextlib.contextmanager
 def server(
     methods: Union[FlightServerMethods, FlightServerMethodsFactory],
+    tls: bool = False,
+    mtls: bool = False,
 ) -> GoodDataFlightServer:
     port = _find_free_port()
     os.environ["GOODDATA_FLIGHT_SERVER__LISTEN_PORT"] = str(port)
-    os.environ["GOODDATA_FLIGHT_SERVER__ADVERTISE_HOST"] = "127.0.0.1"
+    os.environ["GOODDATA_FLIGHT_SERVER__ADVERTISE_HOST"] = "localhost.localdomain"
+
+    if tls:
+        cert = os.path.join(_TLS_DIR, "server-cert.pem")
+        key = os.path.join(_TLS_DIR, "server-key.pem")
+        os.environ["GOODDATA_FLIGHT_SERVER__USE_TLS"] = "TRUE"
+        os.environ["GOODDATA_FLIGHT_SERVER__TLS_CERTIFICATE"] = f"@{cert}"
+        os.environ["GOODDATA_FLIGHT_SERVER__TLS_PRIVATE_KEY"] = f"@{key}"
+
+    if mtls:
+        ca_cert = os.path.join(_TLS_DIR, "ca-cert.pem")
+        os.environ["GOODDATA_FLIGHT_SERVER__TLS_ROOT_CERTIFICATE"] = f"@{ca_cert}"
 
     _server = create_server(methods)
     _server.start()
@@ -43,16 +71,39 @@ def server(
 
     yield _server
 
+    _clean_env_vars()
     _server.stop()
     _server.wait_for_stop()
 
 
 @contextlib.contextmanager
-def flexfun_server(modules: Iterable[str]) -> GoodDataFlightServer:
+def flexfun_server(
+    modules: Iterable[str],
+    tls: bool = False,
+    mtls: bool = False,
+) -> GoodDataFlightServer:
     envvar = ", ".join([f'"{module}"' for module in modules])
     envvar = f"[{envvar}]"
 
     os.environ["GOODDATA_FLIGHT_FLEXFUN__FUNCTIONS"] = envvar
 
-    with server(create_flexfun_flight_methods) as s:
+    with server(create_flexfun_flight_methods, tls, mtls) as s:
         yield s
+
+
+@pytest.fixture(scope="session")
+def tls_ca_cert():
+    with open(os.path.join(_TLS_DIR, "ca-cert.pem"), "rb") as f:
+        return f.read()
+
+
+@pytest.fixture(scope="session")
+def tls_client_cert():
+    with open(os.path.join(_TLS_DIR, "client-cert.pem"), "rb") as f:
+        return f.read()
+
+
+@pytest.fixture(scope="session")
+def tls_client_key():
+    with open(os.path.join(_TLS_DIR, "client-key.pem"), "rb") as f:
+        return f.read()

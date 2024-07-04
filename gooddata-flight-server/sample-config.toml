@@ -56,6 +56,56 @@ advertise_host = "127.0.0.1"
 advertise_port = 17001
 
 #######################################################################
+# TLS Setup
+#######################################################################
+
+# optionally specify to use TLS; default when not specified is False
+#
+# IMPORTANT: when you turn on TLS, you must also specify at minimum
+# the TLS certificate and TLS private key for the server to use.
+# Additionally, if you use self-signed certificates, you need to
+# also specify the tls_root_certificate.
+use_tls = true
+
+# TODO: WIP this may move to authentication section?
+use_mtls = true
+
+# if you want to use TLS (see 'use_tls' above), then you must specify
+# server's certificate.
+#
+# This is supposed to be a PEM encoded X.509 certificate identifying
+# your server.
+#
+# You can inline the certificate value into this setting, or you can
+# specify file where the certificate resides.
+#
+# To specify certificate file, code the value of this setting as
+# '@/absolute/path/to/cert`
+tls_certificate = "..."
+
+# if you want to use TLS (see 'use_tls' above), then you must specify
+# the server's private key.
+#
+# This is supposed to be PEM encoded X.509 private key. Similar to
+# the certificate, you can also use the '@/absolute/path/to/cert'
+# notation to make server load the certificate from some file.
+#
+# IMPORTANT: never commit config files containing inlined secrets
+# such as the private key into VCS. You can leverage the server's
+# ability to combine config from multiple files: have one file
+# without secrets and commit that to VCS if you so desire. The other
+# config file with secrets should be outside of VCS.
+tls_private_key = "..."
+
+# if you use mTLS and have self-signed certificates, then you must
+# also include the X.509 certificate of your CA that signed them.
+#
+# Again, you can inline the certificate in PEM encoding right here
+# into this setting, or you can use the '@/absolute/path/to/ca-cert'
+# notation.
+tls_root_certificate = "..."
+
+#######################################################################
 # Task Handling
 #######################################################################
 

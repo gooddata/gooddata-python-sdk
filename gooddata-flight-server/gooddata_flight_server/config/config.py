@@ -1,4 +1,5 @@
 #  (C) 2024 GoodData Corporation
+import dataclasses
 import enum
 import os
 import platform
@@ -37,6 +38,11 @@ class ServerConfig:
     advertise_host: str
     advertise_port: int
 
+    use_tls: bool
+    use_mutual_tls: bool
+    tls_cert_and_key: Optional[tuple[bytes, bytes]]
+    tls_root_cert: Optional[bytes]
+
     task_threads: int
     task_close_threads: int
     task_result_ttl_sec: int
@@ -53,11 +59,20 @@ class ServerConfig:
 
     otel_config: OtelConfig
 
-    # TODO: implement config for these; for now defaulting to 'off' state
-    use_tls: bool = False
-    use_mutual_tls: bool = False
-    tls_cert_and_key: Optional[tuple[bytes, bytes]] = None
-    tls_root: Optional[bytes] = None
+    def without_tls(self) -> "ServerConfig":
+        def _basic_sanity(val: bytes) -> bytes:
+            return val[0:38] + b"..." + val[-38:]
+
+        sanitized_root_cert: Optional[bytes] = None
+        sanitized_cert_and_key: Optional[tuple[bytes, bytes]] = None
+
+        if self.tls_root_cert is not None:
+            sanitized_root_cert = _basic_sanity(self.tls_root_cert)
+
+        if self.tls_cert_and_key is not None:
+            sanitized_cert_and_key = (_basic_sanity(self.tls_cert_and_key[0]), _basic_sanity(self.tls_cert_and_key[1]))
+
+        return dataclasses.replace(self, tls_cert_and_key=sanitized_root_cert, tls_root_cert=sanitized_cert_and_key)
 
 
 class _Settings:
@@ -65,6 +80,11 @@ class _Settings:
     ListenPort = "listen_port"
     AdvertiseHost = "advertise_host"
     AdvertisePort = "advertise_port"
+    UseTls = "use_tls"
+    UseMtls = "use_mtls"
+    TlsCertificate = "tls_certificate"
+    TlsPrivateKey = "tls_private_key"
+    TlsRoot = "tls_root_certificate"
     TaskThreads = "task_threads"
     TaskCloseThreads = "task_close_threads"
     TaskResultTtlSec = "task_result_ttl_sec"
@@ -124,6 +144,10 @@ def _validate_mapping(val: Any) -> bool:
     return isinstance(val, dict)
 
 
+def _validate_boolean(val: Any) -> bool:
+    return isinstance(val, bool)
+
+
 _VALIDATORS = [
     Validator(
         _s(_Settings.ListenHost),
@@ -158,6 +182,48 @@ _VALIDATORS = [
         cast=int,
         messages={
             "condition": f"{_Settings.AdvertisePort} must be a valid port number.",
+        },
+    ),
+    Validator(
+        _s(_Settings.UseTls),
+        default=False,
+        condition=_validate_boolean,
+        cast=bool,
+        messages={
+            "condition": f"{_Settings.UseTls} must be a boolean value.",
+        },
+    ),
+    Validator(
+        _s(_Settings.UseMtls),
+        default=False,
+        condition=_validate_boolean,
+        cast=bool,
+        messages={
+            "condition": f"{_Settings.UseMtls} must be a boolean value.",
+        },
+    ),
+    Validator(
+        _s(_Settings.TlsCertificate),
+        condition=_validate_non_empty_string,
+        cast=str,
+        messages={
+            "condition": f"{_Settings.TlsCertificate} must be a non-empty string.",
+        },
+    ),
+    Validator(
+        _s(_Settings.TlsPrivateKey),
+        condition=_validate_non_empty_string,
+        cast=str,
+        messages={
+            "condition": f"{_Settings.TlsPrivateKey} must be a non-empty string.",
+        },
+    ),
+    Validator(
+        _s(_Settings.TlsRoot),
+        condition=_validate_non_empty_string,
+        cast=str,
+        messages={
+            "condition": f"{_Settings.TlsRoot} must be a non-empty string.",
         },
     ),
     Validator(
@@ -280,6 +346,19 @@ _VALIDATORS = [
 ]
 
 
+def _read_tls_setting(settings: Dynaconf, setting: str) -> Optional[bytes]:
+    value: str = settings.get(setting)
+    if value is None:
+        return None
+
+    value = value.strip()
+    if value.startswith("@"):
+        with open(value[1:], "rb") as f:
+            return f.read()
+
+    return value.encode("ascii")
+
+
 def _create_server_config(settings: Dynaconf) -> ServerConfig:
     server_settings = settings.get(_SERVER_SECTION_NAME)
 
@@ -290,11 +369,38 @@ def _create_server_config(settings: Dynaconf) -> ServerConfig:
     # advertise port defaults to value of listen port
     advertise_port = server_settings.get(_Settings.AdvertisePort) or server_settings.get(_Settings.ListenPort)
 
+    use_tls = server_settings.get(_Settings.UseTls)
+    tls_cert_and_key: Optional[tuple[bytes, bytes]] = None
+    tls_root_cert: Optional[bytes] = None
+
+    if use_tls:
+        cert = _read_tls_setting(server_settings, _Settings.TlsCertificate)
+        if cert is None:
+            raise ValidationError(
+                f"When you specify 'use_tls = true', then you must provide '{_Settings.TlsCertificate}'."
+            )
+
+        key = _read_tls_setting(server_settings, _Settings.TlsPrivateKey)
+        if cert is None:
+            raise ValidationError(
+                f"When you specify 'use_tls = true', then you must provide '{_Settings.TlsPrivateKey}'."
+            )
+
+        tls_cert_and_key = (cert, key)
+
+    use_mtls = server_settings.get(_Settings.UseMtls)
+    if use_mtls:
+        tls_root_cert = _read_tls_setting(server_settings, _Settings.TlsRoot)
+
     return ServerConfig(
         listen_host=server_settings.get(_Settings.ListenHost),
         listen_port=server_settings.get(_Settings.ListenPort),
         advertise_host=server_settings.get(_Settings.AdvertiseHost),
         advertise_port=advertise_port,
+        use_tls=use_tls,
+        use_mutual_tls=use_mtls,
+        tls_cert_and_key=tls_cert_and_key,
+        tls_root_cert=tls_root_cert,
         task_threads=server_settings.get(_Settings.TaskThreads),
         task_close_threads=server_settings.get(_Settings.TaskCloseThreads),
         task_result_ttl_sec=server_settings.get(_Settings.TaskResultTtlSec),

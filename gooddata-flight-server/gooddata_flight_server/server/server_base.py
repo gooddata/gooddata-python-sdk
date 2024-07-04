@@ -127,7 +127,7 @@ class ServerBase(abc.ABC):
             python_version=platform.python_version(),
             arrow_version=pyarrow.__version__,
             server_version=__version__,
-            config=self._config,
+            config=self._config.without_tls(),
         )
 
         try:
