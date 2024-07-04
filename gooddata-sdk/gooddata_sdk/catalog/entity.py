@@ -4,7 +4,7 @@ from __future__ import annotations
 import base64
 import os
 from pathlib import Path
-from typing import Any, ClassVar, Dict, List, Optional, Type, TypeVar
+from typing import Any, ClassVar, Dict, List, Optional, Type, TypeVar, Union
 
 import attr
 
@@ -177,7 +177,7 @@ class TokenCredentialsFromFile(Credentials):
         raise NotImplementedError
 
     @staticmethod
-    def token_from_file(file_path: Path) -> str:
+    def token_from_file(file_path: Union[str, Path]) -> str:
         with open(file_path, "rb") as fp:
             return base64.b64encode(fp.read()).decode("utf-8")
 
