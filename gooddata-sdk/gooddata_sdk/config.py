@@ -51,3 +51,7 @@ class AacConfig(ConfigBase):
     profiles: Dict[str, Profile]
     default_profile: str
     access: Dict[str, str]
+
+    def ds_credentials(self) -> Dict[str, str]:
+        load_dotenv()
+        return {k: os.environ.get(v[1:], v) for k, v in self.access.items()}
