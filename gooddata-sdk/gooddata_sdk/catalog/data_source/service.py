@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import functools
 from pathlib import Path
-from typing import Any, List, Optional, Tuple
+from typing import Any, List, Optional, Tuple, Union
 
 from gooddata_api_client.exceptions import NotFoundException
 
@@ -29,7 +29,7 @@ from gooddata_sdk.catalog.data_source.entity_model.data_source import CatalogDat
 from gooddata_sdk.catalog.entity import TokenCredentialsFromFile
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.ldm import CatalogDeclarativeModel
 from gooddata_sdk.client import GoodDataApiClient
-from gooddata_sdk.utils import load_all_entities_dict, read_layout_from_file
+from gooddata_sdk.utils import get_ds_credentials, load_all_entities_dict, read_layout_from_file
 
 _PDM_DEPRECATION_MSG = "This method is going to be deprecated due to PDM removal."
 
@@ -173,6 +173,7 @@ class CatalogDataSourceService(CatalogServiceBase):
         self,
         declarative_data_sources: CatalogDeclarativeDataSources,
         credentials_path: Optional[Path] = None,
+        config_file: Optional[Union[str, Path]] = None,
         test_data_sources: bool = False,
     ) -> None:
         """Set all data sources, including their related physical data model.
@@ -182,6 +183,8 @@ class CatalogDataSourceService(CatalogServiceBase):
                 Declarative Data Source object. Can be retrieved by get_declarative_data_sources.
             credentials_path (Optional[Path], optional):
                 Path to the Credentials. Optional, defaults to None.
+            config_file (Optional[Union[str, Path]], optional):
+                Path to the config file. Defaults to None.
             test_data_sources (bool, optional):
                 If True, the connection of data sources is tested. Defaults to False.
 
@@ -189,9 +192,9 @@ class CatalogDataSourceService(CatalogServiceBase):
             None
         """
         if test_data_sources:
-            self.test_data_sources_connection(declarative_data_sources, credentials_path)
+            self.test_data_sources_connection(declarative_data_sources, credentials_path, config_file)
         credentials = self._credentials_from_file(credentials_path) if credentials_path is not None else dict()
-        self._layout_api.put_data_sources_layout(declarative_data_sources.to_api(credentials))
+        self._layout_api.put_data_sources_layout(declarative_data_sources.to_api(credentials, config_file))
 
     def store_declarative_data_sources(self, layout_root_path: Path = Path.cwd()) -> None:
         """Store data sources layouts in a directory hierarchy.
@@ -236,6 +239,7 @@ class CatalogDataSourceService(CatalogServiceBase):
         self,
         layout_root_path: Path = Path.cwd(),
         credentials_path: Optional[Path] = None,
+        config_file: Optional[Union[str, Path]] = None,
         test_data_sources: bool = False,
     ) -> None:
         """Loads and sets layouts stored using `store_declarative_data_sources`.
@@ -247,7 +251,9 @@ class CatalogDataSourceService(CatalogServiceBase):
             layout_root_path (Optional[Path], optional):
                 Path to the root of the layout directory. Defaults to Path.cwd().
             credentials_path (Optional[Path], optional):
-                Path to the credentials. Defaults to Path.cwd().
+                Path to the credentials.
+            config_file (Optional[Union[str, Path]], optional):
+                Path to the config file.
             test_data_sources (bool, optional):
                 If True, the connection of data sources is tested. Defaults to False.
 
@@ -255,7 +261,7 @@ class CatalogDataSourceService(CatalogServiceBase):
             None
         """
         data_sources = self.load_declarative_data_sources(layout_root_path)
-        self.put_declarative_data_sources(data_sources, credentials_path, test_data_sources)
+        self.put_declarative_data_sources(data_sources, credentials_path, config_file, test_data_sources)
 
     @staticmethod
     def store_pdm_to_disk(pdm: CatalogDeclarativeTables, path: Path = Path.cwd()) -> None:
@@ -438,7 +444,10 @@ class CatalogDataSourceService(CatalogServiceBase):
         return ScanSqlResponse.from_api(self._actions_api.scan_sql(data_source_id, sql_request.to_api()))
 
     def test_data_sources_connection(
-        self, declarative_data_sources: CatalogDeclarativeDataSources, credentials_path: Optional[Path] = None
+        self,
+        declarative_data_sources: CatalogDeclarativeDataSources,
+        credentials_path: Optional[Path] = None,
+        config_file: Optional[Union[str, Path]] = None,
     ) -> None:
         """Tests connection to declarative data sources.
 
@@ -453,6 +462,8 @@ class CatalogDataSourceService(CatalogServiceBase):
                 Declarative Data Sources object
             credentials_path (Optional[Path], optional):
                 Path to the credentials. Defaults to None.
+            config_file (Optional[Union[str, Path]], optional):
+                Path to the config file. Defaults to None.
 
         Raises:
             ValueError:
@@ -461,7 +472,15 @@ class CatalogDataSourceService(CatalogServiceBase):
         Returns:
             None
         """
-        credentials = self._credentials_from_file(credentials_path) if credentials_path is not None else dict()
+
+        credentials = dict()
+        if credentials_path is not None and config_file is not None:
+            raise ValueError("Only one of credentials or config_file should be provided")
+        if credentials_path is not None:
+            credentials = self._credentials_from_file(credentials_path)
+        if config_file is not None:
+            credentials = get_ds_credentials(config_file)
+
         errors: dict[str, str] = dict()
         for declarative_data_source in declarative_data_sources.data_sources:
             if credentials.get(declarative_data_source.id) is not None:

@@ -282,6 +282,16 @@ def _get_profile(profile: str, content: Dict) -> Dict[str, Any]:
         return _create_profile_legacy(content[profile])
 
 
+def _get_config_content(path: Union[str, Path]) -> Any:
+    path = Path(path) if isinstance(path, str) else path
+    if not path.exists():
+        raise ValueError(f"The file does not exist on path {path}.")
+    content = read_layout_from_file(path)
+    if content is None:
+        raise ValueError(f"The file is empty {path}.")
+    return content
+
+
 def profile_content(profile: str = "default", profiles_path: Path = PROFILES_FILE_PATH) -> dict[str, Any]:
     """Get the profile content from a given file.
 
@@ -301,12 +311,14 @@ def profile_content(profile: str = "default", profiles_path: Path = PROFILES_FIL
         dict[str, Any]:
             Profile content as a dictionary.
     """
-    if not profiles_path.exists():
-        raise ValueError(f"There is no profiles file located for path {profiles_path}.")
-    content = read_layout_from_file(profiles_path)
-    if content is None:
-        raise ValueError(f"The config file is empty {profiles_path}.")
+    content = _get_config_content(profiles_path)
     return _get_profile(profile, content)
+
+
+def get_ds_credentials(config_file: Union[str, Path]) -> Dict[str, str]:
+    content = _get_config_content(config_file)
+    config = AacConfig.from_dict(content)
+    return config.ds_credentials()
 
 
 def good_pandas_profile_content(

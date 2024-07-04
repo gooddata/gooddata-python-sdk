@@ -2,7 +2,8 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any, List, Optional, Type
+from typing import Any, List, Optional, Type, Union
+from warnings import warn
 
 import attr
 from gooddata_api_client.model.declarative_data_source import DeclarativeDataSource
@@ -13,7 +14,7 @@ from gooddata_sdk.catalog.base import Base, value_in_allowed
 from gooddata_sdk.catalog.entity import TokenCredentialsFromFile
 from gooddata_sdk.catalog.parameter import CatalogParameter
 from gooddata_sdk.catalog.permission.declarative_model.permission import CatalogDeclarativeDataSourcePermission
-from gooddata_sdk.utils import create_directory, read_layout_from_file, write_layout_to_file
+from gooddata_sdk.utils import create_directory, get_ds_credentials, read_layout_from_file, write_layout_to_file
 
 BIGQUERY_TYPE = "BIGQUERY"
 LAYOUT_DATA_SOURCES_DIR = "data_sources"
@@ -23,10 +24,9 @@ LAYOUT_DATA_SOURCES_DIR = "data_sources"
 class CatalogDeclarativeDataSources(Base):
     data_sources: List[CatalogDeclarativeDataSource]
 
-    def to_api(self, credentials: Optional[dict[str, Any]] = None) -> DeclarativeDataSources:
+    def _inject_base(self, credentials: dict[str, Any]) -> DeclarativeDataSources:
         data_sources = []
         client_class = self.client_class()
-        credentials = credentials if credentials is not None else dict()
         for data_source in self.data_sources:
             if data_source.id in credentials:
                 if data_source.type == BIGQUERY_TYPE:
@@ -37,6 +37,34 @@ class CatalogDeclarativeDataSources(Base):
             else:
                 data_sources.append(data_source.to_api())
         return client_class(data_sources=data_sources)
+
+    def _inject_credentials_legacy(self, credentials: dict[str, Any]) -> DeclarativeDataSources:
+        return self._inject_base(credentials)
+
+    def _inject_credentials_aac(self, config_file: Union[str, Path]) -> DeclarativeDataSources:
+        ds_ids = {ds.id for ds in self.data_sources}
+        credentials = get_ds_credentials(config_file)
+        missing = set(credentials.keys()).difference(ds_ids)
+        if len(missing) > 0:
+            warn(
+                f"The following data sources are missing credentials: {missing}.",
+                UserWarning,
+                stacklevel=2,
+            )
+        return self._inject_base(credentials)
+
+    def to_api(
+        self, credentials: Optional[dict[str, Any]] = None, config_file: Optional[Union[str, Path]] = None
+    ) -> DeclarativeDataSources:
+        client_class = self.client_class()
+        if credentials is not None and config_file is not None:
+            raise ValueError("Only one of credentials or config_file should be provided")
+        if credentials is None and config_file is None:
+            return client_class(data_sources=[data_source.to_api() for data_source in self.data_sources])
+        if credentials is not None:
+            return self._inject_credentials_legacy(credentials)
+        if config_file is not None:
+            return self._inject_credentials_aac(config_file)
 
     @staticmethod
     def client_class() -> Type[DeclarativeDataSources]:
@@ -101,9 +129,7 @@ class CatalogDeclarativeDataSource(Base):
         create_directory(data_source_folder)
         return data_source_folder
 
-    def to_api(
-        self, password: Optional[str] = None, token: Optional[str] = None, include_nested_structures: bool = True
-    ) -> DeclarativeDataSource:
+    def to_api(self, password: Optional[str] = None, token: Optional[str] = None) -> DeclarativeDataSource:
         dictionary = self._get_snake_dict()
         if password is not None:
             dictionary["password"] = password
@@ -114,7 +140,7 @@ class CatalogDeclarativeDataSource(Base):
     def store_to_disk(self, data_sources_folder: Path) -> None:
         data_source_folder = self.data_source_folder(data_sources_folder, self.id)
         file_path = data_source_folder / f"{self.id}.yaml"
-        data_source_dict = self.to_api(include_nested_structures=False).to_dict(camel_case=True)
+        data_source_dict = self.to_api().to_dict(camel_case=True)
 
         write_layout_to_file(file_path, data_source_dict)
 
