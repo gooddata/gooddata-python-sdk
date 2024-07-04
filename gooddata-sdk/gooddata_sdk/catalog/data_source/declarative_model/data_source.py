@@ -101,9 +101,7 @@ class CatalogDeclarativeDataSource(Base):
         create_directory(data_source_folder)
         return data_source_folder
 
-    def to_api(
-        self, password: Optional[str] = None, token: Optional[str] = None, include_nested_structures: bool = True
-    ) -> DeclarativeDataSource:
+    def to_api(self, password: Optional[str] = None, token: Optional[str] = None) -> DeclarativeDataSource:
         dictionary = self._get_snake_dict()
         if password is not None:
             dictionary["password"] = password
@@ -114,7 +112,7 @@ class CatalogDeclarativeDataSource(Base):
     def store_to_disk(self, data_sources_folder: Path) -> None:
         data_source_folder = self.data_source_folder(data_sources_folder, self.id)
         file_path = data_source_folder / f"{self.id}.yaml"
-        data_source_dict = self.to_api(include_nested_structures=False).to_dict(camel_case=True)
+        data_source_dict = self.to_api().to_dict(camel_case=True)
 
         write_layout_to_file(file_path, data_source_dict)
 
