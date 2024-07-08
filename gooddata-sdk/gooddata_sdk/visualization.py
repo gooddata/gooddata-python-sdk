@@ -4,7 +4,7 @@ from __future__ import annotations
 import functools
 from collections import defaultdict
 from enum import Enum
-from typing import Any, Optional, Union, cast
+from typing import Any, Optional, Tuple, Union, cast
 
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.model.attribute import Attribute
@@ -736,7 +736,9 @@ class VisualizationService:
 
         return [Visualization(vis_obj, side_loads) for vis_obj in vis_objects.data]
 
-    def get_visualization(self, workspace_id: str, visualization_id: str) -> Visualization:
+    def get_visualization(
+        self, workspace_id: str, visualization_id: str, timeout: Optional[Union[int, float, Tuple]] = None
+    ) -> Visualization:
         """Gets a single visualization from a workspace.
 
         Args:
@@ -744,6 +746,10 @@ class VisualizationService:
                 Workspace identification string e.g. "demo"
             visualization_id (str):
                 Visualization identifier string e.g. "bikes"
+            timeout (int | float | tuple):
+                Timeout in seconds for the request. If a tuple is provided, the first element is the connect timeout
+                and the second element is the read timeout. If a single value is provided, it is used as both connect
+                and read timeout. If None, the default timeout is used.
 
         Returns:
             Visualization:
@@ -754,6 +760,7 @@ class VisualizationService:
             object_id=visualization_id,
             include=["ALL"],
             _check_return_type=False,
+            _request_timeout=timeout,
         )
         side_loads = SideLoads(vis_obj.included)
 
