@@ -30,7 +30,9 @@ class _FlexFunResult(FlightDataTaskResult):
         return self._result
 
     def _close(self) -> None:
-        self._result.close()
+        if isinstance(self._result, pyarrow.RecordBatchReader):
+            self._result.close()
+
         self._result = None
 
 
