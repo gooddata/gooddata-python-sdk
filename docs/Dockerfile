@@ -10,5 +10,5 @@ RUN apt-get update && \
 WORKDIR docs
 RUN npm install
 
-# accessible on http://localhost:1313/docs/
+# accessible on http://localhost:1313/latest/
 ENTRYPOINT ["hugo", "server", "--bind", "0.0.0.0"]

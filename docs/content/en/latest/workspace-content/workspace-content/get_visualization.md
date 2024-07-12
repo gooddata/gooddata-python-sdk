@@ -7,7 +7,7 @@ superheading: "visualizations."
 
 
 
-``get_visualization(workspace_id: str, visualization_id: str)``
+``get_visualization(workspace_id: str, visualization_id: str, timeout: Optional[Union[int, float, Tuple]] = None)``
 
 Get a single visualization from a workspace.
 
@@ -18,6 +18,11 @@ Workspace identification string e.g. "demo"
 {{< /parameter >}}
 {{< parameter p_name="visualization_id" p_type="string" >}}
 Visualization identifier string e.g. "bikes"
+{{< /parameter >}}
+{{< parameter p_name="timeout" p_type="Optional[Union[int, float, Tuple]]" >}}
+Timeout in seconds for the request. If a tuple is provided, the first element is the connect timeout
+and the second element is the read timeout. If a single value is provided, it is used as both connect
+and read timeout. If None, the default timeout is used.
 {{< /parameter >}}
 {{% /parameters-block %}}
 
