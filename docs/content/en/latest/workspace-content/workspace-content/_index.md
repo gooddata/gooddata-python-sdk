@@ -19,6 +19,7 @@ Within a multitenant workspace hierarchy, the analytical model of a parent works
 ### Entity methods
 
 * [get_full_catalog](./get_full_catalog/)
+* [get_visualization](./get_visualization/)
 * [get_visualizations](./get_visualizations/)
 * [get_metrics_catalog](./get_metrics_catalog/)
 * [get_facts_catalog](./get_facts_catalog/)
