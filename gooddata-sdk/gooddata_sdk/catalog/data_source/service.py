@@ -193,8 +193,10 @@ class CatalogDataSourceService(CatalogServiceBase):
         """
         if test_data_sources:
             self.test_data_sources_connection(declarative_data_sources, credentials_path, config_file)
-        credentials = self._credentials_from_file(credentials_path) if credentials_path is not None else dict()
-        self._layout_api.put_data_sources_layout(declarative_data_sources.to_api(credentials, config_file))
+        credentials = self._credentials_from_file(credentials_path) if credentials_path is not None else None
+        self._layout_api.put_data_sources_layout(
+            declarative_data_sources.to_api(credentials=credentials, config_file=config_file)
+        )
 
     def store_declarative_data_sources(self, layout_root_path: Path = Path.cwd()) -> None:
         """Store data sources layouts in a directory hierarchy.
