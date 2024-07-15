@@ -70,21 +70,21 @@ class GoodDataFlightServer(ServerBase):
         return self._task_executor
 
     def _startup_services(self) -> None:
-        self._flight_service.start()
+        server_ctx = ServerContext(
+            settings=self._settings,
+            config=self._config,
+            location=self._location,
+            task_executor=self._task_executor,
+            health=self.health,
+        )
+
+        self._flight_service.start(server_ctx)
 
         if self._methods_factory is not None:
             self.logger.info("flight_service_init_methods")
 
             try:
-                self._methods = self._methods_factory(
-                    ServerContext(
-                        settings=self._settings,
-                        config=self._config,
-                        location=self._location,
-                        task_executor=self._task_executor,
-                        health=self.health,
-                    )
-                )
+                self._methods = self._methods_factory(server_ctx)
             except Exception as e:
                 self.logger.critical("flight_service_init_failed", exc_info=e)
                 raise

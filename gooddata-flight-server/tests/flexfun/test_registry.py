@@ -20,6 +20,7 @@ def fake_ctx():
         location=pyarrow.flight.Location.for_grpc_tcp("localhost", 6666),
         settings=None,
         task_executor=None,
+        health=None,
     )
 
 

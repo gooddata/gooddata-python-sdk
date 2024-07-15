@@ -23,6 +23,15 @@ class OtelExporterType(enum.Enum):
     Console = "console"
 
 
+class AuthenticationMethod(enum.Enum):
+    """
+    Authentication method specifies how to authenticate requests.
+    """
+
+    NoAuth = "none"
+    Token = "token"
+
+
 @dataclass(frozen=True, slots=True)
 class OtelConfig:
     exporter_type: Optional[OtelExporterType]
@@ -42,6 +51,10 @@ class ServerConfig:
     use_mutual_tls: bool
     tls_cert_and_key: Optional[tuple[bytes, bytes]]
     tls_root_cert: Optional[bytes]
+
+    authentication_method: AuthenticationMethod
+    token_header_name: Optional[str]
+    token_verification: Optional[str]
 
     task_threads: int
     task_close_threads: int
@@ -70,9 +83,16 @@ class ServerConfig:
             sanitized_root_cert = _basic_sanity(self.tls_root_cert)
 
         if self.tls_cert_and_key is not None:
-            sanitized_cert_and_key = (_basic_sanity(self.tls_cert_and_key[0]), _basic_sanity(self.tls_cert_and_key[1]))
+            sanitized_cert_and_key = (
+                _basic_sanity(self.tls_cert_and_key[0]),
+                _basic_sanity(self.tls_cert_and_key[1]),
+            )
 
-        return dataclasses.replace(self, tls_cert_and_key=sanitized_root_cert, tls_root_cert=sanitized_cert_and_key)
+        return dataclasses.replace(
+            self,
+            tls_cert_and_key=sanitized_root_cert,
+            tls_root_cert=sanitized_cert_and_key,
+        )
 
 
 class _Settings:
@@ -85,6 +105,9 @@ class _Settings:
     TlsCertificate = "tls_certificate"
     TlsPrivateKey = "tls_private_key"
     TlsRoot = "tls_root_certificate"
+    AuthenticationMethod = "authentication_method"
+    TokenHeaderName = "token_header_name"
+    TokenVerification = "token_verification"
     TaskThreads = "task_threads"
     TaskCloseThreads = "task_close_threads"
     TaskResultTtlSec = "task_result_ttl_sec"
@@ -111,6 +134,7 @@ _DEFAULT_MALLOC_TRIM_INTERVAL_SEC = 30
 _DEFAULT_METRICS_PORT = 17101
 _DEFAULT_HEALTHCHECK_PORT = 8877
 _DEFAULT_LOG_EVENT_KEY_NAME = "event"
+_DEFAULT_TOKEN_VERIFICATION = "EnumeratedTokenVerification"
 
 _SUPPORTED_EXPORTERS = [
     "none",
@@ -118,6 +142,11 @@ _SUPPORTED_EXPORTERS = [
     OtelExporterType.OtlpHttp.value,
     OtelExporterType.OtlpGrpc.value,
     OtelExporterType.Console.value,
+]
+
+_SUPPORTED_AUTH_METHOD = [
+    AuthenticationMethod.NoAuth.value,
+    AuthenticationMethod.Token.value,
 ]
 
 
@@ -136,8 +165,12 @@ def _validate_non_negative_number(val: Any) -> bool:
         return False
 
 
-def _validate_supporter_exporter(val: Any) -> bool:
+def _validate_supported_otel_exporter(val: Any) -> bool:
     return val in _SUPPORTED_EXPORTERS
+
+
+def _validate_supported_auth(val: Any) -> bool:
+    return val in _SUPPORTED_AUTH_METHOD
 
 
 def _validate_mapping(val: Any) -> bool:
@@ -224,6 +257,31 @@ _VALIDATORS = [
         cast=str,
         messages={
             "condition": f"{_Settings.TlsRoot} must be a non-empty string.",
+        },
+    ),
+    Validator(
+        _s(_Settings.AuthenticationMethod),
+        condition=_validate_supported_auth,
+        default=AuthenticationMethod.NoAuth.value,
+        cast=str,
+        messages={
+            "condition": f"{_Settings.AuthenticationMethod} must be one of {', '.join(_SUPPORTED_AUTH_METHOD)}.",
+        },
+    ),
+    Validator(
+        _s(_Settings.TokenHeaderName),
+        condition=_validate_non_empty_string,
+        cast=str,
+        messages={
+            "condition": f"{_Settings.TokenHeaderName} must be a non-empty string.",
+        },
+    ),
+    Validator(
+        _s(_Settings.TokenVerification),
+        condition=_validate_non_empty_string,
+        cast=str,
+        messages={
+            "condition": f"{_Settings.TokenVerification} must be a non-empty string.",
         },
     ),
     Validator(
@@ -314,7 +372,7 @@ _VALIDATORS = [
     Validator(
         _s(_Settings.OtelExporterType),
         cast=str,
-        condition=_validate_supporter_exporter,
+        condition=_validate_supported_otel_exporter,
         messages={
             "condition": f"{_Settings.OtelExporterType} must be one of {', '.join(_SUPPORTED_EXPORTERS)}.",
         },
@@ -392,6 +450,11 @@ def _create_server_config(settings: Dynaconf) -> ServerConfig:
     if use_mtls:
         tls_root_cert = _read_tls_setting(server_settings, _Settings.TlsRoot)
 
+    _auth_method = AuthenticationMethod(server_settings.get(_Settings.AuthenticationMethod))
+    _token_verification: Optional[str] = None
+    if _auth_method == AuthenticationMethod.Token:
+        _token_verification = server_settings.get(_Settings.TokenVerification) or _DEFAULT_TOKEN_VERIFICATION
+
     return ServerConfig(
         listen_host=server_settings.get(_Settings.ListenHost),
         listen_port=server_settings.get(_Settings.ListenPort),
@@ -401,6 +464,9 @@ def _create_server_config(settings: Dynaconf) -> ServerConfig:
         use_mutual_tls=use_mtls,
         tls_cert_and_key=tls_cert_and_key,
         tls_root_cert=tls_root_cert,
+        authentication_method=_auth_method,
+        token_header_name=server_settings.get(_Settings.TokenHeaderName),
+        token_verification=_token_verification,
         task_threads=server_settings.get(_Settings.TaskThreads),
         task_close_threads=server_settings.get(_Settings.TaskCloseThreads),
         task_result_ttl_sec=server_settings.get(_Settings.TaskResultTtlSec),
@@ -434,7 +500,11 @@ def _load_dynaconf(files: tuple[str, ...] = ()) -> Dynaconf:
         elif not os.path.isfile(file):
             raise ValidationError(f"Path {file} is a directory and not a settings file.")
 
-    return Dynaconf(settings_files=files, envvar_prefix="GOODDATA_FLIGHT", environments=False)
+    return Dynaconf(
+        settings_files=files,
+        envvar_prefix="GOODDATA_FLIGHT",
+        environments=False,
+    )
 
 
 def read_config(files: tuple[str, ...]) -> tuple[Dynaconf, ServerConfig]:

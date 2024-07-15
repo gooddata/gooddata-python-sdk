@@ -2,7 +2,11 @@
 import os
 from pathlib import Path
 
-from gooddata_flight_server.config.config import OtelExporterType, read_config
+from gooddata_flight_server.config.config import (
+    AuthenticationMethod,
+    OtelExporterType,
+    read_config,
+)
 
 _CURRENT_DIR = Path(__file__).parent
 
@@ -46,6 +50,10 @@ def test_read_empty():
     assert server_config.otel_config.service_namespace is None
     assert server_config.otel_config.service_instance_id is None
 
+    assert server_config.authentication_method == AuthenticationMethod.NoAuth
+    assert server_config.token_header_name is None
+    assert server_config.token_verification is None
+
 
 def test_read_tls():
     keyfile = os.path.join(_CURRENT_DIR, "private_key.pem")
@@ -60,3 +68,11 @@ def test_read_tls():
     assert server_config.tls_cert_and_key[1] == b"The matrix has you :D\n"
     assert server_config.tls_root_cert is not None
     assert server_config.tls_root_cert == b"inlined ca cert"
+
+
+def test_read_auth():
+    _, server_config = read_config((_config_file("auth-config.toml"),))
+
+    assert server_config.authentication_method == AuthenticationMethod.Token
+    assert server_config.token_header_name == "x-my-header"
+    assert server_config.token_verification == "EnumeratedTokenVerification"

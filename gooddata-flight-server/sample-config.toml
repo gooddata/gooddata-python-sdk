@@ -106,6 +106,56 @@ tls_private_key = "..."
 tls_root_certificate = "..."
 
 #######################################################################
+#
+#######################################################################
+
+# specify authentication method to use. can be one of 'none' or 'token'.
+#
+# if you do not include this option, then the server will not do
+# any authentication. This is dangerous if your server is listening
+# on interfaces that are reachable from the public network.
+#
+# if you specify the 'token' method, then the default strategy
+# for verifying tokens is the 'EnumeratedTokenVerification'. For this
+# to work, you need to specify one or more valid tokens that the
+# client is expected to send. See the end of this file on how to
+# do this.
+#
+# Alternatively, you can implement your own strategy for verifying
+# tokens. See the option below.
+authentication_method = "none"
+
+# Specify strategy to use for verifying tokens.
+#
+# The default strategy is 'EnumeratedTokenVerification' which expects
+# that client sends a token that is included in a list of allowed
+# tokens. See the end of this file for example how to define those
+# tokens.
+#
+# To implement your own token verification strategy, you need to
+# implement your own subclass of 'TokenVerificationStrategy' and
+# then modify this setting to provide module name that contains
+# that implementation.
+#
+# For example if the full path to class implementing your strategy
+# is my_server.auth.custom.MyCustomStrategy, then the value
+# of the 'token_verification' should be 'my_server.auth.custom'.
+#
+# Upon startup, the server will try to dynamically import and
+# load your implementation of TokenVerificationStrategy from the
+# specified module.
+token_verification = "EnumeratedTokenVerification"
+
+# Optionally specify header name that is expected to carry the
+# token.
+#
+# If not specified, the token is expected to come in a HTTP-like
+# convention: the 'authorization' header (must be lower-case) and
+# the value of 'Bearer <token>' where <token> is the value token
+# itself.
+token_header_name = "x-custom-header-with-token"
+
+#######################################################################
 # Task Handling
 #######################################################################
 
@@ -216,3 +266,6 @@ otel_service_instance_id = "your-service-instance-id"
 functions = [
     "my_python_package.some_module"
 ]
+
+[enumerated_tokens]
+tokens = ["token1", "token2"]

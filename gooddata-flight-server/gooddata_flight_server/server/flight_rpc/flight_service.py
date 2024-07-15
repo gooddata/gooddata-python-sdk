@@ -8,9 +8,12 @@ from typing import Optional
 import pyarrow.flight
 import structlog
 
-from gooddata_flight_server.config.config import ServerConfig
+from gooddata_flight_server.config.config import AuthenticationMethod, ServerConfig
 from gooddata_flight_server.errors.error_code import ErrorCode
 from gooddata_flight_server.errors.error_info import ErrorInfo
+from gooddata_flight_server.server.auth.auth_middleware import TokenAuthMiddleware, TokenAuthMiddlewareFactory
+from gooddata_flight_server.server.auth.token_verifier_factory import create_token_verification_strategy
+from gooddata_flight_server.server.base import ServerContext
 from gooddata_flight_server.server.flight_rpc.flight_middleware import (
     CallFinalizer,
     CallInfo,
@@ -102,7 +105,32 @@ class FlightRpcService:
         self._flight_shutdown_thread: Optional[Thread] = None
         self._stopped = False
 
-    def start(self) -> None:
+    def _initialize_authentication(
+        self, ctx: ServerContext
+    ) -> Optional[tuple[str, pyarrow.flight.ServerMiddlewareFactory]]:
+        if self._config.authentication_method == AuthenticationMethod.NoAuth:
+            if self._config.use_mutual_tls:
+                return
+
+            if "127.0.0.1" not in self._config.listen_host and "localhost" not in self._config.listen_host:
+                print("!" * 72)
+                print("!!! Your server is configured without authentication and ")
+                print("!!! it seems it is listening on a non-loopback interface. ")
+                print("!!! The server may be reachable from public network. ")
+                print(f"!!! Listening on: {self._config.listen_host}. ")
+                print("!" * 72)
+
+                self._logger.warning("insecure_warning", listen_url=self._config.listen_host)
+
+            return None
+
+        verification = create_token_verification_strategy(ctx)
+
+        return TokenAuthMiddleware.MiddlewareName, TokenAuthMiddlewareFactory(
+            ctx.config.token_header_name, verification
+        )
+
+    def start(self, ctx: ServerContext) -> None:
         """
         Starts the server. This will start the Flight RPC Server bound to configured host and port.
         The server will be returning UNAVAILABLE for all methods until it is switched to serving.
@@ -125,6 +153,16 @@ class FlightRpcService:
             tls=tls_certificates is not None,
         )
 
+        middleware = {
+            "_availability": self._availability,
+            CallInfo.MiddlewareName: _CallInfoMiddlewareFactory(),
+            CallFinalizer.MiddlewareName: _CallFinalizerMiddlewareFactory(),
+        }
+
+        auth_middleware = self._initialize_authentication(ctx)
+        if auth_middleware is not None:
+            middleware[auth_middleware[0]] = auth_middleware[1]
+
         # server starts right as it is constructed
         # the serve() method does not have to be called; moreover, it should not be called by the server
         # as it makes PyArrow to install signal handlers that interfere with quiver server's handlers
@@ -136,11 +174,7 @@ class FlightRpcService:
             tls_certificates=tls_certificates,
             verify_client=self._config.use_mutual_tls,
             root_certificates=self._config.tls_root_cert,
-            middleware={
-                "_availability": self._availability,
-                CallInfo.MiddlewareName: _CallInfoMiddlewareFactory(),
-                CallFinalizer.MiddlewareName: _CallFinalizerMiddlewareFactory(),
-            },
+            middleware=middleware,
         )
 
     def switch_to_serving(self, methods: FlightServerMethods) -> None:
