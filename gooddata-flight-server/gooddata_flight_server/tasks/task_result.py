@@ -28,7 +28,13 @@ class FlightDataTaskResult(abc.ABC):
     - results whose data that can be consumed repeatedly
     """
 
-    __slots__ = ("_single_use_data", "_data_lock", "_claim_lock", "_claimed", "_closed")
+    __slots__ = (
+        "_single_use_data",
+        "_data_lock",
+        "_claim_lock",
+        "_claimed",
+        "_closed",
+    )
 
     def __init__(self, single_use_data: bool = False) -> None:
         self._single_use_data = single_use_data

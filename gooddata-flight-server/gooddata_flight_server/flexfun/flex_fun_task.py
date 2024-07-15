@@ -7,7 +7,10 @@ from gooddata_flight_server.flexfun.flex_fun import FlexFun
 from gooddata_flight_server.tasks.base import ArrowData
 from gooddata_flight_server.tasks.task import Task
 from gooddata_flight_server.tasks.task_error import TaskError
-from gooddata_flight_server.tasks.task_result import FlightDataTaskResult, TaskResult
+from gooddata_flight_server.tasks.task_result import (
+    FlightDataTaskResult,
+    TaskResult,
+)
 
 
 class _FlexFunResult(FlightDataTaskResult):
@@ -57,7 +60,11 @@ class FlexFunTask(Task):
         self._headers = headers
 
     def run(self) -> Union[TaskResult, TaskError]:
-        result = self._fun.call(parameters=self._parameters, columns=self._columns, headers=self._headers)
+        result = self._fun.call(
+            parameters=self._parameters,
+            columns=self._columns,
+            headers=self._headers,
+        )
 
         return _FlexFunResult(result)
 

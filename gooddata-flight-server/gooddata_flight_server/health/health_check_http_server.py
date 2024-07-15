@@ -66,7 +66,10 @@ class _HealthCheckHandler(BaseHTTPRequestHandler):
         """
         LOGGER.debug("checking_flight_server_healthy")
 
-        for module, status in self._server_health_monitor.module_statuses.items():
+        for (
+            module,
+            status,
+        ) in self._server_health_monitor.module_statuses.items():
             if status == ModuleHealthStatus.NOT_OK:
                 LOGGER.warning("unhealthy_module", module=module)
                 return False

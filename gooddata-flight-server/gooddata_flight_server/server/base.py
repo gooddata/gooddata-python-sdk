@@ -6,8 +6,12 @@ import pyarrow.flight
 from dynaconf import Dynaconf
 
 from gooddata_flight_server.config.config import ServerConfig
-from gooddata_flight_server.health.server_health_monitor import ServerHealthMonitor
-from gooddata_flight_server.server.flight_rpc.server_methods import FlightServerMethods
+from gooddata_flight_server.health.server_health_monitor import (
+    ServerHealthMonitor,
+)
+from gooddata_flight_server.server.flight_rpc.server_methods import (
+    FlightServerMethods,
+)
 from gooddata_flight_server.tasks.task_executor import TaskExecutor
 
 

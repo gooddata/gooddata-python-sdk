@@ -58,7 +58,11 @@ class ServerBase(abc.ABC):
 
         # main server thread; this is responsible for starting all sub-services,
         # don't want the main thread to be blocked
-        self._main_thread = Thread(name="gooddata_flight_server.server", target=self._server_main, daemon=True)
+        self._main_thread = Thread(
+            name="gooddata_flight_server.server",
+            target=self._server_main,
+            daemon=True,
+        )
 
         # main server waits for this condition, once notified, it will stop or abort all sub-services
         self._stop_cond = Condition()
@@ -246,7 +250,8 @@ class ServerBase(abc.ABC):
         """
         with self._start_cond:
             completed = self._start_cond.wait_for(
-                lambda: self._started is True or self._startup_interrupted is not None, timeout=timeout
+                lambda: self._started is True or self._startup_interrupted is not None,
+                timeout=timeout,
             )
             if not completed:
                 return False

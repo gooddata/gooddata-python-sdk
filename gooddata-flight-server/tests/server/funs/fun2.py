@@ -19,7 +19,12 @@ class _SimpleFun(FlexFun):
         ]
     )
 
-    def call(self, parameters: dict, columns: tuple[str, ...], headers: dict[str, list[str]]) -> ArrowData:
+    def call(
+        self,
+        parameters: dict,
+        columns: tuple[str, ...],
+        headers: dict[str, list[str]],
+    ) -> ArrowData:
         assert _DATA is not None
         return _DATA
 

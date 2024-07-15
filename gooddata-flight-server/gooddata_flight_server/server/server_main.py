@@ -5,14 +5,23 @@ import pyarrow.flight
 from dynaconf import Dynaconf
 
 from gooddata_flight_server.config.config import ServerConfig, read_config
-from gooddata_flight_server.flexfun.flight_methods import create_flexfun_flight_methods
+from gooddata_flight_server.flexfun.flight_methods import (
+    create_flexfun_flight_methods,
+)
 from gooddata_flight_server.server.base import (
     FlightServerMethodsFactory,
     ServerContext,
 )
-from gooddata_flight_server.server.flight_rpc.flight_service import FlightRpcService
-from gooddata_flight_server.server.flight_rpc.server_methods import FlightServerMethods
-from gooddata_flight_server.server.server_base import DEFAULT_LOGGING_INI, ServerBase
+from gooddata_flight_server.server.flight_rpc.flight_service import (
+    FlightRpcService,
+)
+from gooddata_flight_server.server.flight_rpc.server_methods import (
+    FlightServerMethods,
+)
+from gooddata_flight_server.server.server_base import (
+    DEFAULT_LOGGING_INI,
+    ServerBase,
+)
 from gooddata_flight_server.tasks.task_executor import TaskExecutor
 from gooddata_flight_server.tasks.thread_task_executor import ThreadTaskExecutor
 from gooddata_flight_server.utils.logging import init_logging

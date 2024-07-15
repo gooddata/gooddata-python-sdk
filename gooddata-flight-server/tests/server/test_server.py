@@ -2,7 +2,9 @@
 from typing import Generator
 
 import pyarrow.flight
-from gooddata_flight_server.server.flight_rpc.server_methods import FlightServerMethods
+from gooddata_flight_server.server.flight_rpc.server_methods import (
+    FlightServerMethods,
+)
 
 from tests.server.conftest import server
 
@@ -45,7 +47,6 @@ def test_smoke():
 
 def test_smoke_tls(tls_ca_cert):
     with server(_TestingMethods(), tls=True) as s:
-        print(s.location)
         c = pyarrow.flight.FlightClient(s.location, tls_root_certs=tls_ca_cert)
         listing = tuple(c.list_flights())
 

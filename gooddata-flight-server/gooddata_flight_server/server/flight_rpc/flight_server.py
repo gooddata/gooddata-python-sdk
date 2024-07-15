@@ -14,7 +14,9 @@ from typing import Optional, TypeAlias, Union
 
 import pyarrow.flight
 
-from gooddata_flight_server.server.flight_rpc.server_methods import FlightServerMethods
+from gooddata_flight_server.server.flight_rpc.server_methods import (
+    FlightServerMethods,
+)
 
 FlightServerLocation: TypeAlias = Union[str, bytes, Optional[tuple[str, int]], pyarrow.flight.Location]
 FlightTlsCertificates: TypeAlias = list[tuple[bytes, bytes]]
@@ -148,7 +150,9 @@ class FlightServer(pyarrow.flight.FlightServerBase):
         return self._methods.do_put(context, descriptor, reader, writer)
 
     def do_get(
-        self, context: pyarrow.flight.ServerCallContext, ticket: pyarrow.flight.Ticket
+        self,
+        context: pyarrow.flight.ServerCallContext,
+        ticket: pyarrow.flight.Ticket,
     ) -> pyarrow.flight.FlightDataStream:
         return self._methods.do_get(context, ticket)
 
@@ -165,6 +169,8 @@ class FlightServer(pyarrow.flight.FlightServerBase):
         return self._methods.list_actions(context)
 
     def do_action(
-        self, context: pyarrow.flight.ServerCallContext, action: pyarrow.flight.Action
+        self,
+        context: pyarrow.flight.ServerCallContext,
+        action: pyarrow.flight.Action,
     ) -> Generator[pyarrow.flight.Result, None, None]:
         return self._methods.do_action(context, action)

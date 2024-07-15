@@ -107,7 +107,11 @@ class FlexFunRegistry:
                 # log as warning just so that it stands out somewhat better
                 self._logger.warning("load_flex_funs_done", module=module, loaded_funs=[])
             else:
-                self._logger.info("load_flex_funs_done", module=module, loaded_funs=loaded_funs)
+                self._logger.info(
+                    "load_flex_funs_done",
+                    module=module,
+                    loaded_funs=loaded_funs,
+                )
 
             self._loaded_modules.append(module)
 

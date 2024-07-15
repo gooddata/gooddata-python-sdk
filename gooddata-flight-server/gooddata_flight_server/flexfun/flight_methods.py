@@ -11,8 +11,13 @@ from gooddata_flight_server.flexfun.flex_fun import FlexFun
 from gooddata_flight_server.flexfun.flex_fun_registry import FlexFunRegistry
 from gooddata_flight_server.flexfun.flex_fun_task import FlexFunTask
 from gooddata_flight_server.server.base import ServerContext
-from gooddata_flight_server.server.flight_rpc.server_methods import FlightServerMethods
-from gooddata_flight_server.tasks.task_result import FlightDataTaskResult, TaskExecutionResult
+from gooddata_flight_server.server.flight_rpc.server_methods import (
+    FlightServerMethods,
+)
+from gooddata_flight_server.tasks.task_result import (
+    FlightDataTaskResult,
+    TaskExecutionResult,
+)
 
 _LOGGER = structlog.get_logger("gooddata_flexfun.rpc")
 
@@ -134,7 +139,9 @@ class _FlexFunServerMethods(FlightServerMethods):
         return self._prepare_flight_info(task_result)
 
     def do_get(
-        self, context: pyarrow.flight.ServerCallContext, ticket: pyarrow.flight.Ticket
+        self,
+        context: pyarrow.flight.ServerCallContext,
+        ticket: pyarrow.flight.Ticket,
     ) -> pyarrow.flight.FlightDataStream:
         try:
             ticket_payload = orjson.loads(ticket.ticket)
@@ -148,7 +155,8 @@ class _FlexFunServerMethods(FlightServerMethods):
         task_result = self._ctx.task_executor.wait_for_result(task_id)
         if task_result is None:
             raise ErrorInfo.for_reason(
-                ErrorCode.INVALID_TICKET, f"Unable to serve data for task '{task_id}'. The task result is not present."
+                ErrorCode.INVALID_TICKET,
+                f"Unable to serve data for task '{task_id}'. The task result is not present.",
             )
 
         result = task_result.result

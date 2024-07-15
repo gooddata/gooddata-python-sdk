@@ -42,7 +42,12 @@ class Task(abc.ABC):
         "_triggers",
     )
 
-    def __init__(self, cmd: bytes, cancellable: bool = True, task_id: Optional[str] = None):
+    def __init__(
+        self,
+        cmd: bytes,
+        cancellable: bool = True,
+        task_id: Optional[str] = None,
+    ):
         self._task_id = task_id or uuid.uuid4().hex
         self._cmd = cmd
         self._cancel_lock = threading.Lock()

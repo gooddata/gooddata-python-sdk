@@ -159,7 +159,9 @@ class ErrorInfo:
         """
         return pyarrow.flight.FlightUnavailableError(self.msg, extra_info=self.to_bytes())
 
-    def to_unauthenticated_error(self) -> pyarrow.flight.FlightUnauthenticatedError:
+    def to_unauthenticated_error(
+        self,
+    ) -> pyarrow.flight.FlightUnauthenticatedError:
         """
         :return: this error meta wrapped into a FlightUnauthenticatedError
         """

@@ -10,7 +10,12 @@ class Fun1(FlexFun):
     Name = "fun1"
     Schema = pyarrow.schema(fields=[pyarrow.field("col", pyarrow.int64())])
 
-    def call(self, parameters: dict, columns: tuple[str, ...], headers: dict[str, list[str]]) -> ArrowData:
+    def call(
+        self,
+        parameters: dict,
+        columns: tuple[str, ...],
+        headers: dict[str, list[str]],
+    ) -> ArrowData:
         pass
 
 
@@ -20,7 +25,12 @@ class Fun2(FlexFun):
 
     OnLoadCalled = False
 
-    def call(self, parameters: dict, columns: tuple[str, ...], headers: dict[str, list[str]]) -> ArrowData:
+    def call(
+        self,
+        parameters: dict,
+        columns: tuple[str, ...],
+        headers: dict[str, list[str]],
+    ) -> ArrowData:
         pass
 
     @staticmethod

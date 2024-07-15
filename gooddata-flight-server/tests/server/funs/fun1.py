@@ -14,7 +14,12 @@ class _SimpleFun(FlexFun):
         ]
     )
 
-    def call(self, parameters: dict, columns: tuple[str, ...], headers: dict[str, list[str]]) -> ArrowData:
+    def call(
+        self,
+        parameters: dict,
+        columns: tuple[str, ...],
+        headers: dict[str, list[str]],
+    ) -> ArrowData:
         return pyarrow.table(
             data={
                 "col1": [1, 2, 3],

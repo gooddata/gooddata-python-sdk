@@ -72,8 +72,8 @@ class CallFinalizer(pyarrow.flight.ServerMiddleware):
         of hanging. The function will be called out from the gRPC server's thread; if the call hangs, server's thread
         will be blocked.
 
-        :param fun: function to register, it will be called with one argument: exception, which is either None on success
-          or pyarrow.ArrowException on failure
+        :param fun: function to register, it will be called with one argument: exception,
+         which is either None on success or pyarrow.ArrowException on failure
         :return: nothing
         """
         self._on_end.append(fun)

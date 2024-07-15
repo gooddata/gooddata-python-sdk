@@ -19,7 +19,12 @@ def test_basic_function():
         assert cmd["function_name"] == "SimpleFun"
 
         descriptor = pyarrow.flight.FlightDescriptor.for_command(
-            orjson.dumps({"function_name": "SimpleFun", "parameters": {"test1": 1, "test2": 2, "test3": 3}})
+            orjson.dumps(
+                {
+                    "function_name": "SimpleFun",
+                    "parameters": {"test1": 1, "test2": 2, "test3": 3},
+                }
+            )
         )
         info = c.get_flight_info(descriptor)
         data: pyarrow.Table = c.do_get(info.endpoints[0].ticket).read_all()
@@ -38,7 +43,12 @@ def test_function_with_on_load():
     with flexfun_server(["tests.server.funs.fun2"]) as s:
         c = pyarrow.flight.FlightClient(s.location)
         descriptor = pyarrow.flight.FlightDescriptor.for_command(
-            orjson.dumps({"function_name": "SimpleFun", "parameters": {"test1": 1, "test2": 2, "test3": 3}})
+            orjson.dumps(
+                {
+                    "function_name": "SimpleFun",
+                    "parameters": {"test1": 1, "test2": 2, "test3": 3},
+                }
+            )
         )
 
         info = c.get_flight_info(descriptor)
@@ -62,7 +72,12 @@ def test_basic_function_tls(tls_ca_cert):
         assert cmd["function_name"] == "SimpleFun"
 
         descriptor = pyarrow.flight.FlightDescriptor.for_command(
-            orjson.dumps({"function_name": "SimpleFun", "parameters": {"test1": 1, "test2": 2, "test3": 3}})
+            orjson.dumps(
+                {
+                    "function_name": "SimpleFun",
+                    "parameters": {"test1": 1, "test2": 2, "test3": 3},
+                }
+            )
         )
         info = c.get_flight_info(descriptor)
         data: pyarrow.Table = c.do_get(info.endpoints[0].ticket).read_all()

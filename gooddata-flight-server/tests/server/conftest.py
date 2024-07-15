@@ -8,9 +8,13 @@ from pathlib import Path
 from typing import Union
 
 import pytest
-from gooddata_flight_server.flexfun.flight_methods import create_flexfun_flight_methods
+from gooddata_flight_server.flexfun.flight_methods import (
+    create_flexfun_flight_methods,
+)
 from gooddata_flight_server.server.base import FlightServerMethodsFactory
-from gooddata_flight_server.server.flight_rpc.server_methods import FlightServerMethods
+from gooddata_flight_server.server.flight_rpc.server_methods import (
+    FlightServerMethods,
+)
 from gooddata_flight_server.server.server_main import (
     GoodDataFlightServer,
     create_server,

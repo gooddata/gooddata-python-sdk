@@ -17,7 +17,10 @@ from gooddata_flight_server.tasks.base import TaskWaitTimeoutError
 from gooddata_flight_server.tasks.metrics import TaskExecutorMetrics
 from gooddata_flight_server.tasks.task import Task
 from gooddata_flight_server.tasks.task_error import TaskError
-from gooddata_flight_server.tasks.task_executor import TaskAttributes, TaskExecutor
+from gooddata_flight_server.tasks.task_executor import (
+    TaskAttributes,
+    TaskExecutor,
+)
 from gooddata_flight_server.tasks.task_result import (
     FlightDataTaskResult,
     TaskExecutionResult,
@@ -341,7 +344,10 @@ class ThreadTaskExecutor(TaskExecutor, _TaskExecutionCallbacks):
         self._metric_prefix = metric_prefix
 
         self._metrics = TaskExecutorMetrics(prefix=metric_prefix)
-        self._executor = ThreadPoolExecutor(max_workers=task_threads, thread_name_prefix="gooddata_flight_server.task")
+        self._executor = ThreadPoolExecutor(
+            max_workers=task_threads,
+            thread_name_prefix="gooddata_flight_server.task",
+        )
         self._close_executor = ThreadPoolExecutor(
             max_workers=result_close_threads,
             thread_name_prefix="gooddata_flight_server.result_close",
@@ -383,7 +389,9 @@ class ThreadTaskExecutor(TaskExecutor, _TaskExecutionCallbacks):
         self._executions.pop(result.task_id, None)
 
     def _create_task_exec_result(
-        self, task_execution: _TaskExecution, f: Future[Union[TaskResult, TaskError]]
+        self,
+        task_execution: _TaskExecution,
+        f: Future[Union[TaskResult, TaskError]],
     ) -> TaskExecutionResult:
         assert f.done()
 
@@ -493,7 +501,11 @@ class ThreadTaskExecutor(TaskExecutor, _TaskExecutionCallbacks):
 
         with task_execution.use_execution_span():
             with SERVER_TRACER.start_as_current_span("task_run", attributes={TaskAttributes.TaskId: task.task_id}):
-                self._logger.info("task_run", task_id=task.task_id, waited=stats.run_waited_duration)
+                self._logger.info(
+                    "task_run",
+                    task_id=task.task_id,
+                    waited=stats.run_waited_duration,
+                )
                 self._metrics.wait_time.observe(stats.run_waited_duration)
 
                 try:

@@ -6,7 +6,9 @@ from typing import Optional, TypeVar
 
 from dynaconf import ValidationError
 
-from gooddata_flight_server.flexfun.flight_methods import create_flexfun_flight_methods
+from gooddata_flight_server.flexfun.flight_methods import (
+    create_flexfun_flight_methods,
+)
 from gooddata_flight_server.server.server_base import (
     DEFAULT_LOGGING_INI,
     ServerStartupInterrupted,

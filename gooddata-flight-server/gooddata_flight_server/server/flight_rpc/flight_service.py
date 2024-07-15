@@ -11,9 +11,14 @@ import structlog
 from gooddata_flight_server.config.config import ServerConfig
 from gooddata_flight_server.errors.error_code import ErrorCode
 from gooddata_flight_server.errors.error_info import ErrorInfo
-from gooddata_flight_server.server.flight_rpc.flight_middleware import CallFinalizer, CallInfo
+from gooddata_flight_server.server.flight_rpc.flight_middleware import (
+    CallFinalizer,
+    CallInfo,
+)
 from gooddata_flight_server.server.flight_rpc.flight_server import FlightServer
-from gooddata_flight_server.server.flight_rpc.server_methods import FlightServerMethods
+from gooddata_flight_server.server.flight_rpc.server_methods import (
+    FlightServerMethods,
+)
 
 
 def _get_flight_server_locations(config: ServerConfig) -> tuple[str, str]:
@@ -72,7 +77,11 @@ class FlightRpcService:
     of the server or loss of connection to the cluster.
     """
 
-    def __init__(self, config: ServerConfig, methods: FlightServerMethods = FlightServerMethods()):
+    def __init__(
+        self,
+        config: ServerConfig,
+        methods: FlightServerMethods = FlightServerMethods(),
+    ):
         self._config = config
         self._methods = methods
 
@@ -182,7 +191,11 @@ class FlightRpcService:
 
         # trigger server shutdown in separate thread because shutdown blocks and violates the contract
         # for quiver's long-running services
-        self._flight_shutdown_thread = Thread(name="flight_service_shutdown", daemon=True, target=self._shutdown_server)
+        self._flight_shutdown_thread = Thread(
+            name="flight_service_shutdown",
+            daemon=True,
+            target=self._shutdown_server,
+        )
         self._flight_shutdown_thread.start()
 
     def _shutdown_server(self) -> None:

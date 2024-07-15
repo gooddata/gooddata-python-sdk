@@ -3,7 +3,10 @@ from collections.abc import Generator
 
 import pyarrow.flight
 
-from gooddata_flight_server.server.flight_rpc.flight_middleware import CallFinalizer, CallInfo
+from gooddata_flight_server.server.flight_rpc.flight_middleware import (
+    CallFinalizer,
+    CallInfo,
+)
 
 
 class FlightServerMethods:
@@ -78,7 +81,9 @@ class FlightServerMethods:
         raise NotImplementedError
 
     def do_get(
-        self, context: pyarrow.flight.ServerCallContext, ticket: pyarrow.flight.Ticket
+        self,
+        context: pyarrow.flight.ServerCallContext,
+        ticket: pyarrow.flight.Ticket,
     ) -> pyarrow.flight.FlightDataStream:
         raise NotImplementedError
 
@@ -95,6 +100,8 @@ class FlightServerMethods:
         raise NotImplementedError
 
     def do_action(
-        self, context: pyarrow.flight.ServerCallContext, action: pyarrow.flight.Action
+        self,
+        context: pyarrow.flight.ServerCallContext,
+        action: pyarrow.flight.Action,
     ) -> Generator[pyarrow.flight.Result, None, None]:
         raise NotImplementedError

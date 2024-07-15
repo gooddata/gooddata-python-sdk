@@ -42,7 +42,9 @@ def _create_console_span_exporter() -> SpanExporter:
 
 
 def _create_zipkin_span_exporter() -> SpanExporter:
-    from opentelemetry.exporter.zipkin.json import ZipkinExporter  # type: ignore
+    from opentelemetry.exporter.zipkin.json import (
+        ZipkinExporter,  # type: ignore
+    )
 
     return ZipkinExporter()
 
