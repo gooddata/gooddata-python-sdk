@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import functools
+import json
 import os
 import re
 from collections.abc import KeysView
@@ -384,3 +385,9 @@ def get_namespace_from_xliff(xliff_content: str) -> Dict:
     tree = ET.ElementTree(ET.fromstring(xliff_content))
     root = tree.getroot()
     return {"ns": root.tag.split("}")[0].strip("{")}
+
+
+def read_json(path: Union[str, Path]) -> Any:
+    path = Path(path) if isinstance(path, str) else path
+    with open(path, "r", encoding="utf-8") as f:
+        return json.loads(f.read())

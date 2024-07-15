@@ -47,6 +47,9 @@ class CatalogDeclarativeUsers(Base):
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeUser(Base):
     id: str
+    email: Optional[str] = None
+    firstname: Optional[str] = None
+    lastname: Optional[str] = None
     auth_id: Optional[str] = None
     user_groups: List[CatalogDeclarativeUserGroupIdentifier] = attr.field(factory=list)
     settings: List[CatalogDeclarativeSetting] = attr.field(factory=list)
