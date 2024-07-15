@@ -31,6 +31,9 @@ setup(
     install_requires=REQUIRES,
     packages=find_packages(exclude=["tests*"]),
     python_requires=">=3.8.0",
+    scripts=[
+        "bin/gdc",
+    ],
     project_urls={
         "Documentation": "https://www.gooddata.com/docs/python-sdk/1.22.0",
         "Source": "https://github.com/gooddata/gooddata-python-sdk",
