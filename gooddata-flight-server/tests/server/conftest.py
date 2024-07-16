@@ -51,7 +51,7 @@ def server(
 ) -> GoodDataFlightServer:
     port = _find_free_port()
     os.environ["GOODDATA_FLIGHT_SERVER__LISTEN_PORT"] = str(port)
-    os.environ["GOODDATA_FLIGHT_SERVER__ADVERTISE_HOST"] = "localhost.localdomain"
+    os.environ["GOODDATA_FLIGHT_SERVER__ADVERTISE_HOST"] = "localhost"
 
     if tls:
         cert = os.path.join(_TLS_DIR, "server-cert.pem")
