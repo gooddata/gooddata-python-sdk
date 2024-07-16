@@ -1,4 +1,4 @@
-#  (C) 2023 GoodData Corporation
+#  (C) 2024 GoodData Corporation
 import importlib
 from typing import Dict, Iterable, List, Type
 

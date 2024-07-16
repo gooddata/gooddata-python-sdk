@@ -1,4 +1,4 @@
-#  (C) 2023 GoodData Corporation
+#  (C) 2024 GoodData Corporation
 from typing import Any, Literal, Optional
 
 from typing_extensions import TypeAlias

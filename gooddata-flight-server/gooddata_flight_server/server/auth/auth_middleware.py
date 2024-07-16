@@ -25,6 +25,7 @@ class TokenAuthMiddleware(pyarrow.flight.ServerMiddleware):
 
 _DEFAULT_AUTH_TOKEN_HEADER = "Authorization"
 _LOGGER = structlog.get_logger("gooddata_flight_server.auth")
+_BEARER_END_IDX = 7
 
 
 class TokenAuthMiddlewareFactory(pyarrow.flight.ServerMiddlewareFactory):
@@ -63,7 +64,7 @@ class TokenAuthMiddlewareFactory(pyarrow.flight.ServerMiddlewareFactory):
                     "Authentication failed because the 'Authorization' header does not start with 'Bearer '"
                 )
 
-            return token[7:].strip()
+            return token[_BEARER_END_IDX:].strip()
 
         token = _auth_header_value(self._token_header_name)
         return token.strip()

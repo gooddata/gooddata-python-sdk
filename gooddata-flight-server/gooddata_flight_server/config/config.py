@@ -150,7 +150,14 @@ _SUPPORTED_AUTH_METHOD = [
 ]
 
 
-def _s(name: str) -> str:
+def _fqsn(name: str) -> str:
+    """
+    Get fully-qualified server setting name. Given a name of setting, this returns
+    name prefixed with server section name. E.g. `listen_url` becomes `server.listen_url`.
+
+    :param name: setting name
+    :return: fully qualified setting name
+    """
     return f"{_SERVER_SECTION_NAME}.{name}"
 
 
@@ -183,7 +190,7 @@ def _validate_boolean(val: Any) -> bool:
 
 _VALIDATORS = [
     Validator(
-        _s(_Settings.ListenHost),
+        _fqsn(_Settings.ListenHost),
         default=_LOCALHOST,
         condition=_validate_non_empty_string,
         cast=str,
@@ -192,7 +199,7 @@ _VALIDATORS = [
         },
     ),
     Validator(
-        _s(_Settings.ListenPort),
+        _fqsn(_Settings.ListenPort),
         default=_DEFAULT_LISTEN_PORT,
         condition=_validate_non_negative_number,
         cast=int,
@@ -201,7 +208,7 @@ _VALIDATORS = [
         },
     ),
     Validator(
-        _s(_Settings.AdvertiseHost),
+        _fqsn(_Settings.AdvertiseHost),
         default=_DEFAULT_ADVERTISE_HOST,
         condition=_validate_non_empty_string,
         cast=str,
@@ -210,7 +217,7 @@ _VALIDATORS = [
         },
     ),
     Validator(
-        _s(_Settings.AdvertisePort),
+        _fqsn(_Settings.AdvertisePort),
         condition=_validate_non_negative_number,
         cast=int,
         messages={
@@ -218,7 +225,7 @@ _VALIDATORS = [
         },
     ),
     Validator(
-        _s(_Settings.UseTls),
+        _fqsn(_Settings.UseTls),
         default=False,
         condition=_validate_boolean,
         cast=bool,
@@ -227,7 +234,7 @@ _VALIDATORS = [
         },
     ),
     Validator(
-        _s(_Settings.UseMtls),
+        _fqsn(_Settings.UseMtls),
         default=False,
         condition=_validate_boolean,
         cast=bool,
@@ -236,7 +243,7 @@ _VALIDATORS = [
         },
     ),
     Validator(
-        _s(_Settings.TlsCertificate),
+        _fqsn(_Settings.TlsCertificate),
         condition=_validate_non_empty_string,
         cast=str,
         messages={
@@ -244,7 +251,7 @@ _VALIDATORS = [
         },
     ),
     Validator(
-        _s(_Settings.TlsPrivateKey),
+        _fqsn(_Settings.TlsPrivateKey),
         condition=_validate_non_empty_string,
         cast=str,
         messages={
@@ -252,7 +259,7 @@ _VALIDATORS = [
         },
     ),
     Validator(
-        _s(_Settings.TlsRoot),
+        _fqsn(_Settings.TlsRoot),
         condition=_validate_non_empty_string,
         cast=str,
         messages={
@@ -260,7 +267,7 @@ _VALIDATORS = [
         },
     ),
     Validator(
-        _s(_Settings.AuthenticationMethod),
+        _fqsn(_Settings.AuthenticationMethod),
         condition=_validate_supported_auth,
         default=AuthenticationMethod.NoAuth.value,
         cast=str,
@@ -269,7 +276,7 @@ _VALIDATORS = [
         },
     ),
     Validator(
-        _s(_Settings.TokenHeaderName),
+        _fqsn(_Settings.TokenHeaderName),
         condition=_validate_non_empty_string,
         cast=str,
         messages={
@@ -277,7 +284,7 @@ _VALIDATORS = [
         },
     ),
     Validator(
-        _s(_Settings.TokenVerification),
+        _fqsn(_Settings.TokenVerification),
         condition=_validate_non_empty_string,
         cast=str,
         messages={
@@ -285,7 +292,7 @@ _VALIDATORS = [
         },
     ),
     Validator(
-        _s(_Settings.TaskThreads),
+        _fqsn(_Settings.TaskThreads),
         default=_DEFAULT_TASK_THREADS,
         condition=_validate_non_negative_number,
         cast=int,
@@ -294,7 +301,7 @@ _VALIDATORS = [
         },
     ),
     Validator(
-        _s(_Settings.TaskCloseThreads),
+        _fqsn(_Settings.TaskCloseThreads),
         default=_DEFAULT_TASK_CLOSE_THREADS,
         condition=_validate_non_negative_number,
         cast=int,
@@ -303,7 +310,7 @@ _VALIDATORS = [
         },
     ),
     Validator(
-        _s(_Settings.TaskResultTtlSec),
+        _fqsn(_Settings.TaskResultTtlSec),
         default=_DEFAULT_TASK_RESULT_TTL_SEC,
         condition=_validate_non_negative_number,
         cast=int,
@@ -312,7 +319,7 @@ _VALIDATORS = [
         },
     ),
     Validator(
-        _s(_Settings.MetricsHost),
+        _fqsn(_Settings.MetricsHost),
         condition=_validate_non_empty_string,
         cast=str,
         messages={
@@ -320,7 +327,7 @@ _VALIDATORS = [
         },
     ),
     Validator(
-        _s(_Settings.MetricsPort),
+        _fqsn(_Settings.MetricsPort),
         default=_DEFAULT_METRICS_PORT,
         condition=_validate_non_negative_number,
         cast=int,
@@ -329,7 +336,7 @@ _VALIDATORS = [
         },
     ),
     Validator(
-        _s(_Settings.HealthcheckHost),
+        _fqsn(_Settings.HealthcheckHost),
         condition=_validate_non_empty_string,
         cast=str,
         messages={
@@ -337,7 +344,7 @@ _VALIDATORS = [
         },
     ),
     Validator(
-        _s(_Settings.HealthcheckPort),
+        _fqsn(_Settings.HealthcheckPort),
         default=_DEFAULT_HEALTHCHECK_PORT,
         condition=_validate_non_negative_number,
         cast=int,
@@ -346,7 +353,7 @@ _VALIDATORS = [
         },
     ),
     Validator(
-        _s(_Settings.MallocTrimIntervalSec),
+        _fqsn(_Settings.MallocTrimIntervalSec),
         default=_DEFAULT_MALLOC_TRIM_INTERVAL_SEC,
         condition=_validate_non_negative_number,
         messages={
@@ -354,7 +361,7 @@ _VALIDATORS = [
         },
     ),
     Validator(
-        _s(_Settings.LogEventKeyName),
+        _fqsn(_Settings.LogEventKeyName),
         default=_DEFAULT_LOG_EVENT_KEY_NAME,
         condition=_validate_non_empty_string,
         messages={
@@ -362,7 +369,7 @@ _VALIDATORS = [
         },
     ),
     Validator(
-        _s(_Settings.LogTraceKeys),
+        _fqsn(_Settings.LogTraceKeys),
         condition=_validate_mapping,
         messages={
             "condition": f"{_Settings.LogTraceKeys} must be a mapping between 'trace_id', 'span_id' "
@@ -370,7 +377,7 @@ _VALIDATORS = [
         },
     ),
     Validator(
-        _s(_Settings.OtelExporterType),
+        _fqsn(_Settings.OtelExporterType),
         cast=str,
         condition=_validate_supported_otel_exporter,
         messages={
@@ -378,7 +385,7 @@ _VALIDATORS = [
         },
     ),
     Validator(
-        _s(_Settings.OtelServiceName),
+        _fqsn(_Settings.OtelServiceName),
         cast=str,
         condition=_validate_non_empty_string,
         messages={
@@ -386,7 +393,7 @@ _VALIDATORS = [
         },
     ),
     Validator(
-        _s(_Settings.OtelServiceNamespace),
+        _fqsn(_Settings.OtelServiceNamespace),
         cast=str,
         condition=_validate_non_empty_string,
         messages={
@@ -394,7 +401,7 @@ _VALIDATORS = [
         },
     ),
     Validator(
-        _s(_Settings.OtelServiceInstanceId),
+        _fqsn(_Settings.OtelServiceInstanceId),
         cast=str,
         condition=_validate_non_empty_string,
         messages={
@@ -419,6 +426,8 @@ def _read_tls_setting(settings: Dynaconf, setting: str) -> Optional[bytes]:
 
 def _create_server_config(settings: Dynaconf) -> ServerConfig:
     server_settings = settings.get(_SERVER_SECTION_NAME)
+    if server_settings is None:
+        raise ValidationError(f"The configuration does not contain the '{_SERVER_SECTION_NAME}'.")
 
     exporter_type = server_settings.get(_Settings.OtelExporterType)
     if exporter_type == "none":

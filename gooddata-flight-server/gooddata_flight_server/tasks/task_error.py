@@ -1,4 +1,4 @@
-#  (C) 2023 GoodData Corporation
+#  (C) 2024 GoodData Corporation
 import dataclasses
 from dataclasses import dataclass
 from typing import Callable, Optional

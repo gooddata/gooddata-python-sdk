@@ -1,4 +1,4 @@
-# (C) 2022 GoodData Corporation
+# (C) 2024 GoodData Corporation
 """
 This is a thin wrapper around the PyArrow FlightServerBase. It exists to provide a typed interface.
 
