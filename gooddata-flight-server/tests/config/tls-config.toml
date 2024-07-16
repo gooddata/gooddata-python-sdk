@@ -1,0 +1,11 @@
+# (C) 2024 GoodData Corporation
+[server]
+
+use_tls = true
+tls_certificate = "inlined cert"
+# note: for test purposes, this whole thing is overwritten
+# using ENV var set in test -> that's where absolute path to
+# key is set accordingly
+tls_private_key = "@overwritten by env var set in tests"
+use_mtls = true
+tls_root_certificate = "inlined ca cert"

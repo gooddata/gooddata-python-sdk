@@ -9,8 +9,10 @@ pre-commit~=3.6.0
 -r ./gooddata-pandas/requirements.txt
 -r ./gooddata-fdw/requirements.txt
 -r ./gooddata-dbt/requirements.txt
+-r ./gooddata-flight-server/requirements.txt
 -r ./gooddata-sdk/test-requirements.txt
 -r ./gooddata-pandas/test-requirements.txt
 -r ./gooddata-fdw/test-requirements.txt
 -r ./gooddata-dbt/test-requirements.txt
+-r ./gooddata-flight-server/test-requirements.txt
 -r ./tests-support/requirements.txt

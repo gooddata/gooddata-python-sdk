@@ -80,3 +80,6 @@ venv/**
 
 # Test helper files
 gooddata-sdk/tests/catalog/store/**
+
+# Testing certificates
+**/*.pem
