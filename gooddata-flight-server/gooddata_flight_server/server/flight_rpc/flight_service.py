@@ -110,7 +110,7 @@ class FlightRpcService:
     ) -> Optional[tuple[str, pyarrow.flight.ServerMiddlewareFactory]]:
         if self._config.authentication_method == AuthenticationMethod.NoAuth:
             if self._config.use_mutual_tls:
-                return
+                return None
 
             if "127.0.0.1" not in self._config.listen_host and "localhost" not in self._config.listen_host:
                 print("!" * 72)

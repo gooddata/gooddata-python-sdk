@@ -90,8 +90,8 @@ class ServerConfig:
 
         return dataclasses.replace(
             self,
-            tls_cert_and_key=sanitized_root_cert,
-            tls_root_cert=sanitized_cert_and_key,
+            tls_cert_and_key=sanitized_cert_and_key,
+            tls_root_cert=sanitized_root_cert,
         )
 
 
@@ -439,7 +439,7 @@ def _create_server_config(settings: Dynaconf) -> ServerConfig:
             )
 
         key = _read_tls_setting(server_settings, _Settings.TlsPrivateKey)
-        if cert is None:
+        if key is None:
             raise ValidationError(
                 f"When you specify 'use_tls = true', then you must provide '{_Settings.TlsPrivateKey}'."
             )

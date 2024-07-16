@@ -105,7 +105,7 @@ class GoodDataFlightServer(ServerBase):
 def create_server(
     methods: Optional[Union[FlightServerMethods, FlightServerMethodsFactory]] = None,
     config_files: tuple[str, ...] = (),
-    logging_config: Optional[str] = DEFAULT_LOGGING_INI,
+    logging_config: str = DEFAULT_LOGGING_INI,
     dev_log: bool = True,
 ) -> "GoodDataFlightServer":
     settings, config = read_config(files=config_files)

@@ -34,7 +34,7 @@ class FlexFunRegistry:
         """
         return self._loaded_modules
 
-    def _check_function(self, fun: type[FlexFun]) -> None:
+    def _check_function(self, fun: type[FlexFun]) -> str:
         # TODO: add name validation using regex
         if fun.Name is None or not len(fun.Name):
             raise ValueError(
@@ -49,7 +49,12 @@ class FlexFunRegistry:
         if fun.Schema is None:
             raise ValueError(f"FlexFun '{fun.Name}' implemented in class {fun.__name__} does not specify schema.")
 
+        return fun.Name
+
     def _initialize_and_register(self, ctx: ServerContext, fun: type[FlexFun]) -> None:
+        # this should be verified earlier and raise proper error
+        assert fun.Name is not None
+
         fun.on_load(ctx)
         self._fun_by_name[fun.Name] = fun
 
@@ -95,13 +100,13 @@ class FlexFunRegistry:
 
                 # verify the function's metadata (stored in static fields) fulfills the
                 # contract in regards
-                self._check_function(member)
+                fun_name = self._check_function(member)
 
                 # trigger function's on-load -> this gives function the opportunity to
                 # perform any one-time initialization. if there is a problem during
                 # init, the whole load will be interrupted.
                 self._initialize_and_register(ctx, member)
-                loaded_funs.append(member.Name)
+                loaded_funs.append(fun_name)
 
             if not len(loaded_funs):
                 # log as warning just so that it stands out somewhat better

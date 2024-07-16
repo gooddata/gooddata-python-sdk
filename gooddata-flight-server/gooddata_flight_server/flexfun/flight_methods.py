@@ -14,12 +14,14 @@ from gooddata_flight_server.server.base import ServerContext
 from gooddata_flight_server.server.flight_rpc.server_methods import (
     FlightServerMethods,
 )
+from gooddata_flight_server.tasks.base import TaskWaitTimeoutError
 from gooddata_flight_server.tasks.task_result import (
     FlightDataTaskResult,
     TaskExecutionResult,
 )
 
 _LOGGER = structlog.get_logger("gooddata_flexfun.rpc")
+_DEFAULT_TASK_WAIT = 60.0
 
 
 class _FlexFunServerMethods(FlightServerMethods):
@@ -52,7 +54,7 @@ class _FlexFunServerMethods(FlightServerMethods):
 
     def _extract_invocation_payload(
         self, descriptor: pyarrow.flight.FlightDescriptor
-    ) -> tuple[str, dict, tuple[str, ...]]:
+    ) -> tuple[str, dict, Optional[tuple[str, ...]]]:
         if descriptor.command is None or not len(descriptor.command):
             raise ErrorInfo.bad_argument(
                 "Incorrect FlexFun invocation. Flight descriptor must contain command with the invocation payload."
@@ -91,7 +93,7 @@ class _FlexFunServerMethods(FlightServerMethods):
             cmd=descriptor.command,
         )
 
-    def _prepare_flight_info(self, task_result: TaskExecutionResult):
+    def _prepare_flight_info(self, task_result: TaskExecutionResult) -> pyarrow.flight.FlightInfo:
         if task_result.error is not None:
             raise task_result.error.as_flight_error()
 
@@ -99,7 +101,7 @@ class _FlexFunServerMethods(FlightServerMethods):
             raise ErrorInfo.for_reason(
                 ErrorCode.COMMAND_CANCELLED,
                 f"FlexFun invocation was cancelled. Invocation task was: '{task_result.task_id}'.",
-            )
+            ).to_server_error()
 
         result = task_result.result
         assert isinstance(result, FlightDataTaskResult)
@@ -134,7 +136,21 @@ class _FlexFunServerMethods(FlightServerMethods):
         task = self._prepare_task(context, descriptor)
 
         self._ctx.task_executor.submit(task)
-        task_result = self._ctx.task_executor.wait_for_result(task.task_id)
+
+        try:
+            # XXX: this should be enhanced to implement polling
+            task_result = self._ctx.task_executor.wait_for_result(task.task_id, _DEFAULT_TASK_WAIT)
+        except TaskWaitTimeoutError:
+            raise ErrorInfo.for_reason(
+                ErrorCode.TIMEOUT, f"GetFlightInfo timed out while waiting for task {task.task_id}."
+            ).to_timeout_error()
+
+        # if this bombs then there must be something really wrong because the task
+        # was clearly submitted and code was waiting for its completion. this invariant
+        # should not happen in this particular code path. The None return value may
+        # be applicable one day when polling is in use and a request comes to check whether
+        # particular task id finished
+        assert task_result is not None
 
         return self._prepare_flight_info(task_result)
 
@@ -157,7 +173,7 @@ class _FlexFunServerMethods(FlightServerMethods):
             raise ErrorInfo.for_reason(
                 ErrorCode.INVALID_TICKET,
                 f"Unable to serve data for task '{task_id}'. The task result is not present.",
-            )
+            ).to_user_error()
 
         result = task_result.result
         if not isinstance(result, FlightDataTaskResult):
@@ -165,7 +181,7 @@ class _FlexFunServerMethods(FlightServerMethods):
                 ErrorCode.INTERNAL_ERROR,
                 f"An internal error has occurred while attempting read result for '{task_id}'."
                 f"While the result exists, it is of an unexpected type. This is a bug in FlexFun server implementation.",
-            )
+            ).to_internal_error()
 
         rlock, data = result.acquire_data()
 
