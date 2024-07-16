@@ -1,0 +1,8 @@
+dynaconf>=3.1.11,<4.0.0
+opentelemetry-api>=1.24.0,<=2.0.0
+opentelemetry-sdk>=1.24.0,<=2.0.0
+orjson>=3.8.5,<4.0.0
+prometheus-client~=0.20.0
+pyarrow>=16.1.0
+readerwriterlock~=1.0.9
+structlog>=24.0.0,<25.0.0

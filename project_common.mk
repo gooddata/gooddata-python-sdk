@@ -33,8 +33,8 @@ format-diff:
 
 .PHONY: format-fix
 format-fix:
-	(cd ..; .venv/bin/ruff $(CURR_DIR_BASE_NAME))
 	(cd ..; .venv/bin/ruff format $(CURR_DIR_BASE_NAME))
+	(cd ..; .venv/bin/ruff check --fix $(CURR_DIR_BASE_NAME))
 
 .PHONY: mypy
 mypy:

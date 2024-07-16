@@ -1,0 +1,6 @@
+# (C) 2024 GoodData Corporation
+[server]
+
+authentication_method = "token"
+token_header_name = "x-my-header"
+token_verification = "EnumeratedTokenVerification"

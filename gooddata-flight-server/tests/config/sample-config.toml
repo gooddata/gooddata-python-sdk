@@ -1,0 +1,33 @@
+# (C) 2024 GoodData Corporation
+[server]
+
+#######################################################################
+# Flight RPC Setup
+#######################################################################
+
+listen_host = "127.0.0.1"
+listen_port = 17001
+advertise_host = "127.0.0.1"
+advertise_port = 17001
+
+#######################################################################
+# Task Handling
+#######################################################################
+
+task_threads = 32
+
+#######################################################################
+# Server Infrastructure & Maintenance
+#######################################################################
+
+metrics_host = "0.0.0.0"
+metrics_port = 17101
+health_check_host = "0.0.0.0"
+health_check_port = 8877
+malloc_trim_interval_sec = 30
+log_event_key_name = "event"
+log_trace_keys = { "trace_id" = "trace_id", "span_id" = "trace_id", "parent_span_id" = "parent_span_id" }
+otel_exporter_type = "otlp-grpc"
+otel_service_name = "your-service-name"
+otel_service_namespace = "your-namespace"
+otel_service_instance_id = "your-service-instance-id"
