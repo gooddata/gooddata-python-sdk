@@ -1,5 +1,6 @@
 #  (C) 2024 GoodData Corporation
 import importlib
+from typing import Type
 
 import structlog
 
@@ -11,7 +12,7 @@ from gooddata_flight_server.server.server_base import ServerStartupInterrupted
 _LOGGER = structlog.get_logger("gooddata_flight_server.auth")
 
 
-def _import_verification_strategy(module_name: str) -> type[TokenVerificationStrategy]:
+def _import_verification_strategy(module_name: str) -> Type[TokenVerificationStrategy]:
     _LOGGER.info("load_token_verification", module_name=module_name)
     module = importlib.import_module(module_name)
 
@@ -34,7 +35,7 @@ def _import_verification_strategy(module_name: str) -> type[TokenVerificationStr
     )
 
 
-def _find_token_verification_class(ctx: ServerContext) -> type[TokenVerificationStrategy]:
+def _find_token_verification_class(ctx: ServerContext) -> Type[TokenVerificationStrategy]:
     # config reader must ensure that there is always some value here
     assert ctx.config.token_verification is not None
 

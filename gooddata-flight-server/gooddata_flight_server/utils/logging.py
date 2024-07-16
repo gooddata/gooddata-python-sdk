@@ -5,7 +5,7 @@ Logging configuration helper functions
 
 import os
 from logging.config import fileConfig
-from typing import Any, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 import orjson
 import structlog
@@ -47,7 +47,7 @@ class _OtelTraceContextInjector:
 
     __slots__ = ("_trace_id_key", "_span_id_key", "_parent_span_id_key")
 
-    def __init__(self, trace_ctx_keys: Optional[dict[str, str]] = None) -> None:
+    def __init__(self, trace_ctx_keys: Optional[Dict[str, str]] = None) -> None:
         _keys = trace_ctx_keys or {}
 
         # do one-time lookup of the actual key names under which the different
@@ -87,9 +87,9 @@ def _configure_structlog(
     dev_log: bool,
     event_key: str,
     add_trace_ctx: bool = False,
-    trace_ctx_keys: Optional[dict[str, str]] = None,
+    trace_ctx_keys: Optional[Dict[str, str]] = None,
 ) -> None:
-    common_processors: list[Any] = [
+    common_processors: List[Any] = [
         structlog.stdlib.filter_by_level,
         structlog.contextvars.merge_contextvars,
     ]
@@ -131,7 +131,7 @@ def init_logging(
     event_key: str = "event",
     for_module: Optional[str] = None,
     add_trace_ctx: bool = False,
-    trace_ctx_keys: Optional[dict[str, str]] = None,
+    trace_ctx_keys: Optional[Dict[str, str]] = None,
 ) -> str:
     """
     Initializes python logging from the file on the provided path. If the path is absolute, then it is

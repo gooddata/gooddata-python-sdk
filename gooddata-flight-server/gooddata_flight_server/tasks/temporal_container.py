@@ -1,9 +1,8 @@
 # (C) 2022 GoodData Corporation
 import threading
 import time
-from collections.abc import Callable, Iterator
 from dataclasses import dataclass
-from typing import Any, Generic, Optional, TypeVar
+from typing import Any, Callable, Dict, Generic, Iterator, List, Optional, TypeVar
 
 import structlog
 from readerwriterlock import rwlock
@@ -11,7 +10,7 @@ from readerwriterlock import rwlock
 T = TypeVar("T")
 
 
-@dataclass(frozen=True, slots=True)
+@dataclass(frozen=True)
 class _Entry(Generic[T]):
     value: T
     added: float
@@ -50,7 +49,7 @@ class TemporalContainer(Generic[T]):
         self._collector_cycle_time = collector_cycle_time
 
         self._entries_rwlock: rwlock.RWLockRead = rwlock.RWLockRead()
-        self._entries: dict[str, _Entry[T]] = {}
+        self._entries: Dict[str, _Entry[T]] = {}
 
         self._thread: threading.Thread = threading.Thread(daemon=True, target=self._collector)
         self._closed = False
@@ -84,8 +83,8 @@ class TemporalContainer(Generic[T]):
                 # log and ignore
                 self._logger.error("temporal_entries_evict_failed", exc_info=True)
 
-    def _evict_expired_items(self, now: float) -> list[T]:
-        to_remove: list[str] = []
+    def _evict_expired_items(self, now: float) -> List[T]:
+        to_remove: List[str] = []
 
         # first get list of entries to remove in this cycle
         # the dict items are naturally ordered so that older entries
@@ -108,7 +107,7 @@ class TemporalContainer(Generic[T]):
         # now go ahead and remove all entries that were identified
         # previously. mind that can happen that a previously identified
         # entry could be removed manually in the meanwhile
-        to_evict: list[T] = []
+        to_evict: List[T] = []
         with self._entries_rwlock.gen_wlock():
             self._logger.debug(
                 "temporal_entries_remove",

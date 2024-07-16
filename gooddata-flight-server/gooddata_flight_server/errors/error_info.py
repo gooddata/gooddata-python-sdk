@@ -1,8 +1,7 @@
 #  (C) 2023 GoodData Corporation
 import base64
 import traceback
-from collections.abc import Callable
-from typing import Optional, Union
+from typing import Callable, Optional, Union
 
 import orjson
 import pyarrow.flight

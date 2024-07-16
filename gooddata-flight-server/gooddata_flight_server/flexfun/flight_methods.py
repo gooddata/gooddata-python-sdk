@@ -1,5 +1,5 @@
 #  (C) 2024 GoodData Corporation
-from typing import Generator, Optional
+from typing import Dict, Generator, Optional, Tuple, Type
 
 import orjson
 import pyarrow.flight
@@ -38,7 +38,7 @@ class _FlexFunServerMethods(FlightServerMethods):
 
         return pyarrow.flight.FlightDescriptor.for_command(orjson.dumps(cmd))
 
-    def _create_fun_info(self, fun: type[FlexFun]) -> pyarrow.flight.FlightInfo:
+    def _create_fun_info(self, fun: Type[FlexFun]) -> pyarrow.flight.FlightInfo:
         # these are for type checker; the registry will only register functions
         # that have proper metadata on them
         assert fun.Name is not None
@@ -54,7 +54,7 @@ class _FlexFunServerMethods(FlightServerMethods):
 
     def _extract_invocation_payload(
         self, descriptor: pyarrow.flight.FlightDescriptor
-    ) -> tuple[str, dict, Optional[tuple[str, ...]]]:
+    ) -> Tuple[str, Dict, Optional[Tuple[str, ...]]]:
         if descriptor.command is None or not len(descriptor.command):
             raise ErrorInfo.bad_argument(
                 "Incorrect FlexFun invocation. Flight descriptor must contain command with the invocation payload."

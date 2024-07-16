@@ -1,6 +1,6 @@
 #  (C) 2024 GoodData Corporation
 import os
-from typing import Generator
+from typing import Dict, Generator
 
 import pyarrow.flight
 import pytest
@@ -19,7 +19,7 @@ _DATA2 = pyarrow.table(
     data={"col1": list(range(100)), "col2": [f"val{x}" for x in range(100)]},
 )
 
-_DATA: dict[bytes, pyarrow.Table] = {b"data1": _DATA1, b"data2": _DATA2}
+_DATA: Dict[bytes, pyarrow.Table] = {b"data1": _DATA1, b"data2": _DATA2}
 
 _LISTING = {
     data_id: pyarrow.flight.FlightInfo(

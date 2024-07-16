@@ -2,15 +2,16 @@
 import abc
 import threading
 import time
-from collections.abc import Generator
 from concurrent.futures import CancelledError, Future, ThreadPoolExecutor
 from contextlib import contextmanager
 from dataclasses import dataclass
-from typing import Any, Optional, Union
+from typing import Any, Dict, Generator, Optional, Union
 
 import opentelemetry.context as otelctx
 import pyarrow.flight
 import structlog
+from opentelemetry import trace
+
 from gooddata_flight_server.errors.error_code import ErrorCode
 from gooddata_flight_server.errors.error_info import ErrorInfo
 from gooddata_flight_server.tasks.base import TaskWaitTimeoutError
@@ -28,10 +29,9 @@ from gooddata_flight_server.tasks.task_result import (
 )
 from gooddata_flight_server.tasks.temporal_container import TemporalContainer
 from gooddata_flight_server.utils.otel_tracing import SERVER_TRACER
-from opentelemetry import trace
 
 
-@dataclass(slots=True)
+@dataclass()
 class _TaskExecutionStats:
     """
     Container for task execution statistics.
@@ -90,7 +90,7 @@ class _TaskExecutionStats:
         return self.completed - self.created
 
     @property
-    def durations_to_dict(self) -> dict[str, float]:
+    def durations_to_dict(self) -> Dict[str, float]:
         return {
             "run_waited_duration": self.run_waited_duration,
             "run_duration": self.run_duration,
@@ -108,7 +108,7 @@ class _TaskExecutionCallbacks(abc.ABC):
     def run_task(
         self,
         task_execution: "_TaskExecution",
-    ) -> Future[Union[TaskResult, TaskError]]:
+    ) -> Future:
         """
         Asynchronously run the task.
 
@@ -120,7 +120,7 @@ class _TaskExecutionCallbacks(abc.ABC):
     def process_task_result(
         self,
         task_execution: "_TaskExecution",
-        result: Future[Union[TaskResult, TaskError]],
+        result: Future,
     ) -> TaskExecutionResult:
         """
         This will be called when the task run itself completes. It is guaranteed
@@ -202,7 +202,7 @@ class _TaskExecution:
         return self._stats
 
     @property
-    def logging_ctx(self) -> dict[str, Any]:
+    def logging_ctx(self) -> Dict[str, Any]:
         return self._logging_ctx
 
     def _complete_execution_span(self, execution_result: TaskExecutionResult) -> None:
@@ -355,7 +355,7 @@ class ThreadTaskExecutor(TaskExecutor, _TaskExecutionCallbacks):
 
         self._task_lock = threading.Lock()
         self._queue_size: int = 0
-        self._executions: dict[str, _TaskExecution] = {}
+        self._executions: Dict[str, _TaskExecution] = {}
 
         self._results: TemporalContainer[TaskExecutionResult] = TemporalContainer(
             logger_name="gooddata_flight_server.result_container",
@@ -391,7 +391,7 @@ class ThreadTaskExecutor(TaskExecutor, _TaskExecutionCallbacks):
     def _create_task_exec_result(
         self,
         task_execution: _TaskExecution,
-        f: Future[Union[TaskResult, TaskError]],
+        f: Future,
     ) -> TaskExecutionResult:
         assert f.done()
 
@@ -532,7 +532,7 @@ class ThreadTaskExecutor(TaskExecutor, _TaskExecutionCallbacks):
     def run_task(
         self,
         task_execution: _TaskExecution,
-    ) -> Future[Union[TaskResult, TaskError]]:
+    ) -> Future:
         with task_execution.use_execution_span():
             with SERVER_TRACER.start_as_current_span("task_run_submit"):
                 task_execution.stats.run_submitted = time.perf_counter()
@@ -542,7 +542,7 @@ class ThreadTaskExecutor(TaskExecutor, _TaskExecutionCallbacks):
     def process_task_result(
         self,
         task_execution: "_TaskExecution",
-        future: Future[Union[TaskResult, TaskError]],
+        future: Future,
     ) -> TaskExecutionResult:
         result = self._create_task_exec_result(task_execution, future)
         self._finish_task_with_result(task_execution, result)

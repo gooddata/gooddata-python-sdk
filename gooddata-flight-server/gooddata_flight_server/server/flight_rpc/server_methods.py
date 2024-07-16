@@ -1,5 +1,5 @@
 # (C) 2022 GoodData Corporation
-from collections.abc import Generator
+from typing import Generator, List, Tuple
 
 import pyarrow.flight
 
@@ -96,7 +96,7 @@ class FlightServerMethods:
     ) -> None:
         raise NotImplementedError
 
-    def list_actions(self, context: pyarrow.flight.ServerCallContext) -> list[tuple[str, str]]:
+    def list_actions(self, context: pyarrow.flight.ServerCallContext) -> List[Tuple[str, str]]:
         raise NotImplementedError
 
     def do_action(

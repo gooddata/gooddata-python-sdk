@@ -2,10 +2,9 @@
 import contextlib
 import os
 import socket
-from collections.abc import Iterable
 from contextlib import closing
 from pathlib import Path
-from typing import Union
+from typing import Iterable, Union
 
 import pytest
 from gooddata_flight_server.flexfun.flight_methods import (

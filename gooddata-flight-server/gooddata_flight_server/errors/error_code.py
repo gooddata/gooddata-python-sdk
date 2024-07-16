@@ -1,5 +1,7 @@
 #  (C) 2023 GoodData Corporation
-from typing import Any, Literal, Optional, TypeAlias
+from typing import Any, Literal, Optional
+
+from typing_extensions import TypeAlias
 
 _CUSTOM_ERROR_START = 1000
 _ERROR_CODE_MASK = 0x0000_FFFF

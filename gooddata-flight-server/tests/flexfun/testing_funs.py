@@ -1,4 +1,5 @@
 #  (C) 2024 GoodData Corporation
+from typing import Dict, List, Tuple
 
 import pyarrow
 from gooddata_flight_server.flexfun.flex_fun import FlexFun
@@ -13,8 +14,8 @@ class Fun1(FlexFun):
     def call(
         self,
         parameters: dict,
-        columns: tuple[str, ...],
-        headers: dict[str, list[str]],
+        columns: Tuple[str, ...],
+        headers: Dict[str, List[str]],
     ) -> ArrowData:
         pass
 
@@ -27,9 +28,9 @@ class Fun2(FlexFun):
 
     def call(
         self,
-        parameters: dict,
-        columns: tuple[str, ...],
-        headers: dict[str, list[str]],
+        parameters: Dict,
+        columns: Tuple[str, ...],
+        headers: Dict[str, List[str]],
     ) -> ArrowData:
         pass
 

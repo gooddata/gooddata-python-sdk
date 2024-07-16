@@ -1,5 +1,5 @@
 #  (C) 2024 GoodData Corporation
-from typing import Iterable, Optional, Union
+from typing import Dict, Iterable, List, Optional, Tuple, Union
 
 import pyarrow
 
@@ -46,8 +46,8 @@ class FlexFunTask(Task):
         self,
         fun: FlexFun,
         parameters: dict,
-        columns: Optional[tuple[str, ...]],
-        headers: dict[str, list[str]],
+        columns: Optional[Tuple[str, ...]],
+        headers: Dict[str, List[str]],
         cmd: bytes,
         cancellable: bool = True,
         task_id: Optional[str] = None,

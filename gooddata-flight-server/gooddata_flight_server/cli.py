@@ -2,7 +2,7 @@
 import argparse
 import sys
 import traceback
-from typing import Optional, TypeVar
+from typing import Optional, Tuple, TypeVar
 
 from dynaconf import ValidationError
 
@@ -70,7 +70,7 @@ def _create_std_server_argparser() -> argparse.ArgumentParser:
 
 
 def _create_server(args: argparse.Namespace) -> GoodDataFlightServer:
-    _config_files: tuple[str, ...] = args.config or ()
+    _config_files: Tuple[str, ...] = args.config or ()
     config_files = tuple(f for f in _config_files if f is not None)
 
     return create_server(

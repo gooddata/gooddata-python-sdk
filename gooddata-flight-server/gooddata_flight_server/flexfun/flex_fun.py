@@ -1,6 +1,6 @@
 #  (C) 2024 GoodData Corporation
 import abc
-from typing import Optional
+from typing import Dict, List, Optional, Tuple
 
 import pyarrow
 
@@ -72,8 +72,8 @@ class FlexFun(abc.ABC):
     def call(
         self,
         parameters: dict,
-        columns: Optional[tuple[str, ...]],
-        headers: dict[str, list[str]],
+        columns: Optional[Tuple[str, ...]],
+        headers: Dict[str, List[str]],
     ) -> ArrowData:
         """
         Function call.

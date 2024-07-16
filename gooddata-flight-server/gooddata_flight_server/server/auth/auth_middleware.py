@@ -1,5 +1,5 @@
 #  (C) 2024 GoodData Corporation
-from typing import Any, Optional
+from typing import Any, Dict, List, Optional
 
 import pyarrow.flight
 import structlog
@@ -38,7 +38,7 @@ class TokenAuthMiddlewareFactory(pyarrow.flight.ServerMiddlewareFactory):
         self._token_header_name = token_header_name
         self._strategy = strategy
 
-    def _extract_token(self, headers: dict[str, list[str]]) -> str:
+    def _extract_token(self, headers: Dict[str, List[str]]) -> str:
         def _auth_header_value(lookup: str) -> str:
             _lookup = lookup.lower()
             values = [value for header, values in headers.items() if header.lower() == _lookup for value in values]
@@ -68,7 +68,7 @@ class TokenAuthMiddlewareFactory(pyarrow.flight.ServerMiddlewareFactory):
         token = _auth_header_value(self._token_header_name)
         return token.strip()
 
-    def start_call(self, info: pyarrow.flight.CallInfo, headers: dict[str, list[str]]) -> Optional[TokenAuthMiddleware]:
+    def start_call(self, info: pyarrow.flight.CallInfo, headers: Dict[str, List[str]]) -> Optional[TokenAuthMiddleware]:
         try:
             token = self._extract_token(headers)
             result = self._strategy.verify(call_info=info, token=token)

@@ -15,7 +15,7 @@ from gooddata_flight_server.server.flight_rpc.server_methods import (
 from gooddata_flight_server.tasks.task_executor import TaskExecutor
 
 
-@dataclass(slots=True, frozen=True)
+@dataclass(frozen=True)
 class ServerContext:
     """
     Server's context.

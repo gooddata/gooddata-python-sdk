@@ -5,7 +5,7 @@ import os
 import platform
 import socket
 from dataclasses import dataclass
-from typing import Any, Optional
+from typing import Any, Dict, Optional, Tuple
 
 from dynaconf import Dynaconf, ValidationError, Validator
 
@@ -32,7 +32,7 @@ class AuthenticationMethod(enum.Enum):
     Token = "token"
 
 
-@dataclass(frozen=True, slots=True)
+@dataclass(frozen=True)
 class OtelConfig:
     exporter_type: Optional[OtelExporterType]
     service_name: str
@@ -40,7 +40,7 @@ class OtelConfig:
     service_instance_id: Optional[str]
 
 
-@dataclass(frozen=True, slots=True)
+@dataclass(frozen=True)
 class ServerConfig:
     listen_host: str
     listen_port: int
@@ -49,7 +49,7 @@ class ServerConfig:
 
     use_tls: bool
     use_mutual_tls: bool
-    tls_cert_and_key: Optional[tuple[bytes, bytes]]
+    tls_cert_and_key: Optional[Tuple[bytes, bytes]]
     tls_root_cert: Optional[bytes]
 
     authentication_method: AuthenticationMethod
@@ -68,7 +68,7 @@ class ServerConfig:
 
     malloc_trim_interval_sec: int
     log_event_key_name: str
-    log_trace_keys: dict[str, str]
+    log_trace_keys: Dict[str, str]
 
     otel_config: OtelConfig
 
@@ -77,7 +77,7 @@ class ServerConfig:
             return val[0:38] + b"..." + val[-38:]
 
         sanitized_root_cert: Optional[bytes] = None
-        sanitized_cert_and_key: Optional[tuple[bytes, bytes]] = None
+        sanitized_cert_and_key: Optional[Tuple[bytes, bytes]] = None
 
         if self.tls_root_cert is not None:
             sanitized_root_cert = _basic_sanity(self.tls_root_cert)
@@ -428,7 +428,7 @@ def _create_server_config(settings: Dynaconf) -> ServerConfig:
     advertise_port = server_settings.get(_Settings.AdvertisePort) or server_settings.get(_Settings.ListenPort)
 
     use_tls = server_settings.get(_Settings.UseTls)
-    tls_cert_and_key: Optional[tuple[bytes, bytes]] = None
+    tls_cert_and_key: Optional[Tuple[bytes, bytes]] = None
     tls_root_cert: Optional[bytes] = None
 
     if use_tls:
@@ -486,7 +486,7 @@ def _create_server_config(settings: Dynaconf) -> ServerConfig:
     )
 
 
-def _load_dynaconf(files: tuple[str, ...] = ()) -> Dynaconf:
+def _load_dynaconf(files: Tuple[str, ...] = ()) -> Dynaconf:
     """
     Initializes Dynaconf instance, optionally using a set of configuration files. Dynaconf will read config
     from env variables with the `GDFS_` prefix. See: https://www.dynaconf.com/ to learn more.
@@ -507,7 +507,7 @@ def _load_dynaconf(files: tuple[str, ...] = ()) -> Dynaconf:
     )
 
 
-def read_config(files: tuple[str, ...]) -> tuple[Dynaconf, ServerConfig]:
+def read_config(files: Tuple[str, ...]) -> Tuple[Dynaconf, ServerConfig]:
     settings = _load_dynaconf(files)
     settings.validators.register(*_VALIDATORS)
     settings.validators.validate()

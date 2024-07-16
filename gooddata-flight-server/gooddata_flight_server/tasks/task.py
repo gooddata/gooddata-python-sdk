@@ -3,7 +3,7 @@ import abc
 import threading
 import uuid
 from concurrent.futures import CancelledError
-from typing import Literal, Optional, Union, final
+from typing import Dict, List, Literal, Optional, Union, final
 
 from gooddata_flight_server.tasks.task_error import TaskError
 from gooddata_flight_server.tasks.task_result import TaskResult
@@ -201,7 +201,7 @@ class TaskFactory(abc.ABC):
     def create_task(
         self,
         cmd: bytes,
-        headers: dict[str, list[str]],
+        headers: Dict[str, List[str]],
         method: Union[Literal["get-flight-info", "list-flights"], str] = "get-flight-info",
     ) -> Task:
         """

@@ -1,14 +1,14 @@
 #  (C) 2023 GoodData Corporation
 import dataclasses
-from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Optional
+from typing import Callable, Optional
 
 import pyarrow.flight
+
 from gooddata_flight_server.errors.error_info import ErrorInfo
 
 
-@dataclass(frozen=True, slots=True)
+@dataclass(frozen=True)
 class TaskError:
     """
     Detail about failed task execution. The original Exception that was raised and

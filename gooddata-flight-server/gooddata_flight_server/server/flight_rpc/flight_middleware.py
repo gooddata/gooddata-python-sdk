@@ -1,9 +1,9 @@
 #  (C) 2024 GoodData Corporation
-from collections.abc import Callable
-from typing import Any, Optional, TypeAlias
+from typing import Any, Callable, Dict, List, Optional
 
 import pyarrow.flight
 import structlog
+from typing_extensions import TypeAlias
 
 _LOGGER = structlog.get_logger("gooddata_flight_server.rpc")
 
@@ -18,7 +18,7 @@ class CallInfo(pyarrow.flight.ServerMiddleware):
 
     MiddlewareName = "call_info"
 
-    def __init__(self, info: pyarrow.flight.CallInfo, headers: dict[str, list[str]]):
+    def __init__(self, info: pyarrow.flight.CallInfo, headers: Dict[str, List[str]]):
         super().__init__()
 
         self._info = info
@@ -32,7 +32,7 @@ class CallInfo(pyarrow.flight.ServerMiddleware):
         return self._info
 
     @property
-    def headers(self) -> dict[str, list[str]]:
+    def headers(self) -> Dict[str, List[str]]:
         """
         :return: headers provided by the caller
         """
@@ -61,7 +61,7 @@ class CallFinalizer(pyarrow.flight.ServerMiddleware):
     def __init__(self) -> None:
         super().__init__()
 
-        self._on_end: list[OnEndCallbackFn] = []
+        self._on_end: List[OnEndCallbackFn] = []
 
     def register_on_end(self, fun: OnEndCallbackFn) -> None:
         """

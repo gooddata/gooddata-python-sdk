@@ -6,6 +6,7 @@ from threading import Thread
 from typing import Any
 
 import structlog
+
 from gooddata_flight_server.health.server_health_monitor import (
     ModuleHealthStatus,
     ServerHealthMonitor,

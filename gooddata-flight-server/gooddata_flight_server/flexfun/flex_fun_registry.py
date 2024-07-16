@@ -1,7 +1,6 @@
 #  (C) 2023 GoodData Corporation
 import importlib
-from collections.abc import Iterable
-from typing import Self
+from typing import Dict, Iterable, List, Type
 
 import structlog
 
@@ -17,24 +16,24 @@ class FlexFunRegistry:
 
     def __init__(self) -> None:
         self._logger = structlog.get_logger("gooddata_flexfun.registry")
-        self._fun_by_name: dict[str, type[FlexFun]] = {}
-        self._loaded_modules: list[str] = []
+        self._fun_by_name: Dict[str, Type[FlexFun]] = {}
+        self._loaded_modules: List[str] = []
 
     @property
-    def flex_funs(self) -> dict[str, type[FlexFun]]:
+    def flex_funs(self) -> Dict[str, Type[FlexFun]]:
         """
         :return: mapping of fun names to their classes
         """
         return self._fun_by_name.copy()
 
     @property
-    def loaded_modules(self) -> list[str]:
+    def loaded_modules(self) -> List[str]:
         """
         :return: list of packages from which the registry loaded operations
         """
         return self._loaded_modules
 
-    def _check_function(self, fun: type[FlexFun]) -> str:
+    def _check_function(self, fun: Type[FlexFun]) -> str:
         # TODO: add name validation using regex
         if fun.Name is None or not len(fun.Name):
             raise ValueError(
@@ -51,14 +50,14 @@ class FlexFunRegistry:
 
         return fun.Name
 
-    def _initialize_and_register(self, ctx: ServerContext, fun: type[FlexFun]) -> None:
+    def _initialize_and_register(self, ctx: ServerContext, fun: Type[FlexFun]) -> None:
         # this should be verified earlier and raise proper error
         assert fun.Name is not None
 
         fun.on_load(ctx)
         self._fun_by_name[fun.Name] = fun
 
-    def register(self, ctx: ServerContext, *funs: type[FlexFun]) -> Self:
+    def register(self, ctx: ServerContext, *funs: Type[FlexFun]) -> "FlexFunRegistry":
         """
         Register one or more FlexFuns.
 
@@ -72,7 +71,7 @@ class FlexFunRegistry:
 
         return self
 
-    def load(self, ctx: ServerContext, modules: Iterable[str]) -> Self:
+    def load(self, ctx: ServerContext, modules: Iterable[str]) -> "FlexFunRegistry":
         """
         Loads FlexFuns from the provided python packages. The packages must be installed and
         importable.
@@ -85,7 +84,7 @@ class FlexFunRegistry:
         for module in modules:
             self._logger.info("load_flex_funs", op_module=module)
             op_module = importlib.import_module(module)
-            loaded_funs: list[str] = []
+            loaded_funs: List[str] = []
 
             for member in op_module.__dict__.values():
                 if not isinstance(member, type) or not issubclass(member, FlexFun):
