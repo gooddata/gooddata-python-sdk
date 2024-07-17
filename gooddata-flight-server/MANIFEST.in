@@ -1,2 +1,5 @@
 # (C) 2024 GoodData Corporation
 graft gooddata_flight_server
+
+include gooddata_flight_server/server/default.logging.ini
+global-exclude *~ *.py[cod] *.so
