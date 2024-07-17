@@ -35,8 +35,11 @@ setup(
         "Documentation": "https://gooddata-flight-server.readthedocs.io/en/v1.21.0",
         "Source": "https://github.com/gooddata/gooddata-python-sdk",
     },
+    scripts=[
+        "bin/gooddata-flight-server",
+    ],
     classifiers=[
-        "Development Status :: 5 - Production/Stable",
+        "Development Status :: 4 - Beta",
         "Environment :: Console",
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3.8",

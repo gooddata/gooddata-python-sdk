@@ -34,6 +34,7 @@ lint.ignore = [
 "gooddata-sdk/gooddata_sdk/__init__.py" = ["F401"]
 "gooddata-dbt/gooddata_dbt/__init__.py" = ["F401"]
 "gooddata-fdw/gooddata_fdw/__init__.py" = ["F401"]
+"gooddata-flight-server/gooddata_flight_server/__init__.py" = ["F401"]
 
 [tool.ruff.format]
 exclude = ['(gooddata-api-client|.*\.snapshot\..*)']
