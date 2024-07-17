@@ -30,6 +30,7 @@ setup(
     license_files=("LICENSE.txt",),
     install_requires=REQUIRES,
     packages=find_packages(exclude=["tests*"]),
+    include_package_data=True,
     python_requires=">=3.8.0",
     project_urls={
         "Documentation": "https://gooddata-flight-server.readthedocs.io/en/v1.21.0",
