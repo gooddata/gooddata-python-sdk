@@ -30,6 +30,7 @@ setup(
     license_files=("LICENSE.txt",),
     install_requires=REQUIRES,
     packages=find_packages(exclude=["tests*"]),
+    package_data={"gooddata_sdk.cli": ["package.json"]},
     python_requires=">=3.8.0",
     scripts=[
         "bin/gdc",
