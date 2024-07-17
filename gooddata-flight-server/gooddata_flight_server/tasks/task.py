@@ -3,7 +3,7 @@ import abc
 import threading
 import uuid
 from concurrent.futures import CancelledError
-from typing import Dict, List, Literal, Optional, Union, final
+from typing import Optional, Union, final
 
 from gooddata_flight_server.tasks.task_error import TaskError
 from gooddata_flight_server.tasks.task_result import TaskResult
@@ -189,27 +189,5 @@ class Task(abc.ABC):
         :return: result of the task
         :raise Exception
         :raise CancelledError: when the task's run was cancelled
-        """
-        raise NotImplementedError
-
-
-class TaskFactory(abc.ABC):
-    """
-    Interface for factories that create concrete implementations of tasks.
-    """
-
-    def create_task(
-        self,
-        cmd: bytes,
-        headers: Dict[str, List[str]],
-        method: Union[Literal["get-flight-info", "list-flights"], str] = "get-flight-info",
-    ) -> Task:
-        """
-        Creates a new task to execute a particular command.
-
-        :param cmd: command included in the FlightDescriptor
-        :param headers: headers provided with the request
-        :param method: flight RPC method / action through which the request to create this task was invoked
-        :return: new instance of task
         """
         raise NotImplementedError
