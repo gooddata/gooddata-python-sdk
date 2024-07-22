@@ -1,5 +1,4 @@
 # (C) 2022 GoodData Corporation
-enableCaching: true
 id: demo-bigquery-ds
 name: demo-bigquery-ds
 schema: demo
