@@ -374,8 +374,9 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         """
         if exclude is None:
             exclude = []
-        return CatalogDeclarativeAnalytics.from_api(
-            self._layout_api.get_analytics_model(workspace_id=workspace_id, exclude=exclude)
+        return CatalogDeclarativeAnalytics.from_dict(
+            self._layout_api.get_analytics_model(workspace_id=workspace_id, exclude=exclude).to_dict(camel_case=False),
+            camel_case=False,
         )
 
     def put_declarative_analytics_model(self, workspace_id: str, analytics_model: CatalogDeclarativeAnalytics) -> None:

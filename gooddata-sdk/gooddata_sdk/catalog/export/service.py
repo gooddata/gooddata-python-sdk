@@ -4,8 +4,8 @@ from pathlib import Path
 from typing import Callable, Optional, Tuple, Union
 
 from gooddata_api_client.exceptions import NotFoundException
-from gooddata_api_client.model.pdf_export_request import PdfExportRequest
 from gooddata_api_client.model.tabular_export_request import TabularExportRequest
+from gooddata_api_client.model.visual_export_request import VisualExportRequest
 
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.export.request import (
@@ -106,7 +106,7 @@ class ExportService(CatalogServiceBase):
 
     @staticmethod
     def _create_export(
-        workspace_id: str, request: Union[PdfExportRequest, TabularExportRequest], create_func: Callable
+        workspace_id: str, request: Union[VisualExportRequest, TabularExportRequest], create_func: Callable
     ) -> str:
         """
         Creates an export of the requested type (PDF or Tabular) in the specified Workspace.
@@ -145,7 +145,7 @@ class ExportService(CatalogServiceBase):
     def _export_common(
         self,
         workspace_id: str,
-        request: Union[PdfExportRequest, TabularExportRequest],
+        request: Union[VisualExportRequest, TabularExportRequest],
         file_path: Path,
         create_func: Callable,
         get_func: Callable,
@@ -211,7 +211,7 @@ class ExportService(CatalogServiceBase):
         if not self._dashboard_id_exists(workspace_id, dashboard_id):
             raise ValueError(f"Dashboard id '{dashboard_id}' does not exist for workspace '{workspace_id}'.")
         store_path = store_path if isinstance(store_path, Path) else Path(store_path)
-        request = PdfExportRequest(dashboard_id=dashboard_id, file_name=file_name)
+        request = VisualExportRequest(dashboard_id=dashboard_id, file_name=file_name)
         file_path = store_path / f"{file_name}.pdf"
         create_func = self._actions_api.create_pdf_export
         get_func = self._actions_api.get_exported_file
