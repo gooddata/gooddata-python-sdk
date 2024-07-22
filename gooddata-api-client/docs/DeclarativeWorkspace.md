@@ -12,6 +12,7 @@ Name | Type | Description | Notes
 **data_source** | [**WorkspaceDataSource**](WorkspaceDataSource.md) |  | [optional] 
 **description** | **str** | Description of the workspace | [optional] 
 **early_access** | **str** | Early access defined on level Workspace | [optional] 
+**early_access_values** | **[str]** | Early access defined on level Workspace | [optional] 
 **hierarchy_permissions** | [**[DeclarativeWorkspaceHierarchyPermission]**](DeclarativeWorkspaceHierarchyPermission.md) |  | [optional] 
 **model** | [**DeclarativeWorkspaceModel**](DeclarativeWorkspaceModel.md) |  | [optional] 
 **parent** | [**WorkspaceIdentifier**](WorkspaceIdentifier.md) |  | [optional] 

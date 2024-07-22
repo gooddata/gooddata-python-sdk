@@ -88,10 +88,10 @@ class TestRequest(ModelNormal):
         """
         lazy_import()
         return {
-            'cache_path': ([str],),  # noqa: E501
-            'enable_caching': (bool,),  # noqa: E501
             'parameters': ([DataSourceParameter],),  # noqa: E501
             'password': (str,),  # noqa: E501
+            'private_key': (str,),  # noqa: E501
+            'private_key_passphrase': (str,),  # noqa: E501
             'schema': (str,),  # noqa: E501
             'token': (str,),  # noqa: E501
             'url': (str,),  # noqa: E501
@@ -104,10 +104,10 @@ class TestRequest(ModelNormal):
 
 
     attribute_map = {
-        'cache_path': 'cachePath',  # noqa: E501
-        'enable_caching': 'enableCaching',  # noqa: E501
         'parameters': 'parameters',  # noqa: E501
         'password': 'password',  # noqa: E501
+        'private_key': 'privateKey',  # noqa: E501
+        'private_key_passphrase': 'privateKeyPassphrase',  # noqa: E501
         'schema': 'schema',  # noqa: E501
         'token': 'token',  # noqa: E501
         'url': 'url',  # noqa: E501
@@ -155,10 +155,10 @@ class TestRequest(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            cache_path ([str]): [optional]  # noqa: E501
-            enable_caching (bool): Enable caching of intermediate results.. [optional]  # noqa: E501
             parameters ([DataSourceParameter]): [optional]  # noqa: E501
             password (str): Database user password.. [optional]  # noqa: E501
+            private_key (str): Private key for data sources which supports key-pair authentication.. [optional]  # noqa: E501
+            private_key_passphrase (str): Passphrase for a encrypted version of a private key.. [optional]  # noqa: E501
             schema (str): Database schema.. [optional]  # noqa: E501
             token (str): Secret for token based authentication for data sources which supports it.. [optional]  # noqa: E501
             url (str): URL to database in JDBC format, where test should connect to.. [optional]  # noqa: E501
@@ -248,10 +248,10 @@ class TestRequest(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            cache_path ([str]): [optional]  # noqa: E501
-            enable_caching (bool): Enable caching of intermediate results.. [optional]  # noqa: E501
             parameters ([DataSourceParameter]): [optional]  # noqa: E501
             password (str): Database user password.. [optional]  # noqa: E501
+            private_key (str): Private key for data sources which supports key-pair authentication.. [optional]  # noqa: E501
+            private_key_passphrase (str): Passphrase for a encrypted version of a private key.. [optional]  # noqa: E501
             schema (str): Database schema.. [optional]  # noqa: E501
             token (str): Secret for token based authentication for data sources which supports it.. [optional]  # noqa: E501
             url (str): URL to database in JDBC format, where test should connect to.. [optional]  # noqa: E501

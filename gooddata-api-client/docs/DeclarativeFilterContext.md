@@ -4,7 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**content** | **{str: (bool, date, datetime, dict, float, int, list, str, none_type)}** | A definition of the metric in JSON format. | 
+**content** | [**JsonNode**](JsonNode.md) |  | 
 **id** | **str** | Filter Context ID. | 
 **title** | **str** | Filter Context title. | 
 **description** | **str** | Filter Context description. | [optional] 

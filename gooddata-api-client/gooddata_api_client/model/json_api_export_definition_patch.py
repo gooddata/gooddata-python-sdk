@@ -31,10 +31,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.json_api_export_definition_in_attributes import JsonApiExportDefinitionInAttributes
     from gooddata_api_client.model.json_api_export_definition_in_relationships import JsonApiExportDefinitionInRelationships
-    from gooddata_api_client.model.json_api_export_definition_patch_attributes import JsonApiExportDefinitionPatchAttributes
+    globals()['JsonApiExportDefinitionInAttributes'] = JsonApiExportDefinitionInAttributes
     globals()['JsonApiExportDefinitionInRelationships'] = JsonApiExportDefinitionInRelationships
-    globals()['JsonApiExportDefinitionPatchAttributes'] = JsonApiExportDefinitionPatchAttributes
 
 
 class JsonApiExportDefinitionPatch(ModelNormal):
@@ -98,9 +98,9 @@ class JsonApiExportDefinitionPatch(ModelNormal):
         """
         lazy_import()
         return {
-            'attributes': (JsonApiExportDefinitionPatchAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
+            'attributes': (JsonApiExportDefinitionInAttributes,),  # noqa: E501
             'relationships': (JsonApiExportDefinitionInRelationships,),  # noqa: E501
         }
 
@@ -110,9 +110,9 @@ class JsonApiExportDefinitionPatch(ModelNormal):
 
 
     attribute_map = {
-        'attributes': 'attributes',  # noqa: E501
         'id': 'id',  # noqa: E501
         'type': 'type',  # noqa: E501
+        'attributes': 'attributes',  # noqa: E501
         'relationships': 'relationships',  # noqa: E501
     }
 
@@ -123,11 +123,10 @@ class JsonApiExportDefinitionPatch(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, attributes, id, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, id, *args, **kwargs):  # noqa: E501
         """JsonApiExportDefinitionPatch - a model defined in OpenAPI
 
         Args:
-            attributes (JsonApiExportDefinitionPatchAttributes):
             id (str): API identifier of an object
 
         Keyword Args:
@@ -162,6 +161,7 @@ class JsonApiExportDefinitionPatch(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            attributes (JsonApiExportDefinitionInAttributes): [optional]  # noqa: E501
             relationships (JsonApiExportDefinitionInRelationships): [optional]  # noqa: E501
         """
 
@@ -195,7 +195,6 @@ class JsonApiExportDefinitionPatch(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.attributes = attributes
         self.id = id
         self.type = type
         for var_name, var_value in kwargs.items():
@@ -218,11 +217,10 @@ class JsonApiExportDefinitionPatch(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, attributes, id, *args, **kwargs):  # noqa: E501
+    def __init__(self, id, *args, **kwargs):  # noqa: E501
         """JsonApiExportDefinitionPatch - a model defined in OpenAPI
 
         Args:
-            attributes (JsonApiExportDefinitionPatchAttributes):
             id (str): API identifier of an object
 
         Keyword Args:
@@ -257,6 +255,7 @@ class JsonApiExportDefinitionPatch(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            attributes (JsonApiExportDefinitionInAttributes): [optional]  # noqa: E501
             relationships (JsonApiExportDefinitionInRelationships): [optional]  # noqa: E501
         """
 
@@ -288,7 +287,6 @@ class JsonApiExportDefinitionPatch(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.attributes = attributes
         self.id = id
         self.type = type
         for var_name, var_value in kwargs.items():

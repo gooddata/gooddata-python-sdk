@@ -98,8 +98,8 @@ class JsonApiExportDefinitionPostOptionalId(ModelNormal):
         """
         lazy_import()
         return {
-            'attributes': (JsonApiExportDefinitionInAttributes,),  # noqa: E501
             'type': (str,),  # noqa: E501
+            'attributes': (JsonApiExportDefinitionInAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'relationships': (JsonApiExportDefinitionInRelationships,),  # noqa: E501
         }
@@ -110,8 +110,8 @@ class JsonApiExportDefinitionPostOptionalId(ModelNormal):
 
 
     attribute_map = {
-        'attributes': 'attributes',  # noqa: E501
         'type': 'type',  # noqa: E501
+        'attributes': 'attributes',  # noqa: E501
         'id': 'id',  # noqa: E501
         'relationships': 'relationships',  # noqa: E501
     }
@@ -123,11 +123,10 @@ class JsonApiExportDefinitionPostOptionalId(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, attributes, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, *args, **kwargs):  # noqa: E501
         """JsonApiExportDefinitionPostOptionalId - a model defined in OpenAPI
 
         Args:
-            attributes (JsonApiExportDefinitionInAttributes):
 
         Keyword Args:
             type (str): Object type. defaults to "exportDefinition", must be one of ["exportDefinition", ]  # noqa: E501
@@ -161,6 +160,7 @@ class JsonApiExportDefinitionPostOptionalId(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            attributes (JsonApiExportDefinitionInAttributes): [optional]  # noqa: E501
             id (str): API identifier of an object. [optional]  # noqa: E501
             relationships (JsonApiExportDefinitionInRelationships): [optional]  # noqa: E501
         """
@@ -195,7 +195,6 @@ class JsonApiExportDefinitionPostOptionalId(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.attributes = attributes
         self.type = type
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
@@ -217,11 +216,10 @@ class JsonApiExportDefinitionPostOptionalId(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, attributes, *args, **kwargs):  # noqa: E501
+    def __init__(self, *args, **kwargs):  # noqa: E501
         """JsonApiExportDefinitionPostOptionalId - a model defined in OpenAPI
 
         Args:
-            attributes (JsonApiExportDefinitionInAttributes):
 
         Keyword Args:
             type (str): Object type. defaults to "exportDefinition", must be one of ["exportDefinition", ]  # noqa: E501
@@ -255,6 +253,7 @@ class JsonApiExportDefinitionPostOptionalId(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            attributes (JsonApiExportDefinitionInAttributes): [optional]  # noqa: E501
             id (str): API identifier of an object. [optional]  # noqa: E501
             relationships (JsonApiExportDefinitionInRelationships): [optional]  # noqa: E501
         """
@@ -287,7 +286,6 @@ class JsonApiExportDefinitionPostOptionalId(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.attributes = attributes
         self.type = type
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

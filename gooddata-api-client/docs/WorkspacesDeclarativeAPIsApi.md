@@ -200,7 +200,7 @@ with gooddata_api_client.ApiClient() as api_client:
             ],
             analytical_dashboards=[
                 DeclarativeAnalyticalDashboard(
-                    content={},
+                    content=JsonNode(),
                     created_at="2023-07-20 12:30",
                     created_by=DeclarativeUserIdentifier(
                         id="employee123",
@@ -222,7 +222,7 @@ with gooddata_api_client.ApiClient() as api_client:
             ],
             attribute_hierarchies=[
                 DeclarativeAttributeHierarchy(
-                    content={},
+                    content=JsonNode(),
                     created_at="["2023-07-20 12:30"]",
                     created_by=DeclarativeUserIdentifier(
                         id="employee123",
@@ -241,7 +241,7 @@ with gooddata_api_client.ApiClient() as api_client:
             ],
             dashboard_plugins=[
                 DeclarativeDashboardPlugin(
-                    content={},
+                    content=JsonNode(),
                     created_at="["2023-07-20 12:30"]",
                     created_by=DeclarativeUserIdentifier(
                         id="employee123",
@@ -260,7 +260,7 @@ with gooddata_api_client.ApiClient() as api_client:
             ],
             filter_contexts=[
                 DeclarativeFilterContext(
-                    content={},
+                    content=JsonNode(),
                     description="Filter Context for Sales team.",
                     id="filter-sales",
                     tags=["Revenues"],
@@ -269,7 +269,7 @@ with gooddata_api_client.ApiClient() as api_client:
             ],
             metrics=[
                 DeclarativeMetric(
-                    content={},
+                    content=JsonNode(),
                     created_at="["2023-07-20 12:30"]",
                     created_by=DeclarativeUserIdentifier(
                         id="employee123",
@@ -288,7 +288,7 @@ with gooddata_api_client.ApiClient() as api_client:
             ],
             visualization_objects=[
                 DeclarativeVisualizationObject(
-                    content={},
+                    content=JsonNode(),
                     created_at="["2023-07-20 12:30"]",
                     created_by=DeclarativeUserIdentifier(
                         id="employee123",
@@ -536,7 +536,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 custom_application_settings=[
                     DeclarativeCustomApplicationSetting(
                         application_name="Modeler",
-                        content={},
+                        content=JsonNode(),
                         id="modeler.demo",
                     ),
                 ],
@@ -548,6 +548,9 @@ with gooddata_api_client.ApiClient() as api_client:
                 ),
                 description="description_example",
                 early_access="early_access_example",
+                early_access_values=[
+                    "early_access_values_example",
+                ],
                 hierarchy_permissions=[
                     DeclarativeWorkspaceHierarchyPermission(
                         assignee=AssigneeIdentifier(
@@ -570,7 +573,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         ],
                         analytical_dashboards=[
                             DeclarativeAnalyticalDashboard(
-                                content={},
+                                content=JsonNode(),
                                 created_at="2023-07-20 12:30",
                                 created_by=DeclarativeUserIdentifier(
                                     id="employee123",
@@ -592,7 +595,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         ],
                         attribute_hierarchies=[
                             DeclarativeAttributeHierarchy(
-                                content={},
+                                content=JsonNode(),
                                 created_at="["2023-07-20 12:30"]",
                                 created_by=DeclarativeUserIdentifier(
                                     id="employee123",
@@ -611,7 +614,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         ],
                         dashboard_plugins=[
                             DeclarativeDashboardPlugin(
-                                content={},
+                                content=JsonNode(),
                                 created_at="["2023-07-20 12:30"]",
                                 created_by=DeclarativeUserIdentifier(
                                     id="employee123",
@@ -630,7 +633,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         ],
                         filter_contexts=[
                             DeclarativeFilterContext(
-                                content={},
+                                content=JsonNode(),
                                 description="Filter Context for Sales team.",
                                 id="filter-sales",
                                 tags=["Revenues"],
@@ -639,7 +642,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         ],
                         metrics=[
                             DeclarativeMetric(
-                                content={},
+                                content=JsonNode(),
                                 created_at="["2023-07-20 12:30"]",
                                 created_by=DeclarativeUserIdentifier(
                                     id="employee123",
@@ -658,7 +661,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         ],
                         visualization_objects=[
                             DeclarativeVisualizationObject(
-                                content={},
+                                content=JsonNode(),
                                 created_at="["2023-07-20 12:30"]",
                                 created_by=DeclarativeUserIdentifier(
                                     id="employee123",
@@ -826,7 +829,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 prefix="/6bUUGjjNSwg0_bs",
                 settings=[
                     DeclarativeSetting(
-                        content={},
+                        content=JsonNode(),
                         id="/6bUUGjjNSwg0_bs",
                         type="TIMEZONE",
                     ),

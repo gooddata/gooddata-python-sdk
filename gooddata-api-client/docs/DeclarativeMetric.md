@@ -4,7 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**content** | **{str: (bool, date, datetime, dict, float, int, list, str, none_type)}** | A definition of the metric in JSON format. | 
+**content** | [**JsonNode**](JsonNode.md) |  | 
 **id** | **str** | Metric ID. | 
 **title** | **str** | Metric title. | 
 **created_at** | **str, none_type** | Time of the entity creation. | [optional] 

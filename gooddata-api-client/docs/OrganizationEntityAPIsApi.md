@@ -592,6 +592,9 @@ with gooddata_api_client.ApiClient() as api_client:
                     "allowed_origins_example",
                 ],
                 early_access="early_access_example",
+                early_access_values=[
+                    "early_access_values_example",
+                ],
                 hostname="hostname_example",
                 jit_enabled=True,
                 name="name_example",
@@ -782,6 +785,9 @@ with gooddata_api_client.ApiClient() as api_client:
                     "allowed_origins_example",
                 ],
                 early_access="early_access_example",
+                early_access_values=[
+                    "early_access_values_example",
+                ],
                 hostname="hostname_example",
                 jit_enabled=True,
                 name="name_example",

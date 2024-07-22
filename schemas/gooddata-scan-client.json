@@ -578,6 +578,14 @@
             "example": "admin123",
             "type": "string"
           },
+          "privateKey": {
+            "description": "Private key for data sources which supports key-pair authentication.",
+            "type": "string"
+          },
+          "privateKeyPassphrase": {
+            "description": "Passphrase for a encrypted version of a private key.",
+            "type": "string"
+          },
           "schema": {
             "description": "Database schema.",
             "example": "public",
@@ -611,7 +619,8 @@
               "ORACLE",
               "PINOT",
               "SINGLESTORE",
-              "MOTHERDUCK"
+              "MOTHERDUCK",
+              "FLIGHTRPC"
             ],
             "example": "POSTGRESQL",
             "type": "string"
@@ -656,17 +665,6 @@
       "TestRequest": {
         "description": "A request containing all information for testing existing data source.",
         "properties": {
-          "cachePath": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "enableCaching": {
-            "description": "Enable caching of intermediate results.",
-            "example": false,
-            "type": "boolean"
-          },
           "parameters": {
             "items": {
               "$ref": "#/components/schemas/DataSourceParameter"
@@ -676,6 +674,14 @@
           "password": {
             "description": "Database user password.",
             "example": "admin123",
+            "type": "string"
+          },
+          "privateKey": {
+            "description": "Private key for data sources which supports key-pair authentication.",
+            "type": "string"
+          },
+          "privateKeyPassphrase": {
+            "description": "Passphrase for a encrypted version of a private key.",
             "type": "string"
           },
           "schema": {

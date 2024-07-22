@@ -8,6 +8,8 @@ Name | Type | Description | Notes
 **type** | **str** | Type of database, where test should connect to. | 
 **parameters** | [**[DataSourceParameter]**](DataSourceParameter.md) |  | [optional] 
 **password** | **str** | Database user password. | [optional] 
+**private_key** | **str** | Private key for data sources which supports key-pair authentication. | [optional] 
+**private_key_passphrase** | **str** | Passphrase for a encrypted version of a private key. | [optional] 
 **schema** | **str** | Database schema. | [optional] 
 **token** | **str** | Secret for token based authentication for data sources which supports it. | [optional] 
 **url** | **str** | URL to database in JDBC format, where test should connect to. | [optional] 

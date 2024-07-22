@@ -1,13 +1,12 @@
-# PdfExportRequest
+# JsonApiAutomationOutDocument
 
-Export request object describing the export properties and metadata for pdf exports.
 
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**dashboard_id** | **str** | Dashboard identifier | 
-**file_name** | **str** | File name to be used for retrieving the pdf document. | 
-**metadata** | **{str: (bool, date, datetime, dict, float, int, list, str, none_type)}** | Metadata definition in open form JSON format. | [optional] 
+**data** | [**JsonApiAutomationOut**](JsonApiAutomationOut.md) |  | 
+**included** | [**[JsonApiAutomationOutIncludes]**](JsonApiAutomationOutIncludes.md) | Included resources | [optional] 
+**links** | [**ObjectLinks**](ObjectLinks.md) |  | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

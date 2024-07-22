@@ -68,7 +68,14 @@
               "UnlimitedWorkspaces",
               "WhiteLabeling",
               "WorkspaceCount",
-              "UserTelemetryDisabled"
+              "UserTelemetryDisabled",
+              "AutomationCount",
+              "UnlimitedAutomations",
+              "AutomationRecipientCount",
+              "UnlimitedAutomationRecipients",
+              "DailyScheduledActionCount",
+              "UnlimitedDailyScheduledActions",
+              "ScheduledActionMinimumRecurrenceMinutes"
             ],
             "type": "string"
           },
@@ -137,6 +144,57 @@
           "userGroups",
           "users"
         ],
+        "type": "object"
+      },
+      "CustomLabel": {
+        "description": "Custom label object override.",
+        "properties": {
+          "title": {
+            "description": "Override value.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "title"
+        ],
+        "type": "object"
+      },
+      "CustomMetric": {
+        "description": "Custom metric object override.",
+        "properties": {
+          "format": {
+            "description": "Format override.",
+            "type": "string"
+          },
+          "title": {
+            "description": "Metric title override.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "format",
+          "title"
+        ],
+        "type": "object"
+      },
+      "CustomOverride": {
+        "description": "Custom cell value overrides (IDs will be replaced with specified values).",
+        "properties": {
+          "labels": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/CustomLabel"
+            },
+            "description": "Map of CustomLabels with keys used as placeholders in document.",
+            "type": "object"
+          },
+          "metrics": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/CustomMetric"
+            },
+            "description": "Map of CustomMetrics with keys used as placeholders in document.",
+            "type": "object"
+          }
+        },
         "type": "object"
       },
       "DashboardPermissions": {
@@ -886,14 +944,6 @@
       "DeclarativeDataSource": {
         "description": "A data source and its properties.",
         "properties": {
-          "cachePath": {
-            "description": "Path to schema, where intermediate caches are stored.",
-            "example": "[ \"dfs\", \"data\" ]. Example used in Apache Drill.",
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
           "cacheStrategy": {
             "description": "Determines how the results coming from a particular datasource should be cached.\n- ALWAYS: The results from the datasource should be cached normally (the default).\n- NEVER: The results from the datasource should never be cached.",
             "enum": [
@@ -907,11 +957,6 @@
               "$ref": "#/components/schemas/Parameter"
             },
             "type": "array"
-          },
-          "enableCaching": {
-            "description": "Enable caching of intermediate results.",
-            "example": false,
-            "type": "boolean"
           },
           "id": {
             "description": "Data source ID.",
@@ -942,6 +987,18 @@
               "$ref": "#/components/schemas/DeclarativeDataSourcePermission"
             },
             "type": "array"
+          },
+          "privateKey": {
+            "description": "The private key to use to connect to the database providing the data for the data source.",
+            "maxLength": 15000,
+            "nullable": true,
+            "type": "string"
+          },
+          "privateKeyPassphrase": {
+            "description": "The passphrase used to encrypt the private key.",
+            "maxLength": 255,
+            "nullable": true,
+            "type": "string"
           },
           "schema": {
             "description": "A scheme/database with the data.",
@@ -979,7 +1036,8 @@
               "ORACLE",
               "PINOT",
               "SINGLESTORE",
-              "MOTHERDUCK"
+              "MOTHERDUCK",
+              "FLIGHTRPC"
             ],
             "example": "POSTGRESQL",
             "type": "string"
@@ -1635,9 +1693,19 @@
             "type": "array"
           },
           "earlyAccess": {
+            "deprecated": true,
             "description": "Early access defined on level Organization",
             "maxLength": 255,
             "type": "string"
+          },
+          "earlyAccessValues": {
+            "description": "Early access defined on level Organization",
+            "items": {
+              "maxLength": 255,
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
           },
           "hostname": {
             "description": "Formal hostname used in deployment.",
@@ -1650,6 +1718,10 @@
             "example": "Alpha corporation",
             "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
+          },
+          "jitEnabled": {
+            "description": "Flag to enable/disable JIT provisioning in the given organization",
+            "type": "boolean"
           },
           "name": {
             "description": "Formal name of the organization.",
@@ -1913,7 +1985,8 @@
               "SHOW_HIDDEN_CATALOG_ITEMS",
               "OPERATOR_OVERRIDES",
               "TIMEZONE_VALIDATION_ENABLED",
-              "OPENAI_CONFIG"
+              "OPENAI_CONFIG",
+              "ENABLE_FILE_ANALYTICS"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -2436,9 +2509,19 @@
             "type": "string"
           },
           "earlyAccess": {
+            "deprecated": true,
             "description": "Early access defined on level Workspace",
             "maxLength": 255,
             "type": "string"
+          },
+          "earlyAccessValues": {
+            "description": "Early access defined on level Workspace",
+            "items": {
+              "maxLength": 255,
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
           },
           "hierarchyPermissions": {
             "items": {
@@ -2841,7 +2924,14 @@
                 "UnlimitedWorkspaces",
                 "WhiteLabeling",
                 "WorkspaceCount",
-                "UserTelemetryDisabled"
+                "UserTelemetryDisabled",
+                "AutomationCount",
+                "UnlimitedAutomations",
+                "AutomationRecipientCount",
+                "UnlimitedAutomationRecipients",
+                "DailyScheduledActionCount",
+                "UnlimitedDailyScheduledActions",
+                "ScheduledActionMinimumRecurrenceMinutes"
               ],
               "type": "string"
             },
@@ -3001,14 +3091,24 @@
             "description": "A flag dictating how the attribute, fact and label ids are generated. By default their ids are derived only from the column name, unless there would be a conflict (e.g. category coming from two different tables). In that case a long id format of `<table>.<column>` is used. If the flag is set to true, then all ids will be generated in the long form.",
             "type": "boolean"
           },
+          "grainMultivalueReferencePrefix": {
+            "description": "Columns starting with this prefix will be considered as grain multivalue references. The prefix is then followed by the value of `separator` parameter. Given the reference prefix is `grmr` and separator is `__`, the columns with name like `grmr__customer__customer_id` will be considered as grain multivalue references to customer_id in customer table.",
+            "example": "grmr",
+            "type": "string"
+          },
           "grainPrefix": {
-            "description": "Columns starting with this prefix will be considered as grains. The prefix is then followed by the value of `separator` parameter. Given the grain prefix is `g` and separator is `__`, the columns with name like `g__name` will be considered as grains.",
-            "example": "g",
+            "description": "Columns starting with this prefix will be considered as grains. The prefix is then followed by the value of `separator` parameter. Given the grain prefix is `gr` and separator is `__`, the columns with name like `gr__name` will be considered as grains.",
+            "example": "gr",
             "type": "string"
           },
           "grainReferencePrefix": {
-            "description": "Columns starting with this prefix will be considered as grain references. The prefix is then followed by the value of `separator` parameter. Given the reference prefix is `gr` and separator is `__`, the columns with name like `gr__customer_name` will be considered as grain references.",
-            "example": "gr",
+            "description": "Columns starting with this prefix will be considered as grain references. The prefix is then followed by the value of `separator` parameter. For composite references, the reference is multivalue if at least one column is multivalue. Given the reference prefix is `grr` and separator is `__`, the columns with name like `grr__customer__customer_id` will be considered as grain references to customer_id in customer table.",
+            "example": "grr",
+            "type": "string"
+          },
+          "multivalueReferencePrefix": {
+            "description": "Columns starting with this prefix will be considered as multivalue references. The prefix is then followed by the value of `separator` parameter. For composite references, the reference is multivalue if at least one column is multivalue. Given the reference prefix is `mr` and separator is `__`, the columns with name like `mr__customer__customer_id` will be considered as multivalue references to customer_id in customer table.",
+            "example": "mr",
             "type": "string"
           },
           "pdm": {
@@ -3020,13 +3120,13 @@
             "type": "string"
           },
           "referencePrefix": {
-            "description": "Columns starting with this prefix will be considered as references. The prefix is then followed by the value of `separator` parameter. Given the reference prefix is `r` and separator is `__`, the columns with name like `r__customer_name` will be considered as references.",
+            "description": "Columns starting with this prefix will be considered as references. The prefix is then followed by the value of `separator` parameter. Given the reference prefix is `r` and separator is `__`, the columns with name like `r__customer__customer_id` will be considered as references to customer_id in customer table.",
             "example": "r",
             "type": "string"
           },
           "secondaryLabelPrefix": {
-            "description": "Columns starting with this prefix will be considered as secondary labels. The prefix is then followed by the value of `separator` parameter. Given the secondary label prefix is `sl` and separator is `__`, the columns with name like `sl__country_id_country_name` will be considered as secondary labels.",
-            "example": "sl",
+            "description": "Columns starting with this prefix will be considered as secondary labels. The prefix is then followed by the value of `separator` parameter. Given the secondary label prefix is `ls` and separator is `__`, the columns with name like `ls__country_id__country_name` will be considered as secondary labels.",
+            "example": "ls",
             "type": "string"
           },
           "separator": {
@@ -3754,6 +3854,15 @@
           "$ref": "#/components/schemas/JsonApiAnalyticalDashboardLinkage"
         },
         "type": "array"
+      },
+      "JsonApiAnalyticalDashboardToOneLinkage": {
+        "description": "References to other resource objects in a to-one (\\\"relationship\\\"). Relationships can be specified by including a member in a resource's links object.",
+        "nullable": true,
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiAnalyticalDashboardLinkage"
+          }
+        ]
       },
       "JsonApiApiTokenIn": {
         "description": "JSON:API representation of apiToken entity.",
@@ -4550,6 +4659,521 @@
             "$ref": "#/components/schemas/JsonApiAttributeLinkage"
           }
         ]
+      },
+      "JsonApiAutomationIn": {
+        "description": "JSON:API representation of automation entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "areRelationsValid": {
+                "type": "boolean"
+              },
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "details": {
+                "description": "Additional details to be included in the automated message.",
+                "maxLength": 10000
+              },
+              "schedule": {
+                "properties": {
+                  "cron": {
+                    "description": "Cron expression defining the schedule of the automation. The format is SECOND MINUTE HOUR DAY-OF-MONTH MONTH DAY-OF-WEEK (YEAR). The example expression signifies an action every 30 minutes from 9:00 to 17:00 on workdays.",
+                    "example": "0 */30 9-17 ? * MON-FRI",
+                    "maxLength": 255,
+                    "type": "string"
+                  },
+                  "cronDescription": {
+                    "description": "Human-readable description of the cron expression.",
+                    "type": "string"
+                  },
+                  "firstRun": {
+                    "description": "Timestamp of the first scheduled action. If not provided default to the next scheduled time.",
+                    "example": "2025-01-01T12:00:00Z",
+                    "format": "date-time",
+                    "type": "string"
+                  },
+                  "timezone": {
+                    "description": "Timezone in which the schedule is defined.",
+                    "example": "Europe/Prague",
+                    "maxLength": 255,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "cron"
+                ],
+                "type": "object"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "relationships": {
+            "properties": {
+              "exportDefinitions": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiExportDefinitionToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "notificationChannel": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiNotificationChannelToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "recipients": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "automation"
+            ],
+            "example": "automation",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiAutomationInDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiAutomationIn"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiAutomationOut": {
+        "description": "JSON:API representation of automation entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "areRelationsValid": {
+                "type": "boolean"
+              },
+              "createdAt": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "details": {
+                "description": "Additional details to be included in the automated message.",
+                "maxLength": 10000
+              },
+              "modifiedAt": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "schedule": {
+                "properties": {
+                  "cron": {
+                    "description": "Cron expression defining the schedule of the automation. The format is SECOND MINUTE HOUR DAY-OF-MONTH MONTH DAY-OF-WEEK (YEAR). The example expression signifies an action every 30 minutes from 9:00 to 17:00 on workdays.",
+                    "example": "0 */30 9-17 ? * MON-FRI",
+                    "maxLength": 255,
+                    "type": "string"
+                  },
+                  "cronDescription": {
+                    "description": "Human-readable description of the cron expression.",
+                    "type": "string"
+                  },
+                  "firstRun": {
+                    "description": "Timestamp of the first scheduled action. If not provided default to the next scheduled time.",
+                    "example": "2025-01-01T12:00:00Z",
+                    "format": "date-time",
+                    "type": "string"
+                  },
+                  "timezone": {
+                    "description": "Timezone in which the schedule is defined.",
+                    "example": "Europe/Prague",
+                    "maxLength": 255,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "cron"
+                ],
+                "type": "object"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "meta": {
+            "properties": {
+              "origin": {
+                "properties": {
+                  "originId": {
+                    "description": "defines id of the workspace where the entity comes from",
+                    "type": "string"
+                  },
+                  "originType": {
+                    "description": "defines type of the origin of the entity",
+                    "enum": [
+                      "NATIVE",
+                      "PARENT"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "originId",
+                  "originType"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "relationships": {
+            "properties": {
+              "createdBy": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserIdentifierToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "exportDefinitions": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiExportDefinitionToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "modifiedBy": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserIdentifierToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "notificationChannel": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiNotificationChannelToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "recipients": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "automation"
+            ],
+            "example": "automation",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiAutomationOutDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiAutomationOut"
+          },
+          "included": {
+            "description": "Included resources",
+            "items": {
+              "$ref": "#/components/schemas/JsonApiAutomationOutIncludes"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "links": {
+            "$ref": "#/components/schemas/ObjectLinks"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiAutomationOutIncludes": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiNotificationChannelOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiUserIdentifierOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiExportDefinitionOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiUserOutWithLinks"
+          }
+        ]
+      },
+      "JsonApiAutomationOutList": {
+        "description": "A JSON:API document with a list of resources",
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/JsonApiAutomationOutWithLinks"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "included": {
+            "description": "Included resources",
+            "items": {
+              "$ref": "#/components/schemas/JsonApiAutomationOutIncludes"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "links": {
+            "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiAutomationOutWithLinks": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiAutomationOut"
+          },
+          {
+            "$ref": "#/components/schemas/ObjectLinksContainer"
+          }
+        ]
+      },
+      "JsonApiAutomationPatch": {
+        "description": "JSON:API representation of patching automation entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "areRelationsValid": {
+                "type": "boolean"
+              },
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "details": {
+                "description": "Additional details to be included in the automated message.",
+                "maxLength": 10000
+              },
+              "schedule": {
+                "properties": {
+                  "cron": {
+                    "description": "Cron expression defining the schedule of the automation. The format is SECOND MINUTE HOUR DAY-OF-MONTH MONTH DAY-OF-WEEK (YEAR). The example expression signifies an action every 30 minutes from 9:00 to 17:00 on workdays.",
+                    "example": "0 */30 9-17 ? * MON-FRI",
+                    "maxLength": 255,
+                    "type": "string"
+                  },
+                  "cronDescription": {
+                    "description": "Human-readable description of the cron expression.",
+                    "type": "string"
+                  },
+                  "firstRun": {
+                    "description": "Timestamp of the first scheduled action. If not provided default to the next scheduled time.",
+                    "example": "2025-01-01T12:00:00Z",
+                    "format": "date-time",
+                    "type": "string"
+                  },
+                  "timezone": {
+                    "description": "Timezone in which the schedule is defined.",
+                    "example": "Europe/Prague",
+                    "maxLength": 255,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "cron"
+                ],
+                "type": "object"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "relationships": {
+            "properties": {
+              "exportDefinitions": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiExportDefinitionToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "notificationChannel": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiNotificationChannelToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "recipients": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "automation"
+            ],
+            "example": "automation",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiAutomationPatchDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiAutomationPatch"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
       },
       "JsonApiColorPaletteIn": {
         "description": "JSON:API representation of colorPalette entity.",
@@ -5797,7 +6421,8 @@
                   "ORACLE",
                   "PINOT",
                   "SINGLESTORE",
-                  "MOTHERDUCK"
+                  "MOTHERDUCK",
+                  "FLIGHTRPC"
                 ],
                 "type": "string"
               }
@@ -5903,14 +6528,6 @@
         "properties": {
           "attributes": {
             "properties": {
-              "cachePath": {
-                "description": "Path to schema, where intermediate caches are stored.",
-                "items": {
-                  "type": "string"
-                },
-                "nullable": true,
-                "type": "array"
-              },
               "cacheStrategy": {
                 "description": "Determines how the results coming from a particular datasource should be cached.",
                 "enum": [
@@ -5919,12 +6536,6 @@
                 ],
                 "nullable": true,
                 "type": "string"
-              },
-              "enableCaching": {
-                "description": "Enable CTAS caching of intermediate results in the database.",
-                "example": false,
-                "nullable": true,
-                "type": "boolean"
               },
               "name": {
                 "description": "User-facing name of the data source.",
@@ -5953,6 +6564,18 @@
               },
               "password": {
                 "description": "The password to use to connect to the database providing the data for the data source.",
+                "maxLength": 255,
+                "nullable": true,
+                "type": "string"
+              },
+              "privateKey": {
+                "description": "The private key to use to connect to the database providing the data for the data source.",
+                "maxLength": 15000,
+                "nullable": true,
+                "type": "string"
+              },
+              "privateKeyPassphrase": {
+                "description": "The passphrase used to encrypt the private key.",
                 "maxLength": 255,
                 "nullable": true,
                 "type": "string"
@@ -5992,7 +6615,8 @@
                   "ORACLE",
                   "PINOT",
                   "SINGLESTORE",
-                  "MOTHERDUCK"
+                  "MOTHERDUCK",
+                  "FLIGHTRPC"
                 ],
                 "type": "string"
               },
@@ -6054,13 +6678,15 @@
         "properties": {
           "attributes": {
             "properties": {
-              "cachePath": {
-                "description": "Path to schema, where intermediate caches are stored.",
-                "items": {
-                  "type": "string"
-                },
+              "authenticationType": {
+                "description": "Type of authentication used to connect to the database.",
+                "enum": [
+                  "USERNAME_PASSWORD",
+                  "TOKEN",
+                  "KEY_PAIR"
+                ],
                 "nullable": true,
-                "type": "array"
+                "type": "string"
               },
               "cacheStrategy": {
                 "description": "Determines how the results coming from a particular datasource should be cached.",
@@ -6090,12 +6716,6 @@
                 },
                 "nullable": true,
                 "type": "array"
-              },
-              "enableCaching": {
-                "description": "Enable CTAS caching of intermediate results in the database.",
-                "example": false,
-                "nullable": true,
-                "type": "boolean"
               },
               "name": {
                 "description": "User-facing name of the data source.",
@@ -6151,7 +6771,8 @@
                   "ORACLE",
                   "PINOT",
                   "SINGLESTORE",
-                  "MOTHERDUCK"
+                  "MOTHERDUCK",
+                  "FLIGHTRPC"
                 ],
                 "type": "string"
               },
@@ -6269,14 +6890,6 @@
         "properties": {
           "attributes": {
             "properties": {
-              "cachePath": {
-                "description": "Path to schema, where intermediate caches are stored.",
-                "items": {
-                  "type": "string"
-                },
-                "nullable": true,
-                "type": "array"
-              },
               "cacheStrategy": {
                 "description": "Determines how the results coming from a particular datasource should be cached.",
                 "enum": [
@@ -6285,12 +6898,6 @@
                 ],
                 "nullable": true,
                 "type": "string"
-              },
-              "enableCaching": {
-                "description": "Enable CTAS caching of intermediate results in the database.",
-                "example": false,
-                "nullable": true,
-                "type": "boolean"
               },
               "name": {
                 "description": "User-facing name of the data source.",
@@ -6319,6 +6926,18 @@
               },
               "password": {
                 "description": "The password to use to connect to the database providing the data for the data source.",
+                "maxLength": 255,
+                "nullable": true,
+                "type": "string"
+              },
+              "privateKey": {
+                "description": "The private key to use to connect to the database providing the data for the data source.",
+                "maxLength": 15000,
+                "nullable": true,
+                "type": "string"
+              },
+              "privateKeyPassphrase": {
+                "description": "The passphrase used to encrypt the private key.",
                 "maxLength": 255,
                 "nullable": true,
                 "type": "string"
@@ -6358,7 +6977,8 @@
                   "ORACLE",
                   "PINOT",
                   "SINGLESTORE",
-                  "MOTHERDUCK"
+                  "MOTHERDUCK",
+                  "FLIGHTRPC"
                 ],
                 "type": "string"
               },
@@ -6918,11 +7538,15 @@
                 "type": "string"
               },
               "requestPayload": {
-                "description": "Free-form JSON content to be used as export request payload for /export/tabular endpoint. Maximum supported length is 15000 characters.",
-                "example": {
-                  "format": "PDF",
-                  "visualizationObjectId": "<id>"
-                },
+                "description": "JSON content to be used as export request payload for /export/tabular and /export/visual endpoints. ",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/VisualExportRequest"
+                  },
+                  {
+                    "$ref": "#/components/schemas/TabularExportRequest"
+                  }
+                ],
                 "type": "object"
               },
               "tags": {
@@ -6936,9 +7560,6 @@
                 "type": "string"
               }
             },
-            "required": [
-              "requestPayload"
-            ],
             "type": "object"
           },
           "id": {
@@ -6949,6 +7570,17 @@
           },
           "relationships": {
             "properties": {
+              "analyticalDashboard": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiAnalyticalDashboardToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
               "visualizationObject": {
                 "properties": {
                   "data": {
@@ -6973,7 +7605,6 @@
           }
         },
         "required": [
-          "attributes",
           "id",
           "type"
         ],
@@ -6987,6 +7618,25 @@
         },
         "required": [
           "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiExportDefinitionLinkage": {
+        "description": "The \\\"type\\\" and \\\"id\\\" to non-empty members.",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "exportDefinition"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
         ],
         "type": "object"
       },
@@ -7011,11 +7661,15 @@
                 "type": "string"
               },
               "requestPayload": {
-                "description": "Free-form JSON content to be used as export request payload for /export/tabular endpoint. Maximum supported length is 15000 characters.",
-                "example": {
-                  "format": "PDF",
-                  "visualizationObjectId": "<id>"
-                },
+                "description": "JSON content to be used as export request payload for /export/tabular and /export/visual endpoints. ",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/VisualExportRequest"
+                  },
+                  {
+                    "$ref": "#/components/schemas/TabularExportRequest"
+                  }
+                ],
                 "type": "object"
               },
               "tags": {
@@ -7029,9 +7683,6 @@
                 "type": "string"
               }
             },
-            "required": [
-              "requestPayload"
-            ],
             "type": "object"
           },
           "id": {
@@ -7040,8 +7691,45 @@
             "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
+          "meta": {
+            "properties": {
+              "origin": {
+                "properties": {
+                  "originId": {
+                    "description": "defines id of the workspace where the entity comes from",
+                    "type": "string"
+                  },
+                  "originType": {
+                    "description": "defines type of the origin of the entity",
+                    "enum": [
+                      "NATIVE",
+                      "PARENT"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "originId",
+                  "originType"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
           "relationships": {
             "properties": {
+              "analyticalDashboard": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiAnalyticalDashboardToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
               "createdBy": {
                 "properties": {
                   "data": {
@@ -7088,7 +7776,6 @@
           }
         },
         "required": [
-          "attributes",
           "id",
           "type"
         ],
@@ -7120,6 +7807,9 @@
         "oneOf": [
           {
             "$ref": "#/components/schemas/JsonApiVisualizationObjectOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiAnalyticalDashboardOutWithLinks"
           },
           {
             "$ref": "#/components/schemas/JsonApiUserIdentifierOutWithLinks"
@@ -7184,11 +7874,15 @@
                 "type": "string"
               },
               "requestPayload": {
-                "description": "Free-form JSON content to be used as export request payload for /export/tabular endpoint. Maximum supported length is 15000 characters.",
-                "example": {
-                  "format": "PDF",
-                  "visualizationObjectId": "<id>"
-                },
+                "description": "JSON content to be used as export request payload for /export/tabular and /export/visual endpoints. ",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/VisualExportRequest"
+                  },
+                  {
+                    "$ref": "#/components/schemas/TabularExportRequest"
+                  }
+                ],
                 "type": "object"
               },
               "tags": {
@@ -7212,6 +7906,17 @@
           },
           "relationships": {
             "properties": {
+              "analyticalDashboard": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiAnalyticalDashboardToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
               "visualizationObject": {
                 "properties": {
                   "data": {
@@ -7236,7 +7941,6 @@
           }
         },
         "required": [
-          "attributes",
           "id",
           "type"
         ],
@@ -7266,11 +7970,15 @@
                 "type": "string"
               },
               "requestPayload": {
-                "description": "Free-form JSON content to be used as export request payload for /export/tabular endpoint. Maximum supported length is 15000 characters.",
-                "example": {
-                  "format": "PDF",
-                  "visualizationObjectId": "<id>"
-                },
+                "description": "JSON content to be used as export request payload for /export/tabular and /export/visual endpoints. ",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/VisualExportRequest"
+                  },
+                  {
+                    "$ref": "#/components/schemas/TabularExportRequest"
+                  }
+                ],
                 "type": "object"
               },
               "tags": {
@@ -7284,9 +7992,6 @@
                 "type": "string"
               }
             },
-            "required": [
-              "requestPayload"
-            ],
             "type": "object"
           },
           "id": {
@@ -7297,6 +8002,17 @@
           },
           "relationships": {
             "properties": {
+              "analyticalDashboard": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiAnalyticalDashboardToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
               "visualizationObject": {
                 "properties": {
                   "data": {
@@ -7321,7 +8037,6 @@
           }
         },
         "required": [
-          "attributes",
           "type"
         ],
         "type": "object"
@@ -7336,6 +8051,13 @@
           "data"
         ],
         "type": "object"
+      },
+      "JsonApiExportDefinitionToManyLinkage": {
+        "description": "References to other resource objects in a to-many (\\\"relationship\\\"). Relationships can be specified by including a member in a resource's links object.",
+        "items": {
+          "$ref": "#/components/schemas/JsonApiExportDefinitionLinkage"
+        },
+        "type": "array"
       },
       "JsonApiFactLinkage": {
         "description": "The \\\"type\\\" and \\\"id\\\" to non-empty members.",
@@ -8923,6 +9645,461 @@
         },
         "type": "array"
       },
+      "JsonApiNotificationChannelIn": {
+        "description": "JSON:API representation of notificationChannel entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "description": {
+                "maxLength": 10000,
+                "nullable": true,
+                "type": "string"
+              },
+              "name": {
+                "maxLength": 255,
+                "nullable": true,
+                "type": "string"
+              },
+              "triggers": {
+                "description": "The triggers that are to be used to send notifications to the channel.",
+                "items": {
+                  "properties": {
+                    "metadata": {
+                      "$ref": "#/components/schemas/JsonNode"
+                    },
+                    "type": {
+                      "description": "The notification trigger type.",
+                      "enum": [
+                        "SCHEDULE",
+                        "ALERT"
+                      ],
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "webhook": {
+                "properties": {
+                  "hasToken": {
+                    "type": "boolean"
+                  },
+                  "token": {
+                    "description": "Bearer token for the webhook.",
+                    "maxLength": 10000,
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "url": {
+                    "description": "The webhook URL.",
+                    "example": "https://example.com/webhook",
+                    "maxLength": 255,
+                    "pattern": "https?\\://.*",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "url"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "notificationChannel"
+            ],
+            "example": "notificationChannel",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiNotificationChannelInDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiNotificationChannelIn"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiNotificationChannelLinkage": {
+        "description": "The \\\"type\\\" and \\\"id\\\" to non-empty members.",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "notificationChannel"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiNotificationChannelOut": {
+        "description": "JSON:API representation of notificationChannel entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "description": {
+                "maxLength": 10000,
+                "nullable": true,
+                "type": "string"
+              },
+              "name": {
+                "maxLength": 255,
+                "nullable": true,
+                "type": "string"
+              },
+              "triggers": {
+                "description": "The triggers that are to be used to send notifications to the channel.",
+                "items": {
+                  "properties": {
+                    "metadata": {
+                      "$ref": "#/components/schemas/JsonNode"
+                    },
+                    "type": {
+                      "description": "The notification trigger type.",
+                      "enum": [
+                        "SCHEDULE",
+                        "ALERT"
+                      ],
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "webhook": {
+                "properties": {
+                  "hasToken": {
+                    "type": "boolean"
+                  },
+                  "token": {
+                    "description": "Bearer token for the webhook.",
+                    "maxLength": 10000,
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "url": {
+                    "description": "The webhook URL.",
+                    "example": "https://example.com/webhook",
+                    "maxLength": 255,
+                    "pattern": "https?\\://.*",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "url"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "notificationChannel"
+            ],
+            "example": "notificationChannel",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiNotificationChannelOutDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiNotificationChannelOut"
+          },
+          "links": {
+            "$ref": "#/components/schemas/ObjectLinks"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiNotificationChannelOutList": {
+        "description": "A JSON:API document with a list of resources",
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/JsonApiNotificationChannelOutWithLinks"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "links": {
+            "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiNotificationChannelOutWithLinks": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiNotificationChannelOut"
+          },
+          {
+            "$ref": "#/components/schemas/ObjectLinksContainer"
+          }
+        ]
+      },
+      "JsonApiNotificationChannelPatch": {
+        "description": "JSON:API representation of patching notificationChannel entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "description": {
+                "maxLength": 10000,
+                "nullable": true,
+                "type": "string"
+              },
+              "name": {
+                "maxLength": 255,
+                "nullable": true,
+                "type": "string"
+              },
+              "triggers": {
+                "description": "The triggers that are to be used to send notifications to the channel.",
+                "items": {
+                  "properties": {
+                    "metadata": {
+                      "$ref": "#/components/schemas/JsonNode"
+                    },
+                    "type": {
+                      "description": "The notification trigger type.",
+                      "enum": [
+                        "SCHEDULE",
+                        "ALERT"
+                      ],
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "webhook": {
+                "properties": {
+                  "hasToken": {
+                    "type": "boolean"
+                  },
+                  "token": {
+                    "description": "Bearer token for the webhook.",
+                    "maxLength": 10000,
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "url": {
+                    "description": "The webhook URL.",
+                    "example": "https://example.com/webhook",
+                    "maxLength": 255,
+                    "pattern": "https?\\://.*",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "url"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "notificationChannel"
+            ],
+            "example": "notificationChannel",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiNotificationChannelPatchDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiNotificationChannelPatch"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiNotificationChannelPostOptionalId": {
+        "description": "JSON:API representation of notificationChannel entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "description": {
+                "maxLength": 10000,
+                "nullable": true,
+                "type": "string"
+              },
+              "name": {
+                "maxLength": 255,
+                "nullable": true,
+                "type": "string"
+              },
+              "triggers": {
+                "description": "The triggers that are to be used to send notifications to the channel.",
+                "items": {
+                  "properties": {
+                    "metadata": {
+                      "$ref": "#/components/schemas/JsonNode"
+                    },
+                    "type": {
+                      "description": "The notification trigger type.",
+                      "enum": [
+                        "SCHEDULE",
+                        "ALERT"
+                      ],
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "webhook": {
+                "properties": {
+                  "hasToken": {
+                    "type": "boolean"
+                  },
+                  "token": {
+                    "description": "Bearer token for the webhook.",
+                    "maxLength": 10000,
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "url": {
+                    "description": "The webhook URL.",
+                    "example": "https://example.com/webhook",
+                    "maxLength": 255,
+                    "pattern": "https?\\://.*",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "url"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "notificationChannel"
+            ],
+            "example": "notificationChannel",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiNotificationChannelPostOptionalIdDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiNotificationChannelPostOptionalId"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiNotificationChannelToOneLinkage": {
+        "description": "References to other resource objects in a to-one (\\\"relationship\\\"). Relationships can be specified by including a member in a resource's links object.",
+        "nullable": true,
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiNotificationChannelLinkage"
+          }
+        ]
+      },
       "JsonApiOrganizationIn": {
         "description": "JSON:API representation of organization entity.",
         "properties": {
@@ -8935,9 +10112,20 @@
                 "type": "array"
               },
               "earlyAccess": {
+                "deprecated": true,
+                "description": "The early access feature identifier. It is used to enable experimental features. Deprecated in favor of earlyAccessValues.",
                 "maxLength": 255,
                 "nullable": true,
                 "type": "string"
+              },
+              "earlyAccessValues": {
+                "description": "The early access feature identifiers. They are used to enable experimental features.",
+                "items": {
+                  "maxLength": 255,
+                  "type": "string"
+                },
+                "nullable": true,
+                "type": "array"
               },
               "hostname": {
                 "maxLength": 255,
@@ -9040,9 +10228,20 @@
                 "type": "object"
               },
               "earlyAccess": {
+                "deprecated": true,
+                "description": "The early access feature identifier. It is used to enable experimental features. Deprecated in favor of earlyAccessValues.",
                 "maxLength": 255,
                 "nullable": true,
                 "type": "string"
+              },
+              "earlyAccessValues": {
+                "description": "The early access feature identifiers. They are used to enable experimental features.",
+                "items": {
+                  "maxLength": 255,
+                  "type": "string"
+                },
+                "nullable": true,
+                "type": "array"
               },
               "hostname": {
                 "maxLength": 255,
@@ -9188,9 +10387,20 @@
                 "type": "array"
               },
               "earlyAccess": {
+                "deprecated": true,
+                "description": "The early access feature identifier. It is used to enable experimental features. Deprecated in favor of earlyAccessValues.",
                 "maxLength": 255,
                 "nullable": true,
                 "type": "string"
+              },
+              "earlyAccessValues": {
+                "description": "The early access feature identifiers. They are used to enable experimental features.",
+                "items": {
+                  "maxLength": 255,
+                  "type": "string"
+                },
+                "nullable": true,
+                "type": "array"
               },
               "hostname": {
                 "maxLength": 255,
@@ -9288,7 +10498,8 @@
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
                   "TIMEZONE_VALIDATION_ENABLED",
-                  "OPENAI_CONFIG"
+                  "OPENAI_CONFIG",
+                  "ENABLE_FILE_ANALYTICS"
                 ],
                 "type": "string"
               }
@@ -9351,7 +10562,8 @@
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
                   "TIMEZONE_VALIDATION_ENABLED",
-                  "OPENAI_CONFIG"
+                  "OPENAI_CONFIG",
+                  "ENABLE_FILE_ANALYTICS"
                 ],
                 "type": "string"
               }
@@ -9454,7 +10666,8 @@
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
                   "TIMEZONE_VALIDATION_ENABLED",
-                  "OPENAI_CONFIG"
+                  "OPENAI_CONFIG",
+                  "ENABLE_FILE_ANALYTICS"
                 ],
                 "type": "string"
               }
@@ -10923,7 +12136,8 @@
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
                   "TIMEZONE_VALIDATION_ENABLED",
-                  "OPENAI_CONFIG"
+                  "OPENAI_CONFIG",
+                  "ENABLE_FILE_ANALYTICS"
                 ],
                 "type": "string"
               }
@@ -10986,7 +12200,8 @@
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
                   "TIMEZONE_VALIDATION_ENABLED",
-                  "OPENAI_CONFIG"
+                  "OPENAI_CONFIG",
+                  "ENABLE_FILE_ANALYTICS"
                 ],
                 "type": "string"
               }
@@ -11064,6 +12279,13 @@
             "$ref": "#/components/schemas/ObjectLinksContainer"
           }
         ]
+      },
+      "JsonApiUserToManyLinkage": {
+        "description": "References to other resource objects in a to-many (\\\"relationship\\\"). Relationships can be specified by including a member in a resource's links object.",
+        "items": {
+          "$ref": "#/components/schemas/JsonApiUserLinkage"
+        },
+        "type": "array"
       },
       "JsonApiUserToOneLinkage": {
         "description": "References to other resource objects in a to-one (\\\"relationship\\\"). Relationships can be specified by including a member in a resource's links object.",
@@ -12242,9 +13464,20 @@
                 "type": "string"
               },
               "earlyAccess": {
+                "deprecated": true,
+                "description": "The early access feature identifier. It is used to enable experimental features. Deprecated in favor of earlyAccessValues.",
                 "maxLength": 255,
                 "nullable": true,
                 "type": "string"
+              },
+              "earlyAccessValues": {
+                "description": "The early access feature identifiers. They are used to enable experimental features.",
+                "items": {
+                  "maxLength": 255,
+                  "type": "string"
+                },
+                "nullable": true,
+                "type": "array"
               },
               "name": {
                 "maxLength": 255,
@@ -12366,9 +13599,20 @@
                 "type": "string"
               },
               "earlyAccess": {
+                "deprecated": true,
+                "description": "The early access feature identifier. It is used to enable experimental features. Deprecated in favor of earlyAccessValues.",
                 "maxLength": 255,
                 "nullable": true,
                 "type": "string"
+              },
+              "earlyAccessValues": {
+                "description": "The early access feature identifiers. They are used to enable experimental features.",
+                "items": {
+                  "maxLength": 255,
+                  "type": "string"
+                },
+                "nullable": true,
+                "type": "array"
               },
               "name": {
                 "maxLength": 255,
@@ -12593,9 +13837,20 @@
                 "type": "string"
               },
               "earlyAccess": {
+                "deprecated": true,
+                "description": "The early access feature identifier. It is used to enable experimental features. Deprecated in favor of earlyAccessValues.",
                 "maxLength": 255,
                 "nullable": true,
                 "type": "string"
+              },
+              "earlyAccessValues": {
+                "description": "The early access feature identifiers. They are used to enable experimental features.",
+                "items": {
+                  "maxLength": 255,
+                  "type": "string"
+                },
+                "nullable": true,
+                "type": "array"
               },
               "name": {
                 "maxLength": 255,
@@ -12684,7 +13939,8 @@
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
                   "TIMEZONE_VALIDATION_ENABLED",
-                  "OPENAI_CONFIG"
+                  "OPENAI_CONFIG",
+                  "ENABLE_FILE_ANALYTICS"
                 ],
                 "type": "string"
               }
@@ -12747,7 +14003,8 @@
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
                   "TIMEZONE_VALIDATION_ENABLED",
-                  "OPENAI_CONFIG"
+                  "OPENAI_CONFIG",
+                  "ENABLE_FILE_ANALYTICS"
                 ],
                 "type": "string"
               }
@@ -12876,7 +14133,8 @@
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
                   "TIMEZONE_VALIDATION_ENABLED",
-                  "OPENAI_CONFIG"
+                  "OPENAI_CONFIG",
+                  "ENABLE_FILE_ANALYTICS"
                 ],
                 "type": "string"
               }
@@ -12939,7 +14197,8 @@
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
                   "TIMEZONE_VALIDATION_ENABLED",
-                  "OPENAI_CONFIG"
+                  "OPENAI_CONFIG",
+                  "ENABLE_FILE_ANALYTICS"
                 ],
                 "type": "string"
               }
@@ -12987,8 +14246,10 @@
         ]
       },
       "JsonNode": {
-        "description": "A definition of the metric in JSON format.",
-        "example": "{ \"content\": { \"maql\": \"SELECT 1\", \"format\": \"%0.2f\" } \"}",
+        "description": "Free-form JSON object",
+        "example": {},
+        "maxLength": 15000,
+        "nullable": true,
         "type": "object"
       },
       "LabelIdentifier": {
@@ -13190,6 +14451,55 @@
         },
         "required": [
           "name",
+          "value"
+        ],
+        "type": "object"
+      },
+      "PdfTableStyle": {
+        "description": "Custom CSS styles for the table. (PDF, HTML)",
+        "example": [
+          {
+            "properties": [
+              {
+                "key": "font-size",
+                "value": "30px"
+              }
+            ],
+            "selector": "th"
+          }
+        ],
+        "properties": {
+          "properties": {
+            "description": "List of CSS properties.",
+            "items": {
+              "$ref": "#/components/schemas/PdfTableStyleProperty"
+            },
+            "type": "array"
+          },
+          "selector": {
+            "description": "CSS selector where to apply given properties.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "selector"
+        ],
+        "type": "object"
+      },
+      "PdfTableStyleProperty": {
+        "description": "CSS property.",
+        "properties": {
+          "key": {
+            "description": "CSS property key.",
+            "type": "string"
+          },
+          "value": {
+            "description": "CSS property value.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
           "value"
         ],
         "type": "object"
@@ -13443,7 +14753,8 @@
               "SHOW_HIDDEN_CATALOG_ITEMS",
               "OPERATOR_OVERRIDES",
               "TIMEZONE_VALIDATION_ENABLED",
-              "OPENAI_CONFIG"
+              "OPENAI_CONFIG",
+              "ENABLE_FILE_ANALYTICS"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -13529,6 +14840,55 @@
         ],
         "type": "object"
       },
+      "Settings": {
+        "description": "Additional settings.",
+        "properties": {
+          "mergeHeaders": {
+            "description": "Merge equal headers in neighbouring cells. (XLSX)",
+            "example": true,
+            "type": "boolean"
+          },
+          "pdfPageSize": {
+            "description": "Page size and orientation. (PDF)",
+            "example": "a4 landscape",
+            "type": "string"
+          },
+          "pdfTableStyle": {
+            "description": "Custom CSS styles for the table. (PDF, HTML)",
+            "example": [
+              {
+                "properties": [
+                  {
+                    "key": "font-size",
+                    "value": "30px"
+                  }
+                ],
+                "selector": "th"
+              }
+            ],
+            "items": {
+              "$ref": "#/components/schemas/PdfTableStyle"
+            },
+            "type": "array"
+          },
+          "pdfTopLeftContent": {
+            "description": "Top left header content. (PDF)",
+            "example": "Good",
+            "type": "string"
+          },
+          "pdfTopRightContent": {
+            "description": "Top right header content. (PDF)",
+            "example": "Morning",
+            "type": "string"
+          },
+          "showFilters": {
+            "description": "Print applied filters on top of the document. (PDF/HTML when visualizationObject is given)",
+            "example": false,
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
       "Skeleton": {
         "properties": {
           "content": {
@@ -13576,6 +14936,14 @@
         "required": [
           "dataType",
           "name"
+        ],
+        "type": "object"
+      },
+      "TabularExportRequest": {
+        "description": "Export request object describing the export properties and overrides for tabular exports.",
+        "required": [
+          "fileName",
+          "format"
         ],
         "type": "object"
       },
@@ -13943,6 +15311,14 @@
         ],
         "type": "object"
       },
+      "VisualExportRequest": {
+        "description": "Export request object describing the export properties and metadata for dashboard PDF exports.",
+        "required": [
+          "dashboardId",
+          "fileName"
+        ],
+        "type": "object"
+      },
       "WorkspaceDataSource": {
         "description": "The data source used for the particular workspace instead of the one defined in the LDM inherited from its parent workspace. Such data source cannot be defined for a single or a top-parent workspace.",
         "properties": {
@@ -14028,6 +15404,85 @@
         },
         "required": [
           "assigneeIdentifier"
+        ],
+        "type": "object"
+      },
+      "WorkspaceUser": {
+        "description": "List of workspace users",
+        "properties": {
+          "email": {
+            "description": "User email address",
+            "example": "user@example.com",
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "description": "User name",
+            "example": "John Wick",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "type": "object"
+      },
+      "WorkspaceUserGroup": {
+        "description": "List of workspace groups",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "description": "Group name",
+            "example": "admins",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "type": "object"
+      },
+      "WorkspaceUserGroups": {
+        "properties": {
+          "totalCount": {
+            "description": "Total number of groups",
+            "format": "int32",
+            "type": "integer"
+          },
+          "userGroups": {
+            "items": {
+              "$ref": "#/components/schemas/WorkspaceUserGroup"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "totalCount",
+          "userGroups"
+        ],
+        "type": "object"
+      },
+      "WorkspaceUsers": {
+        "properties": {
+          "totalCount": {
+            "description": "The total number of users is based on applied filters.",
+            "format": "int32",
+            "type": "integer"
+          },
+          "users": {
+            "items": {
+              "$ref": "#/components/schemas/WorkspaceUser"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "totalCount",
+          "users"
         ],
         "type": "object"
       },
@@ -15306,6 +16761,32 @@
         ]
       }
     },
+    "/api/v1/actions/workspaces/{workspaceId}/metadataSync": {
+      "post": {
+        "description": "(BETA) Temporary solution. Later relevant metadata actions will trigger it in its scope only.",
+        "operationId": "metadataSync",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "summary": "(BETA) Sync Metadata to AI services",
+        "tags": [
+          "AI",
+          "actions"
+        ]
+      }
+    },
     "/api/v1/actions/workspaces/{workspaceId}/overriddenChildEntities": {
       "get": {
         "description": "Finds API identifier overrides in given workspace hierarchy.",
@@ -15613,6 +17094,140 @@
             "MANAGE"
           ]
         }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/userGroups": {
+      "get": {
+        "operationId": "listWorkspaceUserGroups",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Zero-based page index (0..N)",
+            "example": "page=0",
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "format": "int32",
+              "type": "integer"
+            },
+            "style": "form"
+          },
+          {
+            "description": "The size of the page to be returned.",
+            "example": "size=20",
+            "in": "query",
+            "name": "size",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "format": "int32",
+              "type": "integer"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Filter by user name. Note that user name is case insensitive.",
+            "example": "name=charles",
+            "in": "query",
+            "name": "name",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkspaceUserGroups"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/users": {
+      "get": {
+        "operationId": "listWorkspaceUsers",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Zero-based page index (0..N)",
+            "example": "page=0",
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "format": "int32",
+              "type": "integer"
+            },
+            "style": "form"
+          },
+          {
+            "description": "The size of the page to be returned.",
+            "example": "size=20",
+            "in": "query",
+            "name": "size",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "format": "int32",
+              "type": "integer"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Filter by user name. Note that user name is case insensitive.",
+            "example": "name=charles",
+            "in": "query",
+            "name": "name",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkspaceUsers"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
       }
     },
     "/api/v1/entities/admin/cookieSecurityConfigurations/{id}": {
@@ -17343,6 +18958,280 @@
           "entities",
           "organization-model-controller"
         ]
+      }
+    },
+    "/api/v1/entities/notificationChannels": {
+      "get": {
+        "operationId": "getAllEntities@NotificationChannels",
+        "parameters": [
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=name==someString;description==someString",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/size"
+          },
+          {
+            "$ref": "#/components/parameters/sort"
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=page,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "page",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiNotificationChannelOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Get all Notification Channel entities",
+        "tags": [
+          "Notification Channels",
+          "entities",
+          "organization-model-controller"
+        ]
+      },
+      "post": {
+        "operationId": "createEntity@NotificationChannels",
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiNotificationChannelPostOptionalIdDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiNotificationChannelOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Post Notification Channel entities",
+        "tags": [
+          "Notification Channels",
+          "entities",
+          "organization-model-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
+    "/api/v1/entities/notificationChannels/{id}": {
+      "delete": {
+        "operationId": "deleteEntity@NotificationChannels",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPathParameter"
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=name==someString;description==someString",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "$ref": "#/components/responses/Deleted"
+          }
+        },
+        "tags": [
+          "Notification Channels",
+          "entities",
+          "organization-model-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      },
+      "get": {
+        "operationId": "getEntity@NotificationChannels",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPathParameter"
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=name==someString;description==someString",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiNotificationChannelOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Get Notification Channel entity",
+        "tags": [
+          "Notification Channels",
+          "entities",
+          "organization-model-controller"
+        ]
+      },
+      "patch": {
+        "operationId": "patchEntity@NotificationChannels",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPathParameter"
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=name==someString;description==someString",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiNotificationChannelPatchDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiNotificationChannelOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Patch Notification Channel entity",
+        "tags": [
+          "Notification Channels",
+          "entities",
+          "organization-model-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      },
+      "put": {
+        "operationId": "updateEntity@NotificationChannels",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPathParameter"
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=name==someString;description==someString",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiNotificationChannelInDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiNotificationChannelOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Put Notification Channel entity",
+        "tags": [
+          "Notification Channels",
+          "entities",
+          "organization-model-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
       }
     },
     "/api/v1/entities/organization": {
@@ -21064,6 +22953,571 @@
         ]
       }
     },
+    "/api/v1/entities/workspaces/{workspaceId}/automations": {
+      "get": {
+        "operationId": "getAllEntities@Automations",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "origin",
+            "required": false,
+            "schema": {
+              "default": "ALL",
+              "description": "Defines scope of origin of objects. All by default.",
+              "enum": [
+                "ALL",
+                "PARENTS",
+                "NATIVE"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=title==someString;description==someString;notificationChannel.id==321;createdBy.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=notificationChannel,createdBy,modifiedBy,exportDefinitions,recipients",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "notificationChannels",
+                  "userIdentifiers",
+                  "exportDefinitions",
+                  "users",
+                  "notificationChannel",
+                  "createdBy",
+                  "modifiedBy",
+                  "recipients",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/size"
+          },
+          {
+            "$ref": "#/components/parameters/sort"
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=origin,page,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "origin",
+                  "page",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiAutomationOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Get all Automations",
+        "tags": [
+          "Automations",
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
+      },
+      "post": {
+        "operationId": "createEntity@Automations",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=notificationChannel,createdBy,modifiedBy,exportDefinitions,recipients",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "notificationChannels",
+                  "userIdentifiers",
+                  "exportDefinitions",
+                  "users",
+                  "notificationChannel",
+                  "createdBy",
+                  "modifiedBy",
+                  "recipients",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=origin,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "origin",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiAutomationInDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiAutomationOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Post Automations",
+        "tags": [
+          "Automations",
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "ANALYZE"
+          ]
+        }
+      }
+    },
+    "/api/v1/entities/workspaces/{workspaceId}/automations/{objectId}": {
+      "delete": {
+        "operationId": "deleteEntity@Automations",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=title==someString;description==someString;notificationChannel.id==321;createdBy.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "$ref": "#/components/responses/Deleted"
+          }
+        },
+        "summary": "Delete an Automation",
+        "tags": [
+          "Automations",
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "ANALYZE"
+          ]
+        }
+      },
+      "get": {
+        "operationId": "getEntity@Automations",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=title==someString;description==someString;notificationChannel.id==321;createdBy.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=notificationChannel,createdBy,modifiedBy,exportDefinitions,recipients",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "notificationChannels",
+                  "userIdentifiers",
+                  "exportDefinitions",
+                  "users",
+                  "notificationChannel",
+                  "createdBy",
+                  "modifiedBy",
+                  "recipients",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=origin,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "origin",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiAutomationOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Get an Automation",
+        "tags": [
+          "Automations",
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
+      },
+      "patch": {
+        "operationId": "patchEntity@Automations",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=title==someString;description==someString;notificationChannel.id==321;createdBy.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=notificationChannel,createdBy,modifiedBy,exportDefinitions,recipients",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "notificationChannels",
+                  "userIdentifiers",
+                  "exportDefinitions",
+                  "users",
+                  "notificationChannel",
+                  "createdBy",
+                  "modifiedBy",
+                  "recipients",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiAutomationPatchDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiAutomationOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Patch an Automation",
+        "tags": [
+          "Automations",
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "ANALYZE"
+          ]
+        }
+      },
+      "put": {
+        "operationId": "updateEntity@Automations",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=title==someString;description==someString;notificationChannel.id==321;createdBy.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=notificationChannel,createdBy,modifiedBy,exportDefinitions,recipients",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "notificationChannels",
+                  "userIdentifiers",
+                  "exportDefinitions",
+                  "users",
+                  "notificationChannel",
+                  "createdBy",
+                  "modifiedBy",
+                  "recipients",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiAutomationInDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiAutomationOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Put an Automation",
+        "tags": [
+          "Automations",
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "ANALYZE"
+          ]
+        }
+      }
+    },
     "/api/v1/entities/workspaces/{workspaceId}/customApplicationSettings": {
       "get": {
         "operationId": "getAllEntities@CustomApplicationSettings",
@@ -22269,7 +24723,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=title==someString;description==someString;visualizationObject.id==321;createdBy.id==321",
+            "example": "filter=title==someString;description==someString;visualizationObject.id==321;analyticalDashboard.id==321",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -22278,7 +24732,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=visualizationObject,createdBy,modifiedBy",
+            "example": "include=visualizationObject,analyticalDashboard,createdBy,modifiedBy",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -22287,8 +24741,10 @@
               "items": {
                 "enum": [
                   "visualizationObjects",
+                  "analyticalDashboards",
                   "userIdentifiers",
                   "visualizationObject",
+                  "analyticalDashboard",
                   "createdBy",
                   "modifiedBy",
                   "ALL"
@@ -22319,7 +24775,7 @@
           },
           {
             "description": "Include Meta objects.",
-            "example": "metaInclude=page,all",
+            "example": "metaInclude=origin,page,all",
             "explode": false,
             "in": "query",
             "name": "metaInclude",
@@ -22328,6 +24784,7 @@
               "description": "Included meta objects",
               "items": {
                 "enum": [
+                  "origin",
                   "page",
                   "all",
                   "ALL"
@@ -22378,7 +24835,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=visualizationObject,createdBy,modifiedBy",
+            "example": "include=visualizationObject,analyticalDashboard,createdBy,modifiedBy",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -22387,8 +24844,10 @@
               "items": {
                 "enum": [
                   "visualizationObjects",
+                  "analyticalDashboards",
                   "userIdentifiers",
                   "visualizationObject",
+                  "analyticalDashboard",
                   "createdBy",
                   "modifiedBy",
                   "ALL"
@@ -22396,6 +24855,28 @@
                 "type": "string"
               },
               "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=origin,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "origin",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
             },
             "style": "form"
           }
@@ -22458,7 +24939,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=title==someString;description==someString;visualizationObject.id==321;createdBy.id==321",
+            "example": "filter=title==someString;description==someString;visualizationObject.id==321;analyticalDashboard.id==321",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -22505,7 +24986,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=title==someString;description==someString;visualizationObject.id==321;createdBy.id==321",
+            "example": "filter=title==someString;description==someString;visualizationObject.id==321;analyticalDashboard.id==321",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -22514,7 +24995,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=visualizationObject,createdBy,modifiedBy",
+            "example": "include=visualizationObject,analyticalDashboard,createdBy,modifiedBy",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -22523,8 +25004,10 @@
               "items": {
                 "enum": [
                   "visualizationObjects",
+                  "analyticalDashboards",
                   "userIdentifiers",
                   "visualizationObject",
+                  "analyticalDashboard",
                   "createdBy",
                   "modifiedBy",
                   "ALL"
@@ -22543,6 +25026,28 @@
               "default": false,
               "type": "boolean"
             }
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=origin,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "origin",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
           }
         ],
         "responses": {
@@ -22591,7 +25096,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=title==someString;description==someString;visualizationObject.id==321;createdBy.id==321",
+            "example": "filter=title==someString;description==someString;visualizationObject.id==321;analyticalDashboard.id==321",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -22600,7 +25105,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=visualizationObject,createdBy,modifiedBy",
+            "example": "include=visualizationObject,analyticalDashboard,createdBy,modifiedBy",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -22609,8 +25114,10 @@
               "items": {
                 "enum": [
                   "visualizationObjects",
+                  "analyticalDashboards",
                   "userIdentifiers",
                   "visualizationObject",
+                  "analyticalDashboard",
                   "createdBy",
                   "modifiedBy",
                   "ALL"
@@ -22678,7 +25185,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=title==someString;description==someString;visualizationObject.id==321;createdBy.id==321",
+            "example": "filter=title==someString;description==someString;visualizationObject.id==321;analyticalDashboard.id==321",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -22687,7 +25194,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=visualizationObject,createdBy,modifiedBy",
+            "example": "include=visualizationObject,analyticalDashboard,createdBy,modifiedBy",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -22696,8 +25203,10 @@
               "items": {
                 "enum": [
                   "visualizationObjects",
+                  "analyticalDashboards",
                   "userIdentifiers",
                   "visualizationObject",
+                  "analyticalDashboard",
                   "createdBy",
                   "modifiedBy",
                   "ALL"

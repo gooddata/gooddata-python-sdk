@@ -31,11 +31,13 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.json_api_attribute_hierarchy_out_meta import JsonApiAttributeHierarchyOutMeta
     from gooddata_api_client.model.json_api_export_definition_out import JsonApiExportDefinitionOut
     from gooddata_api_client.model.json_api_export_definition_out_attributes import JsonApiExportDefinitionOutAttributes
     from gooddata_api_client.model.json_api_export_definition_out_relationships import JsonApiExportDefinitionOutRelationships
     from gooddata_api_client.model.object_links import ObjectLinks
     from gooddata_api_client.model.object_links_container import ObjectLinksContainer
+    globals()['JsonApiAttributeHierarchyOutMeta'] = JsonApiAttributeHierarchyOutMeta
     globals()['JsonApiExportDefinitionOut'] = JsonApiExportDefinitionOut
     globals()['JsonApiExportDefinitionOutAttributes'] = JsonApiExportDefinitionOutAttributes
     globals()['JsonApiExportDefinitionOutRelationships'] = JsonApiExportDefinitionOutRelationships
@@ -104,9 +106,10 @@ class JsonApiExportDefinitionOutWithLinks(ModelComposed):
         """
         lazy_import()
         return {
-            'attributes': (JsonApiExportDefinitionOutAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
+            'attributes': (JsonApiExportDefinitionOutAttributes,),  # noqa: E501
+            'meta': (JsonApiAttributeHierarchyOutMeta,),  # noqa: E501
             'relationships': (JsonApiExportDefinitionOutRelationships,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
         }
@@ -117,9 +120,10 @@ class JsonApiExportDefinitionOutWithLinks(ModelComposed):
 
 
     attribute_map = {
-        'attributes': 'attributes',  # noqa: E501
         'id': 'id',  # noqa: E501
         'type': 'type',  # noqa: E501
+        'attributes': 'attributes',  # noqa: E501
+        'meta': 'meta',  # noqa: E501
         'relationships': 'relationships',  # noqa: E501
         'links': 'links',  # noqa: E501
     }
@@ -133,7 +137,6 @@ class JsonApiExportDefinitionOutWithLinks(ModelComposed):
         """JsonApiExportDefinitionOutWithLinks - a model defined in OpenAPI
 
         Keyword Args:
-            attributes (JsonApiExportDefinitionOutAttributes):
             id (str): API identifier of an object
             type (str): Object type. defaults to "exportDefinition", must be one of ["exportDefinition", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
@@ -166,6 +169,8 @@ class JsonApiExportDefinitionOutWithLinks(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            attributes (JsonApiExportDefinitionOutAttributes): [optional]  # noqa: E501
+            meta (JsonApiAttributeHierarchyOutMeta): [optional]  # noqa: E501
             relationships (JsonApiExportDefinitionOutRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """
@@ -242,7 +247,6 @@ class JsonApiExportDefinitionOutWithLinks(ModelComposed):
         """JsonApiExportDefinitionOutWithLinks - a model defined in OpenAPI
 
         Keyword Args:
-            attributes (JsonApiExportDefinitionOutAttributes):
             id (str): API identifier of an object
             type (str): Object type. defaults to "exportDefinition", must be one of ["exportDefinition", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
@@ -275,6 +279,8 @@ class JsonApiExportDefinitionOutWithLinks(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            attributes (JsonApiExportDefinitionOutAttributes): [optional]  # noqa: E501
+            meta (JsonApiAttributeHierarchyOutMeta): [optional]  # noqa: E501
             relationships (JsonApiExportDefinitionOutRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """
