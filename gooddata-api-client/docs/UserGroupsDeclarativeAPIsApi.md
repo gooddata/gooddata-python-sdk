@@ -291,7 +291,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 ],
                 settings=[
                     DeclarativeSetting(
-                        content={},
+                        content=JsonNode(),
                         id="/6bUUGjjNSwg0_bs",
                         type="TIMEZONE",
                     ),

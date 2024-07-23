@@ -239,7 +239,9 @@ class CatalogWorkspaceService(CatalogServiceBase):
         """
         if exclude is None:
             exclude = []
-        return CatalogDeclarativeWorkspaces.from_api(self._layout_api.get_workspaces_layout(exclude=exclude))
+        return CatalogDeclarativeWorkspaces.from_dict(
+            self._layout_api.get_workspaces_layout(exclude=exclude).to_dict(camel_case=False), camel_case=False
+        )
 
     def put_declarative_workspaces(self, workspace: CatalogDeclarativeWorkspaces) -> None:
         """Set layout of all workspaces and their hierarchy. Parameter is in declarative form.
@@ -313,8 +315,9 @@ class CatalogWorkspaceService(CatalogServiceBase):
         """
         if exclude is None:
             exclude = []
-        return CatalogDeclarativeWorkspaceModel.from_api(
-            self._layout_api.get_workspace_layout(workspace_id=workspace_id, exclude=exclude)
+        return CatalogDeclarativeWorkspaceModel.from_dict(
+            self._layout_api.get_workspace_layout(workspace_id=workspace_id, exclude=exclude).to_dict(camel_case=False),
+            camel_case=False,
         )
 
     def put_declarative_workspace(

@@ -63,31 +63,6 @@
         ],
         "type": "object"
       },
-      "PdfExportRequest": {
-        "description": "Export request object describing the export properties and metadata for pdf exports.",
-        "properties": {
-          "dashboardId": {
-            "description": "Dashboard identifier",
-            "example": "761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
-            "type": "string"
-          },
-          "fileName": {
-            "description": "File name to be used for retrieving the pdf document.",
-            "example": "filename",
-            "type": "string"
-          },
-          "metadata": {
-            "description": "Metadata definition in open form JSON format.",
-            "example": "\"metadata\":{}",
-            "type": "object"
-          }
-        },
-        "required": [
-          "dashboardId",
-          "fileName"
-        ],
-        "type": "object"
-      },
       "PdfTableStyle": {
         "description": "Custom CSS styles for the table. (PDF, HTML)",
         "example": [
@@ -233,6 +208,31 @@
         "required": [
           "fileName",
           "format"
+        ],
+        "type": "object"
+      },
+      "VisualExportRequest": {
+        "description": "Export request object describing the export properties and metadata for dashboard PDF exports.",
+        "properties": {
+          "dashboardId": {
+            "description": "Dashboard identifier",
+            "example": "761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+            "type": "string"
+          },
+          "fileName": {
+            "description": "File name to be used for retrieving the pdf document.",
+            "example": "filename",
+            "type": "string"
+          },
+          "metadata": {
+            "description": "Metadata definition in free-form JSON format.",
+            "example": "{}",
+            "type": "object"
+          }
+        },
+        "required": [
+          "dashboardId",
+          "fileName"
         ],
         "type": "object"
       }
@@ -396,7 +396,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PdfExportRequest"
+                "$ref": "#/components/schemas/VisualExportRequest"
               }
             }
           },

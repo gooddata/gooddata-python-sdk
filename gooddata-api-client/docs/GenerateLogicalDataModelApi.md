@@ -41,8 +41,10 @@ with gooddata_api_client.ApiClient() as api_client:
         denorm_prefix="dr",
         fact_prefix="f",
         generate_long_ids=True,
-        grain_prefix="g",
-        grain_reference_prefix="gr",
+        grain_multivalue_reference_prefix="grmr",
+        grain_prefix="gr",
+        grain_reference_prefix="grr",
+        multivalue_reference_prefix="mr",
         pdm=PdmLdmRequest(
             sqls=[
                 PdmSql(
@@ -76,7 +78,7 @@ with gooddata_api_client.ApiClient() as api_client:
         ),
         primary_label_prefix="pl",
         reference_prefix="r",
-        secondary_label_prefix="sl",
+        secondary_label_prefix="ls",
         separator="__",
         table_prefix="out_table",
         view_prefix="out_view",

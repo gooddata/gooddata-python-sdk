@@ -97,8 +97,6 @@ class CatalogDeclarativeDataSource(Base):
     type: str = attr.field(validator=value_in_allowed)
     url: Optional[str] = None
     schema: str
-    enable_caching: Optional[bool] = None
-    cache_path: Optional[List[str]] = None
     cache_strategy: Optional[str] = None
     username: Optional[str] = None
     parameters: Optional[List[CatalogParameter]] = None

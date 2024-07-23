@@ -218,8 +218,6 @@ def _create_default_data_source(sdk: GoodDataSdk, data_source_id: str = "test"):
             username="demouser",
             password="demopass",
         ),
-        enable_caching=True,
-        cache_path=["cache_schema"],
         url_params=[("autosave", "true")],
     )
     sdk.catalog_data_source.create_or_update_data_source(data_source=expected_data_source)
@@ -254,7 +252,6 @@ def test_catalog_create_update_list_data_source(test_config):
                 username="demouser",
                 password="demopass",
             ),
-            enable_caching=False,
             url_params=[("autosave", "false")],
         )
         sdk.catalog_data_source.create_or_update_data_source(updated_data_source)
@@ -296,7 +293,6 @@ def test_catalog_create_data_source_redshift_spec(test_config):
                 username="demouser",
                 password="demopass",
             ),
-            enable_caching=False,
             url_params=[("autosave", "true")],
         ),
     )
@@ -316,7 +312,6 @@ def test_catalog_create_data_source_vertica_spec(test_config):
                 username="demouser",
                 password="demopass",
             ),
-            enable_caching=False,
             url_params=[("TLSmode", "false")],
         ),
     )
@@ -336,8 +331,6 @@ def test_catalog_create_data_source_snowflake_spec(test_config):
                 username="demouser",
                 password="demopass",
             ),
-            enable_caching=True,
-            cache_path=["cache_schema"],
             url_params=[("useProxy", "true")],
         ),
     )
@@ -354,8 +347,6 @@ def test_catalog_create_data_source_bigquery_spec(test_config):
                 name="Test",
                 schema="demo",
                 credentials=TokenCredentialsFromFile(file_path=Path("credentials") / "bigquery_service_account.json"),
-                enable_caching=True,
-                cache_path=["cache_schema"],
                 parameters=[{"name": "projectId", "value": "abc"}],
             ),
         )
@@ -379,8 +370,6 @@ def test_catalog_create_data_source_dremio_spec(test_config):
                 password="demopass",
             ),
             schema="",
-            enable_caching=True,
-            cache_path=["$scratch"],
         ),
     )
 
@@ -640,8 +629,6 @@ def test_catalog_create_data_source_greenplum_spec(test_config):
                 username="demouser",
                 password="demopass",
             ),
-            enable_caching=True,
-            cache_path=["cache_schema"],
             url_params=[("autosave", "true")],
         ),
     )
@@ -658,8 +645,6 @@ def test_postgres_url_creation(test_config):
             username="demouser",
             password="demopass",
         ),
-        enable_caching=True,
-        cache_path=["cache_schema"],
         url_params=[("autosave", "true")],
     )
     assert data_source.url == "jdbc:postgresql://localhost:5432/demo?autosave=true"
@@ -675,8 +660,6 @@ def test_snowflake_url_creation(test_config):
             username="demouser",
             password="demopass",
         ),
-        enable_caching=True,
-        cache_path=["cache_schema"],
         url_params=[("useProxy", "true")],
     )
     assert (
@@ -698,7 +681,6 @@ def test_allowed_data_source_type(test_config):
                     username="demouser",
                     password="demopass",
                 ),
-                enable_caching=False,
                 url_params=[("param", "value")],
             )
         except ValueError:
@@ -715,7 +697,6 @@ def test_allowed_data_source_type(test_config):
                 username="demouser",
                 password="demopass",
             ),
-            enable_caching=False,
             url_params=[("param", "value")],
         )
     except ValueError:

@@ -12,6 +12,8 @@ Name | Type | Description | Notes
 **color_palettes** | [**[DeclarativeColorPalette]**](DeclarativeColorPalette.md) | A list of color palettes. | [optional] 
 **csp_directives** | [**[DeclarativeCspDirective]**](DeclarativeCspDirective.md) | A list of CSP directives. | [optional] 
 **early_access** | **str** | Early access defined on level Organization | [optional] 
+**early_access_values** | **[str]** | Early access defined on level Organization | [optional] 
+**jit_enabled** | **bool** | Flag to enable/disable JIT provisioning in the given organization | [optional] 
 **oauth_client_id** | **str** | Identifier of the authentication provider | [optional] 
 **oauth_client_secret** | **str** | Communication secret of the authentication provider (never returned back). | [optional] 
 **oauth_issuer_id** | **str** | Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider. | [optional] 

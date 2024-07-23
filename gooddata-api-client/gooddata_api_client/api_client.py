@@ -802,11 +802,11 @@ class Endpoint(object):
         """ This method is invoked when endpoints are called
         Example:
 
-        api_instance = APITokensApi()
-        api_instance.create_entity_api_tokens  # this is an instance of the class Endpoint
-        api_instance.create_entity_api_tokens()  # this invokes api_instance.create_entity_api_tokens.__call__()
+        api_instance = AIApi()
+        api_instance.metadata_sync  # this is an instance of the class Endpoint
+        api_instance.metadata_sync()  # this invokes api_instance.metadata_sync.__call__()
         which then invokes the callable functions stored in that endpoint at
-        api_instance.create_entity_api_tokens.callable or self.callable in this class
+        api_instance.metadata_sync.callable or self.callable in this class
 
         """
         return self.callable(self, *args, **kwargs)

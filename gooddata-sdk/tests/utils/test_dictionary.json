@@ -1,7 +1,6 @@
 {
   "dataSources": [
     {
-      "enableCaching": false,
       "id": "demo-test-ds",
       "name": "demo-test-ds",
       "pdm": {

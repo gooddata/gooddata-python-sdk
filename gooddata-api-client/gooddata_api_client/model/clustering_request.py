@@ -62,6 +62,9 @@ class ClusteringRequest(ModelNormal):
         ('number_of_clusters',): {
             'inclusive_minimum': 1,
         },
+        ('threshold',): {
+            'exclusive_minimum''inclusive_minimum': 0,
+        },
     }
 
     @cached_property
@@ -86,6 +89,7 @@ class ClusteringRequest(ModelNormal):
         """
         return {
             'number_of_clusters': (int,),  # noqa: E501
+            'threshold': (float,),  # noqa: E501
         }
 
     @cached_property
@@ -95,6 +99,7 @@ class ClusteringRequest(ModelNormal):
 
     attribute_map = {
         'number_of_clusters': 'numberOfClusters',  # noqa: E501
+        'threshold': 'threshold',  # noqa: E501
     }
 
     read_only_vars = {
@@ -141,6 +146,7 @@ class ClusteringRequest(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            threshold (float): Threshold used for algorithm. [optional] if omitted the server will use the default value of 0.03  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -230,6 +236,7 @@ class ClusteringRequest(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            threshold (float): Threshold used for algorithm. [optional] if omitted the server will use the default value of 0.03  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

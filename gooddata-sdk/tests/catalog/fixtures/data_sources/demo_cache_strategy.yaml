@@ -28,7 +28,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '295'
+          - '314'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -70,7 +70,7 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1 ; mode=block
+          - 1; mode=block
       body:
         string:
           data:
@@ -79,7 +79,7 @@ interactions:
             attributes:
               url: jdbc:postgresql://localhost:5432/demo
               username: demouser
-              enableCaching: false
+              authenticationType: USERNAME_PASSWORD
               name: demo-test-ds
               type: POSTGRESQL
               schema: demo
@@ -121,7 +121,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '319'
+          - '338'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -162,7 +162,7 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1 ; mode=block
+          - 1; mode=block
       body:
         string:
           data:
@@ -171,8 +171,8 @@ interactions:
             attributes:
               url: jdbc:postgresql://localhost:5432/demo
               username: demouser
-              enableCaching: false
               cacheStrategy: NEVER
+              authenticationType: USERNAME_PASSWORD
               name: demo-test-ds
               type: POSTGRESQL
               schema: demo
@@ -205,7 +205,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '319'
+          - '338'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -246,7 +246,7 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1 ; mode=block
+          - 1; mode=block
       body:
         string:
           data:
@@ -255,8 +255,8 @@ interactions:
             attributes:
               url: jdbc:postgresql://localhost:5432/demo
               username: demouser
-              enableCaching: false
               cacheStrategy: NEVER
+              authenticationType: USERNAME_PASSWORD
               name: demo-test-ds
               type: POSTGRESQL
               schema: demo
@@ -272,7 +272,6 @@ interactions:
             schema: demo
             type: POSTGRESQL
             url: jdbc:postgresql://localhost:5432/demo
-            enableCaching: false
             username: demouser
             permissions:
               - assignee:
@@ -344,6 +343,6 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1 ; mode=block
+          - 1; mode=block
       body:
         string: ''

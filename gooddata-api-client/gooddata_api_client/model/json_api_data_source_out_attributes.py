@@ -83,6 +83,13 @@ class JsonApiDataSourceOutAttributes(ModelNormal):
             'PINOT': "PINOT",
             'SINGLESTORE': "SINGLESTORE",
             'MOTHERDUCK': "MOTHERDUCK",
+            'FLIGHTRPC': "FLIGHTRPC",
+        },
+        ('authentication_type',): {
+            'None': None,
+            'USERNAME_PASSWORD': "USERNAME_PASSWORD",
+            'TOKEN': "TOKEN",
+            'KEY_PAIR': "KEY_PAIR",
         },
         ('cache_strategy',): {
             'None': None,
@@ -132,10 +139,9 @@ class JsonApiDataSourceOutAttributes(ModelNormal):
             'name': (str,),  # noqa: E501
             'schema': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
-            'cache_path': ([str], none_type,),  # noqa: E501
+            'authentication_type': (str, none_type,),  # noqa: E501
             'cache_strategy': (str, none_type,),  # noqa: E501
             'decoded_parameters': ([JsonApiDataSourceInAttributesParametersInner], none_type,),  # noqa: E501
-            'enable_caching': (bool, none_type,),  # noqa: E501
             'parameters': ([JsonApiDataSourceInAttributesParametersInner], none_type,),  # noqa: E501
             'url': (str, none_type,),  # noqa: E501
             'username': (str, none_type,),  # noqa: E501
@@ -150,10 +156,9 @@ class JsonApiDataSourceOutAttributes(ModelNormal):
         'name': 'name',  # noqa: E501
         'schema': 'schema',  # noqa: E501
         'type': 'type',  # noqa: E501
-        'cache_path': 'cachePath',  # noqa: E501
+        'authentication_type': 'authenticationType',  # noqa: E501
         'cache_strategy': 'cacheStrategy',  # noqa: E501
         'decoded_parameters': 'decodedParameters',  # noqa: E501
-        'enable_caching': 'enableCaching',  # noqa: E501
         'parameters': 'parameters',  # noqa: E501
         'url': 'url',  # noqa: E501
         'username': 'username',  # noqa: E501
@@ -205,10 +210,9 @@ class JsonApiDataSourceOutAttributes(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            cache_path ([str], none_type): Path to schema, where intermediate caches are stored.. [optional]  # noqa: E501
+            authentication_type (str, none_type): Type of authentication used to connect to the database.. [optional]  # noqa: E501
             cache_strategy (str, none_type): Determines how the results coming from a particular datasource should be cached.. [optional]  # noqa: E501
             decoded_parameters ([JsonApiDataSourceInAttributesParametersInner], none_type): Decoded parameters to be used when connecting to the database providing the data for the data source.. [optional]  # noqa: E501
-            enable_caching (bool, none_type): Enable CTAS caching of intermediate results in the database.. [optional]  # noqa: E501
             parameters ([JsonApiDataSourceInAttributesParametersInner], none_type): Additional parameters to be used when connecting to the database providing the data for the data source.. [optional]  # noqa: E501
             url (str, none_type): The URL of the database providing the data for the data source.. [optional]  # noqa: E501
             username (str, none_type): The username to use to connect to the database providing the data for the data source.. [optional]  # noqa: E501
@@ -305,10 +309,9 @@ class JsonApiDataSourceOutAttributes(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            cache_path ([str], none_type): Path to schema, where intermediate caches are stored.. [optional]  # noqa: E501
+            authentication_type (str, none_type): Type of authentication used to connect to the database.. [optional]  # noqa: E501
             cache_strategy (str, none_type): Determines how the results coming from a particular datasource should be cached.. [optional]  # noqa: E501
             decoded_parameters ([JsonApiDataSourceInAttributesParametersInner], none_type): Decoded parameters to be used when connecting to the database providing the data for the data source.. [optional]  # noqa: E501
-            enable_caching (bool, none_type): Enable CTAS caching of intermediate results in the database.. [optional]  # noqa: E501
             parameters ([JsonApiDataSourceInAttributesParametersInner], none_type): Additional parameters to be used when connecting to the database providing the data for the data source.. [optional]  # noqa: E501
             url (str, none_type): The URL of the database providing the data for the data source.. [optional]  # noqa: E501
             username (str, none_type): The username to use to connect to the database providing the data for the data source.. [optional]  # noqa: E501

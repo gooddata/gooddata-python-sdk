@@ -4,12 +4,12 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**cache_path** | **[str], none_type** | Path to schema, where intermediate caches are stored. | [optional] 
 **cache_strategy** | **str, none_type** | Determines how the results coming from a particular datasource should be cached. | [optional] 
-**enable_caching** | **bool, none_type** | Enable CTAS caching of intermediate results in the database. | [optional] 
 **name** | **str** | User-facing name of the data source. | [optional] 
 **parameters** | [**[JsonApiDataSourceInAttributesParametersInner], none_type**](JsonApiDataSourceInAttributesParametersInner.md) | Additional parameters to be used when connecting to the database providing the data for the data source. | [optional] 
 **password** | **str, none_type** | The password to use to connect to the database providing the data for the data source. | [optional] 
+**private_key** | **str, none_type** | The private key to use to connect to the database providing the data for the data source. | [optional] 
+**private_key_passphrase** | **str, none_type** | The passphrase used to encrypt the private key. | [optional] 
 **schema** | **str** | The schema to use as the root of the data for the data source. | [optional] 
 **token** | **str, none_type** | The token to use to connect to the database providing the data for the data source (for example a BigQuery Sevice Acount). | [optional] 
 **type** | **str** | Type of the database providing the data for the data source. | [optional] 

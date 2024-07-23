@@ -33,8 +33,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 def lazy_import():
     from gooddata_api_client.model.declarative_analytical_dashboard_permissions_inner import DeclarativeAnalyticalDashboardPermissionsInner
     from gooddata_api_client.model.declarative_user_identifier import DeclarativeUserIdentifier
+    from gooddata_api_client.model.json_node import JsonNode
     globals()['DeclarativeAnalyticalDashboardPermissionsInner'] = DeclarativeAnalyticalDashboardPermissionsInner
     globals()['DeclarativeUserIdentifier'] = DeclarativeUserIdentifier
+    globals()['JsonNode'] = JsonNode
 
 
 class DeclarativeAnalyticalDashboard(ModelNormal):
@@ -113,7 +115,7 @@ class DeclarativeAnalyticalDashboard(ModelNormal):
         """
         lazy_import()
         return {
-            'content': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),  # noqa: E501
+            'content': (JsonNode,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'title': (str,),  # noqa: E501
             'created_at': (str, none_type,),  # noqa: E501
@@ -154,7 +156,7 @@ class DeclarativeAnalyticalDashboard(ModelNormal):
         """DeclarativeAnalyticalDashboard - a model defined in OpenAPI
 
         Args:
-            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): A definition of the metric in JSON format.
+            content (JsonNode):
             id (str): Analytical dashboard ID.
             title (str): Analytical dashboard title.
 
@@ -254,7 +256,7 @@ class DeclarativeAnalyticalDashboard(ModelNormal):
         """DeclarativeAnalyticalDashboard - a model defined in OpenAPI
 
         Args:
-            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): A definition of the metric in JSON format.
+            content (JsonNode):
             id (str): Analytical dashboard ID.
             title (str): Analytical dashboard title.
 

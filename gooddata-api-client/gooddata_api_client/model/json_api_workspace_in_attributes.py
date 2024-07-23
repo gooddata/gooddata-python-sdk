@@ -107,6 +107,7 @@ class JsonApiWorkspaceInAttributes(ModelNormal):
             'data_source': (JsonApiWorkspaceInAttributesDataSource,),  # noqa: E501
             'description': (str, none_type,),  # noqa: E501
             'early_access': (str, none_type,),  # noqa: E501
+            'early_access_values': ([str], none_type,),  # noqa: E501
             'name': (str, none_type,),  # noqa: E501
             'prefix': (str, none_type,),  # noqa: E501
         }
@@ -121,6 +122,7 @@ class JsonApiWorkspaceInAttributes(ModelNormal):
         'data_source': 'dataSource',  # noqa: E501
         'description': 'description',  # noqa: E501
         'early_access': 'earlyAccess',  # noqa: E501
+        'early_access_values': 'earlyAccessValues',  # noqa: E501
         'name': 'name',  # noqa: E501
         'prefix': 'prefix',  # noqa: E501
     }
@@ -169,7 +171,8 @@ class JsonApiWorkspaceInAttributes(ModelNormal):
             cache_extra_limit (int): [optional]  # noqa: E501
             data_source (JsonApiWorkspaceInAttributesDataSource): [optional]  # noqa: E501
             description (str, none_type): [optional]  # noqa: E501
-            early_access (str, none_type): [optional]  # noqa: E501
+            early_access (str, none_type): The early access feature identifier. It is used to enable experimental features. Deprecated in favor of earlyAccessValues.. [optional]  # noqa: E501
+            early_access_values ([str], none_type): The early access feature identifiers. They are used to enable experimental features.. [optional]  # noqa: E501
             name (str, none_type): [optional]  # noqa: E501
             prefix (str, none_type): Custom prefix of entity identifiers in workspace. [optional]  # noqa: E501
         """
@@ -260,7 +263,8 @@ class JsonApiWorkspaceInAttributes(ModelNormal):
             cache_extra_limit (int): [optional]  # noqa: E501
             data_source (JsonApiWorkspaceInAttributesDataSource): [optional]  # noqa: E501
             description (str, none_type): [optional]  # noqa: E501
-            early_access (str, none_type): [optional]  # noqa: E501
+            early_access (str, none_type): The early access feature identifier. It is used to enable experimental features. Deprecated in favor of earlyAccessValues.. [optional]  # noqa: E501
+            early_access_values ([str], none_type): The early access feature identifiers. They are used to enable experimental features.. [optional]  # noqa: E501
             name (str, none_type): [optional]  # noqa: E501
             prefix (str, none_type): Custom prefix of entity identifiers in workspace. [optional]  # noqa: E501
         """

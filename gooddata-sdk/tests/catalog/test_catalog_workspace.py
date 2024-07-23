@@ -662,7 +662,6 @@ def create_second_data_source(sdk: GoodDataSdk, ds_id: str) -> None:
                 username="demouser",
                 password="demopass",
             ),
-            enable_caching=False,
             url_params=[("autosave", "false")],
         )
     )
