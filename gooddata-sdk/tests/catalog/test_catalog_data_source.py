@@ -29,6 +29,7 @@ from gooddata_sdk import (
     DatabricksAttributes,
     ExecutionDefinition,
     GoodDataSdk,
+    KeyPairCredentials,
     MariaDbAttributes,
     MsSqlAttributes,
     MySqlAttributes,
@@ -331,6 +332,22 @@ def test_catalog_create_data_source_snowflake_spec(test_config):
             credentials=BasicCredentials(
                 username="demouser",
                 password="demopass",
+            ),
+            url_params=[("useProxy", "true")],
+        ),
+    )
+
+    _create_delete_ds(
+        sdk=sdk,
+        data_source=CatalogDataSourceSnowflake(
+            id="test",
+            name="Test",
+            db_specific_attributes=SnowflakeAttributes(account="gooddata", warehouse="TIGER", db_name="TIGER"),
+            schema="demo",
+            credentials=KeyPairCredentials(
+                username="demouser",
+                private_key="private_key",
+                private_key_passphrase="private_key_passphrase",
             ),
             url_params=[("useProxy", "true")],
         ),
