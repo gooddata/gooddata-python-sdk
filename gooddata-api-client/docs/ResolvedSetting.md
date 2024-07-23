@@ -6,7 +6,7 @@ Setting and its value.
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **str** | Setting ID. Formerly used to identify a type of a particular setting, going to be removed in a favor of setting&#39;s type. | 
-**content** | **{str: (bool, date, datetime, dict, float, int, list, str, none_type)}** | A definition of the metric in JSON format. | [optional] 
+**content** | [**JsonNode**](JsonNode.md) |  | [optional] 
 **type** | **str** | Type of the setting. | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 

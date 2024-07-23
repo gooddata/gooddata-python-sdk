@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 
 # **create_pdf_export**
-> ExportResponse create_pdf_export(workspace_id, pdf_export_request)
+> ExportResponse create_pdf_export(workspace_id, visual_export_request)
 
 Create visual - pdf export request
 
@@ -24,7 +24,7 @@ import time
 import gooddata_api_client
 from gooddata_api_client.api import visual_export_api
 from gooddata_api_client.model.export_response import ExportResponse
-from gooddata_api_client.model.pdf_export_request import PdfExportRequest
+from gooddata_api_client.model.visual_export_request import VisualExportRequest
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -38,16 +38,16 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = visual_export_api.VisualExportApi(api_client)
     workspace_id = "workspaceId_example" # str | 
-    pdf_export_request = PdfExportRequest(
+    visual_export_request = VisualExportRequest(
         dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
         file_name="filename",
         metadata={},
-    ) # PdfExportRequest | 
+    ) # VisualExportRequest | 
 
     # example passing only required values which don't have defaults set
     try:
         # Create visual - pdf export request
-        api_response = api_instance.create_pdf_export(workspace_id, pdf_export_request)
+        api_response = api_instance.create_pdf_export(workspace_id, visual_export_request)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling VisualExportApi->create_pdf_export: %s\n" % e)
@@ -59,7 +59,7 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
- **pdf_export_request** | [**PdfExportRequest**](PdfExportRequest.md)|  |
+ **visual_export_request** | [**VisualExportRequest**](VisualExportRequest.md)|  |
 
 ### Return type
 

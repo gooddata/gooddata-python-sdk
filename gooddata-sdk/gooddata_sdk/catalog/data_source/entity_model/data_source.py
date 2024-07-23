@@ -32,8 +32,6 @@ class CatalogDataSourceBase(Base):
     ]
     _DELIMITER: ClassVar[str] = "&"
     _ATTRIBUTES: ClassVar[List[str]] = [
-        "enable_caching",
-        "cache_path",
         "cache_strategy",
         "url",
         "parameters",
@@ -47,8 +45,6 @@ class CatalogDataSourceBase(Base):
     type: str = attr.field()
     schema: str
     url: Optional[str] = None
-    enable_caching: Optional[bool] = None
-    cache_path: Optional[List[str]] = None
     cache_strategy: Optional[str] = None
     parameters: Optional[List[Dict[str, str]]] = None
     decoded_parameters: Optional[List[Dict[str, str]]] = None
@@ -91,8 +87,6 @@ class CatalogDataSourceBase(Base):
             and self.name == other.name
             and self.type == other.type
             and self.schema == other.schema
-            and self.enable_caching == other.enable_caching
-            and self.cache_path == other.cache_path
             and self.parameters == other.parameters
         )
 

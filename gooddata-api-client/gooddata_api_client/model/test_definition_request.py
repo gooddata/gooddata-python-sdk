@@ -83,6 +83,7 @@ class TestDefinitionRequest(ModelNormal):
             'PINOT': "PINOT",
             'SINGLESTORE': "SINGLESTORE",
             'MOTHERDUCK': "MOTHERDUCK",
+            'FLIGHTRPC': "FLIGHTRPC",
         },
     }
 
@@ -115,6 +116,8 @@ class TestDefinitionRequest(ModelNormal):
             'type': (str,),  # noqa: E501
             'parameters': ([DataSourceParameter],),  # noqa: E501
             'password': (str,),  # noqa: E501
+            'private_key': (str,),  # noqa: E501
+            'private_key_passphrase': (str,),  # noqa: E501
             'schema': (str,),  # noqa: E501
             'token': (str,),  # noqa: E501
             'url': (str,),  # noqa: E501
@@ -130,6 +133,8 @@ class TestDefinitionRequest(ModelNormal):
         'type': 'type',  # noqa: E501
         'parameters': 'parameters',  # noqa: E501
         'password': 'password',  # noqa: E501
+        'private_key': 'privateKey',  # noqa: E501
+        'private_key_passphrase': 'privateKeyPassphrase',  # noqa: E501
         'schema': 'schema',  # noqa: E501
         'token': 'token',  # noqa: E501
         'url': 'url',  # noqa: E501
@@ -182,6 +187,8 @@ class TestDefinitionRequest(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             parameters ([DataSourceParameter]): [optional]  # noqa: E501
             password (str): Database user password.. [optional]  # noqa: E501
+            private_key (str): Private key for data sources which supports key-pair authentication.. [optional]  # noqa: E501
+            private_key_passphrase (str): Passphrase for a encrypted version of a private key.. [optional]  # noqa: E501
             schema (str): Database schema.. [optional]  # noqa: E501
             token (str): Secret for token based authentication for data sources which supports it.. [optional]  # noqa: E501
             url (str): URL to database in JDBC format, where test should connect to.. [optional]  # noqa: E501
@@ -277,6 +284,8 @@ class TestDefinitionRequest(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             parameters ([DataSourceParameter]): [optional]  # noqa: E501
             password (str): Database user password.. [optional]  # noqa: E501
+            private_key (str): Private key for data sources which supports key-pair authentication.. [optional]  # noqa: E501
+            private_key_passphrase (str): Passphrase for a encrypted version of a private key.. [optional]  # noqa: E501
             schema (str): Database schema.. [optional]  # noqa: E501
             token (str): Secret for token based authentication for data sources which supports it.. [optional]  # noqa: E501
             url (str): URL to database in JDBC format, where test should connect to.. [optional]  # noqa: E501

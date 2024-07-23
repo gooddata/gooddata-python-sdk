@@ -4,6 +4,7 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**ai_search**](SmartFunctionsApi.md#ai_search) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/search | (BETA) Semantic Search in Metadata
 [**anomaly_detection**](SmartFunctionsApi.md#anomaly_detection) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/{resultId} | (EXPERIMENTAL) Smart functions - Anomaly Detection
 [**anomaly_detection_result**](SmartFunctionsApi.md#anomaly_detection_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/result/{resultId} | (EXPERIMENTAL) Smart functions - Anomaly Detection Result
 [**clustering**](SmartFunctionsApi.md#clustering) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/clustering/{resultId} | (EXPERIMENTAL) Smart functions - Clustering
@@ -11,6 +12,82 @@ Method | HTTP request | Description
 [**forecast**](SmartFunctionsApi.md#forecast) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/{resultId} | (BETA) Smart functions - Forecast
 [**forecast_result**](SmartFunctionsApi.md#forecast_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/result/{resultId} | (BETA) Smart functions - Forecast Result
 
+
+# **ai_search**
+> SearchResult ai_search(workspace_id, search_request)
+
+(BETA) Semantic Search in Metadata
+
+(BETA) Uses similarity (e.g. cosine distance) search to find top X most similar metadata objects.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import smart_functions_api
+from gooddata_api_client.model.search_result import SearchResult
+from gooddata_api_client.model.search_request import SearchRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = smart_functions_api.SmartFunctionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    search_request = SearchRequest(
+        deep_search=False,
+        object_types=[
+            "attribute",
+        ],
+        question="question_example",
+    ) # SearchRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (BETA) Semantic Search in Metadata
+        api_response = api_instance.ai_search(workspace_id, search_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling SmartFunctionsApi->ai_search: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **search_request** | [**SearchRequest**](SearchRequest.md)|  |
+
+### Return type
+
+[**SearchResult**](SearchResult.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **anomaly_detection**
 > SmartFunctionResponse anomaly_detection(workspace_id, result_id, anomaly_detection_request)
@@ -211,6 +288,7 @@ with gooddata_api_client.ApiClient() as api_client:
     result_id = "9bd52018570364264fcf62d373da6bed313120e8" # str | Input result ID to be used in the computation
     clustering_request = ClusteringRequest(
         number_of_clusters=1,
+        threshold=0.03,
     ) # ClusteringRequest | 
     skip_cache = False # bool | Ignore all caches during execution of current request. (optional) if omitted the server will use the default value of False
 

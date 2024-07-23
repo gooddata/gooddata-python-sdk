@@ -4,6 +4,7 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**ai_search**](ActionsApi.md#ai_search) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/search | (BETA) Semantic Search in Metadata
 [**all_platform_usage**](ActionsApi.md#all_platform_usage) | **GET** /api/v1/actions/collectUsage | Info about the platform usage.
 [**anomaly_detection**](ActionsApi.md#anomaly_detection) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/{resultId} | (EXPERIMENTAL) Smart functions - Anomaly Detection
 [**anomaly_detection_result**](ActionsApi.md#anomaly_detection_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/result/{resultId} | (EXPERIMENTAL) Smart functions - Anomaly Detection Result
@@ -35,10 +36,13 @@ Method | HTTP request | Description
 [**inherited_entity_prefixes**](ActionsApi.md#inherited_entity_prefixes) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityPrefixes | Get used entity prefixes in hierarchy
 [**key_driver_analysis**](ActionsApi.md#key_driver_analysis) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/computeKeyDrivers | (EXPERIMENTAL) Compute key driver analysis
 [**key_driver_analysis_result**](ActionsApi.md#key_driver_analysis_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/computeKeyDrivers/result/{resultId} | (EXPERIMENTAL) Get key driver analysis result
+[**list_workspace_user_groups**](ActionsApi.md#list_workspace_user_groups) | **GET** /api/v1/actions/workspaces/{workspaceId}/userGroups | 
+[**list_workspace_users**](ActionsApi.md#list_workspace_users) | **GET** /api/v1/actions/workspaces/{workspaceId}/users | 
 [**manage_dashboard_permissions**](ActionsApi.md#manage_dashboard_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/managePermissions | Manage Permissions for a Dashboard
 [**manage_data_source_permissions**](ActionsApi.md#manage_data_source_permissions) | **POST** /api/v1/actions/dataSources/{dataSourceId}/managePermissions | Manage Permissions for a Data Source
 [**manage_organization_permissions**](ActionsApi.md#manage_organization_permissions) | **POST** /api/v1/actions/organization/managePermissions | Manage Permissions for a Organization
 [**manage_workspace_permissions**](ActionsApi.md#manage_workspace_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/managePermissions | Manage Permissions for a Workspace
+[**metadata_sync**](ActionsApi.md#metadata_sync) | **POST** /api/v1/actions/workspaces/{workspaceId}/metadataSync | (BETA) Sync Metadata to AI services
 [**overridden_child_entities**](ActionsApi.md#overridden_child_entities) | **GET** /api/v1/actions/workspaces/{workspaceId}/overriddenChildEntities | Finds identifier overrides in workspace hierarchy.
 [**particular_platform_usage**](ActionsApi.md#particular_platform_usage) | **POST** /api/v1/actions/collectUsage | Info about the platform usage for particular items.
 [**register_upload_notification**](ActionsApi.md#register_upload_notification) | **POST** /api/v1/actions/dataSources/{dataSourceId}/uploadNotification | Register an upload notification
@@ -57,6 +61,82 @@ Method | HTTP request | Description
 [**workspace_resolve_all_settings**](ActionsApi.md#workspace_resolve_all_settings) | **GET** /api/v1/actions/workspaces/{workspaceId}/resolveSettings | Values for all settings.
 [**workspace_resolve_settings**](ActionsApi.md#workspace_resolve_settings) | **POST** /api/v1/actions/workspaces/{workspaceId}/resolveSettings | Values for selected settings.
 
+
+# **ai_search**
+> SearchResult ai_search(workspace_id, search_request)
+
+(BETA) Semantic Search in Metadata
+
+(BETA) Uses similarity (e.g. cosine distance) search to find top X most similar metadata objects.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.search_result import SearchResult
+from gooddata_api_client.model.search_request import SearchRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    search_request = SearchRequest(
+        deep_search=False,
+        object_types=[
+            "attribute",
+        ],
+        question="question_example",
+    ) # SearchRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (BETA) Semantic Search in Metadata
+        api_response = api_instance.ai_search(workspace_id, search_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->ai_search: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **search_request** | [**SearchRequest**](SearchRequest.md)|  |
+
+### Return type
+
+[**SearchResult**](SearchResult.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **all_platform_usage**
 > [PlatformUsage] all_platform_usage()
@@ -532,6 +612,7 @@ with gooddata_api_client.ApiClient() as api_client:
     result_id = "9bd52018570364264fcf62d373da6bed313120e8" # str | Input result ID to be used in the computation
     clustering_request = ClusteringRequest(
         number_of_clusters=1,
+        threshold=0.03,
     ) # ClusteringRequest | 
     skip_cache = False # bool | Ignore all caches during execution of current request. (optional) if omitted the server will use the default value of False
 
@@ -1180,7 +1261,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **create_pdf_export**
-> ExportResponse create_pdf_export(workspace_id, pdf_export_request)
+> ExportResponse create_pdf_export(workspace_id, visual_export_request)
 
 Create visual - pdf export request
 
@@ -1194,7 +1275,7 @@ import time
 import gooddata_api_client
 from gooddata_api_client.api import actions_api
 from gooddata_api_client.model.export_response import ExportResponse
-from gooddata_api_client.model.pdf_export_request import PdfExportRequest
+from gooddata_api_client.model.visual_export_request import VisualExportRequest
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1208,16 +1289,16 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = actions_api.ActionsApi(api_client)
     workspace_id = "workspaceId_example" # str | 
-    pdf_export_request = PdfExportRequest(
+    visual_export_request = VisualExportRequest(
         dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
         file_name="filename",
         metadata={},
-    ) # PdfExportRequest | 
+    ) # VisualExportRequest | 
 
     # example passing only required values which don't have defaults set
     try:
         # Create visual - pdf export request
-        api_response = api_instance.create_pdf_export(workspace_id, pdf_export_request)
+        api_response = api_instance.create_pdf_export(workspace_id, visual_export_request)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling ActionsApi->create_pdf_export: %s\n" % e)
@@ -1229,7 +1310,7 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
- **pdf_export_request** | [**PdfExportRequest**](PdfExportRequest.md)|  |
+ **visual_export_request** | [**VisualExportRequest**](VisualExportRequest.md)|  |
 
 ### Return type
 
@@ -1767,8 +1848,10 @@ with gooddata_api_client.ApiClient() as api_client:
         denorm_prefix="dr",
         fact_prefix="f",
         generate_long_ids=True,
-        grain_prefix="g",
-        grain_reference_prefix="gr",
+        grain_multivalue_reference_prefix="grmr",
+        grain_prefix="gr",
+        grain_reference_prefix="grr",
+        multivalue_reference_prefix="mr",
         pdm=PdmLdmRequest(
             sqls=[
                 PdmSql(
@@ -1802,7 +1885,7 @@ with gooddata_api_client.ApiClient() as api_client:
         ),
         primary_label_prefix="pl",
         reference_prefix="r",
-        secondary_label_prefix="sl",
+        secondary_label_prefix="ls",
         separator="__",
         table_prefix="out_table",
         view_prefix="out_view",
@@ -2637,6 +2720,162 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **list_workspace_user_groups**
+> WorkspaceUserGroups list_workspace_user_groups(workspace_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.workspace_user_groups import WorkspaceUserGroups
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    page = page=0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
+    size = size=20 # int | The size of the page to be returned. (optional) if omitted the server will use the default value of 20
+    name = "name=charles" # str | Filter by user name. Note that user name is case insensitive. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.list_workspace_user_groups(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->list_workspace_user_groups: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.list_workspace_user_groups(workspace_id, page=page, size=size, name=name)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->list_workspace_user_groups: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
+ **size** | **int**| The size of the page to be returned. | [optional] if omitted the server will use the default value of 20
+ **name** | **str**| Filter by user name. Note that user name is case insensitive. | [optional]
+
+### Return type
+
+[**WorkspaceUserGroups**](WorkspaceUserGroups.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **list_workspace_users**
+> WorkspaceUsers list_workspace_users(workspace_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.workspace_users import WorkspaceUsers
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    page = page=0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
+    size = size=20 # int | The size of the page to be returned. (optional) if omitted the server will use the default value of 20
+    name = "name=charles" # str | Filter by user name. Note that user name is case insensitive. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.list_workspace_users(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->list_workspace_users: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.list_workspace_users(workspace_id, page=page, size=size, name=name)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->list_workspace_users: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
+ **size** | **int**| The size of the page to be returned. | [optional] if omitted the server will use the default value of 20
+ **name** | **str**| Filter by user name. Note that user name is case insensitive. | [optional]
+
+### Return type
+
+[**WorkspaceUsers**](WorkspaceUsers.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **manage_dashboard_permissions**
 > manage_dashboard_permissions(workspace_id, dashboard_id, manage_dashboard_permissions_request_inner)
 
@@ -2939,6 +3178,71 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **metadata_sync**
+> metadata_sync(workspace_id)
+
+(BETA) Sync Metadata to AI services
+
+(BETA) Temporary solution. Later relevant metadata actions will trigger it in its scope only.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (BETA) Sync Metadata to AI services
+        api_instance.metadata_sync(workspace_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->metadata_sync: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -3940,10 +4244,6 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = actions_api.ActionsApi(api_client)
     data_source_id = "myPostgres" # str | Data source id
     test_request = TestRequest(
-        cache_path=[
-            "cache_path_example",
-        ],
-        enable_caching=False,
         parameters=[
             DataSourceParameter(
                 name="name_example",
@@ -3951,6 +4251,8 @@ with gooddata_api_client.ApiClient() as api_client:
             ),
         ],
         password="admin123",
+        private_key="private_key_example",
+        private_key_passphrase="private_key_passphrase_example",
         schema="public",
         token="token_example",
         url="jdbc:postgresql://localhost:5432/db_name",
@@ -4032,6 +4334,8 @@ with gooddata_api_client.ApiClient() as api_client:
             ),
         ],
         password="admin123",
+        private_key="private_key_example",
+        private_key_passphrase="private_key_passphrase_example",
         schema="public",
         token="token_example",
         type="POSTGRESQL",

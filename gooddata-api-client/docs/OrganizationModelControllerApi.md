@@ -8,6 +8,7 @@ Method | HTTP request | Description
 [**create_entity_csp_directives**](OrganizationModelControllerApi.md#create_entity_csp_directives) | **POST** /api/v1/entities/cspDirectives | Post CSP Directives
 [**create_entity_data_sources**](OrganizationModelControllerApi.md#create_entity_data_sources) | **POST** /api/v1/entities/dataSources | Post Data Sources
 [**create_entity_jwks**](OrganizationModelControllerApi.md#create_entity_jwks) | **POST** /api/v1/entities/jwks | Post Jwks
+[**create_entity_notification_channels**](OrganizationModelControllerApi.md#create_entity_notification_channels) | **POST** /api/v1/entities/notificationChannels | Post Notification Channel entities
 [**create_entity_organization_settings**](OrganizationModelControllerApi.md#create_entity_organization_settings) | **POST** /api/v1/entities/organizationSettings | Post Organization Setting entities
 [**create_entity_themes**](OrganizationModelControllerApi.md#create_entity_themes) | **POST** /api/v1/entities/themes | Post Theming
 [**create_entity_user_groups**](OrganizationModelControllerApi.md#create_entity_user_groups) | **POST** /api/v1/entities/userGroups | Post User Group entities
@@ -17,6 +18,7 @@ Method | HTTP request | Description
 [**delete_entity_csp_directives**](OrganizationModelControllerApi.md#delete_entity_csp_directives) | **DELETE** /api/v1/entities/cspDirectives/{id} | Delete CSP Directives
 [**delete_entity_data_sources**](OrganizationModelControllerApi.md#delete_entity_data_sources) | **DELETE** /api/v1/entities/dataSources/{id} | Delete Data Source entity
 [**delete_entity_jwks**](OrganizationModelControllerApi.md#delete_entity_jwks) | **DELETE** /api/v1/entities/jwks/{id} | Delete Jwk
+[**delete_entity_notification_channels**](OrganizationModelControllerApi.md#delete_entity_notification_channels) | **DELETE** /api/v1/entities/notificationChannels/{id} | 
 [**delete_entity_organization_settings**](OrganizationModelControllerApi.md#delete_entity_organization_settings) | **DELETE** /api/v1/entities/organizationSettings/{id} | Delete Organization entity
 [**delete_entity_themes**](OrganizationModelControllerApi.md#delete_entity_themes) | **DELETE** /api/v1/entities/themes/{id} | Delete Theming
 [**delete_entity_user_groups**](OrganizationModelControllerApi.md#delete_entity_user_groups) | **DELETE** /api/v1/entities/userGroups/{id} | Delete UserGroup entity
@@ -28,6 +30,7 @@ Method | HTTP request | Description
 [**get_all_entities_data_sources**](OrganizationModelControllerApi.md#get_all_entities_data_sources) | **GET** /api/v1/entities/dataSources | Get Data Source entities
 [**get_all_entities_entitlements**](OrganizationModelControllerApi.md#get_all_entities_entitlements) | **GET** /api/v1/entities/entitlements | Get Entitlements
 [**get_all_entities_jwks**](OrganizationModelControllerApi.md#get_all_entities_jwks) | **GET** /api/v1/entities/jwks | Get all Jwks
+[**get_all_entities_notification_channels**](OrganizationModelControllerApi.md#get_all_entities_notification_channels) | **GET** /api/v1/entities/notificationChannels | Get all Notification Channel entities
 [**get_all_entities_organization_settings**](OrganizationModelControllerApi.md#get_all_entities_organization_settings) | **GET** /api/v1/entities/organizationSettings | Get Organization entities
 [**get_all_entities_themes**](OrganizationModelControllerApi.md#get_all_entities_themes) | **GET** /api/v1/entities/themes | Get all Theming entities
 [**get_all_entities_user_groups**](OrganizationModelControllerApi.md#get_all_entities_user_groups) | **GET** /api/v1/entities/userGroups | Get UserGroup entities
@@ -40,6 +43,7 @@ Method | HTTP request | Description
 [**get_entity_data_sources**](OrganizationModelControllerApi.md#get_entity_data_sources) | **GET** /api/v1/entities/dataSources/{id} | Get Data Source entity
 [**get_entity_entitlements**](OrganizationModelControllerApi.md#get_entity_entitlements) | **GET** /api/v1/entities/entitlements/{id} | Get Entitlement
 [**get_entity_jwks**](OrganizationModelControllerApi.md#get_entity_jwks) | **GET** /api/v1/entities/jwks/{id} | Get Jwk
+[**get_entity_notification_channels**](OrganizationModelControllerApi.md#get_entity_notification_channels) | **GET** /api/v1/entities/notificationChannels/{id} | Get Notification Channel entity
 [**get_entity_organization_settings**](OrganizationModelControllerApi.md#get_entity_organization_settings) | **GET** /api/v1/entities/organizationSettings/{id} | Get Organization entity
 [**get_entity_themes**](OrganizationModelControllerApi.md#get_entity_themes) | **GET** /api/v1/entities/themes/{id} | Get Theming
 [**get_entity_user_groups**](OrganizationModelControllerApi.md#get_entity_user_groups) | **GET** /api/v1/entities/userGroups/{id} | Get UserGroup entity
@@ -50,6 +54,7 @@ Method | HTTP request | Description
 [**patch_entity_csp_directives**](OrganizationModelControllerApi.md#patch_entity_csp_directives) | **PATCH** /api/v1/entities/cspDirectives/{id} | Patch CSP Directives
 [**patch_entity_data_sources**](OrganizationModelControllerApi.md#patch_entity_data_sources) | **PATCH** /api/v1/entities/dataSources/{id} | Patch Data Source entity
 [**patch_entity_jwks**](OrganizationModelControllerApi.md#patch_entity_jwks) | **PATCH** /api/v1/entities/jwks/{id} | Patch Jwk
+[**patch_entity_notification_channels**](OrganizationModelControllerApi.md#patch_entity_notification_channels) | **PATCH** /api/v1/entities/notificationChannels/{id} | Patch Notification Channel entity
 [**patch_entity_organization_settings**](OrganizationModelControllerApi.md#patch_entity_organization_settings) | **PATCH** /api/v1/entities/organizationSettings/{id} | Patch Organization entity
 [**patch_entity_themes**](OrganizationModelControllerApi.md#patch_entity_themes) | **PATCH** /api/v1/entities/themes/{id} | Patch Theming
 [**patch_entity_user_groups**](OrganizationModelControllerApi.md#patch_entity_user_groups) | **PATCH** /api/v1/entities/userGroups/{id} | Patch UserGroup entity
@@ -59,6 +64,7 @@ Method | HTTP request | Description
 [**update_entity_csp_directives**](OrganizationModelControllerApi.md#update_entity_csp_directives) | **PUT** /api/v1/entities/cspDirectives/{id} | Put CSP Directives
 [**update_entity_data_sources**](OrganizationModelControllerApi.md#update_entity_data_sources) | **PUT** /api/v1/entities/dataSources/{id} | Put Data Source entity
 [**update_entity_jwks**](OrganizationModelControllerApi.md#update_entity_jwks) | **PUT** /api/v1/entities/jwks/{id} | Put Jwk
+[**update_entity_notification_channels**](OrganizationModelControllerApi.md#update_entity_notification_channels) | **PUT** /api/v1/entities/notificationChannels/{id} | Put Notification Channel entity
 [**update_entity_organization_settings**](OrganizationModelControllerApi.md#update_entity_organization_settings) | **PUT** /api/v1/entities/organizationSettings/{id} | Put Organization entity
 [**update_entity_themes**](OrganizationModelControllerApi.md#update_entity_themes) | **PUT** /api/v1/entities/themes/{id} | Put Theming
 [**update_entity_user_groups**](OrganizationModelControllerApi.md#update_entity_user_groups) | **PUT** /api/v1/entities/userGroups/{id} | Put UserGroup entity
@@ -250,11 +256,7 @@ with gooddata_api_client.ApiClient() as api_client:
     json_api_data_source_in_document = JsonApiDataSourceInDocument(
         data=JsonApiDataSourceIn(
             attributes=JsonApiDataSourceInAttributes(
-                cache_path=[
-                    "cache_path_example",
-                ],
                 cache_strategy="ALWAYS",
-                enable_caching=False,
                 name="name_example",
                 parameters=[
                     JsonApiDataSourceInAttributesParametersInner(
@@ -263,6 +265,8 @@ with gooddata_api_client.ApiClient() as api_client:
                     ),
                 ],
                 password="password_example",
+                private_key="private_key_example",
+                private_key_passphrase="private_key_passphrase_example",
                 schema="schema_example",
                 token="token_example",
                 type="POSTGRESQL",
@@ -382,6 +386,92 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiJwkOutDocument**](JsonApiJwkOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/vnd.gooddata.api+json
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**201** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **create_entity_notification_channels**
+> JsonApiNotificationChannelOutDocument create_entity_notification_channels(json_api_notification_channel_post_optional_id_document)
+
+Post Notification Channel entities
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import organization_model_controller_api
+from gooddata_api_client.model.json_api_notification_channel_out_document import JsonApiNotificationChannelOutDocument
+from gooddata_api_client.model.json_api_notification_channel_post_optional_id_document import JsonApiNotificationChannelPostOptionalIdDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
+    json_api_notification_channel_post_optional_id_document = JsonApiNotificationChannelPostOptionalIdDocument(
+        data=JsonApiNotificationChannelPostOptionalId(
+            attributes=JsonApiNotificationChannelInAttributes(
+                description="description_example",
+                name="name_example",
+                triggers=[
+                    JsonApiNotificationChannelInAttributesTriggersInner(
+                        metadata=JsonNode(),
+                        type="SCHEDULE",
+                    ),
+                ],
+                webhook=JsonApiNotificationChannelInAttributesWebhook(
+                    has_token=True,
+                    token="token_example",
+                    url="https://example.com/webhook",
+                ),
+            ),
+            id="id1",
+            type="notificationChannel",
+        ),
+    ) # JsonApiNotificationChannelPostOptionalIdDocument | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Post Notification Channel entities
+        api_response = api_instance.create_entity_notification_channels(json_api_notification_channel_post_optional_id_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->create_entity_notification_channels: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **json_api_notification_channel_post_optional_id_document** | [**JsonApiNotificationChannelPostOptionalIdDocument**](JsonApiNotificationChannelPostOptionalIdDocument.md)|  |
+
+### Return type
+
+[**JsonApiNotificationChannelOutDocument**](JsonApiNotificationChannelOutDocument.md)
 
 ### Authorization
 
@@ -792,6 +882,9 @@ with gooddata_api_client.ApiClient() as api_client:
                 ),
                 description="description_example",
                 early_access="early_access_example",
+                early_access_values=[
+                    "early_access_values_example",
+                ],
                 name="name_example",
                 prefix="/6bUUGjjNSwg0_bs",
             ),
@@ -1126,6 +1219,77 @@ with gooddata_api_client.ApiClient() as api_client:
         api_instance.delete_entity_jwks(id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling OrganizationModelControllerApi->delete_entity_jwks: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | Successfully deleted |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **delete_entity_notification_channels**
+> delete_entity_notification_channels(id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import organization_model_controller_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
+    id = "/6bUUGjjNSwg0_bs" # str | 
+    filter = "filter=name==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_instance.delete_entity_notification_channels(id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->delete_entity_notification_channels: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_instance.delete_entity_notification_channels(id, filter=filter)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->delete_entity_notification_channels: %s\n" % e)
 ```
 
 
@@ -1986,6 +2150,84 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiJwkOutList**](JsonApiJwkOutList.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_all_entities_notification_channels**
+> JsonApiNotificationChannelOutList get_all_entities_notification_channels()
+
+Get all Notification Channel entities
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import organization_model_controller_api
+from gooddata_api_client.model.json_api_notification_channel_out_list import JsonApiNotificationChannelOutList
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
+    filter = "filter=name==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
+    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
+    sort = [
+        "sort_example",
+    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = [
+        "metaInclude=page,all",
+    ] # [str] | Include Meta objects. (optional)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Get all Notification Channel entities
+        api_response = api_instance.get_all_entities_notification_channels(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->get_all_entities_notification_channels: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
+ **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
+ **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
+
+### Return type
+
+[**JsonApiNotificationChannelOutList**](JsonApiNotificationChannelOutList.md)
 
 ### Authorization
 
@@ -2965,6 +3207,82 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **get_entity_notification_channels**
+> JsonApiNotificationChannelOutDocument get_entity_notification_channels(id)
+
+Get Notification Channel entity
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import organization_model_controller_api
+from gooddata_api_client.model.json_api_notification_channel_out_document import JsonApiNotificationChannelOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
+    id = "/6bUUGjjNSwg0_bs" # str | 
+    filter = "filter=name==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get Notification Channel entity
+        api_response = api_instance.get_entity_notification_channels(id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->get_entity_notification_channels: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Get Notification Channel entity
+        api_response = api_instance.get_entity_notification_channels(id, filter=filter)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->get_entity_notification_channels: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+[**JsonApiNotificationChannelOutDocument**](JsonApiNotificationChannelOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **get_entity_organization_settings**
 > JsonApiOrganizationSettingOutDocument get_entity_organization_settings(id)
 
@@ -3656,11 +3974,7 @@ with gooddata_api_client.ApiClient() as api_client:
     json_api_data_source_patch_document = JsonApiDataSourcePatchDocument(
         data=JsonApiDataSourcePatch(
             attributes=JsonApiDataSourcePatchAttributes(
-                cache_path=[
-                    "cache_path_example",
-                ],
                 cache_strategy="ALWAYS",
-                enable_caching=False,
                 name="name_example",
                 parameters=[
                     JsonApiDataSourceInAttributesParametersInner(
@@ -3669,6 +3983,8 @@ with gooddata_api_client.ApiClient() as api_client:
                     ),
                 ],
                 password="password_example",
+                private_key="private_key_example",
+                private_key_passphrase="private_key_passphrase_example",
                 schema="schema_example",
                 token="token_example",
                 type="POSTGRESQL",
@@ -3800,6 +4116,105 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiJwkOutDocument**](JsonApiJwkOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/vnd.gooddata.api+json
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **patch_entity_notification_channels**
+> JsonApiNotificationChannelOutDocument patch_entity_notification_channels(id, json_api_notification_channel_patch_document)
+
+Patch Notification Channel entity
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import organization_model_controller_api
+from gooddata_api_client.model.json_api_notification_channel_out_document import JsonApiNotificationChannelOutDocument
+from gooddata_api_client.model.json_api_notification_channel_patch_document import JsonApiNotificationChannelPatchDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
+    id = "/6bUUGjjNSwg0_bs" # str | 
+    json_api_notification_channel_patch_document = JsonApiNotificationChannelPatchDocument(
+        data=JsonApiNotificationChannelPatch(
+            attributes=JsonApiNotificationChannelInAttributes(
+                description="description_example",
+                name="name_example",
+                triggers=[
+                    JsonApiNotificationChannelInAttributesTriggersInner(
+                        metadata=JsonNode(),
+                        type="SCHEDULE",
+                    ),
+                ],
+                webhook=JsonApiNotificationChannelInAttributesWebhook(
+                    has_token=True,
+                    token="token_example",
+                    url="https://example.com/webhook",
+                ),
+            ),
+            id="id1",
+            type="notificationChannel",
+        ),
+    ) # JsonApiNotificationChannelPatchDocument | 
+    filter = "filter=name==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Patch Notification Channel entity
+        api_response = api_instance.patch_entity_notification_channels(id, json_api_notification_channel_patch_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->patch_entity_notification_channels: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Patch Notification Channel entity
+        api_response = api_instance.patch_entity_notification_channels(id, json_api_notification_channel_patch_document, filter=filter)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->patch_entity_notification_channels: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+ **json_api_notification_channel_patch_document** | [**JsonApiNotificationChannelPatchDocument**](JsonApiNotificationChannelPatchDocument.md)|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+[**JsonApiNotificationChannelOutDocument**](JsonApiNotificationChannelOutDocument.md)
 
 ### Authorization
 
@@ -4245,6 +4660,9 @@ with gooddata_api_client.ApiClient() as api_client:
                 ),
                 description="description_example",
                 early_access="early_access_example",
+                early_access_values=[
+                    "early_access_values_example",
+                ],
                 name="name_example",
                 prefix="/6bUUGjjNSwg0_bs",
             ),
@@ -4523,11 +4941,7 @@ with gooddata_api_client.ApiClient() as api_client:
     json_api_data_source_in_document = JsonApiDataSourceInDocument(
         data=JsonApiDataSourceIn(
             attributes=JsonApiDataSourceInAttributes(
-                cache_path=[
-                    "cache_path_example",
-                ],
                 cache_strategy="ALWAYS",
-                enable_caching=False,
                 name="name_example",
                 parameters=[
                     JsonApiDataSourceInAttributesParametersInner(
@@ -4536,6 +4950,8 @@ with gooddata_api_client.ApiClient() as api_client:
                     ),
                 ],
                 password="password_example",
+                private_key="private_key_example",
+                private_key_passphrase="private_key_passphrase_example",
                 schema="schema_example",
                 token="token_example",
                 type="POSTGRESQL",
@@ -4667,6 +5083,105 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiJwkOutDocument**](JsonApiJwkOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/vnd.gooddata.api+json
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **update_entity_notification_channels**
+> JsonApiNotificationChannelOutDocument update_entity_notification_channels(id, json_api_notification_channel_in_document)
+
+Put Notification Channel entity
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import organization_model_controller_api
+from gooddata_api_client.model.json_api_notification_channel_in_document import JsonApiNotificationChannelInDocument
+from gooddata_api_client.model.json_api_notification_channel_out_document import JsonApiNotificationChannelOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
+    id = "/6bUUGjjNSwg0_bs" # str | 
+    json_api_notification_channel_in_document = JsonApiNotificationChannelInDocument(
+        data=JsonApiNotificationChannelIn(
+            attributes=JsonApiNotificationChannelInAttributes(
+                description="description_example",
+                name="name_example",
+                triggers=[
+                    JsonApiNotificationChannelInAttributesTriggersInner(
+                        metadata=JsonNode(),
+                        type="SCHEDULE",
+                    ),
+                ],
+                webhook=JsonApiNotificationChannelInAttributesWebhook(
+                    has_token=True,
+                    token="token_example",
+                    url="https://example.com/webhook",
+                ),
+            ),
+            id="id1",
+            type="notificationChannel",
+        ),
+    ) # JsonApiNotificationChannelInDocument | 
+    filter = "filter=name==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Put Notification Channel entity
+        api_response = api_instance.update_entity_notification_channels(id, json_api_notification_channel_in_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->update_entity_notification_channels: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Put Notification Channel entity
+        api_response = api_instance.update_entity_notification_channels(id, json_api_notification_channel_in_document, filter=filter)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->update_entity_notification_channels: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+ **json_api_notification_channel_in_document** | [**JsonApiNotificationChannelInDocument**](JsonApiNotificationChannelInDocument.md)|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+[**JsonApiNotificationChannelOutDocument**](JsonApiNotificationChannelOutDocument.md)
 
 ### Authorization
 
@@ -5112,6 +5627,9 @@ with gooddata_api_client.ApiClient() as api_client:
                 ),
                 description="description_example",
                 early_access="early_access_example",
+                early_access_values=[
+                    "early_access_values_example",
+                ],
                 name="name_example",
                 prefix="/6bUUGjjNSwg0_bs",
             ),

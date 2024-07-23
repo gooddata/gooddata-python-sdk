@@ -638,6 +638,14 @@
             "format": "int32",
             "minimum": 1,
             "type": "integer"
+          },
+          "threshold": {
+            "default": 0.03,
+            "description": "Threshold used for algorithm",
+            "exclusiveMinimum": true,
+            "format": "double",
+            "minimum": 0,
+            "type": "number"
           }
         },
         "required": [
@@ -1586,6 +1594,12 @@
       },
       "MeasureGroupHeaders": {
         "properties": {
+          "first": {
+            "$ref": "#/components/schemas/MeasureHeaderOut"
+          },
+          "last": {
+            "$ref": "#/components/schemas/MeasureHeaderOut"
+          },
           "measureGroupHeaders": {
             "items": {
               "$ref": "#/components/schemas/MeasureHeaderOut"
@@ -2081,6 +2095,78 @@
         ],
         "type": "object"
       },
+      "SearchRequest": {
+        "properties": {
+          "deepSearch": {
+            "default": false,
+            "description": "Turn on deep search. If true, content of complex objects will be searched as well, e.g. metrics in visualizations.",
+            "type": "boolean"
+          },
+          "objectTypes": {
+            "description": "List of object types to search for.",
+            "items": {
+              "description": "Object type to search for.",
+              "enum": [
+                "attribute",
+                "metric",
+                "fact",
+                "label",
+                "date",
+                "dataset",
+                "visualization",
+                "dashboard"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "question": {
+            "description": "Keyword/sentence is input for search.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "question"
+        ],
+        "type": "object"
+      },
+      "SearchResult": {
+        "properties": {
+          "results": {
+            "items": {
+              "$ref": "#/components/schemas/SearchResultObject"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "results"
+        ],
+        "type": "object"
+      },
+      "SearchResultObject": {
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "description",
+          "id",
+          "title",
+          "type"
+        ],
+        "type": "object"
+      },
       "SimpleMeasureDefinition": {
         "properties": {
           "measure": {
@@ -2263,7 +2349,8 @@
               "MIN",
               "MAX",
               "AVG",
-              "MED"
+              "MED",
+              "NATIVE"
             ],
             "example": "SUM",
             "type": "string"
@@ -2369,6 +2456,51 @@
   },
   "openapi": "3.0.1",
   "paths": {
+    "/api/v1/actions/workspaces/{workspaceId}/ai/search": {
+      "post": {
+        "description": "(BETA) Uses similarity (e.g. cosine distance) search to find top X most similar metadata objects.",
+        "operationId": "aiSearch",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchResult"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "(BETA) Semantic Search in Metadata",
+        "tags": [
+          "Smart Functions",
+          "actions"
+        ]
+      }
+    },
     "/api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidDescendants": {
       "post": {
         "description": "(BETA) Returns map of lists of attributes that can be used as descendants of the given attributes.",

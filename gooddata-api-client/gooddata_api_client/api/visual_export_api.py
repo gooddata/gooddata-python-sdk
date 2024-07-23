@@ -23,7 +23,7 @@ from gooddata_api_client.model_utils import (  # noqa: F401
     validate_and_convert_types
 )
 from gooddata_api_client.model.export_response import ExportResponse
-from gooddata_api_client.model.pdf_export_request import PdfExportRequest
+from gooddata_api_client.model.visual_export_request import VisualExportRequest
 
 
 class VisualExportApi(object):
@@ -49,11 +49,11 @@ class VisualExportApi(object):
             params_map={
                 'all': [
                     'workspace_id',
-                    'pdf_export_request',
+                    'visual_export_request',
                 ],
                 'required': [
                     'workspace_id',
-                    'pdf_export_request',
+                    'visual_export_request',
                 ],
                 'nullable': [
                 ],
@@ -70,15 +70,15 @@ class VisualExportApi(object):
                 'openapi_types': {
                     'workspace_id':
                         (str,),
-                    'pdf_export_request':
-                        (PdfExportRequest,),
+                    'visual_export_request':
+                        (VisualExportRequest,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                 },
                 'location_map': {
                     'workspace_id': 'path',
-                    'pdf_export_request': 'body',
+                    'visual_export_request': 'body',
                 },
                 'collection_format_map': {
                 }
@@ -207,7 +207,7 @@ class VisualExportApi(object):
     def create_pdf_export(
         self,
         workspace_id,
-        pdf_export_request,
+        visual_export_request,
         **kwargs
     ):
         """Create visual - pdf export request  # noqa: E501
@@ -216,12 +216,12 @@ class VisualExportApi(object):
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.create_pdf_export(workspace_id, pdf_export_request, async_req=True)
+        >>> thread = api.create_pdf_export(workspace_id, visual_export_request, async_req=True)
         >>> result = thread.get()
 
         Args:
             workspace_id (str):
-            pdf_export_request (PdfExportRequest):
+            visual_export_request (VisualExportRequest):
 
         Keyword Args:
             _return_http_data_only (bool): response data without head status
@@ -287,8 +287,8 @@ class VisualExportApi(object):
         kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
-        kwargs['pdf_export_request'] = \
-            pdf_export_request
+        kwargs['visual_export_request'] = \
+            visual_export_request
         return self.create_pdf_export_endpoint.call_with_http_info(**kwargs)
 
     def get_exported_file(

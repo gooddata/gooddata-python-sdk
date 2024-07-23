@@ -52,6 +52,9 @@ with gooddata_api_client.ApiClient() as api_client:
                 ),
                 description="description_example",
                 early_access="early_access_example",
+                early_access_values=[
+                    "early_access_values_example",
+                ],
                 name="name_example",
                 prefix="/6bUUGjjNSwg0_bs",
             ),
@@ -406,6 +409,9 @@ with gooddata_api_client.ApiClient() as api_client:
                 ),
                 description="description_example",
                 early_access="early_access_example",
+                early_access_values=[
+                    "early_access_values_example",
+                ],
                 name="name_example",
                 prefix="/6bUUGjjNSwg0_bs",
             ),
@@ -514,6 +520,9 @@ with gooddata_api_client.ApiClient() as api_client:
                 ),
                 description="description_example",
                 early_access="early_access_example",
+                early_access_values=[
+                    "early_access_values_example",
+                ],
                 name="name_example",
                 prefix="/6bUUGjjNSwg0_bs",
             ),

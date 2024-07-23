@@ -4,8 +4,8 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**meta** | [**JsonApiAttributeHierarchyOutMeta**](JsonApiAttributeHierarchyOutMeta.md) |  | [optional] 
-**relationships** | [**JsonApiMetricOutRelationships**](JsonApiMetricOutRelationships.md) |  | [optional] 
+**meta** | [**JsonApiAnalyticalDashboardOutMeta**](JsonApiAnalyticalDashboardOutMeta.md) |  | [optional] 
+**relationships** | [**JsonApiAnalyticalDashboardOutRelationships**](JsonApiAnalyticalDashboardOutRelationships.md) |  | [optional] 
 **links** | [**ObjectLinks**](ObjectLinks.md) |  | [optional] 
 **attributes** | [**JsonApiUserIdentifierOutAttributes**](JsonApiUserIdentifierOutAttributes.md) |  | [optional] 
 **id** | **str** | API identifier of an object | [optional] 

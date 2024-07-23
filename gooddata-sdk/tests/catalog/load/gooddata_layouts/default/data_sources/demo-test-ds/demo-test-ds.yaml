@@ -1,5 +1,4 @@
 # (C) 2022 GoodData Corporation
-enableCaching: false
 id: demo-test-ds
 name: demo-test-ds
 permissions:

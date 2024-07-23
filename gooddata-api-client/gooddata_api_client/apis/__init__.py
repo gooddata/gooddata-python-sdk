@@ -6,7 +6,7 @@
 # raise a `RecursionError`.
 # In order to avoid this, import only the API that you directly need like:
 #
-#   from gooddata_api_client.api.api_tokens_api import APITokensApi
+#   from gooddata_api_client.api.ai_api import AIApi
 #
 # or import this package, but before doing it, use:
 #
@@ -14,11 +14,13 @@
 #   sys.setrecursionlimit(n)
 
 # Import APIs into API package:
+from gooddata_api_client.api.ai_api import AIApi
 from gooddata_api_client.api.api_tokens_api import APITokensApi
 from gooddata_api_client.api.analytics_model_api import AnalyticsModelApi
 from gooddata_api_client.api.appearance_api import AppearanceApi
 from gooddata_api_client.api.attribute_hierarchies_api import AttributeHierarchiesApi
 from gooddata_api_client.api.attributes_api import AttributesApi
+from gooddata_api_client.api.automations_api import AutomationsApi
 from gooddata_api_client.api.available_drivers_api import AvailableDriversApi
 from gooddata_api_client.api.csp_directives_api import CSPDirectivesApi
 from gooddata_api_client.api.computation_api import ComputationApi
@@ -40,6 +42,7 @@ from gooddata_api_client.api.jwks_api import JWKSApi
 from gooddata_api_client.api.ldm_declarative_apis_api import LDMDeclarativeAPIsApi
 from gooddata_api_client.api.labels_api import LabelsApi
 from gooddata_api_client.api.metrics_api import MetricsApi
+from gooddata_api_client.api.notification_channels_api import NotificationChannelsApi
 from gooddata_api_client.api.options_api import OptionsApi
 from gooddata_api_client.api.organization_declarative_apis_api import OrganizationDeclarativeAPIsApi
 from gooddata_api_client.api.organization_entity_apis_api import OrganizationEntityAPIsApi

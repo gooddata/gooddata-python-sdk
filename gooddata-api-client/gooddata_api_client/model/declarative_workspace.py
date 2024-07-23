@@ -91,6 +91,8 @@ class DeclarativeWorkspace(ModelNormal):
         ('early_access',): {
             'max_length': 255,
         },
+        ('early_access_values',): {
+        },
         ('prefix',): {
             'max_length': 255,
             'regex': {
@@ -129,6 +131,7 @@ class DeclarativeWorkspace(ModelNormal):
             'data_source': (WorkspaceDataSource,),  # noqa: E501
             'description': (str,),  # noqa: E501
             'early_access': (str,),  # noqa: E501
+            'early_access_values': ([str],),  # noqa: E501
             'hierarchy_permissions': ([DeclarativeWorkspaceHierarchyPermission],),  # noqa: E501
             'model': (DeclarativeWorkspaceModel,),  # noqa: E501
             'parent': (WorkspaceIdentifier,),  # noqa: E501
@@ -151,6 +154,7 @@ class DeclarativeWorkspace(ModelNormal):
         'data_source': 'dataSource',  # noqa: E501
         'description': 'description',  # noqa: E501
         'early_access': 'earlyAccess',  # noqa: E501
+        'early_access_values': 'earlyAccessValues',  # noqa: E501
         'hierarchy_permissions': 'hierarchyPermissions',  # noqa: E501
         'model': 'model',  # noqa: E501
         'parent': 'parent',  # noqa: E501
@@ -210,6 +214,7 @@ class DeclarativeWorkspace(ModelNormal):
             data_source (WorkspaceDataSource): [optional]  # noqa: E501
             description (str): Description of the workspace. [optional]  # noqa: E501
             early_access (str): Early access defined on level Workspace. [optional]  # noqa: E501
+            early_access_values ([str]): Early access defined on level Workspace. [optional]  # noqa: E501
             hierarchy_permissions ([DeclarativeWorkspaceHierarchyPermission]): [optional]  # noqa: E501
             model (DeclarativeWorkspaceModel): [optional]  # noqa: E501
             parent (WorkspaceIdentifier): [optional]  # noqa: E501
@@ -313,6 +318,7 @@ class DeclarativeWorkspace(ModelNormal):
             data_source (WorkspaceDataSource): [optional]  # noqa: E501
             description (str): Description of the workspace. [optional]  # noqa: E501
             early_access (str): Early access defined on level Workspace. [optional]  # noqa: E501
+            early_access_values ([str]): Early access defined on level Workspace. [optional]  # noqa: E501
             hierarchy_permissions ([DeclarativeWorkspaceHierarchyPermission]): [optional]  # noqa: E501
             model (DeclarativeWorkspaceModel): [optional]  # noqa: E501
             parent (WorkspaceIdentifier): [optional]  # noqa: E501

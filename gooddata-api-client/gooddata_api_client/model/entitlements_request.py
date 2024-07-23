@@ -72,6 +72,13 @@ class EntitlementsRequest(ModelNormal):
             'WHITELABELING': "WhiteLabeling",
             'WORKSPACECOUNT': "WorkspaceCount",
             'USERTELEMETRYDISABLED': "UserTelemetryDisabled",
+            'AUTOMATIONCOUNT': "AutomationCount",
+            'UNLIMITEDAUTOMATIONS': "UnlimitedAutomations",
+            'AUTOMATIONRECIPIENTCOUNT': "AutomationRecipientCount",
+            'UNLIMITEDAUTOMATIONRECIPIENTS': "UnlimitedAutomationRecipients",
+            'DAILYSCHEDULEDACTIONCOUNT': "DailyScheduledActionCount",
+            'UNLIMITEDDAILYSCHEDULEDACTIONS': "UnlimitedDailyScheduledActions",
+            'SCHEDULEDACTIONMINIMUMRECURRENCEMINUTES': "ScheduledActionMinimumRecurrenceMinutes",
         },
     }
 
