@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import List, Optional
+from typing import List, Optional, Type
 from unittest import mock
 from unittest.mock import MagicMock
 
@@ -41,6 +41,7 @@ from gooddata_sdk import (
     TokenCredentialsFromFile,
     VerticaAttributes,
 )
+from gooddata_sdk.catalog.data_source.entity_model.data_source import DatabaseAttributes
 from tests_support.file_utils import load_json
 from tests_support.vcrpy_utils import get_vcr
 
@@ -635,38 +636,6 @@ def test_catalog_create_data_source_greenplum_spec(test_config):
 """
 
 
-def test_postgres_url_creation(test_config):
-    data_source = CatalogDataSourcePostgres(
-        id="test",
-        name="Test",
-        db_specific_attributes=PostgresAttributes(host="localhost", db_name="demo"),
-        schema="demo",
-        credentials=BasicCredentials(
-            username="demouser",
-            password="demopass",
-        ),
-        url_params=[("autosave", "true")],
-    )
-    assert data_source.url == "jdbc:postgresql://localhost:5432/demo?autosave=true"
-
-
-def test_snowflake_url_creation(test_config):
-    data_source = CatalogDataSourceSnowflake(
-        id="test",
-        name="Test",
-        db_specific_attributes=SnowflakeAttributes(account="gooddata", warehouse="TIGER", db_name="TIGER"),
-        schema="demo",
-        credentials=BasicCredentials(
-            username="demouser",
-            password="demopass",
-        ),
-        url_params=[("useProxy", "true")],
-    )
-    assert (
-        data_source.url == "jdbc:snowflake://gooddata.snowflakecomputing.com:443?warehouse=TIGER&db=TIGER&useProxy=true"
-    )
-
-
 def test_allowed_data_source_type(test_config):
     allowed_types = JsonApiDataSourceInAttributes.allowed_values.get(("type",))
     for t in allowed_types.values():
@@ -705,58 +674,71 @@ def test_allowed_data_source_type(test_config):
         assert False, "ValueError was not raised for nonsense database type"
 
 
-def test_catalog_data_source_mssql(test_config):
-    data_source = CatalogDataSourceMsSql(
+@pytest.mark.parametrize(
+    "db_class,attributes,url,parameters,url_params",
+    [
+        (
+            CatalogDataSourceMsSql,
+            MsSqlAttributes(host="Host", db_name="DbName"),
+            "jdbc:sqlserver://Host:1433;databaseName=DbName",
+            None,
+            None,
+        ),
+        (
+            CatalogDataSourceDatabricks,
+            DatabricksAttributes(host="Host", http_path="xyz123abc"),
+            "jdbc:databricks://Host:443/default;httpPath=xyz123abc",
+            [{"name": "catalog", "value": "super_catalog"}],
+            None,
+        ),
+        (
+            CatalogDataSourceMySql,
+            MySqlAttributes(host="localhost", port="3306"),
+            "jdbc:mysql://localhost:3306/my_schema",
+            None,
+            None,
+        ),
+        (
+            CatalogDataSourceMariaDb,
+            MariaDbAttributes(host="localhost", port="3306"),
+            "jdbc:mariadb://localhost:3306/my_schema",
+            None,
+            None,
+        ),
+        (
+            CatalogDataSourcePostgres,
+            PostgresAttributes(host="localhost", db_name="demo"),
+            "jdbc:postgresql://localhost:5432/demo?autosave=true",
+            None,
+            [("autosave", "true")],
+        ),
+        (
+            CatalogDataSourceSnowflake,
+            SnowflakeAttributes(account="gooddata", warehouse="TIGER", db_name="TIGER"),
+            "jdbc:snowflake://gooddata.snowflakecomputing.com:443?warehouse=TIGER&db=TIGER&useProxy=true",
+            None,
+            [("useProxy", "true")],
+        ),
+    ],
+)
+def test_jdbc_urls_creation(
+    db_class: Type[CatalogDataSource],
+    attributes: Type[DatabaseAttributes],
+    url: str,
+    parameters: Optional[List],
+    url_params: Optional[List],
+):
+    db_class: Type[CatalogDataSource] = db_class
+    data_source = db_class(
         id="test",
         name="Test",
-        db_specific_attributes=MsSqlAttributes(host="Host", db_name="DbName"),
-        schema="Schema",
+        db_specific_attributes=attributes,
+        parameters=parameters,
+        schema="my_schema",
+        url_params=url_params,
         credentials=BasicCredentials(
             username="demouser",
             password="demopass",
         ),
     )
-    assert data_source.url == "jdbc:sqlserver://Host:1433;databaseName=DbName"
-
-
-def test_catalog_data_source_databricks(test_config):
-    data_source = CatalogDataSourceDatabricks(
-        id="test",
-        name="Test",
-        db_specific_attributes=DatabricksAttributes(host="Host", http_path="xyz123abc"),
-        schema="SCHEMA",
-        parameters=[{"name": "catalog", "value": "super_catalog"}],
-        credentials=BasicCredentials(
-            username="demouser",
-            password="demospass",
-        ),
-    )
-    assert data_source.url == "jdbc:databricks://Host:443/default;httpPath=xyz123abc"
-
-
-def test_catalog_data_source_mysql(test_config):
-    data_source = CatalogDataSourceMySql(
-        id="test",
-        name="Test",
-        db_specific_attributes=MySqlAttributes(host="localhost", port="3306"),
-        schema="my_schema",
-        credentials=BasicCredentials(
-            username="demouser",
-            password="demospass",
-        ),
-    )
-    assert data_source.url == "jdbc:mysql://localhost:3306/my_schema"
-
-
-def test_catalog_data_source_mariadb(test_config):
-    data_source = CatalogDataSourceMariaDb(
-        id="test",
-        name="Test",
-        db_specific_attributes=MariaDbAttributes(host="localhost", port="3306"),
-        schema="my_schema",
-        credentials=BasicCredentials(
-            username="demouser",
-            password="demospass",
-        ),
-    )
-    assert data_source.url == "jdbc:mariadb://localhost:3306/my_schema"
+    assert data_source.url == url
