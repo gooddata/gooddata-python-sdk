@@ -118,6 +118,8 @@ class Credentials(Base):
     TOKEN_KEY: ClassVar[str] = "token"
     USER_KEY: ClassVar[str] = "username"
     PASSWORD_KEY: ClassVar[str] = "password"
+    PRIVATE_KEY: ClassVar[str] = "private_key"
+    PRIVATE_KEY_PASSPHRASE: ClassVar[str] = "private_key_passphrase"
 
     def to_api_args(self) -> dict[str, Any]:
         return attr.asdict(self)
@@ -227,4 +229,25 @@ class BasicCredentials(Credentials):
             # Password is not returned from API (security)
             # You have to fill it to keep it or update it
             password="",
+        )
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class KeyPairCredentials(Credentials):
+    username: str
+    private_key: str = attr.field(repr=lambda value: "***")
+    private_key_passphrase: Optional[str] = attr.field(repr=lambda value: "***", default=None)
+
+    @classmethod
+    def is_part_of_api(cls, entity: dict[str, Any]) -> bool:
+        return cls.USER_KEY in entity and cls.PRIVATE_KEY in entity
+
+    @classmethod
+    def from_api(cls, attributes: dict[str, Any]) -> KeyPairCredentials:
+        # Credentials are not returned for security reasons
+        return cls(
+            username=attributes[cls.USER_KEY],
+            # Private key is not returned from API (security)
+            # You have to fill it to keep it or update it
+            private_key="",
         )

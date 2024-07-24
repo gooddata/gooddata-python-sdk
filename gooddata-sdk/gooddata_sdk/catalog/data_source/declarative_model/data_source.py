@@ -107,6 +107,8 @@ class CatalogDeclarativeDataSource(Base):
         self,
         password: Optional[str] = None,
         token: Optional[str] = None,
+        private_key: Optional[str] = None,
+        private_key_passphrase: Optional[str] = None,
     ) -> TestDefinitionRequest:
         kwargs: dict[str, Any] = {"schema": self.schema}
         if password is not None:
@@ -115,6 +117,10 @@ class CatalogDeclarativeDataSource(Base):
             kwargs["token"] = token
         if self.username is not None:
             kwargs["username"] = self.username
+        if private_key is not None:
+            kwargs["private_key"] = private_key
+        if private_key_passphrase is not None:
+            kwargs["private_key_passphrase"] = private_key
         return TestDefinitionRequest(type=self.type, url=self.url, **kwargs)
 
     @staticmethod
@@ -127,12 +133,22 @@ class CatalogDeclarativeDataSource(Base):
         create_directory(data_source_folder)
         return data_source_folder
 
-    def to_api(self, password: Optional[str] = None, token: Optional[str] = None) -> DeclarativeDataSource:
+    def to_api(
+        self,
+        password: Optional[str] = None,
+        token: Optional[str] = None,
+        private_key: Optional[str] = None,
+        private_key_passphrase: Optional[str] = None,
+    ) -> DeclarativeDataSource:
         dictionary = self._get_snake_dict()
         if password is not None:
             dictionary["password"] = password
         if token is not None:
             dictionary["token"] = token
+        if private_key is not None:
+            dictionary["private_key"] = private_key
+        if private_key_passphrase is not None:
+            dictionary["private_key_passphrase"] = private_key_passphrase
         return self.client_class().from_dict(dictionary)
 
     def store_to_disk(self, data_sources_folder: Path) -> None:
