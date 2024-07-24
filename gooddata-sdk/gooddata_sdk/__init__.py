@@ -56,6 +56,7 @@ from gooddata_sdk.catalog.depends_on import CatalogDependsOn, CatalogDependsOnDa
 from gooddata_sdk.catalog.entity import (
     AttrCatalogEntity,
     BasicCredentials,
+    KeyPairCredentials,
     TokenCredentialsFromEnvVar,
     TokenCredentialsFromFile,
 )
