@@ -33,7 +33,7 @@ class TotalDefinition:
     """total's local identifier"""
 
     aggregation: str
-    """aggregation function; case insensitive; one of SUM, MIN, MAX, MED, AVG"""
+    """aggregation function; case insensitive; one of SUM, MIN, MAX, MED, AVG, NAT"""
 
     metric_local_id: str
     """local identifier of the measure to calculate total for"""
@@ -175,12 +175,19 @@ class ExecutionDefinition:
                 models.Total(
                     local_identifier=total.local_id,
                     metric=total.metric_local_id,
-                    function=total.aggregation.upper(),
+                    function=ExecutionDefinition._convert_total_aggregation(total.aggregation),
                     total_dimensions=total_dims,
                 )
             )
 
         return totals
+
+    @staticmethod
+    def _convert_total_aggregation(aggregation: str) -> str:
+        # native total is represented as NAT in visualization objects, but needs to be NATIVE in execution
+        if aggregation.upper() == "NAT":
+            return "NATIVE"
+        return aggregation.upper()
 
     def _create_result_spec(self) -> models.ResultSpec:
         dimensions = self._create_dimensions()
