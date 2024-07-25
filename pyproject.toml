@@ -45,7 +45,7 @@ exclude = ['(gooddata-api-client|.*\.snapshot\..*)']
 # github_url = "https://github.com/<user or organization>/<project>/"
 
 [tool.tbump.version]
-current = "1.22.0"
+current = "1.23.0"
 regex = '''
   (?P<major>\d+)
   \.
