@@ -38,7 +38,7 @@ from gooddata_sdk.visualization import (
 logger = logging.getLogger(__name__)
 
 _MEASURE_GROUP_IDENTIFIER = "measureGroup"
-_TOTAL_ORDER = ["SUM", "MAX", "MIN", "AVG", "MED"]
+_TOTAL_ORDER = ["SUM", "MAX", "MIN", "AVG", "MED", "NAT"]
 
 _TABLE_ROW_BATCH_SIZE = 512
 """
