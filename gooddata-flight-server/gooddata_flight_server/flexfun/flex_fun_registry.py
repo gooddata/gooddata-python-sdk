@@ -17,7 +17,15 @@ class FlexFunRegistry:
     def __init__(self) -> None:
         self._logger = structlog.get_logger("gooddata_flexfun.registry")
         self._fun_by_name: Dict[str, Type[FlexFun]] = {}
+        self._fun_names: tuple[str, ...] = ()
         self._loaded_modules: List[str] = []
+
+    @property
+    def flex_funs_names(self) -> tuple[str, ...]:
+        """
+        :return: names of available functions
+        """
+        return self._fun_names
 
     @property
     def flex_funs(self) -> Dict[str, Type[FlexFun]]:
@@ -56,6 +64,7 @@ class FlexFunRegistry:
 
         fun.on_load(ctx)
         self._fun_by_name[fun.Name] = fun
+        self._fun_names = tuple(self._fun_by_name.keys())
 
     def register(self, ctx: ServerContext, *funs: Type[FlexFun]) -> "FlexFunRegistry":
         """

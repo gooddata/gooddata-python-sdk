@@ -126,6 +126,9 @@ class _FlexFunServerMethods(FlightServerMethods):
     def list_flights(
         self, context: pyarrow.flight.ServerCallContext, criteria: bytes
     ) -> Generator[pyarrow.flight.FlightInfo, None, None]:
+        structlog.contextvars.bind_contextvars(peer=context.peer())
+        _LOGGER.info("list_flights", available_funs=self._registry.flex_funs_names)
+
         return (self._create_fun_info(fun) for fun in self._registry.flex_funs.values())
 
     def get_flight_info(
@@ -133,80 +136,107 @@ class _FlexFunServerMethods(FlightServerMethods):
         context: pyarrow.flight.ServerCallContext,
         descriptor: pyarrow.flight.FlightDescriptor,
     ) -> pyarrow.flight.FlightInfo:
-        task = self._prepare_task(context, descriptor)
-
-        self._ctx.task_executor.submit(task)
+        structlog.contextvars.bind_contextvars(peer=context.peer())
+        task: Optional[FlexFunTask] = None
 
         try:
-            # XXX: this should be enhanced to implement polling
-            task_result = self._ctx.task_executor.wait_for_result(task.task_id, _DEFAULT_TASK_WAIT)
-        except TaskWaitTimeoutError:
-            raise ErrorInfo.for_reason(
-                ErrorCode.TIMEOUT, f"GetFlightInfo timed out while waiting for task {task.task_id}."
-            ).to_timeout_error()
+            task = self._prepare_task(context, descriptor)
+            self._ctx.task_executor.submit(task)
 
-        # if this bombs then there must be something really wrong because the task
-        # was clearly submitted and code was waiting for its completion. this invariant
-        # should not happen in this particular code path. The None return value may
-        # be applicable one day when polling is in use and a request comes to check whether
-        # particular task id finished
-        assert task_result is not None
+            try:
+                # XXX: this should be enhanced to implement polling
+                task_result = self._ctx.task_executor.wait_for_result(task.task_id, _DEFAULT_TASK_WAIT)
+            except TaskWaitTimeoutError:
+                raise ErrorInfo.for_reason(
+                    ErrorCode.TIMEOUT, f"GetFlightInfo timed out while waiting for task {task.task_id}."
+                ).to_timeout_error()
 
-        return self._prepare_flight_info(task_result)
+            # if this bombs then there must be something really wrong because the task
+            # was clearly submitted and code was waiting for its completion. this invariant
+            # should not happen in this particular code path. The None return value may
+            # be applicable one day when polling is in use and a request comes to check whether
+            # particular task id finished
+            assert task_result is not None
+
+            return self._prepare_flight_info(task_result)
+        except Exception:
+            if task is not None:
+                _LOGGER.error("get_flight_info_failed", task_id=task.task_id, fun=task.fun_name, exc_info=True)
+            else:
+                _LOGGER.error("flexfun_submit_failed", exc_info=True)
+
+            raise
 
     def do_get(
         self,
         context: pyarrow.flight.ServerCallContext,
         ticket: pyarrow.flight.Ticket,
     ) -> pyarrow.flight.FlightDataStream:
+        structlog.contextvars.bind_contextvars(peer=context.peer())
+
         try:
-            ticket_payload = orjson.loads(ticket.ticket)
+            try:
+                ticket_payload = orjson.loads(ticket.ticket)
+            except Exception:
+                raise ErrorInfo.bad_argument("Incorrect ticket payload. The ticket payload is not a valid JSON.")
+
+            task_id = ticket_payload.get("task_id")
+            if task_id is None or not len(task_id):
+                raise ErrorInfo.bad_argument("Incorrect ticket payload. The ticket payload does not specify 'task_id'.")
+
+            task_result = self._ctx.task_executor.wait_for_result(task_id)
+            if task_result is None:
+                raise ErrorInfo.for_reason(
+                    ErrorCode.INVALID_TICKET,
+                    f"Unable to serve data for task '{task_id}'. The task result is not present.",
+                ).to_user_error()
+
+            result = task_result.result
+            if not isinstance(result, FlightDataTaskResult):
+                raise ErrorInfo.for_reason(
+                    ErrorCode.INTERNAL_ERROR,
+                    f"An internal error has occurred while attempting read result for '{task_id}'."
+                    f"While the result exists, it is of an unexpected type. "
+                    f"This is a bug in FlexFun server implementation.",
+                ).to_internal_error()
+
+            rlock, data = result.acquire_data()
+
+            def _on_end(_: Optional[pyarrow.ArrowException]) -> None:
+                """
+                Once the request that streams the data out is done, make sure
+                to release the read-lock. Single-use results are closed at
+                this point because the data cannot be read again anyway.
+                """
+                rlock.release()
+
+                if result.single_use_data:
+                    # note: results with single-use data can only ever have one active
+                    #  reader (e.g. this one). since the rlock is now released the
+                    #  close will proceed without chance of being blocked
+                    try:
+                        result.close()
+                    except Exception:
+                        # log and sink these Exceptions - not much to do
+                        _LOGGER.error("do_get_close_failed", exc_info=True)
+
+            finalizer = self.call_finalizer_middleware(context)
+            finalizer.register_on_end(_on_end)
+
+            if isinstance(data, pyarrow.Table):
+                _LOGGER.info("do_get_table", task_id=task_id, num_rows=data.num_rows)
+
+                return pyarrow.flight.RecordBatchStream(data)
+            elif isinstance(data, pyarrow.RecordBatchReader):
+                _LOGGER.info("do_get_reader", task_id=task_id)
+
+                return pyarrow.flight.RecordBatchStream(data)
+
+            _LOGGER.info("do_get_generator", task_id=task_id)
+            return pyarrow.flight.GeneratorStream(data)
         except Exception:
-            raise ErrorInfo.bad_argument("Incorrect ticket payload. The ticket payload is not a valid JSON.")
-
-        task_id = ticket_payload.get("task_id")
-        if task_id is None or not len(task_id):
-            raise ErrorInfo.bad_argument("Incorrect ticket payload. The ticket payload does not specify 'task_id'.")
-
-        task_result = self._ctx.task_executor.wait_for_result(task_id)
-        if task_result is None:
-            raise ErrorInfo.for_reason(
-                ErrorCode.INVALID_TICKET,
-                f"Unable to serve data for task '{task_id}'. The task result is not present.",
-            ).to_user_error()
-
-        result = task_result.result
-        if not isinstance(result, FlightDataTaskResult):
-            raise ErrorInfo.for_reason(
-                ErrorCode.INTERNAL_ERROR,
-                f"An internal error has occurred while attempting read result for '{task_id}'."
-                f"While the result exists, it is of an unexpected type. This is a bug in FlexFun server implementation.",
-            ).to_internal_error()
-
-        rlock, data = result.acquire_data()
-
-        def _on_end(_: Optional[pyarrow.ArrowException]) -> None:
-            """
-            Once the request that streams the data out is done, make sure
-            to release the read-lock. Single-use results are closed at
-            this point because the data cannot be read again anyway.
-            """
-            rlock.release()
-
-            if result.single_use_data:
-                # note: results with single-use data can only ever have one active
-                #  reader (e.g. this one). since the rlock is now released the
-                #  close will proceed without chance of being blocked
-                try:
-                    result.close()
-                except Exception:
-                    # log and sink these Exceptions - not much to do
-                    _LOGGER.error("do_get_close_failed", exc_info=True)
-
-        finalizer = self.call_finalizer_middleware(context)
-        finalizer.register_on_end(_on_end)
-
-        return pyarrow.flight.RecordBatchStream(data)
+            _LOGGER.error("do_get_failed", exc_info=True)
+            raise
 
 
 _FLEXFUN_CONFIG_SECTION = "flexfun"
