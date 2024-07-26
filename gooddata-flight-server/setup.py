@@ -22,7 +22,7 @@ setup(
     description="Flight RPC server to host custom functions for GoodData Cloud",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    version="1.21.0",
+    version="1.23.0",
     author="GoodData",
     author_email="support@gooddata.com",
     license="MIT",
