@@ -175,19 +175,12 @@ class ExecutionDefinition:
                 models.Total(
                     local_identifier=total.local_id,
                     metric=total.metric_local_id,
-                    function=ExecutionDefinition._convert_total_aggregation(total.aggregation),
+                    function=total.aggregation.upper(),
                     total_dimensions=total_dims,
                 )
             )
 
         return totals
-
-    @staticmethod
-    def _convert_total_aggregation(aggregation: str) -> str:
-        # native total is represented as NAT in visualization objects, but needs to be NATIVE in execution
-        if aggregation.upper() == "NAT":
-            return "NATIVE"
-        return aggregation.upper()
 
     def _create_result_spec(self) -> models.ResultSpec:
         dimensions = self._create_dimensions()
