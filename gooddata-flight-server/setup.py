@@ -33,7 +33,7 @@ setup(
     include_package_data=True,
     python_requires=">=3.8.0",
     project_urls={
-        "Documentation": "https://gooddata-flight-server.readthedocs.io/en/v1.21.0",
+        "Documentation": "https://gooddata-flight-server.readthedocs.io/en/v1.23.0",
         "Source": "https://github.com/gooddata/gooddata-python-sdk",
     },
     scripts=[
@@ -47,6 +47,7 @@ setup(
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         "Topic :: Database",
         "Topic :: Scientific/Engineering",
         "Topic :: Software Development",

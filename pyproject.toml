@@ -111,6 +111,11 @@ src = "gooddata-dbt/setup.py"
 search = "gooddata-sdk~={current_version}"
 
 [[tool.tbump.file]]
+# gooddata-flight-server setup.py
+src = "gooddata-flight-server/setup.py"
+search = "version=\"{current_version}\""
+
+[[tool.tbump.file]]
 # clients README
 src = "gooddata-*-client/README.md"
 
@@ -145,6 +150,10 @@ search = '"Documentation": "https://gooddata-pandas.readthedocs.io/en/v{current_
 [[tool.tbump.file]]
 src = "gooddata-fdw/setup.py"
 search = '"Documentation": "https://gooddata-fdw.readthedocs.io/en/v{current_version}"'
+
+[[tool.tbump.file]]
+src = "gooddata-flight-server/setup.py"
+search = '"Documentation": "https://gooddata-flight-server.readthedocs.io/en/v{current_version}"'
 
 # You can specify a list of commands to
 # run after the files have been patched
