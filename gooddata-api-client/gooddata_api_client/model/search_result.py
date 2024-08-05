@@ -31,7 +31,9 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.search_relationship_object import SearchRelationshipObject
     from gooddata_api_client.model.search_result_object import SearchResultObject
+    globals()['SearchRelationshipObject'] = SearchRelationshipObject
     globals()['SearchResultObject'] = SearchResultObject
 
 
@@ -88,6 +90,7 @@ class SearchResult(ModelNormal):
         """
         lazy_import()
         return {
+            'relationships': ([SearchRelationshipObject],),  # noqa: E501
             'results': ([SearchResultObject],),  # noqa: E501
         }
 
@@ -97,6 +100,7 @@ class SearchResult(ModelNormal):
 
 
     attribute_map = {
+        'relationships': 'relationships',  # noqa: E501
         'results': 'results',  # noqa: E501
     }
 
@@ -107,10 +111,11 @@ class SearchResult(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, results, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, relationships, results, *args, **kwargs):  # noqa: E501
         """SearchResult - a model defined in OpenAPI
 
         Args:
+            relationships ([SearchRelationshipObject]):
             results ([SearchResultObject]):
 
         Keyword Args:
@@ -175,6 +180,7 @@ class SearchResult(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.relationships = relationships
         self.results = results
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
@@ -196,10 +202,11 @@ class SearchResult(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, results, *args, **kwargs):  # noqa: E501
+    def __init__(self, relationships, results, *args, **kwargs):  # noqa: E501
         """SearchResult - a model defined in OpenAPI
 
         Args:
+            relationships ([SearchRelationshipObject]):
             results ([SearchResultObject]):
 
         Keyword Args:
@@ -262,6 +269,7 @@ class SearchResult(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.relationships = relationships
         self.results = results
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

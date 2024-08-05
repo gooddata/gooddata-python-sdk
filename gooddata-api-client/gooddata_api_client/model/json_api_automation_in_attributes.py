@@ -69,6 +69,8 @@ class JsonApiAutomationInAttributes(ModelNormal):
         ('details',): {
             'max_length': 10000,
         },
+        ('metadata',): {
+        },
         ('title',): {
             'max_length': 255,
         },
@@ -100,6 +102,7 @@ class JsonApiAutomationInAttributes(ModelNormal):
             'are_relations_valid': (bool,),  # noqa: E501
             'description': (str,),  # noqa: E501
             'details': (bool, date, datetime, dict, float, int, list, str, none_type,),  # noqa: E501
+            'metadata': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}, none_type,),  # noqa: E501
             'schedule': (JsonApiAutomationInAttributesSchedule,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
             'title': (str,),  # noqa: E501
@@ -114,6 +117,7 @@ class JsonApiAutomationInAttributes(ModelNormal):
         'are_relations_valid': 'areRelationsValid',  # noqa: E501
         'description': 'description',  # noqa: E501
         'details': 'details',  # noqa: E501
+        'metadata': 'metadata',  # noqa: E501
         'schedule': 'schedule',  # noqa: E501
         'tags': 'tags',  # noqa: E501
         'title': 'title',  # noqa: E501
@@ -163,6 +167,7 @@ class JsonApiAutomationInAttributes(ModelNormal):
             are_relations_valid (bool): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             details (bool, date, datetime, dict, float, int, list, str, none_type): Additional details to be included in the automated message.. [optional]  # noqa: E501
+            metadata ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}, none_type): Additional information for the automation.. [optional]  # noqa: E501
             schedule (JsonApiAutomationInAttributesSchedule): [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
@@ -254,6 +259,7 @@ class JsonApiAutomationInAttributes(ModelNormal):
             are_relations_valid (bool): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             details (bool, date, datetime, dict, float, int, list, str, none_type): Additional details to be included in the automated message.. [optional]  # noqa: E501
+            metadata ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}, none_type): Additional information for the automation.. [optional]  # noqa: E501
             schedule (JsonApiAutomationInAttributesSchedule): [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501

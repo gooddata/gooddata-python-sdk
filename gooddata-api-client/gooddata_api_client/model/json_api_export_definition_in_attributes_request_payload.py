@@ -32,10 +32,12 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.custom_override import CustomOverride
+    from gooddata_api_client.model.json_node import JsonNode
     from gooddata_api_client.model.settings import Settings
     from gooddata_api_client.model.tabular_export_request import TabularExportRequest
     from gooddata_api_client.model.visual_export_request import VisualExportRequest
     globals()['CustomOverride'] = CustomOverride
+    globals()['JsonNode'] = JsonNode
     globals()['Settings'] = Settings
     globals()['TabularExportRequest'] = TabularExportRequest
     globals()['VisualExportRequest'] = VisualExportRequest
@@ -100,9 +102,10 @@ class JsonApiExportDefinitionInAttributesRequestPayload(ModelComposed):
         """
         lazy_import()
         return {
-            'metadata': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),  # noqa: E501
+            'metadata': (JsonNode,),  # noqa: E501
             'custom_override': (CustomOverride,),  # noqa: E501
             'execution_result': (str,),  # noqa: E501
+            'related_dashboard_id': (str,),  # noqa: E501
             'settings': (Settings,),  # noqa: E501
             'visualization_object': (str,),  # noqa: E501
             'visualization_object_custom_filters': ([{str: (bool, date, datetime, dict, float, int, list, str, none_type)}],),  # noqa: E501
@@ -120,6 +123,7 @@ class JsonApiExportDefinitionInAttributesRequestPayload(ModelComposed):
         'metadata': 'metadata',  # noqa: E501
         'custom_override': 'customOverride',  # noqa: E501
         'execution_result': 'executionResult',  # noqa: E501
+        'related_dashboard_id': 'relatedDashboardId',  # noqa: E501
         'settings': 'settings',  # noqa: E501
         'visualization_object': 'visualizationObject',  # noqa: E501
         'visualization_object_custom_filters': 'visualizationObjectCustomFilters',  # noqa: E501
@@ -167,11 +171,12 @@ class JsonApiExportDefinitionInAttributesRequestPayload(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            metadata ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Metadata definition in free-form JSON format.. [optional]  # noqa: E501
+            metadata (JsonNode): [optional]  # noqa: E501
             custom_override (CustomOverride): [optional]  # noqa: E501
             execution_result (str): Execution result identifier.. [optional]  # noqa: E501
+            related_dashboard_id (str): Analytical dashboard identifier. Optional identifier, which informs the system that the export is related to a specific dashboard.. [optional]  # noqa: E501
             settings (Settings): [optional]  # noqa: E501
-            visualization_object (str): Visualization object identifier. Alternative to executionResult property. (HTML/PDF only). [optional]  # noqa: E501
+            visualization_object (str): Visualization object identifier. Alternative to executionResult property.. [optional]  # noqa: E501
             visualization_object_custom_filters ([{str: (bool, date, datetime, dict, float, int, list, str, none_type)}]): Optional custom filters (as array of IFilter objects defined in UI SDK) to be applied when visualizationObject is given. (HTML/PDF only). [optional]  # noqa: E501
             dashboard_id (str): Dashboard identifier. [optional]  # noqa: E501
             file_name (str): Filename of downloaded file without extension.. [optional]  # noqa: E501
@@ -279,11 +284,12 @@ class JsonApiExportDefinitionInAttributesRequestPayload(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            metadata ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Metadata definition in free-form JSON format.. [optional]  # noqa: E501
+            metadata (JsonNode): [optional]  # noqa: E501
             custom_override (CustomOverride): [optional]  # noqa: E501
             execution_result (str): Execution result identifier.. [optional]  # noqa: E501
+            related_dashboard_id (str): Analytical dashboard identifier. Optional identifier, which informs the system that the export is related to a specific dashboard.. [optional]  # noqa: E501
             settings (Settings): [optional]  # noqa: E501
-            visualization_object (str): Visualization object identifier. Alternative to executionResult property. (HTML/PDF only). [optional]  # noqa: E501
+            visualization_object (str): Visualization object identifier. Alternative to executionResult property.. [optional]  # noqa: E501
             visualization_object_custom_filters ([{str: (bool, date, datetime, dict, float, int, list, str, none_type)}]): Optional custom filters (as array of IFilter objects defined in UI SDK) to be applied when visualizationObject is given. (HTML/PDF only). [optional]  # noqa: E501
             dashboard_id (str): Dashboard identifier. [optional]  # noqa: E501
             file_name (str): Filename of downloaded file without extension.. [optional]  # noqa: E501

@@ -59,6 +59,8 @@ class SearchResultObject(ModelNormal):
     }
 
     validations = {
+        ('tags',): {
+        },
     }
 
     @cached_property
@@ -82,10 +84,18 @@ class SearchResultObject(ModelNormal):
                 and the value is attribute type.
         """
         return {
+            'created_at': (str,),  # noqa: E501
             'description': (str,),  # noqa: E501
             'id': (str,),  # noqa: E501
+            'modified_at': (str,),  # noqa: E501
+            'score': (float,),  # noqa: E501
+            'score_descriptor': (float,),  # noqa: E501
+            'score_exact_match': (int,),  # noqa: E501
+            'score_title': (float,),  # noqa: E501
+            'tags': ([str],),  # noqa: E501
             'title': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
+            'visualization_url': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -94,10 +104,18 @@ class SearchResultObject(ModelNormal):
 
 
     attribute_map = {
+        'created_at': 'createdAt',  # noqa: E501
         'description': 'description',  # noqa: E501
         'id': 'id',  # noqa: E501
+        'modified_at': 'modifiedAt',  # noqa: E501
+        'score': 'score',  # noqa: E501
+        'score_descriptor': 'scoreDescriptor',  # noqa: E501
+        'score_exact_match': 'scoreExactMatch',  # noqa: E501
+        'score_title': 'scoreTitle',  # noqa: E501
+        'tags': 'tags',  # noqa: E501
         'title': 'title',  # noqa: E501
         'type': 'type',  # noqa: E501
+        'visualization_url': 'visualizationUrl',  # noqa: E501
     }
 
     read_only_vars = {
@@ -107,14 +125,22 @@ class SearchResultObject(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, description, id, title, type, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, created_at, description, id, modified_at, score, score_descriptor, score_exact_match, score_title, tags, title, type, visualization_url, *args, **kwargs):  # noqa: E501
         """SearchResultObject - a model defined in OpenAPI
 
         Args:
-            description (str):
-            id (str):
-            title (str):
-            type (str):
+            created_at (str): Timestamp when object was created.
+            description (str): Object description.
+            id (str): Object ID.
+            modified_at (str): Timestamp when object was last modified.
+            score (float): Result score calculated by a similarity search algorithm (cosine_distance).
+            score_descriptor (float): Result score for descriptor containing(now) description and tags.
+            score_exact_match (int): Result score for exact match(id/title). 1/1000. Other scores are multiplied by this.
+            score_title (float): Result score for object title.
+            tags ([str]):
+            title (str): Object title.
+            type (str): Object type, e.g. dashboard.
+            visualization_url (str): If the object is visualization, this field defines the type of visualization.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -178,10 +204,18 @@ class SearchResultObject(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.created_at = created_at
         self.description = description
         self.id = id
+        self.modified_at = modified_at
+        self.score = score
+        self.score_descriptor = score_descriptor
+        self.score_exact_match = score_exact_match
+        self.score_title = score_title
+        self.tags = tags
         self.title = title
         self.type = type
+        self.visualization_url = visualization_url
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -202,14 +236,22 @@ class SearchResultObject(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, description, id, title, type, *args, **kwargs):  # noqa: E501
+    def __init__(self, created_at, description, id, modified_at, score, score_descriptor, score_exact_match, score_title, tags, title, type, visualization_url, *args, **kwargs):  # noqa: E501
         """SearchResultObject - a model defined in OpenAPI
 
         Args:
-            description (str):
-            id (str):
-            title (str):
-            type (str):
+            created_at (str): Timestamp when object was created.
+            description (str): Object description.
+            id (str): Object ID.
+            modified_at (str): Timestamp when object was last modified.
+            score (float): Result score calculated by a similarity search algorithm (cosine_distance).
+            score_descriptor (float): Result score for descriptor containing(now) description and tags.
+            score_exact_match (int): Result score for exact match(id/title). 1/1000. Other scores are multiplied by this.
+            score_title (float): Result score for object title.
+            tags ([str]):
+            title (str): Object title.
+            type (str): Object type, e.g. dashboard.
+            visualization_url (str): If the object is visualization, this field defines the type of visualization.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -271,10 +313,18 @@ class SearchResultObject(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.created_at = created_at
         self.description = description
         self.id = id
+        self.modified_at = modified_at
+        self.score = score
+        self.score_descriptor = score_descriptor
+        self.score_exact_match = score_exact_match
+        self.score_title = score_title
+        self.tags = tags
         self.title = title
         self.type = type
+        self.visualization_url = visualization_url
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

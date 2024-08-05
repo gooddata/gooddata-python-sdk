@@ -35,6 +35,7 @@ def lazy_import():
     from gooddata_api_client.model.declarative_analytical_dashboard_extension import DeclarativeAnalyticalDashboardExtension
     from gooddata_api_client.model.declarative_attribute_hierarchy import DeclarativeAttributeHierarchy
     from gooddata_api_client.model.declarative_dashboard_plugin import DeclarativeDashboardPlugin
+    from gooddata_api_client.model.declarative_export_definition import DeclarativeExportDefinition
     from gooddata_api_client.model.declarative_filter_context import DeclarativeFilterContext
     from gooddata_api_client.model.declarative_metric import DeclarativeMetric
     from gooddata_api_client.model.declarative_visualization_object import DeclarativeVisualizationObject
@@ -42,6 +43,7 @@ def lazy_import():
     globals()['DeclarativeAnalyticalDashboardExtension'] = DeclarativeAnalyticalDashboardExtension
     globals()['DeclarativeAttributeHierarchy'] = DeclarativeAttributeHierarchy
     globals()['DeclarativeDashboardPlugin'] = DeclarativeDashboardPlugin
+    globals()['DeclarativeExportDefinition'] = DeclarativeExportDefinition
     globals()['DeclarativeFilterContext'] = DeclarativeFilterContext
     globals()['DeclarativeMetric'] = DeclarativeMetric
     globals()['DeclarativeVisualizationObject'] = DeclarativeVisualizationObject
@@ -104,6 +106,7 @@ class DeclarativeAnalyticsLayer(ModelNormal):
             'analytical_dashboards': ([DeclarativeAnalyticalDashboard],),  # noqa: E501
             'attribute_hierarchies': ([DeclarativeAttributeHierarchy],),  # noqa: E501
             'dashboard_plugins': ([DeclarativeDashboardPlugin],),  # noqa: E501
+            'export_definitions': ([DeclarativeExportDefinition],),  # noqa: E501
             'filter_contexts': ([DeclarativeFilterContext],),  # noqa: E501
             'metrics': ([DeclarativeMetric],),  # noqa: E501
             'visualization_objects': ([DeclarativeVisualizationObject],),  # noqa: E501
@@ -119,6 +122,7 @@ class DeclarativeAnalyticsLayer(ModelNormal):
         'analytical_dashboards': 'analyticalDashboards',  # noqa: E501
         'attribute_hierarchies': 'attributeHierarchies',  # noqa: E501
         'dashboard_plugins': 'dashboardPlugins',  # noqa: E501
+        'export_definitions': 'exportDefinitions',  # noqa: E501
         'filter_contexts': 'filterContexts',  # noqa: E501
         'metrics': 'metrics',  # noqa: E501
         'visualization_objects': 'visualizationObjects',  # noqa: E501
@@ -169,6 +173,7 @@ class DeclarativeAnalyticsLayer(ModelNormal):
             analytical_dashboards ([DeclarativeAnalyticalDashboard]): A list of analytical dashboards available in the model.. [optional]  # noqa: E501
             attribute_hierarchies ([DeclarativeAttributeHierarchy]): A list of attribute hierarchies.. [optional]  # noqa: E501
             dashboard_plugins ([DeclarativeDashboardPlugin]): A list of dashboard plugins available in the model.. [optional]  # noqa: E501
+            export_definitions ([DeclarativeExportDefinition]): A list of export definitions.. [optional]  # noqa: E501
             filter_contexts ([DeclarativeFilterContext]): A list of filter contexts available in the model.. [optional]  # noqa: E501
             metrics ([DeclarativeMetric]): A list of metrics available in the model.. [optional]  # noqa: E501
             visualization_objects ([DeclarativeVisualizationObject]): A list of visualization objects available in the model.. [optional]  # noqa: E501
@@ -261,6 +266,7 @@ class DeclarativeAnalyticsLayer(ModelNormal):
             analytical_dashboards ([DeclarativeAnalyticalDashboard]): A list of analytical dashboards available in the model.. [optional]  # noqa: E501
             attribute_hierarchies ([DeclarativeAttributeHierarchy]): A list of attribute hierarchies.. [optional]  # noqa: E501
             dashboard_plugins ([DeclarativeDashboardPlugin]): A list of dashboard plugins available in the model.. [optional]  # noqa: E501
+            export_definitions ([DeclarativeExportDefinition]): A list of export definitions.. [optional]  # noqa: E501
             filter_contexts ([DeclarativeFilterContext]): A list of filter contexts available in the model.. [optional]  # noqa: E501
             metrics ([DeclarativeMetric]): A list of metrics available in the model.. [optional]  # noqa: E501
             visualization_objects ([DeclarativeVisualizationObject]): A list of visualization objects available in the model.. [optional]  # noqa: E501

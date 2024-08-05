@@ -45,6 +45,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 are_relations_valid=True,
                 description="description_example",
                 details=None,
+                metadata={},
                 schedule=JsonApiAutomationInAttributesSchedule(
                     cron="0 */30 9-17 ? * MON-FRI",
                     cron_description="cron_description_example",
@@ -431,6 +432,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 are_relations_valid=True,
                 description="description_example",
                 details=None,
+                metadata={},
                 schedule=JsonApiAutomationInAttributesSchedule(
                     cron="0 */30 9-17 ? * MON-FRI",
                     cron_description="cron_description_example",
@@ -557,6 +559,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 are_relations_valid=True,
                 description="description_example",
                 details=None,
+                metadata={},
                 schedule=JsonApiAutomationInAttributesSchedule(
                     cron="0 */30 9-17 ? * MON-FRI",
                     cron_description="cron_description_example",

@@ -186,6 +186,25 @@ with gooddata_api_client.ApiClient() as api_client:
                     title="3D map renderer",
                 ),
             ],
+            export_definitions=[
+                DeclarativeExportDefinition(
+                    created_at="["2023-07-20 12:30"]",
+                    created_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
+                    description="Simple number for total goods in current production.",
+                    id="export-definition-1",
+                    modified_at="["2023-07-20 12:30"]",
+                    modified_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
+                    request_payload=DeclarativeExportDefinitionRequestPayload(None),
+                    tags=["Revenues"],
+                    title="My regular export",
+                ),
+            ],
             filter_contexts=[
                 DeclarativeFilterContext(
                     content=JsonNode(),

@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **str** | Identifier of a workspace | 
 **name** | **str** | Name of a workspace to view. | 
+**automations** | [**[DeclarativeAutomation]**](DeclarativeAutomation.md) |  | [optional] 
 **cache_extra_limit** | **int** | Extra cache limit allocated to specific workspace. In case there is extra cache budget setup for organization, it can be split between multiple workspaces. | [optional] 
 **custom_application_settings** | [**[DeclarativeCustomApplicationSetting]**](DeclarativeCustomApplicationSetting.md) | A list of workspace custom settings. | [optional] 
 **data_source** | [**WorkspaceDataSource**](WorkspaceDataSource.md) |  | [optional] 
