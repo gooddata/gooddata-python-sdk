@@ -31,6 +31,7 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.declarative_automation import DeclarativeAutomation
     from gooddata_api_client.model.declarative_custom_application_setting import DeclarativeCustomApplicationSetting
     from gooddata_api_client.model.declarative_setting import DeclarativeSetting
     from gooddata_api_client.model.declarative_single_workspace_permission import DeclarativeSingleWorkspacePermission
@@ -39,6 +40,7 @@ def lazy_import():
     from gooddata_api_client.model.declarative_workspace_model import DeclarativeWorkspaceModel
     from gooddata_api_client.model.workspace_data_source import WorkspaceDataSource
     from gooddata_api_client.model.workspace_identifier import WorkspaceIdentifier
+    globals()['DeclarativeAutomation'] = DeclarativeAutomation
     globals()['DeclarativeCustomApplicationSetting'] = DeclarativeCustomApplicationSetting
     globals()['DeclarativeSetting'] = DeclarativeSetting
     globals()['DeclarativeSingleWorkspacePermission'] = DeclarativeSingleWorkspacePermission
@@ -126,6 +128,7 @@ class DeclarativeWorkspace(ModelNormal):
         return {
             'id': (str,),  # noqa: E501
             'name': (str,),  # noqa: E501
+            'automations': ([DeclarativeAutomation],),  # noqa: E501
             'cache_extra_limit': (int,),  # noqa: E501
             'custom_application_settings': ([DeclarativeCustomApplicationSetting],),  # noqa: E501
             'data_source': (WorkspaceDataSource,),  # noqa: E501
@@ -149,6 +152,7 @@ class DeclarativeWorkspace(ModelNormal):
     attribute_map = {
         'id': 'id',  # noqa: E501
         'name': 'name',  # noqa: E501
+        'automations': 'automations',  # noqa: E501
         'cache_extra_limit': 'cacheExtraLimit',  # noqa: E501
         'custom_application_settings': 'customApplicationSettings',  # noqa: E501
         'data_source': 'dataSource',  # noqa: E501
@@ -209,6 +213,7 @@ class DeclarativeWorkspace(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            automations ([DeclarativeAutomation]): [optional]  # noqa: E501
             cache_extra_limit (int): Extra cache limit allocated to specific workspace. In case there is extra cache budget setup for organization, it can be split between multiple workspaces.. [optional]  # noqa: E501
             custom_application_settings ([DeclarativeCustomApplicationSetting]): A list of workspace custom settings.. [optional]  # noqa: E501
             data_source (WorkspaceDataSource): [optional]  # noqa: E501
@@ -313,6 +318,7 @@ class DeclarativeWorkspace(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            automations ([DeclarativeAutomation]): [optional]  # noqa: E501
             cache_extra_limit (int): Extra cache limit allocated to specific workspace. In case there is extra cache budget setup for organization, it can be split between multiple workspaces.. [optional]  # noqa: E501
             custom_application_settings ([DeclarativeCustomApplicationSetting]): A list of workspace custom settings.. [optional]  # noqa: E501
             data_source (WorkspaceDataSource): [optional]  # noqa: E501

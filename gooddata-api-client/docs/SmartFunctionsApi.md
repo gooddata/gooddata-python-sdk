@@ -44,10 +44,12 @@ with gooddata_api_client.ApiClient() as api_client:
     workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
     search_request = SearchRequest(
         deep_search=False,
+        limit=10,
         object_types=[
             "attribute",
         ],
         question="question_example",
+        title_to_descriptor_ratio=0.7,
     ) # SearchRequest | 
 
     # example passing only required values which don't have defaults set

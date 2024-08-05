@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **created_at** | **datetime** |  | [optional] 
 **description** | **str** |  | [optional] 
 **details** | **bool, date, datetime, dict, float, int, list, str, none_type** | Additional details to be included in the automated message. | [optional] 
+**metadata** | **{str: (bool, date, datetime, dict, float, int, list, str, none_type)}, none_type** | Additional information for the automation. | [optional] 
 **modified_at** | **datetime** |  | [optional] 
 **schedule** | [**JsonApiAutomationInAttributesSchedule**](JsonApiAutomationInAttributesSchedule.md) |  | [optional] 
 **tags** | **[str]** |  | [optional] 

@@ -79,6 +79,7 @@ class ApiEntitlement(ModelNormal):
             'DAILYSCHEDULEDACTIONCOUNT': "DailyScheduledActionCount",
             'UNLIMITEDDAILYSCHEDULEDACTIONS': "UnlimitedDailyScheduledActions",
             'SCHEDULEDACTIONMINIMUMRECURRENCEMINUTES': "ScheduledActionMinimumRecurrenceMinutes",
+            'FEDERATEDIDENTITYMANAGEMENT': "FederatedIdentityManagement",
         },
     }
 

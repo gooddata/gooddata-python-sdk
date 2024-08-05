@@ -2095,12 +2095,65 @@
         ],
         "type": "object"
       },
+      "SearchRelationshipObject": {
+        "properties": {
+          "sourceObjectId": {
+            "description": "Source object ID.",
+            "type": "string"
+          },
+          "sourceObjectTitle": {
+            "description": "Source object title.",
+            "type": "string"
+          },
+          "sourceObjectType": {
+            "description": "Source object type, e.g. dashboard.",
+            "type": "string"
+          },
+          "sourceWorkspaceId": {
+            "description": "Source workspace ID. If relationship is dashboard->visualization, this is the workspace where the dashboard is located.",
+            "type": "string"
+          },
+          "targetObjectId": {
+            "description": "Target object ID.",
+            "type": "string"
+          },
+          "targetObjectTitle": {
+            "description": "Target object title.",
+            "type": "string"
+          },
+          "targetObjectType": {
+            "description": "Target object type, e.g. visualization.",
+            "type": "string"
+          },
+          "targetWorkspaceId": {
+            "description": "Target workspace ID. If relationship is dashboard->visualization, this is the workspace where the visualization is located.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "sourceObjectId",
+          "sourceObjectTitle",
+          "sourceObjectType",
+          "sourceWorkspaceId",
+          "targetObjectId",
+          "targetObjectTitle",
+          "targetObjectType",
+          "targetWorkspaceId"
+        ],
+        "type": "object"
+      },
       "SearchRequest": {
         "properties": {
           "deepSearch": {
             "default": false,
             "description": "Turn on deep search. If true, content of complex objects will be searched as well, e.g. metrics in visualizations.",
             "type": "boolean"
+          },
+          "limit": {
+            "default": 10,
+            "description": "Maximum number of results to return. There is a hard limit and the actual number of returned results may be lower than what is requested.",
+            "format": "int32",
+            "type": "integer"
           },
           "objectTypes": {
             "description": "List of object types to search for.",
@@ -2123,6 +2176,12 @@
           "question": {
             "description": "Keyword/sentence is input for search.",
             "type": "string"
+          },
+          "titleToDescriptorRatio": {
+            "default": 0.7,
+            "description": "Temporary for experiments. Ratio of title score to descriptor score.",
+            "format": "double",
+            "type": "number"
           }
         },
         "required": [
@@ -2132,6 +2191,12 @@
       },
       "SearchResult": {
         "properties": {
+          "relationships": {
+            "items": {
+              "$ref": "#/components/schemas/SearchRelationshipObject"
+            },
+            "type": "array"
+          },
           "results": {
             "items": {
               "$ref": "#/components/schemas/SearchResultObject"
@@ -2140,30 +2205,83 @@
           }
         },
         "required": [
+          "relationships",
           "results"
         ],
         "type": "object"
       },
       "SearchResultObject": {
         "properties": {
+          "createdAt": {
+            "description": "Timestamp when object was created.",
+            "type": "string"
+          },
           "description": {
+            "description": "Object description.",
             "type": "string"
           },
           "id": {
+            "description": "Object ID.",
             "type": "string"
           },
+          "modifiedAt": {
+            "description": "Timestamp when object was last modified.",
+            "type": "string"
+          },
+          "score": {
+            "description": "Result score calculated by a similarity search algorithm (cosine_distance).",
+            "format": "float",
+            "type": "number"
+          },
+          "scoreDescriptor": {
+            "description": "Result score for descriptor containing(now) description and tags.",
+            "format": "float",
+            "type": "number"
+          },
+          "scoreExactMatch": {
+            "description": "Result score for exact match(id/title). 1/1000. Other scores are multiplied by this.",
+            "format": "int32",
+            "type": "integer"
+          },
+          "scoreTitle": {
+            "description": "Result score for object title.",
+            "format": "float",
+            "type": "number"
+          },
+          "tags": {
+            "items": {
+              "description": "List of tags assigned to the object.",
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
           "title": {
+            "description": "Object title.",
             "type": "string"
           },
           "type": {
+            "description": "Object type, e.g. dashboard.",
+            "type": "string"
+          },
+          "visualizationUrl": {
+            "description": "If the object is visualization, this field defines the type of visualization.",
             "type": "string"
           }
         },
         "required": [
+          "createdAt",
           "description",
           "id",
+          "modifiedAt",
+          "score",
+          "scoreDescriptor",
+          "scoreExactMatch",
+          "scoreTitle",
+          "tags",
           "title",
-          "type"
+          "type",
+          "visualizationUrl"
         ],
         "type": "object"
       },
@@ -2350,7 +2468,7 @@
               "MAX",
               "AVG",
               "MED",
-              "NATIVE"
+              "NAT"
             ],
             "example": "SUM",
             "type": "string"

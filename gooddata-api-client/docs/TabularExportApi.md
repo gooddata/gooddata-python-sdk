@@ -54,6 +54,8 @@ with gooddata_api_client.ApiClient() as api_client:
         execution_result="ff483727196c9dc862c7fd3a5a84df55c96d61a4",
         file_name="result",
         format="CSV",
+        metadata=JsonNode(),
+        related_dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
         settings=Settings(
             merge_headers=True,
             pdf_page_size="a4 landscape",

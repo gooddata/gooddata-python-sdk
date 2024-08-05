@@ -32,8 +32,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.custom_override import CustomOverride
+    from gooddata_api_client.model.json_node import JsonNode
     from gooddata_api_client.model.settings import Settings
     globals()['CustomOverride'] = CustomOverride
+    globals()['JsonNode'] = JsonNode
     globals()['Settings'] = Settings
 
 
@@ -100,6 +102,8 @@ class TabularExportRequest(ModelNormal):
             'format': (str,),  # noqa: E501
             'custom_override': (CustomOverride,),  # noqa: E501
             'execution_result': (str,),  # noqa: E501
+            'metadata': (JsonNode,),  # noqa: E501
+            'related_dashboard_id': (str,),  # noqa: E501
             'settings': (Settings,),  # noqa: E501
             'visualization_object': (str,),  # noqa: E501
             'visualization_object_custom_filters': ([{str: (bool, date, datetime, dict, float, int, list, str, none_type)}],),  # noqa: E501
@@ -115,6 +119,8 @@ class TabularExportRequest(ModelNormal):
         'format': 'format',  # noqa: E501
         'custom_override': 'customOverride',  # noqa: E501
         'execution_result': 'executionResult',  # noqa: E501
+        'metadata': 'metadata',  # noqa: E501
+        'related_dashboard_id': 'relatedDashboardId',  # noqa: E501
         'settings': 'settings',  # noqa: E501
         'visualization_object': 'visualizationObject',  # noqa: E501
         'visualization_object_custom_filters': 'visualizationObjectCustomFilters',  # noqa: E501
@@ -167,8 +173,10 @@ class TabularExportRequest(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             custom_override (CustomOverride): [optional]  # noqa: E501
             execution_result (str): Execution result identifier.. [optional]  # noqa: E501
+            metadata (JsonNode): [optional]  # noqa: E501
+            related_dashboard_id (str): Analytical dashboard identifier. Optional identifier, which informs the system that the export is related to a specific dashboard.. [optional]  # noqa: E501
             settings (Settings): [optional]  # noqa: E501
-            visualization_object (str): Visualization object identifier. Alternative to executionResult property. (HTML/PDF only). [optional]  # noqa: E501
+            visualization_object (str): Visualization object identifier. Alternative to executionResult property.. [optional]  # noqa: E501
             visualization_object_custom_filters ([{str: (bool, date, datetime, dict, float, int, list, str, none_type)}]): Optional custom filters (as array of IFilter objects defined in UI SDK) to be applied when visualizationObject is given. (HTML/PDF only). [optional]  # noqa: E501
         """
 
@@ -263,8 +271,10 @@ class TabularExportRequest(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             custom_override (CustomOverride): [optional]  # noqa: E501
             execution_result (str): Execution result identifier.. [optional]  # noqa: E501
+            metadata (JsonNode): [optional]  # noqa: E501
+            related_dashboard_id (str): Analytical dashboard identifier. Optional identifier, which informs the system that the export is related to a specific dashboard.. [optional]  # noqa: E501
             settings (Settings): [optional]  # noqa: E501
-            visualization_object (str): Visualization object identifier. Alternative to executionResult property. (HTML/PDF only). [optional]  # noqa: E501
+            visualization_object (str): Visualization object identifier. Alternative to executionResult property.. [optional]  # noqa: E501
             visualization_object_custom_filters ([{str: (bool, date, datetime, dict, float, int, list, str, none_type)}]): Optional custom filters (as array of IFilter objects defined in UI SDK) to be applied when visualizationObject is given. (HTML/PDF only). [optional]  # noqa: E501
         """
 
