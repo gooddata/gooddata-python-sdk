@@ -1,6 +1,6 @@
 #  (C) 2024 GoodData Corporation
 import importlib
-from typing import Dict, Iterable, List, Type
+from typing import Dict, Iterable, List, Tuple, Type
 
 import structlog
 
@@ -21,7 +21,7 @@ class FlexFunRegistry:
         self._loaded_modules: List[str] = []
 
     @property
-    def flex_funs_names(self) -> tuple[str, ...]:
+    def flex_funs_names(self) -> Tuple[str, ...]:
         """
         :return: names of available functions
         """

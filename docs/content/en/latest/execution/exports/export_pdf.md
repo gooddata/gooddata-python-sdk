@@ -12,6 +12,7 @@ superheading: "export."
         timeout: float = 60.0,
         retry: float = 0.2,
         max_retry: float = 5.0,
+        metadata: Optional[Dict[str, Any]] = None,
     )``
 
 Export a PDF of the specified GoodData Dashboard and save it to the specified file path.
@@ -38,6 +39,9 @@ Initial wait time (in seconds) before retrying to get the exported content. Defa
 {{< /parameter >}}
 {{< parameter p_name="max_retry" p_type="float" >}}
 The maximum retry wait time (in seconds). Defaults to 5.0.
+{{< /parameter >}}
+{{< parameter p_name="metadata" p_type="Optional[Dict[str, Any]]" >}}
+Specify the metadata for the export. Specific metadata can override filtering.
 {{< /parameter >}}
 {{% /parameters-block %}}
 

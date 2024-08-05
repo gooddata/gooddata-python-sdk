@@ -1,7 +1,7 @@
 # (C) 2023 GoodData Corporation
 import time
 from pathlib import Path
-from typing import Callable, Optional, Tuple, Union
+from typing import Any, Callable, Dict, Optional, Tuple, Union
 
 from gooddata_api_client.exceptions import NotFoundException
 from gooddata_api_client.model.tabular_export_request import TabularExportRequest
@@ -189,6 +189,7 @@ class ExportService(CatalogServiceBase):
         timeout: float = 60.0,
         retry: float = 0.2,
         max_retry: float = 5.0,
+        metadata: Optional[Dict[str, Any]] = None,
     ) -> None:
         """
         Export a PDF of the specified GoodData Dashboard and save it to the specified file path.
@@ -200,18 +201,25 @@ class ExportService(CatalogServiceBase):
             file_name (str):
                 The name of the PDF file (excluding the file extension).
             store_path (Union[str, Path], optional):
-                The path to save the exported PDF. Defaults to the current directory.
+                The path to save the exported PDF.
+                Defaults to the current directory.
             timeout (float, optional):
-                The maximum amount of time (in seconds) to wait for the server to process the export. Defaults to 60.0.
+                The maximum amount of time (in seconds) to wait for the server to process the export.
+                Defaults to 60.0.
             retry (float, optional):
-                Initial wait time (in seconds) before retrying to get the exported content. Defaults to 0.2.
+                Initial wait time (in seconds) before retrying to get the exported content.
+                Defaults to 0.2.
             max_retry (float, optional):
-                The maximum retry wait time (in seconds). Defaults to 5.0.
+                The maximum retry wait time (in seconds).
+                Defaults to 5.0.
+            metadata (Dict[str, Any]):
+                Specify the metadata for the export.
+                Specific metadata can override filtering.
         """
         if not self._dashboard_id_exists(workspace_id, dashboard_id):
             raise ValueError(f"Dashboard id '{dashboard_id}' does not exist for workspace '{workspace_id}'.")
         store_path = store_path if isinstance(store_path, Path) else Path(store_path)
-        request = VisualExportRequest(dashboard_id=dashboard_id, file_name=file_name)
+        request = VisualExportRequest(dashboard_id=dashboard_id, file_name=file_name, metadata=metadata)
         file_path = store_path / f"{file_name}.pdf"
         create_func = self._actions_api.create_pdf_export
         get_func = self._actions_api.get_exported_file
