@@ -44,6 +44,7 @@ docs/AttributeHierarchiesApi.md
 docs/AttributeItem.md
 docs/AttributeResultHeader.md
 docs/AttributesApi.md
+docs/AutomationSchedule.md
 docs/AutomationsApi.md
 docs/AvailableAssignees.md
 docs/AvailableDriversApi.md
@@ -94,6 +95,7 @@ docs/DeclarativeAnalytics.md
 docs/DeclarativeAnalyticsLayer.md
 docs/DeclarativeAttribute.md
 docs/DeclarativeAttributeHierarchy.md
+docs/DeclarativeAutomation.md
 docs/DeclarativeColorPalette.md
 docs/DeclarativeColumn.md
 docs/DeclarativeCspDirective.md
@@ -107,6 +109,9 @@ docs/DeclarativeDataset.md
 docs/DeclarativeDatasetExtension.md
 docs/DeclarativeDatasetSql.md
 docs/DeclarativeDateDataset.md
+docs/DeclarativeExportDefinition.md
+docs/DeclarativeExportDefinitionIdentifier.md
+docs/DeclarativeExportDefinitionRequestPayload.md
 docs/DeclarativeFact.md
 docs/DeclarativeFilterContext.md
 docs/DeclarativeJwk.md
@@ -115,6 +120,8 @@ docs/DeclarativeLabel.md
 docs/DeclarativeLdm.md
 docs/DeclarativeMetric.md
 docs/DeclarativeModel.md
+docs/DeclarativeNotificationChannel.md
+docs/DeclarativeNotificationChannelIdentifier.md
 docs/DeclarativeOrganization.md
 docs/DeclarativeOrganizationInfo.md
 docs/DeclarativeOrganizationPermission.md
@@ -178,6 +185,7 @@ docs/ExecutionResultHeader.md
 docs/ExecutionResultPaging.md
 docs/ExecutionSettings.md
 docs/ExportDefinitionsApi.md
+docs/ExportRequest.md
 docs/ExportResponse.md
 docs/FactsApi.md
 docs/File.md
@@ -659,6 +667,7 @@ docs/NegativeAttributeFilterNegativeAttributeFilter.md
 docs/Note.md
 docs/Notes.md
 docs/NotificationChannelsApi.md
+docs/NotificationTrigger.md
 docs/ObjectLinks.md
 docs/ObjectLinksContainer.md
 docs/OptionsApi.md
@@ -714,6 +723,7 @@ docs/ScanResultPdm.md
 docs/ScanSqlRequest.md
 docs/ScanSqlResponse.md
 docs/ScanningApi.md
+docs/SearchRelationshipObject.md
 docs/SearchRequest.md
 docs/SearchResult.md
 docs/SearchResultObject.md
@@ -776,6 +786,7 @@ docs/ValidateByItem.md
 docs/VisualExportApi.md
 docs/VisualExportRequest.md
 docs/VisualizationObjectApi.md
+docs/Webhook.md
 docs/WorkspaceDataSource.md
 docs/WorkspaceIdentifier.md
 docs/WorkspaceObjectControllerApi.md
@@ -893,6 +904,7 @@ gooddata_api_client/model/attribute_header_out.py
 gooddata_api_client/model/attribute_header_out_attribute_header.py
 gooddata_api_client/model/attribute_item.py
 gooddata_api_client/model/attribute_result_header.py
+gooddata_api_client/model/automation_schedule.py
 gooddata_api_client/model/available_assignees.py
 gooddata_api_client/model/clustering_request.py
 gooddata_api_client/model/clustering_result.py
@@ -932,6 +944,7 @@ gooddata_api_client/model/declarative_analytics.py
 gooddata_api_client/model/declarative_analytics_layer.py
 gooddata_api_client/model/declarative_attribute.py
 gooddata_api_client/model/declarative_attribute_hierarchy.py
+gooddata_api_client/model/declarative_automation.py
 gooddata_api_client/model/declarative_color_palette.py
 gooddata_api_client/model/declarative_column.py
 gooddata_api_client/model/declarative_csp_directive.py
@@ -945,6 +958,9 @@ gooddata_api_client/model/declarative_dataset.py
 gooddata_api_client/model/declarative_dataset_extension.py
 gooddata_api_client/model/declarative_dataset_sql.py
 gooddata_api_client/model/declarative_date_dataset.py
+gooddata_api_client/model/declarative_export_definition.py
+gooddata_api_client/model/declarative_export_definition_identifier.py
+gooddata_api_client/model/declarative_export_definition_request_payload.py
 gooddata_api_client/model/declarative_fact.py
 gooddata_api_client/model/declarative_filter_context.py
 gooddata_api_client/model/declarative_jwk.py
@@ -953,6 +969,8 @@ gooddata_api_client/model/declarative_label.py
 gooddata_api_client/model/declarative_ldm.py
 gooddata_api_client/model/declarative_metric.py
 gooddata_api_client/model/declarative_model.py
+gooddata_api_client/model/declarative_notification_channel.py
+gooddata_api_client/model/declarative_notification_channel_identifier.py
 gooddata_api_client/model/declarative_organization.py
 gooddata_api_client/model/declarative_organization_info.py
 gooddata_api_client/model/declarative_organization_permission.py
@@ -1012,6 +1030,7 @@ gooddata_api_client/model/execution_result_grand_total.py
 gooddata_api_client/model/execution_result_header.py
 gooddata_api_client/model/execution_result_paging.py
 gooddata_api_client/model/execution_settings.py
+gooddata_api_client/model/export_request.py
 gooddata_api_client/model/export_response.py
 gooddata_api_client/model/file.py
 gooddata_api_client/model/filter_by.py
@@ -1483,6 +1502,7 @@ gooddata_api_client/model/negative_attribute_filter.py
 gooddata_api_client/model/negative_attribute_filter_negative_attribute_filter.py
 gooddata_api_client/model/note.py
 gooddata_api_client/model/notes.py
+gooddata_api_client/model/notification_trigger.py
 gooddata_api_client/model/object_links.py
 gooddata_api_client/model/object_links_container.py
 gooddata_api_client/model/organization_permission_assignment.py
@@ -1529,6 +1549,7 @@ gooddata_api_client/model/scan_request.py
 gooddata_api_client/model/scan_result_pdm.py
 gooddata_api_client/model/scan_sql_request.py
 gooddata_api_client/model/scan_sql_response.py
+gooddata_api_client/model/search_relationship_object.py
 gooddata_api_client/model/search_request.py
 gooddata_api_client/model/search_result.py
 gooddata_api_client/model/search_result_object.py
@@ -1575,6 +1596,7 @@ gooddata_api_client/model/user_management_workspace_permission_assignment.py
 gooddata_api_client/model/user_permission.py
 gooddata_api_client/model/validate_by_item.py
 gooddata_api_client/model/visual_export_request.py
+gooddata_api_client/model/webhook.py
 gooddata_api_client/model/workspace_data_source.py
 gooddata_api_client/model/workspace_identifier.py
 gooddata_api_client/model/workspace_permission_assignment.py

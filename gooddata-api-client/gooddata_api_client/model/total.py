@@ -66,7 +66,7 @@ class Total(ModelNormal):
             'MAX': "MAX",
             'AVG': "AVG",
             'MED': "MED",
-            'NATIVE': "NATIVE",
+            'NAT': "NAT",
         },
     }
 

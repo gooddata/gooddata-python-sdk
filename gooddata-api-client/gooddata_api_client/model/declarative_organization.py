@@ -33,6 +33,7 @@ from gooddata_api_client.exceptions import ApiAttributeError
 def lazy_import():
     from gooddata_api_client.model.declarative_data_source import DeclarativeDataSource
     from gooddata_api_client.model.declarative_jwk import DeclarativeJwk
+    from gooddata_api_client.model.declarative_notification_channel import DeclarativeNotificationChannel
     from gooddata_api_client.model.declarative_organization_info import DeclarativeOrganizationInfo
     from gooddata_api_client.model.declarative_user import DeclarativeUser
     from gooddata_api_client.model.declarative_user_group import DeclarativeUserGroup
@@ -40,6 +41,7 @@ def lazy_import():
     from gooddata_api_client.model.declarative_workspace_data_filter import DeclarativeWorkspaceDataFilter
     globals()['DeclarativeDataSource'] = DeclarativeDataSource
     globals()['DeclarativeJwk'] = DeclarativeJwk
+    globals()['DeclarativeNotificationChannel'] = DeclarativeNotificationChannel
     globals()['DeclarativeOrganizationInfo'] = DeclarativeOrganizationInfo
     globals()['DeclarativeUser'] = DeclarativeUser
     globals()['DeclarativeUserGroup'] = DeclarativeUserGroup
@@ -103,6 +105,7 @@ class DeclarativeOrganization(ModelNormal):
             'organization': (DeclarativeOrganizationInfo,),  # noqa: E501
             'data_sources': ([DeclarativeDataSource],),  # noqa: E501
             'jwks': ([DeclarativeJwk],),  # noqa: E501
+            'notification_channels': ([DeclarativeNotificationChannel],),  # noqa: E501
             'user_groups': ([DeclarativeUserGroup],),  # noqa: E501
             'users': ([DeclarativeUser],),  # noqa: E501
             'workspace_data_filters': ([DeclarativeWorkspaceDataFilter],),  # noqa: E501
@@ -118,6 +121,7 @@ class DeclarativeOrganization(ModelNormal):
         'organization': 'organization',  # noqa: E501
         'data_sources': 'dataSources',  # noqa: E501
         'jwks': 'jwks',  # noqa: E501
+        'notification_channels': 'notificationChannels',  # noqa: E501
         'user_groups': 'userGroups',  # noqa: E501
         'users': 'users',  # noqa: E501
         'workspace_data_filters': 'workspaceDataFilters',  # noqa: E501
@@ -170,6 +174,7 @@ class DeclarativeOrganization(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             data_sources ([DeclarativeDataSource]): [optional]  # noqa: E501
             jwks ([DeclarativeJwk]): [optional]  # noqa: E501
+            notification_channels ([DeclarativeNotificationChannel]): [optional]  # noqa: E501
             user_groups ([DeclarativeUserGroup]): [optional]  # noqa: E501
             users ([DeclarativeUser]): [optional]  # noqa: E501
             workspace_data_filters ([DeclarativeWorkspaceDataFilter]): [optional]  # noqa: E501
@@ -265,6 +270,7 @@ class DeclarativeOrganization(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             data_sources ([DeclarativeDataSource]): [optional]  # noqa: E501
             jwks ([DeclarativeJwk]): [optional]  # noqa: E501
+            notification_channels ([DeclarativeNotificationChannel]): [optional]  # noqa: E501
             user_groups ([DeclarativeUserGroup]): [optional]  # noqa: E501
             users ([DeclarativeUser]): [optional]  # noqa: E501
             workspace_data_filters ([DeclarativeWorkspaceDataFilter]): [optional]  # noqa: E501
