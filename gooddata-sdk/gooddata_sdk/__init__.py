@@ -67,6 +67,7 @@ from gooddata_sdk.catalog.export.request import (
     ExportRequest,
     ExportSettings,
 )
+from gooddata_sdk.catalog.filter_by import CatalogFilterBy
 from gooddata_sdk.catalog.identifier import (
     CatalogAssigneeIdentifier,
     CatalogDatasetWorkspaceDataFilterIdentifier,

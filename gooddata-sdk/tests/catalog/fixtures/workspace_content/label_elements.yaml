@@ -368,3 +368,153 @@ interactions:
             offset: 0
             next: null
           cacheId: 7fe933d079b4018b591f0cd7ea30185f
+  - request:
+      method: POST
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
+      body:
+        label: order_status
+        dependsOn:
+          - label: order_status
+            values:
+              - Canceled
+              - Delivered
+            complementFilter: false
+        validateBy: [ ]
+      headers:
+        Accept:
+          - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
+        Content-Type:
+          - application/json
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+    response:
+      status:
+        code: 200
+        message: OK
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Length:
+          - '261'
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - same-origin
+        Set-Cookie:
+          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
+            GMT; HttpOnly; SameSite=Lax
+        Vary:
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      body:
+        string:
+          primaryLabel:
+            id: order_status
+            type: label
+          elements:
+            - title: Canceled
+              primaryTitle: Canceled
+            - title: Delivered
+              primaryTitle: Delivered
+          paging:
+            total: 2
+            count: 2
+            offset: 0
+            next: null
+          cacheId: 11c8c486e7cc0402e6f14bc0dd3f1d35
+  - request:
+      method: POST
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
+      body:
+        label: customer_name
+        dependsOn: [ ]
+        validateBy: [ ]
+        exactFilter:
+          - 'C-02AZUA9H'
+          - 'C-0159TVP7'
+        filterBy:
+          labelType: PRIMARY
+      headers:
+        Accept:
+          - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
+        Content-Type:
+          - application/json
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+    response:
+      status:
+        code: 200
+        message: OK
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Length:
+          - '273'
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - same-origin
+        Set-Cookie:
+          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
+            GMT; HttpOnly; SameSite=Lax
+        Vary:
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      body:
+        string:
+          primaryLabel:
+            id: customer_id
+            type: label
+          elements:
+            - title: Jennifer Miller
+              primaryTitle: C-02AZUA9H
+            - title: William Ross
+              primaryTitle: C-0159TVP7
+          paging:
+            total: 2
+            count: 2
+            offset: 0
+            next: null
+          cacheId: 940798a736c77273652b9cfd53254528
