@@ -12,6 +12,7 @@ from gooddata_api_client.model.elements_request import ElementsRequest
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.data_source.validation.data_source import DataSourceValidator
 from gooddata_sdk.catalog.depends_on import CatalogDependsOn, CatalogDependsOnDateFilter
+from gooddata_sdk.catalog.filter_by import CatalogFilterBy
 from gooddata_sdk.catalog.types import ValidObjects
 from gooddata_sdk.catalog.validate_by_item import CatalogValidateByItem
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.analytics_model import (
@@ -564,6 +565,8 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         label_id: LabelElementsInputType,
         depends_on: Optional[List[DependsOnItem]] = None,
         validate_by: Optional[List[CatalogValidateByItem]] = None,
+        exact_filter: Optional[List[str]] = None,
+        filter_by: Optional[CatalogFilterBy] = None,
     ) -> List[str]:
         """
         Get existing values for a label.
@@ -580,6 +583,11 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
                 Optional parameter specifying dependencies on other labels or date filters.
             validate_by (Optional[List[CatalogValidateByItem]]):
                 Optional parameter specifying validation metrics, attributes, labels or facts.
+            exact_filter (Optional[List[str]]):
+                Optional parameter specifying exact filter values.
+            filter_by (Optional[CatalogFilterBy]):
+                Optional parameter specifying which label is used for filtering - primary or requested.
+                If omitted the server will use the default value of "REQUESTED"
         Returns:
             list of label values
         """
@@ -597,6 +605,13 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         request = ElementsRequest(
             label=label_id, depends_on=[d.to_api() for d in depends_on], validate_by=[v.to_api() for v in validate_by]
         )
+
+        if exact_filter is not None:
+            request.exact_filter = exact_filter
+
+        if filter_by is not None:
+            request.filter_by = filter_by.to_api()
+
         # TODO - fix return type of Paging.next in Backend + add support for this API to SDK
         values = self._actions_api.compute_label_elements_post(workspace_id, request, _check_return_type=False)
         return [v["title"] for v in values["elements"]]
