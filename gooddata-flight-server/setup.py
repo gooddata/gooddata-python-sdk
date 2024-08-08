@@ -22,7 +22,7 @@ setup(
     description="Flight RPC server to host custom functions for GoodData Cloud",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    version="1.23.0",
+    version="1.24.0",
     author="GoodData",
     author_email="support@gooddata.com",
     license="MIT",
@@ -33,7 +33,7 @@ setup(
     include_package_data=True,
     python_requires=">=3.8.0",
     project_urls={
-        "Documentation": "https://gooddata-flight-server.readthedocs.io/en/v1.23.0",
+        "Documentation": "https://gooddata-flight-server.readthedocs.io/en/v1.24.0",
         "Source": "https://github.com/gooddata/gooddata-python-sdk",
     },
     scripts=[
