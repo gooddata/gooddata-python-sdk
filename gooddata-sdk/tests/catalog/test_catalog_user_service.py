@@ -4,7 +4,6 @@ from __future__ import annotations
 import copy
 import json
 from pathlib import Path
-from typing import List
 
 from gooddata_sdk import (
     CatalogAssigneeIdentifier,
@@ -642,12 +641,12 @@ def test_revoke_permissions_bulk(test_config):
 # Help functions
 
 
-def _assert_users_default(users: List[CatalogDeclarativeUser]):
+def _assert_users_default(users: list[CatalogDeclarativeUser]):
     assert len(users) == 3
     assert [user.id for user in users] == ["admin", "demo", "demo2"]
 
 
-def _assert_user_groups_default(user_groups: List[CatalogDeclarativeUserGroup]):
+def _assert_user_groups_default(user_groups: list[CatalogDeclarativeUserGroup]):
     assert len(user_groups) == 4
     assert set(user_group.id for user_group in user_groups) == {
         "adminGroup",

@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import hashlib
 import uuid
-from typing import Any, Dict, Optional, Union
+from typing import Any, Optional, Union
 
 import pandas
 from gooddata_sdk import (
@@ -20,8 +20,8 @@ from pandas import Index, MultiIndex
 
 LabelItemDef = Union[Attribute, ObjId, str]
 DataItemDef = Union[Attribute, Metric, ObjId, str]
-IndexDef = Union[LabelItemDef, Dict[str, LabelItemDef]]
-ColumnsDef = Dict[str, DataItemDef]
+IndexDef = Union[LabelItemDef, dict[str, LabelItemDef]]
+ColumnsDef = dict[str, DataItemDef]
 
 # register external pandas types to converters
 IntegerConverter.set_external_fnc(lambda self, value: pandas.to_numeric(value))

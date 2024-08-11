@@ -1,7 +1,7 @@
 # (C) 2023 GoodData Corporation
 import logging
 from pathlib import Path
-from typing import Any, List, Union
+from typing import Any, Union
 
 from gooddata_sdk import (
     CatalogDataSourceMotherDuck,
@@ -35,7 +35,7 @@ class GoodDataApiWrapper:
         self.logger = logger
         self.dry_run = dry_run
 
-    def get_visualizations(self, workspace_id: str) -> List[Visualization]:
+    def get_visualizations(self, workspace_id: str) -> list[Visualization]:
         if self.dry_run:
             self.logger.info("Dry run - skipping visualizations listing")
             return []

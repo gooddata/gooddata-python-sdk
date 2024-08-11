@@ -9,7 +9,7 @@ There are two main pieces:
 -  FlightServerMethods - base class containing typed definitions of all Flight RPC Methods
 """
 
-from typing import Dict, Generator, List, Optional, Tuple, Union
+from typing import Generator, Optional, Union
 
 import pyarrow.flight
 from typing_extensions import TypeAlias
@@ -18,9 +18,9 @@ from gooddata_flight_server.server.flight_rpc.server_methods import (
     FlightServerMethods,
 )
 
-FlightServerLocation: TypeAlias = Union[str, bytes, Optional[Tuple[str, int]], pyarrow.flight.Location]
-FlightTlsCertificates: TypeAlias = List[Tuple[bytes, bytes]]
-FlightMiddlewares: TypeAlias = Dict[str, pyarrow.flight.ServerMiddlewareFactory]
+FlightServerLocation: TypeAlias = Union[str, bytes, Optional[tuple[str, int]], pyarrow.flight.Location]
+FlightTlsCertificates: TypeAlias = list[tuple[bytes, bytes]]
+FlightMiddlewares: TypeAlias = dict[str, pyarrow.flight.ServerMiddlewareFactory]
 
 
 class FlightServer(pyarrow.flight.FlightServerBase):
@@ -165,7 +165,7 @@ class FlightServer(pyarrow.flight.FlightServerBase):
     ) -> None:
         return self._methods.do_exchange(context, descriptor, reader, writer)
 
-    def list_actions(self, context: pyarrow.flight.ServerCallContext) -> List[Tuple[str, str]]:
+    def list_actions(self, context: pyarrow.flight.ServerCallContext) -> list[tuple[str, str]]:
         return self._methods.list_actions(context)
 
     def do_action(

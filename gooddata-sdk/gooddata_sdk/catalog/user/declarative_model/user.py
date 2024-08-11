@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import List, Optional, Type
+from typing import Optional
 
 import attr
 from gooddata_api_client.model.declarative_user import DeclarativeUser
@@ -20,10 +20,10 @@ LAYOUT_USERS_FILE = "users.yaml"
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeUsers(Base):
-    users: List[CatalogDeclarativeUser]
+    users: list[CatalogDeclarativeUser]
 
     @staticmethod
-    def client_class() -> Type[DeclarativeUsers]:
+    def client_class() -> type[DeclarativeUsers]:
         return DeclarativeUsers
 
     @classmethod
@@ -51,12 +51,12 @@ class CatalogDeclarativeUser(Base):
     firstname: Optional[str] = None
     lastname: Optional[str] = None
     auth_id: Optional[str] = None
-    user_groups: List[CatalogDeclarativeUserGroupIdentifier] = attr.field(factory=list)
-    settings: List[CatalogDeclarativeSetting] = attr.field(factory=list)
-    permissions: List[CatalogDeclarativeUserPermission] = attr.field(factory=list)
+    user_groups: list[CatalogDeclarativeUserGroupIdentifier] = attr.field(factory=list)
+    settings: list[CatalogDeclarativeSetting] = attr.field(factory=list)
+    permissions: list[CatalogDeclarativeUserPermission] = attr.field(factory=list)
 
     @staticmethod
-    def client_class() -> Type[DeclarativeUser]:
+    def client_class() -> type[DeclarativeUser]:
         return DeclarativeUser
 
 
@@ -66,5 +66,5 @@ class CatalogDeclarativeUserPermission(Base):
     assignee: CatalogAssigneeIdentifier
 
     @staticmethod
-    def client_class() -> Type[DeclarativeUserPermission]:
+    def client_class() -> type[DeclarativeUserPermission]:
         return DeclarativeUserPermission

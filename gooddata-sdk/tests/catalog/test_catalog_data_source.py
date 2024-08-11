@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import List, Optional, Type
+from typing import Optional
 from unittest import mock
 from unittest.mock import MagicMock
 
@@ -110,7 +110,7 @@ def test_scan_pdm_and_generate_logical_model(test_config: dict):
     assert len(declarative_model.ldm.date_instances) == len(generated_declarative_model.ldm.date_instances)
 
 
-def build_pdm_sql_datasets() -> List[CatalogPdmSql]:
+def build_pdm_sql_datasets() -> list[CatalogPdmSql]:
     return [
         # Test sql-dataset specific attributes, facts, references
         CatalogPdmSql(
@@ -227,7 +227,7 @@ def _create_default_data_source(sdk: GoodDataSdk, data_source_id: str = "test"):
     assert expected_data_source == data_source
 
 
-def _get_data_source(data_sources: List[CatalogDataSource], data_source_id: str) -> Optional[CatalogDataSource]:
+def _get_data_source(data_sources: list[CatalogDataSource], data_source_id: str) -> Optional[CatalogDataSource]:
     for data_source in data_sources:
         if data_source.id == data_source_id:
             return data_source
@@ -739,13 +739,13 @@ def test_allowed_data_source_type(test_config):
     ],
 )
 def test_jdbc_urls_creation(
-    db_class: Type[CatalogDataSource],
-    attributes: Type[DatabaseAttributes],
+    db_class: type[CatalogDataSource],
+    attributes: type[DatabaseAttributes],
     url: str,
-    parameters: Optional[List],
-    url_params: Optional[List],
+    parameters: Optional[list],
+    url_params: Optional[list],
 ):
-    db_class: Type[CatalogDataSource] = db_class
+    db_class: type[CatalogDataSource] = db_class
     data_source = db_class(
         id="test",
         name="Test",

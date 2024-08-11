@@ -1,6 +1,4 @@
 # (C) 2022 GoodData Corporation
-from typing import Type
-
 import attr
 from gooddata_api_client.model.parameter import Parameter
 
@@ -13,5 +11,5 @@ class CatalogParameter(Base):
     value: str
 
     @staticmethod
-    def client_class() -> Type[Parameter]:
+    def client_class() -> type[Parameter]:
         return Parameter

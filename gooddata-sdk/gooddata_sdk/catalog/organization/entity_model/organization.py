@@ -1,7 +1,7 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import List, Optional, Type
+from typing import Optional
 
 import attr
 from gooddata_api_client.model.json_api_organization_in import JsonApiOrganizationIn
@@ -16,7 +16,7 @@ class CatalogOrganizationDocument(Base):
     data: CatalogOrganization
 
     @staticmethod
-    def client_class() -> Type[JsonApiOrganizationInDocument]:
+    def client_class() -> type[JsonApiOrganizationInDocument]:
         return JsonApiOrganizationInDocument
 
     def to_api(self, oauth_client_secret: Optional[str] = None) -> JsonApiOrganizationInDocument:
@@ -32,7 +32,7 @@ class CatalogOrganization(Base):
     attributes: CatalogOrganizationAttributes
 
     @staticmethod
-    def client_class() -> Type[JsonApiOrganizationIn]:
+    def client_class() -> type[JsonApiOrganizationIn]:
         return JsonApiOrganizationIn
 
 
@@ -40,10 +40,10 @@ class CatalogOrganization(Base):
 class CatalogOrganizationAttributes(Base):
     name: Optional[str] = None
     hostname: Optional[str] = None
-    allowed_origins: Optional[List[str]] = None
+    allowed_origins: Optional[list[str]] = None
     oauth_issuer_location: Optional[str] = None
     oauth_client_id: Optional[str] = None
 
     @staticmethod
-    def client_class() -> Type[JsonApiOrganizationInAttributes]:
+    def client_class() -> type[JsonApiOrganizationInAttributes]:
         return JsonApiOrganizationInAttributes

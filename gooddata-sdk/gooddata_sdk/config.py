@@ -1,6 +1,6 @@
 # (C) 2024 GoodData Corporation
 import os
-from typing import Any, Dict, Optional, Type, TypeVar
+from typing import Any, Optional, TypeVar
 
 import attrs
 from attrs import define
@@ -13,15 +13,15 @@ T = TypeVar("T", bound="ConfigBase")
 
 @define
 class ConfigBase:
-    def to_dict(self) -> Dict[str, str]:
+    def to_dict(self) -> dict[str, str]:
         return attrs.asdict(self)
 
     @classmethod
-    def from_dict(cls: Type[T], data: Dict[str, Any]) -> T:
+    def from_dict(cls: type[T], data: dict[str, Any]) -> T:
         return structure(data, cls)
 
     @classmethod
-    def can_structure(cls: Type[T], data: Dict[str, Any]) -> bool:
+    def can_structure(cls: type[T], data: dict[str, Any]) -> bool:
         try:
             cls.from_dict(data)
             return True
@@ -33,10 +33,10 @@ class ConfigBase:
 class Profile(ConfigBase):
     host: str
     token: str
-    custom_headers: Optional[Dict[str, str]] = None
+    custom_headers: Optional[dict[str, str]] = None
     extra_user_agent: Optional[str] = None
 
-    def to_dict(self, use_env: bool = False) -> Dict[str, str]:
+    def to_dict(self, use_env: bool = False) -> dict[str, str]:
         load_dotenv()
         if not use_env:
             return attrs.asdict(self)
@@ -48,10 +48,10 @@ class Profile(ConfigBase):
 
 @define
 class AacConfig(ConfigBase):
-    profiles: Dict[str, Profile]
+    profiles: dict[str, Profile]
     default_profile: str
-    access: Dict[str, str]
+    access: dict[str, str]
 
-    def ds_credentials(self) -> Dict[str, str]:
+    def ds_credentials(self) -> dict[str, str]:
         load_dotenv()
         return {k: os.environ.get(v[1:], v) for k, v in self.access.items()}

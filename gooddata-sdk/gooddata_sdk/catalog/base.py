@@ -1,7 +1,8 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional, Type, TypeVar
+import builtins
+from typing import Any, Optional, TypeVar
 
 import attr
 from cattrs import structure
@@ -13,7 +14,7 @@ U = TypeVar("U", bound="JsonApiEntityBase")
 
 
 def value_in_allowed(
-    instance: Type[Base], attribute: attr.Attribute, value: str, client_class: Optional[Any] = None
+    instance: type[Base], attribute: attr.Attribute, value: str, client_class: Optional[Any] = None
 ) -> None:
     if client_class is None:
         client_class = instance.client_class()
@@ -28,14 +29,14 @@ def value_in_allowed(
 @attr.s
 class Base:
     @classmethod
-    def from_api(cls: Type[T], entity: Dict[str, Any]) -> T:
+    def from_api(cls: type[T], entity: dict[str, Any]) -> T:
         """
         Creates object from entity passed by client class, which represents it as dictionary.
         """
         return structure(entity, cls)
 
     @classmethod
-    def from_dict(cls: Type[T], data: Dict[str, Any], camel_case: bool = True) -> T:
+    def from_dict(cls: type[T], data: dict[str, Any], camel_case: bool = True) -> T:
         """
         Creates object from dictionary. It needs to be specified if the dictionary is in camelCase or snake_case.
         """
@@ -43,7 +44,7 @@ class Base:
             data = cls.client_class().from_dict(data, camel_case).to_dict()
         return structure(data, cls)
 
-    def to_dict(self, camel_case: bool = True) -> Dict[str, Any]:
+    def to_dict(self, camel_case: bool = True) -> dict[str, Any]:
         """
         Converts object into dictionary. Optional argument if the dictionary should be camelCase or snake_case can be
         specified.
@@ -57,7 +58,7 @@ class Base:
     def _is_attribute_private(attribute: attr.Attribute) -> bool:
         return attribute.name.startswith("_")
 
-    def _get_snake_dict(self) -> Dict[str, Any]:
+    def _get_snake_dict(self) -> dict[str, Any]:
         return attr.asdict(
             self, filter=lambda attribute, value: value is not None and not self._is_attribute_private(attribute)
         )
@@ -75,19 +76,19 @@ class Base:
 class JsonApiEntityBase:
     id: str
     type: str
-    attributes: Dict[str, Any] = attr.field(repr=False)
-    relationships: Optional[Dict[str, Any]] = attr.field(repr=False, default=None)
-    meta: Optional[Dict[str, Any]] = attr.field(repr=False, default=None)
-    links: Optional[Dict[str, Any]] = attr.field(repr=False, default=None)
-    related_entities_data: List[Dict[str, Any]] = attr.field(repr=False, default=list)
-    related_entities_side_loads: List[Dict[str, Any]] = attr.field(repr=False, default=list)
-    side_loads: List[Dict[str, Any]] = attr.field(repr=False, default=list)
+    attributes: dict[str, Any] = attr.field(repr=False)
+    relationships: Optional[dict[str, Any]] = attr.field(repr=False, default=None)
+    meta: Optional[dict[str, Any]] = attr.field(repr=False, default=None)
+    links: Optional[dict[str, Any]] = attr.field(repr=False, default=None)
+    related_entities_data: list[dict[str, Any]] = attr.field(repr=False, default=list)
+    related_entities_side_loads: list[dict[str, Any]] = attr.field(repr=False, default=list)
+    side_loads: list[dict[str, Any]] = attr.field(repr=False, default=list)
 
     @classmethod
     def from_api(
         cls,
-        entity: Dict[str, Any],
-        side_loads: Optional[List[Any]] = None,
+        entity: dict[str, Any],
+        side_loads: Optional[list[Any]] = None,
         related_entities: Optional[AllPagedEntities] = None,
     ) -> JsonApiEntityBase:
         """
@@ -99,11 +100,11 @@ class JsonApiEntityBase:
         return structure(entity, cls)
 
     @classmethod
-    def from_dict(cls: Type[U], data: Dict[str, Any]) -> U:
+    def from_dict(cls: builtins.type[U], data: dict[str, Any]) -> U:
         return NotImplemented
 
     @staticmethod
-    def to_dict() -> Dict[str, Any]:
+    def to_dict() -> dict[str, Any]:
         return NotImplemented
 
     @staticmethod

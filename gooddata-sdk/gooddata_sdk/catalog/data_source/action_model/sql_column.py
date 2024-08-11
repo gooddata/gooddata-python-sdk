@@ -1,8 +1,6 @@
 # (C) 2023 GoodData Corporation
 from __future__ import annotations
 
-from typing import Type
-
 import attr
 from gooddata_api_client.model.sql_column import SqlColumn as ApiSqlColumn
 
@@ -15,5 +13,5 @@ class SqlColumn(Base):
     name: str
 
     @staticmethod
-    def client_class() -> Type[ApiSqlColumn]:
+    def client_class() -> type[ApiSqlColumn]:
         return ApiSqlColumn

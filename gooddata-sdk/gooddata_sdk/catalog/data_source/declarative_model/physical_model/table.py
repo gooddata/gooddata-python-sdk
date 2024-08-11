@@ -1,8 +1,9 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
+import builtins
 from pathlib import Path
-from typing import List, Optional, Type
+from typing import Optional
 
 import attr
 from gooddata_api_client.model.declarative_table import DeclarativeTable
@@ -16,12 +17,12 @@ from gooddata_sdk.utils import read_layout_from_file, write_layout_to_file
 class CatalogDeclarativeTable(Base):
     id: str
     type: str
-    path: List[str]
-    columns: List[CatalogDeclarativeColumn]
+    path: list[str]
+    columns: list[CatalogDeclarativeColumn]
     name_prefix: Optional[str] = None
 
     @staticmethod
-    def client_class() -> Type[DeclarativeTable]:
+    def client_class() -> builtins.type[DeclarativeTable]:
         return DeclarativeTable
 
     def store_to_disk(self, pdm_folder: Path) -> None:

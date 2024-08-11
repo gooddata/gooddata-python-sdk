@@ -1,6 +1,6 @@
 # (C) 2022 GoodData Corporation
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import Optional
 
 from gooddata_pandas import DataFrameFactory
 from gooddata_sdk import (
@@ -25,8 +25,8 @@ _fixtures_dir = _current_dir / "fixtures"
 def _run_and_validate_results(
     gdf: DataFrameFactory,
     exec_def: ExecutionDefinition,
-    expected: Tuple[int, int],
-    expected_row_totals: Optional[List[List[int]]] = None,
+    expected: tuple[int, int],
+    expected_row_totals: Optional[list[list[int]]] = None,
     page_size: int = 100,
 ) -> str:
     # generate dataframe from exec_def

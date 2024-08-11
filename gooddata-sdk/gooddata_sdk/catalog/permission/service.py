@@ -1,5 +1,5 @@
 # (C) 2022 GoodData Corporation
-from typing import List, Union
+from typing import Union
 
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.permission.declarative_model.dashboard_assignees import CatalogAvailableAssignees
@@ -89,7 +89,7 @@ class CatalogPermissionService(CatalogServiceBase):
         self,
         workspace_id: str,
         dashboard_id: str,
-        permissions_for_assignee: List[
+        permissions_for_assignee: list[
             Union[CatalogPermissionsForAssigneeIdentifier, CatalogPermissionsForAssigneeRule]
         ],
     ) -> None:
@@ -113,7 +113,7 @@ class CatalogPermissionService(CatalogServiceBase):
             _check_return_type=False,
         )
 
-    def get_declarative_organization_permissions(self) -> List[CatalogDeclarativeOrganizationPermission]:
+    def get_declarative_organization_permissions(self) -> list[CatalogDeclarativeOrganizationPermission]:
         """Get a list of all declarative organization permissions.
 
         Args:
@@ -131,7 +131,7 @@ class CatalogPermissionService(CatalogServiceBase):
         return catalog_list
 
     def put_declarative_organization_permissions(
-        self, org_permissions: List[CatalogDeclarativeOrganizationPermission]
+        self, org_permissions: list[CatalogDeclarativeOrganizationPermission]
     ) -> None:
         """Put a list of all declarative organization permissions.
 
@@ -149,7 +149,7 @@ class CatalogPermissionService(CatalogServiceBase):
         self._layout_api.set_organization_permissions(declarative_organization_permissions)
 
     def manage_organization_permissions(
-        self, organization_permission_assignments: List[CatalogOrganizationPermissionAssignment]
+        self, organization_permission_assignments: list[CatalogOrganizationPermissionAssignment]
     ) -> None:
         """Provide managing organization permissions for user and user groups.
 

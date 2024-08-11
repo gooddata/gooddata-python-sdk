@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import functools
 from pathlib import Path
-from typing import List
 
 from gooddata_api_client.exceptions import NotFoundException
 
@@ -70,14 +69,14 @@ class CatalogUserService(CatalogServiceBase):
         """
         self._entities_api.delete_entity_users(id=user_id)
 
-    def list_users(self) -> List[CatalogUser]:
+    def list_users(self) -> list[CatalogUser]:
         """Get a list of all existing users.
 
         Args:
             None
 
         Returns:
-            List[CatalogUser]:
+            list[CatalogUser]:
                 List of all Users as User entity objects.
         """
         get_users = functools.partial(
@@ -138,14 +137,14 @@ class CatalogUserService(CatalogServiceBase):
         """
         self._entities_api.delete_entity_user_groups(id=user_group_id)
 
-    def list_user_groups(self) -> List[CatalogUserGroup]:
+    def list_user_groups(self) -> list[CatalogUserGroup]:
         """Get a list of all existing user groups.
 
         Args:
             None
 
         Returns:
-            List[CatalogUserGroup]:
+            list[CatalogUserGroup]:
                 List of all User groups as UserGroup entity object.
         """
         get_user_groups = functools.partial(

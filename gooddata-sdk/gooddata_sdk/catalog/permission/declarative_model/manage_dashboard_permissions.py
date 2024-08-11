@@ -1,6 +1,4 @@
 # (C) 2023 GoodData Corporation
-from typing import List, Type
-
 import attr
 from gooddata_api_client.model.manage_dashboard_permissions_request_inner import ManageDashboardPermissionsRequestInner
 
@@ -17,19 +15,19 @@ class CatalogDashboardAssigneeIdentifier(CatalogAssigneeIdentifier):
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogPermissionsForAssigneeIdentifier(Base):
-    permissions: List[str] = attr.field(factory=list)
+    permissions: list[str] = attr.field(factory=list)
     assignee_identifier: CatalogAssigneeIdentifier
 
     @staticmethod
-    def client_class() -> Type[ManageDashboardPermissionsRequestInner]:
+    def client_class() -> type[ManageDashboardPermissionsRequestInner]:
         return ManageDashboardPermissionsRequestInner
 
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogPermissionsForAssigneeRule(Base):
-    permissions: List[str] = attr.field(factory=list)
+    permissions: list[str] = attr.field(factory=list)
     assignee_rule: CatalogAssigneeRule
 
     @staticmethod
-    def client_class() -> Type[ManageDashboardPermissionsRequestInner]:
+    def client_class() -> type[ManageDashboardPermissionsRequestInner]:
         return ManageDashboardPermissionsRequestInner

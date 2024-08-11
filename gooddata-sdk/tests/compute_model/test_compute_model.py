@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import json
 import os
-from typing import List, Optional
+from typing import Optional
 
 import pytest
 from gooddata_sdk.compute.model.attribute import Attribute
@@ -84,9 +84,9 @@ test_inputs = [
 @pytest.mark.parametrize("scenario,attributes,metrics,filters", test_inputs)
 def test_attribute_filters_to_api_model(
     scenario: str,
-    attributes: Optional[List[Attribute]],
-    metrics: Optional[List[Metric]],
-    filters: Optional[List[Filter]],
+    attributes: Optional[list[Attribute]],
+    metrics: Optional[list[Metric]],
+    filters: Optional[list[Filter]],
     snapshot,
 ):
     # it is essential to define snapshot dir using absolute path, otherwise snapshots cannot be found when

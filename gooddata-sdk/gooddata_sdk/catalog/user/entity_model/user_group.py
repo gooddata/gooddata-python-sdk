@@ -1,7 +1,7 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import List, Optional, Type
+from typing import Optional
 
 import attr
 from gooddata_api_client.model.json_api_user_group_in import JsonApiUserGroupIn
@@ -15,14 +15,14 @@ class CatalogUserGroupDocument(Base):
     data: CatalogUserGroup
 
     @staticmethod
-    def client_class() -> Type[JsonApiUserGroupInDocument]:
+    def client_class() -> type[JsonApiUserGroupInDocument]:
         return JsonApiUserGroupInDocument
 
     @classmethod
-    def init(cls, user_group_id: str, user_group_parent_ids: Optional[List[str]] = None) -> CatalogUserGroupDocument:
+    def init(cls, user_group_id: str, user_group_parent_ids: Optional[list[str]] = None) -> CatalogUserGroupDocument:
         return cls(data=CatalogUserGroup.init(user_group_id=user_group_id, user_group_parent_ids=user_group_parent_ids))
 
-    def update_user_group(self, user_group_parents_id: Optional[List[str]] = None) -> None:
+    def update_user_group(self, user_group_parents_id: Optional[list[str]] = None) -> None:
         relationships = CatalogUserGroupRelationships.create_user_group_relationships(user_group_parents_id)
         self.data.relationships = relationships
 
@@ -34,7 +34,7 @@ class CatalogUserGroup(Base):
     relationships: Optional[CatalogUserGroupRelationships] = None
 
     @staticmethod
-    def client_class() -> Type[JsonApiUserGroupIn]:
+    def client_class() -> type[JsonApiUserGroupIn]:
         return JsonApiUserGroupIn
 
     @classmethod
@@ -42,14 +42,14 @@ class CatalogUserGroup(Base):
         cls,
         user_group_id: str,
         user_group_name: Optional[str] = None,
-        user_group_parent_ids: Optional[List[str]] = None,
+        user_group_parent_ids: Optional[list[str]] = None,
     ) -> CatalogUserGroup:
         attributes = CatalogUserGroupAttributes(name=user_group_name)
         relationships = CatalogUserGroupRelationships.create_user_group_relationships(user_group_parent_ids)
         return cls(id=user_group_id, attributes=attributes, relationships=relationships)
 
     @property
-    def get_parents(self) -> List[str]:
+    def get_parents(self) -> list[str]:
         return self.relationships.get_parents if self.relationships is not None else []
 
     @property
@@ -65,7 +65,7 @@ class CatalogUserGroupRelationships(Base):
 
     @classmethod
     def create_user_group_relationships(
-        cls, user_group_parent_ids: Optional[List[str]]
+        cls, user_group_parent_ids: Optional[list[str]]
     ) -> CatalogUserGroupRelationships:
         parents = None
         if user_group_parent_ids is not None:
@@ -75,7 +75,7 @@ class CatalogUserGroupRelationships(Base):
         return cls(parents=parents)
 
     @property
-    def get_parents(self) -> List[str]:
+    def get_parents(self) -> list[str]:
         return self.parents.get_parents if self.parents is not None else []
 
 
@@ -86,8 +86,8 @@ class CatalogUserGroupAttributes(Base):
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogUserGroupParents(Base):
-    data: Optional[List[CatalogUserGroup]] = None
+    data: Optional[list[CatalogUserGroup]] = None
 
     @property
-    def get_parents(self) -> List[str]:
+    def get_parents(self) -> list[str]:
         return [user_group.id for user_group in self.data] if self.data is not None else []

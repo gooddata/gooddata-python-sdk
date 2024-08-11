@@ -1,5 +1,5 @@
 # (C) 2023 GoodData Corporation
-from typing import List, Optional, Type
+from typing import Optional, Type
 
 import attr
 from gooddata_api_client.model.dashboard_permissions import DashboardPermissions
@@ -17,7 +17,7 @@ class CatalogGrantedPermission(Base):
     source: str
 
     @staticmethod
-    def client_class() -> Type[GrantedPermission]:
+    def client_class() -> type[GrantedPermission]:
         return GrantedPermission
 
 
@@ -26,10 +26,10 @@ class CatalogUserPermission(Base):
     id: str
     name: Optional[str] = None
     email: Optional[str] = None
-    permissions: Optional[List[CatalogGrantedPermission]] = None
+    permissions: Optional[list[CatalogGrantedPermission]] = None
 
     @staticmethod
-    def client_class() -> Type[UserPermission]:
+    def client_class() -> type[UserPermission]:
         return UserPermission
 
 
@@ -37,29 +37,29 @@ class CatalogUserPermission(Base):
 class CatalogUserGroupPermission(Base):
     id: str
     name: Optional[str] = None
-    permissions: Optional[List[CatalogGrantedPermission]] = None
+    permissions: Optional[list[CatalogGrantedPermission]] = None
 
     @staticmethod
-    def client_class() -> Type[UserGroupPermission]:
+    def client_class() -> type[UserGroupPermission]:
         return UserGroupPermission
 
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogRulePermission(Base):
     type: str
-    permissions: Optional[List[str]] = None
+    permissions: Optional[list[str]] = None
 
     @staticmethod
-    def client_class() -> Type[RulePermission]:
+    def client_class() -> Type[RulePermission]:  # noqa: UP006
         return RulePermission
 
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDashboardPermissions(Base):
-    rules: List[CatalogRulePermission]
-    user_groups: List[CatalogUserGroupPermission]
-    users: List[CatalogUserPermission]
+    rules: list[CatalogRulePermission]
+    user_groups: list[CatalogUserGroupPermission]
+    users: list[CatalogUserPermission]
 
     @staticmethod
-    def client_class() -> Type[DashboardPermissions]:
+    def client_class() -> type[DashboardPermissions]:
         return DashboardPermissions

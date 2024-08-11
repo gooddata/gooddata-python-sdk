@@ -1,5 +1,5 @@
 #  (C) 2024 GoodData Corporation
-from typing import Optional, Tuple, Union
+from typing import Optional, Union
 
 import pyarrow.flight
 from dynaconf import Dynaconf
@@ -104,7 +104,7 @@ class GoodDataFlightServer(ServerBase):
 
 def create_server(
     methods: Optional[Union[FlightServerMethods, FlightServerMethodsFactory]] = None,
-    config_files: Tuple[str, ...] = (),
+    config_files: tuple[str, ...] = (),
     logging_config: str = DEFAULT_LOGGING_INI,
     dev_log: bool = True,
 ) -> "GoodDataFlightServer":

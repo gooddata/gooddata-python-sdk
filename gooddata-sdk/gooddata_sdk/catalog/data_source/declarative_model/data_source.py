@@ -1,8 +1,9 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
+import builtins
 from pathlib import Path
-from typing import Any, List, Optional, Type, Union
+from typing import Any, Optional, Union
 from warnings import warn
 
 import attr
@@ -22,7 +23,7 @@ LAYOUT_DATA_SOURCES_DIR = "data_sources"
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeDataSources(Base):
-    data_sources: List[CatalogDeclarativeDataSource]
+    data_sources: list[CatalogDeclarativeDataSource]
 
     def _inject_base(self, credentials: dict[str, Any]) -> DeclarativeDataSources:
         data_sources = []
@@ -67,7 +68,7 @@ class CatalogDeclarativeDataSources(Base):
             return self._inject_credentials_aac(config_file)
 
     @staticmethod
-    def client_class() -> Type[DeclarativeDataSources]:
+    def client_class() -> type[DeclarativeDataSources]:
         return DeclarativeDataSources
 
     @staticmethod
@@ -99,9 +100,9 @@ class CatalogDeclarativeDataSource(Base):
     schema: str
     cache_strategy: Optional[str] = None
     username: Optional[str] = None
-    parameters: Optional[List[CatalogParameter]] = None
-    decoded_parameters: Optional[List[CatalogParameter]] = None
-    permissions: List[CatalogDeclarativeDataSourcePermission] = attr.field(factory=list)
+    parameters: Optional[list[CatalogParameter]] = None
+    decoded_parameters: Optional[list[CatalogParameter]] = None
+    permissions: list[CatalogDeclarativeDataSourcePermission] = attr.field(factory=list)
 
     def to_test_request(
         self,
@@ -124,7 +125,7 @@ class CatalogDeclarativeDataSource(Base):
         return TestDefinitionRequest(type=self.type, url=self.url, **kwargs)
 
     @staticmethod
-    def client_class() -> Type[DeclarativeDataSource]:
+    def client_class() -> builtins.type[DeclarativeDataSource]:
         return DeclarativeDataSource
 
     @staticmethod

@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import List, Optional, Type
+from typing import Optional
 
 import attr
 from gooddata_api_client.model.declarative_date_dataset import DeclarativeDateDataset
@@ -19,12 +19,12 @@ class CatalogDeclarativeDateDataset(Base):
     id: str
     title: str
     granularities_formatting: CatalogGranularitiesFormatting
-    granularities: List[str]
+    granularities: list[str]
     description: Optional[str] = None
-    tags: Optional[List[str]] = None
+    tags: Optional[list[str]] = None
 
     @staticmethod
-    def client_class() -> Type[DeclarativeDateDataset]:
+    def client_class() -> type[DeclarativeDateDataset]:
         return DeclarativeDateDataset
 
     def store_to_disk(self, date_instances_folder: Path) -> None:
@@ -43,5 +43,5 @@ class CatalogGranularitiesFormatting(Base):
     title_pattern: str
 
     @staticmethod
-    def client_class() -> Type[GranularitiesFormatting]:
+    def client_class() -> type[GranularitiesFormatting]:
         return GranularitiesFormatting

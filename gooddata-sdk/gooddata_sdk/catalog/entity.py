@@ -2,9 +2,10 @@
 from __future__ import annotations
 
 import base64
+import builtins
 import os
 from pathlib import Path
-from typing import Any, ClassVar, Dict, List, Optional, Type, TypeVar, Union
+from typing import Any, ClassVar, Optional, TypeVar, Union
 
 import attr
 
@@ -34,26 +35,26 @@ class AttrCatalogEntity:
     json_api_entity: Optional[JsonApiEntityBase] = None
     title: Optional[str] = None
     description: Optional[str] = None
-    tags: Optional[List[str]] = None
+    tags: Optional[list[str]] = None
 
     @property
-    def json_api_attributes(self) -> Dict[str, Any]:
+    def json_api_attributes(self) -> dict[str, Any]:
         return self.json_api_entity.attributes if self.json_api_entity else {}
 
     @property
-    def json_api_relationships(self) -> Dict[str, Any]:
+    def json_api_relationships(self) -> dict[str, Any]:
         return self.json_api_entity.relationships if self.json_api_entity and self.json_api_entity.relationships else {}
 
     @property
-    def json_api_side_loads(self) -> List[Dict[str, Any]]:
+    def json_api_side_loads(self) -> list[dict[str, Any]]:
         return self.json_api_entity.side_loads if self.json_api_entity else []
 
     @property
-    def json_api_related_entities_data(self) -> List[Dict[str, Any]]:
+    def json_api_related_entities_data(self) -> list[dict[str, Any]]:
         return self.json_api_entity.related_entities_data if self.json_api_entity else []
 
     @property
-    def json_api_related_entities_side_loads(self) -> List[Dict[str, Any]]:
+    def json_api_related_entities_side_loads(self) -> list[dict[str, Any]]:
         return self.json_api_entity.related_entities_side_loads if self.json_api_entity else []
 
     @property
@@ -62,9 +63,9 @@ class AttrCatalogEntity:
 
     @classmethod
     def from_api(
-        cls: Type[T],
-        entity: Dict[str, Any],
-        side_loads: Optional[List[Any]] = None,
+        cls: builtins.type[T],
+        entity: dict[str, Any],
+        side_loads: Optional[list[Any]] = None,
         related_entities: Optional[AllPagedEntities] = None,
     ) -> T:
         """
@@ -129,7 +130,7 @@ class Credentials(Base):
         return NotImplemented
 
     @classmethod
-    def create(cls, creds_classes: list[Type[Credentials]], entity: dict[str, Any]) -> Credentials:
+    def create(cls, creds_classes: list[type[Credentials]], entity: dict[str, Any]) -> Credentials:
         for creds_class in creds_classes:
             if creds_class.is_part_of_api(entity):
                 return creds_class.from_api(entity)
@@ -137,7 +138,7 @@ class Credentials(Base):
         raise ValueError("No supported credentials found")
 
     @classmethod
-    def validate_instance(cls, creds_classes: list[Type[Credentials]], instance: Credentials) -> None:
+    def validate_instance(cls, creds_classes: list[type[Credentials]], instance: Credentials) -> None:
         passed = isinstance(instance, tuple(creds_classes))
         if not passed:
             classes_as_str = ",".join([str(creds_class) for creds_class in creds_classes])

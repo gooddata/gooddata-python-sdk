@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Type, TypeVar, Union
+from typing import Any, Optional, TypeVar, Union
 
 import attr
 from cattrs import global_converter, structure
@@ -48,7 +48,7 @@ class CatalogDeclarativeAnalytics(Base):
     analytics: Optional[CatalogDeclarativeAnalyticsLayer] = None
 
     @staticmethod
-    def client_class() -> Type[DeclarativeAnalytics]:
+    def client_class() -> type[DeclarativeAnalytics]:
         return DeclarativeAnalytics
 
     def store_to_disk(self, workspace_folder: Path) -> None:
@@ -63,16 +63,16 @@ class CatalogDeclarativeAnalytics(Base):
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeAnalyticsLayer(Base):
-    analytical_dashboards: List[CatalogDeclarativeAnalyticalDashboard] = attr.field(factory=list)
-    analytical_dashboard_extensions: List[CatalogDeclarativeAnalyticalDashboardExtension] = attr.field(factory=list)
-    attribute_hierarchies: List[CatalogDeclarativeAttributeHierarchy] = attr.field(factory=list)
-    dashboard_plugins: List[CatalogDeclarativeDashboardPlugin] = attr.field(factory=list)
-    filter_contexts: List[CatalogDeclarativeFilterContext] = attr.field(factory=list)
-    metrics: List[CatalogDeclarativeMetric] = attr.field(factory=list)
-    visualization_objects: List[CatalogDeclarativeVisualizationObject] = attr.field(factory=list)
+    analytical_dashboards: list[CatalogDeclarativeAnalyticalDashboard] = attr.field(factory=list)
+    analytical_dashboard_extensions: list[CatalogDeclarativeAnalyticalDashboardExtension] = attr.field(factory=list)
+    attribute_hierarchies: list[CatalogDeclarativeAttributeHierarchy] = attr.field(factory=list)
+    dashboard_plugins: list[CatalogDeclarativeDashboardPlugin] = attr.field(factory=list)
+    filter_contexts: list[CatalogDeclarativeFilterContext] = attr.field(factory=list)
+    metrics: list[CatalogDeclarativeMetric] = attr.field(factory=list)
+    visualization_objects: list[CatalogDeclarativeVisualizationObject] = attr.field(factory=list)
 
     @staticmethod
-    def client_class() -> Type[DeclarativeAnalyticsLayer]:
+    def client_class() -> type[DeclarativeAnalyticsLayer]:
         return DeclarativeAnalyticsLayer
 
     @staticmethod
@@ -219,7 +219,7 @@ class CatalogAnalyticsObjectBase(Base):
         write_layout_to_file(analytics_file, self.to_api().to_dict(camel_case=True))
 
     @classmethod
-    def load_from_disk(cls: Type[T], analytics_file: Path) -> T:
+    def load_from_disk(cls: type[T], analytics_file: Path) -> T:
         analytics_layout = read_layout_from_file(analytics_file)
         return cls.from_dict(analytics_layout)
 
@@ -227,9 +227,9 @@ class CatalogAnalyticsObjectBase(Base):
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogAnalyticsBase(CatalogAnalyticsObjectBase):
     title: str
-    content: Dict[str, Any]
+    content: dict[str, Any]
     description: Optional[str] = None
-    tags: Optional[List[str]] = None
+    tags: Optional[list[str]] = None
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -243,7 +243,7 @@ class CatalogAnalyticsBaseMeta(CatalogAnalyticsBase):
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeAnalyticalDashboard(CatalogAnalyticsBaseMeta):
     permissions: Optional[
-        List[
+        list[
             Union[
                 CatalogDeclarativeDashboardPermissionsForAssignee, CatalogDeclarativeDashboardPermissionsForAssigneeRule
             ]
@@ -251,12 +251,12 @@ class CatalogDeclarativeAnalyticalDashboard(CatalogAnalyticsBaseMeta):
     ] = None
 
     @staticmethod
-    def client_class() -> Type[DeclarativeAnalyticalDashboard]:
+    def client_class() -> type[DeclarativeAnalyticalDashboard]:
         return DeclarativeAnalyticalDashboard
 
     @staticmethod
     def structure_permissions(
-        v: Dict[str, Any], _: Any
+        v: dict[str, Any], _: Any
     ) -> Union[
         CatalogDeclarativeDashboardPermissionsForAssignee, CatalogDeclarativeDashboardPermissionsForAssigneeRule
     ]:
@@ -275,44 +275,44 @@ global_converter.register_structure_hook(
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeDashboardPlugin(CatalogAnalyticsBaseMeta):
     @staticmethod
-    def client_class() -> Type[DeclarativeDashboardPlugin]:
+    def client_class() -> type[DeclarativeDashboardPlugin]:
         return DeclarativeDashboardPlugin
 
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeAnalyticalDashboardExtension(CatalogAnalyticsObjectBase):
-    permissions: List[
+    permissions: list[
         Union[CatalogDeclarativeDashboardPermissionsForAssignee, CatalogDeclarativeDashboardPermissionsForAssigneeRule]
     ]
 
     @staticmethod
-    def client_class() -> Type[DeclarativeAnalyticalDashboardExtension]:
+    def client_class() -> type[DeclarativeAnalyticalDashboardExtension]:
         return DeclarativeAnalyticalDashboardExtension
 
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeFilterContext(CatalogAnalyticsBase):
     @staticmethod
-    def client_class() -> Type[DeclarativeFilterContext]:
+    def client_class() -> type[DeclarativeFilterContext]:
         return DeclarativeFilterContext
 
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeMetric(CatalogAnalyticsBaseMeta):
     @staticmethod
-    def client_class() -> Type[DeclarativeMetric]:
+    def client_class() -> type[DeclarativeMetric]:
         return DeclarativeMetric
 
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeVisualizationObject(CatalogAnalyticsBaseMeta):
     @staticmethod
-    def client_class() -> Type[DeclarativeVisualizationObject]:
+    def client_class() -> type[DeclarativeVisualizationObject]:
         return DeclarativeVisualizationObject
 
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeAttributeHierarchy(CatalogAnalyticsBaseMeta):
     @staticmethod
-    def client_class() -> Type[DeclarativeAttributeHierarchy]:
+    def client_class() -> type[DeclarativeAttributeHierarchy]:
         return DeclarativeAttributeHierarchy

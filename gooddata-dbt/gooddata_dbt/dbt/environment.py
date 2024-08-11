@@ -1,5 +1,4 @@
 # (C) 2023 GoodData Corporation
-from typing import Dict
 
 import attrs
 from cattrs import structure
@@ -37,10 +36,10 @@ class DbtCloudEnvironment:
     credentials: DbtCloudEnvironmentCredentials
 
     @classmethod
-    def from_dict(cls, data: Dict) -> "DbtCloudEnvironment":
+    def from_dict(cls, data: dict) -> "DbtCloudEnvironment":
         return structure(data, cls)
 
-    def to_profile(self, password: str, schema_name: str) -> Dict:
+    def to_profile(self, password: str, schema_name: str) -> dict:
         # TODO: add support for other DB types, now it is hardcoded to Snowflake
         return {
             "title": f"{self.project.connection.name} ({self.name} dbtCloud)",

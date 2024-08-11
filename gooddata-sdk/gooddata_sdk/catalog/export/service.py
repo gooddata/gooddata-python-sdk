@@ -1,7 +1,7 @@
 # (C) 2023 GoodData Corporation
 import time
 from pathlib import Path
-from typing import Any, Callable, Dict, Optional, Tuple, Union
+from typing import Any, Callable, Optional, Union
 
 from gooddata_api_client.exceptions import NotFoundException
 from gooddata_api_client.model.tabular_export_request import TabularExportRequest
@@ -189,7 +189,7 @@ class ExportService(CatalogServiceBase):
         timeout: float = 60.0,
         retry: float = 0.2,
         max_retry: float = 5.0,
-        metadata: Optional[Dict[str, Any]] = None,
+        metadata: Optional[dict[str, Any]] = None,
     ) -> None:
         """
         Export a PDF of the specified GoodData Dashboard and save it to the specified file path.
@@ -277,7 +277,7 @@ class ExportService(CatalogServiceBase):
         }
         return ExportCustomOverride(labels=labels, metrics=metrics)
 
-    def _get_visualization_exec_table(self, workspace_id: str, visualization_id: str) -> Tuple[ExecutionTable, str]:
+    def _get_visualization_exec_table(self, workspace_id: str, visualization_id: str) -> tuple[ExecutionTable, str]:
         try:
             visualization = VisualizationService(self._client).get_visualization(
                 workspace_id=workspace_id, visualization_id=visualization_id

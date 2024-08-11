@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import List, Type
 
 import attr
 from gooddata_api_client.model.declarative_users_user_groups import DeclarativeUsersUserGroups
@@ -17,11 +16,11 @@ from gooddata_sdk.catalog.user.declarative_model.user_group import (
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeUsersUserGroups(Base):
-    users: List[CatalogDeclarativeUser]
-    user_groups: List[CatalogDeclarativeUserGroup]
+    users: list[CatalogDeclarativeUser]
+    user_groups: list[CatalogDeclarativeUserGroup]
 
     @staticmethod
-    def client_class() -> Type[DeclarativeUsersUserGroups]:
+    def client_class() -> type[DeclarativeUsersUserGroups]:
         return DeclarativeUsersUserGroups
 
     @classmethod

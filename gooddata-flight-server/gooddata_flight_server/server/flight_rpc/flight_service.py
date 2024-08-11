@@ -3,7 +3,7 @@
 # mypy: no-strict-optional
 
 from threading import Thread
-from typing import Dict, List, Optional, Tuple
+from typing import Optional
 
 import pyarrow.flight
 import structlog
@@ -24,7 +24,7 @@ from gooddata_flight_server.server.flight_rpc.server_methods import (
 )
 
 
-def _get_flight_server_locations(config: ServerConfig) -> Tuple[str, str]:
+def _get_flight_server_locations(config: ServerConfig) -> tuple[str, str]:
     if config.use_tls:
         transport = "grpc+tls"
     else:
@@ -49,7 +49,7 @@ class _AvailabilityMiddlewareFactory(pyarrow.flight.ServerMiddlewareFactory):
         self.unavailable_reason: Optional[ErrorInfo] = unavailable_reason
 
     def start_call(
-        self, info: pyarrow.flight.CallInfo, headers: Dict[str, List[str]]
+        self, info: pyarrow.flight.CallInfo, headers: dict[str, list[str]]
     ) -> Optional[pyarrow.flight.ServerMiddleware]:
         if self.unavailable_reason is None:
             return None
@@ -59,14 +59,14 @@ class _AvailabilityMiddlewareFactory(pyarrow.flight.ServerMiddlewareFactory):
 
 class _CallInfoMiddlewareFactory(pyarrow.flight.ServerMiddlewareFactory):
     def start_call(
-        self, info: pyarrow.flight.CallInfo, headers: Dict[str, List[str]]
+        self, info: pyarrow.flight.CallInfo, headers: dict[str, list[str]]
     ) -> Optional[pyarrow.flight.ServerMiddleware]:
         return CallInfo(info, headers)
 
 
 class _CallFinalizerMiddlewareFactory(pyarrow.flight.ServerMiddlewareFactory):
     def start_call(
-        self, info: pyarrow.flight.CallInfo, headers: Dict[str, List[str]]
+        self, info: pyarrow.flight.CallInfo, headers: dict[str, list[str]]
     ) -> Optional[pyarrow.flight.ServerMiddleware]:
         return CallFinalizer()
 
@@ -107,7 +107,7 @@ class FlightRpcService:
 
     def _initialize_authentication(
         self, ctx: ServerContext
-    ) -> Optional[Tuple[str, pyarrow.flight.ServerMiddlewareFactory]]:
+    ) -> Optional[tuple[str, pyarrow.flight.ServerMiddlewareFactory]]:
         if self._config.authentication_method == AuthenticationMethod.NoAuth:
             if self._config.use_mutual_tls:
                 return None

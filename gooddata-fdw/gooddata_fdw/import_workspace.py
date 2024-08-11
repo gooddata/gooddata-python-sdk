@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import re
-from typing import NamedTuple, Optional, Type
+from typing import NamedTuple, Optional
 
 from gooddata_sdk import (
     CatalogWorkspaceContent,
@@ -63,15 +63,15 @@ class WorkspaceImporter:
 
 
 class WorkspaceImportersLocator:
-    _IMPORTERS: set[Type[WorkspaceImporter]] = set()
+    _IMPORTERS: set[type[WorkspaceImporter]] = set()
 
     @classmethod
-    def register(cls, class_: Type[WorkspaceImporter]) -> Type[WorkspaceImporter]:
+    def register(cls, class_: type[WorkspaceImporter]) -> type[WorkspaceImporter]:
         cls._IMPORTERS.add(class_)
         return class_
 
     @classmethod
-    def locate(cls, object_type: str) -> list[Type[WorkspaceImporter]]:
+    def locate(cls, object_type: str) -> list[type[WorkspaceImporter]]:
         return [importer for importer in cls._IMPORTERS if importer.support_object_type(object_type)]
 
 
