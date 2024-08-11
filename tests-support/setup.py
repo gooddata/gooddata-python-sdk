@@ -11,5 +11,5 @@ setup(
     description="Tests support for GoodData Python SDK",
     install_requires=REQUIRES,
     packages=find_packages(exclude=["tests"]),
-    python_requires=">=3.8.0",
+    python_requires=">=3.9.0",
 )
