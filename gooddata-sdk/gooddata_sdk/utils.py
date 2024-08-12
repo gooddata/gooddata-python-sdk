@@ -391,3 +391,34 @@ def read_json(path: Union[str, Path]) -> Any:
     path = Path(path) if isinstance(path, str) else path
     with open(path, "r", encoding="utf-8") as f:
         return json.loads(f.read())
+
+
+def ref_extract_obj_id(ref: Dict[str, Any]) -> ObjId:
+    """
+    Extracts ObjId from a ref dictionary.
+    :param ref: the ref to extract from
+    :return: the extracted ObjId
+    :raises ValueError: if the ref is not an identifier
+    """
+    if "identifier" in ref:
+        return ObjId(id=ref["identifier"]["id"], type=ref["identifier"]["type"])
+
+    raise ValueError("invalid ref. must be identifier")
+
+
+def ref_extract(ref: Dict[str, Any]) -> Union[str, ObjId]:
+    """
+    Extracts an object id from a ref dictionary: either an identifier or a localIdentifier.
+    :param ref: the ref to extract from
+    :return: thr extracted object id
+    :raises ValueError: if the ref is not an identifier or localIdentifier
+    """
+    try:
+        return ref_extract_obj_id(ref)
+    except ValueError:
+        pass
+
+    if "localIdentifier" in ref:
+        return ref["localIdentifier"]
+
+    raise ValueError("invalid ref. must be identifier or localIdentifier")

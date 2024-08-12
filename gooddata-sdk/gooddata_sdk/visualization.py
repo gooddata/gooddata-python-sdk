@@ -29,7 +29,7 @@ from gooddata_sdk.compute.model.metric import (
     PopDatesetMetric,
     SimpleMetric,
 )
-from gooddata_sdk.utils import IdObjType, SideLoads, load_all_entities, safeget
+from gooddata_sdk.utils import IdObjType, SideLoads, load_all_entities, ref_extract, ref_extract_obj_id, safeget
 
 #
 # Conversion from types stored in visualization into the gooddata_afm_client models.
@@ -160,48 +160,29 @@ class AttributeSortType(Enum):
 #
 
 
-def _ref_extract_obj_id(ref: dict[str, Any]) -> ObjId:
-    if "identifier" in ref:
-        return ObjId(id=ref["identifier"]["id"], type=ref["identifier"]["type"])
-
-    raise ValueError("invalid ref. must be identifier")
-
-
-def _ref_extract(ref: dict[str, Any]) -> Union[str, ObjId]:
-    try:
-        return _ref_extract_obj_id(ref)
-    except ValueError:
-        pass
-
-    if "localIdentifier" in ref:
-        return ref["localIdentifier"]
-
-    raise ValueError("invalid ref. must be identifier or localIdentifier")
-
-
 def _convert_filter_to_computable(filter_obj: dict[str, Any]) -> Filter:
     if "positiveAttributeFilter" in filter_obj:
         f = filter_obj["positiveAttributeFilter"]
         # fallback to use URIs; SDK may be able to create filter with attr elements as uris...
         in_values = f["in"]["values"] if "values" in f["in"] else f["in"]["uris"]
 
-        return PositiveAttributeFilter(label=_ref_extract(f["displayForm"]), values=in_values)
+        return PositiveAttributeFilter(label=ref_extract(f["displayForm"]), values=in_values)
 
     elif "negativeAttributeFilter" in filter_obj:
         f = filter_obj["negativeAttributeFilter"]
         # fallback to use URIs; SDK may be able to create filter with attr elements as uris...
         not_in_values = f["notIn"]["values"] if "values" in f["notIn"] else f["notIn"]["uris"]
 
-        return NegativeAttributeFilter(label=_ref_extract(f["displayForm"]), values=not_in_values)
+        return NegativeAttributeFilter(label=ref_extract(f["displayForm"]), values=not_in_values)
     elif "relativeDateFilter" in filter_obj:
         f = filter_obj["relativeDateFilter"]
 
         # there is filter present, but uses all time
         if ("from" not in f) or ("to" not in f):
-            return AllTimeFilter(_ref_extract_obj_id(f["dataSet"]))
+            return AllTimeFilter(ref_extract_obj_id(f["dataSet"]))
 
         return RelativeDateFilter(
-            dataset=_ref_extract_obj_id(f["dataSet"]),
+            dataset=ref_extract_obj_id(f["dataSet"]),
             granularity=_GRANULARITY_CONVERSION[f["granularity"]],
             from_shift=f["from"],
             to_shift=f["to"],
@@ -210,13 +191,13 @@ def _convert_filter_to_computable(filter_obj: dict[str, Any]) -> Filter:
     elif "absoluteDateFilter" in filter_obj:
         f = filter_obj["absoluteDateFilter"]
 
-        return AbsoluteDateFilter(dataset=_ref_extract_obj_id(f["dataSet"]), from_date=f["from"], to_date=f["to"])
+        return AbsoluteDateFilter(dataset=ref_extract_obj_id(f["dataSet"]), from_date=f["from"], to_date=f["to"])
     elif "measureValueFilter" in filter_obj:
         f = filter_obj["measureValueFilter"]
 
         # no condition means no limitation
         if "condition" not in f:
-            return AllMetricValueFilter(metric=_ref_extract(f["measure"]))
+            return AllMetricValueFilter(metric=ref_extract(f["measure"]))
 
         condition = f["condition"]
 
@@ -225,7 +206,7 @@ def _convert_filter_to_computable(filter_obj: dict[str, Any]) -> Filter:
             treat_values_as_null = c.get("treatNullValuesAs")
 
             return MetricValueFilter(
-                metric=_ref_extract(f["measure"]),
+                metric=ref_extract(f["measure"]),
                 operator=c["operator"],
                 values=c["value"],
                 treat_nulls_as=treat_values_as_null,
@@ -234,7 +215,7 @@ def _convert_filter_to_computable(filter_obj: dict[str, Any]) -> Filter:
             c = condition["range"]
             treat_values_as_null = c.get("treatNullValuesAs")
             return MetricValueFilter(
-                metric=_ref_extract(f["measure"]),
+                metric=ref_extract(f["measure"]),
                 operator=c["operator"],
                 values=(c["from"], c["to"]),
                 treat_nulls_as=treat_values_as_null,
@@ -244,13 +225,13 @@ def _convert_filter_to_computable(filter_obj: dict[str, Any]) -> Filter:
         # mypy is unable to automatically convert Union[str, ObjId] to Union[str, ObjId, Attribute, Metric]
         # so use explicit cast here
         dimensionality = (
-            [cast(Union[str, ObjId, Attribute, Metric], _ref_extract(a)) for a in f["attributes"]]
+            [cast(Union[str, ObjId, Attribute, Metric], ref_extract(a)) for a in f["attributes"]]
             if "attributes" in f
             else None
         )
 
         return RankingFilter(
-            metrics=[_ref_extract(f["measure"])],
+            metrics=[ref_extract(f["measure"])],
             dimensionality=dimensionality,
             operator=f["operator"],
             value=f["value"],
@@ -273,7 +254,7 @@ def _convert_metric_to_computable(metric: dict[str, Any]) -> Metric:
 
         return SimpleMetric(
             local_id=local_id,
-            item=_ref_extract_obj_id(d["item"]),
+            item=ref_extract_obj_id(d["item"]),
             aggregation=aggregation,
             compute_ratio=compute_ratio,
             filters=filters,
@@ -281,7 +262,7 @@ def _convert_metric_to_computable(metric: dict[str, Any]) -> Metric:
 
     elif "popMeasureDefinition" in measure_def:
         d = measure_def["popMeasureDefinition"]
-        date_attributes = [PopDate(attribute=_ref_extract_obj_id(d["popAttribute"]), periods_ago=1)]
+        date_attributes = [PopDate(attribute=ref_extract_obj_id(d["popAttribute"]), periods_ago=1)]
 
         return PopDateMetric(
             local_id=local_id,
@@ -292,7 +273,7 @@ def _convert_metric_to_computable(metric: dict[str, Any]) -> Metric:
     elif "previousPeriodMeasure" in measure_def:
         d = measure_def["previousPeriodMeasure"]
 
-        date_datasets = [PopDateDataset(_ref_extract(dd["dataSet"]), dd["periodsAgo"]) for dd in d["dateDataSets"]]
+        date_datasets = [PopDateDataset(ref_extract(dd["dataSet"]), dd["periodsAgo"]) for dd in d["dateDataSets"]]
 
         return PopDatesetMetric(
             local_id=local_id,
@@ -413,7 +394,7 @@ class VisualizationAttribute:
         return self._a.get("showAllValues")
 
     def as_computable(self) -> Attribute:
-        return Attribute(local_id=self.local_id, label=_ref_extract(self.label), show_all_values=self.show_all_values)
+        return Attribute(local_id=self.local_id, label=ref_extract(self.label), show_all_values=self.show_all_values)
 
     def __str__(self) -> str:
         return self.__repr__()
