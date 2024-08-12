@@ -191,6 +191,7 @@ from gooddata_sdk.catalog.workspace.entity_model.user_data_filter import (
 )
 from gooddata_sdk.catalog.workspace.entity_model.workspace import CatalogWorkspace
 from gooddata_sdk.client import GoodDataApiClient
+from gooddata_sdk.compute.compute_to_sdk_converter import ComputeToSdkConverter
 from gooddata_sdk.compute.model.attribute import Attribute
 from gooddata_sdk.compute.model.base import ExecModelEntity, ObjId
 from gooddata_sdk.compute.model.execution import (
@@ -235,6 +236,7 @@ from gooddata_sdk.visualization import (
     Visualization,
     VisualizationAttribute,
     VisualizationBucket,
+    VisualizationFilter,
     VisualizationMetric,
     VisualizationService,
 )
