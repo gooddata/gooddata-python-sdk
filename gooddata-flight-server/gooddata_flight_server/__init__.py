@@ -9,6 +9,10 @@ from gooddata_flight_server.config.config import (
 from gooddata_flight_server.errors.error_code import ErrorCode
 from gooddata_flight_server.errors.error_info import ErrorInfo, RetryInfo
 from gooddata_flight_server.flexfun.flex_fun import FlexFun
+from gooddata_flight_server.flexfun.flex_fun_execution_context import (
+    ExecutionContext,
+    ExecutionRequest,
+)
 from gooddata_flight_server.health.server_health_monitor import ModuleHealthStatus, ServerHealthMonitor
 from gooddata_flight_server.server.auth.auth_middleware import TokenAuthMiddleware
 from gooddata_flight_server.server.auth.token_verifier import TokenVerificationStrategy
