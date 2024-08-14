@@ -127,7 +127,7 @@ def test_list_user_groups(test_config):
         "adminQA1Group",
         "visitorsGroup",
     }
-    assert set(user_group.name for user_group in user_groups) == {"demo group", None, "visitors", None}
+    assert set(user_group.name for user_group in user_groups) == {"demo group", "visitors", None}
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "get_user_group.yaml"))
@@ -146,7 +146,7 @@ def test_create_delete_user_group(test_config):
     try:
         current_user_groups = sdk.catalog_user.list_user_groups()
         assert len(current_user_groups) == 4
-        assert set(ug.name for ug in current_user_groups) == {"demo group", None, "visitors", None}
+        assert set(ug.name for ug in current_user_groups) == {"demo group", "visitors", None}
         user_group_e = CatalogUserGroup.init(
             user_group_id=user_group_id,
             user_group_name=user_group_id.upper(),
@@ -654,7 +654,7 @@ def _assert_user_groups_default(user_groups: list[CatalogDeclarativeUserGroup]):
         "adminQA1Group",
         "visitorsGroup",
     }
-    assert set(user_group.name for user_group in user_groups) == {"demo group", None, "visitors", None}
+    assert set(user_group.name for user_group in user_groups) == {"demo group", "visitors", None}
 
 
 def _assert_users_user_groups_default(users_user_groups: CatalogDeclarativeUsersUserGroups):

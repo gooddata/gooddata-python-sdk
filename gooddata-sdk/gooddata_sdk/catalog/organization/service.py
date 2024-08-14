@@ -298,7 +298,7 @@ class CatalogOrganizationService(CatalogServiceBase):
         try:
             self._entities_api.delete_entity_csp_directives(csp_directive_id)
         except NotFoundException:
-            raise ValueError(f"Can not delete {csp_directive_id} csp directive. " f"This csp directive does not exist.")
+            raise ValueError(f"Can not delete {csp_directive_id} csp directive. This csp directive does not exist.")
 
     def update_csp_directive(self, csp_directive: CatalogCspDirective) -> None:
         """Update a csp directive.
@@ -318,4 +318,4 @@ class CatalogOrganizationService(CatalogServiceBase):
             csp_directive_document = JsonApiCspDirectiveInDocument(data=csp_directive.to_api())
             self._entities_api.update_entity_csp_directives(csp_directive.id, csp_directive_document)
         except NotFoundException:
-            raise ValueError(f"Can not update {csp_directive.id} csp directive. " f"This csp directive does not exist.")
+            raise ValueError(f"Can not update {csp_directive.id} csp directive. This csp directive does not exist.")

@@ -120,6 +120,11 @@ src = "gooddata-flight-server/setup.py"
 search = "version=\"{current_version}\""
 
 [[tool.tbump.file]]
+# gooddata-flight-server setup.py dependency
+src = "gooddata-flight-server/setup.py"
+search = "gooddata-sdk~={current_version}"
+
+[[tool.tbump.file]]
 # clients README
 src = "gooddata-*-client/README.md"
 

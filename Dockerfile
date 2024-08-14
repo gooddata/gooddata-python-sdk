@@ -2,13 +2,14 @@
 ARG PY_TAG
 FROM python:${PY_TAG}
 
+ARG PY_TAG
 ARG ENV_TAG
 # tox defines all python targets, makefile recognizes TEST_ENVS and forces
 # tox to execute only tests for installed python
 ENV TEST_ENVS=${ENV_TAG}
 
 # install make and gosu
-ENV GOSU_VERSION 1.14
+ENV GOSU_VERSION=1.14
 RUN set -x \
   && apt-get update \
   && apt-get install -y --no-install-recommends make curl gnupg \
@@ -26,8 +27,8 @@ RUN set -x \
   && true
 
 # install tox
-ENV PYTHON_TOX_VERSION 4.14.0
-ENV PYTHON_TOX_UV_VERSION 1.5.1
+ENV PYTHON_TOX_VERSION=4.14.1
+ENV PYTHON_TOX_UV_VERSION=1.7.0
 RUN set -x \
   && pip3 install tox==${PYTHON_TOX_VERSION} tox-uv==${PYTHON_TOX_UV_VERSION}\
   && true
