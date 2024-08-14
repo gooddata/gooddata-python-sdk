@@ -326,7 +326,7 @@ class CatalogDataSourceService(CatalogServiceBase):
     def scan_pdm_and_generate_logical_model(
         self,
         data_source_id: str,
-        generate_ldm_request: CatalogGenerateLdmRequest = CatalogGenerateLdmRequest(separator="__", wdf_prefix="wdf"),
+        generate_ldm_request: Optional[CatalogGenerateLdmRequest] = None,
         scan_request: CatalogScanModelRequest = CatalogScanModelRequest(),
         report_warnings: bool = False,
     ) -> tuple[CatalogDeclarativeModel, CatalogScanResultPdm]:
@@ -351,6 +351,9 @@ class CatalogDataSourceService(CatalogServiceBase):
                 An instance of CatalogScanResultPdm.
                 Containing pdm itself and a list of warnings that occurred during scanning.
         """
+        if not generate_ldm_request:
+            generate_ldm_request = CatalogGenerateLdmRequest(separator="__", wdf_prefix="wdf")
+
         scan_result = self.scan_data_source(data_source_id, scan_request, report_warnings)
         if generate_ldm_request.pdm and generate_ldm_request.pdm.tables:
             generate_ldm_request.pdm.tables.extend(scan_result.pdm.tables)

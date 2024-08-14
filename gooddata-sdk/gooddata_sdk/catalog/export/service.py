@@ -100,7 +100,7 @@ class ExportService(CatalogServiceBase):
                     break
         if response.status != 200:
             raise ValueError(
-                f"Server was not able to return response. " f"The last response status is '{response.status}'."
+                f"Server was not able to return response. The last response status is '{response.status}'."
             )
         return response.data
 

@@ -137,7 +137,6 @@ _GRANULARITY: set[str] = {
     "QUARTER",
     "MONTH",
     "WEEK",
-    "WEEK",
     "DAY",
     "HOUR",
     "MINUTE",

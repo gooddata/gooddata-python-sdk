@@ -46,3 +46,4 @@ jobs:
               - 'Makefile'
               - 'gooddata-api-client/**'
               - 'gooddata-dbt/**'
+              - 'gooddata-flight-server/**'

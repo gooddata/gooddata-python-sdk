@@ -741,9 +741,8 @@ class CatalogWorkspaceService(CatalogServiceBase):
                 self.add_title_description(to_translate, visualization.title, visualization.description)
                 for bucket in visualization.content["buckets"]:
                     for item in bucket["items"]:
-                        if "measure" in item:
-                            if "alias" in item["measure"]:
-                                to_translate.add(item["measure"]["alias"])
+                        if "measure" in item and "alias" in item["measure"]:
+                            to_translate.add(item["measure"]["alias"])
             for dashboard in workspace_content.analytics.analytical_dashboards or []:
                 self.add_title_description(to_translate, dashboard.title, dashboard.description)
                 # Hack: translate titles in free-form, which is not processed intentionally by this SDK
@@ -795,9 +794,8 @@ class CatalogWorkspaceService(CatalogServiceBase):
                 self.set_title_description(visualization, translated)
                 for bucket in visualization.content["buckets"]:
                     for item in bucket["items"]:
-                        if "measure" in item:
-                            if "alias" in item["measure"]:
-                                item["measure"]["alias"] = translated[item["measure"]["alias"]]
+                        if "measure" in item and "alias" in item["measure"]:
+                            item["measure"]["alias"] = translated[item["measure"]["alias"]]
             for dashboard in new_workspace_content.analytics.analytical_dashboards or []:
                 self.set_title_description(dashboard, translated)
                 # Hack: translate titles in free-form, which is not processed intentionally by this SDK

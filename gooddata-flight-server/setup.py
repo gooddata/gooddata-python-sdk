@@ -8,6 +8,7 @@ long_description = (this_directory / "README.md").read_text(encoding="utf-8")
 
 REQUIRES = [
     "dynaconf>=3.1.11,<4.0.0",
+    "gooddata-sdk~=1.24.0",
     "opentelemetry-api>=1.24.0,<=2.0.0",
     "opentelemetry-sdk>=1.24.0,<=2.0.0",
     "orjson>=3.8.5,<4.0.0",

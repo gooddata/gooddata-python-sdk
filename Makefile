@@ -23,6 +23,14 @@ dev:
 	.venv/bin/pip3 install -r dev-requirements.txt
 	.venv/bin/pre-commit install
 
+.PHONY: lint
+lint:
+	.venv/bin/ruff check .
+
+.PHONY: lint-fix
+lint-fix:
+	.venv/bin/ruff check . --fix
+
 .PHONY: format
 format:
 	.venv/bin/ruff format --check .
