@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import List
 
 import pytest
 from gooddata_sdk import (
@@ -57,7 +56,7 @@ def _assert_default_permissions(catalog_declarative_permissions: CatalogDeclarat
 
 
 def _assert_organization_permissions_id(
-    catalog_organization_permissions: List[CatalogDeclarativeOrganizationPermission],
+    catalog_organization_permissions: list[CatalogDeclarativeOrganizationPermission],
 ) -> None:
     assert set(org_permission.assignee.id for org_permission in catalog_organization_permissions) == {"adminGroup"}
 

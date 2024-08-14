@@ -3,7 +3,7 @@ import argparse
 import json
 import os
 from pathlib import Path
-from typing import List, TextIO
+from typing import TextIO
 
 import attr
 import toml
@@ -158,7 +158,7 @@ def create_file_structure(data: dict, root: Path, url_root: str):
     return links
 
 
-def change_json_root(data: dict, json_start_paths: List[str] | None) -> dict:
+def change_json_root(data: dict, json_start_paths: list[str] | None) -> dict:
     """Change the root of the JSON data to the specified path.
 
     Args:

@@ -1,7 +1,7 @@
 # (C) 2023 GoodData Corporation
 import json
 from pathlib import Path
-from typing import Dict, Union
+from typing import Union
 
 from gooddata_dbt.dbt.tables import DbtModelTables
 from gooddata_sdk import CatalogDeclarativeModel, CatalogDeclarativeTables
@@ -12,7 +12,7 @@ _PDM_PATH = _CURR_DIR / "resources/gooddata_layouts"
 MODEL_ID = "github"
 
 
-def _read_json(path: Union[str, Path]) -> Dict:
+def _read_json(path: Union[str, Path]) -> dict:
     with open(path, "r") as f:
         return json.load(f)
 

@@ -10,7 +10,7 @@ See [DOCUMENTATION](https://gooddata-pandas.readthedocs.io/en/latest/) for more 
 -  GoodData.CN installation; either running on your cloud
    infrastructure or the free Community Edition running on your workstation
 
--  Python 3.8 or newer
+-  Python 3.9 or newer
 
 ## Installation
 

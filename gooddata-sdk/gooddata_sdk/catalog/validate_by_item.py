@@ -1,7 +1,7 @@
 # (C) 2023 GoodData Corporation
 from __future__ import annotations
 
-from typing import Type
+import builtins
 
 import attr
 from gooddata_api_client.model.validate_by_item import ValidateByItem
@@ -15,5 +15,5 @@ class CatalogValidateByItem(Base):
     type: str
 
     @staticmethod
-    def client_class() -> Type[ValidateByItem]:
+    def client_class() -> builtins.type[ValidateByItem]:
         return ValidateByItem

@@ -28,7 +28,7 @@ setup(
     license_files=("LICENSE.txt",),
     install_requires=REQUIRES,
     packages=find_packages(exclude=["tests*"]),
-    python_requires=">=3.8.0",
+    python_requires=">=3.9.0",
     scripts=[
         "bin/gooddata-dbt",
     ],
@@ -36,7 +36,6 @@ setup(
         "Development Status :: 4 - Beta",
         "Environment :: Console",
         "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",

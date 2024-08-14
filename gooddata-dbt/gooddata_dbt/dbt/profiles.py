@@ -2,7 +2,7 @@
 import argparse
 import os
 import re
-from typing import Dict, List, Optional, Union
+from typing import Optional, Union
 from urllib.parse import quote_plus
 
 import attrs
@@ -191,7 +191,7 @@ DbtOutput = Union[DbtOutputPostgreSQL, DbtOutputRedshift, DbtOutputSnowflake, Db
 @attrs.define(auto_attribs=True, kw_only=True)
 class DbtProfile(Base):
     name: str
-    outputs: List[DbtOutput]
+    outputs: list[DbtOutput]
 
 
 class DbtProfiles:
@@ -207,7 +207,7 @@ class DbtProfiles:
             self.dbt_profiles = yaml.safe_load(fp)
 
     @staticmethod
-    def inject_env_vars(output_def: Dict) -> None:
+    def inject_env_vars(output_def: dict) -> None:
         env_re = re.compile(r"\{\{ env_var\('([^']+)'(,\s*'([^']+)')?\) \}\}")
         for output_key, output_value in output_def.items():
             if (env_match := env_re.search(str(output_value))) is not None:
@@ -222,7 +222,7 @@ class DbtProfiles:
             # else do nothing, real value seems to be stored in dbt profile
 
     @staticmethod
-    def to_data_class(output: str, output_def: Dict) -> Optional[DbtOutput]:
+    def to_data_class(output: str, output_def: dict) -> Optional[DbtOutput]:
         db_type = output_def["type"]
         if db_type == "postgres":
             return DbtOutputPostgreSQL.from_dict({"name": output, **output_def})
@@ -241,7 +241,7 @@ class DbtProfiles:
             raise Exception(f"Unsupported database type {output=} {db_type=}")
 
     @property
-    def profiles(self) -> List[DbtProfile]:
+    def profiles(self) -> list[DbtProfile]:
         profiles = []
         for profile, profile_def in self.dbt_profiles.items():
             outputs = []

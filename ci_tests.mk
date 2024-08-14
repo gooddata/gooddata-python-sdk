@@ -1,5 +1,5 @@
 # (C) 2021 GoodData Corporation
-IN_TEST_ENVS = py312,py311,py310,py39,py38
+IN_TEST_ENVS = py312,py311,py310,py39
 ifdef TEST_ENVS
 	IN_TEST_ENVS = $(TEST_ENVS)
 endif
@@ -35,10 +35,6 @@ endif
 
 
 # Targets to build docker file for each python version
-.PHONY: test-ci-py38-build
-test-ci-py38-build: Dockerfile
-	docker build --build-arg "PY_TAG=3.8.19-slim-bullseye" --build-arg "ENV_TAG=py38" -t python-sdk:py38 .
-
 .PHONY: test-ci-py39-build
 test-ci-py39-build: Dockerfile
 	docker build --build-arg "PY_TAG=3.9.19-slim-bullseye" --build-arg "ENV_TAG=py39" -t python-sdk:py39 .

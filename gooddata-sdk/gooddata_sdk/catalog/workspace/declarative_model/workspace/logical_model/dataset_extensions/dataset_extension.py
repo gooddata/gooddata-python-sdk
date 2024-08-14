@@ -1,6 +1,5 @@
 # (C) 2023 GoodData Corporation
 from pathlib import Path
-from typing import List, Type
 
 import attr
 from gooddata_api_client.model.declarative_dataset_extension import DeclarativeDatasetExtension
@@ -17,10 +16,10 @@ LAYOUT_DATASET_EXTENSIONS_DIR = "dataset_extensions"
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeDatasetExtension(Base):
     id: str
-    workspace_data_filter_references: List[CatalogDeclarativeWorkspaceDataFilterReferences]
+    workspace_data_filter_references: list[CatalogDeclarativeWorkspaceDataFilterReferences]
 
     @staticmethod
-    def client_class() -> Type[DeclarativeDatasetExtension]:
+    def client_class() -> type[DeclarativeDatasetExtension]:
         return DeclarativeDatasetExtension
 
     def store_to_disk(self, dataset_extension_folder: Path) -> None:

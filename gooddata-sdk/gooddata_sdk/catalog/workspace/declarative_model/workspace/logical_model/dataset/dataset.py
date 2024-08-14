@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import List, Optional, Type
+from typing import Optional
 
 import attr
 from gooddata_api_client.model.data_source_table_identifier import DataSourceTableIdentifier
@@ -29,19 +29,19 @@ LAYOUT_DATASETS_DIR = "datasets"
 class CatalogDeclarativeDataset(Base):
     id: str
     title: str
-    grain: List[CatalogGrainIdentifier]
-    references: List[CatalogDeclarativeReference]
+    grain: list[CatalogGrainIdentifier]
+    references: list[CatalogDeclarativeReference]
     description: Optional[str] = None
-    attributes: Optional[List[CatalogDeclarativeAttribute]] = None
-    facts: Optional[List[CatalogDeclarativeFact]] = None
+    attributes: Optional[list[CatalogDeclarativeAttribute]] = None
+    facts: Optional[list[CatalogDeclarativeFact]] = None
     data_source_table_id: Optional[CatalogDataSourceTableIdentifier] = None
     sql: Optional[CatalogDeclarativeDatasetSql] = None
-    tags: Optional[List[str]] = None
-    workspace_data_filter_columns: Optional[List[CatalogDeclarativeWorkspaceDataFilterColumn]] = None
-    workspace_data_filter_references: Optional[List[CatalogDeclarativeWorkspaceDataFilterReferences]] = None
+    tags: Optional[list[str]] = None
+    workspace_data_filter_columns: Optional[list[CatalogDeclarativeWorkspaceDataFilterColumn]] = None
+    workspace_data_filter_references: Optional[list[CatalogDeclarativeWorkspaceDataFilterReferences]] = None
 
     @staticmethod
-    def client_class() -> Type[DeclarativeDataset]:
+    def client_class() -> type[DeclarativeDataset]:
         return DeclarativeDataset
 
     def store_to_disk(self, datasets_folder: Path) -> None:
@@ -59,16 +59,16 @@ class CatalogDeclarativeAttribute(Base):
     id: str
     title: str
     source_column: str
-    labels: List[CatalogDeclarativeLabel]
+    labels: list[CatalogDeclarativeLabel]
     source_column_data_type: Optional[str] = None
     default_view: Optional[CatalogLabelIdentifier] = None
     sort_column: Optional[str] = None
     sort_direction: Optional[str] = None
     description: Optional[str] = None
-    tags: Optional[List[str]] = None
+    tags: Optional[list[str]] = None
 
     @staticmethod
-    def client_class() -> Type[DeclarativeAttribute]:
+    def client_class() -> type[DeclarativeAttribute]:
         return DeclarativeAttribute
 
 
@@ -79,10 +79,10 @@ class CatalogDeclarativeFact(Base):
     source_column: str
     source_column_data_type: Optional[str] = None
     description: Optional[str] = None
-    tags: Optional[List[str]] = None
+    tags: Optional[list[str]] = None
 
     @staticmethod
-    def client_class() -> Type[DeclarativeFact]:
+    def client_class() -> type[DeclarativeFact]:
         return DeclarativeFact
 
 
@@ -90,10 +90,10 @@ class CatalogDeclarativeFact(Base):
 class CatalogDataSourceTableIdentifier(Base):
     id: str
     data_source_id: str
-    path: Optional[List[str]] = None
+    path: Optional[list[str]] = None
 
     @staticmethod
-    def client_class() -> Type[DataSourceTableIdentifier]:
+    def client_class() -> type[DataSourceTableIdentifier]:
         return DataSourceTableIdentifier
 
 
@@ -103,7 +103,7 @@ class CatalogDeclarativeDatasetSql(Base):
     data_source_id: str
 
     @staticmethod
-    def client_class() -> Type[DeclarativeDatasetSql]:
+    def client_class() -> type[DeclarativeDatasetSql]:
         return DeclarativeDatasetSql
 
 
@@ -114,11 +114,11 @@ class CatalogDeclarativeLabel(Base):
     source_column: str
     source_column_data_type: Optional[str] = None
     description: Optional[str] = None
-    tags: Optional[List[str]] = None
+    tags: Optional[list[str]] = None
     value_type: Optional[str] = None
 
     @staticmethod
-    def client_class() -> Type[DeclarativeLabel]:
+    def client_class() -> type[DeclarativeLabel]:
         return DeclarativeLabel
 
 
@@ -126,12 +126,12 @@ class CatalogDeclarativeLabel(Base):
 class CatalogDeclarativeReference(Base):
     identifier: CatalogReferenceIdentifier
     multivalue: bool
-    source_columns: Optional[List[str]] = None
-    source_column_data_types: Optional[List[str]] = None
-    sources: Optional[List[CatalogDeclarativeReferenceSource]] = None
+    source_columns: Optional[list[str]] = None
+    source_column_data_types: Optional[list[str]] = None
+    sources: Optional[list[CatalogDeclarativeReferenceSource]] = None
 
     @staticmethod
-    def client_class() -> Type[DeclarativeReference]:
+    def client_class() -> type[DeclarativeReference]:
         return DeclarativeReference
 
 
@@ -141,7 +141,7 @@ class CatalogDeclarativeWorkspaceDataFilterColumn(Base):
     data_type: str
 
     @staticmethod
-    def client_class() -> Type[DeclarativeWorkspaceDataFilterColumn]:
+    def client_class() -> type[DeclarativeWorkspaceDataFilterColumn]:
         return DeclarativeWorkspaceDataFilterColumn
 
 
@@ -152,5 +152,5 @@ class CatalogDeclarativeReferenceSource(Base):
     data_type: Optional[str] = None
 
     @staticmethod
-    def client_class() -> Type[DeclarativeReferenceSource]:
+    def client_class() -> type[DeclarativeReferenceSource]:
         return DeclarativeReferenceSource

@@ -1,7 +1,7 @@
 # (C) 2023 GoodData Corporation
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, Type, TypeVar
+from typing import Any, TypeVar
 
 import attrs
 from cattrs import structure
@@ -71,13 +71,13 @@ NUMERIC_DATA_TYPES = [
 @attrs.define
 class Base:
     @classmethod
-    def from_dict(cls: Type[T], data: Dict[str, Any]) -> T:
+    def from_dict(cls: type[T], data: dict[str, Any]) -> T:
         """
         Creates object from dictionary.
         """
         return structure(data, cls)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """
         Converts object into dictionary.
         """

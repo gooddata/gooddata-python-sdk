@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import logging
 from operator import attrgetter
-from typing import Any, Callable, Dict, Generator, List, Optional, Union
+from typing import Any, Callable, Generator, Optional, Union
 
 from attrs import define, field, frozen
 from attrs.setters import frozen as frozen_attr
@@ -72,9 +72,9 @@ _ATTR_SORT_TYPE_TO_API = {
 class TableDimension:
     """Dataclass used during total and dimension computation."""
 
-    item_ids: List[str] = field(on_setattr=frozen_attr)
+    item_ids: list[str] = field(on_setattr=frozen_attr)
     idx: int = field(on_setattr=frozen_attr)
-    sorting: List[Dict] = field(default=[])
+    sorting: list[dict] = field(default=[])
 
     def to_exec_table_dimension(self) -> ExecTableDimension:
         return ExecTableDimension(
@@ -525,10 +525,10 @@ def _convert_total_dimensions(
 class TotalsComputeInfo:
     """Dataclass containing different values used for special case construction of pivot table totals."""
 
-    row_attr_ids: List[str] = field(on_setattr=frozen_attr)
-    col_attr_ids: List[str] = field(on_setattr=frozen_attr)
-    measure_group_rows: List[str] = field(on_setattr=frozen_attr)
-    measure_group_cols: List[str] = field(on_setattr=frozen_attr)
+    row_attr_ids: list[str] = field(on_setattr=frozen_attr)
+    col_attr_ids: list[str] = field(on_setattr=frozen_attr)
+    measure_group_rows: list[str] = field(on_setattr=frozen_attr)
+    measure_group_cols: list[str] = field(on_setattr=frozen_attr)
     has_row_and_column_grand_totals: bool = False
     has_row_and_column_sub_totals: bool = False
     has_row_subtotal_and_column_grand_total: bool = False

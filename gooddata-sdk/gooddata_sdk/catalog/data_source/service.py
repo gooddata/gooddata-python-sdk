@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import functools
 from pathlib import Path
-from typing import Any, List, Optional, Tuple, Union
+from typing import Any, Optional, Union
 
 from gooddata_api_client.exceptions import NotFoundException
 
@@ -119,14 +119,14 @@ class CatalogDataSourceService(CatalogServiceBase):
             data_source_id, CatalogDataSource.to_api_patch(data_source_id, attributes)
         )
 
-    def list_data_sources(self) -> List[CatalogDataSource]:
+    def list_data_sources(self) -> list[CatalogDataSource]:
         """Lists all data sources.
 
         Args:
             None
 
         Returns:
-            List[CatalogDataSource]:
+            list[CatalogDataSource]:
                 List of all Data Sources in the whole organization.
         """
         get_data_sources = functools.partial(
@@ -136,7 +136,7 @@ class CatalogDataSourceService(CatalogServiceBase):
         data_sources = load_all_entities_dict(get_data_sources)
         return [CatalogDataSource.from_api(ds) for ds in data_sources["data"]]
 
-    def list_data_source_tables(self, data_source_id: str) -> List[CatalogDataSourceTable]:
+    def list_data_source_tables(self, data_source_id: str) -> list[CatalogDataSourceTable]:
         """Lists all the data source tables for a given data source.
 
         Args:
@@ -144,7 +144,7 @@ class CatalogDataSourceService(CatalogServiceBase):
                 Data Source identification string. e.g. "demo"
 
         Returns:
-            List[CatalogDataSourceTable]:
+            list[CatalogDataSourceTable]:
                 List of Data Source Table objects
         """
         get_data_source_tables = functools.partial(
@@ -329,7 +329,7 @@ class CatalogDataSourceService(CatalogServiceBase):
         generate_ldm_request: CatalogGenerateLdmRequest = CatalogGenerateLdmRequest(separator="__", wdf_prefix="wdf"),
         scan_request: CatalogScanModelRequest = CatalogScanModelRequest(),
         report_warnings: bool = False,
-    ) -> Tuple[CatalogDeclarativeModel, CatalogScanResultPdm]:
+    ) -> tuple[CatalogDeclarativeModel, CatalogScanResultPdm]:
         """Scan data source and use returned PDM to generate logical data model. If generate_ldm_request
         contains PDM already, PDM tables received from the scan are appended without deduplication.
 

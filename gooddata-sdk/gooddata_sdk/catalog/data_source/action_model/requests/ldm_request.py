@@ -1,7 +1,7 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import List, Optional, Type
+from typing import Optional
 
 import attr
 from gooddata_api_client.model.generate_ldm_request import GenerateLdmRequest
@@ -17,20 +17,20 @@ from gooddata_sdk.catalog.data_source.declarative_model.physical_model.table imp
 class CatalogPdmSql(Base):
     statement: str
     title: str
-    columns: List[SqlColumn]
+    columns: list[SqlColumn]
 
     @staticmethod
-    def client_class() -> Type[PdmSql]:
+    def client_class() -> type[PdmSql]:
         return PdmSql
 
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogPdmLdmRequest(Base):
-    sqls: Optional[List[CatalogPdmSql]] = None
-    tables: Optional[List[CatalogDeclarativeTable]] = None
+    sqls: Optional[list[CatalogPdmSql]] = None
+    tables: Optional[list[CatalogDeclarativeTable]] = None
 
     @staticmethod
-    def client_class() -> Type[PdmLdmRequest]:
+    def client_class() -> type[PdmLdmRequest]:
         return PdmLdmRequest
 
 
@@ -53,5 +53,5 @@ class CatalogGenerateLdmRequest(Base):
     workspace_id: Optional[str] = None
 
     @staticmethod
-    def client_class() -> Type[GenerateLdmRequest]:
+    def client_class() -> type[GenerateLdmRequest]:
         return GenerateLdmRequest

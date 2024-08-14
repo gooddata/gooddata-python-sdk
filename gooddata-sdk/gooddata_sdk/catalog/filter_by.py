@@ -1,8 +1,6 @@
 # (C) 2024 GoodData Corporation
 from __future__ import annotations
 
-from typing import Type
-
 import attr
 from gooddata_api_client.model.filter_by import FilterBy
 
@@ -14,5 +12,5 @@ class CatalogFilterBy(Base):
     label_type: str
 
     @staticmethod
-    def client_class() -> Type[FilterBy]:
+    def client_class() -> type[FilterBy]:
         return FilterBy

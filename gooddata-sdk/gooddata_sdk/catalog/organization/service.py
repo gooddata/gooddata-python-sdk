@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import functools
-from typing import List, Optional
+from typing import Optional
 
 from gooddata_api_client.exceptions import NotFoundException
 from gooddata_api_client.model.json_api_csp_directive_in_document import JsonApiCspDirectiveInDocument
@@ -70,11 +70,11 @@ class CatalogOrganizationService(CatalogServiceBase):
         organization_document = CatalogOrganizationDocument(data=organization)
         self._entities_api.update_entity_organizations(organization.id, organization_document.to_api())
 
-    def update_allowed_origins(self, allowed_origins: List[str]) -> None:
+    def update_allowed_origins(self, allowed_origins: list[str]) -> None:
         """Updates the allowed origins of the organization.
 
         Args:
-            allowed_origins (List[str]):
+            allowed_origins (list[str]):
                 New allowed origins of the organization
 
         Returns:
@@ -138,22 +138,22 @@ class CatalogOrganizationService(CatalogServiceBase):
         except NotFoundException:
             raise ValueError(f"Can not delete {jwk_id} jwk. This jwk does not exist.")
 
-    def list_jwks(self) -> List[CatalogJwk]:
+    def list_jwks(self) -> list[CatalogJwk]:
         """Returns a list of all jwks in the current organization.
 
         Returns:
-            List[CatalogJwk]:
+            list[CatalogJwk]:
                 List of jwks in the current organization.
         """
         get_jwks = functools.partial(self._entities_api.get_all_entities_jwks, _check_return_type=False)
         jwks = load_all_entities(get_jwks)
         return [CatalogJwk.from_api(jwk) for jwk in jwks.data]
 
-    def list_organization_settings(self) -> List[CatalogOrganizationSetting]:
+    def list_organization_settings(self) -> list[CatalogOrganizationSetting]:
         """Returns a list of all organization settings in the current organization.
 
         Returns:
-            List[CatalogOrganizationSettings]:
+            list[CatalogOrganizationSettings]:
                 List of organization settings in the current organization.
         """
         get_organization_settings = functools.partial(
@@ -241,11 +241,11 @@ class CatalogOrganizationService(CatalogServiceBase):
                 f"This organization setting does not exist."
             )
 
-    def list_csp_directives(self) -> List[CatalogCspDirective]:
+    def list_csp_directives(self) -> list[CatalogCspDirective]:
         """Returns a list of all csp directives in the current organization.
 
         Returns:
-            List[CatalogOrganizationSettings]:
+            list[CatalogOrganizationSettings]:
                 List of csp directives in the current organization.
         """
         get_csp_directives = functools.partial(

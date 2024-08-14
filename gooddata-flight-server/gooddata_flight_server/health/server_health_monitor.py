@@ -2,7 +2,6 @@
 import enum
 import threading
 import time
-from typing import Dict
 
 import structlog
 
@@ -37,7 +36,7 @@ class ServerHealthMonitor:
         self._logger = structlog.get_logger("gooddata_flight_server.maintenance")
         self._libc = LibcUtils()
         self._trim_interval = trim_interval
-        self._module_statuses: Dict[str, ModuleHealthStatus] = {}
+        self._module_statuses: dict[str, ModuleHealthStatus] = {}
 
         self._thread = threading.Thread(
             name="gooddata_flight_server.maintenance",
@@ -73,7 +72,7 @@ class ServerHealthMonitor:
             time.sleep(1.0)
 
     @property
-    def module_statuses(self) -> Dict[str, ModuleHealthStatus]:
+    def module_statuses(self) -> dict[str, ModuleHealthStatus]:
         return self._module_statuses
 
     def set_module_status(self, name: str, status: ModuleHealthStatus) -> None:

@@ -1,7 +1,7 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import List, Optional, Type
+from typing import Optional
 
 import attr
 from gooddata_api_client.model.json_api_jwk_in import JsonApiJwkIn
@@ -17,7 +17,7 @@ class CatalogJwkDocument(Base):
     data: CatalogJwk
 
     @staticmethod
-    def client_class() -> Type[JsonApiJwkInDocument]:
+    def client_class() -> type[JsonApiJwkInDocument]:
         return JsonApiJwkInDocument
 
 
@@ -27,7 +27,7 @@ class CatalogJwk(Base):
     attributes: Optional[CatalogJwkAttributes] = None
 
     @staticmethod
-    def client_class() -> Type[JsonApiJwkIn]:
+    def client_class() -> type[JsonApiJwkIn]:
         return JsonApiJwkIn
 
     @classmethod
@@ -44,7 +44,7 @@ class CatalogJwkAttributes(Base):
     content: Optional[CatalogRsaSpecification] = None
 
     @staticmethod
-    def client_class() -> Type[JsonApiJwkInAttributes]:
+    def client_class() -> type[JsonApiJwkInAttributes]:
         return JsonApiJwkInAttributes
 
 
@@ -56,9 +56,9 @@ class CatalogRsaSpecification(Base):
     kty: str
     n: str
     use: str
-    x5c: List[str]
+    x5c: list[str]
     x5t: str
 
     @staticmethod
-    def client_class() -> Type[JsonApiJwkInAttributesContent]:
+    def client_class() -> type[JsonApiJwkInAttributesContent]:
         return JsonApiJwkInAttributesContent

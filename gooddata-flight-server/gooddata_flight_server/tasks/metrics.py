@@ -1,6 +1,6 @@
 #  (C) 2024 GoodData Corporation
 import threading
-from typing import Callable, Dict, TypeVar
+from typing import Callable, TypeVar
 
 from prometheus_client import Counter, Gauge, Summary
 from prometheus_client.metrics import MetricWrapperBase
@@ -25,18 +25,18 @@ class TaskExecutorMetrics:
     or create new instances.
     """
 
-    _QueueSize: Dict[str, Gauge] = {}
-    _CloseQueueSize: Dict[str, Gauge] = {}
-    _WaitTime: Dict[str, Summary] = {}
-    _TaskE2EDuration: Dict[str, Summary] = {}
-    _TaskDuration: Dict[str, Summary] = {}
-    _TaskErrors: Dict[str, Counter] = {}
-    _TaskCancelled: Dict[str, Counter] = {}
-    _TaskCompleted: Dict[str, Counter] = {}
+    _QueueSize: dict[str, Gauge] = {}
+    _CloseQueueSize: dict[str, Gauge] = {}
+    _WaitTime: dict[str, Summary] = {}
+    _TaskE2EDuration: dict[str, Summary] = {}
+    _TaskDuration: dict[str, Summary] = {}
+    _TaskErrors: dict[str, Counter] = {}
+    _TaskCancelled: dict[str, Counter] = {}
+    _TaskCompleted: dict[str, Counter] = {}
     _MapLock = threading.Lock()
 
     @staticmethod
-    def _get_or_create(d: Dict[str, _TMetric], prefix: str, create_fun: Callable[[], _TMetric]) -> _TMetric:
+    def _get_or_create(d: dict[str, _TMetric], prefix: str, create_fun: Callable[[], _TMetric]) -> _TMetric:
         with TaskExecutorMetrics._MapLock:
             existing = d.get(prefix)
             if existing is not None:

@@ -1,7 +1,7 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import Type
+import builtins
 
 import attr
 from gooddata_api_client.model.assignee_rule import AssigneeRule
@@ -14,5 +14,5 @@ class CatalogAssigneeRule(Base):
     type: str = attr.field(validator=value_in_allowed)
 
     @staticmethod
-    def client_class() -> Type[AssigneeRule]:
+    def client_class() -> builtins.type[AssigneeRule]:
         return AssigneeRule

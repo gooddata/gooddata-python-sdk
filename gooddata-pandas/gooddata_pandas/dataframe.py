@@ -1,7 +1,7 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
 
-from typing import Optional, Tuple, Union
+from typing import Optional, Union
 
 import pandas
 from gooddata_api_client import models
@@ -202,7 +202,7 @@ class DataFrameFactory:
         result_size_dimensions_limits: ResultSizeDimensions = (),
         result_size_bytes_limit: Optional[int] = None,
         page_size: int = _DEFAULT_PAGE_SIZE,
-    ) -> Tuple[pandas.DataFrame, DataFrameMetadata]:
+    ) -> tuple[pandas.DataFrame, DataFrameMetadata]:
         """
         Creates a data frame using an execution definition.
 
@@ -261,7 +261,7 @@ class DataFrameFactory:
         use_local_ids_in_headers: bool = False,
         use_primary_labels_in_attributes: bool = False,
         page_size: int = _DEFAULT_PAGE_SIZE,
-    ) -> Tuple[pandas.DataFrame, DataFrameMetadata]:
+    ) -> tuple[pandas.DataFrame, DataFrameMetadata]:
         """
             Retrieves a DataFrame and DataFrame metadata for a given execution result identifier.
 

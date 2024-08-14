@@ -4,7 +4,7 @@ import logging
 import os
 import time
 from pathlib import Path
-from typing import Dict, List, Tuple, Union
+from typing import Union
 
 import attrs
 import requests
@@ -74,7 +74,7 @@ class DbtCredentials(DbtCloudBase):
         return response.status_code == 200
 
     @property
-    def bearer_token_header(self) -> Dict:
+    def bearer_token_header(self) -> dict:
         return {"Authorization": f"Bearer {self.token}"}
 
 
@@ -84,7 +84,7 @@ class DbtExecutionInfo:
     execution_time: float
 
     @classmethod
-    def from_dict(cls, data: Dict) -> "DbtExecutionInfo":
+    def from_dict(cls, data: dict) -> "DbtExecutionInfo":
         return structure(data, cls)
 
 
@@ -95,7 +95,7 @@ class DbtExecutionHistoryInfo:
     status: str
 
     @classmethod
-    def from_dict(cls, data: Dict) -> "DbtExecutionHistoryInfo":
+    def from_dict(cls, data: dict) -> "DbtExecutionHistoryInfo":
         return structure(data, cls)
 
 
@@ -106,7 +106,7 @@ class DbtExecution:
     execution_info: DbtExecutionInfo
 
     @classmethod
-    def from_dict(cls, data: Dict) -> "DbtExecution":
+    def from_dict(cls, data: dict) -> "DbtExecution":
         return structure(data, cls)
 
 
@@ -119,7 +119,7 @@ class DbtConnection(DbtCloudBase):
         if not can_connect:
             raise ValueError("Cannot connect to dbt Cloud. Please, check credentials.")
 
-    def _post_rest(self, url: str, data: Dict) -> Dict:
+    def _post_rest(self, url: str, data: dict) -> dict:
         response = requests.post(url, headers=self.credentials.bearer_token_header, data=data)
         if response.status_code != 200:
             raise ValueError(
@@ -139,7 +139,7 @@ class DbtConnection(DbtCloudBase):
             )
         return response.json()
 
-    def run_job(self, logger: logging.Logger, job_id: str) -> Tuple[str, str]:
+    def run_job(self, logger: logging.Logger, job_id: str) -> tuple[str, str]:
         url = f"{self.base_v2}/accounts/{self.credentials.account_id}/jobs/{job_id}/run/"
         data = {"cause": "Triggered via API by gooddata-dbt plugin"}
         # Allow testing from localhost where COMMIT_SHA is not set
@@ -161,13 +161,13 @@ class DbtConnection(DbtCloudBase):
         return run_id, run_href
 
     @staticmethod
-    def _was_fetch_success(response: Dict) -> bool:
+    def _was_fetch_success(response: dict) -> bool:
         is_complete = safeget(response, ["data", "is_complete"])
         is_success = safeget(response, ["data", "is_success"])
         return is_complete and is_success
 
     @staticmethod
-    def _is_fetch_done(response: Dict) -> bool:
+    def _is_fetch_done(response: dict) -> bool:
         is_complete = safeget(response, ["data", "is_complete"])
         is_error = safeget(response, ["data", "is_error"])
         if is_error:
@@ -224,7 +224,7 @@ class DbtConnection(DbtCloudBase):
     def download_manifest(self, run_id: str, path: Union[str, Path] = Path("target")) -> None:
         self.download_artifact(run_id, "manifest.json", path)
 
-    def read_env_vars(self, project_id: str, job_id: str) -> Dict:
+    def read_env_vars(self, project_id: str, job_id: str) -> dict:
         url = (
             f"{self.base_v3}/accounts/{self.credentials.account_id}/projects/{project_id}"
             f"/environment-variables/job/?job_definition_id={job_id}"
@@ -282,7 +282,7 @@ class DbtConnection(DbtCloudBase):
     def string_camel_to_snake(element: str) -> str:
         return "".join(["_" + c.lower() if c.isupper() else c for c in element]).lstrip("_")
 
-    def dict_camel_to_snake(self, data: Union[Dict, List]) -> Union[Dict, List]:
+    def dict_camel_to_snake(self, data: Union[dict, list]) -> Union[dict, list]:
         if isinstance(data, list):
             result = []
             for record in data:
@@ -299,15 +299,15 @@ class DbtConnection(DbtCloudBase):
                     result[self.string_camel_to_snake(key)] = value  # type: ignore
         return result
 
-    def get_last_execution(self, environment_id: str, model_count: int) -> List[DbtExecution]:
+    def get_last_execution(self, environment_id: str, model_count: int) -> list[DbtExecution]:
         variables = {"environmentId": environment_id, "first": model_count}
         result = self._post_graphql(self.graphql_applied_models, variables)
         model_edges = self.dict_camel_to_snake(safeget(result, ["data", "environment", "applied", "models", "edges"]))
         return [DbtExecution.from_dict(m["node"]) for m in model_edges]
 
     def get_average_times(
-        self, logger: logging.Logger, models: List[DbtExecution], environment_id: str, history_count: int
-    ) -> Dict[str, float]:
+        self, logger: logging.Logger, models: list[DbtExecution], environment_id: str, history_count: int
+    ) -> dict[str, float]:
         models_history_avg_execution_times = {}
         for model in models:
             variables = {"environmentId": environment_id, "modelId": model.unique_id, "first": history_count}

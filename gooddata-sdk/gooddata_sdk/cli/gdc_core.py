@@ -4,7 +4,6 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
-from typing import List
 
 from gooddata_sdk.cli.clone import clone_all, clone_granular
 from gooddata_sdk.cli.constants import GD_COMMAND, GD_PACKAGE_JSON, GD_ROOT
@@ -90,7 +89,7 @@ def _manage_node_cli() -> None:
         sys.exit(1)
 
 
-def main(cli_args: List[str]) -> None:
+def main(cli_args: list[str]) -> None:
     """
     The entrypoint for gdc cli.
     """

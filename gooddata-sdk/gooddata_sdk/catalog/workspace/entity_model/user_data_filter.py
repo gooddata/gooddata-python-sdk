@@ -1,7 +1,7 @@
 # (C) 2023 GoodData Corporation
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional, Type, Union
+from typing import Any, Optional, Union
 
 import attr
 from gooddata_api_client.model.json_api_user_data_filter_in import JsonApiUserDataFilterIn
@@ -21,7 +21,7 @@ class CatalogUserDataFilterDocument(Base):
     data: CatalogUserDataFilter
 
     @staticmethod
-    def client_class() -> Type[JsonApiUserDataFilterInDocument]:
+    def client_class() -> type[JsonApiUserDataFilterInDocument]:
         return JsonApiUserDataFilterInDocument
 
     def to_api(
@@ -38,13 +38,13 @@ class CatalogUserDataFilterDocument(Base):
         return JsonApiUserDataFilterPostOptionalIdDocument.from_dict(dictionary, camel_case=False)
 
 
-def _proces_entity_list_output(list_entity_data: Optional[Dict[str, List[CatalogEntityIdentifier]]]) -> List[str]:
+def _proces_entity_list_output(list_entity_data: Optional[dict[str, list[CatalogEntityIdentifier]]]) -> list[str]:
     if list_entity_data:
         return list(map(lambda x: x.id, list_entity_data["data"]))
     return []
 
 
-def _data_entity(value: Any) -> Dict[str, Any]:
+def _data_entity(value: Any) -> dict[str, Any]:
     return {"data": value}
 
 
@@ -55,7 +55,7 @@ class CatalogUserDataFilter(Base):
     relationships: Optional[CatalogUserDataFilterRelationships] = None
 
     @staticmethod
-    def client_class() -> Type[JsonApiUserDataFilterIn]:
+    def client_class() -> type[JsonApiUserDataFilterIn]:
         return JsonApiUserDataFilterIn
 
     @classmethod
@@ -66,7 +66,7 @@ class CatalogUserDataFilter(Base):
         are_relations_valid: Optional[bool] = None,
         title: Optional[str] = None,
         description: Optional[str] = None,
-        tags: Optional[List[str]] = None,
+        tags: Optional[list[str]] = None,
         user_id: Optional[str] = None,
         user_group_id: Optional[str] = None,
     ) -> CatalogUserDataFilter:
@@ -103,31 +103,31 @@ class CatalogUserDataFilter(Base):
         return None
 
     @property
-    def attribute_ids(self) -> List[str]:
+    def attribute_ids(self) -> list[str]:
         if self.relationships is None:
             return []
         return _proces_entity_list_output(self.relationships.attributes)
 
     @property
-    def label_ids(self) -> List[str]:
+    def label_ids(self) -> list[str]:
         if self.relationships is None:
             return []
         return _proces_entity_list_output(self.relationships.labels)
 
     @property
-    def fact_ids(self) -> List[str]:
+    def fact_ids(self) -> list[str]:
         if self.relationships is None:
             return []
         return _proces_entity_list_output(self.relationships.facts)
 
     @property
-    def dataset_ids(self) -> List[str]:
+    def dataset_ids(self) -> list[str]:
         if self.relationships is None:
             return []
         return _proces_entity_list_output(self.relationships.datasets)
 
     @property
-    def metric_ids(self) -> List[str]:
+    def metric_ids(self) -> list[str]:
         if self.relationships is None:
             return []
         return _proces_entity_list_output(self.relationships.metrics)
@@ -158,25 +158,25 @@ class CatalogUserDataFilterAttributes(Base):
     are_relations_valid: Optional[bool] = None
     title: Optional[str] = None
     description: Optional[str] = None
-    tags: Optional[List[str]] = None
+    tags: Optional[list[str]] = None
 
     @staticmethod
-    def client_class() -> Type[JsonApiUserDataFilterInAttributes]:
+    def client_class() -> type[JsonApiUserDataFilterInAttributes]:
         return JsonApiUserDataFilterInAttributes
 
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogUserDataFilterRelationships(Base):
-    user: Optional[Dict[str, CatalogEntityIdentifier]] = None
-    user_group: Optional[Dict[str, CatalogEntityIdentifier]] = None
-    attributes: Optional[Dict[str, List[CatalogEntityIdentifier]]] = None
-    labels: Optional[Dict[str, List[CatalogEntityIdentifier]]] = None
-    datasets: Optional[Dict[str, List[CatalogEntityIdentifier]]] = None
-    facts: Optional[Dict[str, List[CatalogEntityIdentifier]]] = None
-    metrics: Optional[Dict[str, List[CatalogEntityIdentifier]]] = None
+    user: Optional[dict[str, CatalogEntityIdentifier]] = None
+    user_group: Optional[dict[str, CatalogEntityIdentifier]] = None
+    attributes: Optional[dict[str, list[CatalogEntityIdentifier]]] = None
+    labels: Optional[dict[str, list[CatalogEntityIdentifier]]] = None
+    datasets: Optional[dict[str, list[CatalogEntityIdentifier]]] = None
+    facts: Optional[dict[str, list[CatalogEntityIdentifier]]] = None
+    metrics: Optional[dict[str, list[CatalogEntityIdentifier]]] = None
 
     @staticmethod
-    def client_class() -> Type[JsonApiUserDataFilterInRelationships]:
+    def client_class() -> type[JsonApiUserDataFilterInRelationships]:
         return JsonApiUserDataFilterInRelationships
 
     @classmethod

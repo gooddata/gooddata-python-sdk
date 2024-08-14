@@ -1,6 +1,4 @@
 # (C) 2023 GoodData Corporation
-from typing import Type
-
 import attr
 from gooddata_api_client.model.declarative_workspace_data_filter_references import (
     DeclarativeWorkspaceDataFilterReferences,
@@ -17,5 +15,5 @@ class CatalogDeclarativeWorkspaceDataFilterReferences(Base):
     filter_column_data_type: str
 
     @staticmethod
-    def client_class() -> Type[DeclarativeWorkspaceDataFilterReferences]:
+    def client_class() -> type[DeclarativeWorkspaceDataFilterReferences]:
         return DeclarativeWorkspaceDataFilterReferences

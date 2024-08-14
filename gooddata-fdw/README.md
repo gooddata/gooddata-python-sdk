@@ -11,7 +11,7 @@ See [DOCUMENTATION](https://gooddata-fdw.readthedocs.io/en/latest/) for more det
 -  [GoodData](https://www.gooddata.com/docs/cloud/) installation; either running on your cloud
    infrastructure or the free Community Edition running on your workstation
 
--  Python 3.8 or newer
+-  Python 3.9 or newer
 
 -  The GoodData Cloud Foreign Data Wrapper is tested with the latest version of multicorn (1.4.0) and PostgreSQL 12
 

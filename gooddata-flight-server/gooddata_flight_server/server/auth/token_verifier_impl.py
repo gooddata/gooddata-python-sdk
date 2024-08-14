@@ -1,5 +1,5 @@
 #  (C) 2024 GoodData Corporation
-from typing import Any, Set
+from typing import Any
 
 import pyarrow.flight
 from dynaconf import ValidationError
@@ -17,7 +17,7 @@ class EnumeratedTokenVerification(TokenVerificationStrategy):
     a token if it matches one of the tokens specified in the settings.
     """
 
-    def __init__(self, allowed_tokens: Set[str]) -> None:
+    def __init__(self, allowed_tokens: set[str]) -> None:
         self._tokens = allowed_tokens
 
     def verify(self, call_info: pyarrow.flight.CallInfo, token: str) -> Any:

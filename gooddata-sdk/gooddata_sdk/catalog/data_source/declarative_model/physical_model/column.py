@@ -1,7 +1,7 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import Optional, Type
+from typing import Optional
 
 import attr
 from gooddata_api_client.model.declarative_column import DeclarativeColumn
@@ -18,5 +18,5 @@ class CatalogDeclarativeColumn(Base):
     referenced_table_column: Optional[str] = None
 
     @staticmethod
-    def client_class() -> Type[DeclarativeColumn]:
+    def client_class() -> type[DeclarativeColumn]:
         return DeclarativeColumn

@@ -1,5 +1,5 @@
 #  (C) 2024 GoodData Corporation
-from typing import Dict, List, Optional, Tuple
+from typing import Optional
 
 import pyarrow
 from gooddata_flight_server.flexfun.flex_fun import FlexFun
@@ -21,9 +21,9 @@ class _SimpleFun(FlexFun):
 
     def call(
         self,
-        parameters: Dict,
-        columns: Tuple[str, ...],
-        headers: Dict[str, List[str]],
+        parameters: dict,
+        columns: tuple[str, ...],
+        headers: dict[str, list[str]],
     ) -> ArrowData:
         assert _DATA is not None
         return _DATA
