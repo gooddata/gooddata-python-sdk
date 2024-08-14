@@ -2,7 +2,7 @@
 import abc
 import threading
 from dataclasses import dataclass
-from typing import Generator, Iterable, Optional, Tuple, Union, final
+from typing import Generator, Iterable, Optional, Union, final
 
 import pyarrow.flight
 from readerwriterlock import rwlock
@@ -126,7 +126,7 @@ class FlightDataTaskResult(abc.ABC):
     @final
     def acquire_data(
         self,
-    ) -> Tuple[rwlock.Lockable, Union[Iterable[ArrowData], ArrowData]]:
+    ) -> tuple[rwlock.Lockable, Union[Iterable[ArrowData], ArrowData]]:
         """
         Acquires this result's data. This method will first ensure that the data is
         still available for reading:
@@ -184,7 +184,7 @@ class ListFlightsTaskResult:
     infos are materialized.
     """
 
-    flight_infos: Tuple[pyarrow.flight.FlightInfo, ...]
+    flight_infos: tuple[pyarrow.flight.FlightInfo, ...]
 
     def as_generator(self) -> Generator[pyarrow.flight.FlightInfo, None, None]:
         yield from self.flight_infos

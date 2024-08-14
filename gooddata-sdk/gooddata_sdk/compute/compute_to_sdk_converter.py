@@ -1,5 +1,5 @@
 # (C) 2024 GoodData Corporation
-from typing import Any, Dict, Union, cast
+from typing import Any, Union, cast
 
 from gooddata_sdk.compute.model.attribute import Attribute
 from gooddata_sdk.compute.model.base import ObjId
@@ -37,7 +37,7 @@ class ComputeToSdkConverter:
     """
 
     @staticmethod
-    def convert_attribute(attribute_dict: Dict[str, Any]) -> Attribute:
+    def convert_attribute(attribute_dict: dict[str, Any]) -> Attribute:
         """
         Converts attribute dictionary to the SDK Compute model.
         :param attribute_dict: the attribute dictionary to convert
@@ -50,7 +50,7 @@ class ComputeToSdkConverter:
         )
 
     @staticmethod
-    def convert_filter(filter_dict: Dict[str, Any]) -> Filter:
+    def convert_filter(filter_dict: dict[str, Any]) -> Filter:
         """
         Converts filter dictionary to the SDK Compute model.
         :param filter_dict: the filter dictionary to convert
@@ -124,7 +124,7 @@ class ComputeToSdkConverter:
         raise ValueError(f"Unsupported filter definition type: {filter_dict}")
 
     @staticmethod
-    def convert_metric(metric_dict: Dict[str, Any]) -> Metric:
+    def convert_metric(metric_dict: dict[str, Any]) -> Metric:
         """
         Converts metric dictionary to the SDK Compute model.
         :param metric_dict: the metric dictionary to convert

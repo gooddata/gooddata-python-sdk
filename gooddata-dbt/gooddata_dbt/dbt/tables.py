@@ -3,7 +3,7 @@ import copy
 import json
 import re
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Optional, Union
 
 import attrs
 from gooddata_sdk import CatalogDeclarativeColumn, CatalogDeclarativeTable, CatalogDeclarativeTables
@@ -70,7 +70,7 @@ class DbtModelMetaGoodDataColumn(Base):
 class DbtModelBase(Base):
     name: str
     description: str
-    tags: List[str]
+    tags: list[str]
     # If 2+ references point to the same table, the table plays multiple roles,
     # it must be generated as multiple datasets
     role_name: Optional[str] = None
@@ -184,7 +184,7 @@ class DbtModelColumn(DbtModelBase):
 @attrs.define(auto_attribs=True, kw_only=True)
 class DbtModelTable(DbtModelBase):
     schema: str
-    columns: Dict[str, DbtModelColumn]
+    columns: dict[str, DbtModelColumn]
     meta: DbtModelMetaGoodDataTable = attrs.field(factory=DbtModelMetaGoodDataTable)
 
 
@@ -198,7 +198,7 @@ class DbtModelTables:
         * column_type – Optional if missing call  scan
     """
 
-    def __init__(self, tables: List[DbtModelTable], upper_case: bool) -> None:
+    def __init__(self, tables: list[DbtModelTable], upper_case: bool) -> None:
         self.upper_case = upper_case
         self.tables = tables
 
@@ -208,7 +208,7 @@ class DbtModelTables:
         dbt_conn: DbtConnection,
         run_id: str,
         upper_case: bool,
-        all_model_ids: List[str],
+        all_model_ids: list[str],
         path: Union[str, Path] = DBT_TARGET_DIR,
     ) -> "DbtModelTables":
         path = path if isinstance(path, Path) else Path(path)
@@ -220,7 +220,7 @@ class DbtModelTables:
 
     @classmethod
     def from_local(
-        cls, upper_case: bool, all_model_ids: List[str], manifest_path: Union[str, Path] = DBT_PATH_TO_MANIFEST
+        cls, upper_case: bool, all_model_ids: list[str], manifest_path: Union[str, Path] = DBT_PATH_TO_MANIFEST
     ) -> "DbtModelTables":
         with open(manifest_path) as fp:
             dbt_catalog = json.load(fp)
@@ -228,7 +228,7 @@ class DbtModelTables:
         return cls(tables, upper_case)
 
     @staticmethod
-    def read_dbt_models(dbt_catalog: Dict, upper_case: bool, all_model_ids: List[str]) -> List[DbtModelTable]:
+    def read_dbt_models(dbt_catalog: dict, upper_case: bool, all_model_ids: list[str]) -> list[DbtModelTable]:
         tables = []
         for model_def in dbt_catalog["nodes"].values():
             model_id = safeget(model_def, ["meta", "gooddata", "model_id"])
@@ -305,7 +305,7 @@ class DbtModelTables:
             result = True
         return result
 
-    def make_grain(self, table: DbtModelTable) -> List[Dict]:
+    def make_grain(self, table: DbtModelTable) -> list[dict]:
         grain = []
         for column in table.columns.values():
             if self.is_primary_key(column):
@@ -325,10 +325,10 @@ class DbtModelTables:
     #     return referenced_object_id
 
     @staticmethod
-    def find_role_playing_tables(tables: List[DbtModelTable]) -> Dict:
+    def find_role_playing_tables(tables: list[DbtModelTable]) -> dict:
         result = {}
         for table in tables:
-            references: Dict[str, Any] = {}
+            references: dict[str, Any] = {}
             for column in table.columns.values():
                 if column.is_reference():
                     referenced_table = column.meta.gooddata.referenced_table
@@ -342,7 +342,7 @@ class DbtModelTables:
                     result[referenced_object_id] = columns
         return result
 
-    def make_references(self, table: DbtModelTable, role_playing_tables: Dict) -> List[Dict]:
+    def make_references(self, table: DbtModelTable, role_playing_tables: dict) -> list[dict]:
         references = []
         for column in table.columns.values():
             referenced_object_id = None
@@ -368,7 +368,7 @@ class DbtModelTables:
         return references
 
     @staticmethod
-    def make_facts(table: DbtModelTable) -> List[Dict]:
+    def make_facts(table: DbtModelTable) -> list[dict]:
         facts = []
         for column in table.columns.values():
             if column.gooddata_is_fact():
@@ -386,7 +386,7 @@ class DbtModelTables:
         return facts
 
     @staticmethod
-    def make_labels(table: DbtModelTable, attribute_column: DbtModelColumn) -> Tuple[List[Dict], Optional[dict]]:
+    def make_labels(table: DbtModelTable, attribute_column: DbtModelColumn) -> tuple[list[dict], Optional[dict]]:
         labels = []
         default_view = None
         for column in table.columns.values():
@@ -409,7 +409,7 @@ class DbtModelTables:
                     }
         return labels, default_view
 
-    def make_attributes(self, table: DbtModelTable) -> List[Dict]:
+    def make_attributes(self, table: DbtModelTable) -> list[dict]:
         attributes = []
         for column in table.columns.values():
             # Default is attribute
@@ -432,7 +432,7 @@ class DbtModelTables:
         return attributes
 
     @staticmethod
-    def make_date_datasets(table: DbtModelTable, existing_date_datasets: List[Dict]) -> List[Dict]:
+    def make_date_datasets(table: DbtModelTable, existing_date_datasets: list[dict]) -> list[dict]:
         date_datasets = []
         for column in table.columns.values():
             existing_dataset_ids = [d["id"] for d in existing_date_datasets]
@@ -460,7 +460,7 @@ class DbtModelTables:
                 )
         return date_datasets
 
-    def make_dataset(self, data_source_id: str, table: DbtModelTable, role_playing_tables: Dict, result: Dict) -> Dict:
+    def make_dataset(self, data_source_id: str, table: DbtModelTable, role_playing_tables: dict, result: dict) -> dict:
         grain = self.make_grain(table)
         references = self.make_references(table, role_playing_tables)
         facts = self.make_facts(table)
@@ -492,7 +492,7 @@ class DbtModelTables:
         return result
 
     @staticmethod
-    def populate_role_playing_tables(tables: List[DbtModelTable], role_playing_tables: Dict) -> List[DbtModelTable]:
+    def populate_role_playing_tables(tables: list[DbtModelTable], role_playing_tables: dict) -> list[DbtModelTable]:
         result = []
         for table in tables:
             if table.name in role_playing_tables:
@@ -506,8 +506,8 @@ class DbtModelTables:
                 result.append(table)
         return result
 
-    def make_declarative_datasets(self, data_source_id: str, model_ids: Optional[List[str]]) -> Dict:
-        result: Dict[str, List] = {"datasets": [], "date_instances": []}
+    def make_declarative_datasets(self, data_source_id: str, model_ids: Optional[list[str]]) -> dict:
+        result: dict[str, list] = {"datasets": [], "date_instances": []}
         model_tables = [t for t in self.tables if not model_ids or t.meta.gooddata.model_id in model_ids]
         role_playing_tables = self.find_role_playing_tables(model_tables)
         model_tables_with_roles = self.populate_role_playing_tables(model_tables, role_playing_tables)

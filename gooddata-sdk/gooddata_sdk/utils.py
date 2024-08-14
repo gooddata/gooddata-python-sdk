@@ -9,7 +9,7 @@ from collections.abc import KeysView
 from enum import Enum, auto
 from pathlib import Path
 from shutil import rmtree
-from typing import Any, Callable, Dict, List, NamedTuple, Tuple, Union, cast, no_type_check
+from typing import Any, Callable, NamedTuple, Union, cast, no_type_check
 from warnings import warn
 from xml.etree import ElementTree as ET
 
@@ -23,7 +23,7 @@ from gooddata_sdk.compute.model.base import ObjId
 from gooddata_sdk.config import AacConfig, Profile
 
 # Use typing collection types to support python < py3.9
-IdObjType = Union[str, ObjId, Dict[str, Dict[str, str]], Dict[str, str]]
+IdObjType = Union[str, ObjId, dict[str, dict[str, str]], dict[str, str]]
 
 PROFILES_FILE = "profiles.yaml"
 PROFILES_DIRECTORY = ".gooddata"
@@ -71,7 +71,7 @@ def id_obj_to_key(id_obj: IdObjType) -> str:
         if isinstance(value_item, dict):
             raise ValueError(f'Invalid value type "{type(id_obj)}" of id object. Expected dict[str, str]')
         # Use typing collection types to support python < py3.9
-        unwrapped = cast(Dict[str, str], id_obj)
+        unwrapped = cast(dict[str, str], id_obj)
 
     if "id" not in unwrapped or "type" not in unwrapped:
         raise KeyError(
@@ -246,7 +246,7 @@ def mandatory_profile_content_check(profile: str, profile_content_keys: KeysView
         raise ValueError(f"Profile {profile} is missing mandatory parameter or parameters {missing_str}.")
 
 
-def _create_profile_legacy(content: Dict) -> Dict:
+def _create_profile_legacy(content: dict) -> dict:
     try:
         return structure(content, Profile).to_dict()
     except ClassValidationError as e:
@@ -260,7 +260,7 @@ def _create_profile_legacy(content: Dict) -> Dict:
         raise ValueError(msg)
 
 
-def _create_profile_aac(profile: str, content: Dict) -> Dict:
+def _create_profile_aac(profile: str, content: dict) -> dict:
     aac_config = AacConfig.from_dict(content)
     selected_profile = aac_config.default_profile if profile == "default" else profile
     if selected_profile not in aac_config.profiles:
@@ -268,7 +268,7 @@ def _create_profile_aac(profile: str, content: Dict) -> Dict:
     return aac_config.profiles[selected_profile].to_dict(use_env=True)
 
 
-def _get_profile(profile: str, content: Dict) -> Dict[str, Any]:
+def _get_profile(profile: str, content: dict) -> dict[str, Any]:
     is_aac_config = AacConfig.can_structure(content)
     if not is_aac_config and profile not in content:
         raise ValueError("Configuration is invalid. Please check the documentation for the valid configuration.")
@@ -316,7 +316,7 @@ def profile_content(profile: str = "default", profiles_path: Path = PROFILES_FIL
     return _get_profile(profile, content)
 
 
-def get_ds_credentials(config_file: Union[str, Path]) -> Dict[str, str]:
+def get_ds_credentials(config_file: Union[str, Path]) -> dict[str, str]:
     content = _get_config_content(config_file)
     config = AacConfig.from_dict(content)
     return config.ds_credentials()
@@ -324,7 +324,7 @@ def get_ds_credentials(config_file: Union[str, Path]) -> Dict[str, str]:
 
 def good_pandas_profile_content(
     profile: str = "default", profiles_path: Path = PROFILES_FILE_PATH
-) -> Tuple[Dict[str, Any], Dict[str, Any]]:
+) -> tuple[dict[str, Any], dict[str, Any]]:
     """Load the profiles for GoodPandas
 
     This is workaround for GoodPandas. We should only use profile_content in the future.
@@ -346,7 +346,7 @@ def good_pandas_profile_content(
     return content, custom_headers
 
 
-def safeget(var: Any, path: List[str]) -> Any:
+def safeget(var: Any, path: list[str]) -> Any:
     if len(path) == 0:
         # base case: we have reached the innermost key
         return var
@@ -363,7 +363,7 @@ def safeget(var: Any, path: List[str]) -> Any:
             return None
 
 
-def safeget_list(var: Any, path: List[str]) -> List[Any]:
+def safeget_list(var: Any, path: list[str]) -> list[Any]:
     result = safeget(var, path)
     if isinstance(result, list):
         return result
@@ -373,7 +373,7 @@ def safeget_list(var: Any, path: List[str]) -> List[Any]:
         raise Exception("safeget_list: result is not iterable! result={0}".format(result))
 
 
-def get_namespace_from_xliff(xliff_content: str) -> Dict:
+def get_namespace_from_xliff(xliff_content: str) -> dict:
     """Extract the XML namespace from the given XLIFF content.
 
     Args:
@@ -393,7 +393,7 @@ def read_json(path: Union[str, Path]) -> Any:
         return json.loads(f.read())
 
 
-def ref_extract_obj_id(ref: Dict[str, Any]) -> ObjId:
+def ref_extract_obj_id(ref: dict[str, Any]) -> ObjId:
     """
     Extracts ObjId from a ref dictionary.
     :param ref: the ref to extract from
@@ -406,7 +406,7 @@ def ref_extract_obj_id(ref: Dict[str, Any]) -> ObjId:
     raise ValueError("invalid ref. must be identifier")
 
 
-def ref_extract(ref: Dict[str, Any]) -> Union[str, ObjId]:
+def ref_extract(ref: dict[str, Any]) -> Union[str, ObjId]:
     """
     Extracts an object id from a ref dictionary: either an identifier or a localIdentifier.
     :param ref: the ref to extract from

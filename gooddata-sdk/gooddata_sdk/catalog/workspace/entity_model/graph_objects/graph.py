@@ -1,7 +1,8 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import List, Optional, Type
+import builtins
+from typing import Optional
 
 import attr
 from gooddata_api_client.model.dependent_entities_graph import DependentEntitiesGraph
@@ -15,10 +16,10 @@ from gooddata_sdk.catalog.base import Base
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDependentEntitiesRequest(Base):
-    identifiers: List[CatalogEntityIdentifier] = attr.field(factory=list)
+    identifiers: list[CatalogEntityIdentifier] = attr.field(factory=list)
 
     @staticmethod
-    def client_class() -> Type[DependentEntitiesRequest]:
+    def client_class() -> builtins.type[DependentEntitiesRequest]:
         return DependentEntitiesRequest
 
 
@@ -27,17 +28,17 @@ class CatalogDependentEntitiesResponse(Base):
     graph: CatalogDependentEntitiesGraph
 
     @staticmethod
-    def client_class() -> Type[DependentEntitiesResponse]:
+    def client_class() -> builtins.type[DependentEntitiesResponse]:
         return DependentEntitiesResponse
 
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDependentEntitiesGraph(Base):
-    nodes: List[CatalogDependentEntitiesNode] = attr.field(factory=list)
-    edges: List[List[CatalogEntityIdentifier]] = attr.field(factory=list)
+    nodes: list[CatalogDependentEntitiesNode] = attr.field(factory=list)
+    edges: list[list[CatalogEntityIdentifier]] = attr.field(factory=list)
 
     @staticmethod
-    def client_class() -> Type[DependentEntitiesGraph]:
+    def client_class() -> builtins.type[DependentEntitiesGraph]:
         return DependentEntitiesGraph
 
 
@@ -48,7 +49,7 @@ class CatalogDependentEntitiesNode(Base):
     title: Optional[str] = None
 
     @staticmethod
-    def client_class() -> Type[DependentEntitiesNode]:
+    def client_class() -> builtins.type[DependentEntitiesNode]:
         return DependentEntitiesNode
 
 
@@ -58,5 +59,5 @@ class CatalogEntityIdentifier(Base):
     type: str
 
     @staticmethod
-    def client_class() -> Type[EntityIdentifier]:
+    def client_class() -> builtins.type[EntityIdentifier]:
         return EntityIdentifier

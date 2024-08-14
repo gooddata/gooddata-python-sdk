@@ -1,7 +1,7 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Optional, Union, cast
 
 import attr
 import attrs
@@ -132,28 +132,28 @@ class CatalogDataset(AttrCatalogEntity):
         default=attr.Factory(lambda self: self.generate_facts_from_api(), takes_self=True),
     )
 
-    grain: Optional[List] = attr.field(
+    grain: Optional[list] = attr.field(
         default=attr.Factory(lambda self: self.json_api_attributes.get("grain"), takes_self=True)
     )
-    reference_properties: Optional[List] = attr.field(
+    reference_properties: Optional[list] = attr.field(
         default=attr.Factory(lambda self: self.json_api_attributes.get("referenceProperties"), takes_self=True)
     )
     data_source_table_id: Optional[str] = attr.field(
         default=attr.Factory(lambda self: self.json_api_attributes.get("dataSourceTableId"), takes_self=True)
     )
-    data_source_table_path: Optional[List] = attr.field(
+    data_source_table_path: Optional[list] = attr.field(
         default=attr.Factory(lambda self: self.json_api_attributes.get("dataSourceTablePath"), takes_self=True)
     )
-    sql: Optional[Dict] = attr.field(
+    sql: Optional[dict] = attr.field(
         default=attr.Factory(lambda self: self.json_api_attributes.get("sql"), takes_self=True)
     )
     are_relations_valid: Optional[bool] = attr.field(
         default=attr.Factory(lambda self: self.json_api_attributes.get("areRelationsValid"), takes_self=True)
     )
-    workspace_data_filter_columns: Optional[List] = attr.field(
+    workspace_data_filter_columns: Optional[list] = attr.field(
         default=attr.Factory(lambda self: self.json_api_attributes.get("workspaceDataFilterColumns"), takes_self=True)
     )
-    workspace_data_filter_references: Optional[List] = attr.field(
+    workspace_data_filter_references: Optional[list] = attr.field(
         default=attr.Factory(
             lambda self: self.json_api_attributes.get("workspaceDataFilterReferences"), takes_self=True
         )

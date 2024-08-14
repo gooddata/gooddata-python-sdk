@@ -1,7 +1,8 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import Any, ClassVar, Dict, List, Optional, Tuple, Type, TypeVar
+import builtins
+from typing import Any, ClassVar, Optional, TypeVar
 
 import attr
 from cattrs import structure
@@ -31,14 +32,14 @@ def db_attrs_with_template(instance: CatalogDataSource, *args: Any) -> None:
 
 @attr.s(auto_attribs=True, kw_only=True, eq=False)
 class CatalogDataSourceBase(Base):
-    _SUPPORTED_CREDENTIALS: ClassVar[List[Type[Credentials]]] = [
+    _SUPPORTED_CREDENTIALS: ClassVar[list[type[Credentials]]] = [
         BasicCredentials,
         TokenCredentials,
         TokenCredentialsFromFile,
         KeyPairCredentials,
     ]
     _DELIMITER: ClassVar[str] = "&"
-    _ATTRIBUTES: ClassVar[List[str]] = [
+    _ATTRIBUTES: ClassVar[list[str]] = [
         "cache_strategy",
         "url",
         "parameters",
@@ -53,8 +54,8 @@ class CatalogDataSourceBase(Base):
     schema: str
     url: Optional[str] = None
     cache_strategy: Optional[str] = None
-    parameters: Optional[List[Dict[str, str]]] = None
-    decoded_parameters: Optional[List[Dict[str, str]]] = None
+    parameters: Optional[list[dict[str, str]]] = None
+    decoded_parameters: Optional[list[dict[str, str]]] = None
     credentials: Credentials = attr.field(repr=False)
 
     @type.validator
@@ -77,7 +78,7 @@ class CatalogDataSourceBase(Base):
         )
 
     @classmethod
-    def from_api(cls: Type[U], entity: Dict[str, Any]) -> U:
+    def from_api(cls: builtins.type[U], entity: dict[str, Any]) -> U:
         attributes = entity["attributes"]
         credentials = Credentials.create(cls._SUPPORTED_CREDENTIALS, entity)
         return structure({"id": entity["id"], "credentials": credentials, **attributes}, cls)
@@ -105,7 +106,7 @@ class CatalogDataSource(CatalogDataSourceBase):
 
     db_vendor: Optional[str] = attr.field(default=None, init=False)
     db_specific_attributes: Optional[DatabaseAttributes] = attr.field(default=None, validator=db_attrs_with_template)
-    url_params: Optional[List[Tuple[str, str]]] = None
+    url_params: Optional[list[tuple[str, str]]] = None
 
     def __attrs_post_init__(self) -> None:
         self.db_vendor = self.db_vendor or self.type.lower()
@@ -257,7 +258,7 @@ class DatabricksAttributes(DatabaseAttributes):
 class CatalogDataSourceDatabricks(CatalogDataSource):
     _URL_TMPL: ClassVar[str] = "jdbc:{db_vendor}://{host}:{port}/default;httpPath={http_path}"
     type: str = "DATABRICKS"
-    parameters: List[Dict[str, str]]
+    parameters: list[dict[str, str]]
     db_specific_attributes: DatabricksAttributes
 
     def __attrs_post_init__(self) -> None:

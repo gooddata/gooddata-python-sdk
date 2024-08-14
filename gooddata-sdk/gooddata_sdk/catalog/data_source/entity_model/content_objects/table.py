@@ -1,7 +1,7 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import List, Optional
+from typing import Optional
 
 import attr
 
@@ -17,9 +17,9 @@ class CatalogDataSourceTable(Base):
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDataSourceTableAttributes(Base):
-    columns: List[CatalogDataSourceTableColumn]
+    columns: list[CatalogDataSourceTableColumn]
     name_prefix: Optional[str] = None
-    path: Optional[List[str]] = None
+    path: Optional[list[str]] = None
     type: Optional[str] = None
 
 

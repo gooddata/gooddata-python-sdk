@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from datetime import date, datetime
-from typing import Any, Callable, Optional, Type
+from typing import Any, Callable, Optional
 
 from dateutil.parser import parse
 
@@ -230,7 +230,7 @@ class ConverterRegistryStore:
             return cls._TYPE_REGISTRIES[type_name]
 
     @classmethod
-    def register(cls, type_name: str, class_converter: Type[Converter], sub_types: Optional[list[str]] = None) -> None:
+    def register(cls, type_name: str, class_converter: type[Converter], sub_types: Optional[list[str]] = None) -> None:
         """
         Register Converter instance created from provided Converter class to given type and list of sub types.
         When sub types are not provided, converter is registered as the default one for given type.

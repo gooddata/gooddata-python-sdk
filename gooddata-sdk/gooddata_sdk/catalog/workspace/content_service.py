@@ -4,7 +4,7 @@ from __future__ import annotations
 import copy
 import functools
 from pathlib import Path
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 import gooddata_api_client.models as afm_models
 from gooddata_api_client.model.elements_request import ElementsRequest
@@ -42,7 +42,7 @@ from gooddata_sdk.utils import load_all_entities
 ValidObjectTypes = Union[Attribute, Metric, Filter, CatalogLabel, CatalogFact, CatalogMetric]
 
 # Use typing collection types to support python < py3.9
-ValidObjectsInputType = Union[ValidObjectTypes, List[ValidObjectTypes], ExecutionDefinition]
+ValidObjectsInputType = Union[ValidObjectTypes, list[ValidObjectTypes], ExecutionDefinition]
 
 LabelElementsInputType = Union[str, ObjId]
 
@@ -359,14 +359,14 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
     # Declarative methods for analytics model
 
     def get_declarative_analytics_model(
-        self, workspace_id: str, exclude: Optional[List[str]] = None
+        self, workspace_id: str, exclude: Optional[list[str]] = None
     ) -> CatalogDeclarativeAnalytics:
         """Retrieves declarative analytics model. The model is tied to the workspace and organization.
 
         Args:
             workspace_id (str):
                 Workspace identification string e.g. "demo"
-            exclude (Optional[List[str]]):
+            exclude (Optional[list[str]]):
                 Defines properties which should not be included in the payload. E.g.: ["ACTIVITY_INFO"]
 
         Returns:
@@ -447,7 +447,7 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         self.put_declarative_analytics_model(workspace_id, declarative_analytics_model)
 
     def store_analytics_model_to_disk(
-        self, workspace_id: str, path: Path = Path.cwd(), exclude: Optional[List[str]] = None
+        self, workspace_id: str, path: Path = Path.cwd(), exclude: Optional[list[str]] = None
     ) -> None:
         """Store analytics model for a given workspace in directory hierarchy.This method does not tie the declarative
             analytics model to the workspace and organization, thus it is recommended for migration between workspaces.
@@ -458,7 +458,7 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
                 Workspace identification string e.g. "demo"
             path (Path, optional):
                 Path to the root of the layout directory. Defaults to Path.cwd().
-            exclude (Optional[List[str]]):
+            exclude (Optional[list[str]]):
                 Defines properties which should not be included in the payload. E.g.: ["ACTIVITY_INFO"]
 
         Returns:
@@ -563,11 +563,11 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         self,
         workspace_id: str,
         label_id: LabelElementsInputType,
-        depends_on: Optional[List[DependsOnItem]] = None,
-        validate_by: Optional[List[CatalogValidateByItem]] = None,
-        exact_filter: Optional[List[str]] = None,
+        depends_on: Optional[list[DependsOnItem]] = None,
+        validate_by: Optional[list[CatalogValidateByItem]] = None,
+        exact_filter: Optional[list[str]] = None,
         filter_by: Optional[CatalogFilterBy] = None,
-    ) -> List[str]:
+    ) -> list[str]:
         """
         Get existing values for a label.
         Under-the-hood, it basically executes SELECT DISTINCT <label_column_name> from corresponding table.
@@ -579,11 +579,11 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
             label_id (str):
                 Label ID. We support string or ObjId types.
                 String may not contain "label/" prefix, we append it if necessary.
-            depends_on (Optional[List[DependsOnItem]]):
+            depends_on (Optional[list[DependsOnItem]]):
                 Optional parameter specifying dependencies on other labels or date filters.
-            validate_by (Optional[List[CatalogValidateByItem]]):
+            validate_by (Optional[list[CatalogValidateByItem]]):
                 Optional parameter specifying validation metrics, attributes, labels or facts.
-            exact_filter (Optional[List[str]]):
+            exact_filter (Optional[list[str]]):
                 Optional parameter specifying exact filter values.
             filter_by (Optional[CatalogFilterBy]):
                 Optional parameter specifying which label is used for filtering - primary or requested.

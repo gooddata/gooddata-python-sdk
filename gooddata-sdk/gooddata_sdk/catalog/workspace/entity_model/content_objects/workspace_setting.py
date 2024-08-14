@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import functools
-from typing import Any, Dict, Type, Union
+from typing import Any, Union
 
 import attr
 from gooddata_api_client.model.json_api_organization_setting_in_attributes import JsonApiOrganizationSettingInAttributes
@@ -30,7 +30,7 @@ class CatalogWorkspaceSetting(Base):
     )
 
     @staticmethod
-    def client_class() -> Type[JsonApiWorkspaceSettingOut]:
+    def client_class() -> type[JsonApiWorkspaceSettingOut]:
         return JsonApiWorkspaceSettingOut
 
     def _attributes(self) -> JsonApiOrganizationSettingInAttributes:
@@ -56,7 +56,7 @@ class CatalogWorkspaceSetting(Base):
             )
 
     @classmethod
-    def from_api(cls, entity: Dict[str, Any]) -> CatalogWorkspaceSetting:
+    def from_api(cls, entity: dict[str, Any]) -> CatalogWorkspaceSetting:
         return cls(
             id=entity["id"],
             setting_type=entity["attributes"]["type"],

@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import List
 from xml.etree import ElementTree as ET
 
 import yaml
@@ -709,7 +708,7 @@ def test_clone_workspace(test_config):
         delete_data_source(sdk, test_config["data_source2"])
 
 
-def _translate_batch(to_translate: List[str]) -> List[str]:
+def _translate_batch(to_translate: list[str]) -> list[str]:
     return [("Rozpočet" if x == "Budget" else x) for x in to_translate]
 
 

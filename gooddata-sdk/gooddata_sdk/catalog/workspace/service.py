@@ -9,7 +9,7 @@ from copy import deepcopy
 from math import ceil
 from pathlib import Path
 from time import time
-from typing import Any, Callable, Dict, List, Optional, Set
+from typing import Any, Callable, Optional
 from xml.etree import ElementTree as ET
 
 import attrs
@@ -124,11 +124,11 @@ class CatalogWorkspaceService(CatalogServiceBase):
             )
         self._entities_api.delete_entity_workspaces(workspace_id)
 
-    def list_workspaces(self) -> List[CatalogWorkspace]:
+    def list_workspaces(self) -> list[CatalogWorkspace]:
         """Returns a list of all workspaces in current organization
 
         Returns:
-            List[CatalogWorkspace]: List of workspaces in the current organization.
+            list[CatalogWorkspace]: List of workspaces in the current organization.
 
         """
         get_workspaces = functools.partial(
@@ -175,7 +175,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
             self._entities_api.get_entity_workspace_settings(workspace_id, workspace_setting_id).data
         )
 
-    def list_workspace_settings(self, workspace_id: str) -> List[CatalogWorkspaceSetting]:
+    def list_workspace_settings(self, workspace_id: str) -> list[CatalogWorkspaceSetting]:
         get_workspace_settings = functools.partial(
             self._entities_api.get_all_entities_workspace_settings,
             workspace_id,
@@ -226,11 +226,11 @@ class CatalogWorkspaceService(CatalogServiceBase):
 
     # Declarative methods - workspaces
 
-    def get_declarative_workspaces(self, exclude: Optional[List[str]] = None) -> CatalogDeclarativeWorkspaces:
+    def get_declarative_workspaces(self, exclude: Optional[list[str]] = None) -> CatalogDeclarativeWorkspaces:
         """Get all workspaces in the current organization in a declarative form.
 
         Args:
-            exclude (Optional[List[str]]):
+            exclude (Optional[list[str]]):
                 Defines properties which should not be included in the payload.
 
         Returns:
@@ -299,14 +299,14 @@ class CatalogWorkspaceService(CatalogServiceBase):
     # Declarative methods - workspace
 
     def get_declarative_workspace(
-        self, workspace_id: str, exclude: Optional[List[str]] = None
+        self, workspace_id: str, exclude: Optional[list[str]] = None
     ) -> CatalogDeclarativeWorkspaceModel:
         """Retrieve a workspace layout.
 
         Args:
             workspace_id (str):
                 Workspace identification string e.g. "demo"
-            exclude (Optional[List[str]]):
+            exclude (Optional[list[str]]):
                 Defines properties which should not be included in the payload.
 
         Returns:
@@ -342,7 +342,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
         self._layout_api.put_workspace_layout(workspace_id, workspace.to_api())
 
     def store_declarative_workspace(
-        self, workspace_id: str, layout_root_path: Path = Path.cwd(), exclude: Optional[List[str]] = None
+        self, workspace_id: str, layout_root_path: Path = Path.cwd(), exclude: Optional[list[str]] = None
     ) -> None:
         """Store workspace layout in a directory hierarchy.
 
@@ -351,7 +351,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
                 Workspace identification string e.g. "demo"
             layout_root_path (Path, optional):
                 Path to the root of the layout directory. Defaults to Path.cwd().
-            exclude (Optional[List[str]]):
+            exclude (Optional[list[str]]):
                 Defines properties which should not be included in the payload.
         """
         workspace_folder = get_workspace_folder(
@@ -581,8 +581,8 @@ class CatalogWorkspaceService(CatalogServiceBase):
 
     @staticmethod
     def translate_in_batches(
-        to_translate: Set[str], to_lang: str, from_lang: str, translator_func: Callable, batch_size: int = 100
-    ) -> Dict[str, str]:
+        to_translate: set[str], to_lang: str, from_lang: str, translator_func: Callable, batch_size: int = 100
+    ) -> dict[str, str]:
         start = time()
         # Group the values into batches
         value_batches = [list(to_translate)[i : i + batch_size] for i in range(0, len(to_translate), batch_size)]
@@ -609,7 +609,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
         return result
 
     @staticmethod
-    def read_translation_file(translation_file_path: Path) -> Dict[str, str]:
+    def read_translation_file(translation_file_path: Path) -> dict[str, str]:
         # Read already existing translation file, if it exists
         already_translated = {}
         if translation_file_path.is_file():
@@ -654,13 +654,13 @@ class CatalogWorkspaceService(CatalogServiceBase):
 
     def translate_if_requested(
         self,
-        to_translate: Set[str],
+        to_translate: set[str],
         translator_func: Optional[Callable],
         to_lang: str,
         from_lang: str,
-        already_translated: Dict[str, str],
+        already_translated: dict[str, str],
         translation_file_path: Path,
-    ) -> Dict[str, str]:
+    ) -> dict[str, str]:
         if to_translate and translator_func:
             translated = {
                 **self.translate_in_batches(to_translate, to_lang, from_lang, translator_func),
@@ -684,27 +684,27 @@ class CatalogWorkspaceService(CatalogServiceBase):
         return translated
 
     @staticmethod
-    def add_title_description(to_translate: Set[str], title: Optional[str], description: Optional[str]) -> None:
+    def add_title_description(to_translate: set[str], title: Optional[str], description: Optional[str]) -> None:
         if title:
             to_translate.add(title)
         if description:
             to_translate.add(description)
 
     def add_title_description_tags(
-        self, to_translate: Set[str], title: Optional[str], description: Optional[str], tags: Optional[List[str]]
+        self, to_translate: set[str], title: Optional[str], description: Optional[str], tags: Optional[list[str]]
     ) -> None:
         self.add_title_description(to_translate, title, description)
         if tags:
             to_translate.update(set(tags))
 
     @staticmethod
-    def set_title_description(workspace_object: Any, translated: Dict[str, str]) -> None:
+    def set_title_description(workspace_object: Any, translated: dict[str, str]) -> None:
         if workspace_object.title:
             workspace_object.title = translated[workspace_object.title]
         if workspace_object.description:
             workspace_object.description = translated[workspace_object.description]
 
-    def set_title_description_tags(self, workspace_object: Any, translated: Dict[str, str]) -> None:
+    def set_title_description_tags(self, workspace_object: Any, translated: dict[str, str]) -> None:
         self.set_title_description(workspace_object, translated)
         if workspace_object.tags:
             workspace_object.tags = [translated[x] for x in workspace_object.tags]
@@ -713,8 +713,8 @@ class CatalogWorkspaceService(CatalogServiceBase):
         self,
         workspace: CatalogWorkspace,
         workspace_content: CatalogDeclarativeWorkspaceModel,
-        already_translated: Dict[str, str],
-    ) -> Set[str]:
+        already_translated: dict[str, str],
+    ) -> set[str]:
         # We translate each string just once. Collect all strings into a set()
         to_translate = set()
         to_translate.add(workspace.name)
@@ -768,7 +768,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
         new_workspace: CatalogWorkspace,
         new_workspace_content: CatalogDeclarativeWorkspaceModel,
         lang: str,
-        translated: Dict[str, str],
+        translated: dict[str, str],
     ) -> None:
         # TODO - WS ID/NAME may not be handled if provisioning of WS is not requested
         lang_for_id = re.sub(r"[^a-zA-Z0-9_]", "_", lang)
@@ -1064,7 +1064,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
         )
         self.put_declarative_workspace_data_filters(declarative_workspace_data_filters)
 
-    def list_user_data_filters(self, workspace_id: str) -> List[CatalogUserDataFilter]:
+    def list_user_data_filters(self, workspace_id: str) -> list[CatalogUserDataFilter]:
         """list all user data filers.
 
         Args:
@@ -1072,7 +1072,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
                 String containing id of the workspace.
 
         Returns:
-            List[CatalogUserDataFilter]:
+            list[CatalogUserDataFilter]:
                 List of user data filter entities.
         """
         get_user_data_filters = functools.partial(

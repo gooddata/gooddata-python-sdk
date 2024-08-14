@@ -31,7 +31,7 @@ setup(
     install_requires=REQUIRES,
     packages=find_packages(exclude=["tests*"]),
     include_package_data=True,
-    python_requires=">=3.8.0",
+    python_requires=">=3.9.0",
     project_urls={
         "Documentation": "https://gooddata-flight-server.readthedocs.io/en/v1.24.0",
         "Source": "https://github.com/gooddata/gooddata-python-sdk",
@@ -43,7 +43,6 @@ setup(
         "Development Status :: 4 - Beta",
         "Environment :: Console",
         "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",

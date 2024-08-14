@@ -1,8 +1,6 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import List, Type
-
 import attr
 from gooddata_api_client.model.declarative_analytical_dashboard_permission_for_assignee import (
     DeclarativeAnalyticalDashboardPermissionForAssignee,
@@ -28,7 +26,7 @@ class CatalogDeclarativeSingleWorkspacePermission(Base):
     assignee: CatalogAssigneeIdentifier
 
     @staticmethod
-    def client_class() -> Type[DeclarativeSingleWorkspacePermission]:
+    def client_class() -> type[DeclarativeSingleWorkspacePermission]:
         return DeclarativeSingleWorkspacePermission
 
 
@@ -38,7 +36,7 @@ class CatalogDeclarativeWorkspaceHierarchyPermission(Base):
     assignee: CatalogAssigneeIdentifier
 
     @staticmethod
-    def client_class() -> Type[DeclarativeWorkspaceHierarchyPermission]:
+    def client_class() -> type[DeclarativeWorkspaceHierarchyPermission]:
         return DeclarativeWorkspaceHierarchyPermission
 
 
@@ -48,17 +46,17 @@ class CatalogDeclarativeDataSourcePermission(Base):
     assignee: CatalogAssigneeIdentifier
 
     @staticmethod
-    def client_class() -> Type[DeclarativeDataSourcePermission]:
+    def client_class() -> type[DeclarativeDataSourcePermission]:
         return DeclarativeDataSourcePermission
 
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeWorkspacePermissions(Base):
-    permissions: List[CatalogDeclarativeSingleWorkspacePermission] = attr.field(factory=list)
-    hierarchy_permissions: List[CatalogDeclarativeWorkspaceHierarchyPermission] = attr.field(factory=list)
+    permissions: list[CatalogDeclarativeSingleWorkspacePermission] = attr.field(factory=list)
+    hierarchy_permissions: list[CatalogDeclarativeWorkspaceHierarchyPermission] = attr.field(factory=list)
 
     @staticmethod
-    def client_class() -> Type[DeclarativeWorkspacePermissions]:
+    def client_class() -> type[DeclarativeWorkspacePermissions]:
         return DeclarativeWorkspacePermissions
 
 
@@ -68,7 +66,7 @@ class CatalogDeclarativeDashboardPermissionsForAssignee(Base):
     assignee: CatalogAssigneeIdentifier
 
     @staticmethod
-    def client_class() -> Type[DeclarativeAnalyticalDashboardPermissionForAssignee]:
+    def client_class() -> type[DeclarativeAnalyticalDashboardPermissionForAssignee]:
         return DeclarativeAnalyticalDashboardPermissionForAssignee
 
 
@@ -78,7 +76,7 @@ class CatalogDeclarativeDashboardPermissionsForAssigneeRule(Base):
     assignee_rule: CatalogAssigneeRule
 
     @staticmethod
-    def client_class() -> Type[DeclarativeAnalyticalDashboardPermissionForAssigneeRule]:
+    def client_class() -> type[DeclarativeAnalyticalDashboardPermissionForAssigneeRule]:
         return DeclarativeAnalyticalDashboardPermissionForAssigneeRule
 
 
@@ -88,15 +86,15 @@ class CatalogDeclarativeOrganizationPermission(Base):
     assignee: CatalogAssigneeIdentifier
 
     @staticmethod
-    def client_class() -> Type[DeclarativeOrganizationPermission]:
+    def client_class() -> type[DeclarativeOrganizationPermission]:
         return DeclarativeOrganizationPermission
 
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogOrganizationPermissionAssignment(Base):
     assignee_identifier: CatalogAssigneeIdentifier
-    permissions: List[str] = attr.field(factory=list)
+    permissions: list[str] = attr.field(factory=list)
 
     @staticmethod
-    def client_class() -> Type[OrganizationPermissionAssignment]:
+    def client_class() -> type[OrganizationPermissionAssignment]:
         return OrganizationPermissionAssignment

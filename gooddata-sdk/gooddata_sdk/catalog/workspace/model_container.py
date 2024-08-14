@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import functools
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from gooddata_sdk.catalog.types import ValidObjects
 from gooddata_sdk.catalog.workspace.entity_model.content_objects.dataset import (
@@ -22,7 +22,7 @@ from gooddata_sdk.utils import AllPagedEntities, IdObjType
 ValidObjectTypes = Union[Attribute, Metric, Filter, CatalogLabel, CatalogFact, CatalogMetric]
 
 # Use typing collection types to support python < py3.9
-ValidObjectsInputType = Union[ValidObjectTypes, List[ValidObjectTypes], ExecutionDefinition]
+ValidObjectsInputType = Union[ValidObjectTypes, list[ValidObjectTypes], ExecutionDefinition]
 
 
 class CatalogWorkspaceContent:
@@ -126,7 +126,7 @@ class CatalogWorkspaceContent:
 
     def filter_by_valid_objects(
         self, valid_objects: dict[str, set[str]]
-    ) -> tuple[List[CatalogDataset], List[CatalogMetric]]:
+    ) -> tuple[list[CatalogDataset], list[CatalogMetric]]:
         new_datasets = list(filter(None, [d.filter_dataset(valid_objects) for d in self.datasets]))
         new_metrics = [m for m in self.metrics if m.id in valid_objects[m.type]]
         return new_datasets, new_metrics

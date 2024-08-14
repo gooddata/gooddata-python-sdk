@@ -5,7 +5,7 @@ import time
 from concurrent.futures import CancelledError, Future, ThreadPoolExecutor
 from contextlib import contextmanager
 from dataclasses import dataclass
-from typing import Any, Dict, Generator, Optional, Union
+from typing import Any, Generator, Optional, Union
 
 import opentelemetry.context as otelctx
 import pyarrow.flight
@@ -90,7 +90,7 @@ class _TaskExecutionStats:
         return self.completed - self.created
 
     @property
-    def durations_to_dict(self) -> Dict[str, float]:
+    def durations_to_dict(self) -> dict[str, float]:
         return {
             "run_waited_duration": self.run_waited_duration,
             "run_duration": self.run_duration,
@@ -202,7 +202,7 @@ class _TaskExecution:
         return self._stats
 
     @property
-    def logging_ctx(self) -> Dict[str, Any]:
+    def logging_ctx(self) -> dict[str, Any]:
         return self._logging_ctx
 
     def _complete_execution_span(self, execution_result: TaskExecutionResult) -> None:
@@ -355,7 +355,7 @@ class ThreadTaskExecutor(TaskExecutor, _TaskExecutionCallbacks):
 
         self._task_lock = threading.Lock()
         self._queue_size: int = 0
-        self._executions: Dict[str, _TaskExecution] = {}
+        self._executions: dict[str, _TaskExecution] = {}
 
         self._results: TemporalContainer[TaskExecutionResult] = TemporalContainer(
             logger_name="gooddata_flight_server.result_container",

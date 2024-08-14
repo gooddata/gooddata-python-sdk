@@ -1,7 +1,7 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import List, Optional, Type
+from typing import Optional
 
 import attr
 from gooddata_api_client.model.json_api_user_in import JsonApiUserIn
@@ -16,7 +16,7 @@ class CatalogUserDocument(Base):
     data: CatalogUser
 
     @staticmethod
-    def client_class() -> Type[JsonApiUserInDocument]:
+    def client_class() -> type[JsonApiUserInDocument]:
         return JsonApiUserInDocument
 
     @classmethod
@@ -27,7 +27,7 @@ class CatalogUserDocument(Base):
         lastname: Optional[str] = None,
         email: Optional[str] = None,
         authentication_id: Optional[str] = None,
-        user_group_ids: Optional[List[str]] = None,
+        user_group_ids: Optional[list[str]] = None,
     ) -> CatalogUserDocument:
         user = CatalogUser.init(
             user_id=user_id,
@@ -46,7 +46,7 @@ class CatalogUserDocument(Base):
         lastname: Optional[str] = None,
         email: Optional[str] = None,
         authentication_id: Optional[str] = None,
-        user_group_ids: Optional[List[str]] = None,
+        user_group_ids: Optional[list[str]] = None,
     ) -> None:
         attributes = CatalogUserAttributes(
             firstname=firstname, lastname=lastname, email=email, authentication_id=authentication_id
@@ -63,7 +63,7 @@ class CatalogUser(Base):
     relationships: Optional[CatalogUserRelationships] = None
 
     @staticmethod
-    def client_class() -> Type[JsonApiUserIn]:
+    def client_class() -> type[JsonApiUserIn]:
         return JsonApiUserIn
 
     @classmethod
@@ -74,7 +74,7 @@ class CatalogUser(Base):
         lastname: Optional[str] = None,
         email: Optional[str] = None,
         authentication_id: Optional[str] = None,
-        user_group_ids: Optional[List[str]] = None,
+        user_group_ids: Optional[list[str]] = None,
     ) -> CatalogUser:
         attributes = CatalogUserAttributes(
             firstname=firstname, lastname=lastname, email=email, authentication_id=authentication_id
@@ -83,11 +83,11 @@ class CatalogUser(Base):
         return cls(id=user_id, attributes=attributes, relationships=relationships)
 
     @property
-    def user_groups(self) -> List[CatalogUserGroup]:
+    def user_groups(self) -> list[CatalogUserGroup]:
         """Get method for the user_groups stored in relationships with the user.
 
         Returns:
-            List[CatalogUserGroup]:
+            list[CatalogUserGroup]:
                 List of User Groups
         """
         if self.relationships and self.relationships.user_groups:
@@ -187,7 +187,7 @@ class CatalogUserRelationships(Base):
             self.user_groups.data = user_groups
 
     @classmethod
-    def create_user_relationships(cls, user_group_ids: Optional[List[str]]) -> CatalogUserRelationships:
+    def create_user_relationships(cls, user_group_ids: Optional[list[str]]) -> CatalogUserRelationships:
         user_groups = None
         if user_group_ids is not None:
             user_groups = CatalogUserGroupsData(
@@ -198,4 +198,4 @@ class CatalogUserRelationships(Base):
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogUserGroupsData(Base):
-    data: List[CatalogUserGroup] = attr.field(factory=list)
+    data: list[CatalogUserGroup] = attr.field(factory=list)

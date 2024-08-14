@@ -1,7 +1,7 @@
 # (C) 2023 GoodData Corporation
 import argparse
 from logging import Logger
-from typing import List, Optional
+from typing import Optional
 
 from gooddata_sdk import GoodDataSdk
 
@@ -54,7 +54,7 @@ class GoodDataSdkWrapper:
         self.sdk.support.wait_till_available(timeout=timeout)
         self.logger.info(f"Host {host} is up")
 
-    def pre_cache_visualizations(self, workspaces: Optional[List] = None) -> None:
+    def pre_cache_visualizations(self, workspaces: Optional[list] = None) -> None:
         if not workspaces:
             workspaces = [w.id for w in self.sdk.catalog_workspace.list_workspaces()]
         for workspace_id in workspaces:

@@ -4,7 +4,7 @@ from __future__ import annotations
 import functools
 from collections import defaultdict
 from enum import Enum
-from typing import Any, Optional, Tuple, Union, cast
+from typing import Any, Optional, Union, cast
 
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.model.attribute import Attribute
@@ -718,7 +718,7 @@ class VisualizationService:
         return [Visualization(vis_obj, side_loads) for vis_obj in vis_objects.data]
 
     def get_visualization(
-        self, workspace_id: str, visualization_id: str, timeout: Optional[Union[int, float, Tuple]] = None
+        self, workspace_id: str, visualization_id: str, timeout: Optional[Union[int, float, tuple]] = None
     ) -> Visualization:
         """Gets a single visualization from a workspace.
 

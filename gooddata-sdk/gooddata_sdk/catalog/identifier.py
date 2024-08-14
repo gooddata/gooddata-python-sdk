@@ -1,7 +1,7 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import Type
+import builtins
 
 import attr
 from gooddata_api_client.model.assignee_identifier import AssigneeIdentifier
@@ -21,7 +21,7 @@ class CatalogWorkspaceIdentifier(Base):
     id: str
 
     @staticmethod
-    def client_class() -> Type[WorkspaceIdentifier]:
+    def client_class() -> builtins.type[WorkspaceIdentifier]:
         return WorkspaceIdentifier
 
 
@@ -30,7 +30,7 @@ class CatalogReferenceIdentifier(Base):
     id: str
 
     @staticmethod
-    def client_class() -> Type[ReferenceIdentifier]:
+    def client_class() -> builtins.type[ReferenceIdentifier]:
         return ReferenceIdentifier
 
 
@@ -40,7 +40,7 @@ class CatalogGrainIdentifier(Base):
     type: str = attr.field(validator=value_in_allowed)
 
     @staticmethod
-    def client_class() -> Type[GrainIdentifier]:
+    def client_class() -> builtins.type[GrainIdentifier]:
         return GrainIdentifier
 
 
@@ -50,7 +50,7 @@ class CatalogAssigneeIdentifier(Base):
     type: str = attr.field(validator=value_in_allowed)
 
     @staticmethod
-    def client_class() -> Type[AssigneeIdentifier]:
+    def client_class() -> builtins.type[AssigneeIdentifier]:
         return AssigneeIdentifier
 
 
@@ -60,7 +60,7 @@ class CatalogDeclarativeUserGroupIdentifier(Base):
     type: str = attr.field(validator=value_in_allowed)
 
     @staticmethod
-    def client_class() -> Type[DeclarativeUserGroupIdentifier]:
+    def client_class() -> builtins.type[DeclarativeUserGroupIdentifier]:
         return DeclarativeUserGroupIdentifier
 
 
@@ -70,7 +70,7 @@ class CatalogUserIdentifier(Base):
     type: str = attr.field(validator=value_in_allowed)
 
     @staticmethod
-    def client_class() -> Type[DeclarativeUserIdentifier]:
+    def client_class() -> builtins.type[DeclarativeUserIdentifier]:
         return DeclarativeUserIdentifier
 
 
@@ -80,7 +80,7 @@ class CatalogLabelIdentifier(Base):
     type: str = attr.field(validator=value_in_allowed)
 
     @staticmethod
-    def client_class() -> Type[LabelIdentifier]:
+    def client_class() -> builtins.type[LabelIdentifier]:
         return LabelIdentifier
 
 
@@ -89,5 +89,5 @@ class CatalogDatasetWorkspaceDataFilterIdentifier(Base):
     id: str
 
     @staticmethod
-    def client_class() -> Type[DatasetWorkspaceDataFilterIdentifier]:
+    def client_class() -> builtins.type[DatasetWorkspaceDataFilterIdentifier]:
         return DatasetWorkspaceDataFilterIdentifier
