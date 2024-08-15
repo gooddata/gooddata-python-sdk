@@ -1,8 +1,5 @@
 # (C) 2024 GoodData Corporation
-try:
-    from importlib import metadata
-except ImportError:
-    import importlib_metadata as metadata  # type: ignore # mypy issue #1153
+from importlib import metadata
 
 try:
     __version__ = metadata.version("gooddata-flight-server")

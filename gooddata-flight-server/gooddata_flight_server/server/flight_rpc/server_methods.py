@@ -1,5 +1,5 @@
 # (C) 2024 GoodData Corporation
-from typing import Generator
+from collections.abc import Generator
 
 import pyarrow.flight
 

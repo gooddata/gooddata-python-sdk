@@ -1,6 +1,6 @@
 #  (C) 2024 GoodData Corporation
 import os
-from typing import Generator
+from collections.abc import Generator
 
 import pyarrow.flight
 import pytest

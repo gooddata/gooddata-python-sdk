@@ -72,7 +72,7 @@ class ExecModelEntity:
 
 class Filter(ExecModelEntity):
     def __init__(self) -> None:
-        super(Filter, self).__init__()
+        super().__init__()
 
         self._apply_on_result = None
 

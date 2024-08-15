@@ -2,10 +2,11 @@
 import abc
 import threading
 import time
+from collections.abc import Generator
 from concurrent.futures import CancelledError, Future, ThreadPoolExecutor
 from contextlib import contextmanager
 from dataclasses import dataclass
-from typing import Any, Generator, Optional, Union
+from typing import Any, Optional, Union
 
 import opentelemetry.context as otelctx
 import pyarrow.flight

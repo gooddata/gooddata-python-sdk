@@ -1,6 +1,6 @@
 #  (C) 2024 GoodData Corporation
 import importlib
-from typing import Iterable
+from collections.abc import Iterable
 
 import structlog
 

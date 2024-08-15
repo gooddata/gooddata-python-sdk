@@ -6,5 +6,5 @@ from pathlib import Path
 
 
 def load_json(path: Path):
-    with open(path, "rt", encoding="utf8") as f:
+    with open(path, encoding="utf8") as f:
         return json.load(f)

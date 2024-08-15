@@ -178,7 +178,7 @@ def recreate_directory(path: Path) -> None:
 class IndentDumper(yaml.SafeDumper):
     @no_type_check
     def increase_indent(self, flow: bool = False, indentless: bool = False):
-        return super(IndentDumper, self).increase_indent(flow, False)
+        return super().increase_indent(flow, False)
 
 
 def write_layout_to_file(path: Path, content: Union[dict[str, Any], list[dict]]) -> None:
@@ -190,7 +190,7 @@ def read_layout_from_file(path: Path) -> Any:
     if not os.path.isfile(path):
         raise ValueError(f"There is no file in the given path {path}")
     try:
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             return yaml.safe_load(f)
     except yaml.YAMLError as exc:
         raise ValueError(f"File [{path}] has wrong yaml format. Following exception was raised during loading: {exc}")
@@ -370,7 +370,7 @@ def safeget_list(var: Any, path: list[str]) -> list[Any]:
     elif result is None:
         return []
     else:
-        raise Exception("safeget_list: result is not iterable! result={0}".format(result))
+        raise Exception(f"safeget_list: result is not iterable! result={result}")
 
 
 def get_namespace_from_xliff(xliff_content: str) -> dict:
@@ -389,7 +389,7 @@ def get_namespace_from_xliff(xliff_content: str) -> dict:
 
 def read_json(path: Union[str, Path]) -> Any:
     path = Path(path) if isinstance(path, str) else path
-    with open(path, "r", encoding="utf-8") as f:
+    with open(path, encoding="utf-8") as f:
         return json.loads(f.read())
 
 

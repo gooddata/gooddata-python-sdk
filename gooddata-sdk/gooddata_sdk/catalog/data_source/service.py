@@ -42,7 +42,7 @@ class CatalogDataSourceService(CatalogServiceBase):
     """
 
     def __init__(self, api_client: GoodDataApiClient) -> None:
-        super(CatalogDataSourceService, self).__init__(api_client)
+        super().__init__(api_client)
 
     # Entities methods are listed below
 

@@ -9,7 +9,8 @@ There are two main pieces:
 -  FlightServerMethods - base class containing typed definitions of all Flight RPC Methods
 """
 
-from typing import Generator, Optional, Union
+from collections.abc import Generator
+from typing import Optional, Union
 
 import pyarrow.flight
 from typing_extensions import TypeAlias

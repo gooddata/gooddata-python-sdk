@@ -21,7 +21,7 @@ lint.select = [
     "SIM2", # simplify boolean expressions
     "SIM4", # simplify if statements
     "SIM9", # simplify dict values
-    "UP006",
+    "UP",
     "W", # pycodestyle warnings
 ]
 lint.ignore = [

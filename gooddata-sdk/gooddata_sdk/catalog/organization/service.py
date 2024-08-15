@@ -19,7 +19,7 @@ from gooddata_sdk.utils import load_all_entities
 
 class CatalogOrganizationService(CatalogServiceBase):
     def __init__(self, api_client: GoodDataApiClient) -> None:
-        super(CatalogOrganizationService, self).__init__(api_client)
+        super().__init__(api_client)
 
     def update_oidc_parameters(
         self,

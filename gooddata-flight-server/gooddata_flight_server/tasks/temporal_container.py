@@ -1,8 +1,9 @@
 # (C) 2024 GoodData Corporation
 import threading
 import time
+from collections.abc import Iterator
 from dataclasses import dataclass
-from typing import Any, Callable, Generic, Iterator, Optional, TypeVar
+from typing import Any, Callable, Generic, Optional, TypeVar
 
 import structlog
 from readerwriterlock import rwlock
