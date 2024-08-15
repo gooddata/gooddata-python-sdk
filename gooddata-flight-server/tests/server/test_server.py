@@ -1,6 +1,6 @@
 #  (C) 2024 GoodData Corporation
 import os
-from typing import Generator
+from collections.abc import Generator
 
 import pyarrow.flight
 import pytest
@@ -60,9 +60,8 @@ def test_smoke_with_auth_fail1(tls_ca_cert):
     os.environ["GOODDATA_FLIGHT_SERVER__AUTHENTICATION_METHOD"] = "token"
     os.environ["GOODDATA_FLIGHT_ENUMERATED_TOKENS__TOKENS"] = '["t1", "t2"]'
 
-    with server(_TestingMethods(), tls=True) as s:
-        with pytest.raises(pyarrow.flight.FlightUnauthenticatedError):
-            list(pyarrow.flight.FlightClient(s.location, tls_root_certs=tls_ca_cert).list_flights())
+    with server(_TestingMethods(), tls=True) as s, pytest.raises(pyarrow.flight.FlightUnauthenticatedError):
+        list(pyarrow.flight.FlightClient(s.location, tls_root_certs=tls_ca_cert).list_flights())
 
 
 def test_smoke_with_auth_fail2(tls_ca_cert):
@@ -71,9 +70,8 @@ def test_smoke_with_auth_fail2(tls_ca_cert):
 
     # important: header names must be lowercase
     opts = FlightCallOptions(headers=[(b"authorization", b"Bearer 123")])
-    with server(_TestingMethods(), tls=True) as s:
-        with pytest.raises(pyarrow.flight.FlightUnauthenticatedError):
-            list(pyarrow.flight.FlightClient(s.location, tls_root_certs=tls_ca_cert).list_flights(b"", opts))
+    with server(_TestingMethods(), tls=True) as s, pytest.raises(pyarrow.flight.FlightUnauthenticatedError):
+        list(pyarrow.flight.FlightClient(s.location, tls_root_certs=tls_ca_cert).list_flights(b"", opts))
 
 
 def test_smoke_with_auth1(tls_ca_cert):
@@ -107,10 +105,9 @@ def test_smoke_with_custom_auth_fail1(tls_ca_cert):
     os.environ["GOODDATA_FLIGHT_SERVER__TOKEN_VERIFICATION"] = "tests.server.testing_token_verifier"
 
     opts = FlightCallOptions(headers=[(b"x-some-bad-header", b"test_token")])
-    with server(_TestingMethods(), tls=True) as s:
-        with pytest.raises(pyarrow.flight.FlightUnauthenticatedError):
-            c = pyarrow.flight.FlightClient(s.location, tls_root_certs=tls_ca_cert)
-            tuple(c.list_flights(b"", opts))
+    with server(_TestingMethods(), tls=True) as s, pytest.raises(pyarrow.flight.FlightUnauthenticatedError):
+        c = pyarrow.flight.FlightClient(s.location, tls_root_certs=tls_ca_cert)
+        tuple(c.list_flights(b"", opts))
 
 
 def test_smoke_with_custom_auth_fail2(tls_ca_cert):
@@ -119,7 +116,6 @@ def test_smoke_with_custom_auth_fail2(tls_ca_cert):
     os.environ["GOODDATA_FLIGHT_SERVER__TOKEN_VERIFICATION"] = "tests.server.testing_token_verifier"
 
     opts = FlightCallOptions(headers=[(b"x-custom-token-header", b"invalid")])
-    with server(_TestingMethods(), tls=True) as s:
-        with pytest.raises(pyarrow.flight.FlightUnauthenticatedError):
-            c = pyarrow.flight.FlightClient(s.location, tls_root_certs=tls_ca_cert)
-            tuple(c.list_flights(b"", opts))
+    with server(_TestingMethods(), tls=True) as s, pytest.raises(pyarrow.flight.FlightUnauthenticatedError):
+        c = pyarrow.flight.FlightClient(s.location, tls_root_certs=tls_ca_cert)
+        tuple(c.list_flights(b"", opts))

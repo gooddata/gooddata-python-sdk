@@ -1,5 +1,6 @@
 #  (C) 2024 GoodData Corporation
-from typing import Iterable, Optional, Union
+from collections.abc import Iterable
+from typing import Optional, Union
 
 import pyarrow
 import structlog

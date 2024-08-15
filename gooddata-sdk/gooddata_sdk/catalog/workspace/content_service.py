@@ -57,7 +57,7 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
     #  access returned object's properties
 
     def __init__(self, api_client: GoodDataApiClient) -> None:
-        super(CatalogWorkspaceContentService, self).__init__(api_client)
+        super().__init__(api_client)
 
     # Entities methods
 

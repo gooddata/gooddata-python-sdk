@@ -9,7 +9,7 @@ def _load_test_env():
         test_env = find_dotenv(".env.test", raise_error_if_not_found=True)
 
         return dotenv_values(test_env)
-    except IOError:
+    except OSError:
         return dict()
 
 

@@ -11,7 +11,7 @@ _current_dir = Path(__file__).parent.absolute()
 
 def test_dictionary_case_convertor(test_config):
     path = _current_dir / "test_dictionary.json"
-    with open(path, "r", encoding="utf8") as f:
+    with open(path, encoding="utf8") as f:
         data = json.load(f)
     x = change_case(change_case(data, camel_to_snake), snake_to_camel)
     assert data == x

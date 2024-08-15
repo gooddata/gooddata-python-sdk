@@ -8,7 +8,7 @@ import re
 from collections import OrderedDict
 from datetime import date
 from pathlib import Path
-from typing import AnyStr, Pattern
+from typing import AnyStr
 
 COPYRIGHT_RE: re.Pattern[AnyStr] = re.compile(r"GoodData Corporation", re.IGNORECASE)
 
@@ -51,12 +51,12 @@ def glob_to_re(pattern):
     return escaped_glob_replacement.sub(lambda match: escaped_glob_tokens_to_re[match.group(0)], re.escape(pattern))
 
 
-def load_ignore_file(ignore_path: Path, verbose: bool) -> list[Pattern[AnyStr]]:
+def load_ignore_file(ignore_path: Path, verbose: bool) -> list[re.Pattern[AnyStr]]:
     if not ignore_path.exists() or not ignore_path.is_file():
         print(f"Ignore file {str(ignore_path)} not found")
         return []
 
-    with open(ignore_path, "rt") as f:
+    with open(ignore_path) as f:
         ignore_lines = f.readlines()
 
     result = [
@@ -84,7 +84,7 @@ def add_copyright(file_name: Path, insert_line: int) -> None:
     today = date.today()
     file_size = file_name.stat().st_size
     if file_size < 1:
-        with open(file_name, "wt", encoding="utf-8") as f:
+        with open(file_name, "w", encoding="utf-8") as f:
             f.write(comment_copyright(file_name.suffix, f"(C) {str(today.year)} GoodData Corporation"))
             f.write("\n")
     else:
@@ -102,7 +102,7 @@ def check_file(file_name: Path, update_file: bool, verbose: bool) -> int:
 
     # CONSIDER: introduce mimetypes library to recognize binary files and to select comment character
     insert_line = 1
-    with open(file_name, "rt") as f:
+    with open(file_name) as f:
         line = f.readline()
         if line.startswith("#!"):
             insert_line = 2
@@ -131,15 +131,13 @@ def safe_check_file(file_name: Path, update_file: bool, verbose: bool) -> int:
         return 1
 
 
-def is_ignored_file(ignore_list: list[Pattern[AnyStr]], file_name: Path) -> bool:
-    for ignore_item in ignore_list:
-        if ignore_item.fullmatch(str(file_name)):
-            return True
-
-    return False
+def is_ignored_file(ignore_list: list[re.Pattern[AnyStr]], file_name: Path) -> bool:
+    return any(ignore_item.fullmatch(str(file_name)) for ignore_item in ignore_list)
 
 
-def process_files(file_names: list[str], ignore_list: list[Pattern[AnyStr]], update_file: bool, verbose: bool) -> int:
+def process_files(
+    file_names: list[str], ignore_list: list[re.Pattern[AnyStr]], update_file: bool, verbose: bool
+) -> int:
     ret_val = 0
     for file_name in file_names:
         file_path = Path(file_name)
@@ -149,7 +147,7 @@ def process_files(file_names: list[str], ignore_list: list[Pattern[AnyStr]], upd
     return ret_val
 
 
-def process_folder(folder_path: Path, ignore_list: list[Pattern[AnyStr]], update_file: bool, verbose: bool) -> int:
+def process_folder(folder_path: Path, ignore_list: list[re.Pattern[AnyStr]], update_file: bool, verbose: bool) -> int:
     if not folder_path.is_dir():
         print(f"{str(folder_path)} is not directory")
         return 1

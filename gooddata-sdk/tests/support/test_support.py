@@ -37,7 +37,7 @@ def test_wait_till_available_no_wait(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     start_time = time.time()
     sdk.support.wait_till_available(3)
-    assert 1000 > (time.time() - start_time)
+    assert (time.time() - start_time) < 1000
 
 
 def test_wait_till_available_timeout(test_config):

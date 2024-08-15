@@ -18,7 +18,7 @@ def bump_toml(file_path: Path, version: list[int]):
     short_version = f"{version[0]}.{version[1]}"
 
     # Load the TOML file
-    with open(file_path, "r") as file:
+    with open(file_path) as file:
         content = file.read()
     data = tomlkit.parse(content)
 
@@ -45,7 +45,7 @@ def bump_toml(file_path: Path, version: list[int]):
 def bump_redir(file_path: Path, version: list[int]):
     long_version = f"{version[0]}.{version[1]}.{version[2]}"
     short_version = f"{version[0]}.{version[1]}"
-    with open(file_path, "r") as file:
+    with open(file_path) as file:
         content = file.readlines()
 
     if version[2] == 0:

@@ -347,10 +347,7 @@ def _create_header_mapper(
             if "labelValue" in header["attributeHeader"]:
                 label_value = header["attributeHeader"]["labelValue"]
                 primary_label_value = header["attributeHeader"]["primaryLabelValue"]
-                if use_primary_labels_in_attributes:
-                    label = primary_label_value
-                else:
-                    label = label_value
+                label = primary_label_value if use_primary_labels_in_attributes else label_value
                 if header_idx is not None:
                     if header_idx in primary_attribute_labels_mapping:
                         primary_attribute_labels_mapping[header_idx][primary_label_value] = label_value

@@ -15,7 +15,7 @@ def load_vis_obj(filename):
     :param filename:
     :return:
     """
-    with open(filename, "rt") as f:
+    with open(filename) as f:
         content = json.load(f)
 
         return dict(

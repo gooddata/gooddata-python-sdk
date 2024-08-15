@@ -2,8 +2,9 @@
 from __future__ import annotations
 
 import logging
+from collections.abc import Generator
 from operator import attrgetter
-from typing import Any, Callable, Generator, Optional, Union
+from typing import Any, Callable, Optional, Union
 
 from attrs import define, field, frozen
 from attrs.setters import frozen as frozen_attr

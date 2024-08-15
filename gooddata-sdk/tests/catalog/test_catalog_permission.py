@@ -165,7 +165,7 @@ def test_put_declarative_permissions(test_config):
     assert len(declarative_permissions_e.permissions) == 0
     assert len(declarative_permissions_e.hierarchy_permissions) == 0
 
-    with open(expected_json_path, "r", encoding="utf-8") as f:
+    with open(expected_json_path, encoding="utf-8") as f:
         data = json.load(f)
 
     declarative_workspace_permissions = CatalogDeclarativeWorkspacePermissions.from_dict(data, camel_case=True)
@@ -201,7 +201,7 @@ def test_put_and_get_declarative_organization_permissions(test_config):
     expected_json_path = _current_dir / "expected" / "declarative_organization_permissions.json"
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
 
-    with open(expected_json_path, "r", encoding="utf-8") as f:
+    with open(expected_json_path, encoding="utf-8") as f:
         data = json.load(f)
 
     declarative_organization_permissions = []

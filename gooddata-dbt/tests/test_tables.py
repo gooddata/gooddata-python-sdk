@@ -13,7 +13,7 @@ MODEL_ID = "github"
 
 
 def _read_json(path: Union[str, Path]) -> dict:
-    with open(path, "r") as f:
+    with open(path) as f:
         return json.load(f)
 
 

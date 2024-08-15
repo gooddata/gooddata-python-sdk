@@ -46,7 +46,7 @@ def rest_op(op, url_path, data=None, raise_ex=True):
 
 
 def read_data_from_file(data_json_path):
-    with open(data_json_path, "rt") as f:
+    with open(data_json_path) as f:
         return json.load(f)
 
 

@@ -618,10 +618,7 @@ class Visualization:
         return VisualizationBucket({"items": [], "localIdentifier": _BUCKET_TYPE_TO_LOCAL_ID[bucket_type]})
 
     def has_bucket_of_type(self, bucket_type: BucketType) -> bool:
-        for b in self.buckets:
-            if b.type == bucket_type:
-                return True
-        return False
+        return any(b.type == bucket_type for b in self.buckets)
 
     def has_row_and_col_totals(self) -> bool:
         row_bucket = self.get_bucket_of_type(BucketType.ROWS)

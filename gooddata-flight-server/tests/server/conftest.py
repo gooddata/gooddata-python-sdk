@@ -2,9 +2,10 @@
 import contextlib
 import os
 import socket
+from collections.abc import Iterable
 from contextlib import closing
 from pathlib import Path
-from typing import Iterable, Union
+from typing import Union
 
 import pytest
 from gooddata_flight_server.flexfun.flight_methods import (
@@ -35,7 +36,7 @@ def _find_free_port():
 
 def _clean_env_vars():
     to_drop = []
-    for key in os.environ.keys():
+    for key in os.environ:
         if key.startswith("GOODDATA_FLIGHT"):
             to_drop.append(key)
 

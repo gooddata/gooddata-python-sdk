@@ -128,7 +128,7 @@ def create_file_structure(data: dict, root: Path, url_root: str):
                 links[name] = {"path": f"{api_ref_root}/{name}".lower(), "kind": "class"}  # Lowercase for Hugo
 
             elif name == "functions":
-                for func_name in obj.keys():
+                for func_name in obj:
                     if func_name.startswith("_"):
                         continue  # Skip magic and private methods
 
@@ -216,7 +216,8 @@ def main():
         data = read_json_file(args.json_file)
         data = change_json_root(data, ref.packages)
         links.update(create_file_structure(data, Path(ref.directory), url_root=ref.url))
-    json.dump(links, open(f"{args.root_directory}/{args.version}/links.json", "w"), indent=4)
+    with open(f"{args.root_directory}/{args.version}/links.json", "w") as f:
+        json.dump(links, f, indent=4)
     print("Dumping the links.json")
 
 

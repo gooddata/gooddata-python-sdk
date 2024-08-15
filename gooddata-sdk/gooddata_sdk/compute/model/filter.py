@@ -76,7 +76,7 @@ def _to_identifier(val: Union[ObjId, str]) -> Union[afm_models.AfmLocalIdentifie
 
 class AttributeFilter(Filter):
     def __init__(self, label: Union[ObjId, str, Attribute], values: Optional[list[str]] = None) -> None:
-        super(AttributeFilter, self).__init__()
+        super().__init__()
 
         self._label = _extract_id_or_local_id(label)
         self._values = values or []
@@ -153,7 +153,7 @@ _GRANULARITY: set[str] = {
 
 class RelativeDateFilter(Filter):
     def __init__(self, dataset: ObjId, granularity: str, from_shift: int, to_shift: int) -> None:
-        super(RelativeDateFilter, self).__init__()
+        super().__init__()
 
         if granularity not in _GRANULARITY:
             raise ValueError(
@@ -248,7 +248,7 @@ class AllTimeFilter(Filter):
     """
 
     def __init__(self, dataset: ObjId) -> None:
-        super(AllTimeFilter, self).__init__()
+        super().__init__()
         self._dataset = dataset
 
     @property
@@ -264,7 +264,7 @@ class AllTimeFilter(Filter):
 
 class AbsoluteDateFilter(Filter):
     def __init__(self, dataset: ObjId, from_date: str, to_date: str) -> None:
-        super(AbsoluteDateFilter, self).__init__()
+        super().__init__()
 
         self._dataset = dataset
         self._from_date = from_date
@@ -334,7 +334,7 @@ _METRIC_VALUE_FILTER_OPERATORS = {
 
 class AllMetricValueFilter(Filter):
     def __init__(self, metric: Union[ObjId, str, Metric]) -> None:
-        super(AllMetricValueFilter, self).__init__()
+        super().__init__()
         self._metric = _extract_id_or_local_id(metric)
 
     @property
@@ -357,7 +357,7 @@ class MetricValueFilter(Filter):
         values: Union[float, int, tuple[float, float]],
         treat_nulls_as: Union[float, None] = None,
     ) -> None:
-        super(MetricValueFilter, self).__init__()
+        super().__init__()
 
         if operator not in _METRIC_VALUE_FILTER_OPERATORS:
             raise ValueError(
@@ -452,7 +452,7 @@ class RankingFilter(Filter):
         value: int,
         dimensionality: Optional[list[Union[str, ObjId, Attribute, Metric]]],
     ) -> None:
-        super(RankingFilter, self).__init__()
+        super().__init__()
 
         if operator not in _RANKING_OPERATORS:
             raise ValueError(

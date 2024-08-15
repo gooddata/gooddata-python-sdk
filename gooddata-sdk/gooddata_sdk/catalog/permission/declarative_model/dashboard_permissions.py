@@ -1,5 +1,6 @@
 # (C) 2023 GoodData Corporation
-from typing import Optional, Type
+import builtins
+from typing import Optional
 
 import attr
 from gooddata_api_client.model.dashboard_permissions import DashboardPermissions
@@ -50,7 +51,7 @@ class CatalogRulePermission(Base):
     permissions: Optional[list[str]] = None
 
     @staticmethod
-    def client_class() -> Type[RulePermission]:  # noqa: UP006
+    def client_class() -> builtins.type[RulePermission]:  # noqa: UP006
         return RulePermission
 
 

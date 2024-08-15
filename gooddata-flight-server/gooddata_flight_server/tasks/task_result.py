@@ -1,8 +1,9 @@
 #  (C) 2024 GoodData Corporation
 import abc
 import threading
+from collections.abc import Generator, Iterable
 from dataclasses import dataclass
-from typing import Generator, Iterable, Optional, Union, final
+from typing import Optional, Union, final
 
 import pyarrow.flight
 from readerwriterlock import rwlock
