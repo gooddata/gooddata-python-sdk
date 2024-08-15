@@ -3,7 +3,6 @@
 
 from __future__ import annotations
 
-from builtins import bytes
 from typing import Optional
 
 import gooddata_api_client as api_client

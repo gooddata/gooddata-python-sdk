@@ -48,7 +48,7 @@ logger = logging.getLogger(__name__)
 
 class CatalogWorkspaceService(CatalogServiceBase):
     def __init__(self, api_client: GoodDataApiClient) -> None:
-        super(CatalogWorkspaceService, self).__init__(api_client)
+        super().__init__(api_client)
         self._permissions_service = CatalogPermissionService(api_client)
 
     # Entities methods

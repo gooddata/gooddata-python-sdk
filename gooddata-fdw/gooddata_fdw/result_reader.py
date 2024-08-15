@@ -1,7 +1,8 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import Any, Generator
+from collections.abc import Generator
+from typing import Any
 
 from gooddata_sdk import ExecutionTable
 from gooddata_sdk.type_converter import DBTypeConverterStore

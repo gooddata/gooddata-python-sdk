@@ -228,11 +228,7 @@ def module_data(module: ModuleType, module_name: str) -> dict:
         dict: parsed module data
     """
     data: dict[str, Any] = {"kind": "module"}
-    if hasattr(module, "__dict__"):
-        objects = vars(module)
-    else:
-        # Handle the case where the object doesn't have __dict__.
-        objects = {}  # or some other appropriate default or action
+    objects = vars(module) if hasattr(module, "__dict__") else {}
 
     for name, obj in objects.items():
         obj_module = inspect.getmodule(obj)
@@ -243,9 +239,8 @@ def module_data(module: ModuleType, module_name: str) -> dict:
             # Filter out non-gooddata libraries
             if module_name in obj_module.__name__:
                 data[name] = class_data(obj)
-        elif isinstance(obj, ModuleType):
-            if module_name in obj_module.__name__:
-                data[name] = module_data(obj)
+        elif isinstance(obj, ModuleType) and module_name in obj_module.__name__:
+            data[name] = module_data(obj)
     return data
 
 
@@ -315,6 +310,7 @@ if __name__ == "__main__":
         **cattrs.unstructure(parse_package(gooddata_pandas, "gooddata_pandas")),
         **cattrs.unstructure(parse_package(gooddata_sdk, "gooddata_sdk")),
     }
-    open("data.json", "w").write(json.dumps(output_json))
+    with open("data.json", "w") as f:
+        f.write(json.dumps(output_json))
 
     print(f"Saved the .json file: `data.json` to {os.getcwd()}")

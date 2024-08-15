@@ -20,7 +20,7 @@ def pytest_addoption(parser):
 @pytest.fixture(scope="session")
 def test_config(request):
     config_path = Path(request.config.getoption("--gd-test-config"))
-    with open(config_path, "rt") as f:
+    with open(config_path) as f:
         config = yaml.safe_load(f)
 
     return config

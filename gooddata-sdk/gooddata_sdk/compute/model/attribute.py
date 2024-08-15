@@ -18,7 +18,7 @@ class Attribute(ExecModelEntity):
             label: identifier of the label to use for slicing or dicing; specified either as ObjId or str   the label id
             show_all_values: request show all values functionality for a given attribute
         """
-        super(Attribute, self).__init__()
+        super().__init__()
 
         self._local_id = local_id
         self._label = ObjId(label, "label") if isinstance(label, str) else label

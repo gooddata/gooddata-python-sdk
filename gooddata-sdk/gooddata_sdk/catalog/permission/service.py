@@ -18,7 +18,7 @@ from gooddata_sdk.client import GoodDataApiClient
 
 class CatalogPermissionService(CatalogServiceBase):
     def __init__(self, api_client: GoodDataApiClient) -> None:
-        super(CatalogPermissionService, self).__init__(api_client)
+        super().__init__(api_client)
 
     def get_declarative_permissions(self, workspace_id: str) -> CatalogDeclarativeWorkspacePermissions:
         """Retrieve current set of permissions of the workspace in a declarative form.

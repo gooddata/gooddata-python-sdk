@@ -47,7 +47,7 @@ class ExportService(CatalogServiceBase):
     """
 
     def __init__(self, api_client: GoodDataApiClient) -> None:
-        super(ExportService, self).__init__(api_client)
+        super().__init__(api_client)
         """
         Initializes the ExportService with the GoodDataApiClient instance.
         Args:

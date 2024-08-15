@@ -158,9 +158,7 @@ class CatalogDeclarativeWorkspaceDataFilters(Base):
             )
         return cls(workspace_data_filters=workspace_data_filters)
 
-    def create_copy(
-        self, source_ws_id: str, target_ws_id: str
-    ) -> tuple["CatalogDeclarativeWorkspaceDataFilters", dict]:
+    def create_copy(self, source_ws_id: str, target_ws_id: str) -> tuple[CatalogDeclarativeWorkspaceDataFilters, dict]:
         self_copy = copy.deepcopy(self)
         # update workspace data filter settings
         for wdf in self_copy.workspace_data_filters:

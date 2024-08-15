@@ -1,7 +1,8 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import Any, Generator, NamedTuple, Optional
+from collections.abc import Generator
+from typing import Any, NamedTuple, Optional
 
 from gooddata_sdk import GoodDataSdk
 

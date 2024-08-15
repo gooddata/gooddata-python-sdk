@@ -37,10 +37,7 @@ def set_gooddata_endpoint_args(parser: argparse.ArgumentParser) -> None:
     )
     # Alternative - use profile.yml file
     env_profiles = os.getenv("GOODDATA_PROFILES")
-    if env_profiles:
-        env_profiles_list = env_profiles.split(" ")
-    else:
-        env_profiles_list = []
+    env_profiles_list = env_profiles.split(" ") if env_profiles else []
     parser.add_argument(
         "-gp",
         "--gooddata-profiles",

@@ -32,7 +32,7 @@ def get_vcr() -> vcr.VCR:
 class IndentDumper(yaml.SafeDumper):
     @typing.no_type_check
     def increase_indent(self, flow: bool = False, indentless: bool = False):
-        return super(IndentDumper, self).increase_indent(flow, False)
+        return super().increase_indent(flow, False)
 
 
 class CustomSerializerYaml:

@@ -20,7 +20,7 @@ def _extract_local_id(val: Union[str, Metric]) -> str:
 
 class Metric(ExecModelEntity):
     def __init__(self, local_id: str) -> None:
-        super(Metric, self).__init__()
+        super().__init__()
         self._local_id = local_id
 
     @property
@@ -57,7 +57,7 @@ class SimpleMetric(Metric):
         compute_ratio: bool = False,
         filters: Optional[list[Filter]] = None,
     ) -> None:
-        super(SimpleMetric, self).__init__(local_id)
+        super().__init__(local_id)
 
         _agg = aggregation.upper() if aggregation is not None else None
         if _agg is not None and _agg not in SIMPLE_METRIC_AGGREGATION:
@@ -158,7 +158,7 @@ class PopDateMetric(Metric):
         metric: Union[str, Metric],
         date_attributes: list[PopDate],
     ) -> None:
-        super(PopDateMetric, self).__init__(local_id)
+        super().__init__(local_id)
 
         self._metric = _extract_local_id(metric)
         self._date_attributes = date_attributes
@@ -206,7 +206,7 @@ class PopDatesetMetric(Metric):
         metric: Union[str, Metric],
         date_datasets: list[PopDateDataset],
     ) -> None:
-        super(PopDatesetMetric, self).__init__(local_id)
+        super().__init__(local_id)
 
         self._metric = _extract_local_id(metric)
         self._date_datasets = date_datasets
@@ -241,7 +241,7 @@ ARITHMETIC_METRIC_OPERATORS = {
 
 class ArithmeticMetric(Metric):
     def __init__(self, local_id: str, operator: str, operands: list[Union[str, Metric]]) -> None:
-        super(ArithmeticMetric, self).__init__(local_id)
+        super().__init__(local_id)
 
         if operator not in ARITHMETIC_METRIC_OPERATORS:
             raise ValueError(

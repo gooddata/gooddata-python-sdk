@@ -1,5 +1,6 @@
 #  (C) 2024 GoodData Corporation
-from typing import Generator, Optional
+from collections.abc import Generator
+from typing import Optional
 
 import orjson
 import pyarrow.flight

@@ -19,7 +19,7 @@ USER_AGENT = f"gooddata-fdw/{__version__}"
 
 class GoodDataForeignDataWrapper(ForeignDataWrapper):
     def __init__(self, options: dict[str, str], columns: dict[str, ColumnDefinition]) -> None:
-        super(GoodDataForeignDataWrapper, self).__init__(options, columns)
+        super().__init__(options, columns)
         _log_debug(f"initializing (options={options}, columns={columns})")
 
         # Table options contain also foreign server options
