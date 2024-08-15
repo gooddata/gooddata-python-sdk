@@ -119,10 +119,7 @@ class ExecutionDefinitionBuilder:
         if index_by is None:
             return
 
-        if not isinstance(index_by, dict):
-            _index_by = {self._DEFAULT_INDEX_NAME: index_by}
-        else:
-            _index_by = index_by
+        _index_by = {self._DEFAULT_INDEX_NAME: index_by} if not isinstance(index_by, dict) else index_by
 
         for index_name, index_def in _index_by.items():
             if isinstance(index_def, str) and (index_def in self._col_to_attr_idx):
@@ -208,11 +205,14 @@ class ExecutionDefinitionBuilder:
                         raise ValueError(f"AttributeFilter instance referencing metric [{_filter.label}]")
                     else:
                         _filter.label = _str_to_obj_id(_filter.label) or _filter.label
-                elif isinstance(_filter, MetricValueFilter) and isinstance(_filter.metric, str):
-                    if _filter.metric in self._col_to_metric_idx:
-                        # Metric is referenced by local_id which was already generated during creation of columns
-                        # When Metric filter contains ObjId reference, it does not need to be modified
-                        _filter.metric = self._metrics[self._col_to_metric_idx[_filter.metric]].local_id
+                elif (
+                    isinstance(_filter, MetricValueFilter)
+                    and isinstance(_filter.metric, str)
+                    and _filter.metric in self._col_to_metric_idx
+                ):
+                    # Metric is referenced by local_id which was already generated during creation of columns
+                    # When Metric filter contains ObjId reference, it does not need to be modified
+                    _filter.metric = self._metrics[self._col_to_metric_idx[_filter.metric]].local_id
 
         return filters
 

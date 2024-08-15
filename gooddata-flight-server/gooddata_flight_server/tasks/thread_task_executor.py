@@ -500,23 +500,25 @@ class ThreadTaskExecutor(TaskExecutor, _TaskExecutionCallbacks):
         structlog.contextvars.clear_contextvars()
         structlog.contextvars.bind_contextvars(**logging_ctx)
 
-        with task_execution.use_execution_span():
-            with SERVER_TRACER.start_as_current_span("task_run", attributes={TaskAttributes.TaskId: task.task_id}):
-                self._logger.info(
-                    "task_run",
-                    task_id=task.task_id,
-                    waited=stats.run_waited_duration,
-                )
-                self._metrics.wait_time.observe(stats.run_waited_duration)
+        with (
+            task_execution.use_execution_span(),
+            SERVER_TRACER.start_as_current_span("task_run", attributes={TaskAttributes.TaskId: task.task_id}),
+        ):
+            self._logger.info(
+                "task_run",
+                task_id=task.task_id,
+                waited=stats.run_waited_duration,
+            )
+            self._metrics.wait_time.observe(stats.run_waited_duration)
 
-                try:
-                    return task.run()
-                finally:
-                    stats.run_completed = time.perf_counter()
-                    stats.completed = stats.run_completed
+            try:
+                return task.run()
+            finally:
+                stats.run_completed = time.perf_counter()
+                stats.completed = stats.run_completed
 
-                    self._metrics.task_duration.observe(stats.run_duration)
-                    self._metrics.task_e2e_duration.observe(stats.duration)
+                self._metrics.task_duration.observe(stats.run_duration)
+                self._metrics.task_e2e_duration.observe(stats.duration)
 
     def _finish_task_with_result(self, task_execution: "_TaskExecution", result: TaskExecutionResult) -> None:
         task = task_execution.task
@@ -534,11 +536,10 @@ class ThreadTaskExecutor(TaskExecutor, _TaskExecutionCallbacks):
         self,
         task_execution: _TaskExecution,
     ) -> Future:
-        with task_execution.use_execution_span():
-            with SERVER_TRACER.start_as_current_span("task_run_submit"):
-                task_execution.stats.run_submitted = time.perf_counter()
+        with task_execution.use_execution_span(), SERVER_TRACER.start_as_current_span("task_run_submit"):
+            task_execution.stats.run_submitted = time.perf_counter()
 
-                return self._executor.submit(self._task_run_wrapper, task_execution)
+            return self._executor.submit(self._task_run_wrapper, task_execution)
 
     def process_task_result(
         self,

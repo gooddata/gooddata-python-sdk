@@ -25,10 +25,7 @@ from gooddata_flight_server.server.flight_rpc.server_methods import (
 
 
 def _get_flight_server_locations(config: ServerConfig) -> tuple[str, str]:
-    if config.use_tls:
-        transport = "grpc+tls"
-    else:
-        transport = "grpc"
+    transport = "grpc+tls" if config.use_tls else "grpc"
 
     return (
         f"{transport}://{config.listen_host}:{config.listen_port}",

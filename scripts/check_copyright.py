@@ -132,11 +132,7 @@ def safe_check_file(file_name: Path, update_file: bool, verbose: bool) -> int:
 
 
 def is_ignored_file(ignore_list: list[re.Pattern[AnyStr]], file_name: Path) -> bool:
-    for ignore_item in ignore_list:
-        if ignore_item.fullmatch(str(file_name)):
-            return True
-
-    return False
+    return any(ignore_item.fullmatch(str(file_name)) for ignore_item in ignore_list)
 
 
 def process_files(
