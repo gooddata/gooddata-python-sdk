@@ -85,9 +85,10 @@ class CatalogDeclarativeDataSources(Base):
     def load_from_disk(cls, layout_organization_folder: Path) -> CatalogDeclarativeDataSources:
         data_sources_folder = cls.data_sources_folder(layout_organization_folder)
         data_source_ids = sorted([p.stem for p in data_sources_folder.iterdir() if p.is_dir()])
-        data_sources = []
-        for data_source_id in data_source_ids:
-            data_sources.append(CatalogDeclarativeDataSource.load_from_disk(data_sources_folder, data_source_id))
+        data_sources = [
+            CatalogDeclarativeDataSource.load_from_disk(data_sources_folder, data_source_id)
+            for data_source_id in data_source_ids
+        ]
         return cls(data_sources=data_sources)
 
 

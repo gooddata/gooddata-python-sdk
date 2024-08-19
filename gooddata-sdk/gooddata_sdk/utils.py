@@ -237,10 +237,11 @@ def mandatory_profile_content_check(profile: str, profile_content_keys: KeysView
         ValueError:
             Missing mandatory parameter or parameters.
     """
-    missing = []
-    for mandatory_parameter in SDK_PROFILE_MANDATORY_KEYS:
-        if mandatory_parameter not in profile_content_keys:
-            missing.append(mandatory_parameter)
+    missing = [
+        mandatory_parameter
+        for mandatory_parameter in SDK_PROFILE_MANDATORY_KEYS
+        if mandatory_parameter not in profile_content_keys
+    ]
     if missing:
         missing_str = " and ".join(missing)
         raise ValueError(f"Profile {profile} is missing mandatory parameter or parameters {missing_str}.")
@@ -250,10 +251,11 @@ def _create_profile_legacy(content: dict) -> dict:
     try:
         return structure(content, Profile).to_dict()
     except ClassValidationError as e:
-        errors = []
-        for error in e.exceptions:
-            if isinstance(error, KeyError):
-                errors.append(f"Profile file does not contain mandatory parameter: {e}")
+        errors = [
+            f"Profile file does not contain mandatory parameter: {e}"
+            for error in e.exceptions
+            if isinstance(error, KeyError)
+        ]
         msg = "\n".join(errors)
         if not msg:
             msg = "An error occurred while parsing the profile file."

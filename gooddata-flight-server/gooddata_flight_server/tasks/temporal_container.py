@@ -127,12 +127,17 @@ class TemporalContainer(Generic[T]):
         #
         # this is intentionally done outside the critical section
         for value in to_evict:
-            try:
-                self._entry_evict_fun(value)
-            except Exception:
-                pass
+            if not self._safe_evict(value):
+                self._logger.error("temporal_entries_evict_failed", value=value)
 
         return to_evict
+
+    def _safe_evict(self, value: T) -> bool:
+        try:
+            self._entry_evict_fun(value)
+            return True
+        except Exception:
+            return False
 
     @property
     def entry_timeout(self) -> float:

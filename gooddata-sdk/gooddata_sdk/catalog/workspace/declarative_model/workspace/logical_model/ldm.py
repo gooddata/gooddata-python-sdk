@@ -239,9 +239,10 @@ class CatalogDeclarativeLdm(Base):
                             fact.source_column = self._change_case(fact.source_column, upper_case)
                 for reference in dataset.references:
                     if reference.source_columns is not None:
-                        new_columns = []
-                        for reference_column in reference.source_columns:
-                            new_columns.append(self._change_case(reference_column, upper_case))
+                        new_columns = [
+                            self._change_case(reference_column, upper_case)
+                            for reference_column in reference.source_columns
+                        ]
                         reference.source_columns = new_columns
                     elif reference.sources is not None:
                         for reference_source in reference.sources:

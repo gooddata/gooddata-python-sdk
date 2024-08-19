@@ -31,9 +31,7 @@ class CatalogDeclarativeUsers(Base):
         users_directory = layout_organization_folder / LAYOUT_USERS_DIR
         users_file = users_directory / LAYOUT_USERS_FILE
         data = read_layout_from_file(users_file)
-        users = []
-        for record in data:
-            users.append(CatalogDeclarativeUser.from_dict(record, camel_case=True))
+        users = [CatalogDeclarativeUser.from_dict(record, camel_case=True) for record in data]
         return cls(users=users)
 
     def store_to_disk(self, layout_organization_folder: Path) -> None:
