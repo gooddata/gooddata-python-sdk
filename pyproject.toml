@@ -14,7 +14,7 @@ lint.select = [
     "E", # pycodestyle errors
     "F", # pyflakes
     "I", # isort
-    "PERF102", # perflint
+    "PERF", # perflint
     "PIE",
     "PLR0402", # prevent unnecessary manual import aliases
     "PLR1711", # prevent useless returns

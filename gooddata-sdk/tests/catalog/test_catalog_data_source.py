@@ -656,21 +656,18 @@ def test_catalog_create_data_source_greenplum_spec(test_config):
 def test_allowed_data_source_type(test_config):
     allowed_types = JsonApiDataSourceInAttributes.allowed_values.get(("type",))
     for t in allowed_types.values():
-        try:
-            CatalogDataSource(
-                id="test",
-                name="Test2",
-                type=t,
-                url="jdbc:postgresql://localhost:5432/demo",
-                schema="demo",
-                credentials=BasicCredentials(
-                    username="demouser",
-                    password="demopass",
-                ),
-                url_params=[("param", "value")],
-            )
-        except ValueError:
-            assert False, f"ValueError was raised for valid database type {t}"
+        CatalogDataSource(
+            id="test",
+            name="Test2",
+            type=t,
+            url="jdbc:postgresql://localhost:5432/demo",
+            schema="demo",
+            credentials=BasicCredentials(
+                username="demouser",
+                password="demopass",
+            ),
+            url_params=[("param", "value")],
+        )
     db_type = "nonsense"
     try:
         CatalogDataSource(

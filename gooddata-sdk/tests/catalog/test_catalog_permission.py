@@ -78,10 +78,7 @@ def _validation_helper(class_type, attribute_name: str):
     client_class = class_type.client_class()
     allowed_values = list(client_class.allowed_values.get((attribute_name,)).values())
     for allowed_value in allowed_values:
-        try:
-            class_type(name=allowed_value, assignee=CatalogAssigneeIdentifier(id="", type="user"))
-        except ValueError:
-            assert False
+        class_type(name=allowed_value, assignee=CatalogAssigneeIdentifier(id="", type="user"))
     with pytest.raises(ValueError):
         class_type(name="nonsense", assignee=CatalogAssigneeIdentifier(id="", type="user"))
 
@@ -204,9 +201,9 @@ def test_put_and_get_declarative_organization_permissions(test_config):
     with open(expected_json_path, encoding="utf-8") as f:
         data = json.load(f)
 
-    declarative_organization_permissions = []
-    for permission in data:
-        declarative_organization_permissions.append(CatalogDeclarativeOrganizationPermission.from_api(permission))
+    declarative_organization_permissions = [
+        CatalogDeclarativeOrganizationPermission.from_api(permission) for permission in data
+    ]
 
     try:
         sdk.catalog_permission.put_declarative_organization_permissions(declarative_organization_permissions)

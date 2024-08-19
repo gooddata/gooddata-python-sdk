@@ -35,10 +35,7 @@ def _find_free_port():
 
 
 def _clean_env_vars():
-    to_drop = []
-    for key in os.environ:
-        if key.startswith("GOODDATA_FLIGHT"):
-            to_drop.append(key)
+    to_drop = [key for key in os.environ if key.startswith("GOODDATA_FLIGHT")]
 
     for key in to_drop:
         os.environ.pop(key, None)

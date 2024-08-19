@@ -35,9 +35,7 @@ class CatalogDeclarativeTables(Base):
     def load_from_disk(cls, data_source_folder: Path) -> CatalogDeclarativeTables:
         pdm_folder = get_pdm_folder(data_source_folder)
         table_files = sorted([p for p in pdm_folder.glob("*.yaml")])
-        tables = []
-        for table_file in table_files:
-            tables.append(CatalogDeclarativeTable.load_from_disk(table_file))
+        tables = [CatalogDeclarativeTable.load_from_disk(table_file) for table_file in table_files]
         return cls(tables=tables)
 
 
