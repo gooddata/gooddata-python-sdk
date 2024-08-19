@@ -294,10 +294,8 @@ def import_submodules(pkg_name: str) -> dict[str, ModuleType]:
     package = sys.modules[pkg_name]
     dictionary = {}
     for loader, name, is_pkg in pkgutil.walk_packages(package.__path__):
-        try:
+        if importlib.util.find_spec(f"{pkg_name}.{name}") is not None:
             dictionary[name] = importlib.import_module(f"{pkg_name}.{name}")
-        except ImportError:
-            pass
 
 
 if __name__ == "__main__":

@@ -124,10 +124,10 @@ class CatalogPermissionService(CatalogServiceBase):
                 List of all declarative organization permissions.
         """
 
-        catalog_list = []
         organization_permissions = self._layout_api.get_organization_permissions()
-        for permission in organization_permissions:
-            catalog_list.append(CatalogDeclarativeOrganizationPermission.from_api(permission))
+        catalog_list = [
+            CatalogDeclarativeOrganizationPermission.from_api(permission) for permission in organization_permissions
+        ]
         return catalog_list
 
     def put_declarative_organization_permissions(
@@ -143,9 +143,7 @@ class CatalogPermissionService(CatalogServiceBase):
             None
         """
 
-        declarative_organization_permissions = []
-        for catalog_permission in org_permissions:
-            declarative_organization_permissions.append(catalog_permission.to_api())
+        declarative_organization_permissions = [catalog_permission.to_api() for catalog_permission in org_permissions]
         self._layout_api.set_organization_permissions(declarative_organization_permissions)
 
     def manage_organization_permissions(

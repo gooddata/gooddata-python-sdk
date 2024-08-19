@@ -3,7 +3,7 @@ import copy
 import json
 import re
 from pathlib import Path
-from typing import Any, Optional, Union
+from typing import Optional, Union
 
 import attrs
 from gooddata_sdk import CatalogDeclarativeColumn, CatalogDeclarativeTable, CatalogDeclarativeTables
@@ -306,10 +306,11 @@ class DbtModelTables:
         return result
 
     def make_grain(self, table: DbtModelTable) -> list[dict]:
-        grain = []
-        for column in table.columns.values():
-            if self.is_primary_key(column):
-                grain.append({"id": column.ldm_id, "type": "attribute"})
+        grain = [
+            {"id": column.ldm_id, "type": "attribute"}
+            for column in table.columns.values()
+            if self.is_primary_key(column)
+        ]
         return grain
 
     # TODO - constraints are stored in special nodes
@@ -326,21 +327,22 @@ class DbtModelTables:
 
     @staticmethod
     def find_role_playing_tables(tables: list[DbtModelTable]) -> dict:
-        result = {}
-        for table in tables:
-            references: dict[str, Any] = {}
-            for column in table.columns.values():
-                if column.is_reference():
-                    referenced_table = column.meta.gooddata.referenced_table
-                    if referenced_table is not None:
-                        if referenced_table in references:
-                            references[referenced_table].append(column.name)
-                        else:
-                            references[referenced_table] = [column.name]
-            for referenced_object_id, columns in references.items():
-                if len(columns) > 1:
-                    result[referenced_object_id] = columns
-        return result
+        return {
+            referenced_object_id: columns
+            for table in tables
+            for column in table.columns.values()
+            if column.is_reference()
+            for referenced_table in [column.meta.gooddata.referenced_table]
+            if referenced_table is not None
+            for referenced_object_id, columns in {
+                referenced_table: [
+                    col.name
+                    for col in table.columns.values()
+                    if col.is_reference() and col.meta.gooddata.referenced_table == referenced_table
+                ]
+            }.items()
+            if len(columns) > 1
+        }
 
     def make_references(self, table: DbtModelTable, role_playing_tables: dict) -> list[dict]:
         references = []
@@ -369,20 +371,19 @@ class DbtModelTables:
 
     @staticmethod
     def make_facts(table: DbtModelTable) -> list[dict]:
-        facts = []
-        for column in table.columns.values():
-            if column.gooddata_is_fact():
-                facts.append(
-                    {
-                        "id": column.ldm_id,
-                        # TODO - all titles filled from dbt descriptions, incorrect! No title in dbt models.
-                        "title": column.gooddata_ldm_title,
-                        "description": column.gooddata_ldm_description,
-                        "source_column": column.name,
-                        "source_column_data_type": column.data_type,
-                        "tags": [table.gooddata_ldm_title] + column.tags,
-                    }
-                )
+        facts = [
+            {
+                "id": column.ldm_id,
+                # TODO - all titles filled from dbt descriptions, incorrect! No title in dbt models.
+                "title": column.gooddata_ldm_title,
+                "description": column.gooddata_ldm_description,
+                "source_column": column.name,
+                "source_column_data_type": column.data_type,
+                "tags": [table.gooddata_ldm_title] + column.tags,
+            }
+            for column in table.columns.values()
+            if column.gooddata_is_fact()
+        ]
         return facts
 
     @staticmethod

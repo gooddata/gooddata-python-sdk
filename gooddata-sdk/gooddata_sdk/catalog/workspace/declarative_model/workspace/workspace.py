@@ -151,11 +151,10 @@ class CatalogDeclarativeWorkspaceDataFilters(Base):
         workspace_data_filters_files = get_sorted_yaml_files(
             CatalogDeclarativeWorkspaces.workspace_data_filters_folder(layout_organization_folder)
         )
-        workspace_data_filters = []
-        for workspace_data_filters_file in workspace_data_filters_files:
-            workspace_data_filters.append(
-                CatalogDeclarativeWorkspaceDataFilter.load_from_disk(workspace_data_filters_file)
-            )
+        workspace_data_filters = [
+            CatalogDeclarativeWorkspaceDataFilter.load_from_disk(workspace_data_filters_file)
+            for workspace_data_filters_file in workspace_data_filters_files
+        ]
         return cls(workspace_data_filters=workspace_data_filters)
 
     def create_copy(self, source_ws_id: str, target_ws_id: str) -> tuple[CatalogDeclarativeWorkspaceDataFilters, dict]:
@@ -240,9 +239,10 @@ class CatalogDeclarativeUserDataFilters(Base):
         user_data_filters_files = get_sorted_yaml_files(
             CatalogDeclarativeWorkspaces.user_data_filters_folder(layout_organization_folder)
         )
-        user_data_filters = []
-        for user_data_filters_file in user_data_filters_files:
-            user_data_filters.append(CatalogDeclarativeUserDataFilter.load_from_disk(user_data_filters_file))
+        user_data_filters = [
+            CatalogDeclarativeUserDataFilter.load_from_disk(user_data_filters_file)
+            for user_data_filters_file in user_data_filters_files
+        ]
         return cls(user_data_filters=user_data_filters)
 
 

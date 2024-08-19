@@ -602,8 +602,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
             # Extract the translated values and add them to the list
             translated_values.extend(api_result)
         # Update the data dictionary with the translated values
-        for key, value in zip(to_translate, translated_values):
-            result[key] = value
+        result = {key: value for key, value in zip(to_translate, translated_values)}
         duration = int((time() - start) * 1000)
         logger.info(f"Translation finished duration={duration}")
         return result

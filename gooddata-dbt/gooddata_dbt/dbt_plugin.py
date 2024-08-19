@@ -216,27 +216,26 @@ def create_localized_workspaces(
 ) -> None:
     if data_product.localization is None:
         return
+    try:
+        from deep_translator import GoogleTranslator
+    except ImportError:
+        logger.warning(
+            "create_localized_workspaces: deep_translator module not found, will not be able to localize workspaces"
+        )
     for to in data_product.localization.to:
-        try:
-            from deep_translator import GoogleTranslator
-
-            translator_func = GoogleTranslator(
-                source=data_product.localization.from_language, target=to.language
-            ).translate_batch
-            logger.info(f"create_localized_workspaces layout_root_path={GOODDATA_LAYOUTS_DIR / data_product.id}")
-            sdk_facade.generate_localized_workspaces(
-                workspace_id,
-                to=to,
-                data_product=data_product,
-                translator_func=translator_func,
-                layout_path=GOODDATA_LAYOUTS_DIR / data_product.id,
-                provision_workspace=True,
-                store_layouts=False,
-            )
-        except ImportError:
-            logger.warning(
-                "create_localized_workspaces: deep_translator module not found, will not be able to localize workspaces"
-            )
+        translator_func = GoogleTranslator(
+            source=data_product.localization.from_language, target=to.language
+        ).translate_batch
+        logger.info(f"create_localized_workspaces layout_root_path={GOODDATA_LAYOUTS_DIR / data_product.id}")
+        sdk_facade.generate_localized_workspaces(
+            workspace_id,
+            to=to,
+            data_product=data_product,
+            translator_func=translator_func,
+            layout_path=GOODDATA_LAYOUTS_DIR / data_product.id,
+            provision_workspace=True,
+            store_layouts=False,
+        )
 
 
 def get_table(data: list[list], headers: list[str], fmt: str) -> str:
@@ -296,9 +295,9 @@ def dbt_cloud_stats(
     dbt_conn = DbtConnection(credentials=DbtCredentials(account_id=args.account_id, token=args.token))
     dbt_tables = DbtModelTables.from_local(args.gooddata_upper_case, all_model_ids)
     model_executions = dbt_conn.get_last_execution(environment_id, len(dbt_tables.tables))
-    exec_list = []
-    for execution in model_executions:
-        exec_list.append([execution.unique_id, round(execution.execution_info.execution_time, 2)])
+    exec_list = [
+        [execution.unique_id, round(execution.execution_info.execution_time, 2)] for execution in model_executions
+    ]
 
     headers = ["Model ID", "Duration(s)"]
     pretty_table = get_table(exec_list, headers, "outline")
