@@ -7,6 +7,7 @@ this_directory = Path(__file__).parent
 long_description = (this_directory / "README.md").read_text(encoding="utf-8")
 
 REQUIRES = [
+    "attrs>=21.4.0,<=23.2.0",
     "dynaconf>=3.1.11,<4.0.0",
     "gooddata-sdk~=1.24.0",
     "opentelemetry-api>=1.24.0,<=2.0.0",
