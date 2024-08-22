@@ -1,27 +1,93 @@
 # (C) 2024 GoodData Corporation
-from dataclasses import dataclass
 from typing import Optional
 
+from attrs import define, field
 from gooddata_sdk import Attribute, ComputeToSdkConverter, Filter, Metric
 
 
-@dataclass
+def _dict_to_attributes(attributes: list[dict]) -> list[Attribute]:
+    return [ComputeToSdkConverter.convert_attribute(a) for a in attributes]
+
+
+def _dict_to_metrics(metrics: list[dict]) -> list[Metric]:
+    return [ComputeToSdkConverter.convert_metric(m) for m in metrics]
+
+
+def _dict_to_filters(filters: list[dict]) -> list[Filter]:
+    return [ComputeToSdkConverter.convert_filter(f) for f in filters]
+
+
+@define
+class ExecutionContextAttributeSorting:
+    """
+    Information about the sorting of an attribute.
+    """
+
+    sort_column: str
+    """
+    Column to sort by.
+    """
+
+    sort_direction: str
+    """
+    Direction of the sorting.
+    """
+
+
+@define
+class ExecutionContextAttribute:
+    """
+    Information about an attribute used in the execution.
+    """
+
+    attribute_identifier: str
+    """
+    Identifier of the attribute used.
+    """
+
+    attribute_title: str
+    """
+    Title of the attribute used.
+    """
+
+    label_identifier: str
+    """
+    Identifier of the particular label used.
+    """
+
+    label_title: str
+    """
+    Title of the particular label used.
+    """
+
+    date_granularity: str
+    """
+    Date granularity of the attribute if it is a date attribute.
+    """
+
+    sorting: Optional[ExecutionContextAttributeSorting]
+    """
+    Sorting of the attribute. If not present, the attribute is not sorted.
+    """
+
+
+@define
 class ExecutionRequest:
     """
     Information about the execution request that is sent to the FlexFun.
     """
 
-    attributes: list[Attribute]
+    attributes: list[Attribute] = field(converter=_dict_to_attributes)
     """
     All the attributes that are part of the execution request.
     """
 
-    metrics: list[Metric]
+    metrics: list[Metric] = field(converter=_dict_to_metrics)
     """
     All the metrics that are part of the execution request.
     """
 
-    filters: list[Filter]
+    filters: list[Filter] = field(converter=_dict_to_filters)
     """
     All the filters that are part of the execution request.
     """
@@ -33,13 +99,13 @@ class ExecutionRequest:
         :param d: the dictionary to parse
         """
         return ExecutionRequest(
-            attributes=[ComputeToSdkConverter.convert_attribute(a) for a in d.get("attributes", [])],
-            metrics=[ComputeToSdkConverter.convert_metric(m) for m in d.get("measures", [])],
-            filters=[ComputeToSdkConverter.convert_filter(f) for f in d.get("filters", [])],
+            attributes=d.get("attributes", []),
+            metrics=d.get("measures", []),
+            filters=d.get("filters", []),
         )
 
 
-@dataclass
+@define
 class ExecutionContext:
     """
     Execution context of the FlexFun
@@ -71,9 +137,19 @@ class ExecutionContext:
     The timezone of the execution.
     """
 
+    week_start: Optional[str]
+    """
+    The start of the week. Either "monday" or "sunday".
+    """
+
     execution_request: ExecutionRequest
     """
     The execution request that the FlexFun should process.
+    """
+
+    attributes: list[ExecutionContextAttribute]
+    """
+    All the attributes that are part of the execution request.
     """
 
     @staticmethod
@@ -90,7 +166,9 @@ class ExecutionContext:
             user_id=d["user_id"],
             timestamp=d.get("timestamp"),
             timezone=d.get("timezone"),
+            week_start=d.get("week_start"),
             execution_request=ExecutionRequest.from_dict(d["execution_request"]),
+            attributes=d.get("attributes", []),
         )
 
     @staticmethod
