@@ -19,6 +19,7 @@ services:
       GDCN_ENABLE_CSV_EXPORT_API: 1
       GDC_FEATURES_VALUES_ENABLE_ANALYTICAL_DASHBOARD_PERMISSIONS: "true"
       GDC_FEATURES_VALUES_ENABLE_METRIC_SQL_AND_DATA_EXPLAIN: 'ENABLED'
+      GDC_FEATURES_VALUES_ENABLE_ROLLUP_TOTALS: "true"
 #      In the case of failing tests (HTTP 500), you can increase the memory for the metadata API
 #      METADATA_API_JAVA_OPTS: "-Xmx1024m -Xms512m"
   gooddata-fdw:
