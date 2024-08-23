@@ -1,19 +1,20 @@
 # (C) 2024 GoodData Corporation
-from typing import Optional
+from typing import Optional, Union
 
 from attrs import define, field
 from gooddata_sdk import Attribute, ComputeToSdkConverter, Filter, Metric
+from typing_extensions import TypeAlias
 
 
-def _dict_to_attributes(attributes: list[dict]) -> list[Attribute]:
+def _dict_to_request_attributes(attributes: list[dict]) -> list[Attribute]:
     return [ComputeToSdkConverter.convert_attribute(a) for a in attributes]
 
 
-def _dict_to_metrics(metrics: list[dict]) -> list[Metric]:
+def _dict_to_request_metrics(metrics: list[dict]) -> list[Metric]:
     return [ComputeToSdkConverter.convert_metric(m) for m in metrics]
 
 
-def _dict_to_filters(filters: list[dict]) -> list[Filter]:
+def _dict_to_request_filters(filters: list[dict]) -> list[Filter]:
     return [ComputeToSdkConverter.convert_filter(f) for f in filters]
 
 
@@ -72,22 +73,113 @@ class ExecutionContextAttribute:
 
 
 @define
+class ExecutionContextPositiveAttributeFilter:
+    """
+    Information about the positive attribute filter.
+    """
+
+    label_identifier: str
+    """
+    Identifier of the label used.
+    """
+
+    values: list[str]
+    """
+    Values of the filter.
+    """
+
+
+@define
+class ExecutionContextNegativeAttributeFilter:
+    """
+    Information about the negative attribute filter.
+    """
+
+    label_identifier: str
+    """
+    Identifier of the label used.
+    """
+
+    values: list[str]
+    """
+    Values of the filter.
+    """
+
+
+@define
+class ExecutionContextRelativeDateFilter:
+    """
+    Information about the relative date filter.
+    """
+
+    dataset_identifier: str
+    """
+    Identifier of the dataset used.
+    """
+
+    granularity: str
+    """
+    Granularity of the filter.
+    """
+
+    from_shift: int
+    """
+    Shift from the start of the period.
+    """
+
+    to_shift: int
+    """
+    Shift from the end of the period.
+    """
+
+
+@define
+class ExecutionContextAbsoluteDateFilter:
+    """
+    Information about the absolute date filter.
+    """
+
+    dataset_identifier: str
+    """
+    Identifier of the dataset used.
+    """
+
+    from_date: str
+    """
+    Start date of the filter.
+    """
+
+    to_date: str
+    """
+    End date of the filter.
+    """
+
+
+ExecutionContextFilter: TypeAlias = Union[
+    ExecutionContextPositiveAttributeFilter,
+    ExecutionContextNegativeAttributeFilter,
+    ExecutionContextRelativeDateFilter,
+    ExecutionContextAbsoluteDateFilter,
+]
+
+
+@define
 class ExecutionRequest:
     """
     Information about the execution request that is sent to the FlexFun.
     """
 
-    attributes: list[Attribute] = field(converter=_dict_to_attributes)
+    attributes: list[Attribute] = field(converter=_dict_to_request_attributes)
     """
     All the attributes that are part of the execution request.
     """
 
-    metrics: list[Metric] = field(converter=_dict_to_metrics)
+    metrics: list[Metric] = field(converter=_dict_to_request_metrics)
     """
     All the metrics that are part of the execution request.
     """
 
-    filters: list[Filter] = field(converter=_dict_to_filters)
+    filters: list[Filter] = field(converter=_dict_to_request_filters)
     """
     All the filters that are part of the execution request.
     """
@@ -103,6 +195,34 @@ class ExecutionRequest:
             metrics=d.get("measures", []),
             filters=d.get("filters", []),
         )
+
+
+def _dict_to_filter(d: dict) -> ExecutionContextFilter:
+    filter_type = d.get("filter_type")
+    if filter_type == "positiveAttributeFilter":
+        return ExecutionContextPositiveAttributeFilter(label_identifier=d["label_identifier"], values=d["values"])
+
+    if filter_type == "negativeAttributeFilter":
+        return ExecutionContextNegativeAttributeFilter(label_identifier=d["label_identifier"], values=d["values"])
+
+    if filter_type == "relativeDateFilter":
+        return ExecutionContextRelativeDateFilter(
+            dataset_identifier=d["dataset_identifier"],
+            granularity=d["granularity"],
+            from_shift=d["from"],
+            to_shift=d["to"],
+        )
+
+    if filter_type == "absoluteDateFilter":
+        return ExecutionContextAbsoluteDateFilter(
+            dataset_identifier=d["dataset_identifier"], from_date=d["from"], to_date=d["to"]
+        )
+
+    raise ValueError(f"Unsupported filter definition type: {d}")
+
+
+def _dict_to_filters(filters: list[dict]) -> list[ExecutionContextFilter]:
+    return [_dict_to_filter(f) for f in filters]
 
 
 @define
@@ -152,6 +272,11 @@ class ExecutionContext:
     All the attributes that are part of the execution request.
     """
 
+    filters: list[ExecutionContextFilter] = field(converter=_dict_to_filters)
+    """
+    All the attribute and date filters that are part of the execution request.
+    """
+
     @staticmethod
     def from_dict(d: dict) -> Optional["ExecutionContext"]:
         """
@@ -169,6 +294,7 @@ class ExecutionContext:
             week_start=d.get("week_start"),
             execution_request=ExecutionRequest.from_dict(d["execution_request"]),
             attributes=d.get("attributes", []),
+            filters=d.get("filters", []),
         )
 
     @staticmethod
