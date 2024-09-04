@@ -83,7 +83,7 @@ class ExecutionContextPositiveAttributeFilter:
     Identifier of the label used.
     """
 
-    values: list[str]
+    values: list[Optional[str]]
     """
     Values of the filter.
     """
@@ -100,7 +100,7 @@ class ExecutionContextNegativeAttributeFilter:
     Identifier of the label used.
     """
 
-    values: list[str]
+    values: list[Optional[str]]
     """
     Values of the filter.
     """
