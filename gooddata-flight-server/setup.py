@@ -9,7 +9,7 @@ long_description = (this_directory / "README.md").read_text(encoding="utf-8")
 REQUIRES = [
     "attrs>=21.4.0,<=23.2.0",
     "dynaconf>=3.1.11,<4.0.0",
-    "gooddata-sdk~=1.25.0",
+    "gooddata-sdk~=1.26.0",
     "opentelemetry-api>=1.24.0,<=2.0.0",
     "opentelemetry-sdk>=1.24.0,<=2.0.0",
     "orjson>=3.8.5,<4.0.0",
@@ -24,7 +24,7 @@ setup(
     description="Flight RPC server to host custom functions for GoodData Cloud",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    version="1.25.0",
+    version="1.26.0",
     author="GoodData",
     author_email="support@gooddata.com",
     license="MIT",
@@ -35,7 +35,7 @@ setup(
     include_package_data=True,
     python_requires=">=3.9.0",
     project_urls={
-        "Documentation": "https://gooddata-flight-server.readthedocs.io/en/v1.25.0",
+        "Documentation": "https://gooddata-flight-server.readthedocs.io/en/v1.26.0",
         "Source": "https://github.com/gooddata/gooddata-python-sdk",
     },
     scripts=[
