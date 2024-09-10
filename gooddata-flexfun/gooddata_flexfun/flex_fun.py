@@ -3,9 +3,7 @@ import abc
 from typing import Optional
 
 import pyarrow
-
-from gooddata_flight_server.server.base import ServerContext
-from gooddata_flight_server.tasks.base import ArrowData
+from gooddata_flight_server import ArrowData, ServerContext
 
 
 class FlexFun(abc.ABC):
@@ -26,8 +24,6 @@ class FlexFun(abc.ABC):
 
     Programming detail: a new instance of the FlexFun will be created
     for every call using the `create` method.
-
-    TODO: rename the class... i'm not very creative right now
     """
 
     Name: Optional[str] = None

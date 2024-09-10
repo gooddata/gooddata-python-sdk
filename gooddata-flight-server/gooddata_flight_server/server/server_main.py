@@ -5,9 +5,6 @@ import pyarrow.flight
 from dynaconf import Dynaconf
 
 from gooddata_flight_server.config.config import ServerConfig, read_config
-from gooddata_flight_server.flexfun.flight_methods import (
-    create_flexfun_flight_methods,
-)
 from gooddata_flight_server.server.base import (
     FlightServerMethodsFactory,
     ServerContext,
@@ -108,6 +105,7 @@ def create_server(
     logging_config: str = DEFAULT_LOGGING_INI,
     dev_log: bool = True,
 ) -> "GoodDataFlightServer":
+    assert methods
     settings, config = read_config(files=config_files)
 
     init_logging(
@@ -119,6 +117,5 @@ def create_server(
     )
 
     initialize_otel_tracing(config=config.otel_config)
-    _methods = methods or create_flexfun_flight_methods
 
-    return GoodDataFlightServer(settings=settings, config=config, methods=_methods)
+    return GoodDataFlightServer(settings=settings, config=config, methods=methods)

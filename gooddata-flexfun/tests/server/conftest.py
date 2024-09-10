@@ -2,19 +2,14 @@
 import contextlib
 import os
 import socket
+from collections.abc import Iterable
 from contextlib import closing
 from pathlib import Path
 from typing import Union
 
 import pytest
-from gooddata_flight_server.server.base import FlightServerMethodsFactory
-from gooddata_flight_server.server.flight_rpc.server_methods import (
-    FlightServerMethods,
-)
-from gooddata_flight_server.server.server_main import (
-    GoodDataFlightServer,
-    create_server,
-)
+from gooddata_flexfun.flight_methods import create_flexfun_flight_methods
+from gooddata_flight_server import FlightServerMethods, FlightServerMethodsFactory, GoodDataFlightServer, create_server
 
 _CURRENT_DIR = Path(__file__).parent
 _TLS_DIR = _CURRENT_DIR / "tls"
@@ -71,6 +66,21 @@ def server(
     _clean_env_vars()
     _server.stop()
     _server.wait_for_stop()
+
+
+@contextlib.contextmanager
+def flexfun_server(
+    modules: Iterable[str],
+    tls: bool = False,
+    mtls: bool = False,
+) -> GoodDataFlightServer:
+    envvar = ", ".join([f'"{module}"' for module in modules])
+    envvar = f"[{envvar}]"
+
+    os.environ["GOODDATA_FLIGHT_FLEXFUN__FUNCTIONS"] = envvar
+
+    with server(create_flexfun_flight_methods, tls, mtls) as s:
+        yield s
 
 
 @pytest.fixture(scope="session")

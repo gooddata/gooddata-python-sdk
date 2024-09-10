@@ -1,8 +1,11 @@
 #  (C) 2024 GoodData Corporation
+from typing import Optional
 
 import pyarrow
-from gooddata_flight_server.flexfun.flex_fun import FlexFun
-from gooddata_flight_server.tasks.base import ArrowData
+from gooddata_flexfun.flex_fun import FlexFun
+from gooddata_flight_server import ArrowData, ServerContext
+
+_DATA: Optional[pyarrow.Table] = None
 
 
 class _SimpleFun(FlexFun):
@@ -21,11 +24,18 @@ class _SimpleFun(FlexFun):
         columns: tuple[str, ...],
         headers: dict[str, list[str]],
     ) -> ArrowData:
-        return pyarrow.table(
+        assert _DATA is not None
+        return _DATA
+
+    @staticmethod
+    def on_load(ctx: ServerContext) -> None:
+        # on load emulates some kid of one-off setup
+        global _DATA
+        _DATA = pyarrow.table(
             data={
                 "col1": [1, 2, 3],
                 "col2": ["a", "b", "c"],
                 "col3": [True, False, True],
             },
-            schema=self.Schema,
+            schema=_SimpleFun.Schema,
         )

@@ -1,0 +1,3 @@
+# GoodData Flex function
+
+...
