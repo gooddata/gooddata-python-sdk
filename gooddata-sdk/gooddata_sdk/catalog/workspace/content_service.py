@@ -4,7 +4,7 @@ from __future__ import annotations
 import copy
 import functools
 from pathlib import Path
-from typing import Optional, Union
+from typing import Literal, Optional, Union
 
 import gooddata_api_client.models as afm_models
 from gooddata_api_client.model.elements_request import ElementsRequest
@@ -567,6 +567,11 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         validate_by: Optional[list[CatalogValidateByItem]] = None,
         exact_filter: Optional[list[str]] = None,
         filter_by: Optional[CatalogFilterBy] = None,
+        pattern_filter: Optional[str] = None,
+        complement_filter: Optional[bool] = False,
+        sort_order: Optional[Literal["ASC", "DESC"]] = None,
+        offset: Optional[int] = None,
+        limit: Optional[int] = None,
     ) -> list[str]:
         """
         Get existing values for a label.
@@ -588,6 +593,17 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
             filter_by (Optional[CatalogFilterBy]):
                 Optional parameter specifying which label is used for filtering - primary or requested.
                 If omitted the server will use the default value of "REQUESTED"
+            pattern_filter (Optional[str]):
+                Optional parameter specifying pattern filter: matching the elements using case-insensitive
+                substring match.
+            complement_filter (Optional[bool]):
+                Optional parameter specifying whether to negate the filter in exact_filter and pattern_filter.
+            sort_order (Optional[Literal["ASC", "DESC"]]):
+                Optional parameter specifying the sort order for the returned values.
+            offset (Optional[int]):
+                Optional parameter specifying the offset for the returned values.
+            limit (Optional[int]):
+                Optional parameter specifying the limit for the returned values.
         Returns:
             list of label values
         """
@@ -612,6 +628,23 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         if filter_by is not None:
             request.filter_by = filter_by.to_api()
 
+        if pattern_filter is not None:
+            request.pattern_filter = pattern_filter
+
+        if complement_filter:
+            request.complement_filter = complement_filter
+
+        if sort_order is not None:
+            request.sort_order = sort_order
+
+        paging_params = {}
+        if offset is not None:
+            paging_params["offset"] = offset
+        if limit is not None:
+            paging_params["limit"] = limit
+
         # TODO - fix return type of Paging.next in Backend + add support for this API to SDK
-        values = self._actions_api.compute_label_elements_post(workspace_id, request, _check_return_type=False)
+        values = self._actions_api.compute_label_elements_post(
+            workspace_id, request, _check_return_type=False, **paging_params
+        )
         return [v["title"] for v in values["elements"]]

@@ -16,7 +16,6 @@ from gooddata_sdk import (
     CatalogDependsOn,
     CatalogDependsOnDateFilter,
     CatalogEntityIdentifier,
-    CatalogFilterBy,
     CatalogValidateByItem,
     CatalogWorkspace,
     DataSourceValidator,
@@ -414,12 +413,22 @@ def test_label_elements(test_config):
         test_config["workspace"], "order_status", [depends_on], [], exact_filter, filter_by
     )
     assert label_values == ["Canceled", "Delivered"]
-    exact_filter = ["C-02AZUA9H", "C-0159TVP7"]
-    filter_by: CatalogFilterBy = CatalogFilterBy(label_type="PRIMARY")
     label_values = sdk.catalog_workspace_content.get_label_elements(
-        test_config["workspace"], "customer_name", [], [], exact_filter, filter_by
+        test_config["workspace"], "label/order_status", pattern_filter="Deli"
     )
-    assert label_values == ["Jennifer Miller", "William Ross"]
+    assert label_values == ["Delivered"]
+    label_values = sdk.catalog_workspace_content.get_label_elements(
+        test_config["workspace"], "label/order_status", pattern_filter="Deli", complement_filter=True
+    )
+    assert label_values == ["Canceled", "Returned"]
+    label_values = sdk.catalog_workspace_content.get_label_elements(
+        test_config["workspace"], "label/order_status", sort_order="DESC"
+    )
+    assert label_values == ["Returned", "Delivered", "Canceled"]
+    label_values = sdk.catalog_workspace_content.get_label_elements(
+        test_config["workspace"], "label/order_status", offset=1, limit=1
+    )
+    assert label_values == ["Delivered"]
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "explicit_workspace_data_filter.yaml"))
