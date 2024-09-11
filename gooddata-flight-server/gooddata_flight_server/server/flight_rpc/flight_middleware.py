@@ -96,11 +96,17 @@ class CallFinalizer(pyarrow.flight.ServerMiddleware):
 class OtelMiddleware(pyarrow.flight.ServerMiddleware):
     MiddlewareName = "otel_middleware"
 
-    def __init__(self, info: pyarrow.flight.CallInfo, headers: dict[str, list[str]]) -> None:
+    def __init__(
+        self, info: pyarrow.flight.CallInfo, headers: dict[str, list[str]], extract_context: bool = False
+    ) -> None:
         super().__init__()
         method_name = info.method.name
 
-        self._otel_ctx = otelpropagate.extract(headers)
+        if extract_context:
+            self._otel_ctx = otelpropagate.extract(headers)
+        else:
+            self._otel_ctx = otelctx.get_current()
+
         self._otel_span = SERVER_TRACER.start_span(
             f"{method_name}",
             kind=SpanKind.SERVER,

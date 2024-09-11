@@ -70,10 +70,14 @@ class _CallFinalizerMiddlewareFactory(pyarrow.flight.ServerMiddlewareFactory):
 
 
 class _OtelMiddlewareFactory(pyarrow.flight.ServerMiddlewareFactory):
+    def __init__(self, extract_context: bool) -> None:
+        super().__init__()
+        self._extract_context = extract_context
+
     def start_call(
         self, info: pyarrow.flight.CallInfo, headers: dict[str, list[str]]
     ) -> Optional[pyarrow.flight.ServerMiddleware]:
-        return OtelMiddleware(info, headers)
+        return OtelMiddleware(info, headers, self._extract_context)
 
 
 class FlightRpcService:
@@ -141,7 +145,9 @@ class FlightRpcService:
         if self._config.otel_config.exporter_type is None:
             return None
 
-        return OtelMiddleware.MiddlewareName, _OtelMiddlewareFactory()
+        return OtelMiddleware.MiddlewareName, _OtelMiddlewareFactory(
+            self._config.otel_config.extract_context_from_headers
+        )
 
     def start(self, ctx: ServerContext) -> None:
         """

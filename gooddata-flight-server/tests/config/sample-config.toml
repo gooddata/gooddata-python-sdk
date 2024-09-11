@@ -31,3 +31,4 @@ otel_exporter_type = "otlp-grpc"
 otel_service_name = "your-service-name"
 otel_service_namespace = "your-namespace"
 otel_service_instance_id = "your-service-instance-id"
+otel_extract_context = true
