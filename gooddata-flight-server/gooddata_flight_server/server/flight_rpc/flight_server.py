@@ -10,11 +10,14 @@ There are two main pieces:
 """
 
 from collections.abc import Generator
-from typing import Optional, Union
+from typing import Any, Callable, Optional, TypeVar, Union
 
+import opentelemetry.context as otelctx
+import opentelemetry.trace as oteltrace
 import pyarrow.flight
-from typing_extensions import TypeAlias
+from typing_extensions import Concatenate, ParamSpec, TypeAlias
 
+from gooddata_flight_server.server.flight_rpc.flight_middleware import OtelMiddleware
 from gooddata_flight_server.server.flight_rpc.server_methods import (
     FlightServerMethods,
 )
@@ -22,6 +25,48 @@ from gooddata_flight_server.server.flight_rpc.server_methods import (
 FlightServerLocation: TypeAlias = Union[str, bytes, Optional[tuple[str, int]], pyarrow.flight.Location]
 FlightTlsCertificates: TypeAlias = list[tuple[bytes, bytes]]
 FlightMiddlewares: TypeAlias = dict[str, pyarrow.flight.ServerMiddlewareFactory]
+
+T = TypeVar("T")
+P = ParamSpec("P")
+
+
+def rpc_decorator() -> (
+    Callable[
+        [Callable[Concatenate[Any, pyarrow.flight.ServerCallContext, P], T]],
+        Callable[Concatenate[Any, pyarrow.flight.ServerCallContext, P], T],
+    ]
+):
+    def _factory(
+        fun: Callable[Concatenate[Any, pyarrow.flight.ServerCallContext, P], T],
+    ) -> Callable[Concatenate[Any, pyarrow.flight.ServerCallContext, P], T]:
+        def _decorator(
+            self: Any,
+            context: pyarrow.flight.ServerCallContext,
+            *args: P.args,
+            **kwargs: P.kwargs,
+        ) -> T:
+            otel_middleware = context.get_middleware(OtelMiddleware.MiddlewareName)
+            if otel_middleware is not None:
+                otel_ctx, otel_span = otel_middleware.call_tracing
+            else:
+                otel_ctx = otelctx.get_current()
+                otel_span = oteltrace.INVALID_SPAN
+
+            old_otel_ctx = otelctx.attach(otel_ctx)
+            try:
+                with oteltrace.use_span(
+                    otel_span,
+                    end_on_exit=False,
+                    record_exception=False,
+                    set_status_on_exception=False,
+                ):
+                    return fun(self, context, *args, **kwargs)
+            finally:
+                otelctx.detach(old_otel_ctx)
+
+        return _decorator
+
+    return _factory
 
 
 class FlightServer(pyarrow.flight.FlightServerBase):
@@ -122,11 +167,13 @@ class FlightServer(pyarrow.flight.FlightServerBase):
     # Delegates to methods impl
     #
 
+    @rpc_decorator()
     def list_flights(
         self, context: pyarrow.flight.ServerCallContext, criteria: bytes
     ) -> Generator[pyarrow.flight.FlightInfo, None, None]:
         return self._methods.list_flights(context, criteria)
 
+    @rpc_decorator()
     def get_flight_info(
         self,
         context: pyarrow.flight.ServerCallContext,
@@ -134,6 +181,7 @@ class FlightServer(pyarrow.flight.FlightServerBase):
     ) -> pyarrow.flight.FlightInfo:
         return self._methods.get_flight_info(context, descriptor)
 
+    @rpc_decorator()
     def get_schema(
         self,
         context: pyarrow.flight.ServerCallContext,
@@ -141,6 +189,7 @@ class FlightServer(pyarrow.flight.FlightServerBase):
     ) -> pyarrow.flight.SchemaResult:
         return self._methods.get_schema(context, descriptor)
 
+    @rpc_decorator()
     def do_put(
         self,
         context: pyarrow.flight.ServerCallContext,
@@ -150,6 +199,7 @@ class FlightServer(pyarrow.flight.FlightServerBase):
     ) -> None:
         return self._methods.do_put(context, descriptor, reader, writer)
 
+    @rpc_decorator()
     def do_get(
         self,
         context: pyarrow.flight.ServerCallContext,
@@ -157,6 +207,7 @@ class FlightServer(pyarrow.flight.FlightServerBase):
     ) -> pyarrow.flight.FlightDataStream:
         return self._methods.do_get(context, ticket)
 
+    @rpc_decorator()
     def do_exchange(
         self,
         context: pyarrow.flight.ServerCallContext,
@@ -166,9 +217,11 @@ class FlightServer(pyarrow.flight.FlightServerBase):
     ) -> None:
         return self._methods.do_exchange(context, descriptor, reader, writer)
 
+    @rpc_decorator()
     def list_actions(self, context: pyarrow.flight.ServerCallContext) -> list[tuple[str, str]]:
         return self._methods.list_actions(context)
 
+    @rpc_decorator()
     def do_action(
         self,
         context: pyarrow.flight.ServerCallContext,

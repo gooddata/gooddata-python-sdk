@@ -38,6 +38,7 @@ class OtelConfig:
     service_name: str
     service_namespace: Optional[str]
     service_instance_id: Optional[str]
+    extract_context_from_headers: bool
 
 
 @dataclass(frozen=True)
@@ -122,6 +123,7 @@ class _Settings:
     OtelServiceName = "otel_service_name"
     OtelServiceNamespace = "otel_service_namespace"
     OtelServiceInstanceId = "otel_service_instance_id"
+    OtelExtractContext = "otel_extract_context"
 
 
 _LOCALHOST = "127.0.0.1"
@@ -408,6 +410,15 @@ _VALIDATORS = [
             "condition": f"{_Settings.OtelServiceInstanceId} must be a non-empty string.",
         },
     ),
+    Validator(
+        _fqsn(_Settings.OtelExtractContext),
+        cast=bool,
+        default=False,
+        condition=_validate_boolean,
+        messages={
+            "condition": f"{_Settings.OtelExtractContext} must be a boolean value.",
+        },
+    ),
 ]
 
 
@@ -491,6 +502,7 @@ def _create_server_config(settings: Dynaconf) -> ServerConfig:
             service_name=server_settings.get(_Settings.OtelServiceName),
             service_namespace=server_settings.get(_Settings.OtelServiceNamespace),
             service_instance_id=server_settings.get(_Settings.OtelServiceInstanceId),
+            extract_context_from_headers=server_settings.get(_Settings.OtelExtractContext),
         ),
     )
 

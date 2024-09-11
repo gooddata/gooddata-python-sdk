@@ -259,6 +259,27 @@ otel_service_namespace = "your-namespace"
 # Default is to use current hostname.
 otel_service_instance_id = "your-service-instance-id"
 
+# optionally specify whether OpenTelemetry integration within the server should look
+# for, extract and use an OpenTelemetry context coming through the Flight RPC
+# request headers.
+#
+# When this option is enabled, the code will use OpenTelemetry's context
+# propagation `extract` method to obtain the context from Flight RPC request headers. This
+# context will then be used when creating OpenTelemetry span representing the Flight
+# RPC call.
+#
+# In simple words:
+#
+# - IF your server is configured to export traces to same backend where your server's clients
+#   also export their traces AND the clients inject the trace context into the Flight RPC headers AND
+#   you turn this option on, THEN you will be able to correlate all calls under one trace ID.
+#
+# - ELSE, you should keep this turned off; each Flight RPC request to your server will create
+#   a new trace ID.
+#
+# Default is false.
+otel_extract_context = false
+
 [flexfun]
 
 # specify one or more modules that contain FlexFun implementations

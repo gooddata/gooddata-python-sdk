@@ -31,6 +31,7 @@ def test_read_valid():
     assert server_config.otel_config.service_name == "your-service-name"
     assert server_config.otel_config.service_namespace == "your-namespace"
     assert server_config.otel_config.service_instance_id == "your-service-instance-id"
+    assert server_config.otel_config.extract_context_from_headers is True
 
 
 def test_read_empty():
@@ -49,6 +50,7 @@ def test_read_empty():
     assert server_config.otel_config.service_name is None
     assert server_config.otel_config.service_namespace is None
     assert server_config.otel_config.service_instance_id is None
+    assert server_config.otel_config.extract_context_from_headers is False
 
     assert server_config.authentication_method == AuthenticationMethod.NoAuth
     assert server_config.token_header_name is None
