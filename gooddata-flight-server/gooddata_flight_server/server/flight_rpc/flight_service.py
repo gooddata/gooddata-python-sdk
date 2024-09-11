@@ -17,6 +17,7 @@ from gooddata_flight_server.server.base import ServerContext
 from gooddata_flight_server.server.flight_rpc.flight_middleware import (
     CallFinalizer,
     CallInfo,
+    OtelMiddleware,
 )
 from gooddata_flight_server.server.flight_rpc.flight_server import FlightServer
 from gooddata_flight_server.server.flight_rpc.server_methods import (
@@ -66,6 +67,13 @@ class _CallFinalizerMiddlewareFactory(pyarrow.flight.ServerMiddlewareFactory):
         self, info: pyarrow.flight.CallInfo, headers: dict[str, list[str]]
     ) -> Optional[pyarrow.flight.ServerMiddleware]:
         return CallFinalizer()
+
+
+class _OtelMiddlewareFactory(pyarrow.flight.ServerMiddlewareFactory):
+    def start_call(
+        self, info: pyarrow.flight.CallInfo, headers: dict[str, list[str]]
+    ) -> Optional[pyarrow.flight.ServerMiddleware]:
+        return OtelMiddleware(info, headers)
 
 
 class FlightRpcService:
@@ -127,6 +135,14 @@ class FlightRpcService:
             ctx.config.token_header_name, verification
         )
 
+    def _initialize_otel_tracing(
+        self, ctx: ServerContext
+    ) -> Optional[tuple[str, pyarrow.flight.ServerMiddlewareFactory]]:
+        if self._config.otel_config.exporter_type is None:
+            return None
+
+        return OtelMiddleware.MiddlewareName, _OtelMiddlewareFactory()
+
     def start(self, ctx: ServerContext) -> None:
         """
         Starts the server. This will start the Flight RPC Server bound to configured host and port.
@@ -159,6 +175,10 @@ class FlightRpcService:
         auth_middleware = self._initialize_authentication(ctx)
         if auth_middleware is not None:
             middleware[auth_middleware[0]] = auth_middleware[1]
+
+        otel_middleware = self._initialize_otel_tracing(ctx)
+        if otel_middleware is not None:
+            middleware[otel_middleware[0]] = otel_middleware[1]
 
         # server starts right as it is constructed
         # the serve() method does not have to be called; moreover, it should not be called by the server
