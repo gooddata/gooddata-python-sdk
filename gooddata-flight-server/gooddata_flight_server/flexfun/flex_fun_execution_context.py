@@ -1,9 +1,38 @@
 # (C) 2024 GoodData Corporation
-from typing import Optional, Union
+import enum
+from dataclasses import dataclass
+from typing import Callable, Optional, Union
 
-from attrs import define, field
-from gooddata_sdk import Attribute, ComputeToSdkConverter, Filter, Metric
-from typing_extensions import TypeAlias
+from gooddata_sdk import (
+    AbsoluteDateFilter,
+    Attribute,
+    CatalogDependsOn,
+    CatalogDependsOnDateFilter,
+    CatalogFilterBy,
+    CatalogValidateByItem,
+    ComputeToSdkConverter,
+    Filter,
+    Metric,
+    RelativeDateFilter,
+)
+from typing_extensions import TypeAlias, TypeVar
+
+TInput = TypeVar("TInput")
+TResult = TypeVar("TResult")
+
+
+def none_safe(func: Callable[[TInput], TResult]) -> Callable[[Optional[TInput]], Optional[TResult]]:
+    """
+    Decorator that makes the unary function safe for None input.
+    If the only argument is None, the function returns None.
+    """
+
+    def wrapper(arg: Optional[TInput]) -> Optional[TResult]:
+        if arg is None:
+            return None
+        return func(arg)
+
+    return wrapper
 
 
 def _dict_to_request_attributes(attributes: list[dict]) -> list[Attribute]:
@@ -18,7 +47,23 @@ def _dict_to_request_filters(filters: list[dict]) -> list[Filter]:
     return [ComputeToSdkConverter.convert_filter(f) for f in filters]
 
 
-@define
+class ExecutionType(enum.Enum):
+    """
+    Type of the execution.
+    """
+
+    REPORT = "REPORT"
+    """
+    Execution of the report.
+    """
+
+    LABEL_ELEMENTS = "LABEL_ELEMENTS"
+    """
+    Collect label elements execution.
+    """
+
+
+@dataclass
 class ExecutionContextAttributeSorting:
     """
     Information about the sorting of an attribute.
@@ -35,7 +80,15 @@ class ExecutionContextAttributeSorting:
     """
 
 
-@define
+@none_safe
+def _dict_to_execution_context_attribute_sorting(d: dict) -> ExecutionContextAttributeSorting:
+    return ExecutionContextAttributeSorting(
+        sort_column=d["sort_column"],
+        sort_direction=d["sort_direction"],
+    )
+
+
+@dataclass
 class ExecutionContextAttribute:
     """
     Information about an attribute used in the execution.
@@ -61,7 +114,7 @@ class ExecutionContextAttribute:
     Title of the particular label used.
     """
 
-    date_granularity: str
+    date_granularity: Optional[str]
     """
     Date granularity of the attribute if it is a date attribute.
     """
@@ -71,8 +124,25 @@ class ExecutionContextAttribute:
     Sorting of the attribute. If not present, the attribute is not sorted.
     """
 
+    @staticmethod
+    def from_dict(d: Optional[dict]) -> Optional["ExecutionContextAttribute"]:
+        """
+        Create ExecutionContextAttribute from a dictionary.
+        :param d: the dictionary to parse
+        """
+        if not d:
+            return None
+        return ExecutionContextAttribute(
+            attribute_title=d["attribute_title"],
+            attribute_identifier=d["attribute_identifier"],
+            label_title=d["label_title"],
+            label_identifier=d["label_identifier"],
+            date_granularity=d.get("date_granularity"),
+            sorting=_dict_to_execution_context_attribute_sorting(d.get("sorting")),
+        )
 
-@define
+
+@dataclass
 class ExecutionContextPositiveAttributeFilter:
     """
     Information about the positive attribute filter.
@@ -89,7 +159,7 @@ class ExecutionContextPositiveAttributeFilter:
     """
 
 
-@define
+@dataclass
 class ExecutionContextNegativeAttributeFilter:
     """
     Information about the negative attribute filter.
@@ -106,7 +176,7 @@ class ExecutionContextNegativeAttributeFilter:
     """
 
 
-@define
+@dataclass
 class ExecutionContextRelativeDateFilter:
     """
     Information about the relative date filter.
@@ -133,7 +203,7 @@ class ExecutionContextRelativeDateFilter:
     """
 
 
-@define
+@dataclass
 class ExecutionContextAbsoluteDateFilter:
     """
     Information about the absolute date filter.
@@ -163,23 +233,24 @@ ExecutionContextFilter: TypeAlias = Union[
 ]
 
 
-@define
+@dataclass
 class ExecutionRequest:
     """
     Information about the execution request that is sent to the FlexFun.
+    DEPRECATED: Use ReportExecutionRequest instead.
     """
 
-    attributes: list[Attribute] = field(converter=_dict_to_request_attributes)
+    attributes: list[Attribute]
     """
     All the attributes that are part of the execution request.
     """
 
-    metrics: list[Metric] = field(converter=_dict_to_request_metrics)
+    metrics: list[Metric]
     """
     All the metrics that are part of the execution request.
     """
 
-    filters: list[Filter] = field(converter=_dict_to_request_filters)
+    filters: list[Filter]
     """
     All the filters that are part of the execution request.
     """
@@ -191,9 +262,174 @@ class ExecutionRequest:
         :param d: the dictionary to parse
         """
         return ExecutionRequest(
-            attributes=d.get("attributes", []),
-            metrics=d.get("measures", []),
-            filters=d.get("filters", []),
+            attributes=_dict_to_request_attributes(d.get("attributes", [])),
+            metrics=_dict_to_request_metrics(d.get("measures", [])),
+            filters=_dict_to_request_filters(d.get("filters", [])),
+        )
+
+
+@dataclass
+class ReportExecutionRequest:
+    """
+    Information about the report execution request.
+    """
+
+    attributes: list[Attribute]
+    """
+    All the attributes that are part of the execution request.
+    """
+
+    metrics: list[Metric]
+    """
+    All the metrics that are part of the execution request.
+    """
+
+    filters: list[Filter]
+    """
+    All the filters that are part of the execution request.
+    """
+
+    @staticmethod
+    @none_safe
+    def from_dict(d: dict) -> "ReportExecutionRequest":
+        """
+        Create ReportExecutionRequest from a dictionary.
+        :param d: the dictionary to parse
+        """
+        return ReportExecutionRequest(
+            attributes=_dict_to_request_attributes(d.get("attributes", [])),
+            metrics=_dict_to_request_metrics(d.get("measures", [])),
+            filters=_dict_to_request_filters(d.get("filters", [])),
+        )
+
+
+DependsOn: TypeAlias = Union[CatalogDependsOn, CatalogDependsOnDateFilter]
+
+
+def _dict_to_depends_on(d: dict) -> DependsOn:
+    if "label" in d:
+        return CatalogDependsOn(
+            label=d["label"],
+            values=d["values"],
+            complement_filter=d.get("complementFilter", False),
+        )
+
+    date_filter = d["dateFilter"]
+    if "from" in date_filter:
+        return CatalogDependsOnDateFilter(
+            date_filter=AbsoluteDateFilter(
+                dataset=date_filter["dataset"],
+                from_date=date_filter["from"],
+                to_date=date_filter["to"],
+            )
+        )
+
+    return CatalogDependsOnDateFilter(
+        date_filter=RelativeDateFilter(
+            dataset=date_filter["dataset"],
+            granularity=date_filter["granularity"],
+            from_shift=date_filter["from"],
+            to_shift=date_filter["to"],
+        )
+    )
+
+
+@none_safe
+def _list_to_depends_on(src: list[dict]) -> list[DependsOn]:
+    return [_dict_to_depends_on(i) for i in src]
+
+
+@none_safe
+def _dict_to_filter_by(src: dict) -> CatalogFilterBy:
+    return CatalogFilterBy(label_type=src.get("labelType"))
+
+
+@none_safe
+def _list_to_validate_by(validate_by: list[dict]) -> list[CatalogValidateByItem]:
+    return [
+        CatalogValidateByItem(
+            id=i["id"],
+            type=i["type"],
+        )
+        for i in validate_by
+    ]
+
+
+@dataclass
+class LabelElementsExecutionRequest:
+    """
+    Information about the label elements execution request.
+    """
+
+    label: str
+    """
+    The label to get the elements for.
+    """
+
+    offset: Optional[int]
+    """
+    The offset of the elements.
+    """
+
+    limit: Optional[int]
+    """
+    The limit of the elements.
+    """
+
+    exclude_primary_label: Optional[bool]
+    """
+    Whether to exclude primary label from the result.
+    """
+
+    exact_filter: Optional[list[str]]
+    """
+    Exact values to filter the elements by.
+    """
+
+    pattern_filter: Optional[str]
+    """
+    Filter the elements by a pattern. The pattern is matched against the element values in a case-insensitive way.
+    """
+
+    complement_filter: Optional[bool]
+    """
+    Whether to invert the effects of exact_filter amd pattern_filter.
+    """
+
+    depends_on: Optional[list[DependsOn]]
+    """
+    Other labels or date filters that should be used to limit the elements.
+    """
+
+    filter_by: Optional[CatalogFilterBy]
+    """
+    Which label is used for filtering - primary or requested.
+    If omitted the server will use the default value of "REQUESTED".
+    """
+
+    validate_by: Optional[list[CatalogValidateByItem]]
+    """
+    Other metrics, attributes, labels or facts used to validate the elements.
+    """
+
+    @staticmethod
+    @none_safe
+    def from_dict(d: dict) -> "LabelElementsExecutionRequest":
+        """
+        Create LabelElementsExecutionRequest from a dictionary.
+        :param d: the dictionary to parse
+        """
+        return LabelElementsExecutionRequest(
+            label=d["label"],
+            offset=d.get("offset"),
+            limit=d.get("limit"),
+            exclude_primary_label=d.get("excludePrimaryLabel"),
+            exact_filter=d.get("exactFilter"),
+            pattern_filter=d.get("patternFilter"),
+            complement_filter=d.get("complementFilter"),
+            depends_on=_list_to_depends_on(d.get("dependsOn")),
+            filter_by=_dict_to_filter_by(d.get("filterBy")),
+            validate_by=_list_to_validate_by(d.get("validateBy")),
         )
 
 
@@ -225,10 +461,29 @@ def _dict_to_filters(filters: list[dict]) -> list[ExecutionContextFilter]:
     return [_dict_to_filter(f) for f in filters]
 
 
-@define
+def _dict_to_attributes(attributes: list[dict]) -> list[ExecutionContextAttribute]:
+    return [
+        ExecutionContextAttribute(
+            attribute_title=i["attribute_title"],
+            attribute_identifier=i["attribute_identifier"],
+            label_title=i["label_title"],
+            label_identifier=i["label_identifier"],
+            date_granularity=i.get("date_granularity"),
+            sorting=i.get("sorting"),
+        )
+        for i in attributes
+    ]
+
+
+@dataclass
 class ExecutionContext:
     """
     Execution context of the FlexFun
+    """
+
+    execution_type: ExecutionType
+    """
+    Type of the execution.
     """
 
     organization_id: str
@@ -265,6 +520,7 @@ class ExecutionContext:
     execution_request: ExecutionRequest
     """
     The execution request that the FlexFun should process.
+    DEPRECATED: Use ReportExecutionRequest or LabelElementsExecutionRequest instead.
     """
 
     attributes: list[ExecutionContextAttribute]
@@ -272,20 +528,32 @@ class ExecutionContext:
     All the attributes that are part of the execution request.
     """
 
-    filters: list[ExecutionContextFilter] = field(converter=_dict_to_filters)
+    filters: list[ExecutionContextFilter]
     """
     All the attribute and date filters that are part of the execution request.
     """
 
+    report_execution_request: Optional[ReportExecutionRequest]
+    """
+    The report execution request that the FlexFun should process.
+    Only present if the execution type is "REPORT".
+    """
+
+    label_elements_execution_request: Optional[LabelElementsExecutionRequest]
+    """
+    The label elements execution request that the FlexFun should process.
+    Only present if the execution type is "LABEL_ELEMENTS".
+    """
+
     @staticmethod
-    def from_dict(d: dict) -> Optional["ExecutionContext"]:
+    @none_safe
+    def from_dict(d: dict) -> "ExecutionContext":
         """
         Create ExecutionContext from a dictionary.
         :param d: the dictionary to parse
         """
-        if not d:
-            return None
         return ExecutionContext(
+            execution_type=ExecutionType[d["execution_type"]],
             organization_id=d["organization_id"],
             workspace_id=d["workspace_id"],
             user_id=d["user_id"],
@@ -293,8 +561,12 @@ class ExecutionContext:
             timezone=d.get("timezone"),
             week_start=d.get("week_start"),
             execution_request=ExecutionRequest.from_dict(d["execution_request"]),
-            attributes=d.get("attributes", []),
-            filters=d.get("filters", []),
+            report_execution_request=ReportExecutionRequest.from_dict(d.get("report_execution_request")),
+            label_elements_execution_request=LabelElementsExecutionRequest.from_dict(
+                d.get("label_elements_execution_request")
+            ),
+            attributes=_dict_to_attributes(d.get("attributes", [])),
+            filters=_dict_to_filters(d.get("filters", [])),
         )
 
     @staticmethod
