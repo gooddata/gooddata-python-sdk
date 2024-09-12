@@ -340,8 +340,8 @@ def _list_to_depends_on(src: list[dict]) -> list[DependsOn]:
 
 
 @none_safe
-def _list_to_filter_by(src: dict) -> CatalogFilterBy:
-    return CatalogFilterBy(label_type=src.get("filterBy"))
+def _dict_to_filter_by(src: dict) -> CatalogFilterBy:
+    return CatalogFilterBy(label_type=src.get("labelType"))
 
 
 @none_safe
@@ -428,7 +428,7 @@ class LabelElementsExecutionRequest:
             pattern_filter=d.get("patternFilter"),
             complement_filter=d.get("complementFilter"),
             depends_on=_list_to_depends_on(d.get("dependsOn")),
-            filter_by=_list_to_filter_by(d.get("filterBy")),
+            filter_by=_dict_to_filter_by(d.get("filterBy")),
             validate_by=_list_to_validate_by(d.get("validateBy")),
         )
 

@@ -48,6 +48,7 @@ def test_label_elements_execution_context_deser(sample_label_execution_context_d
 
     assert deserialized.label_elements_execution_request is not None
     assert isinstance(deserialized.label_elements_execution_request.filter_by, CatalogFilterBy)
+    assert deserialized.label_elements_execution_request.filter_by.label_type == "REQUESTED"
     assert isinstance(deserialized.label_elements_execution_request.depends_on[0], CatalogDependsOn)
     assert isinstance(deserialized.label_elements_execution_request.validate_by[0], CatalogValidateByItem)
 
