@@ -13,6 +13,7 @@ from gooddata_flight_server.flexfun.flex_fun_execution_context import (
     ExecutionContext,
     ExecutionRequest,
 )
+from gooddata_flight_server.flexfun.flight_methods import create_flexfun_flight_methods
 from gooddata_flight_server.health.server_health_monitor import ModuleHealthStatus, ServerHealthMonitor
 from gooddata_flight_server.server.auth.auth_middleware import TokenAuthMiddleware
 from gooddata_flight_server.server.auth.token_verifier import TokenVerificationStrategy
@@ -22,6 +23,7 @@ from gooddata_flight_server.server.flight_rpc.flight_middleware import (
     CallInfo,
 )
 from gooddata_flight_server.server.flight_rpc.server_methods import FlightServerMethods
+from gooddata_flight_server.server.server_main import GoodDataFlightServer, create_server
 from gooddata_flight_server.tasks.base import TaskWaitTimeoutError
 from gooddata_flight_server.tasks.task import Task
 from gooddata_flight_server.tasks.task_error import TaskError
