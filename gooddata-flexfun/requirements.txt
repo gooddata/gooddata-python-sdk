@@ -1,0 +1,6 @@
+ orjson>=3.9.15,<4.0.0
+ pyarrow>=16.1.0
+ structlog>=24.0.0,<25.0.0
+
+ setuptools~=74.1.2
+ typing_extensions~=4.12.2

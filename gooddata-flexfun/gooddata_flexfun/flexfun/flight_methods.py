@@ -5,21 +5,19 @@ from typing import Optional
 import orjson
 import pyarrow.flight
 import structlog
-
-from gooddata_flight_server.errors.error_code import ErrorCode
-from gooddata_flight_server.errors.error_info import ErrorInfo
-from gooddata_flight_server.flexfun.flex_fun import FlexFun
-from gooddata_flight_server.flexfun.flex_fun_registry import FlexFunRegistry
-from gooddata_flight_server.flexfun.flex_fun_task import FlexFunTask
-from gooddata_flight_server.server.base import ServerContext
-from gooddata_flight_server.server.flight_rpc.server_methods import (
-    FlightServerMethods,
-)
-from gooddata_flight_server.tasks.base import TaskWaitTimeoutError
-from gooddata_flight_server.tasks.task_result import (
+from gooddata_flight_server import (
+    ErrorCode,
+    ErrorInfo,
     FlightDataTaskResult,
+    FlightServerMethods,
+    ServerContext,
     TaskExecutionResult,
+    TaskWaitTimeoutError,
 )
+
+from gooddata_flexfun.flexfun.flex_fun import FlexFun
+from gooddata_flexfun.flexfun.flex_fun_registry import FlexFunRegistry
+from gooddata_flexfun.flexfun.flex_fun_task import FlexFunTask
 
 _LOGGER = structlog.get_logger("gooddata_flexfun.rpc")
 _DEFAULT_TASK_WAIT = 60.0

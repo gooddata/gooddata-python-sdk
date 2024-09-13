@@ -1,9 +1,8 @@
 #  (C) 2024 GoodData Corporation
 
 import pyarrow
-from gooddata_flight_server.flexfun.flex_fun import FlexFun
-from gooddata_flight_server.server.base import ServerContext
-from gooddata_flight_server.tasks.base import ArrowData
+from gooddata_flexfun.flexfun.flex_fun import FlexFun
+from gooddata_flight_server import ArrowData, ServerContext
 
 
 class Fun1(FlexFun):
