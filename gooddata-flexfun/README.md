@@ -39,7 +39,7 @@ functions = [
 ]
 ```
 
-Then when running the GoodData Flight Server, use the `--methods-provider-module` option to load the FlexFun methods.
+Then when running the GoodData Flight Server, use the `--methods-provider` option to load the FlexFun methods.
 For example:
 
 ```bash
