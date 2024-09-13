@@ -14,6 +14,7 @@ from gooddata_flight_server.server.server_main import (
     GoodDataFlightServer,
     create_server,
 )
+from gooddata_flight_server.utils.methods_discovery import get_method_factory_from_file, get_method_factory_from_module
 
 TConfig = TypeVar("TConfig")
 
@@ -21,6 +22,24 @@ TConfig = TypeVar("TConfig")
 def _add_start_cmd(parser: argparse.ArgumentParser) -> None:
     subcommands = parser.add_subparsers()
     start_cmd = subcommands.add_parser("start")
+
+    methods_provider_group = start_cmd.add_argument_group("Methods provider")
+    methods_provider_group.add_argument(
+        "--methods-provider-file",
+        type=str,
+        metavar="METHODS_PROVIDER_FILE",
+        help="Path to the module providing the server methods. The module must contain an "
+        "instance of the `FlightServerMethodsFactoryProvider` class. This class will be used to create the "
+        "server methods. If not specified, the server will not provide any methods.",
+    )
+    methods_provider_group.add_argument(
+        "--methods-provider-module",
+        type=str,
+        metavar="METHODS_PROVIDER_MODULE",
+        help="Name of the module providing the server methods. The module must contain an "
+        "instance of the `FlightServerMethodsFactoryProvider` class. This class will be used to create the "
+        "server methods. If not specified, the server will not provide any methods.",
+    )
 
     start_cmd.add_argument(
         "--config",
@@ -70,9 +89,15 @@ def _create_server(args: argparse.Namespace) -> GoodDataFlightServer:
     _config_files: tuple[str, ...] = args.config or ()
     config_files = tuple(f for f in _config_files if f is not None)
 
-    # TODO add methods discovery
+    if args.methods_provider_module:
+        methods = get_method_factory_from_module(args.methods_provider_module)
+    elif args.methods_provider_file:
+        methods = get_method_factory_from_file(args.methods_provider_file)
+    else:
+        raise ValueError("Either --methods-provider-module or --methods-provider-file must be specified.")
+
     return create_server(
-        methods=None,
+        methods=methods,
         config_files=config_files,
         logging_config=args.logging_config or DEFAULT_LOGGING_INI,
         dev_log=args.dev_log or False,

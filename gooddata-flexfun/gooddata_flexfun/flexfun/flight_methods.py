@@ -10,6 +10,8 @@ from gooddata_flight_server import (
     ErrorInfo,
     FlightDataTaskResult,
     FlightServerMethods,
+    FlightServerMethodsAbstractFactory,
+    FlightServerMethodsFactory,
     ServerContext,
     TaskExecutionResult,
     TaskWaitTimeoutError,
@@ -257,3 +259,13 @@ def create_flexfun_flight_methods(ctx: ServerContext) -> FlightServerMethods:
     registry = FlexFunRegistry().load(ctx, modules)
 
     return _FlexFunServerMethods(ctx, registry)
+
+
+class FlexFunServerMethodsAbstractFactory(FlightServerMethodsAbstractFactory):
+    """
+    Factory for FlexFun server methods.
+    Use this factory to create Flight RPC server methods for FlexFun server.
+    """
+
+    def get_factory(self) -> FlightServerMethodsFactory:
+        return create_flexfun_flight_methods

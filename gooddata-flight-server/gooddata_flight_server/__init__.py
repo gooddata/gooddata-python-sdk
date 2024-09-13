@@ -11,7 +11,11 @@ from gooddata_flight_server.errors.error_info import ErrorInfo, RetryInfo
 from gooddata_flight_server.health.server_health_monitor import ModuleHealthStatus, ServerHealthMonitor
 from gooddata_flight_server.server.auth.auth_middleware import TokenAuthMiddleware
 from gooddata_flight_server.server.auth.token_verifier import TokenVerificationStrategy
-from gooddata_flight_server.server.base import FlightServerMethodsFactory, ServerContext
+from gooddata_flight_server.server.base import (
+    FlightServerMethodsAbstractFactory,
+    FlightServerMethodsFactory,
+    ServerContext,
+)
 from gooddata_flight_server.server.flight_rpc.flight_middleware import (
     CallFinalizer,
     CallInfo,

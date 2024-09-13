@@ -1,5 +1,5 @@
 #  (C) 2024 GoodData Corporation
-from typing import Optional, Union
+from typing import Union
 
 import pyarrow.flight
 from dynaconf import Dynaconf
@@ -100,7 +100,7 @@ class GoodDataFlightServer(ServerBase):
 
 
 def create_server(
-    methods: Optional[Union[FlightServerMethods, FlightServerMethodsFactory]] = None,
+    methods: Union[FlightServerMethods, FlightServerMethodsFactory],
     config_files: tuple[str, ...] = (),
     logging_config: str = DEFAULT_LOGGING_INI,
     dev_log: bool = True,
@@ -116,8 +116,5 @@ def create_server(
     )
 
     initialize_otel_tracing(config=config.otel_config)
-
-    # TODO add methods discovery
-    assert methods
 
     return GoodDataFlightServer(settings=settings, config=config, methods=methods)
