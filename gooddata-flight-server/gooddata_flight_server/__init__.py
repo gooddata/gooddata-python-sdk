@@ -11,7 +11,16 @@ from gooddata_flight_server.errors.error_info import ErrorInfo, RetryInfo
 from gooddata_flight_server.flexfun.flex_fun import FlexFun
 from gooddata_flight_server.flexfun.flex_fun_execution_context import (
     ExecutionContext,
+    ExecutionContextAbsoluteDateFilter,
+    ExecutionContextAttribute,
+    ExecutionContextAttributeSorting,
+    ExecutionContextNegativeAttributeFilter,
+    ExecutionContextPositiveAttributeFilter,
+    ExecutionContextRelativeDateFilter,
     ExecutionRequest,
+    ExecutionType,
+    LabelElementsExecutionRequest,
+    ReportExecutionRequest,
 )
 from gooddata_flight_server.flexfun.flight_methods import create_flexfun_flight_methods
 from gooddata_flight_server.health.server_health_monitor import ModuleHealthStatus, ServerHealthMonitor
@@ -24,7 +33,7 @@ from gooddata_flight_server.server.flight_rpc.flight_middleware import (
 )
 from gooddata_flight_server.server.flight_rpc.server_methods import FlightServerMethods
 from gooddata_flight_server.server.server_main import GoodDataFlightServer, create_server
-from gooddata_flight_server.tasks.base import TaskWaitTimeoutError
+from gooddata_flight_server.tasks.base import ArrowData, TaskWaitTimeoutError
 from gooddata_flight_server.tasks.task import Task
 from gooddata_flight_server.tasks.task_error import TaskError
 from gooddata_flight_server.tasks.task_executor import (
