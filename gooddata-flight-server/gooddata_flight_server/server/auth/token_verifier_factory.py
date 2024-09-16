@@ -3,10 +3,10 @@ import importlib
 
 import structlog
 
+from gooddata_flight_server.exceptions import ServerStartupInterrupted
 from gooddata_flight_server.server.auth.token_verifier import TokenVerificationStrategy
 from gooddata_flight_server.server.auth.token_verifier_impl import EnumeratedTokenVerification
 from gooddata_flight_server.server.base import ServerContext
-from gooddata_flight_server.server.server_base import ServerStartupInterrupted
 
 _LOGGER = structlog.get_logger("gooddata_flight_server.auth")
 

@@ -6,17 +6,10 @@ from typing import Optional, TypeVar
 
 from dynaconf import ValidationError
 
-from gooddata_flight_server.flexfun.flight_methods import (
-    create_flexfun_flight_methods,
-)
-from gooddata_flight_server.server.server_base import (
-    DEFAULT_LOGGING_INI,
-    ServerStartupInterrupted,
-)
-from gooddata_flight_server.server.server_main import (
-    GoodDataFlightServer,
-    create_server,
-)
+from gooddata_flight_server.exceptions import FlightMethodsModuleError, ServerStartupInterrupted
+from gooddata_flight_server.server.server_base import DEFAULT_LOGGING_INI
+from gooddata_flight_server.server.server_main import GoodDataFlightServer, create_server
+from gooddata_flight_server.utils.methods_discovery import get_methods_factory
 
 TConfig = TypeVar("TConfig")
 
@@ -25,6 +18,14 @@ def _add_start_cmd(parser: argparse.ArgumentParser) -> None:
     subcommands = parser.add_subparsers()
     start_cmd = subcommands.add_parser("start")
 
+    start_cmd.add_argument(
+        "--methods-provider",
+        type=str,
+        metavar="METHODS_PROVIDER",
+        help="Name of the module providing the server methods. The module must contain a function that implements "
+        "the `FlightServerMethodsFactory` protocol and is annotated with the @flight_server_methods decorator. "
+        "This class will be used to create the server methods.",
+    )
     start_cmd.add_argument(
         "--config",
         type=str,
@@ -72,9 +73,10 @@ def _create_std_server_argparser() -> argparse.ArgumentParser:
 def _create_server(args: argparse.Namespace) -> GoodDataFlightServer:
     _config_files: tuple[str, ...] = args.config or ()
     config_files = tuple(f for f in _config_files if f is not None)
+    methods = get_methods_factory(args.methods_provider)
 
     return create_server(
-        methods=create_flexfun_flight_methods,
+        methods=methods,
         config_files=config_files,
         logging_config=args.logging_config or DEFAULT_LOGGING_INI,
         dev_log=args.dev_log or False,
@@ -104,11 +106,14 @@ def server_cli() -> None:
     try:
         global _SERVER
         _SERVER = _create_server(args=args)
-    except ServerStartupInterrupted as e:
-        print(str(e))
-        sys.exit(1)
     except ValidationError as e:
         print(f"An error has occurred while reading settings: {str(e)}")
+        sys.exit(1)
+    except FlightMethodsModuleError as e:
+        print(f"An error has occurred while getting the FlightMethodsFactory: {str(e)}")
+        sys.exit(1)
+    except ServerStartupInterrupted as e:
+        print(str(e))
         sys.exit(1)
     except Exception:
         print("An unexpected error has occurred while creating server.")

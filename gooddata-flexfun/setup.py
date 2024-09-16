@@ -8,18 +8,16 @@ long_description = (this_directory / "README.md").read_text(encoding="utf-8")
 
 REQUIRES = [
     "dynaconf>=3.1.11,<4.0.0",
-    "opentelemetry-api>=1.24.0,<=2.0.0",
-    "opentelemetry-sdk>=1.24.0,<=2.0.0",
-    "orjson>=3.8.5,<4.0.0",
-    "prometheus-client~=0.20.0",
+    "gooddata-flight-server~=1.26.0",
+    "gooddata-sdk~=1.26.0",
+    "orjson>=3.9.15,<4.0.0",
     "pyarrow>=16.1.0",
-    "readerwriterlock~=1.0.9",
     "structlog>=24.0.0,<25.0.0",
 ]
 
 setup(
-    name="gooddata-flight-server",
-    description="Flight RPC server to host custom functions",
+    name="gooddata-flexfun",
+    description="Set of gooddata-flight-server methods to host custom functions for GoodData Cloud",
     long_description=long_description,
     long_description_content_type="text/markdown",
     version="1.26.0",
@@ -33,12 +31,9 @@ setup(
     include_package_data=True,
     python_requires=">=3.9.0",
     project_urls={
-        "Documentation": "https://gooddata-flight-server.readthedocs.io/en/v1.26.0",
+        "Documentation": "https://gooddata-flexfun.readthedocs.io/en/v1.26.0",
         "Source": "https://github.com/gooddata/gooddata-python-sdk",
     },
-    scripts=[
-        "bin/gooddata-flight-server",
-    ],
     classifiers=[
         "Development Status :: 4 - Beta",
         "Environment :: Console",

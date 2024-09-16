@@ -47,3 +47,4 @@ jobs:
               - 'gooddata-api-client/**'
               - 'gooddata-dbt/**'
               - 'gooddata-flight-server/**'
+              - 'gooddata-flexfun/**'
