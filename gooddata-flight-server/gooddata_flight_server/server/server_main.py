@@ -1,27 +1,15 @@
 #  (C) 2024 GoodData Corporation
-from typing import Optional, Union
+from typing import Union
 
 import pyarrow.flight
 from dynaconf import Dynaconf
 
 from gooddata_flight_server.config.config import ServerConfig, read_config
-from gooddata_flight_server.flexfun.flight_methods import (
-    create_flexfun_flight_methods,
-)
-from gooddata_flight_server.server.base import (
-    FlightServerMethodsFactory,
-    ServerContext,
-)
-from gooddata_flight_server.server.flight_rpc.flight_service import (
-    FlightRpcService,
-)
-from gooddata_flight_server.server.flight_rpc.server_methods import (
-    FlightServerMethods,
-)
-from gooddata_flight_server.server.server_base import (
-    DEFAULT_LOGGING_INI,
-    ServerBase,
-)
+from gooddata_flight_server.exceptions import FlightMethodsModuleError
+from gooddata_flight_server.server.base import FlightServerMethodsFactory, ServerContext
+from gooddata_flight_server.server.flight_rpc.flight_service import FlightRpcService
+from gooddata_flight_server.server.flight_rpc.server_methods import FlightServerMethods
+from gooddata_flight_server.server.server_base import DEFAULT_LOGGING_INI, ServerBase
 from gooddata_flight_server.tasks.task_executor import TaskExecutor
 from gooddata_flight_server.tasks.thread_task_executor import ThreadTaskExecutor
 from gooddata_flight_server.utils.logging import init_logging
@@ -85,6 +73,11 @@ class GoodDataFlightServer(ServerBase):
 
             try:
                 self._methods = self._methods_factory(server_ctx)
+                if not isinstance(self._methods, FlightServerMethods):
+                    raise FlightMethodsModuleError(
+                        f"The provided FlightMethodsFactory has a valid signature but returned an invalid result of type "
+                        f"{type(self._methods)}. Make sure the factory function returns an instance of FlightServerMethods."
+                    )
             except Exception as e:
                 self.logger.critical("flight_service_init_failed", exc_info=e)
                 raise
@@ -103,7 +96,7 @@ class GoodDataFlightServer(ServerBase):
 
 
 def create_server(
-    methods: Optional[Union[FlightServerMethods, FlightServerMethodsFactory]] = None,
+    methods: Union[FlightServerMethods, FlightServerMethodsFactory],
     config_files: tuple[str, ...] = (),
     logging_config: str = DEFAULT_LOGGING_INI,
     dev_log: bool = True,
@@ -119,6 +112,5 @@ def create_server(
     )
 
     initialize_otel_tracing(config=config.otel_config)
-    _methods = methods or create_flexfun_flight_methods
 
-    return GoodDataFlightServer(settings=settings, config=config, methods=_methods)
+    return GoodDataFlightServer(settings=settings, config=config, methods=methods)

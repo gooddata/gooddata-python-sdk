@@ -4,15 +4,9 @@ from typing import Optional, Union
 
 import pyarrow
 import structlog
+from gooddata_flight_server import ArrowData, FlightDataTaskResult, Task, TaskError, TaskResult
 
-from gooddata_flight_server.flexfun.flex_fun import FlexFun
-from gooddata_flight_server.tasks.base import ArrowData
-from gooddata_flight_server.tasks.task import Task
-from gooddata_flight_server.tasks.task_error import TaskError
-from gooddata_flight_server.tasks.task_result import (
-    FlightDataTaskResult,
-    TaskResult,
-)
+from gooddata_flexfun.flexfun.flex_fun import FlexFun
 
 _LOGGER = structlog.get_logger("gooddata_flexfun.task")
 

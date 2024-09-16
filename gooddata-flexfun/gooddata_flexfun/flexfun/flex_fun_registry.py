@@ -3,10 +3,9 @@ import importlib
 from collections.abc import Iterable
 
 import structlog
+from gooddata_flight_server import ErrorInfo, ServerContext
 
-from gooddata_flight_server.errors.error_info import ErrorInfo
-from gooddata_flight_server.flexfun.flex_fun import FlexFun
-from gooddata_flight_server.server.base import ServerContext
+from gooddata_flexfun.flexfun.flex_fun import FlexFun
 
 
 class FlexFunRegistry:

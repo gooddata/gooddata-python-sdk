@@ -1,9 +1,8 @@
 #  (C) 2024 GoodData Corporation
 import pyarrow.flight
 import pytest
-from gooddata_flight_server.errors.error_code import ErrorCode
-from gooddata_flight_server.flexfun.flex_fun_registry import FlexFunRegistry
-from gooddata_flight_server.server.base import ServerContext
+from gooddata_flexfun.flexfun.flex_fun_registry import FlexFunRegistry
+from gooddata_flight_server import ErrorCode, ServerContext
 
 from tests.assert_error_info import assert_error_code
 from tests.flexfun.testing_funs import Fun1, Fun2
