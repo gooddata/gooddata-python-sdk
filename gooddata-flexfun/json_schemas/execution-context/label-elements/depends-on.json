@@ -1,0 +1,32 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "execution-context/label-elements/depends-on.json",
+    "title": "Depends On",
+    "description": "Definition of additional filtering for the label.",
+    "type": "object",
+    "properties": {
+        "label": {
+            "type": "string",
+            "description": "The label of the item that the current item depends on."
+        },
+        "values": {
+            "type": "array",
+            "description": "The values of the label for element filtering.",
+            "items": {
+                "type": [
+                    "string",
+                    "null"
+                ]
+            }
+        },
+        "complementFilter": {
+            "type": "boolean",
+            "description": "If true, return items that do NOT match value.",
+            "default": false
+        }
+    },
+    "required": [
+        "label",
+        "values"
+    ]
+}
