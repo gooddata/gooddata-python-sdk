@@ -32,14 +32,6 @@ from gooddata_flight_server.utils.otel_tracing import SERVER_TRACER
 DEFAULT_LOGGING_INI = os.path.join(os.path.dirname(__file__), "default.logging.ini")
 
 
-class ServerStartupInterrupted(Exception):
-    """
-    This exception is thrown when server startup was interrupted due to unrecoverable condition. Different init and
-    preparation logic may raise this to stop the server startup. The message included in the exception will be
-    printed to stderr and server stops with exit code 1.
-    """
-
-
 class ServerBase(abc.ABC):
     """
     Server base class. Template class which takes care of the infrastructure and other boring

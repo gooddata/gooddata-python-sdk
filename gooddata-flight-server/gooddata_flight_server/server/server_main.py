@@ -5,21 +5,11 @@ import pyarrow.flight
 from dynaconf import Dynaconf
 
 from gooddata_flight_server.config.config import ServerConfig, read_config
-from gooddata_flight_server.exceptions import InvalidFlightMethodsFactoryResultError
-from gooddata_flight_server.server.base import (
-    FlightServerMethodsFactory,
-    ServerContext,
-)
-from gooddata_flight_server.server.flight_rpc.flight_service import (
-    FlightRpcService,
-)
-from gooddata_flight_server.server.flight_rpc.server_methods import (
-    FlightServerMethods,
-)
-from gooddata_flight_server.server.server_base import (
-    DEFAULT_LOGGING_INI,
-    ServerBase,
-)
+from gooddata_flight_server.exceptions import FlightMethodsModuleError
+from gooddata_flight_server.server.base import FlightServerMethodsFactory, ServerContext
+from gooddata_flight_server.server.flight_rpc.flight_service import FlightRpcService
+from gooddata_flight_server.server.flight_rpc.server_methods import FlightServerMethods
+from gooddata_flight_server.server.server_base import DEFAULT_LOGGING_INI, ServerBase
 from gooddata_flight_server.tasks.task_executor import TaskExecutor
 from gooddata_flight_server.tasks.thread_task_executor import ThreadTaskExecutor
 from gooddata_flight_server.utils.logging import init_logging
@@ -84,7 +74,10 @@ class GoodDataFlightServer(ServerBase):
             try:
                 self._methods = self._methods_factory(server_ctx)
                 if not isinstance(self._methods, FlightServerMethods):
-                    raise InvalidFlightMethodsFactoryResultError(self._methods)
+                    raise FlightMethodsModuleError(
+                        f"The provided FlightMethodsFactory has a valid signature but returned an invalid result of type "
+                        f"{type(self._methods)}. Make sure the factory function returns an instance of FlightServerMethods."
+                    )
             except Exception as e:
                 self.logger.critical("flight_service_init_failed", exc_info=e)
                 raise

@@ -6,15 +6,9 @@ from typing import Optional, TypeVar
 
 from dynaconf import ValidationError
 
-from gooddata_flight_server.exceptions import FlightMethodsModuleError, ServerInitializationError
-from gooddata_flight_server.server.server_base import (
-    DEFAULT_LOGGING_INI,
-    ServerStartupInterrupted,
-)
-from gooddata_flight_server.server.server_main import (
-    GoodDataFlightServer,
-    create_server,
-)
+from gooddata_flight_server.exceptions import FlightMethodsModuleError, ServerStartupInterrupted
+from gooddata_flight_server.server.server_base import DEFAULT_LOGGING_INI
+from gooddata_flight_server.server.server_main import GoodDataFlightServer, create_server
 from gooddata_flight_server.utils.methods_discovery import get_methods_factory
 
 TConfig = TypeVar("TConfig")
@@ -28,9 +22,9 @@ def _add_start_cmd(parser: argparse.ArgumentParser) -> None:
         "--methods-provider",
         type=str,
         metavar="METHODS_PROVIDER",
-        help="Name of the module providing the server methods. The module must contain an "
-        "instance of the `FlightServerMethodsFactoryProvider` class. This class will be used to create the "
-        "server methods. If not specified, the server will not provide any methods.",
+        help="Name of the module providing the server methods. The module must contain a function that implements "
+        "the `FlightServerMethodsFactory` protocol and is annotated with the @flight_server_methods decorator. "
+        "This class will be used to create the server methods.",
     )
     start_cmd.add_argument(
         "--config",
@@ -112,17 +106,14 @@ def server_cli() -> None:
     try:
         global _SERVER
         _SERVER = _create_server(args=args)
-    except ServerStartupInterrupted as e:
-        print(str(e))
-        sys.exit(1)
     except ValidationError as e:
         print(f"An error has occurred while reading settings: {str(e)}")
         sys.exit(1)
     except FlightMethodsModuleError as e:
         print(f"An error has occurred while getting the FlightMethodsFactory: {str(e)}")
         sys.exit(1)
-    except ServerInitializationError as e:
-        print(f"An error has occurred while starting the server: {str(e)}")
+    except ServerStartupInterrupted as e:
+        print(str(e))
         sys.exit(1)
     except Exception:
         print("An unexpected error has occurred while creating server.")

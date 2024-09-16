@@ -4,12 +4,7 @@ from functools import wraps
 from inspect import signature
 from typing import Optional
 
-from gooddata_flight_server.exceptions import (
-    FlightMethodsModuleNotFoundError,
-    InvalidFlightMethodsFactoryError,
-    MultipleFlightMethodsFactoriesError,
-    NoFlightMethodsFactoryError,
-)
+from gooddata_flight_server.exceptions import FlightMethodsModuleError
 from gooddata_flight_server.server.base import (
     FlightServerMethods,
     FlightServerMethodsFactory,
@@ -54,15 +49,27 @@ def _only_valid_flight_methods_factory(
     Validate the list of factories and return the only valid one.
     """
     if len(factories) == 0:
-        raise NoFlightMethodsFactoryError(module_name)
+        raise FlightMethodsModuleError(
+            f"No flight methods factory found in the module {module_name}. "
+            "Make sure the module exports exactly one function decorated with the `@flight_server_methods` decorator "
+            "that conforms to the FlightMethodsFactory protocol."
+        )
 
     if len(factories) > 1:
-        raise MultipleFlightMethodsFactoriesError(module_name, len(factories))
+        raise FlightMethodsModuleError(
+            f"Multiple flight methods factories ({len(factories)}) found in the module {module_name}"
+            "Make sure the module exports exactly one function decorated with the `@flight_server_methods` decorator "
+            "that conforms to the FlightMethodsFactory protocol."
+        )
 
     factory = factories[0]
 
     if not _is_valid_flight_methods_factory(factory):
-        raise InvalidFlightMethodsFactoryError(module_name)
+        raise FlightMethodsModuleError(
+            f"Invalid flight methods factory in the module {module_name}. "
+            "Make sure the function conforms to the FlightMethodsFactory protocol: "
+            "that it takes the correct number of arguments and returns an instance of FlightServerMethods."
+        )
 
     return factory
 
@@ -80,7 +87,7 @@ def get_methods_factory(module_name: str, root: Optional[str] = None) -> FlightS
     try:
         module = importlib.import_module(module_name, package=root)
     except ModuleNotFoundError as e:
-        raise FlightMethodsModuleNotFoundError(module_name) from e
+        raise FlightMethodsModuleError(f"Flight methods module {module_name} not found.") from e
 
     factories: list[FlightServerMethodsFactory] = [
         member.__wrapped__  # unwrap the actual instance from the marker decorator to keep the type
