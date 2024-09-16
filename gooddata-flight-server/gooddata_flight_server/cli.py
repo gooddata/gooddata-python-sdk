@@ -6,6 +6,7 @@ from typing import Optional, TypeVar
 
 from dynaconf import ValidationError
 
+from gooddata_flight_server.exceptions import FlightMethodsModuleError, ServerInitializationError
 from gooddata_flight_server.server.server_base import (
     DEFAULT_LOGGING_INI,
     ServerStartupInterrupted,
@@ -116,6 +117,12 @@ def server_cli() -> None:
         sys.exit(1)
     except ValidationError as e:
         print(f"An error has occurred while reading settings: {str(e)}")
+        sys.exit(1)
+    except FlightMethodsModuleError as e:
+        print(f"An error has occurred while getting the FlightMethodsFactory: {str(e)}")
+        sys.exit(1)
+    except ServerInitializationError as e:
+        print(f"An error has occurred while starting the server: {str(e)}")
         sys.exit(1)
     except Exception:
         print("An unexpected error has occurred while creating server.")

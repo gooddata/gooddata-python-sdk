@@ -5,6 +5,7 @@ import pyarrow.flight
 from dynaconf import Dynaconf
 
 from gooddata_flight_server.config.config import ServerConfig, read_config
+from gooddata_flight_server.exceptions import InvalidFlightMethodsFactoryResultError
 from gooddata_flight_server.server.base import (
     FlightServerMethodsFactory,
     ServerContext,
@@ -82,6 +83,8 @@ class GoodDataFlightServer(ServerBase):
 
             try:
                 self._methods = self._methods_factory(server_ctx)
+                if not isinstance(self._methods, FlightServerMethods):
+                    raise InvalidFlightMethodsFactoryResultError(self._methods)
             except Exception as e:
                 self.logger.critical("flight_service_init_failed", exc_info=e)
                 raise

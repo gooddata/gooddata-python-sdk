@@ -8,9 +8,11 @@ class MockMethods(FlightServerMethods):
         self._ctx = ctx
 
 
-# the function is decorated with the `flight_server_methods` decorator
-# but has a wrong signature
 @flight_server_methods
-def mockMethodsFactory(ctx: ServerContext, extra_parameter: str) -> MockMethods:
-    print(extra_parameter)
+def mockMethodsFactory(ctx: ServerContext) -> FlightServerMethods:
+    return MockMethods(ctx)
+
+
+@flight_server_methods
+def anotherMockMethodsFactory(ctx: ServerContext) -> FlightServerMethods:
     return MockMethods(ctx)
