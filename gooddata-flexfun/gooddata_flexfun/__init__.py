@@ -14,4 +14,4 @@ from gooddata_flexfun.flexfun.flex_fun_execution_context import (
     LabelElementsExecutionRequest,
     ReportExecutionRequest,
 )
-from gooddata_flexfun.flexfun.flight_methods import FlexFunServerMethodsAbstractFactory, create_flexfun_flight_methods
+from gooddata_flexfun.flexfun.flight_methods import create_flexfun_flight_methods

@@ -1,5 +1,4 @@
 #  (C) 2024 GoodData Corporation
-import abc
 from dataclasses import dataclass
 from typing import Protocol
 
@@ -62,19 +61,3 @@ class FlightServerMethodsFactory(Protocol):
     """
 
     def __call__(self, ctx: ServerContext) -> FlightServerMethods: ...
-
-
-class FlightServerMethodsAbstractFactory(abc.ABC):
-    """
-    Abstract factory function for server methods.
-    Users can implement this interface to provide their own server methods.
-    """
-
-    @abc.abstractmethod
-    def get_factory(self) -> FlightServerMethodsFactory:
-        """
-        Get the factory function for server methods.
-
-        :return: factory function
-        """
-        raise NotImplementedError

@@ -14,7 +14,7 @@ from gooddata_flight_server.server.server_main import (
     GoodDataFlightServer,
     create_server,
 )
-from gooddata_flight_server.utils.methods_discovery import get_method_factory_from_module
+from gooddata_flight_server.utils.methods_discovery import get_methods_factory
 
 TConfig = TypeVar("TConfig")
 
@@ -78,7 +78,7 @@ def _create_std_server_argparser() -> argparse.ArgumentParser:
 def _create_server(args: argparse.Namespace) -> GoodDataFlightServer:
     _config_files: tuple[str, ...] = args.config or ()
     config_files = tuple(f for f in _config_files if f is not None)
-    methods = get_method_factory_from_module(args.methods_provider)
+    methods = get_methods_factory(args.methods_provider)
 
     return create_server(
         methods=methods,
