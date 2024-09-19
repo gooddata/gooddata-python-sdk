@@ -37,19 +37,19 @@ endif
 # Targets to build docker file for each python version
 .PHONY: test-ci-py39-build
 test-ci-py39-build: Dockerfile
-	docker build --build-arg "PY_TAG=3.9.19-slim-bullseye" --build-arg "ENV_TAG=py39" -t python-sdk:py39 .
+	docker build --build-arg "PY_TAG=3.9.20-slim-bookworm" --build-arg "ENV_TAG=py39" -t python-sdk:py39 .
 
 .PHONY: test-ci-py310-build
 test-ci-py310-build: Dockerfile
-	docker build --build-arg "PY_TAG=3.10.14-slim-bullseye" --build-arg "ENV_TAG=py310" -t python-sdk:py310 .
+	docker build --build-arg "PY_TAG=3.10.15-slim-bookworm" --build-arg "ENV_TAG=py310" -t python-sdk:py310 .
 
 .PHONY: test-ci-py311-build
 test-ci-py311-build: Dockerfile
-	docker build --build-arg "PY_TAG=3.11.9-slim-bullseye" --build-arg "ENV_TAG=py311" -t python-sdk:py311 .
+	docker build --build-arg "PY_TAG=3.11.10-slim-bookworm" --build-arg "ENV_TAG=py311" -t python-sdk:py311 .
 
 .PHONY: test-ci-py312-build
 test-ci-py312-build: Dockerfile
-	docker build --build-arg "PY_TAG=3.12.4-slim-bullseye" --build-arg "ENV_TAG=py312" -t python-sdk:py312 .
+	docker build --build-arg "PY_TAG=3.12.6-slim-bookworm" --build-arg "ENV_TAG=py312" -t python-sdk:py312 .
 
 # test-ci target triggers unit tests for each requested environment
 .PHONY: test-ci
