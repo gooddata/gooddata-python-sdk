@@ -59,10 +59,12 @@ jobs:
         with:
           path: dist/
       - name: Create GitHub release
-        uses: "marvinpinto/action-automatic-releases@v1.2.1"
+        uses: "softprops/action-gh-release@v2"
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          token: "${{ secrets.GITHUB_TOKEN }}"
+          draft: false
           prerelease: false
+          make_latest: true
           files: |
                   dist/**/*.whl
                   dist/**/*.tar.gz
