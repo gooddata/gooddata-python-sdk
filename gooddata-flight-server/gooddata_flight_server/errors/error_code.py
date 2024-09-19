@@ -29,14 +29,16 @@ def _init_names(cls: Any) -> Any:
 
 
 _RetryFlagsLiteral: TypeAlias = Literal["any", "other", "here"]
-_FlagsMapping = {
-    Literal["any"]: _RETRY_ANY_FLAG,
-    Literal["here"]: _RETRY_HERE_FLAG,
-    Literal["other"]: _RETRY_OTHER_FLAG,
+_FlagsMapping: dict[_RetryFlagsLiteral, int] = {
+    "any": _RETRY_ANY_FLAG,
+    "here": _RETRY_HERE_FLAG,
+    "other": _RETRY_OTHER_FLAG,
 }
 
 
 def _get_flags(retry: Optional[_RetryFlagsLiteral] = None) -> int:
+    if retry is None:
+        return 0x0
     return _FlagsMapping.get(retry, 0x0)
 
 
