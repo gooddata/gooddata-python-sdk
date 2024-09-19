@@ -81,7 +81,7 @@ use_mtls = true
 #
 # To specify certificate file, code the value of this setting as
 # '@/absolute/path/to/cert`
-tls_certificate = "..."
+tls_certificate = '''...'''
 
 # if you want to use TLS (see 'use_tls' above), then you must specify
 # the server's private key.
@@ -95,7 +95,7 @@ tls_certificate = "..."
 # ability to combine config from multiple files: have one file
 # without secrets and commit that to VCS if you so desire. The other
 # config file with secrets should be outside of VCS.
-tls_private_key = "..."
+tls_private_key = '''...'''
 
 # if you use mTLS and have self-signed certificates, then you must
 # also include the X.509 certificate of your CA that signed them.
@@ -103,7 +103,7 @@ tls_private_key = "..."
 # Again, you can inline the certificate in PEM encoding right here
 # into this setting, or you can use the '@/absolute/path/to/ca-cert'
 # notation.
-tls_root_certificate = "..."
+tls_root_certificate = '''...'''
 
 #######################################################################
 #
