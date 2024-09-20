@@ -6,7 +6,11 @@ from pathlib import Path
 from typing import Optional, Union
 
 import attrs
-from gooddata_sdk import CatalogDeclarativeColumn, CatalogDeclarativeTable, CatalogDeclarativeTables
+from gooddata_sdk import (
+    CatalogDeclarativeColumn,
+    CatalogDeclarativeTable,
+    CatalogDeclarativeTables,
+)
 from gooddata_sdk.utils import safeget
 
 from gooddata_dbt.dbt.base import (
@@ -35,6 +39,7 @@ class DbtModelMetaGoodDataColumnProps(Base):
     id: Optional[str] = None
     ldm_type: Optional[GoodDataLdmType] = None
     referenced_table: Optional[str] = None
+    referenced_column_name: Optional[str] = None
     label_type: Optional[GoodDataLabelType] = None
     attribute_column: Optional[str] = None
     sort_column: Optional[str] = None
@@ -220,7 +225,10 @@ class DbtModelTables:
 
     @classmethod
     def from_local(
-        cls, upper_case: bool, all_model_ids: list[str], manifest_path: Union[str, Path] = DBT_PATH_TO_MANIFEST
+        cls,
+        upper_case: bool,
+        all_model_ids: list[str],
+        manifest_path: Union[str, Path] = DBT_PATH_TO_MANIFEST,
     ) -> "DbtModelTables":
         with open(manifest_path) as fp:
             dbt_catalog = json.load(fp)
@@ -344,10 +352,32 @@ class DbtModelTables:
             if len(columns) > 1
         }
 
+    def find_primary_key(self, table: DbtModelTable) -> str:
+        for name, column in table.columns.items():
+            if self.is_primary_key(column):
+                return name
+        raise Exception
+
+    def find_referenced_column(self, referenced_object_id: str, role_playing_tables: dict) -> str:
+        for table in self.tables:
+            if table.gooddata_ldm_id == referenced_object_id:
+                return self.find_primary_key(table)
+        # We must also take into consideration the role_playing_tables!
+        for name, columns in role_playing_tables.items():
+            for column in columns:
+                if f"{name}_{column}" == referenced_object_id:
+                    for table in self.tables:
+                        if table.gooddata_ldm_id == name:
+                            return f"{self.find_primary_key(table)}_{column}"
+        raise Exception
+
     def make_references(self, table: DbtModelTable, role_playing_tables: dict) -> list[dict]:
         references = []
+
         for column in table.columns.values():
             referenced_object_id = None
+            referenced_type = "attribute"
+            referenced_column_name = None
             if column.is_reference():
                 referenced_object_id = column.meta.gooddata.gooddata_ref_table_ldm_id
                 referenced_object_name = referenced_object_id
@@ -358,13 +388,24 @@ class DbtModelTables:
                         referenced_object_id = f"{referenced_object_id}_{column.ldm_id}"
             elif column.is_date():
                 referenced_object_id = column.ldm_id
+                referenced_type = "date"
+                referenced_column_name = column.ldm_id
             if referenced_object_id is not None:
+                if referenced_column_name is None:
+                    referenced_column_name = column.meta.gooddata.referenced_column_name
+                    if referenced_column_name is None:
+                        referenced_column_name = self.find_referenced_column(referenced_object_id, role_playing_tables)
                 references.append(
                     {
                         "identifier": {"id": referenced_object_id, "type": "dataset"},
                         "multivalue": False,
-                        "source_columns": [column.name],
-                        "source_column_data_types": [column.data_type],
+                        "sources": [
+                            {
+                                "column": column.name,
+                                "dataType": [column.data_type],
+                                "target": {"id": referenced_column_name, "type": referenced_type},
+                            },
+                        ],
                     }
                 )
         return references
@@ -461,7 +502,13 @@ class DbtModelTables:
                 )
         return date_datasets
 
-    def make_dataset(self, data_source_id: str, table: DbtModelTable, role_playing_tables: dict, result: dict) -> dict:
+    def make_dataset(
+        self,
+        data_source_id: str,
+        table: DbtModelTable,
+        role_playing_tables: dict,
+        result: dict,
+    ) -> dict:
         grain = self.make_grain(table)
         references = self.make_references(table, role_playing_tables)
         facts = self.make_facts(table)
