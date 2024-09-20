@@ -402,7 +402,7 @@ class DbtModelTables:
                         "sources": [
                             {
                                 "column": column.name,
-                                "dataType": [column.data_type],
+                                "dataType": column.data_type,
                                 "target": {"id": referenced_column_name, "type": referenced_type},
                             },
                         ],

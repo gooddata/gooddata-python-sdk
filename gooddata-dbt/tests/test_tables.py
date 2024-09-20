@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Union
 
 from gooddata_dbt.dbt.tables import DbtModelTables
-from gooddata_sdk import CatalogDeclarativeModel, CatalogDeclarativeTables
+from gooddata_sdk import CatalogDeclarativeModel, CatalogDeclarativeReference, CatalogDeclarativeTables
 
 _CURR_DIR = Path(__file__).parent
 _MANIFEST_PATH = _CURR_DIR / "resources/dbt_target/manifest.json"
@@ -45,6 +45,13 @@ def test_make_ldm():
 
     declarative_datasets = tables.make_declarative_datasets(data_source_id, [MODEL_ID])
     ldm = CatalogDeclarativeModel.from_dict({"ldm": declarative_datasets}, camel_case=False)
-
+    reference = CatalogDeclarativeReference.from_dict(
+        {
+            "identifier": {"id": "users"},
+            "multivalue": False,
+            "sources": [{"column": "user_id", "target": {"id": "user_id", "type": "attribute"}}],
+        }
+    )
     assert len(ldm.ldm.datasets) == 4
     assert len(ldm.ldm.date_instances) == 4
+    assert ldm.ldm.datasets[0].references[0] == reference  # AD-hoc check, in the future, make more rigorous
