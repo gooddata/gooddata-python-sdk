@@ -83,8 +83,8 @@ class ExecutionContextAttributeSorting:
 @none_safe
 def _dict_to_execution_context_attribute_sorting(d: dict) -> ExecutionContextAttributeSorting:
     return ExecutionContextAttributeSorting(
-        sort_column=d["sort_column"],
-        sort_direction=d["sort_direction"],
+        sort_column=d["sortColumn"],
+        sort_direction=d["sortDirection"],
     )
 
 
@@ -133,11 +133,11 @@ class ExecutionContextAttribute:
         if not d:
             return None
         return ExecutionContextAttribute(
-            attribute_title=d["attribute_title"],
-            attribute_identifier=d["attribute_identifier"],
-            label_title=d["label_title"],
-            label_identifier=d["label_identifier"],
-            date_granularity=d.get("date_granularity"),
+            attribute_title=d["attributeTitle"],
+            attribute_identifier=d["attributeIdentifier"],
+            label_title=d["labelTitle"],
+            label_identifier=d["labelIdentifier"],
+            date_granularity=d.get("dateGranularity"),
             sorting=_dict_to_execution_context_attribute_sorting(d.get("sorting")),
         )
 
@@ -434,16 +434,16 @@ class LabelElementsExecutionRequest:
 
 
 def _dict_to_filter(d: dict) -> ExecutionContextFilter:
-    filter_type = d.get("filter_type")
+    filter_type = d.get("filterType")
     if filter_type == "positiveAttributeFilter":
-        return ExecutionContextPositiveAttributeFilter(label_identifier=d["label_identifier"], values=d["values"])
+        return ExecutionContextPositiveAttributeFilter(label_identifier=d["labelIdentifier"], values=d["values"])
 
     if filter_type == "negativeAttributeFilter":
-        return ExecutionContextNegativeAttributeFilter(label_identifier=d["label_identifier"], values=d["values"])
+        return ExecutionContextNegativeAttributeFilter(label_identifier=d["labelIdentifier"], values=d["values"])
 
     if filter_type == "relativeDateFilter":
         return ExecutionContextRelativeDateFilter(
-            dataset_identifier=d["dataset_identifier"],
+            dataset_identifier=d["datasetIdentifier"],
             granularity=d["granularity"],
             from_shift=d["from"],
             to_shift=d["to"],
@@ -451,7 +451,7 @@ def _dict_to_filter(d: dict) -> ExecutionContextFilter:
 
     if filter_type == "absoluteDateFilter":
         return ExecutionContextAbsoluteDateFilter(
-            dataset_identifier=d["dataset_identifier"], from_date=d["from"], to_date=d["to"]
+            dataset_identifier=d["datasetIdentifier"], from_date=d["from"], to_date=d["to"]
         )
 
     raise ValueError(f"Unsupported filter definition type: {d}")
@@ -464,11 +464,11 @@ def _dict_to_filters(filters: list[dict]) -> list[ExecutionContextFilter]:
 def _dict_to_attributes(attributes: list[dict]) -> list[ExecutionContextAttribute]:
     return [
         ExecutionContextAttribute(
-            attribute_title=i["attribute_title"],
-            attribute_identifier=i["attribute_identifier"],
-            label_title=i["label_title"],
-            label_identifier=i["label_identifier"],
-            date_granularity=i.get("date_granularity"),
+            attribute_title=i["attributeTitle"],
+            attribute_identifier=i["attributeIdentifier"],
+            label_title=i["labelTitle"],
+            label_identifier=i["labelIdentifier"],
+            date_granularity=i.get("dateGranularity"),
             sorting=i.get("sorting"),
         )
         for i in attributes
@@ -553,17 +553,17 @@ class ExecutionContext:
         :param d: the dictionary to parse
         """
         return ExecutionContext(
-            execution_type=ExecutionType[d["execution_type"]],
-            organization_id=d["organization_id"],
-            workspace_id=d["workspace_id"],
-            user_id=d["user_id"],
+            execution_type=ExecutionType[d["executionType"]],
+            organization_id=d["organizationId"],
+            workspace_id=d["workspaceId"],
+            user_id=d["userId"],
             timestamp=d.get("timestamp"),
             timezone=d.get("timezone"),
-            week_start=d.get("week_start"),
-            execution_request=ExecutionRequest.from_dict(d["execution_request"]),
-            report_execution_request=ReportExecutionRequest.from_dict(d.get("report_execution_request")),
+            week_start=d.get("weekStart"),
+            execution_request=ExecutionRequest.from_dict(d["executionRequest"]),
+            report_execution_request=ReportExecutionRequest.from_dict(d.get("reportExecutionRequest")),
             label_elements_execution_request=LabelElementsExecutionRequest.from_dict(
-                d.get("label_elements_execution_request")
+                d.get("labelElementsExecutionRequest")
             ),
             attributes=_dict_to_attributes(d.get("attributes", [])),
             filters=_dict_to_filters(d.get("filters", [])),
@@ -576,6 +576,4 @@ class ExecutionContext:
         :param parameters: the parameters dictionary of the FlexFun invocation
         :return: None if the parameters do not contain the execution context, otherwise the execution context
         """
-        return (
-            ExecutionContext.from_dict(parameters["execution_context"]) if "execution_context" in parameters else None
-        )
+        return ExecutionContext.from_dict(parameters["executionContext"]) if "executionContext" in parameters else None

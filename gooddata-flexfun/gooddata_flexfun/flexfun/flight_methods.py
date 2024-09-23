@@ -32,7 +32,7 @@ class _FlexFunServerMethods(FlightServerMethods):
     @staticmethod
     def _create_descriptor(fun_name: str, metadata: Optional[dict]) -> pyarrow.flight.FlightDescriptor:
         cmd = {
-            "function_name": fun_name,
+            "functionName": fun_name,
             "metadata": metadata,
         }
 
@@ -65,10 +65,10 @@ class _FlexFunServerMethods(FlightServerMethods):
         except Exception:
             raise ErrorInfo.bad_argument("Incorrect FlexFun invocation. The invocation payload is not a valid JSON.")
 
-        fun = payload.get("function_name")
+        fun = payload.get("functionName")
         if fun is None or not len(fun):
             raise ErrorInfo.bad_argument(
-                "Incorrect FlexFun invocation. The invocation payload does not specify 'function_name'."
+                "Incorrect FlexFun invocation. The invocation payload does not specify 'functionName'."
             )
 
         parameters = payload.get("parameters") or {}
