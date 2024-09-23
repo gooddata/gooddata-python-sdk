@@ -1,3 +1,5 @@
+from gooddata_flight_server import FlightDataTaskResultfrom gooddata_flight_server import TaskResultfrom typing import Union
+
 # GoodData Flight Server
 
 The GoodData Flight Server is an opinionated, pluggable Flight RPC Server implementation.
@@ -219,7 +221,112 @@ a configured amount of time (see `task_result_ttl_sec` setting). The infrastruct
 your task may generate result that can be consumed either repeatedly (say Arrow Tables) or just
 once (say RecordBatchReader backed by live stream).
 
-TODO: continue & add examples
+Here is an example showing how to code a task, how to integrate its execution and how to
+send out data that it generated:
+
+```python
+from typing import Union, Any
+
+import pyarrow.flight
+
+import gooddata_flight_server as gf
+
+
+class MyServiceTask(gf.Task):
+    def __init__(
+            self,
+            task_specific_payload: Any,
+            cmd: bytes,
+    ):
+        super().__init__(cmd)
+
+        self._task_specific_payload = task_specific_payload
+
+    def run(self) -> Union[gf.TaskResult, gf.TaskError]:
+        # tasks support cancellation; your code can check for
+        # cancellation at any time; if the task was cancelled the
+        # method will raise exception.
+        #
+        # do not forget to do cleanup on cancellation
+        self.check_cancelled()
+
+        # ... do whatever is needed to generate the data
+        data: pyarrow.RecordBatchReader = some_method_to_generate_data()
+
+        # when the data is ready, wrap it in a result that implements
+        # the FlightDataTaskResult interface; there are built-in implementations
+        # to wrap Arrow Table or Arrow RecordBatchReader.
+        #
+        # you can write your own result if you need special handling
+        # of result and/or resources bound to the result.
+        return gf.FlightDataTaskResult.for_data(data)
+
+
+class DataServiceMethods(gf.FlightServerMethods):
+    def __init__(self, ctx: gf.ServerContext) -> None:
+        self._ctx = ctx
+
+    def _prepare_flight_info(self, task_result: gf.TaskExecutionResult) -> pyarrow.flight.FlightInfo:
+        if task_result.error is not None:
+            raise task_result.error.as_flight_error()
+
+        if task_result.cancelled:
+            raise gf.ErrorInfo.for_reason(
+                gf.ErrorCode.COMMAND_CANCELLED,
+                f"Service call was cancelled. Invocation task was: '{task_result.task_id}'.",
+            ).to_server_error()
+
+        result = task_result.result
+
+        return pyarrow.flight.FlightInfo(
+            schema=result.get_schema(),
+            descriptor=pyarrow.flight.FlightDescriptor.for_command(task_result.cmd),
+            endpoints=[
+                pyarrow.flight.FlightEndpoint(
+                    ticket=pyarrow.flight.Ticket(ticket=task_result.task_id.encode()),
+                    locations=[self._ctx.location],
+                )
+            ],
+            total_records=-1,
+            total_bytes=-1,
+        )
+
+    def get_flight_info(
+            self,
+            context: pyarrow.flight.ServerCallContext,
+            descriptor: pyarrow.flight.FlightDescriptor,
+    ) -> pyarrow.flight.FlightInfo:
+        cmd = descriptor.command
+        # parse & validate the command
+        some_parsed_command = ...
+
+        # create your custom task; you will usually pass the parsed command
+        # so that task knows what to do. The 'raw' command is required as well because
+        # it should be bounced back in the FlightInfo
+        task = MyServiceTask(task_specific_payload=some_parsed_command, cmd=cmd)
+        self._ctx.task_executor.submit(task)
+
+        # wait for the task to complete
+        result = self._ctx.task_executor.wait_for_result(task_id=task.task_id)
+
+        # once the task completes, create the FlightInfo or raise exception in
+        # case the task failed. The ticket in the FlightInfo should contain the
+        # task identifier.
+        return self._prepare_flight_info(result)
+
+    def do_get(self,
+               context: pyarrow.flight.ServerCallContext,
+               ticket: pyarrow.flight.Ticket
+               ) -> pyarrow.flight.FlightDataStream:
+        # caller comes to pick the data; the ticket should be the task identifier
+        task_id = ticket.ticket.decode()
+
+        # this utility method on the base class takes care of everything needed
+        # to correctly create FlightDataStream from the task result (or die trying
+        # in case the task result is no longer preset, or the result indicates that
+        # the task has failed)
+        return self.do_get_task_result(context, self._ctx.task_executor, task_id)
+```
 
 ### Logging
 
