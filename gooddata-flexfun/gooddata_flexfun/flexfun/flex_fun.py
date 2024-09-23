@@ -16,16 +16,25 @@ class FlexFun(abc.ABC):
 
     - a full schema of the result and all it's columns must be known up-front
 
-    - the function may return only subset of columns if the caller only
-      asks for certain columns
+    - the function receives `parameters` (arguments) that describe the context
+      in which it was invoked. The function _may_ use this information as input
+      to algorithms that it uses to generate the result data
 
-      NOTE: this is only about trimming columns - the result cardinality is
-      the same just that some columns are not returned.
+    - the caller may indicate to the function that out of all columns in the
+      schema, it is only interested in a subset of `columns`
+
+      NOTE: the list of `columns` is provided as hint for column-trimming purposes.
+      The function _should_ use the `columns` hint and only return the desired columns.
+      The function _may_ ignore this and always return all columns / superset of columns:
+      the caller will ignore the extra information.
+
+      At the same time, the `columns` hint is _not_ an indication that the function
+      should perform particular aggregation or do computation differently. To determine this,
+      the function _must_ inspect the `parameters` to actually determine what the caller
+      is interested in.
 
     Programming detail: a new instance of the FlexFun will be created
     for every call using the `create` method.
-
-    TODO: rename the class... i'm not very creative right now
     """
 
     Name: Optional[str] = None
@@ -77,9 +86,9 @@ class FlexFun(abc.ABC):
         Function call.
 
         :param parameters: parameters sent from the GoodData Cloud / FlexQuery.
-        :param columns: hints which columns SHOULD be returned; the FlexFun may decide to ignore
+        :param columns: hints which columns _should_ be returned; the FlexFun may decide to ignore
          this and always return all columns. The extraneous columns will be trimmed when received
-         by FlexQuery.
+         by FlexQuery. See comments of FlexFun class to learn more.
         :param headers: Flight RPC headers
         :return: result of the call
         """
