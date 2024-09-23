@@ -3,9 +3,10 @@ import abc
 import threading
 from collections.abc import Generator, Iterable
 from dataclasses import dataclass
-from typing import Optional, Union, final
+from typing import Callable, Optional, Union, final
 
 import pyarrow.flight
+import structlog
 from readerwriterlock import rwlock
 from typing_extensions import TypeAlias
 
@@ -13,6 +14,8 @@ from gooddata_flight_server.errors.error_code import ErrorCode
 from gooddata_flight_server.errors.error_info import ErrorInfo
 from gooddata_flight_server.tasks.base import ArrowData
 from gooddata_flight_server.tasks.task_error import TaskError
+
+OnCloseCallback: TypeAlias = Callable[[], None]
 
 
 class FlightDataTaskResult(abc.ABC):
@@ -177,6 +180,59 @@ class FlightDataTaskResult(abc.ABC):
         # to recursion
         self._close()
 
+    @staticmethod
+    def for_table(table: pyarrow.Table, on_close: Optional[OnCloseCallback] = None) -> "FlightDataTaskResult":
+        """
+        Factory to create result for an Arrow table. This result allows for repeated
+        reads.
+
+        :param table: table with result's data
+        :param on_close: optionally provide a callback function that will be
+         invoked when the result is closed; you may find this useful if your service
+         needs to do additional cleanup / release resources bound with the result
+        :return: a new instance of result
+        """
+        return _TableTaskResult(table, on_close=on_close)
+
+    @staticmethod
+    def for_reader(
+        reader: pyarrow.RecordBatchReader, on_close: Optional[OnCloseCallback] = None
+    ) -> "FlightDataTaskResult":
+        """
+        Factory to create result for an RecordBatchReader. The created result will
+        be 'single use' - the data from the reader can only be consumed once. After that,
+        the result will be closed. Useful when your service creates streams of Arrow data.
+
+        :param reader: reader result's data
+        :param on_close: optionally provide a callback function that will be
+         invoked when the result is closed; you may find this useful if your service
+         needs to do additional cleanup / release resources bound with the result
+        :return: a new instance of result
+        """
+        return _ReaderTaskResult(reader, on_close=on_close)
+
+    @staticmethod
+    def for_data(data: ArrowData, on_close: Optional[OnCloseCallback] = None) -> "FlightDataTaskResult":
+        """
+        Convenience factory function to create result from either Arrow Table or RecordBatchReader.
+
+        See `for_table` and `for_reader` for further detail.
+
+        :param data: either Arrow Table or RecordBatchReader
+        :param on_close: optionally provide a callback function that will be
+         invoked when the result is closed; you may find this useful if your service
+         needs to do additional cleanup / release resources bound with the result
+        :return: a new instance of result
+        """
+        if isinstance(data, pyarrow.Table):
+            return FlightDataTaskResult.for_table(data, on_close=on_close)
+        elif isinstance(data, pyarrow.RecordBatchReader):
+            return FlightDataTaskResult.for_reader(data, on_close=on_close)
+
+        raise ValueError(
+            f"Unexpected type of 'data': {type(data).__name__}. Expected Arrow Table or RecordBatchReader."
+        )
+
 
 @dataclass
 class ListFlightsTaskResult:
@@ -251,3 +307,57 @@ class TaskExecutionResult:
         :return: error that caused the task to fail; None if the task has not failed
         """
         return self._error
+
+
+_LOGGER = structlog.get_logger("gooddata_flight_server.task_executor")
+
+
+class _TableTaskResult(FlightDataTaskResult):
+    def __init__(self, table: pyarrow.Table, on_close: Optional[OnCloseCallback] = None) -> None:
+        super().__init__(single_use_data=False)
+
+        self._table: pyarrow.Table = table
+        self._on_close = on_close
+
+    def get_schema(self) -> pyarrow.Schema:
+        return self._table.schema
+
+    def _get_data(self) -> Union[Iterable[ArrowData], ArrowData]:
+        return self._table
+
+    def _close(self) -> None:
+        del self._table
+
+        try:
+            if self._on_close is not None:
+                self._on_close()
+        except Exception:
+            _LOGGER.warning("reader_on_close_failed", exc_info=True)
+
+
+class _ReaderTaskResult(FlightDataTaskResult):
+    def __init__(self, reader: pyarrow.RecordBatchReader, on_close: Optional[OnCloseCallback] = None) -> None:
+        super().__init__(single_use_data=True)
+
+        self._reader = reader
+        self._on_close = on_close
+
+    def get_schema(self) -> pyarrow.Schema:
+        return self._reader.schema
+
+    def _get_data(self) -> Union[Iterable[ArrowData], ArrowData]:
+        return self._reader
+
+    def _close(self) -> None:
+        try:
+            self._reader.close()
+        except Exception:
+            _LOGGER.warning("reader_close_failed", exc_info=True)
+        finally:
+            self._reader = None
+
+        try:
+            if self._on_close is not None:
+                self._on_close()
+        except Exception:
+            _LOGGER.warning("reader_on_close_failed", exc_info=True)

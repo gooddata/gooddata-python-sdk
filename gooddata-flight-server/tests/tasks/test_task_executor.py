@@ -1,26 +1,14 @@
 #  (C) 2023 GoodData Corporation
 import threading
-from collections.abc import Iterable
 from typing import Union
 
 import pyarrow.flight
 import pytest
 from gooddata_flight_server import ErrorCode, ErrorInfo, FlightDataTaskResult, Task, TaskError, TaskResult
-from gooddata_flight_server.tasks.base import ArrowData, TaskWaitTimeoutError
+from gooddata_flight_server.tasks.base import TaskWaitTimeoutError
 from gooddata_flight_server.tasks.thread_task_executor import ThreadTaskExecutor
 
-
-class _TestDataResult(FlightDataTaskResult):
-    _Table = pyarrow.table({"col1": list(range(100))})
-
-    def get_schema(self) -> pyarrow.Schema:
-        return self._Table.schema
-
-    def _get_data(self) -> Union[Iterable[ArrowData], ArrowData]:
-        return self._Table
-
-    def _close(self) -> None:
-        pass
+_TEST_TABLE = pyarrow.table({"col1": list(range(100))})
 
 
 class _SuccessTaskWithLiveData(Task):
@@ -28,7 +16,7 @@ class _SuccessTaskWithLiveData(Task):
         super().__init__(cmd=b"", cancellable=True, task_id=None)
 
     def run(self) -> Union[TaskResult, TaskError]:
-        return _TestDataResult()
+        return FlightDataTaskResult.for_data(_TEST_TABLE.to_reader())
 
 
 class _FailWithRaiseTask(Task):
@@ -60,7 +48,7 @@ class _BlockingTask(Task):
         with self.lock:
             self.check_cancelled()
 
-            return _TestDataResult()
+            return FlightDataTaskResult.for_data(_TEST_TABLE)
 
 
 @pytest.fixture
