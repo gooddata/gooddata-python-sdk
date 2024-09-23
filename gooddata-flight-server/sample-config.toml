@@ -14,9 +14,12 @@
 # - 127.0.0.1 - to bind to localhost only (unreachable via outside network)
 # - custom address to bind to
 #
+# env: GOODDATA_FLIGHT_SERVER__LISTEN_HOST
 listen_host = "127.0.0.1"
 
 # port on which the Flight RPC server should listen
+#
+# env: GOODDATA_FLIGHT_SERVER__LISTEN_PORT
 listen_port = 17001
 
 # host name to use when sending this server's Flight RPC location to clients.
@@ -38,6 +41,8 @@ listen_port = 17001
 #
 # Without the 'advertise_host', the GetFlightInfo would return Location referencing
 # some internal / randomly assigned hostname that is unreachable from your workstation.
+#
+# env: GOODDATA_FLIGHT_SERVER__ADVERTISE_HOST
 advertise_host = "127.0.0.1"
 
 # port number to use when sending this server's Flight RPC location to clients.
@@ -53,6 +58,8 @@ advertise_host = "127.0.0.1"
 #
 # Analogous to the host example (see above), the Dockerized server needs to send
 # location with port number that can be reached from your workstation.
+#
+# env: GOODDATA_FLIGHT_SERVER__ADVERTISE_PORT
 advertise_port = 17001
 
 #######################################################################
@@ -65,10 +72,9 @@ advertise_port = 17001
 # the TLS certificate and TLS private key for the server to use.
 # Additionally, if you use self-signed certificates, you need to
 # also specify the tls_root_certificate.
-use_tls = true
-
-# TODO: WIP this may move to authentication section?
-use_mtls = true
+#
+# env: GOODDATA_FLIGHT_SERVER__USE_TLS
+# use_tls = false
 
 # if you want to use TLS (see 'use_tls' above), then you must specify
 # server's certificate.
@@ -80,14 +86,16 @@ use_mtls = true
 # specify file where the certificate resides.
 #
 # To specify certificate file, code the value of this setting as
-# '@/absolute/path/to/cert`
-tls_certificate = "..."
+# `@/absolute/path/to/cert`
+#
+# env: GOODDATA_FLIGHT_SERVER__TLS_CERTIFICATE
+# tls_certificate = '''...'''
 
 # if you want to use TLS (see 'use_tls' above), then you must specify
 # the server's private key.
 #
 # This is supposed to be PEM encoded X.509 private key. Similar to
-# the certificate, you can also use the '@/absolute/path/to/cert'
+# the certificate, you can also use the `@/absolute/path/to/cert`
 # notation to make server load the certificate from some file.
 #
 # IMPORTANT: never commit config files containing inlined secrets
@@ -95,7 +103,9 @@ tls_certificate = "..."
 # ability to combine config from multiple files: have one file
 # without secrets and commit that to VCS if you so desire. The other
 # config file with secrets should be outside of VCS.
-tls_private_key = "..."
+#
+# env: GOODDATA_FLIGHT_SERVER__TLS_PRIVATE_KEY
+# tls_private_key = '''...'''
 
 # if you use mTLS and have self-signed certificates, then you must
 # also include the X.509 certificate of your CA that signed them.
@@ -103,7 +113,9 @@ tls_private_key = "..."
 # Again, you can inline the certificate in PEM encoding right here
 # into this setting, or you can use the '@/absolute/path/to/ca-cert'
 # notation.
-tls_root_certificate = "..."
+#
+# env: GOODDATA_FLIGHT_SERVER__TLS_ROOT_CERTIFICATE
+# tls_root_certificate = '''...'''
 
 #######################################################################
 #
@@ -123,6 +135,8 @@ tls_root_certificate = "..."
 #
 # Alternatively, you can implement your own strategy for verifying
 # tokens. See the option below.
+#
+# env: GOODDATA_FLIGHT_SERVER__AUTHENTICATION_METHOD
 authentication_method = "none"
 
 # Specify strategy to use for verifying tokens.
@@ -144,7 +158,9 @@ authentication_method = "none"
 # Upon startup, the server will try to dynamically import and
 # load your implementation of TokenVerificationStrategy from the
 # specified module.
-token_verification = "EnumeratedTokenVerification"
+#
+# env: GOODDATA_FLIGHT_SERVER__TOKEN_VERIFICATION
+# token_verification = "EnumeratedTokenVerification"
 
 # Optionally specify header name that is expected to carry the
 # token.
@@ -153,18 +169,42 @@ token_verification = "EnumeratedTokenVerification"
 # convention: the 'authorization' header (must be lower-case) and
 # the value of 'Bearer <token>' where <token> is the value token
 # itself.
-token_header_name = "x-custom-header-with-token"
+#
+# env: GOODDATA_FLIGHT_SERVER__TOKEN_HEADER_NAME
+# token_header_name = "x-custom-header-with-token"
 
 #######################################################################
 # Task Handling
 #######################################################################
 
-# number of threads available for tasks which generate flights or
+# Number of threads available for tasks which generate flights or
 # flight listing. Default is 32.
 #
 # Each GetFlightInfo request that generates a flight delegates this
 # to a task. The task executes in a thread pool of this size.
-task_threads = 32
+#
+# Default is 32.
+#
+# env: GOODDATA_FLIGHT_SERVER__TASK_THREADS
+# task_threads = 32
+
+# Number of threads that will be used when closing used / unneeded
+# task results.
+#
+# Default is 2.
+#
+# env: GOODDATA_FLIGHT_SERVER__TASK_CLOSE_THREADS
+# task_close_threads = 2
+
+# Number of seconds a task result will be retained by the server.
+#
+# In other words, when GetFlightInfo uses task to generate the
+# flight, the result will be kept by the server for this number
+# of seconds - the client must come within this timeframe to pick
+# the data using DoGet.
+#
+# env: GOODDATA_FLIGHT_SERVER__TASK_RESULT_TTL_SEC
+# task_result_ttl_sec = 60
 
 #######################################################################
 # Server Infrastructure & Maintenance
@@ -179,12 +219,16 @@ task_threads = 32
 # - custom address to bind to
 #
 # if not specified, the prometheus metrics endpoint will not be started
-metrics_host = "0.0.0.0"
+#
+# env: GOODDATA_FLIGHT_SERVER__METRICS_HOST
+# metrics_host = "0.0.0.0"
 
 # port for prometheus metrics endpoint; default is 17101
 #
 # will only be used if `metrics_host` is specified
-metrics_port = 17101
+#
+# env: GOODDATA_FLIGHT_SERVER__METRICS_PORT
+# metrics_port = 17101
 
 # host to bind health check endpoint; disabled by default
 #
@@ -195,25 +239,33 @@ metrics_port = 17101
 # - custom address to bind to
 #
 # if not specified, the health check endpoint will not be started
-health_check_host = "0.0.0.0"
+#
+# env: GOODDATA_FLIGHT_SERVER__HEALTH_CHECK_HOST
+# health_check_host = "0.0.0.0"
 
 # port for health check endpoint; default is 8877
 #
 # will only be used if `health_check_host` is specified
-health_check_port = 8877
+#
+# env: GOODDATA_FLIGHT_SERVER__HEALTH_CHECK_PORT
+# health_check_port = 8877
 
 # optionally specify interval, in seconds, of calls to malloc_trim - this
 # helps to release unused memory back to the system. Default is 30 seconds.
 #
 # especially useful in memory constrained and memory-limited environments.
-malloc_trim_interval_sec = 30
+#
+# env: GOODDATA_FLIGHT_SERVER__MALLOC_TRIM_INTERVAL_SEC
+# malloc_trim_interval_sec = 30
 
 # optionally specify key name under which the log event name should appear
 # in the structured logs. Default is 'event'
 #
 # you may want to override this in case you want to align the event's key
 # name with the rest of your environment
-log_event_key_name = "event"
+#
+# env: GOODDATA_FLIGHT_SERVER__LOG_EVENT_KEY_NAME
+# log_event_key_name = "event"
 
 # optionally specify mapping for telemetry (tracing) key names that will appear
 # in structured logs. by default, server writes trace information into 'trace_id',
@@ -221,17 +273,21 @@ log_event_key_name = "event"
 #
 # you may want to override these in case you want to align those logs key names
 # with the rest of your enviornment
-log_trace_keys = { "trace_id" = "trace_id", "span_id" = "trace_id", "parent_span_id" = "parent_span_id" }
+#
+# env: GOODDATA_FLIGHT_SERVER__LOG_TRACE_KEYS
+# log_trace_keys = { "trace_id" = "trace_id", "span_id" = "trace_id", "parent_span_id" = "parent_span_id" }
 
 # optionally enable exports of OpenTelemetry tracing. Default is no exports
 # which also means most of the tracing code and instrumentation will be noop.
 #
-# Allowed values are: zipkin, otlp+grpc, otlp+http or console (for debug)
+# Allowed values are: zipkin, otlp-grpc, otlp-http or console (for debug)
 #
 # IMPORTANT: If you want to enable the trace exports, you must install one
 # the appropriate OpenTelemetry exporter package yourself and then configure
 # the exporter using the appropriate environment variables (these are typically
 # documented by the exporter)
+#
+# env: GOODDATA_FLIGHT_SERVER__OTEL_EXPORTER_TYPE
 otel_exporter_type = "none"
 
 # optionally specify OpenTelemetry service name to associate with the server's
@@ -242,12 +298,16 @@ otel_exporter_type = "none"
 #
 # IMPORTANT: if you want to enable and export OpenTelemetry tracing, then you
 # must specify both the `otel_exporter_type` and this option.
-otel_service_name = "your-service-name"
+#
+# env: GOODDATA_FLIGHT_SERVER__OTEL_SERVICE_NAME
+# otel_service_name = "your-service-name"
 
 # optionally specify OpenTelemetry namespace to associate with this server's resource.
 #
 # Default is no namespace.
-otel_service_namespace = "your-namespace"
+#
+# env: GOODDATA_FLIGHT_SERVER__OTEL_SERVICE_NAMESPACE
+# otel_service_namespace = "your-namespace"
 
 # optionally specify OpenTelemetry service instance id to associate with this server's
 # resource.
@@ -257,7 +317,9 @@ otel_service_namespace = "your-namespace"
 # environments, it may be the hostname.
 #
 # Default is to use current hostname.
-otel_service_instance_id = "your-service-instance-id"
+#
+# env: GOODDATA_FLIGHT_SERVER__OTEL_SERVICE_INSTANCE_ID
+# otel_service_instance_id = "your-service-instance-id"
 
 # optionally specify whether OpenTelemetry integration within the server should look
 # for, extract and use an OpenTelemetry context coming through the Flight RPC
@@ -278,15 +340,6 @@ otel_service_instance_id = "your-service-instance-id"
 #   a new trace ID.
 #
 # Default is false.
-otel_extract_context = false
-
-[flexfun]
-
-# specify one or more modules that contain FlexFun implementations
 #
-functions = [
-    "my_python_package.some_module"
-]
-
-[enumerated_tokens]
-tokens = ["token1", "token2"]
+# env: GOODDATA_FLIGHT_SERVER__OTEL_EXTRACT_CONTEXT
+# otel_extract_context = false
