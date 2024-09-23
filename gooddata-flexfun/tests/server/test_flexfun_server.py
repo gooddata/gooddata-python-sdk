@@ -16,12 +16,12 @@ def test_basic_function():
         assert fun_info.descriptor.command is not None
         assert len(fun_info.descriptor.command)
         cmd = orjson.loads(fun_info.descriptor.command)
-        assert cmd["function_name"] == "SimpleFun"
+        assert cmd["functionName"] == "SimpleFun"
 
         descriptor = pyarrow.flight.FlightDescriptor.for_command(
             orjson.dumps(
                 {
-                    "function_name": "SimpleFun",
+                    "functionName": "SimpleFun",
                     "parameters": {"test1": 1, "test2": 2, "test3": 3},
                 }
             )
@@ -45,7 +45,7 @@ def test_function_with_on_load():
         descriptor = pyarrow.flight.FlightDescriptor.for_command(
             orjson.dumps(
                 {
-                    "function_name": "SimpleFun",
+                    "functionName": "SimpleFun",
                     "parameters": {"test1": 1, "test2": 2, "test3": 3},
                 }
             )
@@ -69,12 +69,12 @@ def test_basic_function_tls(tls_ca_cert):
         assert fun_info.descriptor.command is not None
         assert len(fun_info.descriptor.command)
         cmd = orjson.loads(fun_info.descriptor.command)
-        assert cmd["function_name"] == "SimpleFun"
+        assert cmd["functionName"] == "SimpleFun"
 
         descriptor = pyarrow.flight.FlightDescriptor.for_command(
             orjson.dumps(
                 {
-                    "function_name": "SimpleFun",
+                    "functionName": "SimpleFun",
                     "parameters": {"test1": 1, "test2": 2, "test3": 3},
                 }
             )

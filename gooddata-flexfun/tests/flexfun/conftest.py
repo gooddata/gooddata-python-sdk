@@ -5,14 +5,14 @@ import pytest
 @pytest.fixture
 def sample_report_execution_context_dict():
     return {
-        "execution_type": "REPORT",
-        "organization_id": "default",
-        "workspace_id": "646937086c794101984a7adf99a4854b",
-        "user_id": "demo",
+        "executionType": "REPORT",
+        "organizationId": "default",
+        "workspaceId": "646937086c794101984a7adf99a4854b",
+        "userId": "demo",
         "timestamp": "2024-09-12T12:51:26+00:00",
         "timezone": "Etc/UTC",
-        "week_start": "sunday",
-        "execution_request": {
+        "weekStart": "sunday",
+        "executionRequest": {
             "attributes": [
                 {
                     "localIdentifier": "a_attribute1",
@@ -44,7 +44,7 @@ def sample_report_execution_context_dict():
             ],
             "auxMeasures": [],
         },
-        "report_execution_request": {
+        "reportExecutionRequest": {
             "attributes": [
                 {
                     "localIdentifier": "a_attribute1",
@@ -76,32 +76,32 @@ def sample_report_execution_context_dict():
             ],
             "auxMeasures": [],
         },
-        "label_elements_execution_request": None,
+        "labelElementsExecutionRequest": None,
         "attributes": [
             {
-                "attribute_identifier": "attribute1",
-                "attribute_title": "Attribute1",
-                "label_identifier": "attribute1",
-                "label_title": "Attribute1",
-                "date_granularity": None,
+                "attributeIdentifier": "attribute1",
+                "attributeTitle": "Attribute1",
+                "labelIdentifier": "attribute1",
+                "labelTitle": "Attribute1",
+                "dateGranularity": None,
                 "sorting": None,
             }
         ],
-        "filters": [{"filter_type": "negativeAttributeFilter", "label_identifier": "attribute1", "values": ["id1"]}],
+        "filters": [{"filterType": "negativeAttributeFilter", "labelIdentifier": "attribute1", "values": ["id1"]}],
     }
 
 
 @pytest.fixture
 def sample_label_execution_context_dict():
     return {
-        "execution_type": "LABEL_ELEMENTS",
-        "organization_id": "default",
-        "workspace_id": "646937086c794101984a7adf99a4854b",
-        "user_id": "demo",
+        "executionType": "LABEL_ELEMENTS",
+        "organizationId": "default",
+        "workspaceId": "646937086c794101984a7adf99a4854b",
+        "userId": "demo",
         "timestamp": "",
         "timezone": "",
-        "week_start": "sunday",
-        "execution_request": {
+        "weekStart": "sunday",
+        "executionRequest": {
             "attributes": [
                 {
                     "localIdentifier": "label",
@@ -133,8 +133,8 @@ def sample_label_execution_context_dict():
             ],
             "auxMeasures": [],
         },
-        "report_execution_request": None,
-        "label_elements_execution_request": {
+        "reportExecutionRequest": None,
+        "labelElementsExecutionRequest": {
             "label": "attribute2",
             "excludePrimaryLabel": True,
             "filterBy": {"labelType": "REQUESTED"},
@@ -147,13 +147,13 @@ def sample_label_execution_context_dict():
         },
         "attributes": [
             {
-                "attribute_identifier": "attribute2",
-                "attribute_title": "Attribute2",
-                "label_identifier": "attribute2",
-                "label_title": "Attribute2",
-                "date_granularity": None,
+                "attributeIdentifier": "attribute2",
+                "attributeTitle": "Attribute2",
+                "labelIdentifier": "attribute2",
+                "labelTitle": "Attribute2",
+                "dateGranularity": None,
                 "sorting": None,
             }
         ],
-        "filters": [{"filter_type": "negativeAttributeFilter", "label_identifier": "attribute1", "values": ["id1"]}],
+        "filters": [{"filterType": "negativeAttributeFilter", "labelIdentifier": "attribute1", "values": ["id1"]}],
     }
