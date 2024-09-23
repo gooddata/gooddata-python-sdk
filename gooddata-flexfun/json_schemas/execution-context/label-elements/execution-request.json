@@ -1,0 +1,91 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "execution-context/label-elements/execution-request.json",
+    "title": "Label Elements Execution Request",
+    "description": "Request to get elements of a label.",
+    "type": "object",
+    "properties": {
+        "label": {
+            "type": "string",
+            "description": "The label to get the elements for."
+        },
+        "limit": {
+            "type": "integer",
+            "description": "The maximum number of elements to return.",
+            "minimum": 1
+        },
+        "offset": {
+            "type": "integer",
+            "description": "The number of elements to skip before returning.",
+            "minimum": 0
+        },
+        "excludePrimaryLabel": {
+            "type": "boolean",
+            "description": "Excludes items from the result that differ only by primary label\n* false - return items with distinct primary label\n* true - return items with distinct requested label",
+            "default": false
+        },
+        "exactFilter": {
+            "type": "array",
+            "description": "Return only items, whose label exactly matches one of filter values.",
+            "items": {
+                "type": "string"
+            }
+        },
+        "patternFilter": {
+            "type": "string",
+            "description": "Return only items whose label matches the pattern."
+        },
+        "complementFilter": {
+            "type": "boolean",
+            "description": "If true, return items that do not match the exactFilter or patternFilter.",
+            "default": false
+        },
+        "dependsOn": {
+            "type": "array",
+            "description": "Return only items that are not filtered-out by the parent filters.",
+            "items": {
+                "anyOf": [
+                    {
+                        "$ref": "depends-on.json"
+                    },
+                    {
+                        "$ref": "depends-on-date-filter.json"
+                    }
+                ]
+            }
+        },
+        "validateBy": {
+            "type": "array",
+            "description": "Return only items that are valid by the specified item.",
+            "items": {
+                "$ref": "#/$defs/validateByItem"
+            }
+        }
+    },
+    "required": [
+        "label"
+    ],
+    "$defs": {
+        "validateByItem": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "The id of the item to validate."
+                },
+                "type": {
+                    "enum": [
+                        "label",
+                        "attribute",
+                        "fact",
+                        "metric"
+                    ]
+                }
+            },
+            "required": [
+                "id",
+                "type"
+            ]
+        }
+    }
+}

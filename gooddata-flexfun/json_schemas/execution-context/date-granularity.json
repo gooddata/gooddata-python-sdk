@@ -1,0 +1,24 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "execution-context/date-granularity.json",
+    "title": "Date Granularity",
+    "description": "All the supported granularities of the date attributes.",
+    "enum": [
+        "TIMESTAMP",
+        "MINUTE",
+        "HOUR",
+        "DAY",
+        "WEEK",
+        "MONTH",
+        "QUARTER",
+        "YEAR",
+        "MINUTE_OF_HOUR",
+        "HOUR_OF_DAY",
+        "DAY_OF_WEEK",
+        "DAY_OF_MONTH",
+        "DAY_OF_YEAR",
+        "WEEK_OF_YEAR",
+        "MONTH_OF_YEAR",
+        "QUARTER_OF_YEAR"
+    ]
+}

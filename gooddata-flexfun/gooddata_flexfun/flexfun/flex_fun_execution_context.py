@@ -368,17 +368,20 @@ class LabelElementsExecutionRequest:
 
     offset: Optional[int]
     """
-    The offset of the elements.
+    The number of elements to skip before returning.
     """
 
     limit: Optional[int]
     """
-    The limit of the elements.
+    The maximum number of elements to return.
     """
 
     exclude_primary_label: Optional[bool]
     """
-    Whether to exclude primary label from the result.
+    Excludes items from the result that differ only by primary label
+
+    * false - return items with distinct primary label
+    * true - return items with distinct requested label
     """
 
     exact_filter: Optional[list[str]]
