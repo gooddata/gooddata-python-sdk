@@ -1,0 +1,110 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "execution-context/label-elements/depends-on-date-filter.json",
+    "title": "Depends On Date Filter",
+    "description": "Definition of additional filtering for the label based on date filter.",
+    "type": "object",
+    "properties": {
+        "dateFilter": {
+            "description": "The relevant date filter.",
+            "type": "object",
+            "anyOf": [
+                {
+                    "type": "object",
+                    "properties": {
+                        "relativeDateFilter": {
+                            "$ref": "#/$defs/relativeDateFilter"
+                        }
+                    },
+                    "required": [
+                        "relativeDateFilter"
+                    ]
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "absoluteDateFilter": {
+                            "$ref": "#/$defs/absoluteDateFilter"
+                        }
+                    },
+                    "required": [
+                        "absoluteDateFilter"
+                    ]
+                }
+            ]
+        }
+    },
+    "required": [
+        "dateFilter"
+    ],
+    "$defs": {
+        "absoluteDateFilter": {
+            "type": "object",
+            "properties": {
+                "from": {
+                    "type": "string",
+                    "pattern": "^\\d{4}-\\d{1,2}-\\d{1,2}( \\d{1,2}:\\d{1,2})?$",
+                    "description": "The start date of the filter."
+                },
+                "to": {
+                    "type": "string",
+                    "pattern": "^\\d{4}-\\d{1,2}-\\d{1,2}( \\d{1,2}:\\d{1,2})?$",
+                    "description": "The end date of the filter."
+                },
+                "dataset": {
+                    "$ref": "#/$defs/datasetId",
+                    "description": "The dataset to filter by."
+                }
+            },
+            "required": [
+                "from",
+                "to",
+                "dataset"
+            ]
+        },
+        "relativeDateFilter": {
+            "type": "object",
+            "properties": {
+                "from": {
+                    "type": "integer",
+                    "description": "The start date of the filter."
+                },
+                "to": {
+                    "type": "integer",
+                    "description": "The end date of the filter."
+                },
+                "granularity": {
+                    "$ref": "../date-granularity.json",
+                    "description": "The granularity of the filter."
+                },
+                "dataset": {
+                    "$ref": "#/$defs/datasetId",
+                    "description": "The dataset to filter by."
+                }
+            },
+            "required": [
+                "from",
+                "to",
+                "granularity",
+                "dataset"
+            ]
+        },
+        "datasetId": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "The dataset ID."
+                },
+                "type": {
+                    "const": "dataset",
+                    "description": "The dataset type."
+                }
+            },
+            "required": [
+                "id",
+                "type"
+            ]
+        }
+    }
+}

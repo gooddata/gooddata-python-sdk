@@ -19,7 +19,13 @@ Finally, they provide a set of methods that can be called to provide data in res
 * `cancel` - called to cancel a query if GoodData Cloud decides to stop requesting data (e.g. if there is a timeout)
 * `on_load` - called when the FlexFun is created before any `call` or `cancel` methods are called
 
-## Usage
+## Getting Started using the FlexFun Template
+
+The easiest way to get started writing FlexFuns is to use [the template repository](https://github.com/gooddata/gooddata-flexfun-template).
+It provides a simple example of a FlexFun that can be used as a starting point for your own FlexFun with all the necessary infrastructure in place.
+It also has a README that explains how to get started with the template and some general tips on how to write FlexFuns.
+
+## Getting started using the FlexFun package directly
 
 Install the package alongside the gooddata-flight-server using pip:
 

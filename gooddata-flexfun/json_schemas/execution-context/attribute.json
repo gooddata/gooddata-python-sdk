@@ -1,0 +1,58 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "execution-context/attribute.json",
+    "title": "Attribute",
+    "description": "Attribute used in the execution context.",
+    "type": "object",
+    "properties": {
+        "attributeIdentifier": {
+            "type": "string",
+            "description": "Identifier of the attribute used."
+        },
+        "attributeTitle": {
+            "type": "string",
+            "description": "Title of the attribute used."
+        },
+        "labelIdentifier": {
+            "type": "string",
+            "description": "Identifier of the label used."
+        },
+        "labelTitle": {
+            "type": "string",
+            "description": "Title of the label used."
+        },
+        "dateGranularity": {
+            "$ref": "date-granularity.json",
+            "description": "Date granularity of the attribute if it is a date attribute."
+        },
+        "sorting": {
+            "$ref": "#/$defs/sorting"
+        }
+    },
+    "required": [
+        "attributeIdentifier",
+        "attributeTitle",
+        "labelIdentifier",
+        "labelTitle"
+    ],
+    "$defs": {
+        "sorting": {
+            "type": "object",
+            "properties": {
+                "sortColumn": {
+                    "type": "string"
+                },
+                "sortDirection": {
+                    "enum": [
+                        "ASC",
+                        "DESC"
+                    ]
+                }
+            },
+            "required": [
+                "sortColumn",
+                "sortDirection"
+            ]
+        }
+    }
+}

@@ -1,0 +1,124 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "execution-context/filter.json",
+    "title": "Filter",
+    "anyOf": [
+        {
+            "type": "object",
+            "description": "Filter for including elements based on a label.",
+            "properties": {
+                "filterType": {
+                    "const": "positiveAttributeFilter"
+                },
+                "labelIdentifier": {
+                    "type": "string",
+                    "description": "Identifier of the label used."
+                },
+                "values": {
+                    "type": "array",
+                    "description": "The values of the label for element filtering.",
+                    "items": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    }
+                }
+            },
+            "required": [
+                "filterType",
+                "labelIdentifier",
+                "values"
+            ]
+        },
+        {
+            "type": "object",
+            "description": "Filter for excluding elements based on a label.",
+            "properties": {
+                "filterType": {
+                    "const": "negativeAttributeFilter"
+                },
+                "labelIdentifier": {
+                    "type": "string",
+                    "description": "Identifier of the label used."
+                },
+                "values": {
+                    "type": "array",
+                    "description": "The values of the label for element filtering.",
+                    "items": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    }
+                }
+            },
+            "required": [
+                "filterType",
+                "labelIdentifier",
+                "values"
+            ]
+        },
+        {
+            "type": "object",
+            "description": "Filter for relative date ranges.",
+            "properties": {
+                "filterType": {
+                    "const": "relativeDateFilter"
+                },
+                "from": {
+                    "type": "integer",
+                    "description": "The start date of the filter."
+                },
+                "to": {
+                    "type": "integer",
+                    "description": "The end date of the filter."
+                },
+                "granularity": {
+                    "$ref": "date-granularity.json",
+                    "description": "The granularity of the date filter."
+                },
+                "datasetIdentifier": {
+                    "type": "string",
+                    "description": "The dataset to filter by."
+                }
+            },
+            "required": [
+                "filterType",
+                "from",
+                "to",
+                "granularity",
+                "datasetIdentifier"
+            ]
+        },
+        {
+            "type": "object",
+            "description": "Filter for absolute date ranges.",
+            "properties": {
+                "filterType": {
+                    "const": "absoluteDateFilter"
+                },
+                "from": {
+                    "type": "string",
+                    "pattern": "^\\d{4}-\\d{1,2}-\\d{1,2}( \\d{1,2}:\\d{1,2})?$",
+                    "description": "The start date of the filter."
+                },
+                "to": {
+                    "type": "string",
+                    "pattern": "^\\d{4}-\\d{1,2}-\\d{1,2}( \\d{1,2}:\\d{1,2})?$",
+                    "description": "The end date of the filter."
+                },
+                "datasetIdentifier": {
+                    "type": "string",
+                    "description": "The dataset to filter by."
+                }
+            },
+            "required": [
+                "filterType",
+                "from",
+                "to",
+                "datasetIdentifier"
+            ]
+        }
+    ]
+}
