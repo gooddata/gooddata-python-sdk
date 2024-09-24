@@ -1,5 +1,3 @@
-from gooddata_flight_server import FlightDataTaskResultfrom gooddata_flight_server import TaskResultfrom typing import Union
-
 # GoodData Flight Server
 
 The GoodData Flight Server is an opinionated, pluggable Flight RPC Server implementation.
@@ -197,6 +195,55 @@ def my_service(ctx: gf.ServerContext) -> gf.FlightServerMethods:
     # ... create and return server methods ...
 ```
 
+### Authentication
+
+Currently, the server supports two modes of authentication:
+
+- no authentication
+- token-based authentication and allows you to plug in custom token verification logic
+
+The token verification method that comes built-in with the server is a simple one: the token is
+an arbitrary, secret value shared between server and client. You configure the list of valid secret
+tokens at server start-up and then at your discretion distribute these secret values to clients.
+
+By default, the server runs with no authentication. To turn on the token based authentication,
+you have to:
+
+- Set the `authentication_method` setting to `token`.
+
+  By default, the server will use the built-in token verification strategy
+  called `EnumeratedTokenVerification`.
+
+- Configure the secret tokens.
+
+  You can do this using environment variable: `GOODDATA_FLIGHT_ENUMERATED_TOKENS__TOKENS='["", ""]'`.
+  Put the secret token(s) inside the quotes. Alternatively, you can code tokens into a configuration file
+  such as this:
+
+  ```toml
+  [enumerated_tokens]
+  tokens = ["", ""]
+  ```
+
+  IMPORTANT: never commit secrets to your VCS.
+
+With this setup in place, the server will expect the Flight clients to include token in the
+`authorization` header in form of `Bearer <token>`. The token must be present on every
+call.
+
+Here is an example how to make a call that includes the `authorization` header:
+
+```python
+import pyarrow.flight
+
+def example_call_using_tokens():
+    opts = pyarrow.flight.FlightCallOptions(headers=[(b"authorization", b"Bearer <token>")])
+    client = pyarrow.flight.FlightClient("grpc+tls://localhost:17001")
+
+    for flight in client.list_flights(b"", opts):
+        print(flight)
+```
+
 ## Developer Manual
 
 This part of the documentation explains additional capabilities of the server.
@@ -327,6 +374,52 @@ class DataServiceMethods(gf.FlightServerMethods):
         # the task has failed)
         return self.do_get_task_result(context, self._ctx.task_executor, task_id)
 ```
+
+### Custom token verification strategy
+
+At the moment, the built-in token verification strategy supported by the server is the
+most basic one. In cases when this strategy is not good enough, you can code your own
+and plug it into the server.
+
+The `TokenVerificationStrategy` interface sets contract for your custom strategy. You
+implement this class inside a Python module and then tell the server to load that
+module.
+
+For example, you create a module `my_service.auth.custom_token_verification` where you
+implement the verification strategy:
+
+```python
+import gooddata_flight_server as gf
+import pyarrow.flight
+from typing import Any
+
+
+class MyCustomTokenVerification(gf.TokenVerificationStrategy):
+    def verify(self, call_info: pyarrow.flight.CallInfo, token: str) -> Any:
+        # implement your arbitrary logic here;
+        #
+        # see method and class documentation to learn more
+        raise NotImplementedError
+
+    @classmethod
+    def create(cls, ctx: gf.ServerContext) -> "TokenVerificationStrategy":
+        # code has chance to read any necessary settings from `ctx.settings`
+        # property and then use those values to construct the class
+        #
+        # see method and class documentation to learn more
+        return MyCustomTokenVerification()
+```
+
+Then, you can use the `token_verification` setting to tell the server to look up
+and load token verification strategy from `my_service.auth.custom_token_verification` module.
+
+Using custom verification strategy, you can implement support for say JWT tokens or look
+up valid tokens inside some database.
+
+NOTE: As is, the server infrastructure does not concern itself with how the clients actually
+obtain the valid tokens. At the moment, this is outside of this project's scope. You can distribute
+tokens to clients using some procedure or implement custom APIs where clients have to log in
+in order to obtain a valid token.
 
 ### Logging
 
