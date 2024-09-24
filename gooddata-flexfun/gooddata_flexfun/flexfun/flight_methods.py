@@ -184,56 +184,7 @@ class _FlexFunServerMethods(FlightServerMethods):
             if task_id is None or not len(task_id):
                 raise ErrorInfo.bad_argument("Incorrect ticket payload. The ticket payload does not specify 'task_id'.")
 
-            task_result = self._ctx.task_executor.wait_for_result(task_id)
-            if task_result is None:
-                raise ErrorInfo.for_reason(
-                    ErrorCode.INVALID_TICKET,
-                    f"Unable to serve data for task '{task_id}'. The task result is not present.",
-                ).to_user_error()
-
-            result = task_result.result
-            if not isinstance(result, FlightDataTaskResult):
-                raise ErrorInfo.for_reason(
-                    ErrorCode.INTERNAL_ERROR,
-                    f"An internal error has occurred while attempting read result for '{task_id}'."
-                    f"While the result exists, it is of an unexpected type. "
-                    f"This is a bug in FlexFun server implementation.",
-                ).to_internal_error()
-
-            rlock, data = result.acquire_data()
-
-            def _on_end(_: Optional[pyarrow.ArrowException]) -> None:
-                """
-                Once the request that streams the data out is done, make sure
-                to release the read-lock. Single-use results are closed at
-                this point because the data cannot be read again anyway.
-                """
-                rlock.release()
-
-                if result.single_use_data:
-                    # note: results with single-use data can only ever have one active
-                    #  reader (e.g. this one). since the rlock is now released the
-                    #  close will proceed without chance of being blocked
-                    try:
-                        result.close()
-                    except Exception:
-                        # log and sink these Exceptions - not much to do
-                        _LOGGER.error("do_get_close_failed", exc_info=True)
-
-            finalizer = self.call_finalizer_middleware(context)
-            finalizer.register_on_end(_on_end)
-
-            if isinstance(data, pyarrow.Table):
-                _LOGGER.info("do_get_table", task_id=task_id, num_rows=data.num_rows)
-
-                return pyarrow.flight.RecordBatchStream(data)
-            elif isinstance(data, pyarrow.RecordBatchReader):
-                _LOGGER.info("do_get_reader", task_id=task_id)
-
-                return pyarrow.flight.RecordBatchStream(data)
-
-            _LOGGER.info("do_get_generator", task_id=task_id)
-            return pyarrow.flight.GeneratorStream(data)
+            return self.do_get_task_result(context, self._ctx.task_executor, task_id)
         except Exception:
             _LOGGER.error("do_get_failed", exc_info=True)
             raise
