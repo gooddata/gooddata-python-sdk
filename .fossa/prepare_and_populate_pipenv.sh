@@ -37,4 +37,13 @@ pipenv install ../gooddata-api-client/ \
 ../gooddata-sdk/ -r requirements.txt
 cd ..
 
+cd ./gooddata-flight-server
+pipenv install -r requirements.txt
+cd ..
+
+cd ./gooddata-flexfun
+pipenv install ../gooddata-api-client/ \
+../gooddata-sdk/ ../gooddata-flight-server/ -r requirements.txt
+cd ..
+
 cd $ORIG_WORK_DIR
