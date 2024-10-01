@@ -520,12 +520,6 @@ class ExecutionContext:
     The start of the week. Either "monday" or "sunday".
     """
 
-    execution_request: ExecutionRequest
-    """
-    The execution request that the FlexFun should process.
-    DEPRECATED: Use ReportExecutionRequest or LabelElementsExecutionRequest instead.
-    """
-
     attributes: list[ExecutionContextAttribute]
     """
     All the attributes that are part of the execution request.
@@ -563,7 +557,6 @@ class ExecutionContext:
             timestamp=d.get("timestamp"),
             timezone=d.get("timezone"),
             week_start=d.get("weekStart"),
-            execution_request=ExecutionRequest.from_dict(d["executionRequest"]),
             report_execution_request=ReportExecutionRequest.from_dict(d.get("reportExecutionRequest")),
             label_elements_execution_request=LabelElementsExecutionRequest.from_dict(
                 d.get("labelElementsExecutionRequest")
