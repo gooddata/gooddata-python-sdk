@@ -28,6 +28,8 @@ jobs:
           - gooddata-fdw
           - gooddata-sdk
           - gooddata-dbt
+          - gooddata-flight-server
+          - gooddata-flexfun
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -80,6 +82,8 @@ jobs:
           - gooddata-fdw
           - gooddata-sdk
           - gooddata-dbt
+          - gooddata-flight-server
+          - gooddata-flexfun
     steps:
       - name: Obtain ${{ matrix.component }} artifacts
         uses: actions/download-artifact@v4
