@@ -1,4 +1,4 @@
-FROM node:20.11.1-bookworm-slim
+FROM node:20.18.0-bookworm-slim
 
 RUN apt-get update && \
     apt-get install -y git make golang-go curl && \
