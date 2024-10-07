@@ -4,6 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**alert** | [**JsonApiAutomationInAttributesAlert**](JsonApiAutomationInAttributesAlert.md) |  | [optional] 
 **are_relations_valid** | **bool** |  | [optional] 
 **created_at** | **datetime** |  | [optional] 
 **description** | **str** |  | [optional] 
@@ -11,6 +12,7 @@ Name | Type | Description | Notes
 **metadata** | **{str: (bool, date, datetime, dict, float, int, list, str, none_type)}, none_type** | Additional information for the automation. | [optional] 
 **modified_at** | **datetime** |  | [optional] 
 **schedule** | [**JsonApiAutomationInAttributesSchedule**](JsonApiAutomationInAttributesSchedule.md) |  | [optional] 
+**state** | **str** | Current state of the automation. | [optional] 
 **tags** | **[str]** |  | [optional] 
 **title** | **str** |  | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]

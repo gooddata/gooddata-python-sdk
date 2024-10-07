@@ -5,7 +5,6 @@ Desired levels of permissions for a collection of assignees identified by a rule
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**permissions** | **[str]** |  | 
 **assignee_rule** | [**AssigneeRule**](AssigneeRule.md) |  | 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 

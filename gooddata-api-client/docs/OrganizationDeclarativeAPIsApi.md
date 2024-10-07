@@ -150,20 +150,12 @@ with gooddata_api_client.ApiClient() as api_client:
         ],
         notification_channels=[
             DeclarativeNotificationChannel(
+                custom_dashboard_url="custom_dashboard_url_example",
                 description="This is a channel",
+                destination=DeclarativeNotificationChannelDestination(None),
+                enable_multiple_recipients=True,
                 id="notification-channel-1",
                 name="channel",
-                triggers=[
-                    NotificationTrigger(
-                        metadata=JsonNode(),
-                        type="SCHEDULE",
-                    ),
-                ],
-                webhook=Webhook(
-                    has_token=True,
-                    token="token_example",
-                    url="https://example.com/webhook",
-                ),
             ),
         ],
         organization=DeclarativeOrganizationInfo(
@@ -333,11 +325,13 @@ with gooddata_api_client.ApiClient() as api_client:
                         ],
                         schedule=AutomationSchedule(
                             cron="0 */30 9-17 ? * MON-FRI",
-                            cron_description="cron_description_example",
                             first_run=dateutil_parser('2025-01-01T12:00:00Z'),
                             timezone="Europe/Prague",
                         ),
-                        tags=["Revenues"],
+                        state="ACTIVE",
+                        tags=[
+                            "["Revenue","Sales"]",
+                        ],
                         title="title_example",
                     ),
                 ],

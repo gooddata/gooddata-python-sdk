@@ -107,6 +107,7 @@ class AutomationSchedule(ModelNormal):
     }
 
     read_only_vars = {
+        'cron_description',  # noqa: E501
     }
 
     _composed_schemas = {}

@@ -4,6 +4,9 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**ai_chat**](SmartFunctionsApi.md#ai_chat) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/chat | (BETA) Chat with AI
+[**ai_chat_history**](SmartFunctionsApi.md#ai_chat_history) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/chatHistory | (BETA) Get Chat History
+[**ai_route**](SmartFunctionsApi.md#ai_route) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/route | (BETA) Route to supported use cases based on this input query.
 [**ai_search**](SmartFunctionsApi.md#ai_search) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/search | (BETA) Semantic Search in Metadata
 [**anomaly_detection**](SmartFunctionsApi.md#anomaly_detection) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/{resultId} | (EXPERIMENTAL) Smart functions - Anomaly Detection
 [**anomaly_detection_result**](SmartFunctionsApi.md#anomaly_detection_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/result/{resultId} | (EXPERIMENTAL) Smart functions - Anomaly Detection Result
@@ -12,6 +15,239 @@ Method | HTTP request | Description
 [**forecast**](SmartFunctionsApi.md#forecast) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/{resultId} | (BETA) Smart functions - Forecast
 [**forecast_result**](SmartFunctionsApi.md#forecast_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/result/{resultId} | (BETA) Smart functions - Forecast Result
 
+
+# **ai_chat**
+> ChatResult ai_chat(workspace_id, chat_request)
+
+(BETA) Chat with AI
+
+(BETA) Combines multiple use cases such as search, create visualizations, ...
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import smart_functions_api
+from gooddata_api_client.model.chat_result import ChatResult
+from gooddata_api_client.model.chat_request import ChatRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = smart_functions_api.SmartFunctionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    chat_request = ChatRequest(
+        chat_history_thread_id="chat_history_thread_id_example",
+        limit_create=3,
+        limit_create_context=10,
+        limit_search=5,
+        question="question_example",
+        relevant_score_threshold=0.4,
+        search_score_threshold=0.9,
+        title_to_descriptor_ratio=0.7,
+        user_context=UserContext(
+            active_object=ActiveObjectIdentification(
+                id="id_example",
+                type="type_example",
+                workspace_id="workspace_id_example",
+            ),
+        ),
+    ) # ChatRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (BETA) Chat with AI
+        api_response = api_instance.ai_chat(workspace_id, chat_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling SmartFunctionsApi->ai_chat: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **chat_request** | [**ChatRequest**](ChatRequest.md)|  |
+
+### Return type
+
+[**ChatResult**](ChatResult.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **ai_chat_history**
+> ChatHistoryResult ai_chat_history(workspace_id, chat_history_request)
+
+(BETA) Get Chat History
+
+(BETA) Post thread ID (and optionally interaction ID) to get full/partial chat history.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import smart_functions_api
+from gooddata_api_client.model.chat_history_result import ChatHistoryResult
+from gooddata_api_client.model.chat_history_request import ChatHistoryRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = smart_functions_api.SmartFunctionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    chat_history_request = ChatHistoryRequest(
+        chat_history_interaction_id=1,
+        chat_history_thread_id="chat_history_thread_id_example",
+        reset=True,
+        user_feedback="POSITIVE",
+    ) # ChatHistoryRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (BETA) Get Chat History
+        api_response = api_instance.ai_chat_history(workspace_id, chat_history_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling SmartFunctionsApi->ai_chat_history: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **chat_history_request** | [**ChatHistoryRequest**](ChatHistoryRequest.md)|  |
+
+### Return type
+
+[**ChatHistoryResult**](ChatHistoryResult.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **ai_route**
+> RouteResult ai_route(workspace_id, route_request)
+
+(BETA) Route to supported use cases based on this input query.
+
+(BETA) Uses similarity (e.g. cosine distance) to find most similar use cases.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import smart_functions_api
+from gooddata_api_client.model.route_result import RouteResult
+from gooddata_api_client.model.route_request import RouteRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = smart_functions_api.SmartFunctionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    route_request = RouteRequest(
+        question="question_example",
+    ) # RouteRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (BETA) Route to supported use cases based on this input query.
+        api_response = api_instance.ai_route(workspace_id, route_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling SmartFunctionsApi->ai_route: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **route_request** | [**RouteRequest**](RouteRequest.md)|  |
+
+### Return type
+
+[**RouteResult**](RouteResult.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **ai_search**
 > SearchResult ai_search(workspace_id, search_request)
@@ -49,6 +285,7 @@ with gooddata_api_client.ApiClient() as api_client:
             "attribute",
         ],
         question="question_example",
+        relevant_score_threshold=0.3,
         title_to_descriptor_ratio=0.7,
     ) # SearchRequest | 
 

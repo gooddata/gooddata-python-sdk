@@ -78,6 +78,8 @@ class EntitlementsRequest(ModelNormal):
             'UNLIMITEDAUTOMATIONRECIPIENTS': "UnlimitedAutomationRecipients",
             'DAILYSCHEDULEDACTIONCOUNT': "DailyScheduledActionCount",
             'UNLIMITEDDAILYSCHEDULEDACTIONS': "UnlimitedDailyScheduledActions",
+            'DAILYALERTACTIONCOUNT': "DailyAlertActionCount",
+            'UNLIMITEDDAILYALERTACTIONS': "UnlimitedDailyAlertActions",
             'SCHEDULEDACTIONMINIMUMRECURRENCEMINUTES': "ScheduledActionMinimumRecurrenceMinutes",
             'FEDERATEDIDENTITYMANAGEMENT': "FederatedIdentityManagement",
         },
