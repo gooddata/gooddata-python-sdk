@@ -31,7 +31,9 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.json_api_automation_in_attributes_alert import JsonApiAutomationInAttributesAlert
     from gooddata_api_client.model.json_api_automation_in_attributes_schedule import JsonApiAutomationInAttributesSchedule
+    globals()['JsonApiAutomationInAttributesAlert'] = JsonApiAutomationInAttributesAlert
     globals()['JsonApiAutomationInAttributesSchedule'] = JsonApiAutomationInAttributesSchedule
 
 
@@ -60,6 +62,10 @@ class JsonApiAutomationOutAttributes(ModelNormal):
     """
 
     allowed_values = {
+        ('state',): {
+            'ACTIVE': "ACTIVE",
+            'PAUSED': "PAUSED",
+        },
     }
 
     validations = {
@@ -99,6 +105,7 @@ class JsonApiAutomationOutAttributes(ModelNormal):
         """
         lazy_import()
         return {
+            'alert': (JsonApiAutomationInAttributesAlert,),  # noqa: E501
             'are_relations_valid': (bool,),  # noqa: E501
             'created_at': (datetime,),  # noqa: E501
             'description': (str,),  # noqa: E501
@@ -106,6 +113,7 @@ class JsonApiAutomationOutAttributes(ModelNormal):
             'metadata': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}, none_type,),  # noqa: E501
             'modified_at': (datetime,),  # noqa: E501
             'schedule': (JsonApiAutomationInAttributesSchedule,),  # noqa: E501
+            'state': (str,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
             'title': (str,),  # noqa: E501
         }
@@ -116,6 +124,7 @@ class JsonApiAutomationOutAttributes(ModelNormal):
 
 
     attribute_map = {
+        'alert': 'alert',  # noqa: E501
         'are_relations_valid': 'areRelationsValid',  # noqa: E501
         'created_at': 'createdAt',  # noqa: E501
         'description': 'description',  # noqa: E501
@@ -123,6 +132,7 @@ class JsonApiAutomationOutAttributes(ModelNormal):
         'metadata': 'metadata',  # noqa: E501
         'modified_at': 'modifiedAt',  # noqa: E501
         'schedule': 'schedule',  # noqa: E501
+        'state': 'state',  # noqa: E501
         'tags': 'tags',  # noqa: E501
         'title': 'title',  # noqa: E501
     }
@@ -168,6 +178,7 @@ class JsonApiAutomationOutAttributes(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            alert (JsonApiAutomationInAttributesAlert): [optional]  # noqa: E501
             are_relations_valid (bool): [optional]  # noqa: E501
             created_at (datetime): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
@@ -175,6 +186,7 @@ class JsonApiAutomationOutAttributes(ModelNormal):
             metadata ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}, none_type): Additional information for the automation.. [optional]  # noqa: E501
             modified_at (datetime): [optional]  # noqa: E501
             schedule (JsonApiAutomationInAttributesSchedule): [optional]  # noqa: E501
+            state (str): Current state of the automation.. [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
         """
@@ -262,6 +274,7 @@ class JsonApiAutomationOutAttributes(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            alert (JsonApiAutomationInAttributesAlert): [optional]  # noqa: E501
             are_relations_valid (bool): [optional]  # noqa: E501
             created_at (datetime): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
@@ -269,6 +282,7 @@ class JsonApiAutomationOutAttributes(ModelNormal):
             metadata ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}, none_type): Additional information for the automation.. [optional]  # noqa: E501
             modified_at (datetime): [optional]  # noqa: E501
             schedule (JsonApiAutomationInAttributesSchedule): [optional]  # noqa: E501
+            state (str): Current state of the automation.. [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
         """

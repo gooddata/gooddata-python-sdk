@@ -28,7 +28,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '435'
+          - '476'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -59,9 +59,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -70,7 +67,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:24 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -79,6 +79,7 @@ interactions:
               attributes:
                 url: jdbc:postgresql://localhost:5432/demo
                 username: demouser
+                authenticationType: USERNAME_PASSWORD
                 name: demo-test-ds
                 type: POSTGRESQL
                 schema: demo
@@ -114,7 +115,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '156'
+          - '172'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -144,9 +145,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -155,14 +153,17 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:24 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           detail: The requested endpoint does not exist or you do not have permission
             to access it.
           status: 404
           title: Not Found
-          traceId: 19db94f5ea6eaadd
+          traceId: 6703a7240cc7154eb2e7a5938b0c4d9b
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources
@@ -232,9 +233,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -243,7 +241,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:24 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -315,9 +316,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -326,7 +324,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:24 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -398,9 +399,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -409,7 +407,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:24 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -490,9 +491,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -501,7 +499,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:24 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -573,9 +574,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -584,7 +582,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:24 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -650,9 +651,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -661,6 +659,9 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:24 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''

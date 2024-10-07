@@ -4,6 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**analytical_dashboard** | [**JsonApiAutomationInRelationshipsAnalyticalDashboard**](JsonApiAutomationInRelationshipsAnalyticalDashboard.md) |  | [optional] 
 **export_definitions** | [**JsonApiAutomationInRelationshipsExportDefinitions**](JsonApiAutomationInRelationshipsExportDefinitions.md) |  | [optional] 
 **notification_channel** | [**JsonApiAutomationInRelationshipsNotificationChannel**](JsonApiAutomationInRelationshipsNotificationChannel.md) |  | [optional] 
 **recipients** | [**JsonApiAutomationInRelationshipsRecipients**](JsonApiAutomationInRelationshipsRecipients.md) |  | [optional] 

@@ -31,9 +31,9 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_organization_out_relationships_bootstrap_user import JsonApiOrganizationOutRelationshipsBootstrapUser
+    from gooddata_api_client.model.json_api_filter_view_in_relationships_user import JsonApiFilterViewInRelationshipsUser
     from gooddata_api_client.model.json_api_organization_out_relationships_bootstrap_user_group import JsonApiOrganizationOutRelationshipsBootstrapUserGroup
-    globals()['JsonApiOrganizationOutRelationshipsBootstrapUser'] = JsonApiOrganizationOutRelationshipsBootstrapUser
+    globals()['JsonApiFilterViewInRelationshipsUser'] = JsonApiFilterViewInRelationshipsUser
     globals()['JsonApiOrganizationOutRelationshipsBootstrapUserGroup'] = JsonApiOrganizationOutRelationshipsBootstrapUserGroup
 
 
@@ -90,7 +90,7 @@ class JsonApiOrganizationOutRelationships(ModelNormal):
         """
         lazy_import()
         return {
-            'bootstrap_user': (JsonApiOrganizationOutRelationshipsBootstrapUser,),  # noqa: E501
+            'bootstrap_user': (JsonApiFilterViewInRelationshipsUser,),  # noqa: E501
             'bootstrap_user_group': (JsonApiOrganizationOutRelationshipsBootstrapUserGroup,),  # noqa: E501
         }
 
@@ -145,7 +145,7 @@ class JsonApiOrganizationOutRelationships(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            bootstrap_user (JsonApiOrganizationOutRelationshipsBootstrapUser): [optional]  # noqa: E501
+            bootstrap_user (JsonApiFilterViewInRelationshipsUser): [optional]  # noqa: E501
             bootstrap_user_group (JsonApiOrganizationOutRelationshipsBootstrapUserGroup): [optional]  # noqa: E501
         """
 
@@ -232,7 +232,7 @@ class JsonApiOrganizationOutRelationships(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            bootstrap_user (JsonApiOrganizationOutRelationshipsBootstrapUser): [optional]  # noqa: E501
+            bootstrap_user (JsonApiFilterViewInRelationshipsUser): [optional]  # noqa: E501
             bootstrap_user_group (JsonApiOrganizationOutRelationshipsBootstrapUserGroup): [optional]  # noqa: E501
         """
 

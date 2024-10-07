@@ -5,7 +5,7 @@ All URIs are relative to *http://localhost*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**create_entity_notification_channels**](NotificationChannelsApi.md#create_entity_notification_channels) | **POST** /api/v1/entities/notificationChannels | Post Notification Channel entities
-[**delete_entity_notification_channels**](NotificationChannelsApi.md#delete_entity_notification_channels) | **DELETE** /api/v1/entities/notificationChannels/{id} | 
+[**delete_entity_notification_channels**](NotificationChannelsApi.md#delete_entity_notification_channels) | **DELETE** /api/v1/entities/notificationChannels/{id} | Delete Notification Channel entity
 [**get_all_entities_notification_channels**](NotificationChannelsApi.md#get_all_entities_notification_channels) | **GET** /api/v1/entities/notificationChannels | Get all Notification Channel entities
 [**get_entity_notification_channels**](NotificationChannelsApi.md#get_entity_notification_channels) | **GET** /api/v1/entities/notificationChannels/{id} | Get Notification Channel entity
 [**patch_entity_notification_channels**](NotificationChannelsApi.md#patch_entity_notification_channels) | **PATCH** /api/v1/entities/notificationChannels/{id} | Patch Notification Channel entity
@@ -41,19 +41,12 @@ with gooddata_api_client.ApiClient() as api_client:
     json_api_notification_channel_post_optional_id_document = JsonApiNotificationChannelPostOptionalIdDocument(
         data=JsonApiNotificationChannelPostOptionalId(
             attributes=JsonApiNotificationChannelInAttributes(
+                allowed_recipients="CREATOR",
+                custom_dashboard_url="custom_dashboard_url_example",
                 description="description_example",
+                destination=JsonApiNotificationChannelInAttributesDestination(None),
+                destination_type="WEBHOOK",
                 name="name_example",
-                triggers=[
-                    JsonApiNotificationChannelInAttributesTriggersInner(
-                        metadata=JsonNode(),
-                        type="SCHEDULE",
-                    ),
-                ],
-                webhook=JsonApiNotificationChannelInAttributesWebhook(
-                    has_token=True,
-                    token="token_example",
-                    url="https://example.com/webhook",
-                ),
             ),
             id="id1",
             type="notificationChannel",
@@ -101,7 +94,7 @@ No authorization required
 # **delete_entity_notification_channels**
 > delete_entity_notification_channels(id)
 
-
+Delete Notification Channel entity
 
 ### Example
 
@@ -127,6 +120,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Delete Notification Channel entity
         api_instance.delete_entity_notification_channels(id)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling NotificationChannelsApi->delete_entity_notification_channels: %s\n" % e)
@@ -134,6 +128,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Delete Notification Channel entity
         api_instance.delete_entity_notification_channels(id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling NotificationChannelsApi->delete_entity_notification_channels: %s\n" % e)
@@ -353,19 +348,12 @@ with gooddata_api_client.ApiClient() as api_client:
     json_api_notification_channel_patch_document = JsonApiNotificationChannelPatchDocument(
         data=JsonApiNotificationChannelPatch(
             attributes=JsonApiNotificationChannelInAttributes(
+                allowed_recipients="CREATOR",
+                custom_dashboard_url="custom_dashboard_url_example",
                 description="description_example",
+                destination=JsonApiNotificationChannelInAttributesDestination(None),
+                destination_type="WEBHOOK",
                 name="name_example",
-                triggers=[
-                    JsonApiNotificationChannelInAttributesTriggersInner(
-                        metadata=JsonNode(),
-                        type="SCHEDULE",
-                    ),
-                ],
-                webhook=JsonApiNotificationChannelInAttributesWebhook(
-                    has_token=True,
-                    token="token_example",
-                    url="https://example.com/webhook",
-                ),
             ),
             id="id1",
             type="notificationChannel",
@@ -452,19 +440,12 @@ with gooddata_api_client.ApiClient() as api_client:
     json_api_notification_channel_in_document = JsonApiNotificationChannelInDocument(
         data=JsonApiNotificationChannelIn(
             attributes=JsonApiNotificationChannelInAttributes(
+                allowed_recipients="CREATOR",
+                custom_dashboard_url="custom_dashboard_url_example",
                 description="description_example",
+                destination=JsonApiNotificationChannelInAttributesDestination(None),
+                destination_type="WEBHOOK",
                 name="name_example",
-                triggers=[
-                    JsonApiNotificationChannelInAttributesTriggersInner(
-                        metadata=JsonNode(),
-                        type="SCHEDULE",
-                    ),
-                ],
-                webhook=JsonApiNotificationChannelInAttributesWebhook(
-                    has_token=True,
-                    token="token_example",
-                    url="https://example.com/webhook",
-                ),
             ),
             id="id1",
             type="notificationChannel",

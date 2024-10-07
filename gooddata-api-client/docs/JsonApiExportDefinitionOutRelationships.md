@@ -4,7 +4,8 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**analytical_dashboard** | [**JsonApiExportDefinitionInRelationshipsAnalyticalDashboard**](JsonApiExportDefinitionInRelationshipsAnalyticalDashboard.md) |  | [optional] 
+**analytical_dashboard** | [**JsonApiAutomationInRelationshipsAnalyticalDashboard**](JsonApiAutomationInRelationshipsAnalyticalDashboard.md) |  | [optional] 
+**automation** | [**JsonApiExportDefinitionOutRelationshipsAutomation**](JsonApiExportDefinitionOutRelationshipsAutomation.md) |  | [optional] 
 **created_by** | [**JsonApiAnalyticalDashboardOutRelationshipsCreatedBy**](JsonApiAnalyticalDashboardOutRelationshipsCreatedBy.md) |  | [optional] 
 **modified_by** | [**JsonApiAnalyticalDashboardOutRelationshipsCreatedBy**](JsonApiAnalyticalDashboardOutRelationshipsCreatedBy.md) |  | [optional] 
 **visualization_object** | [**JsonApiExportDefinitionInRelationshipsVisualizationObject**](JsonApiExportDefinitionInRelationshipsVisualizationObject.md) |  | [optional] 

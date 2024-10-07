@@ -36,14 +36,14 @@ def lazy_import():
     from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_metrics import JsonApiAnalyticalDashboardOutRelationshipsMetrics
     from gooddata_api_client.model.json_api_attribute_hierarchy_out_relationships_attributes import JsonApiAttributeHierarchyOutRelationshipsAttributes
     from gooddata_api_client.model.json_api_dataset_out_relationships_facts import JsonApiDatasetOutRelationshipsFacts
-    from gooddata_api_client.model.json_api_organization_out_relationships_bootstrap_user import JsonApiOrganizationOutRelationshipsBootstrapUser
+    from gooddata_api_client.model.json_api_filter_view_in_relationships_user import JsonApiFilterViewInRelationshipsUser
     from gooddata_api_client.model.json_api_organization_out_relationships_bootstrap_user_group import JsonApiOrganizationOutRelationshipsBootstrapUserGroup
     globals()['JsonApiAnalyticalDashboardOutRelationshipsDatasets'] = JsonApiAnalyticalDashboardOutRelationshipsDatasets
     globals()['JsonApiAnalyticalDashboardOutRelationshipsLabels'] = JsonApiAnalyticalDashboardOutRelationshipsLabels
     globals()['JsonApiAnalyticalDashboardOutRelationshipsMetrics'] = JsonApiAnalyticalDashboardOutRelationshipsMetrics
     globals()['JsonApiAttributeHierarchyOutRelationshipsAttributes'] = JsonApiAttributeHierarchyOutRelationshipsAttributes
     globals()['JsonApiDatasetOutRelationshipsFacts'] = JsonApiDatasetOutRelationshipsFacts
-    globals()['JsonApiOrganizationOutRelationshipsBootstrapUser'] = JsonApiOrganizationOutRelationshipsBootstrapUser
+    globals()['JsonApiFilterViewInRelationshipsUser'] = JsonApiFilterViewInRelationshipsUser
     globals()['JsonApiOrganizationOutRelationshipsBootstrapUserGroup'] = JsonApiOrganizationOutRelationshipsBootstrapUserGroup
 
 
@@ -105,7 +105,7 @@ class JsonApiUserDataFilterOutRelationships(ModelNormal):
             'facts': (JsonApiDatasetOutRelationshipsFacts,),  # noqa: E501
             'labels': (JsonApiAnalyticalDashboardOutRelationshipsLabels,),  # noqa: E501
             'metrics': (JsonApiAnalyticalDashboardOutRelationshipsMetrics,),  # noqa: E501
-            'user': (JsonApiOrganizationOutRelationshipsBootstrapUser,),  # noqa: E501
+            'user': (JsonApiFilterViewInRelationshipsUser,),  # noqa: E501
             'user_group': (JsonApiOrganizationOutRelationshipsBootstrapUserGroup,),  # noqa: E501
         }
 
@@ -170,7 +170,7 @@ class JsonApiUserDataFilterOutRelationships(ModelNormal):
             facts (JsonApiDatasetOutRelationshipsFacts): [optional]  # noqa: E501
             labels (JsonApiAnalyticalDashboardOutRelationshipsLabels): [optional]  # noqa: E501
             metrics (JsonApiAnalyticalDashboardOutRelationshipsMetrics): [optional]  # noqa: E501
-            user (JsonApiOrganizationOutRelationshipsBootstrapUser): [optional]  # noqa: E501
+            user (JsonApiFilterViewInRelationshipsUser): [optional]  # noqa: E501
             user_group (JsonApiOrganizationOutRelationshipsBootstrapUserGroup): [optional]  # noqa: E501
         """
 
@@ -262,7 +262,7 @@ class JsonApiUserDataFilterOutRelationships(ModelNormal):
             facts (JsonApiDatasetOutRelationshipsFacts): [optional]  # noqa: E501
             labels (JsonApiAnalyticalDashboardOutRelationshipsLabels): [optional]  # noqa: E501
             metrics (JsonApiAnalyticalDashboardOutRelationshipsMetrics): [optional]  # noqa: E501
-            user (JsonApiOrganizationOutRelationshipsBootstrapUser): [optional]  # noqa: E501
+            user (JsonApiFilterViewInRelationshipsUser): [optional]  # noqa: E501
             user_group (JsonApiOrganizationOutRelationshipsBootstrapUserGroup): [optional]  # noqa: E501
         """
 

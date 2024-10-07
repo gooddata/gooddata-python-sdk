@@ -89,6 +89,29 @@
         ],
         "type": "object"
       },
+      "ActiveObjectIdentification": {
+        "description": "Object, with which the user is actively working.",
+        "properties": {
+          "id": {
+            "description": "Object ID.",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type, e.g. dashboard.",
+            "type": "string"
+          },
+          "workspaceId": {
+            "description": "Workspace ID.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "workspaceId"
+        ],
+        "type": "object"
+      },
       "AfmExecution": {
         "properties": {
           "execution": {
@@ -631,6 +654,173 @@
         ],
         "type": "object"
       },
+      "ChatHistoryInteraction": {
+        "description": "List of chat history interactions.",
+        "properties": {
+          "createdVisualizations": {
+            "$ref": "#/components/schemas/CreatedVisualizations"
+          },
+          "foundObjects": {
+            "$ref": "#/components/schemas/FoundObjects"
+          },
+          "interactionFinished": {
+            "description": "Has the interaction already finished? Can be used for polling when interaction is in progress.",
+            "type": "boolean"
+          },
+          "interactionId": {
+            "description": "Chat History interaction ID. Unique ID for each interaction.",
+            "format": "int64",
+            "type": "integer"
+          },
+          "question": {
+            "description": "User question",
+            "maxLength": 2000,
+            "type": "string"
+          },
+          "routing": {
+            "$ref": "#/components/schemas/RouteResult"
+          },
+          "textResponse": {
+            "description": "Text response for general questions.",
+            "type": "string"
+          },
+          "threadId": {
+            "description": "Chat History thread ID. Backend persists chat history and returns ID for further requests.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "interactionFinished",
+          "interactionId",
+          "question",
+          "routing",
+          "threadId"
+        ],
+        "type": "object"
+      },
+      "ChatHistoryRequest": {
+        "properties": {
+          "chatHistoryInteractionId": {
+            "description": "Return chat history records only after this interaction ID. If empty, complete chat history is returned.",
+            "format": "int64",
+            "type": "integer"
+          },
+          "chatHistoryThreadId": {
+            "description": "Chat History thread ID. Optional, backend can create it if not provided.",
+            "type": "string"
+          },
+          "reset": {
+            "description": "User feedback.",
+            "type": "boolean"
+          },
+          "userFeedback": {
+            "description": "User feedback.",
+            "enum": [
+              "POSITIVE",
+              "NEGATIVE",
+              "NONE"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "ChatHistoryResult": {
+        "properties": {
+          "interactions": {
+            "description": "List of chat history interactions.",
+            "items": {
+              "$ref": "#/components/schemas/ChatHistoryInteraction"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "interactions"
+        ],
+        "type": "object"
+      },
+      "ChatRequest": {
+        "properties": {
+          "chatHistoryThreadId": {
+            "description": "Chat History thread ID. Backend persists chat history and returns ID for further requests.",
+            "type": "string"
+          },
+          "limitCreate": {
+            "default": 3,
+            "description": "Maximum number of created results.",
+            "format": "int32",
+            "type": "integer"
+          },
+          "limitCreateContext": {
+            "default": 10,
+            "description": "Maximum number of relevant objects included into context for LLM (for each object type).",
+            "format": "int32",
+            "type": "integer"
+          },
+          "limitSearch": {
+            "default": 5,
+            "description": "Maximum number of search results.",
+            "format": "int32",
+            "type": "integer"
+          },
+          "question": {
+            "description": "User question",
+            "maxLength": 2000,
+            "type": "string"
+          },
+          "relevantScoreThreshold": {
+            "default": 0.4,
+            "description": "Score, above which we return found objects. Below this score objects are not relevant.",
+            "format": "double",
+            "type": "number"
+          },
+          "searchScoreThreshold": {
+            "default": 0.9,
+            "description": "Score, above which we return found object(s) and don't call LLM to create new objects.",
+            "format": "double",
+            "type": "number"
+          },
+          "titleToDescriptorRatio": {
+            "default": 0.7,
+            "description": "Temporary for experiments. Ratio of title score to descriptor score.",
+            "format": "double",
+            "type": "number"
+          },
+          "userContext": {
+            "$ref": "#/components/schemas/UserContext"
+          }
+        },
+        "required": [
+          "question"
+        ],
+        "type": "object"
+      },
+      "ChatResult": {
+        "properties": {
+          "chatHistoryThreadId": {
+            "description": "Chat History thread ID. Backend persists chat history and returns ID for further requests.",
+            "type": "string"
+          },
+          "createdVisualizations": {
+            "$ref": "#/components/schemas/CreatedVisualizations"
+          },
+          "foundObjects": {
+            "$ref": "#/components/schemas/FoundObjects"
+          },
+          "routing": {
+            "$ref": "#/components/schemas/RouteResult"
+          },
+          "textResponse": {
+            "description": "Text response for general questions.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "routing"
+        ],
+        "type": "object"
+      },
       "ClusteringRequest": {
         "properties": {
           "numberOfClusters": {
@@ -751,6 +941,77 @@
         ],
         "type": "object"
       },
+      "CreatedVisualization": {
+        "description": "List of created visualization objects",
+        "properties": {
+          "dimensionality": {
+            "description": "List of attributes representing the dimensionality of the new visualization",
+            "items": {
+              "$ref": "#/components/schemas/DimAttribute"
+            },
+            "type": "array"
+          },
+          "id": {
+            "description": "Proposed ID of the new visualization",
+            "example": "revenue_by_country",
+            "type": "string"
+          },
+          "metrics": {
+            "description": "List of metrics to be used in the new visualization",
+            "items": {
+              "$ref": "#/components/schemas/Metric"
+            },
+            "type": "array"
+          },
+          "title": {
+            "description": "Proposed title of the new visualization",
+            "example": "Revenue by Country",
+            "type": "string"
+          },
+          "visualizationType": {
+            "description": "Visualization type requested in question",
+            "enum": [
+              "TABLE",
+              "HEADLINE",
+              "BAR",
+              "LINE",
+              "PIE",
+              "COLUMN"
+            ],
+            "example": "TABLE",
+            "type": "string"
+          }
+        },
+        "required": [
+          "dimensionality",
+          "id",
+          "metrics",
+          "title",
+          "visualizationType"
+        ],
+        "type": "object"
+      },
+      "CreatedVisualizations": {
+        "description": "Visualization definitions created by AI.",
+        "properties": {
+          "objects": {
+            "description": "List of created visualization objects",
+            "items": {
+              "$ref": "#/components/schemas/CreatedVisualization"
+            },
+            "type": "array"
+          },
+          "reasoning": {
+            "description": "Reasoning from LLM. Description of how and why the answer was generated.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "objects",
+          "reasoning"
+        ],
+        "type": "object"
+      },
       "DataColumnLocator": {
         "description": "Mapping from dimension items (either 'localIdentifier' from 'AttributeItem', or \"measureGroup\") to their respective values. This effectively specifies the path (location) of the data column used for sorting. Therefore values for all dimension items must be specified.",
         "example": {
@@ -868,6 +1129,29 @@
         "nullable": true,
         "type": "object"
       },
+      "DimAttribute": {
+        "description": "List of attributes representing the dimensionality of the new visualization",
+        "properties": {
+          "id": {
+            "description": "ID of the object",
+            "example": "country",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "attribute"
+            ],
+            "example": "attribute",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
       "Dimension": {
         "description": "Single dimension description.",
         "properties": {
@@ -954,7 +1238,7 @@
             "type": "number"
           },
           "dependsOn": {
-            "description": "Return only items, whose are not filtered out by the parent filters.",
+            "description": "Return only items that are not filtered-out by the parent filters.",
             "items": {
               "oneOf": [
                 {
@@ -1002,7 +1286,7 @@
             "type": "string"
           },
           "validateBy": {
-            "description": "Return only items, what are computable on metric.",
+            "description": "Return only items that are computable on metric.",
             "items": {
               "$ref": "#/components/schemas/ValidateByItem"
             },
@@ -1391,6 +1675,27 @@
         ],
         "type": "object"
       },
+      "FoundObjects": {
+        "description": "List of objects found by similarity search and post-processed by LLM.",
+        "properties": {
+          "objects": {
+            "description": "List of objects found with a similarity search.",
+            "items": {
+              "$ref": "#/components/schemas/SearchResultObject"
+            },
+            "type": "array"
+          },
+          "reasoning": {
+            "description": "Reasoning from LLM. Description of how and why the answer was generated.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "objects",
+          "reasoning"
+        ],
+        "type": "object"
+      },
       "HeaderGroup": {
         "description": "Contains the information specific for a group of headers. These groups correlate to attributes and metric groups.",
         "properties": {
@@ -1667,6 +1972,43 @@
           {
             "$ref": "#/components/schemas/RangeMeasureValueFilter"
           }
+        ],
+        "type": "object"
+      },
+      "Metric": {
+        "description": "List of metrics to be used in the new visualization",
+        "properties": {
+          "aggFunction": {
+            "description": "Agg function. Empty if a stored metric is used.",
+            "enum": [
+              "COUNT",
+              "SUM",
+              "MIN",
+              "MAX",
+              "AVG",
+              "MEDIAN"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "ID of the object",
+            "example": "revenue",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "metric",
+              "fact",
+              "attribute"
+            ],
+            "example": "metric",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
         ],
         "type": "object"
       },
@@ -2095,6 +2437,45 @@
         ],
         "type": "object"
       },
+      "RouteRequest": {
+        "properties": {
+          "question": {
+            "description": "Route to supported use cases based on this input query.",
+            "maxLength": 1000,
+            "type": "string"
+          }
+        },
+        "required": [
+          "question"
+        ],
+        "type": "object"
+      },
+      "RouteResult": {
+        "properties": {
+          "reasoning": {
+            "description": "Explanation why LLM picked this use case.",
+            "type": "string"
+          },
+          "useCase": {
+            "description": "Use case where LLM routed based on question.",
+            "enum": [
+              "SEARCH_ALL",
+              "SEARCH_VISUALIZATIONS",
+              "SEARCH_DASHBOARDS",
+              "CREATE_VISUALIZATION",
+              "EXTEND_VISUALIZATION",
+              "GENERAL",
+              "INVALID"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "reasoning",
+          "useCase"
+        ],
+        "type": "object"
+      },
       "SearchRelationshipObject": {
         "properties": {
           "sourceObjectId": {
@@ -2175,7 +2556,14 @@
           },
           "question": {
             "description": "Keyword/sentence is input for search.",
+            "maxLength": 1000,
             "type": "string"
+          },
+          "relevantScoreThreshold": {
+            "default": 0.3,
+            "description": "Score, above which we return found objects. Below this score objects are not relevant.",
+            "format": "double",
+            "type": "number"
           },
           "titleToDescriptorRatio": {
             "default": 0.7,
@@ -2214,6 +2602,7 @@
         "properties": {
           "createdAt": {
             "description": "Timestamp when object was created.",
+            "format": "date-time",
             "type": "string"
           },
           "description": {
@@ -2226,6 +2615,7 @@
           },
           "modifiedAt": {
             "description": "Timestamp when object was last modified.",
+            "format": "date-time",
             "type": "string"
           },
           "score": {
@@ -2267,21 +2657,17 @@
           "visualizationUrl": {
             "description": "If the object is visualization, this field defines the type of visualization.",
             "type": "string"
+          },
+          "workspaceId": {
+            "description": "Workspace ID.",
+            "type": "string"
           }
         },
         "required": [
-          "createdAt",
-          "description",
           "id",
-          "modifiedAt",
-          "score",
-          "scoreDescriptor",
-          "scoreExactMatch",
-          "scoreTitle",
-          "tags",
           "title",
           "type",
-          "visualizationUrl"
+          "workspaceId"
         ],
         "type": "object"
       },
@@ -2547,6 +2933,18 @@
         ],
         "type": "object"
       },
+      "UserContext": {
+        "description": "User context, which can affect the behavior of the underlying AI features.",
+        "properties": {
+          "activeObject": {
+            "$ref": "#/components/schemas/ActiveObjectIdentification"
+          }
+        },
+        "required": [
+          "activeObject"
+        ],
+        "type": "object"
+      },
       "ValidateByItem": {
         "nullable": true,
         "properties": {
@@ -2574,6 +2972,141 @@
   },
   "openapi": "3.0.1",
   "paths": {
+    "/api/v1/actions/workspaces/{workspaceId}/ai/chat": {
+      "post": {
+        "description": "(BETA) Combines multiple use cases such as search, create visualizations, ...",
+        "operationId": "aiChat",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatResult"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "(BETA) Chat with AI",
+        "tags": [
+          "Smart Functions",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/chatHistory": {
+      "post": {
+        "description": "(BETA) Post thread ID (and optionally interaction ID) to get full/partial chat history.",
+        "operationId": "aiChatHistory",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatHistoryRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatHistoryResult"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "(BETA) Get Chat History",
+        "tags": [
+          "Smart Functions",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/route": {
+      "post": {
+        "description": "(BETA) Uses similarity (e.g. cosine distance) to find most similar use cases.",
+        "operationId": "aiRoute",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RouteRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RouteResult"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "(BETA) Route to supported use cases based on this input query.",
+        "tags": [
+          "Smart Functions",
+          "actions"
+        ]
+      }
+    },
     "/api/v1/actions/workspaces/{workspaceId}/ai/search": {
       "post": {
         "description": "(BETA) Uses similarity (e.g. cosine distance) search to find top X most similar metadata objects.",

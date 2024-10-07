@@ -31,9 +31,11 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.json_api_automation_in_relationships_analytical_dashboard import JsonApiAutomationInRelationshipsAnalyticalDashboard
     from gooddata_api_client.model.json_api_automation_in_relationships_export_definitions import JsonApiAutomationInRelationshipsExportDefinitions
     from gooddata_api_client.model.json_api_automation_in_relationships_notification_channel import JsonApiAutomationInRelationshipsNotificationChannel
     from gooddata_api_client.model.json_api_automation_in_relationships_recipients import JsonApiAutomationInRelationshipsRecipients
+    globals()['JsonApiAutomationInRelationshipsAnalyticalDashboard'] = JsonApiAutomationInRelationshipsAnalyticalDashboard
     globals()['JsonApiAutomationInRelationshipsExportDefinitions'] = JsonApiAutomationInRelationshipsExportDefinitions
     globals()['JsonApiAutomationInRelationshipsNotificationChannel'] = JsonApiAutomationInRelationshipsNotificationChannel
     globals()['JsonApiAutomationInRelationshipsRecipients'] = JsonApiAutomationInRelationshipsRecipients
@@ -92,6 +94,7 @@ class JsonApiAutomationInRelationships(ModelNormal):
         """
         lazy_import()
         return {
+            'analytical_dashboard': (JsonApiAutomationInRelationshipsAnalyticalDashboard,),  # noqa: E501
             'export_definitions': (JsonApiAutomationInRelationshipsExportDefinitions,),  # noqa: E501
             'notification_channel': (JsonApiAutomationInRelationshipsNotificationChannel,),  # noqa: E501
             'recipients': (JsonApiAutomationInRelationshipsRecipients,),  # noqa: E501
@@ -103,6 +106,7 @@ class JsonApiAutomationInRelationships(ModelNormal):
 
 
     attribute_map = {
+        'analytical_dashboard': 'analyticalDashboard',  # noqa: E501
         'export_definitions': 'exportDefinitions',  # noqa: E501
         'notification_channel': 'notificationChannel',  # noqa: E501
         'recipients': 'recipients',  # noqa: E501
@@ -149,6 +153,7 @@ class JsonApiAutomationInRelationships(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            analytical_dashboard (JsonApiAutomationInRelationshipsAnalyticalDashboard): [optional]  # noqa: E501
             export_definitions (JsonApiAutomationInRelationshipsExportDefinitions): [optional]  # noqa: E501
             notification_channel (JsonApiAutomationInRelationshipsNotificationChannel): [optional]  # noqa: E501
             recipients (JsonApiAutomationInRelationshipsRecipients): [optional]  # noqa: E501
@@ -237,6 +242,7 @@ class JsonApiAutomationInRelationships(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            analytical_dashboard (JsonApiAutomationInRelationshipsAnalyticalDashboard): [optional]  # noqa: E501
             export_definitions (JsonApiAutomationInRelationshipsExportDefinitions): [optional]  # noqa: E501
             notification_channel (JsonApiAutomationInRelationshipsNotificationChannel): [optional]  # noqa: E501
             recipients (JsonApiAutomationInRelationshipsRecipients): [optional]  # noqa: E501

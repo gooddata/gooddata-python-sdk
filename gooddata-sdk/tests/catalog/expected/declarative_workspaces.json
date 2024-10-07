@@ -2270,7 +2270,8 @@
               "id": "top_10_products",
               "title": "Top 10 Products"
             }
-          ]
+          ],
+          "exportDefinitions": []
         },
         "ldm": {
           "datasets": [
@@ -2786,7 +2787,8 @@
         }
       ],
       "settings": [],
-      "userDataFilters": []
+      "userDataFilters": [],
+      "automations": []
     },
     {
       "customApplicationSettings": [],
@@ -2812,7 +2814,8 @@
           "dashboardPlugins": [],
           "filterContexts": [],
           "metrics": [],
-          "visualizationObjects": []
+          "visualizationObjects": [],
+          "exportDefinitions": []
         },
         "ldm": {
           "datasetExtensions": [
@@ -2841,7 +2844,8 @@
       },
       "permissions": [],
       "settings": [],
-      "userDataFilters": []
+      "userDataFilters": [],
+      "automations": []
     },
     {
       "customApplicationSettings": [],
@@ -2855,7 +2859,8 @@
           "dashboardPlugins": [],
           "filterContexts": [],
           "metrics": [],
-          "visualizationObjects": []
+          "visualizationObjects": [],
+          "exportDefinitions": []
         },
         "ldm": {
           "datasets": [],
@@ -2869,7 +2874,8 @@
       },
       "permissions": [],
       "settings": [],
-      "userDataFilters": []
+      "userDataFilters": [],
+      "automations": []
     }
   ],
   "workspaceDataFilters": [

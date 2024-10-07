@@ -81,9 +81,11 @@ class ExportDefinitionsApi(object):
 
                         "VISUALIZATIONOBJECTS": "visualizationObjects",
                         "ANALYTICALDASHBOARDS": "analyticalDashboards",
+                        "AUTOMATIONS": "automations",
                         "USERIDENTIFIERS": "userIdentifiers",
                         "VISUALIZATIONOBJECT": "visualizationObject",
                         "ANALYTICALDASHBOARD": "analyticalDashboard",
+                        "AUTOMATION": "automation",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
@@ -241,9 +243,11 @@ class ExportDefinitionsApi(object):
 
                         "VISUALIZATIONOBJECTS": "visualizationObjects",
                         "ANALYTICALDASHBOARDS": "analyticalDashboards",
+                        "AUTOMATIONS": "automations",
                         "USERIDENTIFIERS": "userIdentifiers",
                         "VISUALIZATIONOBJECT": "visualizationObject",
                         "ANALYTICALDASHBOARD": "analyticalDashboard",
+                        "AUTOMATION": "automation",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
@@ -355,9 +359,11 @@ class ExportDefinitionsApi(object):
 
                         "VISUALIZATIONOBJECTS": "visualizationObjects",
                         "ANALYTICALDASHBOARDS": "analyticalDashboards",
+                        "AUTOMATIONS": "automations",
                         "USERIDENTIFIERS": "userIdentifiers",
                         "VISUALIZATIONOBJECT": "visualizationObject",
                         "ANALYTICALDASHBOARD": "analyticalDashboard",
+                        "AUTOMATION": "automation",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
@@ -450,9 +456,11 @@ class ExportDefinitionsApi(object):
 
                         "VISUALIZATIONOBJECTS": "visualizationObjects",
                         "ANALYTICALDASHBOARDS": "analyticalDashboards",
+                        "AUTOMATIONS": "automations",
                         "USERIDENTIFIERS": "userIdentifiers",
                         "VISUALIZATIONOBJECT": "visualizationObject",
                         "ANALYTICALDASHBOARD": "analyticalDashboard",
+                        "AUTOMATION": "automation",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
@@ -535,9 +543,11 @@ class ExportDefinitionsApi(object):
 
                         "VISUALIZATIONOBJECTS": "visualizationObjects",
                         "ANALYTICALDASHBOARDS": "analyticalDashboards",
+                        "AUTOMATIONS": "automations",
                         "USERIDENTIFIERS": "userIdentifiers",
                         "VISUALIZATIONOBJECT": "visualizationObject",
                         "ANALYTICALDASHBOARD": "analyticalDashboard",
+                        "AUTOMATION": "automation",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"

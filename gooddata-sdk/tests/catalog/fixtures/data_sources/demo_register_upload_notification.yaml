@@ -32,10 +32,8 @@ interactions:
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdn.jsdelivr.net
-            cdnjs.cloudflare.com; img-src ''self'' data: blob: *.wistia.com *.wistia.net
-            *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net privacy-policy.truste.com
-            www.gooddata.com; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
+            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
+            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
             cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
             *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
             ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
@@ -61,9 +59,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -72,7 +67,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1 ; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:22 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -81,7 +79,7 @@ interactions:
               attributes:
                 title: '# of Active Customers'
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:25
+                createdAt: 2024-10-07 09:14
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
@@ -96,7 +94,7 @@ interactions:
               attributes:
                 title: '# of Orders'
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:25
+                createdAt: 2024-10-07 09:14
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/order_id})
@@ -111,7 +109,7 @@ interactions:
               attributes:
                 title: '# of Top Customers'
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:25
+                createdAt: 2024-10-07 09:14
                 content:
                   format: '#,##0'
                   maql: 'SELECT {metric/amount_of_active_customers} WHERE (SELECT
@@ -128,7 +126,7 @@ interactions:
                 title: '# of Valid Orders'
                 description: ''
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:25
+                createdAt: 2024-10-07 09:14
                 content:
                   format: '#,##0.00'
                   maql: SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status}
@@ -144,7 +142,7 @@ interactions:
               attributes:
                 title: Campaign Spend
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:25
+                createdAt: 2024-10-07 09:14
                 content:
                   format: $#,##0
                   maql: SELECT SUM({fact/spend})
@@ -159,7 +157,7 @@ interactions:
               attributes:
                 title: Order Amount
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:25
+                createdAt: 2024-10-07 09:14
                 content:
                   format: $#,##0
                   maql: SELECT SUM({fact/price}*{fact/quantity})
@@ -174,7 +172,7 @@ interactions:
               attributes:
                 title: '% Revenue'
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:25
+                createdAt: 2024-10-07 09:14
                 content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / {metric/total_revenue}
@@ -189,7 +187,7 @@ interactions:
               attributes:
                 title: '% Revenue from Top 10 Customers'
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:25
+                createdAt: 2024-10-07 09:14
                 content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
@@ -205,7 +203,7 @@ interactions:
               attributes:
                 title: '% Revenue from Top 10% Customers'
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:25
+                createdAt: 2024-10-07 09:14
                 content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
@@ -221,7 +219,7 @@ interactions:
               attributes:
                 title: '% Revenue from Top 10% Products'
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:25
+                createdAt: 2024-10-07 09:14
                 content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
@@ -237,7 +235,7 @@ interactions:
               attributes:
                 title: '% Revenue from Top 10 Products'
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:25
+                createdAt: 2024-10-07 09:14
                 content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
@@ -253,7 +251,7 @@ interactions:
               attributes:
                 title: '% Revenue in Category'
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:25
+                createdAt: 2024-10-07 09:14
                 content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
@@ -269,7 +267,7 @@ interactions:
               attributes:
                 title: '% Revenue per Product'
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:25
+                createdAt: 2024-10-07 09:14
                 content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL
@@ -286,7 +284,7 @@ interactions:
                 title: Revenue
                 description: ''
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:25
+                createdAt: 2024-10-07 09:14
                 content:
                   format: $#,##0
                   maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
@@ -302,7 +300,7 @@ interactions:
               attributes:
                 title: Revenue (Clothing)
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:25
+                createdAt: 2024-10-07 09:14
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
@@ -318,7 +316,7 @@ interactions:
               attributes:
                 title: Revenue (Electronic)
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:25
+                createdAt: 2024-10-07 09:14
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
@@ -334,7 +332,7 @@ interactions:
               attributes:
                 title: Revenue (Home)
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:25
+                createdAt: 2024-10-07 09:14
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
@@ -350,7 +348,7 @@ interactions:
               attributes:
                 title: Revenue (Outdoor)
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:25
+                createdAt: 2024-10-07 09:14
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
@@ -366,7 +364,7 @@ interactions:
               attributes:
                 title: Revenue per Customer
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:25
+                createdAt: 2024-10-07 09:14
                 content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
@@ -381,7 +379,7 @@ interactions:
               attributes:
                 title: Revenue per Dollar Spent
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:25
+                createdAt: 2024-10-07 09:14
                 content:
                   format: $#,##0.0
                   maql: SELECT {metric/revenue} / {metric/campaign_spend}
@@ -396,7 +394,7 @@ interactions:
               attributes:
                 title: Revenue / Top 10
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:25
+                createdAt: 2024-10-07 09:14
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
@@ -411,7 +409,7 @@ interactions:
               attributes:
                 title: Revenue / Top 10%
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:25
+                createdAt: 2024-10-07 09:14
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
@@ -426,7 +424,7 @@ interactions:
               attributes:
                 title: Total Revenue
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:25
+                createdAt: 2024-10-07 09:14
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} BY ALL OTHER
@@ -441,7 +439,7 @@ interactions:
               attributes:
                 title: Total Revenue (No Filters)
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:25
+                createdAt: 2024-10-07 09:14
                 content:
                   format: $#,##0
                   maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
@@ -503,10 +501,8 @@ interactions:
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdn.jsdelivr.net
-            cdnjs.cloudflare.com; img-src ''self'' data: blob: *.wistia.com *.wistia.net
-            *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net privacy-policy.truste.com
-            www.gooddata.com; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
+            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
+            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
             cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
             *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
             ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
@@ -531,9 +527,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Transfer-Encoding:
           - chunked
         Vary:
@@ -544,9 +537,12 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1 ; mode=block
+          - '0'
         content-length:
-          - '272'
+          - '337'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:22 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           executionResponse:
@@ -558,7 +554,7 @@ interactions:
                         name: '# of Active Customers'
                 localIdentifier: dim_0
             links:
-              executionResult: 1732b80ba6910c9f60444909efc35a49a7a2815e
+              executionResult: 9b6fe64f1ac30887f307ed44232ccbdea6ac16d8:45316e025daad8642aeb98438b386ee52e23b59eead057fe47fe1239fa3094fe
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/dataSources/demo-test-ds/uploadNotification
@@ -588,10 +584,8 @@ interactions:
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdn.jsdelivr.net
-            cdnjs.cloudflare.com; img-src ''self'' data: blob: *.wistia.com *.wistia.net
-            *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net privacy-policy.truste.com
-            www.gooddata.com; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
+            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
+            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
             cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
             *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
             ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
@@ -614,9 +608,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -625,7 +616,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1 ; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:22 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
   - request:
@@ -677,10 +671,8 @@ interactions:
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdn.jsdelivr.net
-            cdnjs.cloudflare.com; img-src ''self'' data: blob: *.wistia.com *.wistia.net
-            *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net privacy-policy.truste.com
-            www.gooddata.com; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
+            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
+            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
             cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
             *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
             ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
@@ -705,9 +697,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Transfer-Encoding:
           - chunked
         Vary:
@@ -718,9 +707,12 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1 ; mode=block
+          - '0'
         content-length:
-          - '272'
+          - '337'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:22 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           executionResponse:
@@ -732,4 +724,4 @@ interactions:
                         name: '# of Active Customers'
                 localIdentifier: dim_0
             links:
-              executionResult: bf04570878aab933ca3fa12804a1b35e5c906890
+              executionResult: d56f116482be32c666ac8d35e098f114887385b8:00eea8e6ff211b4fb1a476c5e9a9c65c73835fafff6da7a061f08145f30792fb

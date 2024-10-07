@@ -31,10 +31,8 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.notification_trigger import NotificationTrigger
-    from gooddata_api_client.model.webhook import Webhook
-    globals()['NotificationTrigger'] = NotificationTrigger
-    globals()['Webhook'] = Webhook
+    from gooddata_api_client.model.declarative_notification_channel_destination import DeclarativeNotificationChannelDestination
+    globals()['DeclarativeNotificationChannelDestination'] = DeclarativeNotificationChannelDestination
 
 
 class DeclarativeNotificationChannel(ModelNormal):
@@ -62,6 +60,12 @@ class DeclarativeNotificationChannel(ModelNormal):
     """
 
     allowed_values = {
+        ('destination_type',): {
+            'None': None,
+            'WEBHOOK': "WEBHOOK",
+            'SMTP': "SMTP",
+            'DEFAULT_SMTP': "DEFAULT_SMTP",
+        },
     }
 
     validations = {
@@ -75,8 +79,6 @@ class DeclarativeNotificationChannel(ModelNormal):
         },
         ('name',): {
             'max_length': 255,
-        },
-        ('triggers',): {
         },
     }
 
@@ -104,10 +106,12 @@ class DeclarativeNotificationChannel(ModelNormal):
         lazy_import()
         return {
             'id': (str,),  # noqa: E501
+            'custom_dashboard_url': (str,),  # noqa: E501
             'description': (str,),  # noqa: E501
+            'destination': (DeclarativeNotificationChannelDestination,),  # noqa: E501
+            'destination_type': (str, none_type,),  # noqa: E501
+            'enable_multiple_recipients': (bool,),  # noqa: E501
             'name': (str,),  # noqa: E501
-            'triggers': ([NotificationTrigger],),  # noqa: E501
-            'webhook': (Webhook,),  # noqa: E501
         }
 
     @cached_property
@@ -117,13 +121,16 @@ class DeclarativeNotificationChannel(ModelNormal):
 
     attribute_map = {
         'id': 'id',  # noqa: E501
+        'custom_dashboard_url': 'customDashboardUrl',  # noqa: E501
         'description': 'description',  # noqa: E501
+        'destination': 'destination',  # noqa: E501
+        'destination_type': 'destinationType',  # noqa: E501
+        'enable_multiple_recipients': 'enableMultipleRecipients',  # noqa: E501
         'name': 'name',  # noqa: E501
-        'triggers': 'triggers',  # noqa: E501
-        'webhook': 'webhook',  # noqa: E501
     }
 
     read_only_vars = {
+        'destination_type',  # noqa: E501
     }
 
     _composed_schemas = {}
@@ -167,10 +174,12 @@ class DeclarativeNotificationChannel(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            custom_dashboard_url (str): Custom dashboard url that is going to be used in the notification. If not specified it is going to be deduced based on the context. Allowed placeholders are {workspaceId}, {dashboardId}.. [optional]  # noqa: E501
             description (str): Description of a notification channel.. [optional]  # noqa: E501
+            destination (DeclarativeNotificationChannelDestination): [optional]  # noqa: E501
+            destination_type (str, none_type): [optional]  # noqa: E501
+            enable_multiple_recipients (bool): Whether notifications sent to the channel can have multiple recipients.. [optional] if omitted the server will use the default value of True  # noqa: E501
             name (str): Name of a notification channel.. [optional]  # noqa: E501
-            triggers ([NotificationTrigger]): The triggers that are to be used to send notifications to the channel.. [optional]  # noqa: E501
-            webhook (Webhook): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -260,10 +269,12 @@ class DeclarativeNotificationChannel(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            custom_dashboard_url (str): Custom dashboard url that is going to be used in the notification. If not specified it is going to be deduced based on the context. Allowed placeholders are {workspaceId}, {dashboardId}.. [optional]  # noqa: E501
             description (str): Description of a notification channel.. [optional]  # noqa: E501
+            destination (DeclarativeNotificationChannelDestination): [optional]  # noqa: E501
+            destination_type (str, none_type): [optional]  # noqa: E501
+            enable_multiple_recipients (bool): Whether notifications sent to the channel can have multiple recipients.. [optional] if omitted the server will use the default value of True  # noqa: E501
             name (str): Name of a notification channel.. [optional]  # noqa: E501
-            triggers ([NotificationTrigger]): The triggers that are to be used to send notifications to the channel.. [optional]  # noqa: E501
-            webhook (Webhook): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

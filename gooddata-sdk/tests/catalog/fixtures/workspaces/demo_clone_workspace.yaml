@@ -28,7 +28,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '156'
+          - '172'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -59,9 +59,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -70,14 +67,17 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:46 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           detail: The requested endpoint does not exist or you do not have permission
             to access it.
           status: 404
           title: Not Found
-          traceId: 8d03c43a031737e6
+          traceId: 6703c2e280c9dc303f6f43f03fb3fd23
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources
@@ -147,9 +147,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -158,7 +155,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:46 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -228,9 +228,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Transfer-Encoding:
           - chunked
         Vary:
@@ -241,9 +238,12 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
         content-length:
-          - '37125'
+          - '37148'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:46 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           analytics:
@@ -296,7 +296,7 @@ interactions:
                               drills: []
                               properties: {}
                   version: '2'
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -339,7 +339,7 @@ interactions:
                           type: dashboardPlugin
                       version: '2'
                   version: '2'
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -489,7 +489,7 @@ interactions:
                               drills: []
                               properties: {}
                   version: '2'
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -501,7 +501,7 @@ interactions:
               - content:
                   url: https://www.example.com
                   version: '2'
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -511,13 +511,14 @@ interactions:
               - content:
                   url: https://www.example.com
                   version: '2'
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
                 description: Testing record dashboard_plugin_2
                 id: dashboard_plugin_2
                 title: dashboard_plugin_2
+            exportDefinitions: []
             filterContexts:
               - content:
                   filters:
@@ -560,7 +561,7 @@ interactions:
               - content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -569,7 +570,7 @@ interactions:
               - content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/order_id})
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -579,7 +580,7 @@ interactions:
                   format: '#,##0'
                   maql: 'SELECT {metric/amount_of_active_customers} WHERE (SELECT
                     {metric/revenue} BY {attribute/customer_id}) >  10000 '
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -589,7 +590,7 @@ interactions:
                   format: '#,##0.00'
                   maql: SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -599,7 +600,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT SUM({fact/spend})
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -608,7 +609,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT SUM({fact/price}*{fact/quantity})
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -617,7 +618,7 @@ interactions:
               - content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / {metric/total_revenue}
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -627,7 +628,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -637,7 +638,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -647,7 +648,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -657,7 +658,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -667,7 +668,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
                     ALL OTHER)
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -677,7 +678,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL
                     {attribute/product_id})
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -687,7 +688,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -698,7 +699,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Clothing")
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -708,7 +709,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ( "Electronics")
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -718,7 +719,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Home")
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -728,7 +729,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Outdoor")
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -737,7 +738,7 @@ interactions:
               - content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -746,7 +747,7 @@ interactions:
               - content:
                   format: $#,##0.0
                   maql: SELECT {metric/revenue} / {metric/campaign_spend}
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -755,7 +756,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -764,7 +765,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -773,7 +774,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} BY ALL OTHER
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -782,7 +783,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -847,7 +848,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:treemap
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -923,7 +924,7 @@ interactions:
                         rotation: auto
                   version: '2'
                   visualizationUrl: local:combo2
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -1002,7 +1003,7 @@ interactions:
                         direction: asc
                   version: '2'
                   visualizationUrl: local:table
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -1061,7 +1062,7 @@ interactions:
                       stackMeasuresToPercent: true
                   version: '2'
                   visualizationUrl: local:area
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -1118,7 +1119,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:treemap
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -1171,7 +1172,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:donut
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -1246,7 +1247,7 @@ interactions:
                           visible: false
                   version: '2'
                   visualizationUrl: local:column
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -1303,7 +1304,7 @@ interactions:
                         enabled: true
                   version: '2'
                   visualizationUrl: local:scatter
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -1402,7 +1403,7 @@ interactions:
                         direction: asc
                   version: '2'
                   visualizationUrl: local:table
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -1458,7 +1459,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:line
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -1497,7 +1498,7 @@ interactions:
                   properties: {}
                   version: '2'
                   visualizationUrl: local:bar
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -1553,7 +1554,7 @@ interactions:
                         min: '0'
                   version: '2'
                   visualizationUrl: local:scatter
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -1621,7 +1622,7 @@ interactions:
                         rotation: auto
                   version: '2'
                   visualizationUrl: local:combo2
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -1678,7 +1679,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:bar
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -1735,7 +1736,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:bar
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -2127,9 +2128,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -2138,7 +2136,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:46 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -2175,7 +2176,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '156'
+          - '172'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -2201,9 +2202,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -2212,14 +2210,17 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:46 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           detail: The requested endpoint does not exist or you do not have permission
             to access it.
           status: 404
           title: Not Found
-          traceId: ce631de87cff569c
+          traceId: 6703c2e294036905010c96037c9044cf
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/entities/workspaces/demo_clone?include=workspaces
@@ -2247,7 +2248,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '156'
+          - '172'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -2273,9 +2274,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -2284,14 +2282,17 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:46 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           detail: The requested endpoint does not exist or you do not have permission
             to access it.
           status: 404
           title: Not Found
-          traceId: d55d336cf317793e
+          traceId: 6703c2e21283df24bf2fcc5149c00c97
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces
@@ -2356,9 +2357,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -2367,7 +2365,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:46 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -2432,9 +2433,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Transfer-Encoding:
           - chunked
         Vary:
@@ -2445,9 +2443,12 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
         content-length:
           - '603'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:46 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           workspaceDataFilters:
@@ -2568,9 +2569,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -2579,7 +2577,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:46 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
   - request:
@@ -2971,7 +2972,7 @@ interactions:
               id: campaign
               title: Campaign
               description: ''
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -3013,7 +3014,7 @@ interactions:
                 version: '2'
               id: dashboard_plugin
               title: Dashboard plugin
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -3164,7 +3165,7 @@ interactions:
               id: product_and_category
               title: Product & Category
               description: ''
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -3177,7 +3178,7 @@ interactions:
               id: dashboard_plugin_1
               title: dashboard_plugin_1
               description: Testing record dashboard_plugin_1
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -3187,7 +3188,7 @@ interactions:
               id: dashboard_plugin_2
               title: dashboard_plugin_2
               description: Testing record dashboard_plugin_2
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -3235,7 +3236,7 @@ interactions:
                 maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
               id: amount_of_active_customers
               title: '# of Active Customers'
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -3244,7 +3245,7 @@ interactions:
                 maql: SELECT COUNT({attribute/order_id})
               id: amount_of_orders
               title: '# of Orders'
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -3254,7 +3255,7 @@ interactions:
                   BY {attribute/customer_id}) >  10000 '
               id: amount_of_top_customers
               title: '# of Top Customers'
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -3265,7 +3266,7 @@ interactions:
               id: amount_of_valid_orders
               title: '# of Valid Orders'
               description: ''
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -3274,7 +3275,7 @@ interactions:
                 maql: SELECT SUM({fact/spend})
               id: campaign_spend
               title: Campaign Spend
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -3283,7 +3284,7 @@ interactions:
                 maql: SELECT SUM({fact/price}*{fact/quantity})
               id: order_amount
               title: Order Amount
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -3292,7 +3293,7 @@ interactions:
                 maql: SELECT {metric/revenue} / {metric/total_revenue}
               id: percent_revenue
               title: '% Revenue'
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -3302,7 +3303,7 @@ interactions:
                   \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_customers
               title: '% Revenue from Top 10 Customers'
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -3312,7 +3313,7 @@ interactions:
                   \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_percent_customers
               title: '% Revenue from Top 10% Customers'
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -3322,7 +3323,7 @@ interactions:
                   \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_percent_products
               title: '% Revenue from Top 10% Products'
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -3332,7 +3333,7 @@ interactions:
                   \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_products
               title: '% Revenue from Top 10 Products'
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -3342,7 +3343,7 @@ interactions:
                   ALL OTHER)
               id: percent_revenue_in_category
               title: '% Revenue in Category'
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -3351,7 +3352,7 @@ interactions:
                 maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL {attribute/product_id})
               id: percent_revenue_per_product
               title: '% Revenue per Product'
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -3362,7 +3363,7 @@ interactions:
               id: revenue
               title: Revenue
               description: ''
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -3371,7 +3372,7 @@ interactions:
                 maql: SELECT {metric/revenue} WHERE {label/products.category} IN ("Clothing")
               id: revenue-clothing
               title: Revenue (Clothing)
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -3381,7 +3382,7 @@ interactions:
                   "Electronics")
               id: revenue-electronic
               title: Revenue (Electronic)
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -3390,7 +3391,7 @@ interactions:
                 maql: SELECT {metric/revenue} WHERE {label/products.category} IN ("Home")
               id: revenue-home
               title: Revenue (Home)
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -3399,7 +3400,7 @@ interactions:
                 maql: SELECT {metric/revenue} WHERE {label/products.category} IN ("Outdoor")
               id: revenue-outdoor
               title: Revenue (Outdoor)
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -3408,7 +3409,7 @@ interactions:
                 maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
               id: revenue_per_customer
               title: Revenue per Customer
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -3417,7 +3418,7 @@ interactions:
                 maql: SELECT {metric/revenue} / {metric/campaign_spend}
               id: revenue_per_dollar_spent
               title: Revenue per Dollar Spent
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -3426,7 +3427,7 @@ interactions:
                 maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
               id: revenue_top_10
               title: Revenue / Top 10
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -3435,7 +3436,7 @@ interactions:
                 maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
               id: revenue_top_10_percent
               title: Revenue / Top 10%
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -3444,7 +3445,7 @@ interactions:
                 maql: SELECT {metric/revenue} BY ALL OTHER
               id: total_revenue
               title: Total Revenue
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -3453,7 +3454,7 @@ interactions:
                 maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
               id: total_revenue-no_filters
               title: Total Revenue (No Filters)
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -3518,7 +3519,7 @@ interactions:
                 visualizationUrl: local:treemap
               id: campaign_spend
               title: Campaign Spend
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -3594,7 +3595,7 @@ interactions:
                 visualizationUrl: local:combo2
               id: customers_trend
               title: Customers Trend
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -3673,7 +3674,7 @@ interactions:
                 visualizationUrl: local:table
               id: percent_revenue_per_product_by_customer_and_category
               title: '% Revenue per Product by Customer and Category'
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -3732,7 +3733,7 @@ interactions:
                 visualizationUrl: local:area
               id: percentage_of_customers_by_region
               title: Percentage of Customers by Region
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -3789,7 +3790,7 @@ interactions:
                 visualizationUrl: local:treemap
               id: product_breakdown
               title: Product Breakdown
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -3842,7 +3843,7 @@ interactions:
                 visualizationUrl: local:donut
               id: product_categories_pie_chart
               title: Product Categories Pie Chart
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -3917,7 +3918,7 @@ interactions:
                 visualizationUrl: local:column
               id: product_revenue_comparison-over_previous_period
               title: Product Revenue Comparison (over previous period)
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -3974,7 +3975,7 @@ interactions:
                 visualizationUrl: local:scatter
               id: product_saleability
               title: Product Saleability
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -4073,7 +4074,7 @@ interactions:
                 visualizationUrl: local:table
               id: revenue_and_quantity_by_product_and_category
               title: Revenue and Quantity by Product and Category
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -4129,7 +4130,7 @@ interactions:
                 visualizationUrl: local:line
               id: revenue_by_category_trend
               title: Revenue by Category Trend
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -4168,7 +4169,7 @@ interactions:
                 visualizationUrl: local:bar
               id: revenue_by_product
               title: Revenue by Product
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -4224,7 +4225,7 @@ interactions:
                 visualizationUrl: local:scatter
               id: revenue_per_usd_vs_spend_by_campaign
               title: Revenue per $ vs Spend by Campaign
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -4292,7 +4293,7 @@ interactions:
                 visualizationUrl: local:combo2
               id: revenue_trend
               title: Revenue Trend
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -4349,7 +4350,7 @@ interactions:
                 visualizationUrl: local:bar
               id: top_10_customers
               title: Top 10 Customers
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -4406,10 +4407,11 @@ interactions:
                 visualizationUrl: local:bar
               id: top_10_products
               title: Top 10 Products
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
+          exportDefinitions: []
       headers:
         Accept-Encoding:
           - br, gzip, deflate
@@ -4459,9 +4461,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -4470,7 +4469,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:46 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
   - request:
@@ -4528,9 +4530,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Transfer-Encoding:
           - chunked
         Vary:
@@ -4541,9 +4540,12 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
         content-length:
           - '292'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:46 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           hierarchyPermissions:
@@ -4635,9 +4637,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -4646,7 +4645,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:46 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
   - request:
@@ -4702,9 +4704,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -4713,7 +4712,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:46 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -4778,9 +4780,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Transfer-Encoding:
           - chunked
         Vary:
@@ -4791,9 +4790,12 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
         content-length:
-          - '37156'
+          - '37179'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:46 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           analytics:
@@ -4846,7 +4848,7 @@ interactions:
                               drills: []
                               properties: {}
                   version: '2'
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -4889,7 +4891,7 @@ interactions:
                           type: dashboardPlugin
                       version: '2'
                   version: '2'
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -5039,7 +5041,7 @@ interactions:
                               drills: []
                               properties: {}
                   version: '2'
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -5051,7 +5053,7 @@ interactions:
               - content:
                   url: https://www.example.com
                   version: '2'
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -5061,13 +5063,14 @@ interactions:
               - content:
                   url: https://www.example.com
                   version: '2'
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
                 description: Testing record dashboard_plugin_2
                 id: dashboard_plugin_2
                 title: dashboard_plugin_2
+            exportDefinitions: []
             filterContexts:
               - content:
                   filters:
@@ -5110,7 +5113,7 @@ interactions:
               - content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -5119,7 +5122,7 @@ interactions:
               - content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/order_id})
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -5129,7 +5132,7 @@ interactions:
                   format: '#,##0'
                   maql: 'SELECT {metric/amount_of_active_customers} WHERE (SELECT
                     {metric/revenue} BY {attribute/customer_id}) >  10000 '
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -5139,7 +5142,7 @@ interactions:
                   format: '#,##0.00'
                   maql: SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -5149,7 +5152,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT SUM({fact/spend})
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -5158,7 +5161,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT SUM({fact/price}*{fact/quantity})
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -5167,7 +5170,7 @@ interactions:
               - content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / {metric/total_revenue}
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -5177,7 +5180,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -5187,7 +5190,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -5197,7 +5200,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -5207,7 +5210,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -5217,7 +5220,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
                     ALL OTHER)
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -5227,7 +5230,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL
                     {attribute/product_id})
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -5237,7 +5240,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -5248,7 +5251,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Clothing")
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -5258,7 +5261,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ( "Electronics")
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -5268,7 +5271,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Home")
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -5278,7 +5281,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Outdoor")
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -5287,7 +5290,7 @@ interactions:
               - content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -5296,7 +5299,7 @@ interactions:
               - content:
                   format: $#,##0.0
                   maql: SELECT {metric/revenue} / {metric/campaign_spend}
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -5305,7 +5308,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -5314,7 +5317,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -5323,7 +5326,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} BY ALL OTHER
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -5332,7 +5335,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -5397,7 +5400,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:treemap
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -5473,7 +5476,7 @@ interactions:
                         rotation: auto
                   version: '2'
                   visualizationUrl: local:combo2
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -5552,7 +5555,7 @@ interactions:
                         direction: asc
                   version: '2'
                   visualizationUrl: local:table
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -5611,7 +5614,7 @@ interactions:
                       stackMeasuresToPercent: true
                   version: '2'
                   visualizationUrl: local:area
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -5668,7 +5671,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:treemap
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -5721,7 +5724,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:donut
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -5796,7 +5799,7 @@ interactions:
                           visible: false
                   version: '2'
                   visualizationUrl: local:column
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -5853,7 +5856,7 @@ interactions:
                         enabled: true
                   version: '2'
                   visualizationUrl: local:scatter
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -5952,7 +5955,7 @@ interactions:
                         direction: asc
                   version: '2'
                   visualizationUrl: local:table
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -6008,7 +6011,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:line
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -6047,7 +6050,7 @@ interactions:
                   properties: {}
                   version: '2'
                   visualizationUrl: local:bar
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -6103,7 +6106,7 @@ interactions:
                         min: '0'
                   version: '2'
                   visualizationUrl: local:scatter
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -6171,7 +6174,7 @@ interactions:
                         rotation: auto
                   version: '2'
                   visualizationUrl: local:combo2
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -6228,7 +6231,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:bar
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -6285,7 +6288,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:bar
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -6679,9 +6682,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Transfer-Encoding:
           - chunked
         Vary:
@@ -6692,9 +6692,12 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
         content-length:
-          - '37125'
+          - '37148'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:46 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           analytics:
@@ -6747,7 +6750,7 @@ interactions:
                               drills: []
                               properties: {}
                   version: '2'
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -6790,7 +6793,7 @@ interactions:
                           type: dashboardPlugin
                       version: '2'
                   version: '2'
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -6940,7 +6943,7 @@ interactions:
                               drills: []
                               properties: {}
                   version: '2'
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -6952,7 +6955,7 @@ interactions:
               - content:
                   url: https://www.example.com
                   version: '2'
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -6962,13 +6965,14 @@ interactions:
               - content:
                   url: https://www.example.com
                   version: '2'
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
                 description: Testing record dashboard_plugin_2
                 id: dashboard_plugin_2
                 title: dashboard_plugin_2
+            exportDefinitions: []
             filterContexts:
               - content:
                   filters:
@@ -7011,7 +7015,7 @@ interactions:
               - content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -7020,7 +7024,7 @@ interactions:
               - content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/order_id})
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -7030,7 +7034,7 @@ interactions:
                   format: '#,##0'
                   maql: 'SELECT {metric/amount_of_active_customers} WHERE (SELECT
                     {metric/revenue} BY {attribute/customer_id}) >  10000 '
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -7040,7 +7044,7 @@ interactions:
                   format: '#,##0.00'
                   maql: SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -7050,7 +7054,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT SUM({fact/spend})
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -7059,7 +7063,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT SUM({fact/price}*{fact/quantity})
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -7068,7 +7072,7 @@ interactions:
               - content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / {metric/total_revenue}
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -7078,7 +7082,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -7088,7 +7092,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -7098,7 +7102,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -7108,7 +7112,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -7118,7 +7122,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
                     ALL OTHER)
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -7128,7 +7132,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL
                     {attribute/product_id})
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -7138,7 +7142,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -7149,7 +7153,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Clothing")
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -7159,7 +7163,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ( "Electronics")
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -7169,7 +7173,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Home")
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -7179,7 +7183,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Outdoor")
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -7188,7 +7192,7 @@ interactions:
               - content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -7197,7 +7201,7 @@ interactions:
               - content:
                   format: $#,##0.0
                   maql: SELECT {metric/revenue} / {metric/campaign_spend}
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -7206,7 +7210,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -7215,7 +7219,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -7224,7 +7228,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} BY ALL OTHER
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -7233,7 +7237,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -7298,7 +7302,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:treemap
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -7374,7 +7378,7 @@ interactions:
                         rotation: auto
                   version: '2'
                   visualizationUrl: local:combo2
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -7453,7 +7457,7 @@ interactions:
                         direction: asc
                   version: '2'
                   visualizationUrl: local:table
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -7512,7 +7516,7 @@ interactions:
                       stackMeasuresToPercent: true
                   version: '2'
                   visualizationUrl: local:area
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -7569,7 +7573,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:treemap
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -7622,7 +7626,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:donut
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -7697,7 +7701,7 @@ interactions:
                           visible: false
                   version: '2'
                   visualizationUrl: local:column
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -7754,7 +7758,7 @@ interactions:
                         enabled: true
                   version: '2'
                   visualizationUrl: local:scatter
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -7853,7 +7857,7 @@ interactions:
                         direction: asc
                   version: '2'
                   visualizationUrl: local:table
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -7909,7 +7913,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:line
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -7948,7 +7952,7 @@ interactions:
                   properties: {}
                   version: '2'
                   visualizationUrl: local:bar
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -8004,7 +8008,7 @@ interactions:
                         min: '0'
                   version: '2'
                   visualizationUrl: local:scatter
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -8072,7 +8076,7 @@ interactions:
                         rotation: auto
                   version: '2'
                   visualizationUrl: local:combo2
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -8129,7 +8133,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:bar
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -8186,7 +8190,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:bar
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -8578,9 +8582,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -8589,7 +8590,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:46 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -8626,7 +8630,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '156'
+          - '172'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -8652,9 +8656,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -8663,14 +8664,17 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:46 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           detail: The requested endpoint does not exist or you do not have permission
             to access it.
           status: 404
           title: Not Found
-          traceId: 33f73491b97e0a7e
+          traceId: 6703c2e2abaff841020bc4adc774e986
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/entities/workspaces/demo_jacek?include=workspaces
@@ -8698,7 +8702,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '156'
+          - '172'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -8724,9 +8728,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -8735,14 +8736,17 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:46 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           detail: The requested endpoint does not exist or you do not have permission
             to access it.
           status: 404
           title: Not Found
-          traceId: d6a3687fadcfdb22
+          traceId: 6703c2e2008aa735fdb4ec0d681757f2
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces
@@ -8807,9 +8811,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -8818,7 +8819,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:46 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -8883,9 +8887,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Transfer-Encoding:
           - chunked
         Vary:
@@ -8896,9 +8897,12 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
         content-length:
           - '772'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:46 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           workspaceDataFilters:
@@ -9033,9 +9037,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -9044,7 +9045,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:46 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
   - request:
@@ -9436,7 +9440,7 @@ interactions:
               id: campaign
               title: Campaign
               description: ''
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -9478,7 +9482,7 @@ interactions:
                 version: '2'
               id: dashboard_plugin
               title: Dashboard plugin
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -9629,7 +9633,7 @@ interactions:
               id: product_and_category
               title: Product & Category
               description: ''
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -9642,7 +9646,7 @@ interactions:
               id: dashboard_plugin_1
               title: dashboard_plugin_1
               description: Testing record dashboard_plugin_1
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -9652,7 +9656,7 @@ interactions:
               id: dashboard_plugin_2
               title: dashboard_plugin_2
               description: Testing record dashboard_plugin_2
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -9700,7 +9704,7 @@ interactions:
                 maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
               id: amount_of_active_customers
               title: '# of Active Customers'
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -9709,7 +9713,7 @@ interactions:
                 maql: SELECT COUNT({attribute/order_id})
               id: amount_of_orders
               title: '# of Orders'
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -9719,7 +9723,7 @@ interactions:
                   BY {attribute/customer_id}) >  10000 '
               id: amount_of_top_customers
               title: '# of Top Customers'
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -9730,7 +9734,7 @@ interactions:
               id: amount_of_valid_orders
               title: '# of Valid Orders'
               description: ''
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -9739,7 +9743,7 @@ interactions:
                 maql: SELECT SUM({fact/spend})
               id: campaign_spend
               title: Campaign Spend
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -9748,7 +9752,7 @@ interactions:
                 maql: SELECT SUM({fact/price}*{fact/quantity})
               id: order_amount
               title: Order Amount
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -9757,7 +9761,7 @@ interactions:
                 maql: SELECT {metric/revenue} / {metric/total_revenue}
               id: percent_revenue
               title: '% Revenue'
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -9767,7 +9771,7 @@ interactions:
                   \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_customers
               title: '% Revenue from Top 10 Customers'
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -9777,7 +9781,7 @@ interactions:
                   \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_percent_customers
               title: '% Revenue from Top 10% Customers'
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -9787,7 +9791,7 @@ interactions:
                   \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_percent_products
               title: '% Revenue from Top 10% Products'
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -9797,7 +9801,7 @@ interactions:
                   \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_products
               title: '% Revenue from Top 10 Products'
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -9807,7 +9811,7 @@ interactions:
                   ALL OTHER)
               id: percent_revenue_in_category
               title: '% Revenue in Category'
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -9816,7 +9820,7 @@ interactions:
                 maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL {attribute/product_id})
               id: percent_revenue_per_product
               title: '% Revenue per Product'
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -9827,7 +9831,7 @@ interactions:
               id: revenue
               title: Revenue
               description: ''
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -9836,7 +9840,7 @@ interactions:
                 maql: SELECT {metric/revenue} WHERE {label/products.category} IN ("Clothing")
               id: revenue-clothing
               title: Revenue (Clothing)
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -9846,7 +9850,7 @@ interactions:
                   "Electronics")
               id: revenue-electronic
               title: Revenue (Electronic)
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -9855,7 +9859,7 @@ interactions:
                 maql: SELECT {metric/revenue} WHERE {label/products.category} IN ("Home")
               id: revenue-home
               title: Revenue (Home)
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -9864,7 +9868,7 @@ interactions:
                 maql: SELECT {metric/revenue} WHERE {label/products.category} IN ("Outdoor")
               id: revenue-outdoor
               title: Revenue (Outdoor)
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -9873,7 +9877,7 @@ interactions:
                 maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
               id: revenue_per_customer
               title: Revenue per Customer
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -9882,7 +9886,7 @@ interactions:
                 maql: SELECT {metric/revenue} / {metric/campaign_spend}
               id: revenue_per_dollar_spent
               title: Revenue per Dollar Spent
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -9891,7 +9895,7 @@ interactions:
                 maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
               id: revenue_top_10
               title: Revenue / Top 10
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -9900,7 +9904,7 @@ interactions:
                 maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
               id: revenue_top_10_percent
               title: Revenue / Top 10%
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -9909,7 +9913,7 @@ interactions:
                 maql: SELECT {metric/revenue} BY ALL OTHER
               id: total_revenue
               title: Total Revenue
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -9918,7 +9922,7 @@ interactions:
                 maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
               id: total_revenue-no_filters
               title: Total Revenue (No Filters)
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -9983,7 +9987,7 @@ interactions:
                 visualizationUrl: local:treemap
               id: campaign_spend
               title: Campaign Spend
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -10059,7 +10063,7 @@ interactions:
                 visualizationUrl: local:combo2
               id: customers_trend
               title: Customers Trend
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -10138,7 +10142,7 @@ interactions:
                 visualizationUrl: local:table
               id: percent_revenue_per_product_by_customer_and_category
               title: '% Revenue per Product by Customer and Category'
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -10197,7 +10201,7 @@ interactions:
                 visualizationUrl: local:area
               id: percentage_of_customers_by_region
               title: Percentage of Customers by Region
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -10254,7 +10258,7 @@ interactions:
                 visualizationUrl: local:treemap
               id: product_breakdown
               title: Product Breakdown
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -10307,7 +10311,7 @@ interactions:
                 visualizationUrl: local:donut
               id: product_categories_pie_chart
               title: Product Categories Pie Chart
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -10382,7 +10386,7 @@ interactions:
                 visualizationUrl: local:column
               id: product_revenue_comparison-over_previous_period
               title: Product Revenue Comparison (over previous period)
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -10439,7 +10443,7 @@ interactions:
                 visualizationUrl: local:scatter
               id: product_saleability
               title: Product Saleability
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -10538,7 +10542,7 @@ interactions:
                 visualizationUrl: local:table
               id: revenue_and_quantity_by_product_and_category
               title: Revenue and Quantity by Product and Category
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -10594,7 +10598,7 @@ interactions:
                 visualizationUrl: local:line
               id: revenue_by_category_trend
               title: Revenue by Category Trend
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -10633,7 +10637,7 @@ interactions:
                 visualizationUrl: local:bar
               id: revenue_by_product
               title: Revenue by Product
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -10689,7 +10693,7 @@ interactions:
                 visualizationUrl: local:scatter
               id: revenue_per_usd_vs_spend_by_campaign
               title: Revenue per $ vs Spend by Campaign
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -10757,7 +10761,7 @@ interactions:
                 visualizationUrl: local:combo2
               id: revenue_trend
               title: Revenue Trend
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -10814,7 +10818,7 @@ interactions:
                 visualizationUrl: local:bar
               id: top_10_customers
               title: Top 10 Customers
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -10871,10 +10875,11 @@ interactions:
                 visualizationUrl: local:bar
               id: top_10_products
               title: Top 10 Products
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
+          exportDefinitions: []
       headers:
         Accept-Encoding:
           - br, gzip, deflate
@@ -10924,9 +10929,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -10935,7 +10937,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:46 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
   - request:
@@ -10993,9 +10998,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Transfer-Encoding:
           - chunked
         Vary:
@@ -11006,9 +11008,12 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
         content-length:
           - '292'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:47 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           hierarchyPermissions:
@@ -11100,9 +11105,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -11111,7 +11113,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:47 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
   - request:
@@ -11167,9 +11172,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -11178,7 +11180,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:47 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -11243,9 +11248,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Transfer-Encoding:
           - chunked
         Vary:
@@ -11256,9 +11258,12 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
         content-length:
           - '292'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:47 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           hierarchyPermissions:
@@ -11334,9 +11339,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Transfer-Encoding:
           - chunked
         Vary:
@@ -11347,9 +11349,12 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
         content-length:
           - '292'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:47 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           hierarchyPermissions:
@@ -11425,9 +11430,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Transfer-Encoding:
           - chunked
         Vary:
@@ -11438,9 +11440,12 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
         content-length:
-          - '37125'
+          - '37148'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:47 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           analytics:
@@ -11493,7 +11498,7 @@ interactions:
                               drills: []
                               properties: {}
                   version: '2'
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -11536,7 +11541,7 @@ interactions:
                           type: dashboardPlugin
                       version: '2'
                   version: '2'
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -11686,7 +11691,7 @@ interactions:
                               drills: []
                               properties: {}
                   version: '2'
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -11698,7 +11703,7 @@ interactions:
               - content:
                   url: https://www.example.com
                   version: '2'
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -11708,13 +11713,14 @@ interactions:
               - content:
                   url: https://www.example.com
                   version: '2'
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
                 description: Testing record dashboard_plugin_2
                 id: dashboard_plugin_2
                 title: dashboard_plugin_2
+            exportDefinitions: []
             filterContexts:
               - content:
                   filters:
@@ -11757,7 +11763,7 @@ interactions:
               - content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -11766,7 +11772,7 @@ interactions:
               - content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/order_id})
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -11776,7 +11782,7 @@ interactions:
                   format: '#,##0'
                   maql: 'SELECT {metric/amount_of_active_customers} WHERE (SELECT
                     {metric/revenue} BY {attribute/customer_id}) >  10000 '
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -11786,7 +11792,7 @@ interactions:
                   format: '#,##0.00'
                   maql: SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -11796,7 +11802,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT SUM({fact/spend})
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -11805,7 +11811,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT SUM({fact/price}*{fact/quantity})
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -11814,7 +11820,7 @@ interactions:
               - content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / {metric/total_revenue}
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -11824,7 +11830,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -11834,7 +11840,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -11844,7 +11850,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -11854,7 +11860,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -11864,7 +11870,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
                     ALL OTHER)
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -11874,7 +11880,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL
                     {attribute/product_id})
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -11884,7 +11890,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -11895,7 +11901,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Clothing")
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -11905,7 +11911,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ( "Electronics")
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -11915,7 +11921,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Home")
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -11925,7 +11931,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Outdoor")
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -11934,7 +11940,7 @@ interactions:
               - content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -11943,7 +11949,7 @@ interactions:
               - content:
                   format: $#,##0.0
                   maql: SELECT {metric/revenue} / {metric/campaign_spend}
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -11952,7 +11958,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -11961,7 +11967,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -11970,7 +11976,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} BY ALL OTHER
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -11979,7 +11985,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -12044,7 +12050,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:treemap
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -12120,7 +12126,7 @@ interactions:
                         rotation: auto
                   version: '2'
                   visualizationUrl: local:combo2
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -12199,7 +12205,7 @@ interactions:
                         direction: asc
                   version: '2'
                   visualizationUrl: local:table
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -12258,7 +12264,7 @@ interactions:
                       stackMeasuresToPercent: true
                   version: '2'
                   visualizationUrl: local:area
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -12315,7 +12321,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:treemap
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -12368,7 +12374,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:donut
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -12443,7 +12449,7 @@ interactions:
                           visible: false
                   version: '2'
                   visualizationUrl: local:column
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -12500,7 +12506,7 @@ interactions:
                         enabled: true
                   version: '2'
                   visualizationUrl: local:scatter
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -12599,7 +12605,7 @@ interactions:
                         direction: asc
                   version: '2'
                   visualizationUrl: local:table
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -12655,7 +12661,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:line
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -12694,7 +12700,7 @@ interactions:
                   properties: {}
                   version: '2'
                   visualizationUrl: local:bar
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -12750,7 +12756,7 @@ interactions:
                         min: '0'
                   version: '2'
                   visualizationUrl: local:scatter
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -12818,7 +12824,7 @@ interactions:
                         rotation: auto
                   version: '2'
                   visualizationUrl: local:combo2
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -12875,7 +12881,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:bar
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -12932,7 +12938,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:bar
-                createdAt: 2024-07-22 19:06
+                createdAt: 2024-10-07 11:15
                 createdBy:
                   id: admin
                   type: user
@@ -13324,9 +13330,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -13335,7 +13338,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:47 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -13398,9 +13404,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -13409,7 +13412,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:47 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -13476,9 +13482,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -13487,16 +13490,41 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:47 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
+            - id: demo_west_california
+              type: workspace
+              attributes:
+                name: Demo West California
+              relationships:
+                parent:
+                  data:
+                    id: demo_west
+                    type: workspace
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo_west_california
             - id: demo
               type: workspace
               attributes:
                 name: Demo
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo
+            - id: demo_west
+              type: workspace
+              attributes:
+                name: Demo West
+              relationships:
+                parent:
+                  data:
+                    id: demo
+                    type: workspace
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo_west
             - id: demo_clone
               type: workspace
               attributes:
@@ -13509,28 +13537,6 @@ interactions:
                 name: Deno Jacek
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo_jacek
-            - id: demo_west
-              type: workspace
-              attributes:
-                name: Demo West
-              relationships:
-                parent:
-                  data:
-                    id: demo
-                    type: workspace
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo_west
-            - id: demo_west_california
-              type: workspace
-              attributes:
-                name: Demo West California
-              relationships:
-                parent:
-                  data:
-                    id: demo_west
-                    type: workspace
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo_west_california
           included:
             - id: demo
               type: workspace
@@ -13598,9 +13604,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -13609,7 +13612,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:47 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
   - request:
@@ -13639,7 +13645,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '156'
+          - '172'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -13665,9 +13671,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -13676,14 +13679,17 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:47 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           detail: The requested endpoint does not exist or you do not have permission
             to access it.
           status: 404
           title: Not Found
-          traceId: 80330f401e60fc48
+          traceId: 6703c2e3473f80ad84cb5fce2c078062
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces
@@ -13748,9 +13754,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -13759,7 +13762,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:47 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -13824,9 +13830,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Transfer-Encoding:
           - chunked
         Vary:
@@ -13837,9 +13840,12 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
         content-length:
           - '772'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:47 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           workspaceDataFilters:
@@ -13974,9 +13980,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -13985,7 +13988,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:47 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
   - request:
@@ -14377,7 +14383,7 @@ interactions:
               id: campaign
               title: Campaign
               description: ''
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -14419,7 +14425,7 @@ interactions:
                 version: '2'
               id: dashboard_plugin
               title: Dashboard plugin
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -14570,7 +14576,7 @@ interactions:
               id: product_and_category
               title: Product & Category
               description: ''
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -14583,7 +14589,7 @@ interactions:
               id: dashboard_plugin_1
               title: dashboard_plugin_1
               description: Testing record dashboard_plugin_1
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -14593,7 +14599,7 @@ interactions:
               id: dashboard_plugin_2
               title: dashboard_plugin_2
               description: Testing record dashboard_plugin_2
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -14641,7 +14647,7 @@ interactions:
                 maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
               id: amount_of_active_customers
               title: '# of Active Customers'
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -14650,7 +14656,7 @@ interactions:
                 maql: SELECT COUNT({attribute/order_id})
               id: amount_of_orders
               title: '# of Orders'
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -14660,7 +14666,7 @@ interactions:
                   BY {attribute/customer_id}) >  10000 '
               id: amount_of_top_customers
               title: '# of Top Customers'
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -14671,7 +14677,7 @@ interactions:
               id: amount_of_valid_orders
               title: '# of Valid Orders'
               description: ''
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -14680,7 +14686,7 @@ interactions:
                 maql: SELECT SUM({fact/spend})
               id: campaign_spend
               title: Campaign Spend
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -14689,7 +14695,7 @@ interactions:
                 maql: SELECT SUM({fact/price}*{fact/quantity})
               id: order_amount
               title: Order Amount
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -14698,7 +14704,7 @@ interactions:
                 maql: SELECT {metric/revenue} / {metric/total_revenue}
               id: percent_revenue
               title: '% Revenue'
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -14708,7 +14714,7 @@ interactions:
                   \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_customers
               title: '% Revenue from Top 10 Customers'
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -14718,7 +14724,7 @@ interactions:
                   \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_percent_customers
               title: '% Revenue from Top 10% Customers'
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -14728,7 +14734,7 @@ interactions:
                   \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_percent_products
               title: '% Revenue from Top 10% Products'
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -14738,7 +14744,7 @@ interactions:
                   \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_products
               title: '% Revenue from Top 10 Products'
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -14748,7 +14754,7 @@ interactions:
                   ALL OTHER)
               id: percent_revenue_in_category
               title: '% Revenue in Category'
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -14757,7 +14763,7 @@ interactions:
                 maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL {attribute/product_id})
               id: percent_revenue_per_product
               title: '% Revenue per Product'
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -14768,7 +14774,7 @@ interactions:
               id: revenue
               title: Revenue
               description: ''
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -14777,7 +14783,7 @@ interactions:
                 maql: SELECT {metric/revenue} WHERE {label/products.category} IN ("Clothing")
               id: revenue-clothing
               title: Revenue (Clothing)
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -14787,7 +14793,7 @@ interactions:
                   "Electronics")
               id: revenue-electronic
               title: Revenue (Electronic)
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -14796,7 +14802,7 @@ interactions:
                 maql: SELECT {metric/revenue} WHERE {label/products.category} IN ("Home")
               id: revenue-home
               title: Revenue (Home)
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -14805,7 +14811,7 @@ interactions:
                 maql: SELECT {metric/revenue} WHERE {label/products.category} IN ("Outdoor")
               id: revenue-outdoor
               title: Revenue (Outdoor)
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -14814,7 +14820,7 @@ interactions:
                 maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
               id: revenue_per_customer
               title: Revenue per Customer
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -14823,7 +14829,7 @@ interactions:
                 maql: SELECT {metric/revenue} / {metric/campaign_spend}
               id: revenue_per_dollar_spent
               title: Revenue per Dollar Spent
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -14832,7 +14838,7 @@ interactions:
                 maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
               id: revenue_top_10
               title: Revenue / Top 10
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -14841,7 +14847,7 @@ interactions:
                 maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
               id: revenue_top_10_percent
               title: Revenue / Top 10%
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -14850,7 +14856,7 @@ interactions:
                 maql: SELECT {metric/revenue} BY ALL OTHER
               id: total_revenue
               title: Total Revenue
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -14859,7 +14865,7 @@ interactions:
                 maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
               id: total_revenue-no_filters
               title: Total Revenue (No Filters)
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -14924,7 +14930,7 @@ interactions:
                 visualizationUrl: local:treemap
               id: campaign_spend
               title: Campaign Spend
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -15000,7 +15006,7 @@ interactions:
                 visualizationUrl: local:combo2
               id: customers_trend
               title: Customers Trend
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -15079,7 +15085,7 @@ interactions:
                 visualizationUrl: local:table
               id: percent_revenue_per_product_by_customer_and_category
               title: '% Revenue per Product by Customer and Category'
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -15138,7 +15144,7 @@ interactions:
                 visualizationUrl: local:area
               id: percentage_of_customers_by_region
               title: Percentage of Customers by Region
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -15195,7 +15201,7 @@ interactions:
                 visualizationUrl: local:treemap
               id: product_breakdown
               title: Product Breakdown
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -15248,7 +15254,7 @@ interactions:
                 visualizationUrl: local:donut
               id: product_categories_pie_chart
               title: Product Categories Pie Chart
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -15323,7 +15329,7 @@ interactions:
                 visualizationUrl: local:column
               id: product_revenue_comparison-over_previous_period
               title: Product Revenue Comparison (over previous period)
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -15380,7 +15386,7 @@ interactions:
                 visualizationUrl: local:scatter
               id: product_saleability
               title: Product Saleability
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -15479,7 +15485,7 @@ interactions:
                 visualizationUrl: local:table
               id: revenue_and_quantity_by_product_and_category
               title: Revenue and Quantity by Product and Category
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -15535,7 +15541,7 @@ interactions:
                 visualizationUrl: local:line
               id: revenue_by_category_trend
               title: Revenue by Category Trend
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -15574,7 +15580,7 @@ interactions:
                 visualizationUrl: local:bar
               id: revenue_by_product
               title: Revenue by Product
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -15630,7 +15636,7 @@ interactions:
                 visualizationUrl: local:scatter
               id: revenue_per_usd_vs_spend_by_campaign
               title: Revenue per $ vs Spend by Campaign
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -15698,7 +15704,7 @@ interactions:
                 visualizationUrl: local:combo2
               id: revenue_trend
               title: Revenue Trend
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -15755,7 +15761,7 @@ interactions:
                 visualizationUrl: local:bar
               id: top_10_customers
               title: Top 10 Customers
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
@@ -15812,10 +15818,11 @@ interactions:
                 visualizationUrl: local:bar
               id: top_10_products
               title: Top 10 Products
-              createdAt: 2024-07-22 19:06
+              createdAt: 2024-10-07 11:15
               createdBy:
                 id: admin
                 type: user
+          exportDefinitions: []
       headers:
         Accept-Encoding:
           - br, gzip, deflate
@@ -15865,9 +15872,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -15876,7 +15880,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:47 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
   - request:
@@ -15934,9 +15941,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Transfer-Encoding:
           - chunked
         Vary:
@@ -15947,9 +15951,12 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
         content-length:
           - '292'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:47 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           hierarchyPermissions:
@@ -16041,9 +16048,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -16052,7 +16056,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:47 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
   - request:
@@ -17421,6 +17428,7 @@ interactions:
                       visualizationUrl: local:bar
                     id: top_10_products
                     title: Top 10 Products
+                exportDefinitions: []
               ldm:
                 datasets:
                   - grain:
@@ -17765,6 +17773,7 @@ interactions:
                 name: VIEW
             settings: []
             userDataFilters: []
+            automations: []
           - id: demo_west
             name: Demo West
             customApplicationSettings: []
@@ -17783,6 +17792,7 @@ interactions:
                 filterContexts: []
                 metrics: []
                 visualizationObjects: []
+                exportDefinitions: []
               ldm:
                 datasetExtensions:
                   - id: order_lines
@@ -17800,6 +17810,7 @@ interactions:
             permissions: []
             settings: []
             userDataFilters: []
+            automations: []
           - id: demo_west_california
             name: Demo West California
             customApplicationSettings: []
@@ -17813,6 +17824,7 @@ interactions:
                 filterContexts: []
                 metrics: []
                 visualizationObjects: []
+                exportDefinitions: []
               ldm:
                 datasets: []
                 dateInstances: []
@@ -17822,6 +17834,7 @@ interactions:
             permissions: []
             settings: []
             userDataFilters: []
+            automations: []
       headers:
         Accept-Encoding:
           - br, gzip, deflate
@@ -17871,9 +17884,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -17882,7 +17892,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:47 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
   - request:
@@ -17936,9 +17949,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -17947,6 +17957,9 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:47 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''

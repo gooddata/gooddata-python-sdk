@@ -68,6 +68,10 @@ class DeclarativeAutomation(ModelNormal):
     """
 
     allowed_values = {
+        ('state',): {
+            'ACTIVE': "ACTIVE",
+            'PAUSED': "PAUSED",
+        },
     }
 
     validations = {
@@ -137,6 +141,7 @@ class DeclarativeAutomation(ModelNormal):
             'notification_channel': (DeclarativeNotificationChannelIdentifier,),  # noqa: E501
             'recipients': ([DeclarativeUserIdentifier],),  # noqa: E501
             'schedule': (AutomationSchedule,),  # noqa: E501
+            'state': (str,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
             'title': (str,),  # noqa: E501
         }
@@ -159,6 +164,7 @@ class DeclarativeAutomation(ModelNormal):
         'notification_channel': 'notificationChannel',  # noqa: E501
         'recipients': 'recipients',  # noqa: E501
         'schedule': 'schedule',  # noqa: E501
+        'state': 'state',  # noqa: E501
         'tags': 'tags',  # noqa: E501
         'title': 'title',  # noqa: E501
     }
@@ -218,7 +224,8 @@ class DeclarativeAutomation(ModelNormal):
             notification_channel (DeclarativeNotificationChannelIdentifier): [optional]  # noqa: E501
             recipients ([DeclarativeUserIdentifier]): [optional]  # noqa: E501
             schedule (AutomationSchedule): [optional]  # noqa: E501
-            tags ([str]): A list of tags.. [optional]  # noqa: E501
+            state (str): Current state of the automation.. [optional] if omitted the server will use the default value of "ACTIVE"  # noqa: E501
+            tags ([str]): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
         """
 
@@ -320,7 +327,8 @@ class DeclarativeAutomation(ModelNormal):
             notification_channel (DeclarativeNotificationChannelIdentifier): [optional]  # noqa: E501
             recipients ([DeclarativeUserIdentifier]): [optional]  # noqa: E501
             schedule (AutomationSchedule): [optional]  # noqa: E501
-            tags ([str]): A list of tags.. [optional]  # noqa: E501
+            state (str): Current state of the automation.. [optional] if omitted the server will use the default value of "ACTIVE"  # noqa: E501
+            tags ([str]): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
         """
 

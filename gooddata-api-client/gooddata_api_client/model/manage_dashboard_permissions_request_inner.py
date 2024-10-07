@@ -66,11 +66,6 @@ class ManageDashboardPermissionsRequestInner(ModelComposed):
     """
 
     allowed_values = {
-        ('permissions',): {
-            'EDIT': "EDIT",
-            'SHARE': "SHARE",
-            'VIEW': "VIEW",
-        },
     }
 
     validations = {
@@ -99,7 +94,6 @@ class ManageDashboardPermissionsRequestInner(ModelComposed):
         """
         lazy_import()
         return {
-            'permissions': ([str],),  # noqa: E501
             'assignee_identifier': (AssigneeIdentifier,),  # noqa: E501
             'assignee_rule': (AssigneeRule,),  # noqa: E501
         }
@@ -110,7 +104,6 @@ class ManageDashboardPermissionsRequestInner(ModelComposed):
 
 
     attribute_map = {
-        'permissions': 'permissions',  # noqa: E501
         'assignee_identifier': 'assigneeIdentifier',  # noqa: E501
         'assignee_rule': 'assigneeRule',  # noqa: E501
     }
@@ -154,7 +147,6 @@ class ManageDashboardPermissionsRequestInner(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            permissions ([str]): [optional]  # noqa: E501
             assignee_identifier (AssigneeIdentifier): [optional]  # noqa: E501
             assignee_rule (AssigneeRule): [optional]  # noqa: E501
         """
@@ -260,7 +252,6 @@ class ManageDashboardPermissionsRequestInner(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            permissions ([str]): [optional]  # noqa: E501
             assignee_identifier (AssigneeIdentifier): [optional]  # noqa: E501
             assignee_rule (AssigneeRule): [optional]  # noqa: E501
         """

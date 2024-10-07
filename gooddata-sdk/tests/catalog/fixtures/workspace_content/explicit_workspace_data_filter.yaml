@@ -30,10 +30,8 @@ interactions:
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdn.jsdelivr.net
-            cdnjs.cloudflare.com; img-src ''self'' data: blob: *.wistia.com *.wistia.net
-            *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net privacy-policy.truste.com
-            www.gooddata.com; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
+            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
+            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
             cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
             *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
             ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
@@ -59,9 +57,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Transfer-Encoding:
           - chunked
         Vary:
@@ -72,9 +67,12 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1 ; mode=block
+          - '0'
         content-length:
           - '6227'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:43 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           ldm:
@@ -778,10 +776,8 @@ interactions:
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdn.jsdelivr.net
-            cdnjs.cloudflare.com; img-src ''self'' data: blob: *.wistia.com *.wistia.net
-            *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net privacy-policy.truste.com
-            www.gooddata.com; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
+            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
+            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
             cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
             *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
             ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
@@ -804,9 +800,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -815,7 +808,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1 ; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:43 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
   - request:
@@ -847,10 +843,8 @@ interactions:
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdn.jsdelivr.net
-            cdnjs.cloudflare.com; img-src ''self'' data: blob: *.wistia.com *.wistia.net
-            *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net privacy-policy.truste.com
-            www.gooddata.com; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
+            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
+            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
             cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
             *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
             ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
@@ -875,9 +869,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Transfer-Encoding:
           - chunked
         Vary:
@@ -888,9 +879,12 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1 ; mode=block
+          - '0'
         content-length:
           - '6385'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:43 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           ldm:
@@ -1263,10 +1257,8 @@ interactions:
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdn.jsdelivr.net
-            cdnjs.cloudflare.com; img-src ''self'' data: blob: *.wistia.com *.wistia.net
-            *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net privacy-policy.truste.com
-            www.gooddata.com; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
+            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
+            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
             cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
             *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
             ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
@@ -1291,9 +1283,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -1302,7 +1291,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1 ; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:43 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -1506,37 +1498,6 @@ interactions:
                 origin:
                   originType: NATIVE
                   originId: demo
-            - id: state
-              type: attribute
-              attributes:
-                title: State
-                description: State
-                tags:
-                  - Customers
-                areRelationsValid: true
-                sourceColumn: state
-                sourceColumnDataType: STRING
-              relationships:
-                defaultView:
-                  data:
-                    id: state
-                    type: label
-                dataset:
-                  data:
-                    id: customers
-                    type: dataset
-                labels:
-                  data:
-                    - id: geo__state__location
-                      type: label
-                    - id: state
-                      type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/state
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
             - id: order_id
               type: attribute
               attributes:
@@ -1731,6 +1692,37 @@ interactions:
                       type: label
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.hour
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: state
+              type: attribute
+              attributes:
+                title: State
+                description: State
+                tags:
+                  - Customers
+                areRelationsValid: true
+                sourceColumn: state
+                sourceColumnDataType: STRING
+              relationships:
+                defaultView:
+                  data:
+                    id: state
+                    type: label
+                dataset:
+                  data:
+                    id: customers
+                    type: dataset
+                labels:
+                  data:
+                    - id: geo__state__location
+                      type: label
+                    - id: state
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/state
               meta:
                 origin:
                   originType: NATIVE
@@ -2108,15 +2100,15 @@ interactions:
                     type: attribute
                 referenceProperties:
                   - identifier:
-                      id: date
+                      id: campaigns
                       type: dataset
                     multivalue: false
                     sources:
-                      - column: date
-                        dataType: DATE
+                      - column: campaign_id
+                        dataType: INT
                         target:
-                          id: date
-                          type: date
+                          id: campaign_id
+                          type: attribute
                     sourceColumns: null
                     sourceColumnDataTypes: null
                   - identifier:
@@ -2132,6 +2124,18 @@ interactions:
                     sourceColumns: null
                     sourceColumnDataTypes: null
                   - identifier:
+                      id: date
+                      type: dataset
+                    multivalue: false
+                    sources:
+                      - column: date
+                        dataType: DATE
+                        target:
+                          id: date
+                          type: date
+                    sourceColumns: null
+                    sourceColumnDataTypes: null
+                  - identifier:
                       id: customers
                       type: dataset
                     multivalue: false
@@ -2143,26 +2147,14 @@ interactions:
                           type: attribute
                     sourceColumns: null
                     sourceColumnDataTypes: null
-                  - identifier:
-                      id: campaigns
-                      type: dataset
-                    multivalue: false
-                    sources:
-                      - column: campaign_id
-                        dataType: INT
-                        target:
-                          id: campaign_id
-                          type: attribute
-                    sourceColumns: null
-                    sourceColumnDataTypes: null
                 dataSourceTableId: demo-test-ds:order_lines
                 dataSourceTablePath:
                   - demo
                   - order_lines
                 workspaceDataFilterColumns:
-                  - name: wdf__state
-                    dataType: STRING
                   - name: wdf__region
+                    dataType: STRING
+                  - name: wdf__state
                     dataType: STRING
                 workspaceDataFilterReferences:
                   - filterId:
@@ -2633,10 +2625,8 @@ interactions:
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdn.jsdelivr.net
-            cdnjs.cloudflare.com; img-src ''self'' data: blob: *.wistia.com *.wistia.net
-            *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net privacy-policy.truste.com
-            www.gooddata.com; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
+            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
+            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
             cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
             *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
             ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
@@ -2661,9 +2651,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -2672,7 +2659,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1 ; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:43 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -2708,17 +2698,17 @@ interactions:
               relationships:
                 attributes:
                   data:
-                    - id: campaign_channel_id
+                    - id: campaign_channels.category
                       type: attribute
                     - id: type
                       type: attribute
-                    - id: campaign_channels.category
+                    - id: campaign_channel_id
                       type: attribute
                 facts:
                   data:
-                    - id: spend
-                      type: fact
                     - id: budget
+                      type: fact
+                    - id: spend
                       type: fact
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/campaign_channels
@@ -2780,13 +2770,13 @@ interactions:
               relationships:
                 attributes:
                   data:
-                    - id: customer_name
-                      type: attribute
                     - id: customer_id
                       type: attribute
                     - id: region
                       type: attribute
                     - id: state
+                      type: attribute
+                    - id: customer_name
                       type: attribute
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/customers
@@ -2806,15 +2796,15 @@ interactions:
                     type: attribute
                 referenceProperties:
                   - identifier:
-                      id: date
+                      id: campaigns
                       type: dataset
                     multivalue: false
                     sources:
-                      - column: date
-                        dataType: DATE
+                      - column: campaign_id
+                        dataType: INT
                         target:
-                          id: date
-                          type: date
+                          id: campaign_id
+                          type: attribute
                     sourceColumns: null
                     sourceColumnDataTypes: null
                   - identifier:
@@ -2830,6 +2820,18 @@ interactions:
                     sourceColumns: null
                     sourceColumnDataTypes: null
                   - identifier:
+                      id: date
+                      type: dataset
+                    multivalue: false
+                    sources:
+                      - column: date
+                        dataType: DATE
+                        target:
+                          id: date
+                          type: date
+                    sourceColumns: null
+                    sourceColumnDataTypes: null
+                  - identifier:
                       id: customers
                       type: dataset
                     multivalue: false
@@ -2841,27 +2843,15 @@ interactions:
                           type: attribute
                     sourceColumns: null
                     sourceColumnDataTypes: null
-                  - identifier:
-                      id: campaigns
-                      type: dataset
-                    multivalue: false
-                    sources:
-                      - column: campaign_id
-                        dataType: INT
-                        target:
-                          id: campaign_id
-                          type: attribute
-                    sourceColumns: null
-                    sourceColumnDataTypes: null
                 dataSourceTableId: demo-test-ds:order_lines
                 dataSourceTablePath:
                   - demo
                   - order_lines
                 areRelationsValid: true
                 workspaceDataFilterColumns:
-                  - name: wdf__state
-                    dataType: STRING
                   - name: wdf__region
+                    dataType: STRING
+                  - name: wdf__state
                     dataType: STRING
                 workspaceDataFilterReferences:
                   - filterId:
@@ -2878,17 +2868,17 @@ interactions:
               relationships:
                 attributes:
                   data:
-                    - id: order_id
-                      type: attribute
                     - id: order_line_id
                       type: attribute
                     - id: order_status
                       type: attribute
+                    - id: order_id
+                      type: attribute
                 facts:
                   data:
-                    - id: price
-                      type: fact
                     - id: quantity
+                      type: fact
+                    - id: price
                       type: fact
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/order_lines
@@ -2915,9 +2905,9 @@ interactions:
               relationships:
                 attributes:
                   data:
-                    - id: products.category
-                      type: attribute
                     - id: product_name
+                      type: attribute
+                    - id: products.category
                       type: attribute
                     - id: product_id
                       type: attribute
@@ -2939,35 +2929,35 @@ interactions:
               relationships:
                 attributes:
                   data:
-                    - id: date.day
+                    - id: date.month
                       type: attribute
                     - id: date.week
                       type: attribute
+                    - id: date.minuteOfHour
+                      type: attribute
                     - id: date.quarter
                       type: attribute
-                    - id: date.year
+                    - id: date.hourOfDay
+                      type: attribute
+                    - id: date.hour
                       type: attribute
                     - id: date.monthOfYear
                       type: attribute
-                    - id: date.month
+                    - id: date.dayOfYear
+                      type: attribute
+                    - id: date.day
+                      type: attribute
+                    - id: date.year
                       type: attribute
                     - id: date.weekOfYear
                       type: attribute
                     - id: date.minute
                       type: attribute
-                    - id: date.hourOfDay
-                      type: attribute
-                    - id: date.dayOfYear
-                      type: attribute
-                    - id: date.quarterOfYear
-                      type: attribute
-                    - id: date.minuteOfHour
-                      type: attribute
                     - id: date.dayOfMonth
                       type: attribute
-                    - id: date.hour
-                      type: attribute
                     - id: date.dayOfWeek
+                      type: attribute
+                    - id: date.quarterOfYear
                       type: attribute
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/date
@@ -3369,10 +3359,8 @@ interactions:
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdn.jsdelivr.net
-            cdnjs.cloudflare.com; img-src ''self'' data: blob: *.wistia.com *.wistia.net
-            *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net privacy-policy.truste.com
-            www.gooddata.com; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
+            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
+            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
             cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
             *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
             ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
@@ -3397,9 +3385,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -3408,7 +3393,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1 ; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:43 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -3417,7 +3405,7 @@ interactions:
               attributes:
                 title: '# of Active Customers'
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:35
+                createdAt: 2024-10-07 11:17
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
@@ -3432,7 +3420,7 @@ interactions:
               attributes:
                 title: '# of Orders'
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:35
+                createdAt: 2024-10-07 11:17
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/order_id})
@@ -3447,7 +3435,7 @@ interactions:
               attributes:
                 title: '# of Top Customers'
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:35
+                createdAt: 2024-10-07 11:17
                 content:
                   format: '#,##0'
                   maql: 'SELECT {metric/amount_of_active_customers} WHERE (SELECT
@@ -3464,7 +3452,7 @@ interactions:
                 title: '# of Valid Orders'
                 description: ''
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:35
+                createdAt: 2024-10-07 11:17
                 content:
                   format: '#,##0.00'
                   maql: SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status}
@@ -3480,7 +3468,7 @@ interactions:
               attributes:
                 title: Campaign Spend
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:35
+                createdAt: 2024-10-07 11:17
                 content:
                   format: $#,##0
                   maql: SELECT SUM({fact/spend})
@@ -3495,7 +3483,7 @@ interactions:
               attributes:
                 title: Order Amount
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:35
+                createdAt: 2024-10-07 11:17
                 content:
                   format: $#,##0
                   maql: SELECT SUM({fact/price}*{fact/quantity})
@@ -3510,7 +3498,7 @@ interactions:
               attributes:
                 title: '% Revenue'
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:35
+                createdAt: 2024-10-07 11:17
                 content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / {metric/total_revenue}
@@ -3525,7 +3513,7 @@ interactions:
               attributes:
                 title: '% Revenue from Top 10 Customers'
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:35
+                createdAt: 2024-10-07 11:17
                 content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
@@ -3541,7 +3529,7 @@ interactions:
               attributes:
                 title: '% Revenue from Top 10% Customers'
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:35
+                createdAt: 2024-10-07 11:17
                 content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
@@ -3557,7 +3545,7 @@ interactions:
               attributes:
                 title: '% Revenue from Top 10% Products'
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:35
+                createdAt: 2024-10-07 11:17
                 content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
@@ -3573,7 +3561,7 @@ interactions:
               attributes:
                 title: '% Revenue from Top 10 Products'
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:35
+                createdAt: 2024-10-07 11:17
                 content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
@@ -3589,7 +3577,7 @@ interactions:
               attributes:
                 title: '% Revenue in Category'
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:35
+                createdAt: 2024-10-07 11:17
                 content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
@@ -3605,7 +3593,7 @@ interactions:
               attributes:
                 title: '% Revenue per Product'
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:35
+                createdAt: 2024-10-07 11:17
                 content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL
@@ -3622,7 +3610,7 @@ interactions:
                 title: Revenue
                 description: ''
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:35
+                createdAt: 2024-10-07 11:17
                 content:
                   format: $#,##0
                   maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
@@ -3638,7 +3626,7 @@ interactions:
               attributes:
                 title: Revenue (Clothing)
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:35
+                createdAt: 2024-10-07 11:17
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
@@ -3654,7 +3642,7 @@ interactions:
               attributes:
                 title: Revenue (Electronic)
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:35
+                createdAt: 2024-10-07 11:17
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
@@ -3670,7 +3658,7 @@ interactions:
               attributes:
                 title: Revenue (Home)
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:35
+                createdAt: 2024-10-07 11:17
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
@@ -3686,7 +3674,7 @@ interactions:
               attributes:
                 title: Revenue (Outdoor)
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:35
+                createdAt: 2024-10-07 11:17
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
@@ -3702,7 +3690,7 @@ interactions:
               attributes:
                 title: Revenue per Customer
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:35
+                createdAt: 2024-10-07 11:17
                 content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
@@ -3717,7 +3705,7 @@ interactions:
               attributes:
                 title: Revenue per Dollar Spent
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:35
+                createdAt: 2024-10-07 11:17
                 content:
                   format: $#,##0.0
                   maql: SELECT {metric/revenue} / {metric/campaign_spend}
@@ -3732,7 +3720,7 @@ interactions:
               attributes:
                 title: Revenue / Top 10
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:35
+                createdAt: 2024-10-07 11:17
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
@@ -3747,7 +3735,7 @@ interactions:
               attributes:
                 title: Revenue / Top 10%
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:35
+                createdAt: 2024-10-07 11:17
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
@@ -3762,7 +3750,7 @@ interactions:
               attributes:
                 title: Total Revenue
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:35
+                createdAt: 2024-10-07 11:17
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} BY ALL OTHER
@@ -3777,7 +3765,7 @@ interactions:
               attributes:
                 title: Total Revenue (No Filters)
                 areRelationsValid: true
-                createdAt: 2024-01-25 12:35
+                createdAt: 2024-10-07 11:17
                 content:
                   format: $#,##0
                   maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
@@ -5156,6 +5144,7 @@ interactions:
                       visualizationUrl: local:bar
                     id: top_10_products
                     title: Top 10 Products
+                exportDefinitions: []
               ldm:
                 datasets:
                   - grain:
@@ -5500,6 +5489,7 @@ interactions:
                 name: VIEW
             settings: []
             userDataFilters: []
+            automations: []
           - id: demo_west
             name: Demo West
             customApplicationSettings: []
@@ -5518,6 +5508,7 @@ interactions:
                 filterContexts: []
                 metrics: []
                 visualizationObjects: []
+                exportDefinitions: []
               ldm:
                 datasetExtensions:
                   - id: order_lines
@@ -5535,6 +5526,7 @@ interactions:
             permissions: []
             settings: []
             userDataFilters: []
+            automations: []
           - id: demo_west_california
             name: Demo West California
             customApplicationSettings: []
@@ -5548,6 +5540,7 @@ interactions:
                 filterContexts: []
                 metrics: []
                 visualizationObjects: []
+                exportDefinitions: []
               ldm:
                 datasets: []
                 dateInstances: []
@@ -5557,6 +5550,7 @@ interactions:
             permissions: []
             settings: []
             userDataFilters: []
+            automations: []
       headers:
         Accept-Encoding:
           - br, gzip, deflate
@@ -5582,10 +5576,8 @@ interactions:
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdn.jsdelivr.net
-            cdnjs.cloudflare.com; img-src ''self'' data: blob: *.wistia.com *.wistia.net
-            *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net privacy-policy.truste.com
-            www.gooddata.com; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
+            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
+            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
             cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
             *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
             ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
@@ -5608,9 +5600,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -5619,6 +5608,9 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1 ; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:43 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''

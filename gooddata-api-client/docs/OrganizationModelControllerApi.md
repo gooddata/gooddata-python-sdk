@@ -7,7 +7,9 @@ Method | HTTP request | Description
 [**create_entity_color_palettes**](OrganizationModelControllerApi.md#create_entity_color_palettes) | **POST** /api/v1/entities/colorPalettes | Post Color Pallettes
 [**create_entity_csp_directives**](OrganizationModelControllerApi.md#create_entity_csp_directives) | **POST** /api/v1/entities/cspDirectives | Post CSP Directives
 [**create_entity_data_sources**](OrganizationModelControllerApi.md#create_entity_data_sources) | **POST** /api/v1/entities/dataSources | Post Data Sources
+[**create_entity_identity_providers**](OrganizationModelControllerApi.md#create_entity_identity_providers) | **POST** /api/v1/entities/identityProviders | Post Identity Providers
 [**create_entity_jwks**](OrganizationModelControllerApi.md#create_entity_jwks) | **POST** /api/v1/entities/jwks | Post Jwks
+[**create_entity_llm_endpoints**](OrganizationModelControllerApi.md#create_entity_llm_endpoints) | **POST** /api/v1/entities/llmEndpoints | Post LLM endpoint entities
 [**create_entity_notification_channels**](OrganizationModelControllerApi.md#create_entity_notification_channels) | **POST** /api/v1/entities/notificationChannels | Post Notification Channel entities
 [**create_entity_organization_settings**](OrganizationModelControllerApi.md#create_entity_organization_settings) | **POST** /api/v1/entities/organizationSettings | Post Organization Setting entities
 [**create_entity_themes**](OrganizationModelControllerApi.md#create_entity_themes) | **POST** /api/v1/entities/themes | Post Theming
@@ -17,8 +19,10 @@ Method | HTTP request | Description
 [**delete_entity_color_palettes**](OrganizationModelControllerApi.md#delete_entity_color_palettes) | **DELETE** /api/v1/entities/colorPalettes/{id} | Delete a Color Pallette
 [**delete_entity_csp_directives**](OrganizationModelControllerApi.md#delete_entity_csp_directives) | **DELETE** /api/v1/entities/cspDirectives/{id} | Delete CSP Directives
 [**delete_entity_data_sources**](OrganizationModelControllerApi.md#delete_entity_data_sources) | **DELETE** /api/v1/entities/dataSources/{id} | Delete Data Source entity
+[**delete_entity_identity_providers**](OrganizationModelControllerApi.md#delete_entity_identity_providers) | **DELETE** /api/v1/entities/identityProviders/{id} | Delete Identity Provider
 [**delete_entity_jwks**](OrganizationModelControllerApi.md#delete_entity_jwks) | **DELETE** /api/v1/entities/jwks/{id} | Delete Jwk
-[**delete_entity_notification_channels**](OrganizationModelControllerApi.md#delete_entity_notification_channels) | **DELETE** /api/v1/entities/notificationChannels/{id} | 
+[**delete_entity_llm_endpoints**](OrganizationModelControllerApi.md#delete_entity_llm_endpoints) | **DELETE** /api/v1/entities/llmEndpoints/{id} | 
+[**delete_entity_notification_channels**](OrganizationModelControllerApi.md#delete_entity_notification_channels) | **DELETE** /api/v1/entities/notificationChannels/{id} | Delete Notification Channel entity
 [**delete_entity_organization_settings**](OrganizationModelControllerApi.md#delete_entity_organization_settings) | **DELETE** /api/v1/entities/organizationSettings/{id} | Delete Organization entity
 [**delete_entity_themes**](OrganizationModelControllerApi.md#delete_entity_themes) | **DELETE** /api/v1/entities/themes/{id} | Delete Theming
 [**delete_entity_user_groups**](OrganizationModelControllerApi.md#delete_entity_user_groups) | **DELETE** /api/v1/entities/userGroups/{id} | Delete UserGroup entity
@@ -29,7 +33,9 @@ Method | HTTP request | Description
 [**get_all_entities_data_source_identifiers**](OrganizationModelControllerApi.md#get_all_entities_data_source_identifiers) | **GET** /api/v1/entities/dataSourceIdentifiers | Get all Data Source Identifiers
 [**get_all_entities_data_sources**](OrganizationModelControllerApi.md#get_all_entities_data_sources) | **GET** /api/v1/entities/dataSources | Get Data Source entities
 [**get_all_entities_entitlements**](OrganizationModelControllerApi.md#get_all_entities_entitlements) | **GET** /api/v1/entities/entitlements | Get Entitlements
+[**get_all_entities_identity_providers**](OrganizationModelControllerApi.md#get_all_entities_identity_providers) | **GET** /api/v1/entities/identityProviders | Get all Identity Providers
 [**get_all_entities_jwks**](OrganizationModelControllerApi.md#get_all_entities_jwks) | **GET** /api/v1/entities/jwks | Get all Jwks
+[**get_all_entities_llm_endpoints**](OrganizationModelControllerApi.md#get_all_entities_llm_endpoints) | **GET** /api/v1/entities/llmEndpoints | Get all LLM endpoint entities
 [**get_all_entities_notification_channels**](OrganizationModelControllerApi.md#get_all_entities_notification_channels) | **GET** /api/v1/entities/notificationChannels | Get all Notification Channel entities
 [**get_all_entities_organization_settings**](OrganizationModelControllerApi.md#get_all_entities_organization_settings) | **GET** /api/v1/entities/organizationSettings | Get Organization entities
 [**get_all_entities_themes**](OrganizationModelControllerApi.md#get_all_entities_themes) | **GET** /api/v1/entities/themes | Get all Theming entities
@@ -42,7 +48,9 @@ Method | HTTP request | Description
 [**get_entity_data_source_identifiers**](OrganizationModelControllerApi.md#get_entity_data_source_identifiers) | **GET** /api/v1/entities/dataSourceIdentifiers/{id} | Get Data Source Identifier
 [**get_entity_data_sources**](OrganizationModelControllerApi.md#get_entity_data_sources) | **GET** /api/v1/entities/dataSources/{id} | Get Data Source entity
 [**get_entity_entitlements**](OrganizationModelControllerApi.md#get_entity_entitlements) | **GET** /api/v1/entities/entitlements/{id} | Get Entitlement
+[**get_entity_identity_providers**](OrganizationModelControllerApi.md#get_entity_identity_providers) | **GET** /api/v1/entities/identityProviders/{id} | Get Identity Provider
 [**get_entity_jwks**](OrganizationModelControllerApi.md#get_entity_jwks) | **GET** /api/v1/entities/jwks/{id} | Get Jwk
+[**get_entity_llm_endpoints**](OrganizationModelControllerApi.md#get_entity_llm_endpoints) | **GET** /api/v1/entities/llmEndpoints/{id} | Get LLM endpoint entity
 [**get_entity_notification_channels**](OrganizationModelControllerApi.md#get_entity_notification_channels) | **GET** /api/v1/entities/notificationChannels/{id} | Get Notification Channel entity
 [**get_entity_organization_settings**](OrganizationModelControllerApi.md#get_entity_organization_settings) | **GET** /api/v1/entities/organizationSettings/{id} | Get Organization entity
 [**get_entity_themes**](OrganizationModelControllerApi.md#get_entity_themes) | **GET** /api/v1/entities/themes/{id} | Get Theming
@@ -53,7 +61,9 @@ Method | HTTP request | Description
 [**patch_entity_color_palettes**](OrganizationModelControllerApi.md#patch_entity_color_palettes) | **PATCH** /api/v1/entities/colorPalettes/{id} | Patch Color Pallette
 [**patch_entity_csp_directives**](OrganizationModelControllerApi.md#patch_entity_csp_directives) | **PATCH** /api/v1/entities/cspDirectives/{id} | Patch CSP Directives
 [**patch_entity_data_sources**](OrganizationModelControllerApi.md#patch_entity_data_sources) | **PATCH** /api/v1/entities/dataSources/{id} | Patch Data Source entity
+[**patch_entity_identity_providers**](OrganizationModelControllerApi.md#patch_entity_identity_providers) | **PATCH** /api/v1/entities/identityProviders/{id} | Patch Identity Provider
 [**patch_entity_jwks**](OrganizationModelControllerApi.md#patch_entity_jwks) | **PATCH** /api/v1/entities/jwks/{id} | Patch Jwk
+[**patch_entity_llm_endpoints**](OrganizationModelControllerApi.md#patch_entity_llm_endpoints) | **PATCH** /api/v1/entities/llmEndpoints/{id} | Patch LLM endpoint entity
 [**patch_entity_notification_channels**](OrganizationModelControllerApi.md#patch_entity_notification_channels) | **PATCH** /api/v1/entities/notificationChannels/{id} | Patch Notification Channel entity
 [**patch_entity_organization_settings**](OrganizationModelControllerApi.md#patch_entity_organization_settings) | **PATCH** /api/v1/entities/organizationSettings/{id} | Patch Organization entity
 [**patch_entity_themes**](OrganizationModelControllerApi.md#patch_entity_themes) | **PATCH** /api/v1/entities/themes/{id} | Patch Theming
@@ -63,7 +73,9 @@ Method | HTTP request | Description
 [**update_entity_color_palettes**](OrganizationModelControllerApi.md#update_entity_color_palettes) | **PUT** /api/v1/entities/colorPalettes/{id} | Put Color Pallette
 [**update_entity_csp_directives**](OrganizationModelControllerApi.md#update_entity_csp_directives) | **PUT** /api/v1/entities/cspDirectives/{id} | Put CSP Directives
 [**update_entity_data_sources**](OrganizationModelControllerApi.md#update_entity_data_sources) | **PUT** /api/v1/entities/dataSources/{id} | Put Data Source entity
+[**update_entity_identity_providers**](OrganizationModelControllerApi.md#update_entity_identity_providers) | **PUT** /api/v1/entities/identityProviders/{id} | Put Identity Provider
 [**update_entity_jwks**](OrganizationModelControllerApi.md#update_entity_jwks) | **PUT** /api/v1/entities/jwks/{id} | Put Jwk
+[**update_entity_llm_endpoints**](OrganizationModelControllerApi.md#update_entity_llm_endpoints) | **PUT** /api/v1/entities/llmEndpoints/{id} | PUT LLM endpoint entity
 [**update_entity_notification_channels**](OrganizationModelControllerApi.md#update_entity_notification_channels) | **PUT** /api/v1/entities/notificationChannels/{id} | Put Notification Channel entity
 [**update_entity_organization_settings**](OrganizationModelControllerApi.md#update_entity_organization_settings) | **PUT** /api/v1/entities/organizationSettings/{id} | Put Organization entity
 [**update_entity_themes**](OrganizationModelControllerApi.md#update_entity_themes) | **PUT** /api/v1/entities/themes/{id} | Put Theming
@@ -329,6 +341,82 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **create_entity_identity_providers**
+> JsonApiIdentityProviderOutDocument create_entity_identity_providers(json_api_identity_provider_in_document)
+
+Post Identity Providers
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import organization_model_controller_api
+from gooddata_api_client.model.json_api_identity_provider_out_document import JsonApiIdentityProviderOutDocument
+from gooddata_api_client.model.json_api_identity_provider_in_document import JsonApiIdentityProviderInDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
+    json_api_identity_provider_in_document = JsonApiIdentityProviderInDocument(
+        data=JsonApiIdentityProviderIn(
+            attributes=JsonApiIdentityProviderInAttributes(
+                identifiers=["gooddata.com"],
+                specification=JsonApiIdentityProviderInAttributesSpecification(),
+                type="SAML",
+            ),
+            id="id1",
+            type="identityProvider",
+        ),
+    ) # JsonApiIdentityProviderInDocument | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Post Identity Providers
+        api_response = api_instance.create_entity_identity_providers(json_api_identity_provider_in_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->create_entity_identity_providers: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **json_api_identity_provider_in_document** | [**JsonApiIdentityProviderInDocument**](JsonApiIdentityProviderInDocument.md)|  |
+
+### Return type
+
+[**JsonApiIdentityProviderOutDocument**](JsonApiIdentityProviderOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/vnd.gooddata.api+json
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**201** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **create_entity_jwks**
 > JsonApiJwkOutDocument create_entity_jwks(json_api_jwk_in_document)
 
@@ -405,6 +493,86 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **create_entity_llm_endpoints**
+> JsonApiLlmEndpointOutDocument create_entity_llm_endpoints(json_api_llm_endpoint_in_document)
+
+Post LLM endpoint entities
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import organization_model_controller_api
+from gooddata_api_client.model.json_api_llm_endpoint_in_document import JsonApiLlmEndpointInDocument
+from gooddata_api_client.model.json_api_llm_endpoint_out_document import JsonApiLlmEndpointOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
+    json_api_llm_endpoint_in_document = JsonApiLlmEndpointInDocument(
+        data=JsonApiLlmEndpointIn(
+            attributes=JsonApiLlmEndpointInAttributes(
+                base_url="base_url_example",
+                description="description_example",
+                llm_model="llm_model_example",
+                llm_organization="llm_organization_example",
+                provider="OPENAI",
+                title="title_example",
+                token="token_example",
+            ),
+            id="id1",
+            type="llmEndpoint",
+        ),
+    ) # JsonApiLlmEndpointInDocument | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Post LLM endpoint entities
+        api_response = api_instance.create_entity_llm_endpoints(json_api_llm_endpoint_in_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->create_entity_llm_endpoints: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **json_api_llm_endpoint_in_document** | [**JsonApiLlmEndpointInDocument**](JsonApiLlmEndpointInDocument.md)|  |
+
+### Return type
+
+[**JsonApiLlmEndpointOutDocument**](JsonApiLlmEndpointOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/vnd.gooddata.api+json
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**201** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **create_entity_notification_channels**
 > JsonApiNotificationChannelOutDocument create_entity_notification_channels(json_api_notification_channel_post_optional_id_document)
 
@@ -434,19 +602,12 @@ with gooddata_api_client.ApiClient() as api_client:
     json_api_notification_channel_post_optional_id_document = JsonApiNotificationChannelPostOptionalIdDocument(
         data=JsonApiNotificationChannelPostOptionalId(
             attributes=JsonApiNotificationChannelInAttributes(
+                allowed_recipients="CREATOR",
+                custom_dashboard_url="custom_dashboard_url_example",
                 description="description_example",
+                destination=JsonApiNotificationChannelInAttributesDestination(None),
+                destination_type="WEBHOOK",
                 name="name_example",
-                triggers=[
-                    JsonApiNotificationChannelInAttributesTriggersInner(
-                        metadata=JsonNode(),
-                        type="SCHEDULE",
-                    ),
-                ],
-                webhook=JsonApiNotificationChannelInAttributesWebhook(
-                    has_token=True,
-                    token="token_example",
-                    url="https://example.com/webhook",
-                ),
             ),
             id="id1",
             type="notificationChannel",
@@ -1176,6 +1337,79 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **delete_entity_identity_providers**
+> delete_entity_identity_providers(id)
+
+Delete Identity Provider
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import organization_model_controller_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
+    id = "/6bUUGjjNSwg0_bs" # str | 
+    filter = "filter=type==IdentityProviderTypeValue;identifiers==v1,v2,v3" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Delete Identity Provider
+        api_instance.delete_entity_identity_providers(id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->delete_entity_identity_providers: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Delete Identity Provider
+        api_instance.delete_entity_identity_providers(id, filter=filter)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->delete_entity_identity_providers: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | Successfully deleted |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **delete_entity_jwks**
 > delete_entity_jwks(id)
 
@@ -1251,10 +1485,81 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **delete_entity_llm_endpoints**
+> delete_entity_llm_endpoints(id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import organization_model_controller_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
+    id = "/6bUUGjjNSwg0_bs" # str | 
+    filter = "filter=title==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_instance.delete_entity_llm_endpoints(id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->delete_entity_llm_endpoints: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_instance.delete_entity_llm_endpoints(id, filter=filter)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->delete_entity_llm_endpoints: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | Successfully deleted |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **delete_entity_notification_channels**
 > delete_entity_notification_channels(id)
 
-
+Delete Notification Channel entity
 
 ### Example
 
@@ -1280,6 +1585,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Delete Notification Channel entity
         api_instance.delete_entity_notification_channels(id)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling OrganizationModelControllerApi->delete_entity_notification_channels: %s\n" % e)
@@ -1287,6 +1593,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Delete Notification Channel entity
         api_instance.delete_entity_notification_channels(id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling OrganizationModelControllerApi->delete_entity_notification_channels: %s\n" % e)
@@ -2089,6 +2396,84 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **get_all_entities_identity_providers**
+> JsonApiIdentityProviderOutList get_all_entities_identity_providers()
+
+Get all Identity Providers
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import organization_model_controller_api
+from gooddata_api_client.model.json_api_identity_provider_out_list import JsonApiIdentityProviderOutList
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
+    filter = "filter=type==IdentityProviderTypeValue;identifiers==v1,v2,v3" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
+    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
+    sort = [
+        "sort_example",
+    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = [
+        "metaInclude=page,all",
+    ] # [str] | Include Meta objects. (optional)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Get all Identity Providers
+        api_response = api_instance.get_all_entities_identity_providers(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->get_all_entities_identity_providers: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
+ **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
+ **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
+
+### Return type
+
+[**JsonApiIdentityProviderOutList**](JsonApiIdentityProviderOutList.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **get_all_entities_jwks**
 > JsonApiJwkOutList get_all_entities_jwks()
 
@@ -2150,6 +2535,84 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiJwkOutList**](JsonApiJwkOutList.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_all_entities_llm_endpoints**
+> JsonApiLlmEndpointOutList get_all_entities_llm_endpoints()
+
+Get all LLM endpoint entities
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import organization_model_controller_api
+from gooddata_api_client.model.json_api_llm_endpoint_out_list import JsonApiLlmEndpointOutList
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
+    filter = "filter=title==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
+    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
+    sort = [
+        "sort_example",
+    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = [
+        "metaInclude=page,all",
+    ] # [str] | Include Meta objects. (optional)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Get all LLM endpoint entities
+        api_response = api_instance.get_all_entities_llm_endpoints(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->get_all_entities_llm_endpoints: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
+ **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
+ **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
+
+### Return type
+
+[**JsonApiLlmEndpointOutList**](JsonApiLlmEndpointOutList.md)
 
 ### Authorization
 
@@ -3129,6 +3592,82 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **get_entity_identity_providers**
+> JsonApiIdentityProviderOutDocument get_entity_identity_providers(id)
+
+Get Identity Provider
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import organization_model_controller_api
+from gooddata_api_client.model.json_api_identity_provider_out_document import JsonApiIdentityProviderOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
+    id = "/6bUUGjjNSwg0_bs" # str | 
+    filter = "filter=type==IdentityProviderTypeValue;identifiers==v1,v2,v3" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get Identity Provider
+        api_response = api_instance.get_entity_identity_providers(id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->get_entity_identity_providers: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Get Identity Provider
+        api_response = api_instance.get_entity_identity_providers(id, filter=filter)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->get_entity_identity_providers: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+[**JsonApiIdentityProviderOutDocument**](JsonApiIdentityProviderOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **get_entity_jwks**
 > JsonApiJwkOutDocument get_entity_jwks(id)
 
@@ -3188,6 +3727,82 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiJwkOutDocument**](JsonApiJwkOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_entity_llm_endpoints**
+> JsonApiLlmEndpointOutDocument get_entity_llm_endpoints(id)
+
+Get LLM endpoint entity
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import organization_model_controller_api
+from gooddata_api_client.model.json_api_llm_endpoint_out_document import JsonApiLlmEndpointOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
+    id = "/6bUUGjjNSwg0_bs" # str | 
+    filter = "filter=title==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get LLM endpoint entity
+        api_response = api_instance.get_entity_llm_endpoints(id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->get_entity_llm_endpoints: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Get LLM endpoint entity
+        api_response = api_instance.get_entity_llm_endpoints(id, filter=filter)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->get_entity_llm_endpoints: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+[**JsonApiLlmEndpointOutDocument**](JsonApiLlmEndpointOutDocument.md)
 
 ### Authorization
 
@@ -4046,6 +4661,95 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **patch_entity_identity_providers**
+> JsonApiIdentityProviderOutDocument patch_entity_identity_providers(id, json_api_identity_provider_patch_document)
+
+Patch Identity Provider
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import organization_model_controller_api
+from gooddata_api_client.model.json_api_identity_provider_patch_document import JsonApiIdentityProviderPatchDocument
+from gooddata_api_client.model.json_api_identity_provider_out_document import JsonApiIdentityProviderOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
+    id = "/6bUUGjjNSwg0_bs" # str | 
+    json_api_identity_provider_patch_document = JsonApiIdentityProviderPatchDocument(
+        data=JsonApiIdentityProviderPatch(
+            attributes=JsonApiIdentityProviderPatchAttributes(
+                identifiers=["gooddata.com"],
+                specification=JsonApiIdentityProviderInAttributesSpecification(),
+                type="SAML",
+            ),
+            id="id1",
+            type="identityProvider",
+        ),
+    ) # JsonApiIdentityProviderPatchDocument | 
+    filter = "filter=type==IdentityProviderTypeValue;identifiers==v1,v2,v3" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Patch Identity Provider
+        api_response = api_instance.patch_entity_identity_providers(id, json_api_identity_provider_patch_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->patch_entity_identity_providers: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Patch Identity Provider
+        api_response = api_instance.patch_entity_identity_providers(id, json_api_identity_provider_patch_document, filter=filter)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->patch_entity_identity_providers: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+ **json_api_identity_provider_patch_document** | [**JsonApiIdentityProviderPatchDocument**](JsonApiIdentityProviderPatchDocument.md)|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+[**JsonApiIdentityProviderOutDocument**](JsonApiIdentityProviderOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/vnd.gooddata.api+json
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **patch_entity_jwks**
 > JsonApiJwkOutDocument patch_entity_jwks(id, json_api_jwk_patch_document)
 
@@ -4135,6 +4839,99 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **patch_entity_llm_endpoints**
+> JsonApiLlmEndpointOutDocument patch_entity_llm_endpoints(id, json_api_llm_endpoint_patch_document)
+
+Patch LLM endpoint entity
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import organization_model_controller_api
+from gooddata_api_client.model.json_api_llm_endpoint_out_document import JsonApiLlmEndpointOutDocument
+from gooddata_api_client.model.json_api_llm_endpoint_patch_document import JsonApiLlmEndpointPatchDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
+    id = "/6bUUGjjNSwg0_bs" # str | 
+    json_api_llm_endpoint_patch_document = JsonApiLlmEndpointPatchDocument(
+        data=JsonApiLlmEndpointPatch(
+            attributes=JsonApiLlmEndpointPatchAttributes(
+                base_url="base_url_example",
+                description="description_example",
+                llm_model="llm_model_example",
+                llm_organization="llm_organization_example",
+                provider="OPENAI",
+                title="title_example",
+                token="token_example",
+            ),
+            id="id1",
+            type="llmEndpoint",
+        ),
+    ) # JsonApiLlmEndpointPatchDocument | 
+    filter = "filter=title==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Patch LLM endpoint entity
+        api_response = api_instance.patch_entity_llm_endpoints(id, json_api_llm_endpoint_patch_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->patch_entity_llm_endpoints: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Patch LLM endpoint entity
+        api_response = api_instance.patch_entity_llm_endpoints(id, json_api_llm_endpoint_patch_document, filter=filter)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->patch_entity_llm_endpoints: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+ **json_api_llm_endpoint_patch_document** | [**JsonApiLlmEndpointPatchDocument**](JsonApiLlmEndpointPatchDocument.md)|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+[**JsonApiLlmEndpointOutDocument**](JsonApiLlmEndpointOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/vnd.gooddata.api+json
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **patch_entity_notification_channels**
 > JsonApiNotificationChannelOutDocument patch_entity_notification_channels(id, json_api_notification_channel_patch_document)
 
@@ -4165,19 +4962,12 @@ with gooddata_api_client.ApiClient() as api_client:
     json_api_notification_channel_patch_document = JsonApiNotificationChannelPatchDocument(
         data=JsonApiNotificationChannelPatch(
             attributes=JsonApiNotificationChannelInAttributes(
+                allowed_recipients="CREATOR",
+                custom_dashboard_url="custom_dashboard_url_example",
                 description="description_example",
+                destination=JsonApiNotificationChannelInAttributesDestination(None),
+                destination_type="WEBHOOK",
                 name="name_example",
-                triggers=[
-                    JsonApiNotificationChannelInAttributesTriggersInner(
-                        metadata=JsonNode(),
-                        type="SCHEDULE",
-                    ),
-                ],
-                webhook=JsonApiNotificationChannelInAttributesWebhook(
-                    has_token=True,
-                    token="token_example",
-                    url="https://example.com/webhook",
-                ),
             ),
             id="id1",
             type="notificationChannel",
@@ -5013,6 +5803,95 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **update_entity_identity_providers**
+> JsonApiIdentityProviderOutDocument update_entity_identity_providers(id, json_api_identity_provider_in_document)
+
+Put Identity Provider
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import organization_model_controller_api
+from gooddata_api_client.model.json_api_identity_provider_out_document import JsonApiIdentityProviderOutDocument
+from gooddata_api_client.model.json_api_identity_provider_in_document import JsonApiIdentityProviderInDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
+    id = "/6bUUGjjNSwg0_bs" # str | 
+    json_api_identity_provider_in_document = JsonApiIdentityProviderInDocument(
+        data=JsonApiIdentityProviderIn(
+            attributes=JsonApiIdentityProviderInAttributes(
+                identifiers=["gooddata.com"],
+                specification=JsonApiIdentityProviderInAttributesSpecification(),
+                type="SAML",
+            ),
+            id="id1",
+            type="identityProvider",
+        ),
+    ) # JsonApiIdentityProviderInDocument | 
+    filter = "filter=type==IdentityProviderTypeValue;identifiers==v1,v2,v3" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Put Identity Provider
+        api_response = api_instance.update_entity_identity_providers(id, json_api_identity_provider_in_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->update_entity_identity_providers: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Put Identity Provider
+        api_response = api_instance.update_entity_identity_providers(id, json_api_identity_provider_in_document, filter=filter)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->update_entity_identity_providers: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+ **json_api_identity_provider_in_document** | [**JsonApiIdentityProviderInDocument**](JsonApiIdentityProviderInDocument.md)|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+[**JsonApiIdentityProviderOutDocument**](JsonApiIdentityProviderOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/vnd.gooddata.api+json
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **update_entity_jwks**
 > JsonApiJwkOutDocument update_entity_jwks(id, json_api_jwk_in_document)
 
@@ -5102,6 +5981,99 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **update_entity_llm_endpoints**
+> JsonApiLlmEndpointOutDocument update_entity_llm_endpoints(id, json_api_llm_endpoint_in_document)
+
+PUT LLM endpoint entity
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import organization_model_controller_api
+from gooddata_api_client.model.json_api_llm_endpoint_in_document import JsonApiLlmEndpointInDocument
+from gooddata_api_client.model.json_api_llm_endpoint_out_document import JsonApiLlmEndpointOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
+    id = "/6bUUGjjNSwg0_bs" # str | 
+    json_api_llm_endpoint_in_document = JsonApiLlmEndpointInDocument(
+        data=JsonApiLlmEndpointIn(
+            attributes=JsonApiLlmEndpointInAttributes(
+                base_url="base_url_example",
+                description="description_example",
+                llm_model="llm_model_example",
+                llm_organization="llm_organization_example",
+                provider="OPENAI",
+                title="title_example",
+                token="token_example",
+            ),
+            id="id1",
+            type="llmEndpoint",
+        ),
+    ) # JsonApiLlmEndpointInDocument | 
+    filter = "filter=title==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # PUT LLM endpoint entity
+        api_response = api_instance.update_entity_llm_endpoints(id, json_api_llm_endpoint_in_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->update_entity_llm_endpoints: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # PUT LLM endpoint entity
+        api_response = api_instance.update_entity_llm_endpoints(id, json_api_llm_endpoint_in_document, filter=filter)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->update_entity_llm_endpoints: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+ **json_api_llm_endpoint_in_document** | [**JsonApiLlmEndpointInDocument**](JsonApiLlmEndpointInDocument.md)|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+[**JsonApiLlmEndpointOutDocument**](JsonApiLlmEndpointOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/vnd.gooddata.api+json
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **update_entity_notification_channels**
 > JsonApiNotificationChannelOutDocument update_entity_notification_channels(id, json_api_notification_channel_in_document)
 
@@ -5132,19 +6104,12 @@ with gooddata_api_client.ApiClient() as api_client:
     json_api_notification_channel_in_document = JsonApiNotificationChannelInDocument(
         data=JsonApiNotificationChannelIn(
             attributes=JsonApiNotificationChannelInAttributes(
+                allowed_recipients="CREATOR",
+                custom_dashboard_url="custom_dashboard_url_example",
                 description="description_example",
+                destination=JsonApiNotificationChannelInAttributesDestination(None),
+                destination_type="WEBHOOK",
                 name="name_example",
-                triggers=[
-                    JsonApiNotificationChannelInAttributesTriggersInner(
-                        metadata=JsonNode(),
-                        type="SCHEDULE",
-                    ),
-                ],
-                webhook=JsonApiNotificationChannelInAttributesWebhook(
-                    has_token=True,
-                    token="token_example",
-                    url="https://example.com/webhook",
-                ),
             ),
             id="id1",
             type="notificationChannel",

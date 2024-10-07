@@ -587,11 +587,13 @@ with gooddata_api_client.ApiClient() as api_client:
                         ],
                         schedule=AutomationSchedule(
                             cron="0 */30 9-17 ? * MON-FRI",
-                            cron_description="cron_description_example",
                             first_run=dateutil_parser('2025-01-01T12:00:00Z'),
                             timezone="Europe/Prague",
                         ),
-                        tags=["Revenues"],
+                        state="ACTIVE",
+                        tags=[
+                            "["Revenue","Sales"]",
+                        ],
                         title="title_example",
                     ),
                 ],
