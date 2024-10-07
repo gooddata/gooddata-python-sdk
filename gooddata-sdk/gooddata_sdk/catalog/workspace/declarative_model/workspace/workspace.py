@@ -83,6 +83,7 @@ class CatalogDeclarativeWorkspace(Base):
     settings: list[CatalogDeclarativeSetting] = attr.field(factory=list)
     user_data_filters: list[CatalogDeclarativeUserDataFilter] = attr.field(factory=list)
     custom_application_settings: list[CatalogDeclarativeCustomApplicationSetting] = attr.field(factory=list)
+    automations: list[dict] = attr.field(factory=list)
 
     @staticmethod
     def client_class() -> type[DeclarativeWorkspace]:
