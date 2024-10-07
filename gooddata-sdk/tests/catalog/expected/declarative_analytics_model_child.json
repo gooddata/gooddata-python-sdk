@@ -18,6 +18,7 @@
     "dashboardPlugins": [],
     "filterContexts": [],
     "metrics": [],
-    "visualizationObjects": []
+    "visualizationObjects": [],
+    "exportDefinitions": []
   }
 }

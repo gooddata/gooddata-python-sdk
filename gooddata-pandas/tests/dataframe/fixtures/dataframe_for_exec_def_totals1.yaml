@@ -99,10 +99,8 @@ interactions:
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdn.jsdelivr.net
-            cdnjs.cloudflare.com; img-src ''self'' data: blob: *.wistia.com *.wistia.net
-            *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net privacy-policy.truste.com
-            www.gooddata.com; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
+            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
+            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
             cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
             *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
             ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
@@ -128,9 +126,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Transfer-Encoding:
           - chunked
         Vary:
@@ -141,9 +136,12 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1 ; mode=block
+          - '0'
         content-length:
-          - '1097'
+          - '1219'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:16:45 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           executionResponse:
@@ -163,6 +161,7 @@ interactions:
                       primaryLabel:
                         id: products.category
                         type: label
+                      valueType: TEXT
                 localIdentifier: dim_0
               - headers:
                   - attributeHeader:
@@ -179,6 +178,7 @@ interactions:
                       primaryLabel:
                         id: region
                         type: label
+                      valueType: TEXT
                   - attributeHeader:
                       localIdentifier: state
                       label:
@@ -193,6 +193,7 @@ interactions:
                       primaryLabel:
                         id: state
                         type: label
+                      valueType: TEXT
                   - measureGroupHeaders:
                       - localIdentifier: price
                       - localIdentifier: order_amount
@@ -200,10 +201,10 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: 894be7423e580e6d3202fcebff6a7773d8bd0229
+              executionResult: 2fe44a2ae0aac23b4c46c8ca7c0ffa74ab82fdae:8e81554da21411a91a2ea8a427524a53eab44e9ac6af2931f9788342029edc5c
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/894be7423e580e6d3202fcebff6a7773d8bd0229/metadata
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/2fe44a2ae0aac23b4c46c8ca7c0ffa74ab82fdae%3A8e81554da21411a91a2ea8a427524a53eab44e9ac6af2931f9788342029edc5c/metadata
       body: null
       headers:
         Accept:
@@ -230,10 +231,8 @@ interactions:
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdn.jsdelivr.net
-            cdnjs.cloudflare.com; img-src ''self'' data: blob: *.wistia.com *.wistia.net
-            *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net privacy-policy.truste.com
-            www.gooddata.com; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
+            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
+            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
             cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
             *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
             ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
@@ -258,9 +257,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Transfer-Encoding:
           - chunked
         Vary:
@@ -271,9 +267,12 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1 ; mode=block
+          - '0'
         content-length:
-          - '2406'
+          - '2528'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:16:45 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           afm:
@@ -335,6 +334,7 @@ interactions:
                       primaryLabel:
                         id: products.category
                         type: label
+                      valueType: TEXT
                 localIdentifier: dim_0
               - headers:
                   - attributeHeader:
@@ -351,6 +351,7 @@ interactions:
                       primaryLabel:
                         id: region
                         type: label
+                      valueType: TEXT
                   - attributeHeader:
                       localIdentifier: state
                       label:
@@ -365,6 +366,7 @@ interactions:
                       primaryLabel:
                         id: state
                         type: label
+                      valueType: TEXT
                   - measureGroupHeaders:
                       - localIdentifier: price
                       - localIdentifier: order_amount
@@ -372,7 +374,7 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: 894be7423e580e6d3202fcebff6a7773d8bd0229
+              executionResult: 2fe44a2ae0aac23b4c46c8ca7c0ffa74ab82fdae:8e81554da21411a91a2ea8a427524a53eab44e9ac6af2931f9788342029edc5c
           resultSpec:
             dimensions:
               - localIdentifier: dim_0
@@ -407,7 +409,7 @@ interactions:
           resultSize: 4770
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/894be7423e580e6d3202fcebff6a7773d8bd0229?offset=0%2C0&limit=100%2C100
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/2fe44a2ae0aac23b4c46c8ca7c0ffa74ab82fdae%3A8e81554da21411a91a2ea8a427524a53eab44e9ac6af2931f9788342029edc5c?offset=0%2C0&limit=100%2C100
       body: null
       headers:
         Accept:
@@ -434,10 +436,8 @@ interactions:
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdn.jsdelivr.net
-            cdnjs.cloudflare.com; img-src ''self'' data: blob: *.wistia.com *.wistia.net
-            *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net privacy-policy.truste.com
-            www.gooddata.com; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
+            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
+            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
             cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
             *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
             ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
@@ -462,9 +462,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Transfer-Encoding:
           - chunked
         Vary:
@@ -475,9 +472,12 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1 ; mode=block
+          - '0'
         content-length:
           - '22911'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:16:45 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -1867,7 +1867,7 @@ interactions:
               - 96
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/894be7423e580e6d3202fcebff6a7773d8bd0229/metadata
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/2fe44a2ae0aac23b4c46c8ca7c0ffa74ab82fdae%3A8e81554da21411a91a2ea8a427524a53eab44e9ac6af2931f9788342029edc5c/metadata
       body: null
       headers:
         Accept:
@@ -1894,10 +1894,8 @@ interactions:
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdn.jsdelivr.net
-            cdnjs.cloudflare.com; img-src ''self'' data: blob: *.wistia.com *.wistia.net
-            *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net privacy-policy.truste.com
-            www.gooddata.com; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
+            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
+            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
             cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
             *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
             ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
@@ -1922,9 +1920,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Transfer-Encoding:
           - chunked
         Vary:
@@ -1935,9 +1930,12 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1 ; mode=block
+          - '0'
         content-length:
-          - '2406'
+          - '2528'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:16:45 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           afm:
@@ -1999,6 +1997,7 @@ interactions:
                       primaryLabel:
                         id: products.category
                         type: label
+                      valueType: TEXT
                 localIdentifier: dim_0
               - headers:
                   - attributeHeader:
@@ -2015,6 +2014,7 @@ interactions:
                       primaryLabel:
                         id: region
                         type: label
+                      valueType: TEXT
                   - attributeHeader:
                       localIdentifier: state
                       label:
@@ -2029,6 +2029,7 @@ interactions:
                       primaryLabel:
                         id: state
                         type: label
+                      valueType: TEXT
                   - measureGroupHeaders:
                       - localIdentifier: price
                       - localIdentifier: order_amount
@@ -2036,7 +2037,7 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: 894be7423e580e6d3202fcebff6a7773d8bd0229
+              executionResult: 2fe44a2ae0aac23b4c46c8ca7c0ffa74ab82fdae:8e81554da21411a91a2ea8a427524a53eab44e9ac6af2931f9788342029edc5c
           resultSpec:
             dimensions:
               - localIdentifier: dim_0
@@ -2071,7 +2072,7 @@ interactions:
           resultSize: 4770
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/894be7423e580e6d3202fcebff6a7773d8bd0229?offset=0%2C0&limit=100%2C100
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/2fe44a2ae0aac23b4c46c8ca7c0ffa74ab82fdae%3A8e81554da21411a91a2ea8a427524a53eab44e9ac6af2931f9788342029edc5c?offset=0%2C0&limit=100%2C100
       body: null
       headers:
         Accept:
@@ -2098,10 +2099,8 @@ interactions:
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdn.jsdelivr.net
-            cdnjs.cloudflare.com; img-src ''self'' data: blob: *.wistia.com *.wistia.net
-            *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net privacy-policy.truste.com
-            www.gooddata.com; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
+            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
+            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
             cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
             *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
             ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
@@ -2126,9 +2125,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Transfer-Encoding:
           - chunked
         Vary:
@@ -2139,9 +2135,12 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1 ; mode=block
+          - '0'
         content-length:
           - '22911'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:16:45 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:

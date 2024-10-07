@@ -2738,7 +2738,8 @@
                 "visualizationUrl": "local:bar"
               }
             }
-          ]
+          ],
+          "export_definitions": []
         }
       },
       "permissions": [
@@ -2775,7 +2776,8 @@
       ],
       "settings": [],
       "user_data_filters": [],
-      "custom_application_settings": []
+      "custom_application_settings": [],
+      "automations": []
     },
     {
       "id": "demo_west",
@@ -2818,7 +2820,8 @@
           "dashboard_plugins": [],
           "filter_contexts": [],
           "metrics": [],
-          "visualization_objects": []
+          "visualization_objects": [],
+          "export_definitions": []
         }
       },
       "parent": {
@@ -2828,7 +2831,8 @@
       "hierarchy_permissions": [],
       "settings": [],
       "user_data_filters": [],
-      "custom_application_settings": []
+      "custom_application_settings": [],
+      "automations": []
     },
     {
       "id": "demo_west_california",
@@ -2845,7 +2849,8 @@
           "dashboard_plugins": [],
           "filter_contexts": [],
           "metrics": [],
-          "visualization_objects": []
+          "visualization_objects": [],
+          "export_definitions": []
         }
       },
       "parent": {
@@ -2855,7 +2860,8 @@
       "hierarchy_permissions": [],
       "settings": [],
       "user_data_filters": [],
-      "custom_application_settings": []
+      "custom_application_settings": [],
+      "automations": []
     }
   ],
   "workspace_data_filters": [

@@ -67,9 +67,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Transfer-Encoding:
           - chunked
         Vary:
@@ -80,9 +77,12 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
         content-length:
           - '261'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:42 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           primaryLabel:
@@ -98,7 +98,7 @@ interactions:
             count: 2
             offset: 0
             next: null
-          cacheId: b44eab802c23260ca4fe62a6a1538003
+          cacheId: fb2512bbc0c3f50f04fb16ec5a453195
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
@@ -161,9 +161,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Transfer-Encoding:
           - chunked
         Vary:
@@ -174,9 +171,12 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
         content-length:
           - '214'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:42 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           primaryLabel:
@@ -190,7 +190,7 @@ interactions:
             count: 1
             offset: 0
             next: null
-          cacheId: 39e11fd2aad6ca07850300169cd24484
+          cacheId: c0fc2deba55a29e9f7b9a87182a96ec8
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
@@ -251,9 +251,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Transfer-Encoding:
           - chunked
         Vary:
@@ -264,9 +261,12 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
         content-length:
           - '308'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:42 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           primaryLabel:
@@ -284,7 +284,7 @@ interactions:
             count: 3
             offset: 0
             next: null
-          cacheId: 0e84830ceefa38ee86ceed18516b2e98
+          cacheId: 8713ec39381648de76b8bb07b2dd7e6e
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
@@ -353,9 +353,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Transfer-Encoding:
           - chunked
         Vary:
@@ -366,9 +363,12 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
         content-length:
           - '166'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:42 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           primaryLabel:
@@ -380,7 +380,7 @@ interactions:
             count: 0
             offset: 0
             next: null
-          cacheId: 1d98d0c70b4389e7621aafe9608689be
+          cacheId: 70cc2bee4313e4d9af4331d270c8744f
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
@@ -450,9 +450,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Transfer-Encoding:
           - chunked
         Vary:
@@ -463,9 +460,12 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
         content-length:
           - '166'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:42 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           primaryLabel:
@@ -477,7 +477,7 @@ interactions:
             count: 0
             offset: 0
             next: null
-          cacheId: 2f78327b91d98aa85a6e8012150dab81
+          cacheId: d93f6d7cb3e2857629109e8b7e79e846
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
@@ -543,9 +543,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Transfer-Encoding:
           - chunked
         Vary:
@@ -556,9 +553,12 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
         content-length:
           - '261'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:42 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           primaryLabel:
@@ -574,7 +574,7 @@ interactions:
             count: 2
             offset: 0
             next: null
-          cacheId: b44eab802c23260ca4fe62a6a1538003
+          cacheId: fb2512bbc0c3f50f04fb16ec5a453195
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
@@ -636,9 +636,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Transfer-Encoding:
           - chunked
         Vary:
@@ -649,9 +646,12 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
         content-length:
           - '214'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:43 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           primaryLabel:
@@ -665,7 +665,7 @@ interactions:
             count: 1
             offset: 0
             next: null
-          cacheId: 639dff293ba49b75a24653eea93ac389
+          cacheId: dc53e67a50f22828e5102bb95159202e
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
@@ -728,9 +728,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Transfer-Encoding:
           - chunked
         Vary:
@@ -741,9 +738,12 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
         content-length:
           - '259'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:43 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           primaryLabel:
@@ -759,7 +759,7 @@ interactions:
             count: 2
             offset: 0
             next: null
-          cacheId: ddfb3b062a48151fdeac436128dc048f
+          cacheId: dfb8fa340c0b88f877bd38889b7c05d3
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
@@ -821,9 +821,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Transfer-Encoding:
           - chunked
         Vary:
@@ -834,9 +831,12 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
         content-length:
           - '308'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:43 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           primaryLabel:
@@ -854,7 +854,7 @@ interactions:
             count: 3
             offset: 0
             next: null
-          cacheId: 59683b1ff43904b99ce31dac2b26089a
+          cacheId: 75f4bf7c56fc29d44cbe1dab40d7194b
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements?offset=1&limit=1
@@ -915,9 +915,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Transfer-Encoding:
           - chunked
         Vary:
@@ -928,9 +925,12 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
         content-length:
           - '312'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:43 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           primaryLabel:
@@ -944,4 +944,4 @@ interactions:
             count: 1
             offset: 1
             next: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements?limit=1&offset=2
-          cacheId: 0e84830ceefa38ee86ceed18516b2e98
+          cacheId: 8713ec39381648de76b8bb07b2dd7e6e
