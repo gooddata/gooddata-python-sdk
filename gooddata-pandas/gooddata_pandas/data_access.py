@@ -437,11 +437,10 @@ def compute_and_extract(
     exec_def = response.exec_def
     cols = list(columns.keys())
 
-    catalog = sdk.catalog_workspace_content.get_full_catalog(workspace_id)
-
     if not exec_def.has_attributes():
         return _extract_for_metrics_only(response, cols, col_to_metric_idx), dict()
     else:
+        catalog = sdk.catalog_workspace_content.get_full_catalog(workspace_id)
         return _extract_from_attributes_and_maybe_metrics(
             response,
             catalog,
