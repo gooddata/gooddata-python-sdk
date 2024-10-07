@@ -6,7 +6,7 @@ from typing import Any, Optional, Union
 from gooddata_sdk import (
     Attribute,
     AttributeFilter,
-    CatalogWorkspaceContent,
+    CatalogAttribute,
     ExecutionDefinition,
     ExecutionResponse,
     Filter,
@@ -16,6 +16,7 @@ from gooddata_sdk import (
     ObjId,
     TableDimension,
 )
+from gooddata_sdk.utils import IdObjType
 
 from gooddata_pandas.utils import (
     ColumnsDef,
@@ -319,19 +320,26 @@ def _extract_for_metrics_only(response: ExecutionResponse, cols: list, col_to_me
     return data
 
 
-def _typed_result(catalog: CatalogWorkspaceContent, attribute: Attribute, result_values: list[Any]) -> list[Any]:
+def _find_attribute(attributes: list[CatalogAttribute], id_obj: IdObjType) -> Union[CatalogAttribute, None]:
+    for attribute in attributes:
+        if attribute.find_label(id_obj) is not None:
+            return attribute
+    return None
+
+
+def _typed_result(attributes: list[CatalogAttribute], attribute: Attribute, result_values: list[Any]) -> list[Any]:
     """
     Internal function to convert result_values to proper data types.
 
     Args:
-        catalog (CatalogWorkspaceContent): The catalog workspace content.
+        attributes (list[CatalogAttribute]): The catalog of attributes.
         attribute (Attribute): The attribute for which the typed result will be computed.
         result_values (list[Any]): A list of raw values.
 
     Returns:
         list[Any]: A list of converted values with proper data types.
     """
-    catalog_attribute = catalog.find_label_attribute(attribute.label)
+    catalog_attribute = _find_attribute(attributes, attribute.label)
     if catalog_attribute is None:
         raise ValueError(f"Unable to find attribute {attribute.label} in catalog")
     return [_typed_attribute_value(catalog_attribute, value) for value in result_values]
@@ -339,7 +347,7 @@ def _typed_result(catalog: CatalogWorkspaceContent, attribute: Attribute, result
 
 def _extract_from_attributes_and_maybe_metrics(
     response: ExecutionResponse,
-    catalog: CatalogWorkspaceContent,
+    attributes: list[CatalogAttribute],
     cols: list[str],
     col_to_attr_idx: dict[str, int],
     col_to_metric_idx: dict[str, int],
@@ -382,12 +390,12 @@ def _extract_from_attributes_and_maybe_metrics(
         for idx_name in index:
             rs = result.get_all_header_values(attribute_dim, safe_index_to_attr_idx[idx_name])
             attribute = index_to_attribute[idx_name]
-            index[idx_name] += _typed_result(catalog, attribute, rs)
+            index[idx_name] += _typed_result(attributes, attribute, rs)
         for col in cols:
             if col in col_to_attr_idx:
                 rs = result.get_all_header_values(attribute_dim, col_to_attr_idx[col])
                 attribute = col_to_attribute[col]
-                data[col] += _typed_result(catalog, attribute, rs)
+                data[col] += _typed_result(attributes, attribute, rs)
             elif col_to_metric_idx[col] < len(result.data):
                 data[col] += result.data[col_to_metric_idx[col]]
         if result.is_complete(attribute_dim):
@@ -440,10 +448,10 @@ def compute_and_extract(
     if not exec_def.has_attributes():
         return _extract_for_metrics_only(response, cols, col_to_metric_idx), dict()
     else:
-        catalog = sdk.catalog_workspace_content.get_full_catalog(workspace_id)
+        attributes = sdk.catalog_workspace_content.get_attributes_catalog(workspace_id, include=["labels", "datasets"])
         return _extract_from_attributes_and_maybe_metrics(
             response,
-            catalog,
+            attributes,
             cols,
             col_to_attr_idx,
             col_to_metric_idx,

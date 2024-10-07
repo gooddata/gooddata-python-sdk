@@ -103,21 +103,28 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
 
         return CatalogWorkspaceContent.create_workspace_content_catalog(valid_obj_fun, datasets, attributes, metrics)
 
-    def get_attributes_catalog(self, workspace_id: str) -> list[CatalogAttribute]:
+    def get_attributes_catalog(self, workspace_id: str, include: Optional[list[str]] = None) -> list[CatalogAttribute]:
         """Retrieve all attributes in a given workspace.
 
         Args:
             workspace_id (str):
                 Workspace identification string e.g. "demo"
+            include (list[str]):
+                Entities to include.
+                Available: datasets, labels, attributeHierarchies, dataset, defaultView, ALL
 
         Returns:
             list[CatalogAttribute]:
                 List of all attributes in a given workspace.
         """
+        available_includes = {"datasets", "labels", "attributeHierarchies", "dataset", "defaultView", "ALL"}
+        include = include if include is not None else ["labels"]
+        if not set(include).issubset(available_includes):
+            raise ValueError(f"Invalid include parameter. Available values: {available_includes}, got: {include}")
         get_attributes = functools.partial(
             self._entities_api.get_all_entities_attributes,
             workspace_id,
-            include=["labels"],
+            include=include,
             _check_return_type=False,
         )
         attributes = load_all_entities(get_attributes)
