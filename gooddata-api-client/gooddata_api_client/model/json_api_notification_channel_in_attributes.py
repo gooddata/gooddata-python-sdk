@@ -31,10 +31,8 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_notification_channel_in_attributes_triggers_inner import JsonApiNotificationChannelInAttributesTriggersInner
-    from gooddata_api_client.model.json_api_notification_channel_in_attributes_webhook import JsonApiNotificationChannelInAttributesWebhook
-    globals()['JsonApiNotificationChannelInAttributesTriggersInner'] = JsonApiNotificationChannelInAttributesTriggersInner
-    globals()['JsonApiNotificationChannelInAttributesWebhook'] = JsonApiNotificationChannelInAttributesWebhook
+    from gooddata_api_client.model.json_api_notification_channel_in_attributes_destination import JsonApiNotificationChannelInAttributesDestination
+    globals()['JsonApiNotificationChannelInAttributesDestination'] = JsonApiNotificationChannelInAttributesDestination
 
 
 class JsonApiNotificationChannelInAttributes(ModelNormal):
@@ -62,6 +60,16 @@ class JsonApiNotificationChannelInAttributes(ModelNormal):
     """
 
     allowed_values = {
+        ('allowed_recipients',): {
+            'CREATOR': "CREATOR",
+            'INTERNAL': "INTERNAL",
+        },
+        ('destination_type',): {
+            'None': None,
+            'WEBHOOK': "WEBHOOK",
+            'SMTP': "SMTP",
+            'DEFAULT_SMTP': "DEFAULT_SMTP",
+        },
     }
 
     validations = {
@@ -96,10 +104,12 @@ class JsonApiNotificationChannelInAttributes(ModelNormal):
         """
         lazy_import()
         return {
+            'allowed_recipients': (str,),  # noqa: E501
+            'custom_dashboard_url': (str,),  # noqa: E501
             'description': (str, none_type,),  # noqa: E501
+            'destination': (JsonApiNotificationChannelInAttributesDestination,),  # noqa: E501
+            'destination_type': (str, none_type,),  # noqa: E501
             'name': (str, none_type,),  # noqa: E501
-            'triggers': ([JsonApiNotificationChannelInAttributesTriggersInner],),  # noqa: E501
-            'webhook': (JsonApiNotificationChannelInAttributesWebhook,),  # noqa: E501
         }
 
     @cached_property
@@ -108,10 +118,12 @@ class JsonApiNotificationChannelInAttributes(ModelNormal):
 
 
     attribute_map = {
+        'allowed_recipients': 'allowedRecipients',  # noqa: E501
+        'custom_dashboard_url': 'customDashboardUrl',  # noqa: E501
         'description': 'description',  # noqa: E501
+        'destination': 'destination',  # noqa: E501
+        'destination_type': 'destinationType',  # noqa: E501
         'name': 'name',  # noqa: E501
-        'triggers': 'triggers',  # noqa: E501
-        'webhook': 'webhook',  # noqa: E501
     }
 
     read_only_vars = {
@@ -155,10 +167,12 @@ class JsonApiNotificationChannelInAttributes(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            allowed_recipients (str): Allowed recipients of notifications from this channel. CREATOR - only the creator INTERNAL - all users within the organization . [optional]  # noqa: E501
+            custom_dashboard_url (str): Custom dashboard url that is going to be used in the notification. If not specified it is going to be deduced based on the context. Allowed placeholders are {workspaceId}, {dashboardId}.. [optional]  # noqa: E501
             description (str, none_type): [optional]  # noqa: E501
+            destination (JsonApiNotificationChannelInAttributesDestination): [optional]  # noqa: E501
+            destination_type (str, none_type): [optional]  # noqa: E501
             name (str, none_type): [optional]  # noqa: E501
-            triggers ([JsonApiNotificationChannelInAttributesTriggersInner]): The triggers that are to be used to send notifications to the channel.. [optional]  # noqa: E501
-            webhook (JsonApiNotificationChannelInAttributesWebhook): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -244,10 +258,12 @@ class JsonApiNotificationChannelInAttributes(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            allowed_recipients (str): Allowed recipients of notifications from this channel. CREATOR - only the creator INTERNAL - all users within the organization . [optional]  # noqa: E501
+            custom_dashboard_url (str): Custom dashboard url that is going to be used in the notification. If not specified it is going to be deduced based on the context. Allowed placeholders are {workspaceId}, {dashboardId}.. [optional]  # noqa: E501
             description (str, none_type): [optional]  # noqa: E501
+            destination (JsonApiNotificationChannelInAttributesDestination): [optional]  # noqa: E501
+            destination_type (str, none_type): [optional]  # noqa: E501
             name (str, none_type): [optional]  # noqa: E501
-            triggers ([JsonApiNotificationChannelInAttributesTriggersInner]): The triggers that are to be used to send notifications to the channel.. [optional]  # noqa: E501
-            webhook (JsonApiNotificationChannelInAttributesWebhook): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

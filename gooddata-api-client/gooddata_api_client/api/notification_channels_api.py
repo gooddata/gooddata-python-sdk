@@ -514,7 +514,7 @@ class NotificationChannelsApi(object):
         id,
         **kwargs
     ):
-        """delete_entity_notification_channels  # noqa: E501
+        """Delete Notification Channel entity  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True

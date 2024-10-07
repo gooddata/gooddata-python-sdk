@@ -5,9 +5,11 @@ All URIs are relative to *http://localhost*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**get_analytics_model**](LayoutApi.md#get_analytics_model) | **GET** /api/v1/layout/workspaces/{workspaceId}/analyticsModel | Get analytics model
+[**get_automations**](LayoutApi.md#get_automations) | **GET** /api/v1/layout/workspaces/{workspaceId}/automations | Get automations
 [**get_data_source_permissions**](LayoutApi.md#get_data_source_permissions) | **GET** /api/v1/layout/dataSources/{dataSourceId}/permissions | Get permissions for the data source
 [**get_data_sources_layout**](LayoutApi.md#get_data_sources_layout) | **GET** /api/v1/layout/dataSources | Get all data sources
 [**get_logical_model**](LayoutApi.md#get_logical_model) | **GET** /api/v1/layout/workspaces/{workspaceId}/logicalModel | Get logical model
+[**get_notification_channels_layout**](LayoutApi.md#get_notification_channels_layout) | **GET** /api/v1/layout/notificationChannels | Get all notification channels layout
 [**get_organization_layout**](LayoutApi.md#get_organization_layout) | **GET** /api/v1/layout/organization | Get organization layout
 [**get_organization_permissions**](LayoutApi.md#get_organization_permissions) | **GET** /api/v1/layout/organization/permissions | Get organization permissions
 [**get_user_data_filters**](LayoutApi.md#get_user_data_filters) | **GET** /api/v1/layout/workspaces/{workspaceId}/userDataFilters | Get user data filters
@@ -26,8 +28,10 @@ Method | HTTP request | Description
 [**put_users_user_groups_layout**](LayoutApi.md#put_users_user_groups_layout) | **PUT** /api/v1/layout/usersAndUserGroups | Put all users and user groups
 [**put_workspace_layout**](LayoutApi.md#put_workspace_layout) | **PUT** /api/v1/layout/workspaces/{workspaceId} | Set workspace layout
 [**set_analytics_model**](LayoutApi.md#set_analytics_model) | **PUT** /api/v1/layout/workspaces/{workspaceId}/analyticsModel | Set analytics model
+[**set_automations**](LayoutApi.md#set_automations) | **PUT** /api/v1/layout/workspaces/{workspaceId}/automations | Set automations
 [**set_data_source_permissions**](LayoutApi.md#set_data_source_permissions) | **PUT** /api/v1/layout/dataSources/{dataSourceId}/permissions | Set data source permissions.
 [**set_logical_model**](LayoutApi.md#set_logical_model) | **PUT** /api/v1/layout/workspaces/{workspaceId}/logicalModel | Set logical model
+[**set_notification_channels**](LayoutApi.md#set_notification_channels) | **PUT** /api/v1/layout/notificationChannels | Set all notification channels
 [**set_organization_layout**](LayoutApi.md#set_organization_layout) | **PUT** /api/v1/layout/organization | Set organization layout
 [**set_organization_permissions**](LayoutApi.md#set_organization_permissions) | **PUT** /api/v1/layout/organization/permissions | Set organization permissions
 [**set_user_data_filters**](LayoutApi.md#set_user_data_filters) | **PUT** /api/v1/layout/workspaces/{workspaceId}/userDataFilters | Set user data filters
@@ -115,6 +119,86 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Retrieved current analytics model. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_automations**
+> [DeclarativeAutomation] get_automations(workspace_id)
+
+Get automations
+
+Retrieve automations for the specific workspace
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import layout_api
+from gooddata_api_client.model.declarative_automation import DeclarativeAutomation
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = layout_api.LayoutApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    exclude = [
+        "ACTIVITY_INFO",
+    ] # [str] |  (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get automations
+        api_response = api_instance.get_automations(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling LayoutApi->get_automations: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Get automations
+        api_response = api_instance.get_automations(workspace_id, exclude=exclude)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling LayoutApi->get_automations: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **exclude** | **[str]**|  | [optional]
+
+### Return type
+
+[**[DeclarativeAutomation]**](DeclarativeAutomation.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Retrieved automations. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -323,6 +407,69 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Retrieved current logical model. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_notification_channels_layout**
+> DeclarativeNotificationChannels get_notification_channels_layout()
+
+Get all notification channels layout
+
+Gets complete layout of notification channels.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import layout_api
+from gooddata_api_client.model.declarative_notification_channels import DeclarativeNotificationChannels
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = layout_api.LayoutApi(api_client)
+
+    # example, this endpoint has no required or optional parameters
+    try:
+        # Get all notification channels layout
+        api_response = api_instance.get_notification_channels_layout()
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling LayoutApi->get_notification_channels_layout: %s\n" % e)
+```
+
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**DeclarativeNotificationChannels**](DeclarativeNotificationChannels.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Retrieved layout of all notification channels. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -2079,6 +2226,119 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **set_automations**
+> set_automations(workspace_id, declarative_automation)
+
+Set automations
+
+Set automations for the specific workspace.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import layout_api
+from gooddata_api_client.model.declarative_automation import DeclarativeAutomation
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = layout_api.LayoutApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    declarative_automation = [
+        DeclarativeAutomation(
+            created_at="2023-07-20 12:30",
+            created_by=DeclarativeUserIdentifier(
+                id="employee123",
+                type="user",
+            ),
+            description="description_example",
+            details={
+                "key": "key_example",
+            },
+            export_definitions=[
+                DeclarativeExportDefinitionIdentifier(
+                    id="export123",
+                    type="exportDefinition",
+                ),
+            ],
+            id="/6bUUGjjNSwg0_bs",
+            metadata=JsonNode(),
+            modified_at="2023-07-20 12:30",
+            modified_by=DeclarativeUserIdentifier(
+                id="employee123",
+                type="user",
+            ),
+            notification_channel=DeclarativeNotificationChannelIdentifier(
+                id="webhook123",
+                type="notificationChannel",
+            ),
+            recipients=[
+                DeclarativeUserIdentifier(
+                    id="employee123",
+                    type="user",
+                ),
+            ],
+            schedule=AutomationSchedule(
+                cron="0 */30 9-17 ? * MON-FRI",
+                first_run=dateutil_parser('2025-01-01T12:00:00Z'),
+                timezone="Europe/Prague",
+            ),
+            state="ACTIVE",
+            tags=[
+                "["Revenue","Sales"]",
+            ],
+            title="title_example",
+        ),
+    ] # [DeclarativeAutomation] | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Set automations
+        api_instance.set_automations(workspace_id, declarative_automation)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling LayoutApi->set_automations: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **declarative_automation** | [**[DeclarativeAutomation]**](DeclarativeAutomation.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | Automations successfully set. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **set_data_source_permissions**
 > set_data_source_permissions(data_source_id, declarative_data_source_permissions)
 
@@ -2358,6 +2618,83 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **set_notification_channels**
+> set_notification_channels(declarative_notification_channels)
+
+Set all notification channels
+
+Sets notification channels in organization.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import layout_api
+from gooddata_api_client.model.declarative_notification_channels import DeclarativeNotificationChannels
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = layout_api.LayoutApi(api_client)
+    declarative_notification_channels = DeclarativeNotificationChannels(
+        notification_channels=[
+            DeclarativeNotificationChannel(
+                custom_dashboard_url="custom_dashboard_url_example",
+                description="This is a channel",
+                destination=DeclarativeNotificationChannelDestination(None),
+                enable_multiple_recipients=True,
+                id="notification-channel-1",
+                name="channel",
+            ),
+        ],
+    ) # DeclarativeNotificationChannels | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Set all notification channels
+        api_instance.set_notification_channels(declarative_notification_channels)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling LayoutApi->set_notification_channels: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **declarative_notification_channels** | [**DeclarativeNotificationChannels**](DeclarativeNotificationChannels.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | All notification channels set. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **set_organization_layout**
 > set_organization_layout(declarative_organization)
 
@@ -2430,20 +2767,12 @@ with gooddata_api_client.ApiClient() as api_client:
         ],
         notification_channels=[
             DeclarativeNotificationChannel(
+                custom_dashboard_url="custom_dashboard_url_example",
                 description="This is a channel",
+                destination=DeclarativeNotificationChannelDestination(None),
+                enable_multiple_recipients=True,
                 id="notification-channel-1",
                 name="channel",
-                triggers=[
-                    NotificationTrigger(
-                        metadata=JsonNode(),
-                        type="SCHEDULE",
-                    ),
-                ],
-                webhook=Webhook(
-                    has_token=True,
-                    token="token_example",
-                    url="https://example.com/webhook",
-                ),
             ),
         ],
         organization=DeclarativeOrganizationInfo(
@@ -2613,11 +2942,13 @@ with gooddata_api_client.ApiClient() as api_client:
                         ],
                         schedule=AutomationSchedule(
                             cron="0 */30 9-17 ? * MON-FRI",
-                            cron_description="cron_description_example",
                             first_run=dateutil_parser('2025-01-01T12:00:00Z'),
                             timezone="Europe/Prague",
                         ),
-                        tags=["Revenues"],
+                        state="ACTIVE",
+                        tags=[
+                            "["Revenue","Sales"]",
+                        ],
                         title="title_example",
                     ),
                 ],
@@ -3584,11 +3915,13 @@ with gooddata_api_client.ApiClient() as api_client:
                         ],
                         schedule=AutomationSchedule(
                             cron="0 */30 9-17 ? * MON-FRI",
-                            cron_description="cron_description_example",
                             first_run=dateutil_parser('2025-01-01T12:00:00Z'),
                             timezone="Europe/Prague",
                         ),
-                        tags=["Revenues"],
+                        state="ACTIVE",
+                        tags=[
+                            "["Revenue","Sales"]",
+                        ],
                         title="title_example",
                     ),
                 ],

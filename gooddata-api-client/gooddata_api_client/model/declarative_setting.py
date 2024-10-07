@@ -75,6 +75,7 @@ class DeclarativeSetting(ModelNormal):
             'TIMEZONE_VALIDATION_ENABLED': "TIMEZONE_VALIDATION_ENABLED",
             'OPENAI_CONFIG': "OPENAI_CONFIG",
             'ENABLE_FILE_ANALYTICS': "ENABLE_FILE_ANALYTICS",
+            'ALERT': "ALERT",
         },
     }
 

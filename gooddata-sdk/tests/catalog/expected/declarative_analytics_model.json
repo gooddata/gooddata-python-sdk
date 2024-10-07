@@ -2249,6 +2249,7 @@
         "id": "top_10_products",
         "title": "Top 10 Products"
       }
-    ]
+    ],
+    "exportDefinitions": []
   }
 }

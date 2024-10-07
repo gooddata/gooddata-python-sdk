@@ -31,9 +31,9 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_export_definition_in_relationships_analytical_dashboard import JsonApiExportDefinitionInRelationshipsAnalyticalDashboard
+    from gooddata_api_client.model.json_api_automation_in_relationships_analytical_dashboard import JsonApiAutomationInRelationshipsAnalyticalDashboard
     from gooddata_api_client.model.json_api_export_definition_in_relationships_visualization_object import JsonApiExportDefinitionInRelationshipsVisualizationObject
-    globals()['JsonApiExportDefinitionInRelationshipsAnalyticalDashboard'] = JsonApiExportDefinitionInRelationshipsAnalyticalDashboard
+    globals()['JsonApiAutomationInRelationshipsAnalyticalDashboard'] = JsonApiAutomationInRelationshipsAnalyticalDashboard
     globals()['JsonApiExportDefinitionInRelationshipsVisualizationObject'] = JsonApiExportDefinitionInRelationshipsVisualizationObject
 
 
@@ -90,7 +90,7 @@ class JsonApiExportDefinitionInRelationships(ModelNormal):
         """
         lazy_import()
         return {
-            'analytical_dashboard': (JsonApiExportDefinitionInRelationshipsAnalyticalDashboard,),  # noqa: E501
+            'analytical_dashboard': (JsonApiAutomationInRelationshipsAnalyticalDashboard,),  # noqa: E501
             'visualization_object': (JsonApiExportDefinitionInRelationshipsVisualizationObject,),  # noqa: E501
         }
 
@@ -145,7 +145,7 @@ class JsonApiExportDefinitionInRelationships(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            analytical_dashboard (JsonApiExportDefinitionInRelationshipsAnalyticalDashboard): [optional]  # noqa: E501
+            analytical_dashboard (JsonApiAutomationInRelationshipsAnalyticalDashboard): [optional]  # noqa: E501
             visualization_object (JsonApiExportDefinitionInRelationshipsVisualizationObject): [optional]  # noqa: E501
         """
 
@@ -232,7 +232,7 @@ class JsonApiExportDefinitionInRelationships(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            analytical_dashboard (JsonApiExportDefinitionInRelationshipsAnalyticalDashboard): [optional]  # noqa: E501
+            analytical_dashboard (JsonApiAutomationInRelationshipsAnalyticalDashboard): [optional]  # noqa: E501
             visualization_object (JsonApiExportDefinitionInRelationshipsVisualizationObject): [optional]  # noqa: E501
         """
 

@@ -70,6 +70,7 @@ class CatalogDeclarativeAnalyticsLayer(Base):
     filter_contexts: list[CatalogDeclarativeFilterContext] = attr.field(factory=list)
     metrics: list[CatalogDeclarativeMetric] = attr.field(factory=list)
     visualization_objects: list[CatalogDeclarativeVisualizationObject] = attr.field(factory=list)
+    export_definitions: list[dict] = attr.field(factory=list)
 
     @staticmethod
     def client_class() -> type[DeclarativeAnalyticsLayer]:

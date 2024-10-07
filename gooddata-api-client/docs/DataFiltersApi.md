@@ -66,7 +66,7 @@ with gooddata_api_client.ApiClient() as api_client:
             ),
             id="id1",
             relationships=JsonApiUserDataFilterInRelationships(
-                user=JsonApiOrganizationOutRelationshipsBootstrapUser(
+                user=JsonApiFilterViewInRelationshipsUser(
                     data=JsonApiUserToOneLinkage(None),
                 ),
                 user_group=JsonApiOrganizationOutRelationshipsBootstrapUserGroup(
@@ -1221,7 +1221,7 @@ with gooddata_api_client.ApiClient() as api_client:
             ),
             id="id1",
             relationships=JsonApiUserDataFilterInRelationships(
-                user=JsonApiOrganizationOutRelationshipsBootstrapUser(
+                user=JsonApiFilterViewInRelationshipsUser(
                     data=JsonApiUserToOneLinkage(None),
                 ),
                 user_group=JsonApiOrganizationOutRelationshipsBootstrapUserGroup(
@@ -1626,7 +1626,7 @@ with gooddata_api_client.ApiClient() as api_client:
             ),
             id="id1",
             relationships=JsonApiUserDataFilterInRelationships(
-                user=JsonApiOrganizationOutRelationshipsBootstrapUser(
+                user=JsonApiFilterViewInRelationshipsUser(
                     data=JsonApiUserToOneLinkage(None),
                 ),
                 user_group=JsonApiOrganizationOutRelationshipsBootstrapUserGroup(

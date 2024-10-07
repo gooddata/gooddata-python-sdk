@@ -16,7 +16,8 @@ Name | Type | Description | Notes
 **notification_channel** | [**DeclarativeNotificationChannelIdentifier**](DeclarativeNotificationChannelIdentifier.md) |  | [optional] 
 **recipients** | [**[DeclarativeUserIdentifier]**](DeclarativeUserIdentifier.md) |  | [optional] 
 **schedule** | [**AutomationSchedule**](AutomationSchedule.md) |  | [optional] 
-**tags** | **[str]** | A list of tags. | [optional] 
+**state** | **str** | Current state of the automation. | [optional]  if omitted the server will use the default value of "ACTIVE"
+**tags** | **[str]** |  | [optional] 
 **title** | **str** |  | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 

@@ -56,9 +56,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -67,7 +64,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1 ; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:50 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
   - request:
@@ -130,9 +130,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -141,7 +138,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1 ; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:50 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><xliff xmlns="urn:oasis:names:tc:xliff:document:2.0"
           version="2.1" srcLang="en-US" trgLang="fr-FR"><file id="demo"><group id="analyticalDashboard"><group
@@ -273,9 +273,6 @@ interactions:
           id="attribute.date.dayOfWeek"><unit id="attribute.date.dayOfWeek.title"><segment><source>Date
           - Day of Week</source></segment></unit><unit id="attribute.date.dayOfWeek.description"><segment><source>Generic
           Day of the Week (D1-D7)</source></segment></unit><unit id="attribute.date.dayOfWeek.tags"><segment><source>Date</source></segment></unit></group><group
-          id="attribute.state"><unit id="attribute.state.title"><segment><source>State</source></segment></unit><unit
-          id="attribute.state.description"><segment><source>State</source></segment></unit><unit
-          id="attribute.state.tags"><segment><source>Customers</source></segment></unit></group><group
           id="attribute.date.dayOfMonth"><unit id="attribute.date.dayOfMonth.title"><segment><source>Date
           - Day of Month</source></segment></unit><unit id="attribute.date.dayOfMonth.description"><segment><source>Generic
           Day of the Month (D1-D31)</source></segment></unit><unit id="attribute.date.dayOfMonth.tags"><segment><source>Date</source></segment></unit></group><group
@@ -290,7 +287,10 @@ interactions:
           Month (M1-M12)</source></segment></unit><unit id="attribute.date.monthOfYear.tags"><segment><source>Date</source></segment></unit></group><group
           id="attribute.date.quarterOfYear"><unit id="attribute.date.quarterOfYear.title"><segment><source>Date
           - Quarter of Year</source></segment></unit><unit id="attribute.date.quarterOfYear.description"><segment><source>Generic
-          Quarter (Q1-Q4)</source></segment></unit><unit id="attribute.date.quarterOfYear.tags"><segment><source>Date</source></segment></unit></group></group><group
+          Quarter (Q1-Q4)</source></segment></unit><unit id="attribute.date.quarterOfYear.tags"><segment><source>Date</source></segment></unit></group><group
+          id="attribute.state"><unit id="attribute.state.title"><segment><source>State</source></segment></unit><unit
+          id="attribute.state.description"><segment><source>State</source></segment></unit><unit
+          id="attribute.state.tags"><segment><source>Customers</source></segment></unit></group></group><group
           id="dataset"><group id="dataset.campaign_channels"><unit id="dataset.campaign_channels.title"><segment><source>Campaign
           channels</source></segment></unit><unit id="dataset.campaign_channels.description"><segment><source>Campaign
           channels</source></segment></unit><unit id="dataset.campaign_channels.tags"><segment><source>Campaign
@@ -323,7 +323,38 @@ interactions:
           id="fact.quantity"><unit id="fact.quantity.title"><segment><source>Quantity</source></segment></unit><unit
           id="fact.quantity.description"><segment><source>Quantity</source></segment></unit><unit
           id="fact.quantity.tags"><segment><source>Order lines</source></segment></unit></group></group><group
-          id="label"><group id="label.order_id"><unit id="label.order_id.title"><segment><source>Order
+          id="label"><group id="label.campaign_channel_id"><unit id="label.campaign_channel_id.title"><segment><source>Campaign
+          channel id</source></segment></unit><unit id="label.campaign_channel_id.description"><segment><source>Campaign
+          channel id</source></segment></unit><unit id="label.campaign_channel_id.tags"><segment><source>Campaign
+          channels</source></segment></unit></group><group id="label.campaign_channels.category"><unit
+          id="label.campaign_channels.category.title"><segment><source>Category</source></segment></unit><unit
+          id="label.campaign_channels.category.description"><segment><source>Category</source></segment></unit><unit
+          id="label.campaign_channels.category.tags"><segment><source>Campaign channels</source></segment></unit></group><group
+          id="label.type"><unit id="label.type.title"><segment><source>Type</source></segment></unit><unit
+          id="label.type.description"><segment><source>Type</source></segment></unit><unit
+          id="label.type.tags"><segment><source>Campaign channels</source></segment></unit></group><group
+          id="label.campaign_id"><unit id="label.campaign_id.title"><segment><source>Campaign
+          id</source></segment></unit><unit id="label.campaign_id.description"><segment><source>Campaign
+          id</source></segment></unit><unit id="label.campaign_id.tags"><segment><source>Campaigns</source></segment></unit></group><group
+          id="label.campaign_name"><unit id="label.campaign_name.title"><segment><source>Campaign
+          name</source></segment></unit><unit id="label.campaign_name.description"><segment><source>Campaign
+          name</source></segment></unit><unit id="label.campaign_name.tags"><segment><source>Campaigns</source></segment></unit></group><group
+          id="label.customer_id"><unit id="label.customer_id.title"><segment><source>Customer
+          id</source></segment></unit><unit id="label.customer_id.description"><segment><source>Customer
+          id</source></segment></unit><unit id="label.customer_id.tags"><segment><source>Customers</source></segment></unit></group><group
+          id="label.customer_name"><unit id="label.customer_name.title"><segment><source>Customer
+          name</source></segment></unit><unit id="label.customer_name.description"><segment><source>Customer
+          name</source></segment></unit><unit id="label.customer_name.tags"><segment><source>Customers</source></segment></unit></group><group
+          id="label.region"><unit id="label.region.title"><segment><source>Region</source></segment></unit><unit
+          id="label.region.description"><segment><source>Region</source></segment></unit><unit
+          id="label.region.tags"><segment><source>Customers</source></segment></unit></group><group
+          id="label.state"><unit id="label.state.title"><segment><source>State</source></segment></unit><unit
+          id="label.state.description"><segment><source>State</source></segment></unit><unit
+          id="label.state.tags"><segment><source>Customers</source></segment></unit></group><group
+          id="label.geo__state__location"><unit id="label.geo__state__location.title"><segment><source>Location</source></segment></unit><unit
+          id="label.geo__state__location.description"><segment><source>Location</source></segment></unit><unit
+          id="label.geo__state__location.tags"><segment><source>Customers</source></segment></unit></group><group
+          id="label.order_id"><unit id="label.order_id.title"><segment><source>Order
           id</source></segment></unit><unit id="label.order_id.description"><segment><source>Order
           id</source></segment></unit><unit id="label.order_id.tags"><segment><source>Order
           lines</source></segment></unit></group><group id="label.order_line_id"><unit
@@ -387,46 +418,9 @@ interactions:
           Month (M1-M12)</source></segment></unit><unit id="label.date.monthOfYear.tags"><segment><source>Date</source></segment></unit></group><group
           id="label.date.quarterOfYear"><unit id="label.date.quarterOfYear.title"><segment><source>Date
           - Quarter of Year</source></segment></unit><unit id="label.date.quarterOfYear.description"><segment><source>Generic
-          Quarter (Q1-Q4)</source></segment></unit><unit id="label.date.quarterOfYear.tags"><segment><source>Date</source></segment></unit></group><group
-          id="label.campaign_channel_id"><unit id="label.campaign_channel_id.title"><segment><source>Campaign
-          channel id</source></segment></unit><unit id="label.campaign_channel_id.description"><segment><source>Campaign
-          channel id</source></segment></unit><unit id="label.campaign_channel_id.tags"><segment><source>Campaign
-          channels</source></segment></unit></group><group id="label.campaign_channels.category"><unit
-          id="label.campaign_channels.category.title"><segment><source>Category</source></segment></unit><unit
-          id="label.campaign_channels.category.description"><segment><source>Category</source></segment></unit><unit
-          id="label.campaign_channels.category.tags"><segment><source>Campaign channels</source></segment></unit></group><group
-          id="label.type"><unit id="label.type.title"><segment><source>Type</source></segment></unit><unit
-          id="label.type.description"><segment><source>Type</source></segment></unit><unit
-          id="label.type.tags"><segment><source>Campaign channels</source></segment></unit></group><group
-          id="label.campaign_id"><unit id="label.campaign_id.title"><segment><source>Campaign
-          id</source></segment></unit><unit id="label.campaign_id.description"><segment><source>Campaign
-          id</source></segment></unit><unit id="label.campaign_id.tags"><segment><source>Campaigns</source></segment></unit></group><group
-          id="label.campaign_name"><unit id="label.campaign_name.title"><segment><source>Campaign
-          name</source></segment></unit><unit id="label.campaign_name.description"><segment><source>Campaign
-          name</source></segment></unit><unit id="label.campaign_name.tags"><segment><source>Campaigns</source></segment></unit></group><group
-          id="label.customer_id"><unit id="label.customer_id.title"><segment><source>Customer
-          id</source></segment></unit><unit id="label.customer_id.description"><segment><source>Customer
-          id</source></segment></unit><unit id="label.customer_id.tags"><segment><source>Customers</source></segment></unit></group><group
-          id="label.customer_name"><unit id="label.customer_name.title"><segment><source>Customer
-          name</source></segment></unit><unit id="label.customer_name.description"><segment><source>Customer
-          name</source></segment></unit><unit id="label.customer_name.tags"><segment><source>Customers</source></segment></unit></group><group
-          id="label.region"><unit id="label.region.title"><segment><source>Region</source></segment></unit><unit
-          id="label.region.description"><segment><source>Region</source></segment></unit><unit
-          id="label.region.tags"><segment><source>Customers</source></segment></unit></group><group
-          id="label.state"><unit id="label.state.title"><segment><source>State</source></segment></unit><unit
-          id="label.state.description"><segment><source>State</source></segment></unit><unit
-          id="label.state.tags"><segment><source>Customers</source></segment></unit></group><group
-          id="label.geo__state__location"><unit id="label.geo__state__location.title"><segment><source>Location</source></segment></unit><unit
-          id="label.geo__state__location.description"><segment><source>Location</source></segment></unit><unit
-          id="label.geo__state__location.tags"><segment><source>Customers</source></segment></unit></group></group><group
-          id="metric"><group id="metric.revenue_per_dollar_spent"><unit id="metric.revenue_per_dollar_spent.title"><segment><source>Revenue
-          per Dollar Spent</source></segment></unit></group><group id="metric.revenue_top_10"><unit
-          id="metric.revenue_top_10.title"><segment><source>Revenue / Top 10</source></segment></unit></group><group
-          id="metric.revenue_top_10_percent"><unit id="metric.revenue_top_10_percent.title"><segment><source>Revenue
-          / Top 10%</source></segment></unit></group><group id="metric.total_revenue"><unit
-          id="metric.total_revenue.title"><segment><source>Total Revenue</source></segment></unit></group><group
-          id="metric.total_revenue-no_filters"><unit id="metric.total_revenue-no_filters.title"><segment><source>Total
-          Revenue (No Filters)</source></segment></unit></group><group id="metric.amount_of_orders"><unit
+          Quarter (Q1-Q4)</source></segment></unit><unit id="label.date.quarterOfYear.tags"><segment><source>Date</source></segment></unit></group></group><group
+          id="metric"><group id="metric.amount_of_active_customers"><unit id="metric.amount_of_active_customers.title"><segment><source>#
+          of Active Customers</source></segment></unit></group><group id="metric.amount_of_orders"><unit
           id="metric.amount_of_orders.title"><segment><source># of Orders</source></segment></unit></group><group
           id="metric.amount_of_top_customers"><unit id="metric.amount_of_top_customers.title"><segment><source>#
           of Top Customers</source></segment></unit></group><group id="metric.amount_of_valid_orders"><unit
@@ -440,11 +434,10 @@ interactions:
           id="metric.percent_revenue_from_top_10_customers.title"><segment><source>%
           Revenue from Top 10 Customers</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_percent_customers"><unit
           id="metric.percent_revenue_from_top_10_percent_customers.title"><segment><source>%
-          Revenue from Top 10% Customers</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_percent_products"><unit
-          id="metric.percent_revenue_from_top_10_percent_products.title"><segment><source>%
-          Revenue from Top 10% Products</source></segment></unit></group><group id="metric.amount_of_active_customers"><unit
-          id="metric.amount_of_active_customers.title"><segment><source># of Active
-          Customers</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_products"><unit
+          Revenue from Top 10% Customers</source></segment></unit></group><group id="metric.revenue-outdoor"><unit
+          id="metric.revenue-outdoor.title"><segment><source>Revenue (Outdoor)</source></segment></unit></group><group
+          id="metric.percent_revenue_from_top_10_percent_products"><unit id="metric.percent_revenue_from_top_10_percent_products.title"><segment><source>%
+          Revenue from Top 10% Products</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_products"><unit
           id="metric.percent_revenue_from_top_10_products.title"><segment><source>%
           Revenue from Top 10 Products</source></segment></unit></group><group id="metric.percent_revenue_in_category"><unit
           id="metric.percent_revenue_in_category.title"><segment><source>% Revenue
@@ -457,21 +450,16 @@ interactions:
           (Clothing)</source></segment></unit></group><group id="metric.revenue-electronic"><unit
           id="metric.revenue-electronic.title"><segment><source>Revenue (Electronic)</source></segment></unit></group><group
           id="metric.revenue-home"><unit id="metric.revenue-home.title"><segment><source>Revenue
-          (Home)</source></segment></unit></group><group id="metric.revenue-outdoor"><unit
-          id="metric.revenue-outdoor.title"><segment><source>Revenue (Outdoor)</source></segment></unit></group><group
-          id="metric.revenue_per_customer"><unit id="metric.revenue_per_customer.title"><segment><source>Revenue
-          per Customer</source></segment></unit></group></group><group id="visualizationObject"><group
-          id="visualizationObject.percent_revenue_per_product_by_customer_and_category"><unit
-          id="visualizationObject.percent_revenue_per_product_by_customer_and_category.title"><segment><source>%
-          Revenue per Product by Customer and Category</source></segment></unit><unit
-          id="visualizationObject.percent_revenue_per_product_by_customer_and_category.free-form"><notes><note
-          appliesTo="source">Free-form translations are marked by the 'id' attribute,
-          which is a hash combining the JSON path and the source text's value. Since
-          this hash is hard to read, the source text includes extra details about
-          its general location.</note></notes><segment id="ce8ec0221a023203625053c69201db66390cdc526860100160d732cac7317696"><source><mrk
-          id="1" type="free-form:path" value="$.buckets[*].items[*].measure.title"/>%
-          Revenue per Product</source></segment><segment id="55ebf600c86d1a043d6d203235883b21007aebcc7c3daf7a5f9eaeea6761d9cf"><source><mrk
-          id="1" type="free-form:path" value="$.buckets[*].items[*].measure.title"/>Revenue</source></segment></unit></group><group
+          (Home)</source></segment></unit></group><group id="metric.revenue_per_customer"><unit
+          id="metric.revenue_per_customer.title"><segment><source>Revenue per Customer</source></segment></unit></group><group
+          id="metric.revenue_per_dollar_spent"><unit id="metric.revenue_per_dollar_spent.title"><segment><source>Revenue
+          per Dollar Spent</source></segment></unit></group><group id="metric.revenue_top_10"><unit
+          id="metric.revenue_top_10.title"><segment><source>Revenue / Top 10</source></segment></unit></group><group
+          id="metric.revenue_top_10_percent"><unit id="metric.revenue_top_10_percent.title"><segment><source>Revenue
+          / Top 10%</source></segment></unit></group><group id="metric.total_revenue"><unit
+          id="metric.total_revenue.title"><segment><source>Total Revenue</source></segment></unit></group><group
+          id="metric.total_revenue-no_filters"><unit id="metric.total_revenue-no_filters.title"><segment><source>Total
+          Revenue (No Filters)</source></segment></unit></group></group><group id="visualizationObject"><group
           id="visualizationObject.campaign_spend"><unit id="visualizationObject.campaign_spend.title"><segment><source>Campaign
           Spend</source></segment></unit><unit id="visualizationObject.campaign_spend.free-form"><notes><note
           appliesTo="source">Free-form translations are marked by the 'id' attribute,
@@ -491,8 +479,18 @@ interactions:
           id="1" type="free-form:path" value="$.buckets[*].items[*].measure.title"/>Revenue
           per Customer</source></segment><segment id="8b5759c74e64aa69c917ff14cc37996fe5423759e2d8e129ce54ce1d37275f0d"><source><mrk
           id="1" type="free-form:path" value="$.buckets[*].items[*].measure.alias"/>Active
-          Customers</source></segment></unit></group><group id="visualizationObject.percentage_of_customers_by_region"><unit
-          id="visualizationObject.percentage_of_customers_by_region.title"><segment><source>Percentage
+          Customers</source></segment></unit></group><group id="visualizationObject.percent_revenue_per_product_by_customer_and_category"><unit
+          id="visualizationObject.percent_revenue_per_product_by_customer_and_category.title"><segment><source>%
+          Revenue per Product by Customer and Category</source></segment></unit><unit
+          id="visualizationObject.percent_revenue_per_product_by_customer_and_category.free-form"><notes><note
+          appliesTo="source">Free-form translations are marked by the 'id' attribute,
+          which is a hash combining the JSON path and the source text's value. Since
+          this hash is hard to read, the source text includes extra details about
+          its general location.</note></notes><segment id="ce8ec0221a023203625053c69201db66390cdc526860100160d732cac7317696"><source><mrk
+          id="1" type="free-form:path" value="$.buckets[*].items[*].measure.title"/>%
+          Revenue per Product</source></segment><segment id="55ebf600c86d1a043d6d203235883b21007aebcc7c3daf7a5f9eaeea6761d9cf"><source><mrk
+          id="1" type="free-form:path" value="$.buckets[*].items[*].measure.title"/>Revenue</source></segment></unit></group><group
+          id="visualizationObject.percentage_of_customers_by_region"><unit id="visualizationObject.percentage_of_customers_by_region.title"><segment><source>Percentage
           of Customers by Region</source></segment></unit><unit id="visualizationObject.percentage_of_customers_by_region.free-form"><notes><note
           appliesTo="source">Free-form translations are marked by the 'id' attribute,
           which is a hash combining the JSON path and the source text's value. Since
@@ -674,9 +672,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -685,7 +680,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1 ; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:50 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><xliff xmlns="urn:oasis:names:tc:xliff:document:2.0"
           version="2.1" srcLang="en-US" trgLang="fr-FR"><file id="demo"><group id="analyticalDashboard"><group
@@ -817,9 +815,6 @@ interactions:
           id="attribute.date.dayOfWeek"><unit id="attribute.date.dayOfWeek.title"><segment><source>Date
           - Day of Week</source></segment></unit><unit id="attribute.date.dayOfWeek.description"><segment><source>Generic
           Day of the Week (D1-D7)</source></segment></unit><unit id="attribute.date.dayOfWeek.tags"><segment><source>Date</source></segment></unit></group><group
-          id="attribute.state"><unit id="attribute.state.title"><segment><source>State</source></segment></unit><unit
-          id="attribute.state.description"><segment><source>State</source></segment></unit><unit
-          id="attribute.state.tags"><segment><source>Customers</source></segment></unit></group><group
           id="attribute.date.dayOfMonth"><unit id="attribute.date.dayOfMonth.title"><segment><source>Date
           - Day of Month</source></segment></unit><unit id="attribute.date.dayOfMonth.description"><segment><source>Generic
           Day of the Month (D1-D31)</source></segment></unit><unit id="attribute.date.dayOfMonth.tags"><segment><source>Date</source></segment></unit></group><group
@@ -834,7 +829,10 @@ interactions:
           Month (M1-M12)</source></segment></unit><unit id="attribute.date.monthOfYear.tags"><segment><source>Date</source></segment></unit></group><group
           id="attribute.date.quarterOfYear"><unit id="attribute.date.quarterOfYear.title"><segment><source>Date
           - Quarter of Year</source></segment></unit><unit id="attribute.date.quarterOfYear.description"><segment><source>Generic
-          Quarter (Q1-Q4)</source></segment></unit><unit id="attribute.date.quarterOfYear.tags"><segment><source>Date</source></segment></unit></group></group><group
+          Quarter (Q1-Q4)</source></segment></unit><unit id="attribute.date.quarterOfYear.tags"><segment><source>Date</source></segment></unit></group><group
+          id="attribute.state"><unit id="attribute.state.title"><segment><source>State</source></segment></unit><unit
+          id="attribute.state.description"><segment><source>State</source></segment></unit><unit
+          id="attribute.state.tags"><segment><source>Customers</source></segment></unit></group></group><group
           id="dataset"><group id="dataset.campaign_channels"><unit id="dataset.campaign_channels.title"><segment><source>Campaign
           channels</source></segment></unit><unit id="dataset.campaign_channels.description"><segment><source>Campaign
           channels</source></segment></unit><unit id="dataset.campaign_channels.tags"><segment><source>Campaign
@@ -867,7 +865,38 @@ interactions:
           id="fact.quantity"><unit id="fact.quantity.title"><segment><source>Quantity</source></segment></unit><unit
           id="fact.quantity.description"><segment><source>Quantity</source></segment></unit><unit
           id="fact.quantity.tags"><segment><source>Order lines</source></segment></unit></group></group><group
-          id="label"><group id="label.order_id"><unit id="label.order_id.title"><segment><source>Order
+          id="label"><group id="label.campaign_channel_id"><unit id="label.campaign_channel_id.title"><segment><source>Campaign
+          channel id</source></segment></unit><unit id="label.campaign_channel_id.description"><segment><source>Campaign
+          channel id</source></segment></unit><unit id="label.campaign_channel_id.tags"><segment><source>Campaign
+          channels</source></segment></unit></group><group id="label.campaign_channels.category"><unit
+          id="label.campaign_channels.category.title"><segment><source>Category</source></segment></unit><unit
+          id="label.campaign_channels.category.description"><segment><source>Category</source></segment></unit><unit
+          id="label.campaign_channels.category.tags"><segment><source>Campaign channels</source></segment></unit></group><group
+          id="label.type"><unit id="label.type.title"><segment><source>Type</source></segment></unit><unit
+          id="label.type.description"><segment><source>Type</source></segment></unit><unit
+          id="label.type.tags"><segment><source>Campaign channels</source></segment></unit></group><group
+          id="label.campaign_id"><unit id="label.campaign_id.title"><segment><source>Campaign
+          id</source></segment></unit><unit id="label.campaign_id.description"><segment><source>Campaign
+          id</source></segment></unit><unit id="label.campaign_id.tags"><segment><source>Campaigns</source></segment></unit></group><group
+          id="label.campaign_name"><unit id="label.campaign_name.title"><segment><source>Campaign
+          name</source></segment></unit><unit id="label.campaign_name.description"><segment><source>Campaign
+          name</source></segment></unit><unit id="label.campaign_name.tags"><segment><source>Campaigns</source></segment></unit></group><group
+          id="label.customer_id"><unit id="label.customer_id.title"><segment><source>Customer
+          id</source></segment></unit><unit id="label.customer_id.description"><segment><source>Customer
+          id</source></segment></unit><unit id="label.customer_id.tags"><segment><source>Customers</source></segment></unit></group><group
+          id="label.customer_name"><unit id="label.customer_name.title"><segment><source>Customer
+          name</source></segment></unit><unit id="label.customer_name.description"><segment><source>Customer
+          name</source></segment></unit><unit id="label.customer_name.tags"><segment><source>Customers</source></segment></unit></group><group
+          id="label.region"><unit id="label.region.title"><segment><source>Region</source></segment></unit><unit
+          id="label.region.description"><segment><source>Region</source></segment></unit><unit
+          id="label.region.tags"><segment><source>Customers</source></segment></unit></group><group
+          id="label.state"><unit id="label.state.title"><segment><source>State</source></segment></unit><unit
+          id="label.state.description"><segment><source>State</source></segment></unit><unit
+          id="label.state.tags"><segment><source>Customers</source></segment></unit></group><group
+          id="label.geo__state__location"><unit id="label.geo__state__location.title"><segment><source>Location</source></segment></unit><unit
+          id="label.geo__state__location.description"><segment><source>Location</source></segment></unit><unit
+          id="label.geo__state__location.tags"><segment><source>Customers</source></segment></unit></group><group
+          id="label.order_id"><unit id="label.order_id.title"><segment><source>Order
           id</source></segment></unit><unit id="label.order_id.description"><segment><source>Order
           id</source></segment></unit><unit id="label.order_id.tags"><segment><source>Order
           lines</source></segment></unit></group><group id="label.order_line_id"><unit
@@ -931,46 +960,9 @@ interactions:
           Month (M1-M12)</source></segment></unit><unit id="label.date.monthOfYear.tags"><segment><source>Date</source></segment></unit></group><group
           id="label.date.quarterOfYear"><unit id="label.date.quarterOfYear.title"><segment><source>Date
           - Quarter of Year</source></segment></unit><unit id="label.date.quarterOfYear.description"><segment><source>Generic
-          Quarter (Q1-Q4)</source></segment></unit><unit id="label.date.quarterOfYear.tags"><segment><source>Date</source></segment></unit></group><group
-          id="label.campaign_channel_id"><unit id="label.campaign_channel_id.title"><segment><source>Campaign
-          channel id</source></segment></unit><unit id="label.campaign_channel_id.description"><segment><source>Campaign
-          channel id</source></segment></unit><unit id="label.campaign_channel_id.tags"><segment><source>Campaign
-          channels</source></segment></unit></group><group id="label.campaign_channels.category"><unit
-          id="label.campaign_channels.category.title"><segment><source>Category</source></segment></unit><unit
-          id="label.campaign_channels.category.description"><segment><source>Category</source></segment></unit><unit
-          id="label.campaign_channels.category.tags"><segment><source>Campaign channels</source></segment></unit></group><group
-          id="label.type"><unit id="label.type.title"><segment><source>Type</source></segment></unit><unit
-          id="label.type.description"><segment><source>Type</source></segment></unit><unit
-          id="label.type.tags"><segment><source>Campaign channels</source></segment></unit></group><group
-          id="label.campaign_id"><unit id="label.campaign_id.title"><segment><source>Campaign
-          id</source></segment></unit><unit id="label.campaign_id.description"><segment><source>Campaign
-          id</source></segment></unit><unit id="label.campaign_id.tags"><segment><source>Campaigns</source></segment></unit></group><group
-          id="label.campaign_name"><unit id="label.campaign_name.title"><segment><source>Campaign
-          name</source></segment></unit><unit id="label.campaign_name.description"><segment><source>Campaign
-          name</source></segment></unit><unit id="label.campaign_name.tags"><segment><source>Campaigns</source></segment></unit></group><group
-          id="label.customer_id"><unit id="label.customer_id.title"><segment><source>Customer
-          id</source></segment></unit><unit id="label.customer_id.description"><segment><source>Customer
-          id</source></segment></unit><unit id="label.customer_id.tags"><segment><source>Customers</source></segment></unit></group><group
-          id="label.customer_name"><unit id="label.customer_name.title"><segment><source>Customer
-          name</source></segment></unit><unit id="label.customer_name.description"><segment><source>Customer
-          name</source></segment></unit><unit id="label.customer_name.tags"><segment><source>Customers</source></segment></unit></group><group
-          id="label.region"><unit id="label.region.title"><segment><source>Region</source></segment></unit><unit
-          id="label.region.description"><segment><source>Region</source></segment></unit><unit
-          id="label.region.tags"><segment><source>Customers</source></segment></unit></group><group
-          id="label.state"><unit id="label.state.title"><segment><source>State</source></segment></unit><unit
-          id="label.state.description"><segment><source>State</source></segment></unit><unit
-          id="label.state.tags"><segment><source>Customers</source></segment></unit></group><group
-          id="label.geo__state__location"><unit id="label.geo__state__location.title"><segment><source>Location</source></segment></unit><unit
-          id="label.geo__state__location.description"><segment><source>Location</source></segment></unit><unit
-          id="label.geo__state__location.tags"><segment><source>Customers</source></segment></unit></group></group><group
-          id="metric"><group id="metric.revenue_per_dollar_spent"><unit id="metric.revenue_per_dollar_spent.title"><segment><source>Revenue
-          per Dollar Spent</source></segment></unit></group><group id="metric.revenue_top_10"><unit
-          id="metric.revenue_top_10.title"><segment><source>Revenue / Top 10</source></segment></unit></group><group
-          id="metric.revenue_top_10_percent"><unit id="metric.revenue_top_10_percent.title"><segment><source>Revenue
-          / Top 10%</source></segment></unit></group><group id="metric.total_revenue"><unit
-          id="metric.total_revenue.title"><segment><source>Total Revenue</source></segment></unit></group><group
-          id="metric.total_revenue-no_filters"><unit id="metric.total_revenue-no_filters.title"><segment><source>Total
-          Revenue (No Filters)</source></segment></unit></group><group id="metric.amount_of_orders"><unit
+          Quarter (Q1-Q4)</source></segment></unit><unit id="label.date.quarterOfYear.tags"><segment><source>Date</source></segment></unit></group></group><group
+          id="metric"><group id="metric.amount_of_active_customers"><unit id="metric.amount_of_active_customers.title"><segment><source>#
+          of Active Customers</source></segment></unit></group><group id="metric.amount_of_orders"><unit
           id="metric.amount_of_orders.title"><segment><source># of Orders</source></segment></unit></group><group
           id="metric.amount_of_top_customers"><unit id="metric.amount_of_top_customers.title"><segment><source>#
           of Top Customers</source></segment></unit></group><group id="metric.amount_of_valid_orders"><unit
@@ -984,11 +976,10 @@ interactions:
           id="metric.percent_revenue_from_top_10_customers.title"><segment><source>%
           Revenue from Top 10 Customers</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_percent_customers"><unit
           id="metric.percent_revenue_from_top_10_percent_customers.title"><segment><source>%
-          Revenue from Top 10% Customers</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_percent_products"><unit
-          id="metric.percent_revenue_from_top_10_percent_products.title"><segment><source>%
-          Revenue from Top 10% Products</source></segment></unit></group><group id="metric.amount_of_active_customers"><unit
-          id="metric.amount_of_active_customers.title"><segment><source># of Active
-          Customers</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_products"><unit
+          Revenue from Top 10% Customers</source></segment></unit></group><group id="metric.revenue-outdoor"><unit
+          id="metric.revenue-outdoor.title"><segment><source>Revenue (Outdoor)</source></segment></unit></group><group
+          id="metric.percent_revenue_from_top_10_percent_products"><unit id="metric.percent_revenue_from_top_10_percent_products.title"><segment><source>%
+          Revenue from Top 10% Products</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_products"><unit
           id="metric.percent_revenue_from_top_10_products.title"><segment><source>%
           Revenue from Top 10 Products</source></segment></unit></group><group id="metric.percent_revenue_in_category"><unit
           id="metric.percent_revenue_in_category.title"><segment><source>% Revenue
@@ -1001,21 +992,16 @@ interactions:
           (Clothing)</source></segment></unit></group><group id="metric.revenue-electronic"><unit
           id="metric.revenue-electronic.title"><segment><source>Revenue (Electronic)</source></segment></unit></group><group
           id="metric.revenue-home"><unit id="metric.revenue-home.title"><segment><source>Revenue
-          (Home)</source></segment></unit></group><group id="metric.revenue-outdoor"><unit
-          id="metric.revenue-outdoor.title"><segment><source>Revenue (Outdoor)</source></segment></unit></group><group
-          id="metric.revenue_per_customer"><unit id="metric.revenue_per_customer.title"><segment><source>Revenue
-          per Customer</source></segment></unit></group></group><group id="visualizationObject"><group
-          id="visualizationObject.percent_revenue_per_product_by_customer_and_category"><unit
-          id="visualizationObject.percent_revenue_per_product_by_customer_and_category.title"><segment><source>%
-          Revenue per Product by Customer and Category</source></segment></unit><unit
-          id="visualizationObject.percent_revenue_per_product_by_customer_and_category.free-form"><notes><note
-          appliesTo="source">Free-form translations are marked by the 'id' attribute,
-          which is a hash combining the JSON path and the source text's value. Since
-          this hash is hard to read, the source text includes extra details about
-          its general location.</note></notes><segment id="ce8ec0221a023203625053c69201db66390cdc526860100160d732cac7317696"><source><mrk
-          id="1" type="free-form:path" value="$.buckets[*].items[*].measure.title"/>%
-          Revenue per Product</source></segment><segment id="55ebf600c86d1a043d6d203235883b21007aebcc7c3daf7a5f9eaeea6761d9cf"><source><mrk
-          id="1" type="free-form:path" value="$.buckets[*].items[*].measure.title"/>Revenue</source></segment></unit></group><group
+          (Home)</source></segment></unit></group><group id="metric.revenue_per_customer"><unit
+          id="metric.revenue_per_customer.title"><segment><source>Revenue per Customer</source></segment></unit></group><group
+          id="metric.revenue_per_dollar_spent"><unit id="metric.revenue_per_dollar_spent.title"><segment><source>Revenue
+          per Dollar Spent</source></segment></unit></group><group id="metric.revenue_top_10"><unit
+          id="metric.revenue_top_10.title"><segment><source>Revenue / Top 10</source></segment></unit></group><group
+          id="metric.revenue_top_10_percent"><unit id="metric.revenue_top_10_percent.title"><segment><source>Revenue
+          / Top 10%</source></segment></unit></group><group id="metric.total_revenue"><unit
+          id="metric.total_revenue.title"><segment><source>Total Revenue</source></segment></unit></group><group
+          id="metric.total_revenue-no_filters"><unit id="metric.total_revenue-no_filters.title"><segment><source>Total
+          Revenue (No Filters)</source></segment></unit></group></group><group id="visualizationObject"><group
           id="visualizationObject.campaign_spend"><unit id="visualizationObject.campaign_spend.title"><segment><source>Campaign
           Spend</source></segment></unit><unit id="visualizationObject.campaign_spend.free-form"><notes><note
           appliesTo="source">Free-form translations are marked by the 'id' attribute,
@@ -1035,8 +1021,18 @@ interactions:
           id="1" type="free-form:path" value="$.buckets[*].items[*].measure.title"/>Revenue
           per Customer</source></segment><segment id="8b5759c74e64aa69c917ff14cc37996fe5423759e2d8e129ce54ce1d37275f0d"><source><mrk
           id="1" type="free-form:path" value="$.buckets[*].items[*].measure.alias"/>Active
-          Customers</source></segment></unit></group><group id="visualizationObject.percentage_of_customers_by_region"><unit
-          id="visualizationObject.percentage_of_customers_by_region.title"><segment><source>Percentage
+          Customers</source></segment></unit></group><group id="visualizationObject.percent_revenue_per_product_by_customer_and_category"><unit
+          id="visualizationObject.percent_revenue_per_product_by_customer_and_category.title"><segment><source>%
+          Revenue per Product by Customer and Category</source></segment></unit><unit
+          id="visualizationObject.percent_revenue_per_product_by_customer_and_category.free-form"><notes><note
+          appliesTo="source">Free-form translations are marked by the 'id' attribute,
+          which is a hash combining the JSON path and the source text's value. Since
+          this hash is hard to read, the source text includes extra details about
+          its general location.</note></notes><segment id="ce8ec0221a023203625053c69201db66390cdc526860100160d732cac7317696"><source><mrk
+          id="1" type="free-form:path" value="$.buckets[*].items[*].measure.title"/>%
+          Revenue per Product</source></segment><segment id="55ebf600c86d1a043d6d203235883b21007aebcc7c3daf7a5f9eaeea6761d9cf"><source><mrk
+          id="1" type="free-form:path" value="$.buckets[*].items[*].measure.title"/>Revenue</source></segment></unit></group><group
+          id="visualizationObject.percentage_of_customers_by_region"><unit id="visualizationObject.percentage_of_customers_by_region.title"><segment><source>Percentage
           of Customers by Region</source></segment></unit><unit id="visualizationObject.percentage_of_customers_by_region.free-form"><notes><note
           appliesTo="source">Free-form translations are marked by the 'id' attribute,
           which is a hash combining the JSON path and the source text's value. Since
@@ -1319,9 +1315,6 @@ interactions:
         id="attribute.date.dayOfWeek.description"><segment><source>Generic Day of
         the Week (D1-D7)</source><target>Generic Day of the Week (D1-D7).</target></segment></unit><unit
         id="attribute.date.dayOfWeek.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-        id="attribute.state"><unit id="attribute.state.title"><segment><source>State</source><target>State.</target></segment></unit><unit
-        id="attribute.state.description"><segment><source>State</source><target>State.</target></segment></unit><unit
-        id="attribute.state.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
         id="attribute.date.dayOfMonth"><unit id="attribute.date.dayOfMonth.title"><segment><source>Date
         - Day of Month</source><target>Date - Day of Month.</target></segment></unit><unit
         id="attribute.date.dayOfMonth.description"><segment><source>Generic Day of
@@ -1345,7 +1338,10 @@ interactions:
         - Quarter of Year</source><target>Date - Quarter of Year.</target></segment></unit><unit
         id="attribute.date.quarterOfYear.description"><segment><source>Generic Quarter
         (Q1-Q4)</source><target>Generic Quarter (Q1-Q4).</target></segment></unit><unit
-        id="attribute.date.quarterOfYear.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group></group><group
+        id="attribute.date.quarterOfYear.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
+        id="attribute.state"><unit id="attribute.state.title"><segment><source>State</source><target>State.</target></segment></unit><unit
+        id="attribute.state.description"><segment><source>State</source><target>State.</target></segment></unit><unit
+        id="attribute.state.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group></group><group
         id="dataset"><group id="dataset.campaign_channels"><unit id="dataset.campaign_channels.title"><segment><source>Campaign
         channels</source><target>Campaign channels.</target></segment></unit><unit
         id="dataset.campaign_channels.description"><segment><source>Campaign channels</source><target>Campaign
@@ -1378,9 +1374,42 @@ interactions:
         id="fact.quantity"><unit id="fact.quantity.title"><segment><source>Quantity</source><target>Quantity.</target></segment></unit><unit
         id="fact.quantity.description"><segment><source>Quantity</source><target>Quantity.</target></segment></unit><unit
         id="fact.quantity.tags"><segment><source>Order lines</source><target>Order
-        lines.</target></segment></unit></group></group><group id="label"><group id="label.order_id"><unit
-        id="label.order_id.title"><segment><source>Order id</source><target>Order
-        id.</target></segment></unit><unit id="label.order_id.description"><segment><source>Order
+        lines.</target></segment></unit></group></group><group id="label"><group id="label.campaign_channel_id"><unit
+        id="label.campaign_channel_id.title"><segment><source>Campaign channel id</source><target>Campaign
+        channel id.</target></segment></unit><unit id="label.campaign_channel_id.description"><segment><source>Campaign
+        channel id</source><target>Campaign channel id.</target></segment></unit><unit
+        id="label.campaign_channel_id.tags"><segment><source>Campaign channels</source><target>Campaign
+        channels.</target></segment></unit></group><group id="label.campaign_channels.category"><unit
+        id="label.campaign_channels.category.title"><segment><source>Category</source><target>Category.</target></segment></unit><unit
+        id="label.campaign_channels.category.description"><segment><source>Category</source><target>Category.</target></segment></unit><unit
+        id="label.campaign_channels.category.tags"><segment><source>Campaign channels</source><target>Campaign
+        channels.</target></segment></unit></group><group id="label.type"><unit id="label.type.title"><segment><source>Type</source><target>Type.</target></segment></unit><unit
+        id="label.type.description"><segment><source>Type</source><target>Type.</target></segment></unit><unit
+        id="label.type.tags"><segment><source>Campaign channels</source><target>Campaign
+        channels.</target></segment></unit></group><group id="label.campaign_id"><unit
+        id="label.campaign_id.title"><segment><source>Campaign id</source><target>Campaign
+        id.</target></segment></unit><unit id="label.campaign_id.description"><segment><source>Campaign
+        id</source><target>Campaign id.</target></segment></unit><unit id="label.campaign_id.tags"><segment><source>Campaigns</source><target>Campaigns.</target></segment></unit></group><group
+        id="label.campaign_name"><unit id="label.campaign_name.title"><segment><source>Campaign
+        name</source><target>Campaign name.</target></segment></unit><unit id="label.campaign_name.description"><segment><source>Campaign
+        name</source><target>Campaign name.</target></segment></unit><unit id="label.campaign_name.tags"><segment><source>Campaigns</source><target>Campaigns.</target></segment></unit></group><group
+        id="label.customer_id"><unit id="label.customer_id.title"><segment><source>Customer
+        id</source><target>Customer id.</target></segment></unit><unit id="label.customer_id.description"><segment><source>Customer
+        id</source><target>Customer id.</target></segment></unit><unit id="label.customer_id.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
+        id="label.customer_name"><unit id="label.customer_name.title"><segment><source>Customer
+        name</source><target>Customer name.</target></segment></unit><unit id="label.customer_name.description"><segment><source>Customer
+        name</source><target>Customer name.</target></segment></unit><unit id="label.customer_name.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
+        id="label.region"><unit id="label.region.title"><segment><source>Region</source><target>Region.</target></segment></unit><unit
+        id="label.region.description"><segment><source>Region</source><target>Region.</target></segment></unit><unit
+        id="label.region.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
+        id="label.state"><unit id="label.state.title"><segment><source>State</source><target>State.</target></segment></unit><unit
+        id="label.state.description"><segment><source>State</source><target>State.</target></segment></unit><unit
+        id="label.state.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
+        id="label.geo__state__location"><unit id="label.geo__state__location.title"><segment><source>Location</source><target>Location.</target></segment></unit><unit
+        id="label.geo__state__location.description"><segment><source>Location</source><target>Location.</target></segment></unit><unit
+        id="label.geo__state__location.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
+        id="label.order_id"><unit id="label.order_id.title"><segment><source>Order
+        id</source><target>Order id.</target></segment></unit><unit id="label.order_id.description"><segment><source>Order
         id</source><target>Order id.</target></segment></unit><unit id="label.order_id.tags"><segment><source>Order
         lines</source><target>Order lines.</target></segment></unit></group><group
         id="label.order_line_id"><unit id="label.order_line_id.title"><segment><source>Order
@@ -1461,50 +1490,9 @@ interactions:
         - Quarter of Year</source><target>Date - Quarter of Year.</target></segment></unit><unit
         id="label.date.quarterOfYear.description"><segment><source>Generic Quarter
         (Q1-Q4)</source><target>Generic Quarter (Q1-Q4).</target></segment></unit><unit
-        id="label.date.quarterOfYear.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-        id="label.campaign_channel_id"><unit id="label.campaign_channel_id.title"><segment><source>Campaign
-        channel id</source><target>Campaign channel id.</target></segment></unit><unit
-        id="label.campaign_channel_id.description"><segment><source>Campaign channel
-        id</source><target>Campaign channel id.</target></segment></unit><unit id="label.campaign_channel_id.tags"><segment><source>Campaign
-        channels</source><target>Campaign channels.</target></segment></unit></group><group
-        id="label.campaign_channels.category"><unit id="label.campaign_channels.category.title"><segment><source>Category</source><target>Category.</target></segment></unit><unit
-        id="label.campaign_channels.category.description"><segment><source>Category</source><target>Category.</target></segment></unit><unit
-        id="label.campaign_channels.category.tags"><segment><source>Campaign channels</source><target>Campaign
-        channels.</target></segment></unit></group><group id="label.type"><unit id="label.type.title"><segment><source>Type</source><target>Type.</target></segment></unit><unit
-        id="label.type.description"><segment><source>Type</source><target>Type.</target></segment></unit><unit
-        id="label.type.tags"><segment><source>Campaign channels</source><target>Campaign
-        channels.</target></segment></unit></group><group id="label.campaign_id"><unit
-        id="label.campaign_id.title"><segment><source>Campaign id</source><target>Campaign
-        id.</target></segment></unit><unit id="label.campaign_id.description"><segment><source>Campaign
-        id</source><target>Campaign id.</target></segment></unit><unit id="label.campaign_id.tags"><segment><source>Campaigns</source><target>Campaigns.</target></segment></unit></group><group
-        id="label.campaign_name"><unit id="label.campaign_name.title"><segment><source>Campaign
-        name</source><target>Campaign name.</target></segment></unit><unit id="label.campaign_name.description"><segment><source>Campaign
-        name</source><target>Campaign name.</target></segment></unit><unit id="label.campaign_name.tags"><segment><source>Campaigns</source><target>Campaigns.</target></segment></unit></group><group
-        id="label.customer_id"><unit id="label.customer_id.title"><segment><source>Customer
-        id</source><target>Customer id.</target></segment></unit><unit id="label.customer_id.description"><segment><source>Customer
-        id</source><target>Customer id.</target></segment></unit><unit id="label.customer_id.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
-        id="label.customer_name"><unit id="label.customer_name.title"><segment><source>Customer
-        name</source><target>Customer name.</target></segment></unit><unit id="label.customer_name.description"><segment><source>Customer
-        name</source><target>Customer name.</target></segment></unit><unit id="label.customer_name.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
-        id="label.region"><unit id="label.region.title"><segment><source>Region</source><target>Region.</target></segment></unit><unit
-        id="label.region.description"><segment><source>Region</source><target>Region.</target></segment></unit><unit
-        id="label.region.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
-        id="label.state"><unit id="label.state.title"><segment><source>State</source><target>State.</target></segment></unit><unit
-        id="label.state.description"><segment><source>State</source><target>State.</target></segment></unit><unit
-        id="label.state.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
-        id="label.geo__state__location"><unit id="label.geo__state__location.title"><segment><source>Location</source><target>Location.</target></segment></unit><unit
-        id="label.geo__state__location.description"><segment><source>Location</source><target>Location.</target></segment></unit><unit
-        id="label.geo__state__location.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group></group><group
-        id="metric"><group id="metric.revenue_per_dollar_spent"><unit id="metric.revenue_per_dollar_spent.title"><segment><source>Revenue
-        per Dollar Spent</source><target>Revenue per Dollar Spent.</target></segment></unit></group><group
-        id="metric.revenue_top_10"><unit id="metric.revenue_top_10.title"><segment><source>Revenue
-        / Top 10</source><target>Revenue / Top 10.</target></segment></unit></group><group
-        id="metric.revenue_top_10_percent"><unit id="metric.revenue_top_10_percent.title"><segment><source>Revenue
-        / Top 10%</source><target>Revenue / Top 10%.</target></segment></unit></group><group
-        id="metric.total_revenue"><unit id="metric.total_revenue.title"><segment><source>Total
-        Revenue</source><target>Total Revenue.</target></segment></unit></group><group
-        id="metric.total_revenue-no_filters"><unit id="metric.total_revenue-no_filters.title"><segment><source>Total
-        Revenue (No Filters)</source><target>Total Revenue (No Filters).</target></segment></unit></group><group
+        id="label.date.quarterOfYear.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group></group><group
+        id="metric"><group id="metric.amount_of_active_customers"><unit id="metric.amount_of_active_customers.title"><segment><source>#
+        of Active Customers</source><target># of Active Customers.</target></segment></unit></group><group
         id="metric.amount_of_orders"><unit id="metric.amount_of_orders.title"><segment><source>#
         of Orders</source><target># of Orders.</target></segment></unit></group><group
         id="metric.amount_of_top_customers"><unit id="metric.amount_of_top_customers.title"><segment><source>#
@@ -1522,10 +1510,10 @@ interactions:
         Revenue from Top 10 Customers</source><target>% Revenue from Top 10 Customers.</target></segment></unit></group><group
         id="metric.percent_revenue_from_top_10_percent_customers"><unit id="metric.percent_revenue_from_top_10_percent_customers.title"><segment><source>%
         Revenue from Top 10% Customers</source><target>% Revenue from Top 10% Customers.</target></segment></unit></group><group
+        id="metric.revenue-outdoor"><unit id="metric.revenue-outdoor.title"><segment><source>Revenue
+        (Outdoor)</source><target>Revenue (Outdoor).</target></segment></unit></group><group
         id="metric.percent_revenue_from_top_10_percent_products"><unit id="metric.percent_revenue_from_top_10_percent_products.title"><segment><source>%
         Revenue from Top 10% Products</source><target>% Revenue from Top 10% Products.</target></segment></unit></group><group
-        id="metric.amount_of_active_customers"><unit id="metric.amount_of_active_customers.title"><segment><source>#
-        of Active Customers</source><target># of Active Customers.</target></segment></unit></group><group
         id="metric.percent_revenue_from_top_10_products"><unit id="metric.percent_revenue_from_top_10_products.title"><segment><source>%
         Revenue from Top 10 Products</source><target>% Revenue from Top 10 Products.</target></segment></unit></group><group
         id="metric.percent_revenue_in_category"><unit id="metric.percent_revenue_in_category.title"><segment><source>%
@@ -1540,24 +1528,21 @@ interactions:
         (Electronic)</source><target>Revenue (Electronic).</target></segment></unit></group><group
         id="metric.revenue-home"><unit id="metric.revenue-home.title"><segment><source>Revenue
         (Home)</source><target>Revenue (Home).</target></segment></unit></group><group
-        id="metric.revenue-outdoor"><unit id="metric.revenue-outdoor.title"><segment><source>Revenue
-        (Outdoor)</source><target>Revenue (Outdoor).</target></segment></unit></group><group
         id="metric.revenue_per_customer"><unit id="metric.revenue_per_customer.title"><segment><source>Revenue
-        per Customer</source><target>Revenue per Customer.</target></segment></unit></group></group><group
-        id="visualizationObject"><group id="visualizationObject.percent_revenue_per_product_by_customer_and_category"><unit
-        id="visualizationObject.percent_revenue_per_product_by_customer_and_category.title"><segment><source>%
-        Revenue per Product by Customer and Category</source><target>% Revenue per
-        Product by Customer and Category.</target></segment></unit><unit id="visualizationObject.percent_revenue_per_product_by_customer_and_category.free-form"><notes><note
-        appliesTo="source">Free-form translations are marked by the ''id'' attribute,
-        which is a hash combining the JSON path and the source text''s value. Since
-        this hash is hard to read, the source text includes extra details about its
-        general location.</note></notes><segment id="ce8ec0221a023203625053c69201db66390cdc526860100160d732cac7317696"><source><mrk
-        id="1" type="free-form:path" value="$.buckets[*].items[*].measure.title" />%
-        Revenue per Product</source><target>% Revenue per Product.</target></segment><segment
-        id="55ebf600c86d1a043d6d203235883b21007aebcc7c3daf7a5f9eaeea6761d9cf"><source><mrk
-        id="1" type="free-form:path" value="$.buckets[*].items[*].measure.title" />Revenue</source><target>Revenue.</target></segment></unit></group><group
-        id="visualizationObject.campaign_spend"><unit id="visualizationObject.campaign_spend.title"><segment><source>Campaign
-        Spend</source><target>Campaign Spend.</target></segment></unit><unit id="visualizationObject.campaign_spend.free-form"><notes><note
+        per Customer</source><target>Revenue per Customer.</target></segment></unit></group><group
+        id="metric.revenue_per_dollar_spent"><unit id="metric.revenue_per_dollar_spent.title"><segment><source>Revenue
+        per Dollar Spent</source><target>Revenue per Dollar Spent.</target></segment></unit></group><group
+        id="metric.revenue_top_10"><unit id="metric.revenue_top_10.title"><segment><source>Revenue
+        / Top 10</source><target>Revenue / Top 10.</target></segment></unit></group><group
+        id="metric.revenue_top_10_percent"><unit id="metric.revenue_top_10_percent.title"><segment><source>Revenue
+        / Top 10%</source><target>Revenue / Top 10%.</target></segment></unit></group><group
+        id="metric.total_revenue"><unit id="metric.total_revenue.title"><segment><source>Total
+        Revenue</source><target>Total Revenue.</target></segment></unit></group><group
+        id="metric.total_revenue-no_filters"><unit id="metric.total_revenue-no_filters.title"><segment><source>Total
+        Revenue (No Filters)</source><target>Total Revenue (No Filters).</target></segment></unit></group></group><group
+        id="visualizationObject"><group id="visualizationObject.campaign_spend"><unit
+        id="visualizationObject.campaign_spend.title"><segment><source>Campaign Spend</source><target>Campaign
+        Spend.</target></segment></unit><unit id="visualizationObject.campaign_spend.free-form"><notes><note
         appliesTo="source">Free-form translations are marked by the ''id'' attribute,
         which is a hash combining the JSON path and the source text''s value. Since
         this hash is hard to read, the source text includes extra details about its
@@ -1578,6 +1563,18 @@ interactions:
         id="8b5759c74e64aa69c917ff14cc37996fe5423759e2d8e129ce54ce1d37275f0d"><source><mrk
         id="1" type="free-form:path" value="$.buckets[*].items[*].measure.alias" />Active
         Customers</source><target>Active Customers.</target></segment></unit></group><group
+        id="visualizationObject.percent_revenue_per_product_by_customer_and_category"><unit
+        id="visualizationObject.percent_revenue_per_product_by_customer_and_category.title"><segment><source>%
+        Revenue per Product by Customer and Category</source><target>% Revenue per
+        Product by Customer and Category.</target></segment></unit><unit id="visualizationObject.percent_revenue_per_product_by_customer_and_category.free-form"><notes><note
+        appliesTo="source">Free-form translations are marked by the ''id'' attribute,
+        which is a hash combining the JSON path and the source text''s value. Since
+        this hash is hard to read, the source text includes extra details about its
+        general location.</note></notes><segment id="ce8ec0221a023203625053c69201db66390cdc526860100160d732cac7317696"><source><mrk
+        id="1" type="free-form:path" value="$.buckets[*].items[*].measure.title" />%
+        Revenue per Product</source><target>% Revenue per Product.</target></segment><segment
+        id="55ebf600c86d1a043d6d203235883b21007aebcc7c3daf7a5f9eaeea6761d9cf"><source><mrk
+        id="1" type="free-form:path" value="$.buckets[*].items[*].measure.title" />Revenue</source><target>Revenue.</target></segment></unit></group><group
         id="visualizationObject.percentage_of_customers_by_region"><unit id="visualizationObject.percentage_of_customers_by_region.title"><segment><source>Percentage
         of Customers by Region</source><target>Percentage of Customers by Region.</target></segment></unit><unit
         id="visualizationObject.percentage_of_customers_by_region.free-form"><notes><note
@@ -1764,9 +1761,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -1775,7 +1769,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1 ; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:50 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
   - request:
@@ -1838,9 +1835,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -1849,7 +1843,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1 ; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:50 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><xliff xmlns="urn:oasis:names:tc:xliff:document:2.0"
           version="2.1" srcLang="en-US" trgLang="fr-FR"><file id="demo"><group id="analyticalDashboard"><group
@@ -2006,9 +2003,6 @@ interactions:
           id="attribute.date.dayOfWeek.description"><segment><source>Generic Day of
           the Week (D1-D7)</source><target>Generic Day of the Week (D1-D7).</target></segment></unit><unit
           id="attribute.date.dayOfWeek.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-          id="attribute.state"><unit id="attribute.state.title"><segment><source>State</source><target>State.</target></segment></unit><unit
-          id="attribute.state.description"><segment><source>State</source><target>State.</target></segment></unit><unit
-          id="attribute.state.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
           id="attribute.date.dayOfMonth"><unit id="attribute.date.dayOfMonth.title"><segment><source>Date
           - Day of Month</source><target>Date - Day of Month.</target></segment></unit><unit
           id="attribute.date.dayOfMonth.description"><segment><source>Generic Day
@@ -2033,7 +2027,10 @@ interactions:
           - Quarter of Year</source><target>Date - Quarter of Year.</target></segment></unit><unit
           id="attribute.date.quarterOfYear.description"><segment><source>Generic Quarter
           (Q1-Q4)</source><target>Generic Quarter (Q1-Q4).</target></segment></unit><unit
-          id="attribute.date.quarterOfYear.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group></group><group
+          id="attribute.date.quarterOfYear.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
+          id="attribute.state"><unit id="attribute.state.title"><segment><source>State</source><target>State.</target></segment></unit><unit
+          id="attribute.state.description"><segment><source>State</source><target>State.</target></segment></unit><unit
+          id="attribute.state.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group></group><group
           id="dataset"><group id="dataset.campaign_channels"><unit id="dataset.campaign_channels.title"><segment><source>Campaign
           channels</source><target>Campaign channels.</target></segment></unit><unit
           id="dataset.campaign_channels.description"><segment><source>Campaign channels</source><target>Campaign
@@ -2071,6 +2068,40 @@ interactions:
           id="fact.quantity.description"><segment><source>Quantity</source><target>Quantity.</target></segment></unit><unit
           id="fact.quantity.tags"><segment><source>Order lines</source><target>Order
           lines.</target></segment></unit></group></group><group id="label"><group
+          id="label.campaign_channel_id"><unit id="label.campaign_channel_id.title"><segment><source>Campaign
+          channel id</source><target>Campaign channel id.</target></segment></unit><unit
+          id="label.campaign_channel_id.description"><segment><source>Campaign channel
+          id</source><target>Campaign channel id.</target></segment></unit><unit id="label.campaign_channel_id.tags"><segment><source>Campaign
+          channels</source><target>Campaign channels.</target></segment></unit></group><group
+          id="label.campaign_channels.category"><unit id="label.campaign_channels.category.title"><segment><source>Category</source><target>Category.</target></segment></unit><unit
+          id="label.campaign_channels.category.description"><segment><source>Category</source><target>Category.</target></segment></unit><unit
+          id="label.campaign_channels.category.tags"><segment><source>Campaign channels</source><target>Campaign
+          channels.</target></segment></unit></group><group id="label.type"><unit
+          id="label.type.title"><segment><source>Type</source><target>Type.</target></segment></unit><unit
+          id="label.type.description"><segment><source>Type</source><target>Type.</target></segment></unit><unit
+          id="label.type.tags"><segment><source>Campaign channels</source><target>Campaign
+          channels.</target></segment></unit></group><group id="label.campaign_id"><unit
+          id="label.campaign_id.title"><segment><source>Campaign id</source><target>Campaign
+          id.</target></segment></unit><unit id="label.campaign_id.description"><segment><source>Campaign
+          id</source><target>Campaign id.</target></segment></unit><unit id="label.campaign_id.tags"><segment><source>Campaigns</source><target>Campaigns.</target></segment></unit></group><group
+          id="label.campaign_name"><unit id="label.campaign_name.title"><segment><source>Campaign
+          name</source><target>Campaign name.</target></segment></unit><unit id="label.campaign_name.description"><segment><source>Campaign
+          name</source><target>Campaign name.</target></segment></unit><unit id="label.campaign_name.tags"><segment><source>Campaigns</source><target>Campaigns.</target></segment></unit></group><group
+          id="label.customer_id"><unit id="label.customer_id.title"><segment><source>Customer
+          id</source><target>Customer id.</target></segment></unit><unit id="label.customer_id.description"><segment><source>Customer
+          id</source><target>Customer id.</target></segment></unit><unit id="label.customer_id.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
+          id="label.customer_name"><unit id="label.customer_name.title"><segment><source>Customer
+          name</source><target>Customer name.</target></segment></unit><unit id="label.customer_name.description"><segment><source>Customer
+          name</source><target>Customer name.</target></segment></unit><unit id="label.customer_name.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
+          id="label.region"><unit id="label.region.title"><segment><source>Region</source><target>Region.</target></segment></unit><unit
+          id="label.region.description"><segment><source>Region</source><target>Region.</target></segment></unit><unit
+          id="label.region.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
+          id="label.state"><unit id="label.state.title"><segment><source>State</source><target>State.</target></segment></unit><unit
+          id="label.state.description"><segment><source>State</source><target>State.</target></segment></unit><unit
+          id="label.state.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
+          id="label.geo__state__location"><unit id="label.geo__state__location.title"><segment><source>Location</source><target>Location.</target></segment></unit><unit
+          id="label.geo__state__location.description"><segment><source>Location</source><target>Location.</target></segment></unit><unit
+          id="label.geo__state__location.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
           id="label.order_id"><unit id="label.order_id.title"><segment><source>Order
           id</source><target>Order id.</target></segment></unit><unit id="label.order_id.description"><segment><source>Order
           id</source><target>Order id.</target></segment></unit><unit id="label.order_id.tags"><segment><source>Order
@@ -2153,51 +2184,9 @@ interactions:
           - Quarter of Year</source><target>Date - Quarter of Year.</target></segment></unit><unit
           id="label.date.quarterOfYear.description"><segment><source>Generic Quarter
           (Q1-Q4)</source><target>Generic Quarter (Q1-Q4).</target></segment></unit><unit
-          id="label.date.quarterOfYear.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-          id="label.campaign_channel_id"><unit id="label.campaign_channel_id.title"><segment><source>Campaign
-          channel id</source><target>Campaign channel id.</target></segment></unit><unit
-          id="label.campaign_channel_id.description"><segment><source>Campaign channel
-          id</source><target>Campaign channel id.</target></segment></unit><unit id="label.campaign_channel_id.tags"><segment><source>Campaign
-          channels</source><target>Campaign channels.</target></segment></unit></group><group
-          id="label.campaign_channels.category"><unit id="label.campaign_channels.category.title"><segment><source>Category</source><target>Category.</target></segment></unit><unit
-          id="label.campaign_channels.category.description"><segment><source>Category</source><target>Category.</target></segment></unit><unit
-          id="label.campaign_channels.category.tags"><segment><source>Campaign channels</source><target>Campaign
-          channels.</target></segment></unit></group><group id="label.type"><unit
-          id="label.type.title"><segment><source>Type</source><target>Type.</target></segment></unit><unit
-          id="label.type.description"><segment><source>Type</source><target>Type.</target></segment></unit><unit
-          id="label.type.tags"><segment><source>Campaign channels</source><target>Campaign
-          channels.</target></segment></unit></group><group id="label.campaign_id"><unit
-          id="label.campaign_id.title"><segment><source>Campaign id</source><target>Campaign
-          id.</target></segment></unit><unit id="label.campaign_id.description"><segment><source>Campaign
-          id</source><target>Campaign id.</target></segment></unit><unit id="label.campaign_id.tags"><segment><source>Campaigns</source><target>Campaigns.</target></segment></unit></group><group
-          id="label.campaign_name"><unit id="label.campaign_name.title"><segment><source>Campaign
-          name</source><target>Campaign name.</target></segment></unit><unit id="label.campaign_name.description"><segment><source>Campaign
-          name</source><target>Campaign name.</target></segment></unit><unit id="label.campaign_name.tags"><segment><source>Campaigns</source><target>Campaigns.</target></segment></unit></group><group
-          id="label.customer_id"><unit id="label.customer_id.title"><segment><source>Customer
-          id</source><target>Customer id.</target></segment></unit><unit id="label.customer_id.description"><segment><source>Customer
-          id</source><target>Customer id.</target></segment></unit><unit id="label.customer_id.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
-          id="label.customer_name"><unit id="label.customer_name.title"><segment><source>Customer
-          name</source><target>Customer name.</target></segment></unit><unit id="label.customer_name.description"><segment><source>Customer
-          name</source><target>Customer name.</target></segment></unit><unit id="label.customer_name.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
-          id="label.region"><unit id="label.region.title"><segment><source>Region</source><target>Region.</target></segment></unit><unit
-          id="label.region.description"><segment><source>Region</source><target>Region.</target></segment></unit><unit
-          id="label.region.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
-          id="label.state"><unit id="label.state.title"><segment><source>State</source><target>State.</target></segment></unit><unit
-          id="label.state.description"><segment><source>State</source><target>State.</target></segment></unit><unit
-          id="label.state.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
-          id="label.geo__state__location"><unit id="label.geo__state__location.title"><segment><source>Location</source><target>Location.</target></segment></unit><unit
-          id="label.geo__state__location.description"><segment><source>Location</source><target>Location.</target></segment></unit><unit
-          id="label.geo__state__location.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group></group><group
-          id="metric"><group id="metric.revenue_per_dollar_spent"><unit id="metric.revenue_per_dollar_spent.title"><segment><source>Revenue
-          per Dollar Spent</source><target>Revenue per Dollar Spent.</target></segment></unit></group><group
-          id="metric.revenue_top_10"><unit id="metric.revenue_top_10.title"><segment><source>Revenue
-          / Top 10</source><target>Revenue / Top 10.</target></segment></unit></group><group
-          id="metric.revenue_top_10_percent"><unit id="metric.revenue_top_10_percent.title"><segment><source>Revenue
-          / Top 10%</source><target>Revenue / Top 10%.</target></segment></unit></group><group
-          id="metric.total_revenue"><unit id="metric.total_revenue.title"><segment><source>Total
-          Revenue</source><target>Total Revenue.</target></segment></unit></group><group
-          id="metric.total_revenue-no_filters"><unit id="metric.total_revenue-no_filters.title"><segment><source>Total
-          Revenue (No Filters)</source><target>Total Revenue (No Filters).</target></segment></unit></group><group
+          id="label.date.quarterOfYear.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group></group><group
+          id="metric"><group id="metric.amount_of_active_customers"><unit id="metric.amount_of_active_customers.title"><segment><source>#
+          of Active Customers</source><target># of Active Customers.</target></segment></unit></group><group
           id="metric.amount_of_orders"><unit id="metric.amount_of_orders.title"><segment><source>#
           of Orders</source><target># of Orders.</target></segment></unit></group><group
           id="metric.amount_of_top_customers"><unit id="metric.amount_of_top_customers.title"><segment><source>#
@@ -2215,10 +2204,10 @@ interactions:
           Revenue from Top 10 Customers</source><target>% Revenue from Top 10 Customers.</target></segment></unit></group><group
           id="metric.percent_revenue_from_top_10_percent_customers"><unit id="metric.percent_revenue_from_top_10_percent_customers.title"><segment><source>%
           Revenue from Top 10% Customers</source><target>% Revenue from Top 10% Customers.</target></segment></unit></group><group
+          id="metric.revenue-outdoor"><unit id="metric.revenue-outdoor.title"><segment><source>Revenue
+          (Outdoor)</source><target>Revenue (Outdoor).</target></segment></unit></group><group
           id="metric.percent_revenue_from_top_10_percent_products"><unit id="metric.percent_revenue_from_top_10_percent_products.title"><segment><source>%
           Revenue from Top 10% Products</source><target>% Revenue from Top 10% Products.</target></segment></unit></group><group
-          id="metric.amount_of_active_customers"><unit id="metric.amount_of_active_customers.title"><segment><source>#
-          of Active Customers</source><target># of Active Customers.</target></segment></unit></group><group
           id="metric.percent_revenue_from_top_10_products"><unit id="metric.percent_revenue_from_top_10_products.title"><segment><source>%
           Revenue from Top 10 Products</source><target>% Revenue from Top 10 Products.</target></segment></unit></group><group
           id="metric.percent_revenue_in_category"><unit id="metric.percent_revenue_in_category.title"><segment><source>%
@@ -2233,23 +2222,20 @@ interactions:
           (Electronic)</source><target>Revenue (Electronic).</target></segment></unit></group><group
           id="metric.revenue-home"><unit id="metric.revenue-home.title"><segment><source>Revenue
           (Home)</source><target>Revenue (Home).</target></segment></unit></group><group
-          id="metric.revenue-outdoor"><unit id="metric.revenue-outdoor.title"><segment><source>Revenue
-          (Outdoor)</source><target>Revenue (Outdoor).</target></segment></unit></group><group
           id="metric.revenue_per_customer"><unit id="metric.revenue_per_customer.title"><segment><source>Revenue
-          per Customer</source><target>Revenue per Customer.</target></segment></unit></group></group><group
-          id="visualizationObject"><group id="visualizationObject.percent_revenue_per_product_by_customer_and_category"><unit
-          id="visualizationObject.percent_revenue_per_product_by_customer_and_category.title"><segment><source>%
-          Revenue per Product by Customer and Category</source><target>% Revenue per
-          Product by Customer and Category.</target></segment></unit><unit id="visualizationObject.percent_revenue_per_product_by_customer_and_category.free-form"><notes><note
-          appliesTo="source">Free-form translations are marked by the 'id' attribute,
-          which is a hash combining the JSON path and the source text's value. Since
-          this hash is hard to read, the source text includes extra details about
-          its general location.</note></notes><segment id="ce8ec0221a023203625053c69201db66390cdc526860100160d732cac7317696"><source><mrk
-          id="1" type="free-form:path" value="$.buckets[*].items[*].measure.title"/>%
-          Revenue per Product</source><target>% Revenue per Product.</target></segment><segment
-          id="55ebf600c86d1a043d6d203235883b21007aebcc7c3daf7a5f9eaeea6761d9cf"><source><mrk
-          id="1" type="free-form:path" value="$.buckets[*].items[*].measure.title"/>Revenue</source><target>Revenue.</target></segment></unit></group><group
-          id="visualizationObject.campaign_spend"><unit id="visualizationObject.campaign_spend.title"><segment><source>Campaign
+          per Customer</source><target>Revenue per Customer.</target></segment></unit></group><group
+          id="metric.revenue_per_dollar_spent"><unit id="metric.revenue_per_dollar_spent.title"><segment><source>Revenue
+          per Dollar Spent</source><target>Revenue per Dollar Spent.</target></segment></unit></group><group
+          id="metric.revenue_top_10"><unit id="metric.revenue_top_10.title"><segment><source>Revenue
+          / Top 10</source><target>Revenue / Top 10.</target></segment></unit></group><group
+          id="metric.revenue_top_10_percent"><unit id="metric.revenue_top_10_percent.title"><segment><source>Revenue
+          / Top 10%</source><target>Revenue / Top 10%.</target></segment></unit></group><group
+          id="metric.total_revenue"><unit id="metric.total_revenue.title"><segment><source>Total
+          Revenue</source><target>Total Revenue.</target></segment></unit></group><group
+          id="metric.total_revenue-no_filters"><unit id="metric.total_revenue-no_filters.title"><segment><source>Total
+          Revenue (No Filters)</source><target>Total Revenue (No Filters).</target></segment></unit></group></group><group
+          id="visualizationObject"><group id="visualizationObject.campaign_spend"><unit
+          id="visualizationObject.campaign_spend.title"><segment><source>Campaign
           Spend</source><target>Campaign Spend.</target></segment></unit><unit id="visualizationObject.campaign_spend.free-form"><notes><note
           appliesTo="source">Free-form translations are marked by the 'id' attribute,
           which is a hash combining the JSON path and the source text's value. Since
@@ -2271,6 +2257,18 @@ interactions:
           id="8b5759c74e64aa69c917ff14cc37996fe5423759e2d8e129ce54ce1d37275f0d"><source><mrk
           id="1" type="free-form:path" value="$.buckets[*].items[*].measure.alias"/>Active
           Customers</source><target>Active Customers.</target></segment></unit></group><group
+          id="visualizationObject.percent_revenue_per_product_by_customer_and_category"><unit
+          id="visualizationObject.percent_revenue_per_product_by_customer_and_category.title"><segment><source>%
+          Revenue per Product by Customer and Category</source><target>% Revenue per
+          Product by Customer and Category.</target></segment></unit><unit id="visualizationObject.percent_revenue_per_product_by_customer_and_category.free-form"><notes><note
+          appliesTo="source">Free-form translations are marked by the 'id' attribute,
+          which is a hash combining the JSON path and the source text's value. Since
+          this hash is hard to read, the source text includes extra details about
+          its general location.</note></notes><segment id="ce8ec0221a023203625053c69201db66390cdc526860100160d732cac7317696"><source><mrk
+          id="1" type="free-form:path" value="$.buckets[*].items[*].measure.title"/>%
+          Revenue per Product</source><target>% Revenue per Product.</target></segment><segment
+          id="55ebf600c86d1a043d6d203235883b21007aebcc7c3daf7a5f9eaeea6761d9cf"><source><mrk
+          id="1" type="free-form:path" value="$.buckets[*].items[*].measure.title"/>Revenue</source><target>Revenue.</target></segment></unit></group><group
           id="visualizationObject.percentage_of_customers_by_region"><unit id="visualizationObject.percentage_of_customers_by_region.title"><segment><source>Percentage
           of Customers by Region</source><target>Percentage of Customers by Region.</target></segment></unit><unit
           id="visualizationObject.percentage_of_customers_by_region.free-form"><notes><note
@@ -2462,9 +2460,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -2473,6 +2468,9 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1 ; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:50 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''

@@ -35,12 +35,16 @@ from gooddata_api_client.api.dependency_graph_api import DependencyGraphApi
 from gooddata_api_client.api.entitlement_api import EntitlementApi
 from gooddata_api_client.api.export_definitions_api import ExportDefinitionsApi
 from gooddata_api_client.api.facts_api import FactsApi
+from gooddata_api_client.api.filter_views_api import FilterViewsApi
 from gooddata_api_client.api.generate_logical_data_model_api import GenerateLogicalDataModelApi
 from gooddata_api_client.api.hierarchy_api import HierarchyApi
+from gooddata_api_client.api.identity_providers_api import IdentityProvidersApi
 from gooddata_api_client.api.invalidate_cache_api import InvalidateCacheApi
 from gooddata_api_client.api.jwks_api import JWKSApi
 from gooddata_api_client.api.ldm_declarative_apis_api import LDMDeclarativeAPIsApi
+from gooddata_api_client.api.llm_endpoints_api import LLMEndpointsApi
 from gooddata_api_client.api.labels_api import LabelsApi
+from gooddata_api_client.api.metadata_sync_api import MetadataSyncApi
 from gooddata_api_client.api.metrics_api import MetricsApi
 from gooddata_api_client.api.notification_channels_api import NotificationChannelsApi
 from gooddata_api_client.api.options_api import OptionsApi
@@ -54,6 +58,7 @@ from gooddata_api_client.api.smart_functions_api import SmartFunctionsApi
 from gooddata_api_client.api.tabular_export_api import TabularExportApi
 from gooddata_api_client.api.test_connection_api import TestConnectionApi
 from gooddata_api_client.api.translations_api import TranslationsApi
+from gooddata_api_client.api.unsubscribe_api import UnsubscribeApi
 from gooddata_api_client.api.usage_api import UsageApi
 from gooddata_api_client.api.user_groups_declarative_apis_api import UserGroupsDeclarativeAPIsApi
 from gooddata_api_client.api.user_groups_entity_apis_api import UserGroupsEntityAPIsApi

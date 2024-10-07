@@ -28,7 +28,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '156'
+          - '172'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -55,9 +55,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -66,14 +63,17 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:35 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           detail: The requested endpoint does not exist or you do not have permission
             to access it.
           status: 404
           title: Not Found
-          traceId: d8d000758b18aa62
+          traceId: 6703c34f8861cea1b9b4332f3c75835d
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces
@@ -138,9 +138,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -149,7 +146,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:35 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -214,9 +214,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Transfer-Encoding:
           - chunked
         Vary:
@@ -227,9 +224,12 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
         content-length:
-          - '6088'
+          - '6227'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:35 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           ldm:
@@ -543,11 +543,21 @@ interactions:
             dateInstances:
               - description: ''
                 granularities:
+                  - MINUTE
+                  - HOUR
                   - DAY
                   - WEEK
                   - MONTH
                   - QUARTER
                   - YEAR
+                  - MINUTE_OF_HOUR
+                  - HOUR_OF_DAY
+                  - DAY_OF_WEEK
+                  - DAY_OF_MONTH
+                  - DAY_OF_YEAR
+                  - WEEK_OF_YEAR
+                  - MONTH_OF_YEAR
+                  - QUARTER_OF_YEAR
                 granularitiesFormatting:
                   titleBase: ''
                   titlePattern: '%titleBase - %granularityTitle'
@@ -582,7 +592,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '435'
+          - '476'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -612,9 +622,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -623,7 +630,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:36 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -632,6 +642,7 @@ interactions:
               attributes:
                 url: jdbc:postgresql://localhost:5432/demo
                 username: demouser
+                authenticationType: USERNAME_PASSWORD
                 name: demo-test-ds
                 type: POSTGRESQL
                 schema: demo
@@ -948,11 +959,21 @@ interactions:
                 - Products
           dateInstances:
             - granularities:
+                - MINUTE
+                - HOUR
                 - DAY
                 - WEEK
                 - MONTH
                 - QUARTER
                 - YEAR
+                - MINUTE_OF_HOUR
+                - HOUR_OF_DAY
+                - DAY_OF_WEEK
+                - DAY_OF_MONTH
+                - DAY_OF_YEAR
+                - WEEK_OF_YEAR
+                - MONTH_OF_YEAR
+                - QUARTER_OF_YEAR
               granularitiesFormatting:
                 titleBase: ''
                 titlePattern: '%titleBase - %granularityTitle'
@@ -1010,9 +1031,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -1021,7 +1039,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:36 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
   - request:
@@ -1051,7 +1072,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '435'
+          - '476'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -1081,9 +1102,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -1092,7 +1110,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:36 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -1101,6 +1122,7 @@ interactions:
               attributes:
                 url: jdbc:postgresql://localhost:5432/demo
                 username: demouser
+                authenticationType: USERNAME_PASSWORD
                 name: demo-test-ds
                 type: POSTGRESQL
                 schema: demo
@@ -1417,11 +1439,21 @@ interactions:
                 - Products
           dateInstances:
             - granularities:
+                - MINUTE
+                - HOUR
                 - DAY
                 - WEEK
                 - MONTH
                 - QUARTER
                 - YEAR
+                - MINUTE_OF_HOUR
+                - HOUR_OF_DAY
+                - DAY_OF_WEEK
+                - DAY_OF_MONTH
+                - DAY_OF_YEAR
+                - WEEK_OF_YEAR
+                - MONTH_OF_YEAR
+                - QUARTER_OF_YEAR
               granularitiesFormatting:
                 titleBase: ''
                 titlePattern: '%titleBase - %granularityTitle'
@@ -1479,9 +1511,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -1490,7 +1519,10 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:36 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
   - request:
@@ -1548,9 +1580,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Transfer-Encoding:
           - chunked
         Vary:
@@ -1561,9 +1590,12 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
         content-length:
-          - '5930'
+          - '6069'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:36 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           ldm:
@@ -1871,11 +1903,21 @@ interactions:
             dateInstances:
               - description: ''
                 granularities:
+                  - MINUTE
+                  - HOUR
                   - DAY
                   - WEEK
                   - MONTH
                   - QUARTER
                   - YEAR
+                  - MINUTE_OF_HOUR
+                  - HOUR_OF_DAY
+                  - DAY_OF_WEEK
+                  - DAY_OF_MONTH
+                  - DAY_OF_YEAR
+                  - WEEK_OF_YEAR
+                  - MONTH_OF_YEAR
+                  - QUARTER_OF_YEAR
                 granularitiesFormatting:
                   titleBase: ''
                   titlePattern: '%titleBase - %granularityTitle'
@@ -3249,6 +3291,7 @@ interactions:
                       visualizationUrl: local:bar
                     id: top_10_products
                     title: Top 10 Products
+                exportDefinitions: []
               ldm:
                 datasets:
                   - grain:
@@ -3593,6 +3636,7 @@ interactions:
                 name: VIEW
             settings: []
             userDataFilters: []
+            automations: []
           - id: demo_west
             name: Demo West
             customApplicationSettings: []
@@ -3611,6 +3655,7 @@ interactions:
                 filterContexts: []
                 metrics: []
                 visualizationObjects: []
+                exportDefinitions: []
               ldm:
                 datasetExtensions:
                   - id: order_lines
@@ -3628,6 +3673,7 @@ interactions:
             permissions: []
             settings: []
             userDataFilters: []
+            automations: []
           - id: demo_west_california
             name: Demo West California
             customApplicationSettings: []
@@ -3641,6 +3687,7 @@ interactions:
                 filterContexts: []
                 metrics: []
                 visualizationObjects: []
+                exportDefinitions: []
               ldm:
                 datasets: []
                 dateInstances: []
@@ -3650,6 +3697,7 @@ interactions:
             permissions: []
             settings: []
             userDataFilters: []
+            automations: []
       headers:
         Accept-Encoding:
           - br, gzip, deflate
@@ -3699,9 +3747,6 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -3710,6 +3755,9 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:36 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
