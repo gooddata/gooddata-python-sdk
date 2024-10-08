@@ -2,7 +2,7 @@
 from pathlib import Path
 
 from gooddata_pandas import DataFrameFactory
-from gooddata_sdk import PositiveAttributeFilter
+from gooddata_sdk import ObjId, PositiveAttributeFilter, RelativeDateFilter, SimpleMetric
 from tests_support.vcrpy_utils import get_vcr
 
 gd_vcr = get_vcr()
@@ -75,3 +75,17 @@ def test_empty_not_indexed_dataframe(gdf: DataFrameFactory):
     assert df.columns[0] == "product_name"
     assert df.columns[1] == "amount_of_top_customers"
     assert df.columns[2] == "total_revenue"
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "filtered_empty_df.yaml"))
+def test_filter_empty_df(gdf: DataFrameFactory):
+    my_metric = SimpleMetric(local_id="m_revenue", item=ObjId(id="revenue", type="metric"))
+    my_filter = RelativeDateFilter(
+        dataset=ObjId(id="date", type="dataset"),
+        granularity="YEAR",
+        from_shift=1,
+        to_shift=2,
+    )
+    df = gdf.not_indexed(columns=dict(my_metric=my_metric), filter_by=[my_filter])
+    assert df.empty
+    assert df.columns[0] == "my_metric"
