@@ -312,12 +312,10 @@ def _extract_for_metrics_only(response: ExecutionResponse, cols: list, col_to_me
     """
     exec_def = response.exec_def
     result = response.read_result(len(exec_def.metrics))
-    data = dict()
+    if len(result.data) == 0:
+        return {col: [] for col in cols}
 
-    for col in cols:
-        data[col] = [result.data[col_to_metric_idx[col]]]
-
-    return data
+    return {col: [result.data[col_to_metric_idx[col]]] for col in cols}
 
 
 def _find_attribute(attributes: list[CatalogAttribute], id_obj: IdObjType) -> Union[CatalogAttribute, None]:
