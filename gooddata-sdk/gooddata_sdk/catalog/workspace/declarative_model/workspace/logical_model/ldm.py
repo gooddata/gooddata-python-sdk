@@ -188,6 +188,10 @@ class CatalogDeclarativeLdm(Base):
                     data_source_id = dataset.data_source_table_id.data_source_id
                     if data_source_id in data_source_mapping:
                         dataset.data_source_table_id.data_source_id = data_source_mapping[data_source_id]
+                if dataset.sql is not None:
+                    data_source_id = dataset.sql.data_source_id
+                    if data_source_id in data_source_mapping:
+                        dataset.sql.data_source_id = data_source_mapping[data_source_id]
         return self
 
     @staticmethod
