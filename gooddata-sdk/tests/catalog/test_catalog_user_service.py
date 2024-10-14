@@ -638,6 +638,32 @@ def test_revoke_permissions_bulk(test_config):
         sdk.catalog_user.manage_user_permissions(user_id, origin_permissions)
 
 
+@gd_vcr.use_cassette(str(_fixtures_dir / "test_api_tokens.yaml"))
+def test_api_tokens(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    tokens = sdk.catalog_user.list_user_api_tokens(test_config["demo_user"])
+    assert len(tokens) == 0
+
+    token_id = "test_token"
+    try:
+        token = sdk.catalog_user.create_user_api_token(test_config["demo_user"], "test_token")
+        assert token.id == token_id
+        assert token.bearer_token is not None
+
+        token = sdk.catalog_user.get_user_api_token(test_config["demo_user"], token_id)
+        assert token.id == token_id
+        assert token.bearer_token is None
+
+        tokens = sdk.catalog_user.list_user_api_tokens(test_config["demo_user"])
+        assert len(tokens) == 1
+        assert tokens[0].id == token_id
+        assert tokens[0].bearer_token is None
+    finally:
+        sdk.catalog_user.delete_user_api_token(test_config["demo_user"], token_id)
+        tokens = sdk.catalog_user.list_user_api_tokens(test_config["demo_user"])
+        assert len(tokens) == 0
+
+
 # Help functions
 
 
