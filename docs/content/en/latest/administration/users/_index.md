@@ -16,6 +16,10 @@ See [Manage Users and UserGroups](https://www.gooddata.com/docs/cloud/manage-dep
 * [get_user](./get_user/)
 * [delete_user](./delete_user/)
 * [list_users](./list_users/)
+* [create_user_api_token](./create_user_api_token/)
+* [get_user_api_token](./get_user_api_token/)
+* [delete_user_api_token](./delete_user_api_token/)
+* [list_user_api_tokens](./list_user_api_tokens/)
 
 
 ### Declarative Methods
