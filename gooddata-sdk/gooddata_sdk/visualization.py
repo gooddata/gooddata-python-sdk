@@ -440,6 +440,38 @@ class VisualizationFilter:
         return repr(self._filter)
 
 
+class VisualizationAttributeFilterConfig:
+    """
+    Represents attribute filter configuration used by a visualization.
+    """
+
+    def __init__(self, afc: tuple[str, Any]) -> None:
+        local_id, data = afc
+        self._local_id = local_id
+        self._data = data
+
+    @property
+    def local_id(self) -> str:
+        return self._local_id
+
+    @property
+    def label_id(self) -> str:
+        return self._data["displayAsLabel"]["identifier"]["id"]
+
+    @property
+    def type(self) -> str:
+        return self._data["displayAsLabel"]["identifier"]["type"]
+
+    def __str__(self) -> str:
+        return self.__repr__()
+
+    def __repr__(self) -> str:
+        return (
+            f"VisualizationAttributeFilterConfig(local_id='{self.local_id}', label_id='{self.label_id}', "
+            f"type='{self.type}')"
+        )
+
+
 class VisualizationSortLocator:
     def __init__(self, locator: dict[str, str], locator_type: LocatorItemType) -> None:
         self._locator = locator
@@ -546,6 +578,7 @@ class Visualization:
         side_loads: Optional[SideLoads] = None,
     ) -> None:
         self._vo = from_vis_obj
+        self._attribute_filter_configs: Optional[list[VisualizationAttributeFilterConfig]] = None
         self._buckets: Optional[list[VisualizationBucket]] = None
         self._filters: Optional[list[VisualizationFilter]] = None
         self._sorts: Optional[list[VisualizationSort]] = None
@@ -567,6 +600,15 @@ class Visualization:
     def are_relations_valid(self) -> str:
         # Fallback to true for tests, where fixtures were generated without HTTP header activating this feature
         return self._vo["attributes"].get("areRelationsValid", "true")
+
+    @property
+    def attribute_filter_configs(self) -> Optional[list[VisualizationAttributeFilterConfig]]:
+        visualization_attribute_filter_configs = safeget(self._vo, ["attributes", "content", "attributeFilterConfigs"])
+        if self._attribute_filter_configs is None and visualization_attribute_filter_configs is not None:
+            self._attribute_filter_configs = [
+                VisualizationAttributeFilterConfig(afc) for afc in visualization_attribute_filter_configs.items()
+            ]
+        return self._attribute_filter_configs
 
     @property
     def buckets(self) -> list[VisualizationBucket]:
