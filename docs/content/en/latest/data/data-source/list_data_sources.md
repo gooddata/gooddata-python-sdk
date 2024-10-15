@@ -35,7 +35,6 @@ data_sources = sdk.catalog_data_source.list_data_sources()
 #        type='POSTGRESQL',
 #        schema='demo',
 #        url='jdbc:postgresql://localhost:5432/demo',
-#        enable_caching=False,
 #        cache_path=None,
 #        parameters=None,
 #        decoded_parameters=None,

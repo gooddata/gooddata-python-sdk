@@ -1547,7 +1547,7 @@ def get_oneof_instance(cls, model_kwargs, constant_kwargs, model_arg=None):
                 # Workaround for missing OneOf schema support by the generator
                 # Checks if the defined schema is a subset of received model
                 # This way we can ensure forward-compatibility support of new fields in API
-                assert set(oneof_class.openapi_types.keys()) <= set(model_kwargs.keys())
+                assert len(set(model_kwargs.keys()).difference(set(oneof_class.openapi_types.keys()))) == 0 or set(oneof_class.openapi_types.keys()) <= set(model_kwargs.keys())
 
             else:
                 if issubclass(oneof_class, ModelSimple):

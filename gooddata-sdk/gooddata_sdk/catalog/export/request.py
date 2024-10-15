@@ -63,8 +63,8 @@ class ExportRequest(Base):
     """
 
     format: str
-    execution_result: str
     file_name: str
+    execution_result: Optional[str] = None
     settings: Optional[ExportSettings] = None
     custom_override: Optional[ExportCustomOverride] = None
 
