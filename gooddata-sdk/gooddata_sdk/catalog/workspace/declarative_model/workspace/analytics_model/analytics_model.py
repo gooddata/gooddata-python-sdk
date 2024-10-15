@@ -2,9 +2,10 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any, Optional, TypeVar, Union
+from typing import Any, Optional, Union
 
 import attr
+from attrs import define
 from cattrs import global_converter, structure
 from gooddata_api_client.model.declarative_analytical_dashboard import DeclarativeAnalyticalDashboard
 from gooddata_api_client.model.declarative_analytical_dashboard_extension import DeclarativeAnalyticalDashboardExtension
@@ -17,14 +18,19 @@ from gooddata_api_client.model.declarative_metric import DeclarativeMetric
 from gooddata_api_client.model.declarative_visualization_object import DeclarativeVisualizationObject
 
 from gooddata_sdk.catalog.base import Base
-from gooddata_sdk.catalog.identifier import CatalogUserIdentifier
 from gooddata_sdk.catalog.permission.declarative_model.permission import (
     CatalogDeclarativeDashboardPermissionsForAssignee,
     CatalogDeclarativeDashboardPermissionsForAssigneeRule,
 )
-from gooddata_sdk.utils import create_directory, get_sorted_yaml_files, read_layout_from_file, write_layout_to_file
+from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.base import (
+    CatalogAnalyticsBase,
+    CatalogAnalyticsObjectBase,
+)
+from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.export_definition import (
+    CatalogDeclarativeExportDefinition,
+)
+from gooddata_sdk.utils import create_directory, get_sorted_yaml_files
 
-T = TypeVar("T", bound="CatalogAnalyticsObjectBase")
 AnalyticsObjects = Union[
     DeclarativeAnalyticalDashboard,
     DeclarativeDashboardPlugin,
@@ -41,6 +47,7 @@ LAYOUT_FILTER_CONTEXTS_DIR = "filter_contexts"
 LAYOUT_METRICS_DIR = "metrics"
 LAYOUT_VISUALIZATION_OBJECTS_DIR = "visualization_objects"
 ATTRIBUTE_HIERARCHY_OBJECTS_DIR = "attribute_hierarchy_objects"
+EXPORT_DEFINITION_DIR = "export_definitions"
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -70,7 +77,7 @@ class CatalogDeclarativeAnalyticsLayer(Base):
     filter_contexts: list[CatalogDeclarativeFilterContext] = attr.field(factory=list)
     metrics: list[CatalogDeclarativeMetric] = attr.field(factory=list)
     visualization_objects: list[CatalogDeclarativeVisualizationObject] = attr.field(factory=list)
-    export_definitions: list[dict] = attr.field(factory=list)
+    export_definitions: list[CatalogDeclarativeExportDefinition] = attr.field(factory=list)
 
     @staticmethod
     def client_class() -> type[DeclarativeAnalyticsLayer]:
@@ -124,6 +131,12 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         create_directory(folder)
         return folder
 
+    @staticmethod
+    def get_export_definition_dif(analytics_model_folder: Path) -> Path:
+        folder = analytics_model_folder / EXPORT_DEFINITION_DIR
+        create_directory(folder)
+        return folder
+
     def store_to_disk(self, workspace_folder: Path) -> None:
         analytics_model_folder = self.get_analytics_model_folder(workspace_folder)
 
@@ -134,6 +147,7 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         metrics_folder = self.get_metrics_folder(analytics_model_folder)
         visualization_objects_folder = self.get_visualization_objects_folder(analytics_model_folder)
         attribute_hierarchy_folder = self.get_attribute_hierarchy_folder(analytics_model_folder)
+        export_definition_folder = self.get_export_definition_dif(analytical_dashboards_folder)
 
         for analytical_dashboard in self.analytical_dashboards:
             analytical_dashboard.store_to_disk(analytical_dashboards_folder)
@@ -156,6 +170,9 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         for attribute_hierarchy in self.attribute_hierarchies:
             attribute_hierarchy.store_to_disk(attribute_hierarchy_folder)
 
+        for export_definition in self.export_definitions:
+            export_definition.store_to_disk(export_definition_folder)
+
     @classmethod
     def load_from_disk(cls, workspace_folder: Path) -> CatalogDeclarativeAnalyticsLayer:
         analytics_model_folder = cls.get_analytics_model_folder(workspace_folder)
@@ -166,6 +183,7 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         metrics_folder = cls.get_metrics_folder(analytics_model_folder)
         visualization_objects_folder = cls.get_visualization_objects_folder(analytics_model_folder)
         attribute_hierarchy_folder = cls.get_attribute_hierarchy_folder(analytics_model_folder)
+        export_definition_folder = cls.get_export_definition_dif(analytical_dashboards_folder)
 
         analytical_dashboard_files = get_sorted_yaml_files(analytical_dashboards_folder)
         analytical_dashboard_extension_files = get_sorted_yaml_files(analytical_dashboard_extensions_folder)
@@ -174,6 +192,7 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         metric_files = get_sorted_yaml_files(metrics_folder)
         visualization_object_files = get_sorted_yaml_files(visualization_objects_folder)
         attribute_hierarchy_files = get_sorted_yaml_files(attribute_hierarchy_folder)
+        export_definition_files = get_sorted_yaml_files(export_definition_folder)
 
         analytical_dashboards = [
             CatalogDeclarativeAnalyticalDashboard.load_from_disk(analytical_dashboard_file)
@@ -200,6 +219,10 @@ class CatalogDeclarativeAnalyticsLayer(Base):
             CatalogDeclarativeAttributeHierarchy.load_from_disk(attribute_hierarchy_file)
             for attribute_hierarchy_file in attribute_hierarchy_files
         ]
+        export_definitions = [
+            CatalogDeclarativeExportDefinition.load_from_disk(export_definition_file)
+            for export_definition_file in export_definition_files
+        ]
         return cls(
             analytical_dashboards=analytical_dashboards,
             analytical_dashboard_extensions=analytical_dashboard_extensions,
@@ -208,41 +231,12 @@ class CatalogDeclarativeAnalyticsLayer(Base):
             filter_contexts=filter_contexts,
             metrics=metrics,
             visualization_objects=visualization_objects,
+            export_definitions=export_definitions,
         )
 
 
-@attr.s(auto_attribs=True, kw_only=True)
-class CatalogAnalyticsObjectBase(Base):
-    id: str
-
-    def store_to_disk(self, analytics_folder: Path) -> None:
-        analytics_file = analytics_folder / f"{self.id}.yaml"
-        write_layout_to_file(analytics_file, self.to_api().to_dict(camel_case=True))
-
-    @classmethod
-    def load_from_disk(cls: type[T], analytics_file: Path) -> T:
-        analytics_layout = read_layout_from_file(analytics_file)
-        return cls.from_dict(analytics_layout)
-
-
-@attr.s(auto_attribs=True, kw_only=True)
-class CatalogAnalyticsBase(CatalogAnalyticsObjectBase):
-    title: str
-    content: dict[str, Any]
-    description: Optional[str] = None
-    tags: Optional[list[str]] = None
-
-
-@attr.s(auto_attribs=True, kw_only=True)
-class CatalogAnalyticsBaseMeta(CatalogAnalyticsBase):
-    created_at: Optional[str] = None
-    created_by: Optional[CatalogUserIdentifier] = None
-    modified_at: Optional[str] = None
-    modified_by: Optional[CatalogUserIdentifier] = None
-
-
-@attr.s(auto_attribs=True, kw_only=True)
-class CatalogDeclarativeAnalyticalDashboard(CatalogAnalyticsBaseMeta):
+@define(auto_attribs=True, kw_only=True)
+class CatalogDeclarativeAnalyticalDashboard(CatalogAnalyticsBase):
     permissions: Optional[
         list[
             Union[
@@ -274,7 +268,7 @@ global_converter.register_structure_hook(
 
 
 @attr.s(auto_attribs=True, kw_only=True)
-class CatalogDeclarativeDashboardPlugin(CatalogAnalyticsBaseMeta):
+class CatalogDeclarativeDashboardPlugin(CatalogAnalyticsBase):
     @staticmethod
     def client_class() -> type[DeclarativeDashboardPlugin]:
         return DeclarativeDashboardPlugin
@@ -299,21 +293,21 @@ class CatalogDeclarativeFilterContext(CatalogAnalyticsBase):
 
 
 @attr.s(auto_attribs=True, kw_only=True)
-class CatalogDeclarativeMetric(CatalogAnalyticsBaseMeta):
+class CatalogDeclarativeMetric(CatalogAnalyticsBase):
     @staticmethod
     def client_class() -> type[DeclarativeMetric]:
         return DeclarativeMetric
 
 
 @attr.s(auto_attribs=True, kw_only=True)
-class CatalogDeclarativeVisualizationObject(CatalogAnalyticsBaseMeta):
+class CatalogDeclarativeVisualizationObject(CatalogAnalyticsBase):
     @staticmethod
     def client_class() -> type[DeclarativeVisualizationObject]:
         return DeclarativeVisualizationObject
 
 
 @attr.s(auto_attribs=True, kw_only=True)
-class CatalogDeclarativeAttributeHierarchy(CatalogAnalyticsBaseMeta):
+class CatalogDeclarativeAttributeHierarchy(CatalogAnalyticsBase):
     @staticmethod
     def client_class() -> type[DeclarativeAttributeHierarchy]:
         return DeclarativeAttributeHierarchy

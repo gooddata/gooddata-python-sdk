@@ -135,6 +135,10 @@ from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.
     CatalogDeclarativeAnalytics,
     CatalogDeclarativeMetric,
 )
+from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.export_definition import (
+    CatalogDeclarativeExportDefinition,
+    CatalogDeclarativeExportDefinitionRequestPayload,
+)
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.data_filter_references import (
     CatalogDeclarativeWorkspaceDataFilterReferences,
 )
