@@ -138,7 +138,7 @@ class CatalogDataSourceService(CatalogServiceBase):
     # Declarative methods are listed below
 
     def get_declarative_data_sources(self) -> CatalogDeclarativeDataSources:
-        """Retrieve all data sources, including their related physical data model.
+        """Retrieve all data sources.
 
         Args:
             None
