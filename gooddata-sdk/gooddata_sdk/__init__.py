@@ -71,6 +71,8 @@ from gooddata_sdk.catalog.filter_by import CatalogFilterBy
 from gooddata_sdk.catalog.identifier import (
     CatalogAssigneeIdentifier,
     CatalogDatasetWorkspaceDataFilterIdentifier,
+    CatalogExportDefinitionIdentifier,
+    CatalogNotificationChannelIdentifier,
     CatalogWorkspaceIdentifier,
 )
 from gooddata_sdk.catalog.organization.entity_model.directive import CatalogCspDirective
@@ -142,6 +144,10 @@ from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.export_definition import (
     CatalogDeclarativeExportDefinition,
     CatalogDeclarativeExportDefinitionRequestPayload,
+)
+from gooddata_sdk.catalog.workspace.declarative_model.workspace.automation import (
+    CatalogAutomationSchedule,
+    CatalogDeclarativeAutomation,
 )
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.data_filter_references import (
     CatalogDeclarativeWorkspaceDataFilterReferences,
