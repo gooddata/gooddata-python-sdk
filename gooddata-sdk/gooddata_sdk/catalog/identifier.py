@@ -4,8 +4,13 @@ from __future__ import annotations
 import builtins
 
 import attr
+from attrs import define
 from gooddata_api_client.model.assignee_identifier import AssigneeIdentifier
 from gooddata_api_client.model.dataset_workspace_data_filter_identifier import DatasetWorkspaceDataFilterIdentifier
+from gooddata_api_client.model.declarative_export_definition_identifier import DeclarativeExportDefinitionIdentifier
+from gooddata_api_client.model.declarative_notification_channel_identifier import (
+    DeclarativeNotificationChannelIdentifier,
+)
 from gooddata_api_client.model.declarative_user_group_identifier import DeclarativeUserGroupIdentifier
 from gooddata_api_client.model.declarative_user_identifier import DeclarativeUserIdentifier
 from gooddata_api_client.model.grain_identifier import GrainIdentifier
@@ -91,3 +96,21 @@ class CatalogDatasetWorkspaceDataFilterIdentifier(Base):
     @staticmethod
     def client_class() -> builtins.type[DatasetWorkspaceDataFilterIdentifier]:
         return DatasetWorkspaceDataFilterIdentifier
+
+
+@define(auto_attribs=True, kw_only=True)
+class CatalogExportDefinitionIdentifier(Base):
+    id: str
+
+    @staticmethod
+    def client_class() -> builtins.type[DeclarativeExportDefinitionIdentifier]:
+        return DeclarativeExportDefinitionIdentifier
+
+
+@define(auto_attribs=True, kw_only=True)
+class CatalogNotificationChannelIdentifier(Base):
+    id: str
+
+    @staticmethod
+    def client_class() -> builtins.type[DeclarativeNotificationChannelIdentifier]:
+        return DeclarativeNotificationChannelIdentifier

@@ -29,6 +29,7 @@ from gooddata_sdk.catalog.setting import CatalogDeclarativeCustomApplicationSett
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.analytics_model import (
     CatalogDeclarativeAnalyticsLayer,
 )
+from gooddata_sdk.catalog.workspace.declarative_model.workspace.automation import CatalogDeclarativeAutomation
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.ldm import CatalogDeclarativeLdm
 from gooddata_sdk.utils import create_directory, get_sorted_yaml_files, read_layout_from_file, write_layout_to_file
 
@@ -83,7 +84,7 @@ class CatalogDeclarativeWorkspace(Base):
     settings: list[CatalogDeclarativeSetting] = attr.field(factory=list)
     user_data_filters: list[CatalogDeclarativeUserDataFilter] = attr.field(factory=list)
     custom_application_settings: list[CatalogDeclarativeCustomApplicationSetting] = attr.field(factory=list)
-    automations: list[dict] = attr.field(factory=list)
+    automations: list[CatalogDeclarativeAutomation] = attr.field(factory=list)
 
     @staticmethod
     def client_class() -> type[DeclarativeWorkspace]:

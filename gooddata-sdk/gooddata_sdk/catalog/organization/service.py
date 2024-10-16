@@ -5,6 +5,7 @@ import functools
 from typing import Optional
 
 from gooddata_api_client.exceptions import NotFoundException
+from gooddata_api_client.model.declarative_notification_channels import DeclarativeNotificationChannels
 from gooddata_api_client.model.json_api_csp_directive_in_document import JsonApiCspDirectiveInDocument
 from gooddata_api_client.model.json_api_organization_setting_in_document import JsonApiOrganizationSettingInDocument
 
@@ -13,6 +14,7 @@ from gooddata_sdk.catalog.organization.entity_model.directive import CatalogCspD
 from gooddata_sdk.catalog.organization.entity_model.jwk import CatalogJwk, CatalogJwkDocument
 from gooddata_sdk.catalog.organization.entity_model.organization import CatalogOrganizationDocument
 from gooddata_sdk.catalog.organization.entity_model.setting import CatalogOrganizationSetting
+from gooddata_sdk.catalog.organization.layout.notification_channel import CatalogDeclarativeNotificationChannel
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.utils import load_all_entities
 
@@ -20,6 +22,8 @@ from gooddata_sdk.utils import load_all_entities
 class CatalogOrganizationService(CatalogServiceBase):
     def __init__(self, api_client: GoodDataApiClient) -> None:
         super().__init__(api_client)
+
+    # Entities API
 
     def update_oidc_parameters(
         self,
@@ -319,3 +323,34 @@ class CatalogOrganizationService(CatalogServiceBase):
             self._entities_api.update_entity_csp_directives(csp_directive.id, csp_directive_document)
         except NotFoundException:
             raise ValueError(f"Can not update {csp_directive.id} csp directive. This csp directive does not exist.")
+
+    # Layout APIs
+
+    def get_declarative_notification_channels(self) -> list[CatalogDeclarativeNotificationChannel]:
+        """
+        Get all declarative notification channels in the current organization.
+
+        Returns:
+            list[CatalogDeclarativeNotificationChannel]:
+                List of declarative notification channels.
+        """
+        return [
+            CatalogDeclarativeNotificationChannel.from_api(nc)
+            for nc in self._layout_api.get_notification_channels_layout().notification_channels
+        ]
+
+    def put_declarative_notification_channels(
+        self, notification_channels: list[CatalogDeclarativeNotificationChannel]
+    ) -> None:
+        """
+        Put declarative notification channels in the current organization.
+
+        Args:
+            notification_channels (list[CatalogDeclarativeNotificationChannel]):
+                List of declarative notification channels.
+
+        Returns:
+            None
+        """
+        api_ncs = [nc.to_api() for nc in notification_channels]
+        self._layout_api.set_notification_channels(DeclarativeNotificationChannels(notification_channels=api_ncs))
