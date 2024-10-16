@@ -27,6 +27,8 @@ Manage workspaces. Entity and Declarative methods are supported.
 * [store_declarative_workspaces](./store_declarative_workspaces/)
 * [load_declarative_workspaces](./load_declarative_workspaces/)
 * [load_and_put_declarative_workspaces](./load_and_put_declarative_workspaces/)
+* [get_declarative_automations](./get_declarative_automations/)
+* [put_declarative_automations](./put_declarative_automations/)
 
 
 ## Example
