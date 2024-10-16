@@ -17,6 +17,7 @@ from gooddata_api_client.api.translations_api import LocaleRequest
 from gooddata_api_client.exceptions import NotFoundException
 from gooddata_api_client.model.resolve_settings_request import ResolveSettingsRequest
 
+from gooddata_sdk import CatalogDeclarativeAutomation
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.permission.service import CatalogPermissionService
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import (
@@ -1232,3 +1233,33 @@ class CatalogWorkspaceService(CatalogServiceBase):
             self.layout_organization_folder(layout_root_path)
         )
         self.put_declarative_user_data_filters(workspace_id, declarative_user_data_filters)
+
+    def get_declarative_automations(self, workspace_id: str) -> list[CatalogDeclarativeAutomation]:
+        """Retrieve a list of declarative automations.
+
+        Args:
+            workspace_id (str):
+                Workspace identification string e.g. "demo"
+
+        Returns:
+            list[CatalogDeclarativeAutomation]:
+                List of declarative automations.
+        """
+        return [
+            CatalogDeclarativeAutomation.from_api(automation)
+            for automation in self._layout_api.get_automations(workspace_id)
+        ]
+
+    def put_declarative_automations(self, workspace_id: str, automations: list[CatalogDeclarativeAutomation]) -> None:
+        """Set automations for the workspace.
+
+        Args:
+            workspace_id (str):
+                Workspace identification string e.g. "demo"
+            automations (list[CatalogDeclarativeAutomation]):
+                List of declarative automations.
+        Returns:
+            None
+        """
+        api_automations = [automation.to_api() for automation in automations]
+        self._layout_api.set_automations(workspace_id, api_automations)

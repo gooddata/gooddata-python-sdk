@@ -9,6 +9,7 @@ import yaml
 from gooddata_sdk import (
     BasicCredentials,
     CatalogDataSourcePostgres,
+    CatalogDeclarativeAutomation,
     CatalogDeclarativeUserDataFilter,
     CatalogDeclarativeUserDataFilters,
     CatalogDeclarativeWorkspaceDataFilters,
@@ -21,7 +22,11 @@ from gooddata_sdk import (
     GoodDataSdk,
     PostgresAttributes,
 )
-from gooddata_sdk.catalog.identifier import CatalogUserIdentifier
+from gooddata_sdk.catalog.identifier import CatalogNotificationChannelIdentifier, CatalogUserIdentifier
+from gooddata_sdk.catalog.organization.layout.notification_channel import (
+    CatalogDeclarativeNotificationChannel,
+    CatalogWebhook,
+)
 from gooddata_sdk.utils import recreate_directory
 from tests_support.vcrpy_utils import get_vcr
 
@@ -918,3 +923,36 @@ def test_clean_metadata_locale(test_config):
     xliff_after = sdk.catalog_workspace.get_metadata_localization(workspace_id=test_workspace, target_language="fr-FR")
 
     assert xliff_before == xliff_after
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "layout_automations.yaml"))
+def test_layout_automations(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    workspace_id = test_config["workspace"]
+
+    automations = sdk.catalog_workspace.get_declarative_automations(workspace_id)
+    assert len(automations) == 0
+
+    try:
+        notification_channel = [
+            CatalogDeclarativeNotificationChannel(
+                id="webhook", name="Webhook", destination=CatalogWebhook(url="https://webhook.site", token="123")
+            ),
+        ]
+        sdk.catalog_organization.put_declarative_notification_channels(notification_channel)
+        automations_expected = [
+            CatalogDeclarativeAutomation(
+                id="automation",
+                title="Automation",
+                state="ACTIVE",
+                notification_channel=CatalogNotificationChannelIdentifier(id="webhook"),
+            )
+        ]
+        sdk.catalog_workspace.put_declarative_automations(workspace_id, automations_expected)
+        automations_o = sdk.catalog_workspace.get_declarative_automations(workspace_id)
+        assert automations_expected == automations_o
+    finally:
+        sdk.catalog_workspace.put_declarative_automations(workspace_id, [])
+        automations = sdk.catalog_workspace.get_declarative_automations(workspace_id)
+        assert len(automations) == 0
+        sdk.catalog_organization.put_declarative_notification_channels([])
