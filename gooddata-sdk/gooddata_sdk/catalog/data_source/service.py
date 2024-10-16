@@ -24,7 +24,6 @@ from gooddata_sdk.catalog.data_source.declarative_model.physical_model.pdm impor
     CatalogDeclarativeTables,
     CatalogScanResultPdm,
 )
-from gooddata_sdk.catalog.data_source.entity_model.content_objects.table import CatalogDataSourceTable
 from gooddata_sdk.catalog.data_source.entity_model.data_source import CatalogDataSource
 from gooddata_sdk.catalog.entity import TokenCredentialsFromFile
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.ldm import CatalogDeclarativeModel
@@ -136,29 +135,10 @@ class CatalogDataSourceService(CatalogServiceBase):
         data_sources = load_all_entities_dict(get_data_sources)
         return [CatalogDataSource.from_api(ds) for ds in data_sources["data"]]
 
-    def list_data_source_tables(self, data_source_id: str) -> list[CatalogDataSourceTable]:
-        """Lists all the data source tables for a given data source.
-
-        Args:
-            data_source_id (str):
-                Data Source identification string. e.g. "demo"
-
-        Returns:
-            list[CatalogDataSourceTable]:
-                List of Data Source Table objects
-        """
-        get_data_source_tables = functools.partial(
-            self._entities_api.get_all_entities_data_source_tables,
-            data_source_id,
-            _check_return_type=False,
-        )
-        data_source_tables = load_all_entities_dict(get_data_source_tables, camel_case=False)
-        return [CatalogDataSourceTable.from_dict(dst, camel_case=False) for dst in data_source_tables["data"]]
-
     # Declarative methods are listed below
 
     def get_declarative_data_sources(self) -> CatalogDeclarativeDataSources:
-        """Retrieve all data sources, including their related physical data model.
+        """Retrieve all data sources.
 
         Args:
             None
