@@ -5,7 +5,7 @@ weight: 110
 superheading: "catalog_workspace_content."
 ---
 
-``get_declarative_analytics_model(workspace_id: str)``
+``get_declarative_analytics_model(workspace_id: str, exclude: Optional[list[str]])``
 
 Gets an analytics model layout.
 
@@ -13,6 +13,10 @@ Gets an analytics model layout.
 {{% parameters-block  title="Parameters" %}}
 {{< parameter p_name="workspace_id" p_type="string" >}}
 Workspace identification string e.g. "demo"
+{{< /parameter >}}
+{{< parameter p_name="exclude" p_type="Optional[list[str]]" >}}
+Defines properties which should not be included in the payload.
+E.g.: ["ACTIVITY_INFO"]
 {{< /parameter >}}
 {{% /parameters-block %}}
 
