@@ -82,6 +82,10 @@ from gooddata_sdk.catalog.organization.entity_model.jwk import (
 )
 from gooddata_sdk.catalog.organization.entity_model.organization import CatalogOrganization
 from gooddata_sdk.catalog.organization.entity_model.setting import CatalogOrganizationSetting
+from gooddata_sdk.catalog.organization.layout.notification_channel import (
+    CatalogDeclarativeNotificationChannel,
+    CatalogWebhook,
+)
 from gooddata_sdk.catalog.organization.service import CatalogOrganizationService
 from gooddata_sdk.catalog.permission.declarative_model.dashboard_assignees import (
     CatalogAvailableAssignees,

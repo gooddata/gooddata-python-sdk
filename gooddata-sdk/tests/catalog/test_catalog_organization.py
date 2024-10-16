@@ -6,10 +6,12 @@ from pathlib import Path
 from gooddata_api_client.exceptions import NotFoundException
 from gooddata_sdk import (
     CatalogCspDirective,
+    CatalogDeclarativeNotificationChannel,
     CatalogJwk,
     CatalogOrganization,
     CatalogOrganizationSetting,
     CatalogRsaSpecification,
+    CatalogWebhook,
     GoodDataSdk,
 )
 from tests_support.vcrpy_utils import get_vcr
@@ -342,3 +344,33 @@ def test_update_allowed_origins(test_config):
         sdk.catalog_organization.update_allowed_origins([])
         organization = sdk.catalog_organization.get_organization()
         assert organization.attributes.allowed_origins == []
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "layout_notification_channels.yaml"))
+def test_layout_notification_channels(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+
+    ncs = sdk.catalog_organization.get_declarative_notification_channels()
+    assert len(ncs) == 0
+
+    try:
+        notification_channels_e = [
+            CatalogDeclarativeNotificationChannel(
+                id="webhook", name="Webhook", destination=CatalogWebhook(url="https://webhook.site", token="123")
+            ),
+        ]
+        sdk.catalog_organization.put_declarative_notification_channels(notification_channels_e)
+        notification_channels_o = sdk.catalog_organization.get_declarative_notification_channels()
+        assert notification_channels_e[0].id == notification_channels_o[0].id
+        assert notification_channels_e[0].name == notification_channels_o[0].name
+        assert notification_channels_e[0].destination == notification_channels_o[0].destination
+    finally:
+        sdk.catalog_organization.put_declarative_notification_channels([])
+        ncs = sdk.catalog_organization.get_declarative_notification_channels()
+        assert len(ncs) == 0
+
+
+def test_prdel():
+    CatalogDeclarativeNotificationChannel(
+        id="webhook", destination=CatalogWebhook(url="https://webhook.site", token="123")
+    ).to_api()
