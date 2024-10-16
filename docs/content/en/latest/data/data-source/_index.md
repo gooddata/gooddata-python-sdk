@@ -16,7 +16,6 @@ See [Connect Data](https://www.gooddata.com/docs/cloud/connect-data/) to learn h
 * [get_data_source](./get_data_source/)
 * [delete_data_source](./delete_data_source/)
 * [list_data_sources](./list_data_sources/)
-* [list_data_source_tables](./list_data_source_tables/)
 * [patch_data_source_attributes](./patch_data_source_attributes/)
 
 ### Declarative Methods
