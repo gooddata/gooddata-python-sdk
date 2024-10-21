@@ -5,6 +5,7 @@ from typing import Optional
 from attrs import define, field
 from gooddata_api_client.model.declarative_notification_channel import DeclarativeNotificationChannel
 from gooddata_api_client.model.webhook import Webhook
+
 from gooddata_sdk.catalog.base import Base
 
 # TODO: there is an issue with generated client which causes these two classes to fail
