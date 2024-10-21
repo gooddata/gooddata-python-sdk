@@ -9,15 +9,10 @@ from gooddata_api_client.model.visual_export_request import VisualExportRequest
 
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.export.request import (
-    ExportCustomLabel,
-    ExportCustomMetric,
-    ExportCustomOverride,
     ExportRequest,
     ExportSettings,
 )
 from gooddata_sdk.client import GoodDataApiClient
-from gooddata_sdk.compute.model.metric import SimpleMetric
-from gooddata_sdk.table import ExecutionTable, TableService
 from gooddata_sdk.visualization import VisualizationService
 
 
@@ -258,33 +253,12 @@ class ExportService(CatalogServiceBase):
             workspace_id, export_request.to_api(), file_path, create_func, get_func, timeout, retry, max_retry
         )
 
-    @staticmethod
-    def _custom_overrides_labels(exec_table: ExecutionTable, metrics_format: str = "#,##0") -> ExportCustomOverride:
-        """
-        Visualizations by default use generated hash as local_id,
-        therefore, we might want to use dummy logic to replace it.
-        For attributes by label.id
-        For metrics by item.id
-        """
-        labels = {
-            attribute.local_id: ExportCustomLabel(title=attribute.label.id) for attribute in exec_table.attributes
-        }
-        metrics = {
-            metric.local_id: ExportCustomMetric(
-                title=metric.item.id if isinstance(metric, SimpleMetric) else metric.local_id, format=metrics_format
-            )
-            for metric in exec_table.metrics
-        }
-        return ExportCustomOverride(labels=labels, metrics=metrics)
-
-    def _get_visualization_exec_table(self, workspace_id: str, visualization_id: str) -> tuple[ExecutionTable, str]:
+    def _get_visualization_title(self, workspace_id: str, visualization_id: str) -> str:
         try:
             visualization = VisualizationService(self._client).get_visualization(
                 workspace_id=workspace_id, visualization_id=visualization_id
             )
-            return TableService(self._client).for_visualization(
-                workspace_id=workspace_id, visualization=visualization
-            ), visualization.title
+            return visualization.title
         except NotFoundException:
             raise ValueError(
                 f"Either workspace workspace_id='{workspace_id}' "
@@ -321,15 +295,13 @@ class ExportService(CatalogServiceBase):
         Returns:
             None
         """
-        exec_table, visualization_tile = self._get_visualization_exec_table(workspace_id, visualization_id)
-        custom_override = self._custom_overrides_labels(exec_table)
-        file_name = file_name if file_name is not None else visualization_tile
+        if file_name is None:
+            file_name = self._get_visualization_title(workspace_id, visualization_id)
         export_request = ExportRequest(
             format=file_format,
-            execution_result=exec_table.result_id,
+            visualization_object=visualization_id,
             file_name=file_name,
             settings=settings,
-            custom_override=custom_override,
         )
         self.export_tabular(
             workspace_id=workspace_id,
