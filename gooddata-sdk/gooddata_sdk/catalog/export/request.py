@@ -65,6 +65,7 @@ class ExportRequest(Base):
     format: str
     file_name: str
     execution_result: Optional[str] = None
+    visualization_object: Optional[str] = None
     settings: Optional[ExportSettings] = None
     custom_override: Optional[ExportCustomOverride] = None
 
