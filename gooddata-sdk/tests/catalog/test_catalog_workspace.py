@@ -8,6 +8,7 @@ from xml.etree import ElementTree as ET
 import yaml
 from gooddata_sdk import (
     BasicCredentials,
+    CatalogAutomationSchedule,
     CatalogDataSourcePostgres,
     CatalogDeclarativeAutomation,
     CatalogDeclarativeUserDataFilter,
@@ -946,6 +947,10 @@ def test_layout_automations(test_config):
                 title="Automation",
                 state="ACTIVE",
                 notification_channel=CatalogNotificationChannelIdentifier(id="webhook"),
+                schedule=CatalogAutomationSchedule(
+                    cron="0 0 * * *",
+                ),
+                metadata={"key": "value"},
             )
         ]
         sdk.catalog_workspace.put_declarative_automations(workspace_id, automations_expected)

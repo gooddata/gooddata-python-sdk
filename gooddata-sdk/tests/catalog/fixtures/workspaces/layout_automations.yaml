@@ -69,7 +69,7 @@ interactions:
         X-XSS-Protection:
           - '0'
         set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Wed, 16 Oct 2024 10:37:11 GMT;
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Wed, 23 Oct 2024 11:21:42 GMT;
             Path=/; HTTPOnly; SameSite=Lax
       body:
         string: []
@@ -143,7 +143,7 @@ interactions:
         X-XSS-Protection:
           - '0'
         set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Wed, 16 Oct 2024 10:37:12 GMT;
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Wed, 23 Oct 2024 11:21:42 GMT;
             Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
@@ -154,9 +154,14 @@ interactions:
         - id: automation
           state: ACTIVE
           title: Automation
+          metadata:
+            key: value
           notificationChannel:
             id: webhook
             type: notificationChannel
+          schedule:
+            cron: 0 0 * * *
+            timezone: UTC
       headers:
         Accept-Encoding:
           - br, gzip, deflate
@@ -216,7 +221,7 @@ interactions:
         X-XSS-Protection:
           - '0'
         set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Wed, 16 Oct 2024 10:37:12 GMT;
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Wed, 23 Oct 2024 11:21:42 GMT;
             Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
@@ -287,16 +292,21 @@ interactions:
         X-XSS-Protection:
           - '0'
         content-length:
-          - '127'
+          - '203'
         set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Wed, 16 Oct 2024 10:37:12 GMT;
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Wed, 23 Oct 2024 11:21:42 GMT;
             Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           - id: automation
+            metadata:
+              key: value
             notificationChannel:
               id: webhook
               type: notificationChannel
+            schedule:
+              cron: 0 0 * * *
+              timezone: UTC
             state: ACTIVE
             title: Automation
   - request:
@@ -362,7 +372,7 @@ interactions:
         X-XSS-Protection:
           - '0'
         set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Wed, 16 Oct 2024 10:37:12 GMT;
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Wed, 23 Oct 2024 11:21:42 GMT;
             Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
@@ -433,7 +443,7 @@ interactions:
         X-XSS-Protection:
           - '0'
         set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Wed, 16 Oct 2024 10:37:12 GMT;
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Wed, 23 Oct 2024 11:21:42 GMT;
             Path=/; HTTPOnly; SameSite=Lax
       body:
         string: []
@@ -501,7 +511,7 @@ interactions:
         X-XSS-Protection:
           - '0'
         set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Wed, 16 Oct 2024 10:37:12 GMT;
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Wed, 23 Oct 2024 11:21:42 GMT;
             Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''

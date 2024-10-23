@@ -13,8 +13,10 @@ Name | Type | Description | Notes
 **modified_at** | **datetime** |  | [optional] 
 **schedule** | [**JsonApiAutomationInAttributesSchedule**](JsonApiAutomationInAttributesSchedule.md) |  | [optional] 
 **state** | **str** | Current state of the automation. | [optional] 
+**tabular_exports** | [**[JsonApiAutomationInAttributesTabularExportsInner]**](JsonApiAutomationInAttributesTabularExportsInner.md) |  | [optional] 
 **tags** | **[str]** |  | [optional] 
 **title** | **str** |  | [optional] 
+**visual_exports** | [**[JsonApiAutomationInAttributesVisualExportsInner]**](JsonApiAutomationInAttributesVisualExportsInner.md) |  | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

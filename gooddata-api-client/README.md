@@ -194,7 +194,9 @@ Class | Method | HTTP request | Description
 *FilterViewsApi* | [**delete_entity_filter_views**](docs/FilterViewsApi.md#delete_entity_filter_views) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Delete Filter view
 *FilterViewsApi* | [**get_all_entities_filter_views**](docs/FilterViewsApi.md#get_all_entities_filter_views) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterViews | Get all Filter views
 *FilterViewsApi* | [**get_entity_filter_views**](docs/FilterViewsApi.md#get_entity_filter_views) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Get Filter view
+*FilterViewsApi* | [**get_filter_views**](docs/FilterViewsApi.md#get_filter_views) | **GET** /api/v1/layout/workspaces/{workspaceId}/filterViews | Get filter views
 *FilterViewsApi* | [**patch_entity_filter_views**](docs/FilterViewsApi.md#patch_entity_filter_views) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Patch Filter view
+*FilterViewsApi* | [**set_filter_views**](docs/FilterViewsApi.md#set_filter_views) | **PUT** /api/v1/layout/workspaces/{workspaceId}/filterViews | Set filter views
 *FilterViewsApi* | [**update_entity_filter_views**](docs/FilterViewsApi.md#update_entity_filter_views) | **PUT** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Put Filter views
 *GenerateLogicalDataModelApi* | [**generate_logical_model**](docs/GenerateLogicalDataModelApi.md#generate_logical_model) | **POST** /api/v1/actions/dataSources/{dataSourceId}/generateLogicalModel | Generate logical data model (LDM) from physical data model (PDM)
 *HierarchyApi* | [**check_entity_overrides**](docs/HierarchyApi.md#check_entity_overrides) | **POST** /api/v1/actions/workspaces/{workspaceId}/checkEntityOverrides | Finds entities with given ID in hierarchy.
@@ -626,6 +628,7 @@ Class | Method | HTTP request | Description
 *LayoutApi* | [**get_automations**](docs/LayoutApi.md#get_automations) | **GET** /api/v1/layout/workspaces/{workspaceId}/automations | Get automations
 *LayoutApi* | [**get_data_source_permissions**](docs/LayoutApi.md#get_data_source_permissions) | **GET** /api/v1/layout/dataSources/{dataSourceId}/permissions | Get permissions for the data source
 *LayoutApi* | [**get_data_sources_layout**](docs/LayoutApi.md#get_data_sources_layout) | **GET** /api/v1/layout/dataSources | Get all data sources
+*LayoutApi* | [**get_filter_views**](docs/LayoutApi.md#get_filter_views) | **GET** /api/v1/layout/workspaces/{workspaceId}/filterViews | Get filter views
 *LayoutApi* | [**get_logical_model**](docs/LayoutApi.md#get_logical_model) | **GET** /api/v1/layout/workspaces/{workspaceId}/logicalModel | Get logical model
 *LayoutApi* | [**get_notification_channels_layout**](docs/LayoutApi.md#get_notification_channels_layout) | **GET** /api/v1/layout/notificationChannels | Get all notification channels layout
 *LayoutApi* | [**get_organization_layout**](docs/LayoutApi.md#get_organization_layout) | **GET** /api/v1/layout/organization | Get organization layout
@@ -648,6 +651,7 @@ Class | Method | HTTP request | Description
 *LayoutApi* | [**set_analytics_model**](docs/LayoutApi.md#set_analytics_model) | **PUT** /api/v1/layout/workspaces/{workspaceId}/analyticsModel | Set analytics model
 *LayoutApi* | [**set_automations**](docs/LayoutApi.md#set_automations) | **PUT** /api/v1/layout/workspaces/{workspaceId}/automations | Set automations
 *LayoutApi* | [**set_data_source_permissions**](docs/LayoutApi.md#set_data_source_permissions) | **PUT** /api/v1/layout/dataSources/{dataSourceId}/permissions | Set data source permissions.
+*LayoutApi* | [**set_filter_views**](docs/LayoutApi.md#set_filter_views) | **PUT** /api/v1/layout/workspaces/{workspaceId}/filterViews | Set filter views
 *LayoutApi* | [**set_logical_model**](docs/LayoutApi.md#set_logical_model) | **PUT** /api/v1/layout/workspaces/{workspaceId}/logicalModel | Set logical model
 *LayoutApi* | [**set_notification_channels**](docs/LayoutApi.md#set_notification_channels) | **PUT** /api/v1/layout/notificationChannels | Set all notification channels
 *LayoutApi* | [**set_organization_layout**](docs/LayoutApi.md#set_organization_layout) | **PUT** /api/v1/layout/organization | Set organization layout
@@ -890,6 +894,8 @@ Class | Method | HTTP request | Description
  - [AttributeItem](docs/AttributeItem.md)
  - [AttributeResultHeader](docs/AttributeResultHeader.md)
  - [AutomationSchedule](docs/AutomationSchedule.md)
+ - [AutomationTabularExport](docs/AutomationTabularExport.md)
+ - [AutomationVisualExport](docs/AutomationVisualExport.md)
  - [AvailableAssignees](docs/AvailableAssignees.md)
  - [ChatHistoryInteraction](docs/ChatHistoryInteraction.md)
  - [ChatHistoryRequest](docs/ChatHistoryRequest.md)
@@ -899,6 +905,7 @@ Class | Method | HTTP request | Description
  - [ClusteringRequest](docs/ClusteringRequest.md)
  - [ClusteringResult](docs/ClusteringResult.md)
  - [ColumnLocation](docs/ColumnLocation.md)
+ - [ColumnOverride](docs/ColumnOverride.md)
  - [ColumnStatistic](docs/ColumnStatistic.md)
  - [ColumnStatisticWarning](docs/ColumnStatisticWarning.md)
  - [ColumnStatisticsRequest](docs/ColumnStatisticsRequest.md)
@@ -928,6 +935,7 @@ Class | Method | HTTP request | Description
  - [DateFilter](docs/DateFilter.md)
  - [DeclarativeAnalyticalDashboard](docs/DeclarativeAnalyticalDashboard.md)
  - [DeclarativeAnalyticalDashboardExtension](docs/DeclarativeAnalyticalDashboardExtension.md)
+ - [DeclarativeAnalyticalDashboardIdentifier](docs/DeclarativeAnalyticalDashboardIdentifier.md)
  - [DeclarativeAnalyticalDashboardPermissionAssignment](docs/DeclarativeAnalyticalDashboardPermissionAssignment.md)
  - [DeclarativeAnalyticalDashboardPermissionForAssignee](docs/DeclarativeAnalyticalDashboardPermissionForAssignee.md)
  - [DeclarativeAnalyticalDashboardPermissionForAssigneeAllOf](docs/DeclarativeAnalyticalDashboardPermissionForAssigneeAllOf.md)
@@ -957,6 +965,7 @@ Class | Method | HTTP request | Description
  - [DeclarativeExportDefinitionRequestPayload](docs/DeclarativeExportDefinitionRequestPayload.md)
  - [DeclarativeFact](docs/DeclarativeFact.md)
  - [DeclarativeFilterContext](docs/DeclarativeFilterContext.md)
+ - [DeclarativeFilterView](docs/DeclarativeFilterView.md)
  - [DeclarativeJwk](docs/DeclarativeJwk.md)
  - [DeclarativeJwkSpecification](docs/DeclarativeJwkSpecification.md)
  - [DeclarativeLabel](docs/DeclarativeLabel.md)
@@ -1125,6 +1134,8 @@ Class | Method | HTTP request | Description
  - [JsonApiAutomationInAttributes](docs/JsonApiAutomationInAttributes.md)
  - [JsonApiAutomationInAttributesAlert](docs/JsonApiAutomationInAttributesAlert.md)
  - [JsonApiAutomationInAttributesSchedule](docs/JsonApiAutomationInAttributesSchedule.md)
+ - [JsonApiAutomationInAttributesTabularExportsInner](docs/JsonApiAutomationInAttributesTabularExportsInner.md)
+ - [JsonApiAutomationInAttributesVisualExportsInner](docs/JsonApiAutomationInAttributesVisualExportsInner.md)
  - [JsonApiAutomationInDocument](docs/JsonApiAutomationInDocument.md)
  - [JsonApiAutomationInRelationships](docs/JsonApiAutomationInRelationships.md)
  - [JsonApiAutomationInRelationshipsAnalyticalDashboard](docs/JsonApiAutomationInRelationshipsAnalyticalDashboard.md)
@@ -1618,6 +1629,7 @@ Class | Method | HTTP request | Description
  - [SqlQueryAllOf](docs/SqlQueryAllOf.md)
  - [Table](docs/Table.md)
  - [TableAllOf](docs/TableAllOf.md)
+ - [TableOverride](docs/TableOverride.md)
  - [TableWarning](docs/TableWarning.md)
  - [TabularExportRequest](docs/TabularExportRequest.md)
  - [TestDefinitionRequest](docs/TestDefinitionRequest.md)

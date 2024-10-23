@@ -253,8 +253,18 @@
                 "example": "sample_item.price",
                 "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
                 "type": "string"
+              },
+              "type": {
+                "enum": [
+                  "label"
+                ],
+                "type": "string"
               }
             },
+            "required": [
+              "type",
+              "id"
+            ],
             "type": "object"
           }
         },
@@ -265,6 +275,21 @@
       },
       "AlertAfm": {
         "properties": {
+          "attributes": {
+            "description": "Attributes to be used in the computation.",
+            "items": {
+              "$ref": "#/components/schemas/AttributeItem"
+            },
+            "maximum": 1,
+            "type": "array"
+          },
+          "auxMeasures": {
+            "description": "Metrics to be referenced from other AFM objects (e.g. filters) but not included in the result.",
+            "items": {
+              "$ref": "#/components/schemas/MeasureItem"
+            },
+            "type": "array"
+          },
           "filters": {
             "description": "Various filter types to filter execution result.",
             "items": {
@@ -490,6 +515,27 @@
         ],
         "type": "object"
       },
+      "AttributeItem": {
+        "properties": {
+          "label": {
+            "$ref": "#/components/schemas/AfmObjectIdentifierLabel"
+          },
+          "localIdentifier": {
+            "pattern": "^[.a-zA-Z0-9_-]+$",
+            "type": "string"
+          },
+          "showAllValues": {
+            "default": false,
+            "description": "Specifies that the label should be outer-joined.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "label",
+          "localIdentifier"
+        ],
+        "type": "object"
+      },
       "AutomationSchedule": {
         "properties": {
           "cron": {
@@ -521,6 +567,28 @@
         ],
         "type": "object"
       },
+      "AutomationTabularExport": {
+        "properties": {
+          "requestPayload": {
+            "$ref": "#/components/schemas/TabularExportRequest"
+          }
+        },
+        "required": [
+          "requestPayload"
+        ],
+        "type": "object"
+      },
+      "AutomationVisualExport": {
+        "properties": {
+          "requestPayload": {
+            "$ref": "#/components/schemas/VisualExportRequest"
+          }
+        },
+        "required": [
+          "requestPayload"
+        ],
+        "type": "object"
+      },
       "AvailableAssignees": {
         "properties": {
           "userGroups": {
@@ -541,6 +609,47 @@
         "required": [
           "userGroups",
           "users"
+        ],
+        "type": "object"
+      },
+      "ColumnOverride": {
+        "description": "Table column override.",
+        "properties": {
+          "labelTargetColumn": {
+            "description": "Specifies the attribute's column to which this label is associated.",
+            "example": "users",
+            "type": "string"
+          },
+          "labelType": {
+            "description": "Label type for the target attribute.",
+            "enum": [
+              "TEXT",
+              "HYPERLINK",
+              "GEO",
+              "GEO_LONGITUDE",
+              "GEO_LATITUDE",
+              "IMAGE"
+            ],
+            "example": "HYPERLINK",
+            "type": "string"
+          },
+          "ldmTypeOverride": {
+            "description": "Logical Data Model type for the column.",
+            "enum": [
+              "FACT",
+              "LABEL"
+            ],
+            "example": "FACT",
+            "type": "string"
+          },
+          "name": {
+            "description": "Column name.",
+            "example": "column_name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
         ],
         "type": "object"
       },
@@ -989,6 +1098,30 @@
         ],
         "type": "object"
       },
+      "DeclarativeAnalyticalDashboardIdentifier": {
+        "description": "An analytical dashboard identifier.",
+        "properties": {
+          "id": {
+            "description": "Identifier of the analytical dashboard.",
+            "example": "dashboard123",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "A type.",
+            "enum": [
+              "analyticalDashboard"
+            ],
+            "example": "analyticalDashboard",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
       "DeclarativeAnalyticalDashboardPermissionAssignment": {
         "description": "Analytical dashboard permission.",
         "properties": {
@@ -1274,6 +1407,9 @@
       },
       "DeclarativeAutomation": {
         "properties": {
+          "analyticalDashboard": {
+            "$ref": "#/components/schemas/DeclarativeAnalyticalDashboardIdentifier"
+          },
           "createdAt": {
             "description": "Time of the entity creation.",
             "example": "2023-07-20 12:30",
@@ -1344,6 +1480,13 @@
             ],
             "type": "string"
           },
+          "tabularExports": {
+            "items": {
+              "$ref": "#/components/schemas/AutomationTabularExport"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
           "tags": {
             "items": {
               "description": "A list of tags.",
@@ -1356,6 +1499,13 @@
           "title": {
             "maxLength": 255,
             "type": "string"
+          },
+          "visualExports": {
+            "items": {
+              "$ref": "#/components/schemas/AutomationVisualExport"
+            },
+            "type": "array",
+            "uniqueItems": true
           }
         },
         "required": [
@@ -2117,6 +2267,51 @@
         ],
         "type": "object"
       },
+      "DeclarativeFilterView": {
+        "properties": {
+          "analyticalDashboard": {
+            "$ref": "#/components/schemas/DeclarativeAnalyticalDashboardIdentifier"
+          },
+          "content": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "description": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "id": {
+            "description": "FilterView object ID.",
+            "example": "filterView-1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "isDefault": {
+            "description": "Indicator whether the filter view should by applied by default.",
+            "type": "boolean"
+          },
+          "tags": {
+            "items": {
+              "description": "A list of tags.",
+              "example": "[\"Revenue\",\"Sales\"]",
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "title": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "user": {
+            "$ref": "#/components/schemas/DeclarativeUserIdentifier"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "type": "object"
+      },
       "DeclarativeJwk": {
         "description": "A declarative form of the JWK.",
         "properties": {
@@ -2323,6 +2518,15 @@
       "DeclarativeNotificationChannel": {
         "description": "A declarative form of a particular notification channel.",
         "properties": {
+          "allowedRecipients": {
+            "default": "INTERNAL",
+            "description": "Allowed recipients of notifications from this channel.\nCREATOR - only the creator\nINTERNAL - all users within the organization\n",
+            "enum": [
+              "CREATOR",
+              "INTERNAL"
+            ],
+            "type": "string"
+          },
           "customDashboardUrl": {
             "description": "Custom dashboard url that is going to be used in the notification. If not specified it is going to be deduced based on the context. Allowed placeholders are {workspaceId}, {dashboardId}.",
             "type": "string"
@@ -2355,11 +2559,6 @@
             "nullable": true,
             "readOnly": true,
             "type": "string"
-          },
-          "enableMultipleRecipients": {
-            "default": true,
-            "description": "Whether notifications sent to the channel can have multiple recipients.",
-            "type": "boolean"
           },
           "id": {
             "description": "Identifier of a notification channel",
@@ -2535,6 +2734,16 @@
             "description": "Communication secret of the authentication provider (never returned back).",
             "maxLength": 255,
             "type": "string"
+          },
+          "oauthCustomAuthAttributes": {
+            "additionalProperties": {
+              "description": "Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.",
+              "maxLength": 10000,
+              "type": "string"
+            },
+            "description": "Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.",
+            "maxLength": 10000,
+            "type": "object"
           },
           "oauthIssuerId": {
             "description": "Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.",
@@ -2784,7 +2993,8 @@
               "TIMEZONE_VALIDATION_ENABLED",
               "OPENAI_CONFIG",
               "ENABLE_FILE_ANALYTICS",
-              "ALERT"
+              "ALERT",
+              "SEPARATORS"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -3328,6 +3538,12 @@
             },
             "type": "array",
             "uniqueItems": true
+          },
+          "filterViews": {
+            "items": {
+              "$ref": "#/components/schemas/DeclarativeFilterView"
+            },
+            "type": "array"
           },
           "hierarchyPermissions": {
             "items": {
@@ -3988,6 +4204,7 @@
             "type": "string"
           },
           "generateLongIds": {
+            "default": false,
             "description": "A flag dictating how the attribute, fact and label ids are generated. By default their ids are derived only from the column name, unless there would be a conflict (e.g. category coming from two different tables). In that case a long id format of `<table>.<column>` is used. If the flag is set to true, then all ids will be generated in the long form.",
             "type": "boolean"
           },
@@ -4032,7 +4249,6 @@
           "separator": {
             "default": "__",
             "description": "A separator between prefixes and the names. Default is \"__\".",
-            "example": "__",
             "type": "string"
           },
           "tablePrefix": {
@@ -4048,8 +4264,8 @@
             "type": "string"
           },
           "wdfPrefix": {
+            "default": "wdf",
             "description": "Column serving as workspace data filter. No labels are auto generated for such columns.",
-            "example": "wdf",
             "type": "string"
           },
           "workspaceId": {
@@ -5689,6 +5905,20 @@
                 ],
                 "type": "string"
               },
+              "tabularExports": {
+                "items": {
+                  "properties": {
+                    "requestPayload": {
+                      "$ref": "#/components/schemas/TabularExportRequest"
+                    }
+                  },
+                  "required": [
+                    "requestPayload"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
               "tags": {
                 "items": {
                   "type": "string"
@@ -5698,6 +5928,20 @@
               "title": {
                 "maxLength": 255,
                 "type": "string"
+              },
+              "visualExports": {
+                "items": {
+                  "properties": {
+                    "requestPayload": {
+                      "$ref": "#/components/schemas/VisualExportRequest"
+                    }
+                  },
+                  "required": [
+                    "requestPayload"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
               }
             },
             "type": "object"
@@ -5895,6 +6139,20 @@
                 ],
                 "type": "string"
               },
+              "tabularExports": {
+                "items": {
+                  "properties": {
+                    "requestPayload": {
+                      "$ref": "#/components/schemas/TabularExportRequest"
+                    }
+                  },
+                  "required": [
+                    "requestPayload"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
               "tags": {
                 "items": {
                   "type": "string"
@@ -5904,6 +6162,20 @@
               "title": {
                 "maxLength": 255,
                 "type": "string"
+              },
+              "visualExports": {
+                "items": {
+                  "properties": {
+                    "requestPayload": {
+                      "$ref": "#/components/schemas/VisualExportRequest"
+                    }
+                  },
+                  "required": [
+                    "requestPayload"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
               }
             },
             "type": "object"
@@ -6197,6 +6469,20 @@
                 ],
                 "type": "string"
               },
+              "tabularExports": {
+                "items": {
+                  "properties": {
+                    "requestPayload": {
+                      "$ref": "#/components/schemas/TabularExportRequest"
+                    }
+                  },
+                  "required": [
+                    "requestPayload"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
               "tags": {
                 "items": {
                   "type": "string"
@@ -6206,6 +6492,20 @@
               "title": {
                 "maxLength": 255,
                 "type": "string"
+              },
+              "visualExports": {
+                "items": {
+                  "properties": {
+                    "requestPayload": {
+                      "$ref": "#/components/schemas/VisualExportRequest"
+                    }
+                  },
+                  "required": [
+                    "requestPayload"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
               }
             },
             "type": "object"
@@ -12149,6 +12449,14 @@
                 "maxLength": 255,
                 "type": "string"
               },
+              "oauthCustomAuthAttributes": {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "description": "Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.",
+                "maxLength": 10000,
+                "type": "object"
+              },
               "oauthIssuerId": {
                 "description": "Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.",
                 "example": "myOidcProvider",
@@ -12260,6 +12568,14 @@
               "oauthClientId": {
                 "maxLength": 255,
                 "type": "string"
+              },
+              "oauthCustomAuthAttributes": {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "description": "Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.",
+                "maxLength": 10000,
+                "type": "object"
               },
               "oauthIssuerId": {
                 "description": "Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.",
@@ -12424,6 +12740,14 @@
                 "maxLength": 255,
                 "type": "string"
               },
+              "oauthCustomAuthAttributes": {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "description": "Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.",
+                "maxLength": 10000,
+                "type": "object"
+              },
               "oauthIssuerId": {
                 "description": "Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.",
                 "example": "myOidcProvider",
@@ -12501,7 +12825,8 @@
                   "TIMEZONE_VALIDATION_ENABLED",
                   "OPENAI_CONFIG",
                   "ENABLE_FILE_ANALYTICS",
-                  "ALERT"
+                  "ALERT",
+                  "SEPARATORS"
                 ],
                 "type": "string"
               }
@@ -12566,7 +12891,8 @@
                   "TIMEZONE_VALIDATION_ENABLED",
                   "OPENAI_CONFIG",
                   "ENABLE_FILE_ANALYTICS",
-                  "ALERT"
+                  "ALERT",
+                  "SEPARATORS"
                 ],
                 "type": "string"
               }
@@ -12671,7 +12997,8 @@
                   "TIMEZONE_VALIDATION_ENABLED",
                   "OPENAI_CONFIG",
                   "ENABLE_FILE_ANALYTICS",
-                  "ALERT"
+                  "ALERT",
+                  "SEPARATORS"
                 ],
                 "type": "string"
               }
@@ -14142,7 +14469,8 @@
                   "TIMEZONE_VALIDATION_ENABLED",
                   "OPENAI_CONFIG",
                   "ENABLE_FILE_ANALYTICS",
-                  "ALERT"
+                  "ALERT",
+                  "SEPARATORS"
                 ],
                 "type": "string"
               }
@@ -14207,7 +14535,8 @@
                   "TIMEZONE_VALIDATION_ENABLED",
                   "OPENAI_CONFIG",
                   "ENABLE_FILE_ANALYTICS",
-                  "ALERT"
+                  "ALERT",
+                  "SEPARATORS"
                 ],
                 "type": "string"
               }
@@ -15949,7 +16278,8 @@
                   "TIMEZONE_VALIDATION_ENABLED",
                   "OPENAI_CONFIG",
                   "ENABLE_FILE_ANALYTICS",
-                  "ALERT"
+                  "ALERT",
+                  "SEPARATORS"
                 ],
                 "type": "string"
               }
@@ -16014,7 +16344,8 @@
                   "TIMEZONE_VALIDATION_ENABLED",
                   "OPENAI_CONFIG",
                   "ENABLE_FILE_ANALYTICS",
-                  "ALERT"
+                  "ALERT",
+                  "SEPARATORS"
                 ],
                 "type": "string"
               }
@@ -16145,7 +16476,8 @@
                   "TIMEZONE_VALIDATION_ENABLED",
                   "OPENAI_CONFIG",
                   "ENABLE_FILE_ANALYTICS",
-                  "ALERT"
+                  "ALERT",
+                  "SEPARATORS"
                 ],
                 "type": "string"
               }
@@ -16210,7 +16542,8 @@
                   "TIMEZONE_VALIDATION_ENABLED",
                   "OPENAI_CONFIG",
                   "ENABLE_FILE_ANALYTICS",
-                  "ALERT"
+                  "ALERT",
+                  "SEPARATORS"
                 ],
                 "type": "string"
               }
@@ -16685,6 +17018,13 @@
             "description": "List of SQL datasets.",
             "items": {
               "$ref": "#/components/schemas/PdmSql"
+            },
+            "type": "array"
+          },
+          "tableOverrides": {
+            "description": "(BETA) List of table overrides.",
+            "items": {
+              "$ref": "#/components/schemas/TableOverride"
             },
             "type": "array"
           },
@@ -17255,7 +17595,8 @@
               "TIMEZONE_VALIDATION_ENABLED",
               "OPENAI_CONFIG",
               "ENABLE_FILE_ANALYTICS",
-              "ALERT"
+              "ALERT",
+              "SEPARATORS"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -17555,6 +17896,34 @@
         "required": [
           "dataType",
           "name"
+        ],
+        "type": "object"
+      },
+      "TableOverride": {
+        "description": "Table override settings.",
+        "properties": {
+          "columns": {
+            "description": "An array of column overrides",
+            "items": {
+              "$ref": "#/components/schemas/ColumnOverride"
+            },
+            "type": "array"
+          },
+          "path": {
+            "description": "Path for the table.",
+            "example": [
+              "schema",
+              "table_name"
+            ],
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "columns",
+          "path"
         ],
         "type": "object"
       },
@@ -34399,6 +34768,106 @@
         ],
         "x-gdc-security-info": {
           "description": "Permissions to modify the automations.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
+    "/api/v1/layout/workspaces/{workspaceId}/filterViews": {
+      "get": {
+        "description": "Retrieve filter views for the specific workspace",
+        "operationId": "getFilterViews",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "exclude",
+            "required": false,
+            "schema": {
+              "items": {
+                "description": "Defines properties which should not be included in the payload.",
+                "enum": [
+                  "ACTIVITY_INFO"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/DeclarativeFilterView"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Retrieved filterViews."
+          }
+        },
+        "summary": "Get filter views",
+        "tags": [
+          "layout",
+          "Filter Views"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions to read the filter views.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      },
+      "put": {
+        "description": "Set filter views for the specific workspace.",
+        "operationId": "setFilterViews",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "items": {
+                  "$ref": "#/components/schemas/DeclarativeFilterView"
+                },
+                "type": "array"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "FilterViews successfully set."
+          }
+        },
+        "summary": "Set filter views",
+        "tags": [
+          "layout",
+          "Filter Views"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions to modify the filter views.",
           "permissions": [
             "MANAGE"
           ]

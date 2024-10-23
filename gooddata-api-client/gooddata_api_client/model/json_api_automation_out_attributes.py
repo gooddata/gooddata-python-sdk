@@ -33,8 +33,12 @@ from gooddata_api_client.exceptions import ApiAttributeError
 def lazy_import():
     from gooddata_api_client.model.json_api_automation_in_attributes_alert import JsonApiAutomationInAttributesAlert
     from gooddata_api_client.model.json_api_automation_in_attributes_schedule import JsonApiAutomationInAttributesSchedule
+    from gooddata_api_client.model.json_api_automation_in_attributes_tabular_exports_inner import JsonApiAutomationInAttributesTabularExportsInner
+    from gooddata_api_client.model.json_api_automation_in_attributes_visual_exports_inner import JsonApiAutomationInAttributesVisualExportsInner
     globals()['JsonApiAutomationInAttributesAlert'] = JsonApiAutomationInAttributesAlert
     globals()['JsonApiAutomationInAttributesSchedule'] = JsonApiAutomationInAttributesSchedule
+    globals()['JsonApiAutomationInAttributesTabularExportsInner'] = JsonApiAutomationInAttributesTabularExportsInner
+    globals()['JsonApiAutomationInAttributesVisualExportsInner'] = JsonApiAutomationInAttributesVisualExportsInner
 
 
 class JsonApiAutomationOutAttributes(ModelNormal):
@@ -114,8 +118,10 @@ class JsonApiAutomationOutAttributes(ModelNormal):
             'modified_at': (datetime,),  # noqa: E501
             'schedule': (JsonApiAutomationInAttributesSchedule,),  # noqa: E501
             'state': (str,),  # noqa: E501
+            'tabular_exports': ([JsonApiAutomationInAttributesTabularExportsInner],),  # noqa: E501
             'tags': ([str],),  # noqa: E501
             'title': (str,),  # noqa: E501
+            'visual_exports': ([JsonApiAutomationInAttributesVisualExportsInner],),  # noqa: E501
         }
 
     @cached_property
@@ -133,8 +139,10 @@ class JsonApiAutomationOutAttributes(ModelNormal):
         'modified_at': 'modifiedAt',  # noqa: E501
         'schedule': 'schedule',  # noqa: E501
         'state': 'state',  # noqa: E501
+        'tabular_exports': 'tabularExports',  # noqa: E501
         'tags': 'tags',  # noqa: E501
         'title': 'title',  # noqa: E501
+        'visual_exports': 'visualExports',  # noqa: E501
     }
 
     read_only_vars = {
@@ -187,8 +195,10 @@ class JsonApiAutomationOutAttributes(ModelNormal):
             modified_at (datetime): [optional]  # noqa: E501
             schedule (JsonApiAutomationInAttributesSchedule): [optional]  # noqa: E501
             state (str): Current state of the automation.. [optional]  # noqa: E501
+            tabular_exports ([JsonApiAutomationInAttributesTabularExportsInner]): [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
+            visual_exports ([JsonApiAutomationInAttributesVisualExportsInner]): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -283,8 +293,10 @@ class JsonApiAutomationOutAttributes(ModelNormal):
             modified_at (datetime): [optional]  # noqa: E501
             schedule (JsonApiAutomationInAttributesSchedule): [optional]  # noqa: E501
             state (str): Current state of the automation.. [optional]  # noqa: E501
+            tabular_exports ([JsonApiAutomationInAttributesTabularExportsInner]): [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
+            visual_exports ([JsonApiAutomationInAttributesVisualExportsInner]): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

@@ -46,13 +46,13 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = smart_functions_api.SmartFunctionsApi(api_client)
     workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
     chat_request = ChatRequest(
-        chat_history_thread_id="chat_history_thread_id_example",
         limit_create=3,
         limit_create_context=10,
         limit_search=5,
         question="question_example",
         relevant_score_threshold=0.4,
         search_score_threshold=0.9,
+        thread_id_suffix="thread_id_suffix_example",
         title_to_descriptor_ratio=0.7,
         user_context=UserContext(
             active_object=ActiveObjectIdentification(
@@ -133,8 +133,8 @@ with gooddata_api_client.ApiClient() as api_client:
     workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
     chat_history_request = ChatHistoryRequest(
         chat_history_interaction_id=1,
-        chat_history_thread_id="chat_history_thread_id_example",
         reset=True,
+        thread_id_suffix="thread_id_suffix_example",
         user_feedback="POSITIVE",
     ) # ChatHistoryRequest | 
 
