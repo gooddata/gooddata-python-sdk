@@ -302,6 +302,9 @@ with gooddata_api_client.ApiClient() as api_client:
                 name="name_example",
                 oauth_client_id="oauth_client_id_example",
                 oauth_client_secret="oauth_client_secret_example",
+                oauth_custom_auth_attributes={
+                    "key": "key_example",
+                },
                 oauth_issuer_id="myOidcProvider",
                 oauth_issuer_location="oauth_issuer_location_example",
                 oauth_subject_id_claim="oid",
@@ -495,6 +498,9 @@ with gooddata_api_client.ApiClient() as api_client:
                 name="name_example",
                 oauth_client_id="oauth_client_id_example",
                 oauth_client_secret="oauth_client_secret_example",
+                oauth_custom_auth_attributes={
+                    "key": "key_example",
+                },
                 oauth_issuer_id="myOidcProvider",
                 oauth_issuer_location="oauth_issuer_location_example",
                 oauth_subject_id_claim="oid",

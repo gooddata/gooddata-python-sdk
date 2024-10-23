@@ -356,7 +356,11 @@ def test_layout_notification_channels(test_config):
     try:
         notification_channels_e = [
             CatalogDeclarativeNotificationChannel(
-                id="webhook", name="Webhook", destination=CatalogWebhook(url="https://webhook.site", token="123")
+                id="webhook",
+                name="Webhook",
+                destination=CatalogWebhook(url="https://webhook.site", token="123"),
+                custom_dashboard_url="https://dashboard.site",
+                allowed_recipients="CREATOR",
             ),
         ]
         sdk.catalog_organization.put_declarative_notification_channels(notification_channels_e)
@@ -364,13 +368,9 @@ def test_layout_notification_channels(test_config):
         assert notification_channels_e[0].id == notification_channels_o[0].id
         assert notification_channels_e[0].name == notification_channels_o[0].name
         assert notification_channels_e[0].destination == notification_channels_o[0].destination
+        assert notification_channels_e[0].custom_dashboard_url == notification_channels_o[0].custom_dashboard_url
+        assert notification_channels_e[0].allowed_recipients == notification_channels_o[0].allowed_recipients
     finally:
         sdk.catalog_organization.put_declarative_notification_channels([])
         ncs = sdk.catalog_organization.get_declarative_notification_channels()
         assert len(ncs) == 0
-
-
-def test_prdel():
-    CatalogDeclarativeNotificationChannel(
-        id="webhook", destination=CatalogWebhook(url="https://webhook.site", token="123")
-    ).to_api()

@@ -150,10 +150,10 @@ with gooddata_api_client.ApiClient() as api_client:
         ],
         notification_channels=[
             DeclarativeNotificationChannel(
+                allowed_recipients="INTERNAL",
                 custom_dashboard_url="custom_dashboard_url_example",
                 description="This is a channel",
                 destination=DeclarativeNotificationChannelDestination(None),
-                enable_multiple_recipients=True,
                 id="notification-channel-1",
                 name="channel",
             ),
@@ -184,6 +184,9 @@ with gooddata_api_client.ApiClient() as api_client:
             name="Alpha corporation",
             oauth_client_id="oauth_client_id_example",
             oauth_client_secret="oauth_client_secret_example",
+            oauth_custom_auth_attributes={
+                "key": "key_example",
+            },
             oauth_issuer_id="myOidcProvider",
             oauth_issuer_location="oauth_issuer_location_example",
             oauth_subject_id_claim="oid",
@@ -291,6 +294,10 @@ with gooddata_api_client.ApiClient() as api_client:
             DeclarativeWorkspace(
                 automations=[
                     DeclarativeAutomation(
+                        analytical_dashboard=DeclarativeAnalyticalDashboardIdentifier(
+                            id="dashboard123",
+                            type="analyticalDashboard",
+                        ),
                         created_at="2023-07-20 12:30",
                         created_by=DeclarativeUserIdentifier(
                             id="employee123",
@@ -329,10 +336,65 @@ with gooddata_api_client.ApiClient() as api_client:
                             timezone="Europe/Prague",
                         ),
                         state="ACTIVE",
+                        tabular_exports=[
+                            AutomationTabularExport(
+                                request_payload=TabularExportRequest(
+                                    custom_override=CustomOverride(
+                                        labels={
+                                            "key": CustomLabel(
+                                                title="title_example",
+                                            ),
+                                        },
+                                        metrics={
+                                            "key": CustomMetric(
+                                                format="format_example",
+                                                title="title_example",
+                                            ),
+                                        },
+                                    ),
+                                    execution_result="ff483727196c9dc862c7fd3a5a84df55c96d61a4",
+                                    file_name="result",
+                                    format="CSV",
+                                    metadata=JsonNode(),
+                                    related_dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                                    settings=Settings(
+                                        merge_headers=True,
+                                        pdf_page_size="a4 landscape",
+                                        pdf_table_style=[
+                                            PdfTableStyle(
+                                                properties=[
+                                                    PdfTableStyleProperty(
+                                                        key="key_example",
+                                                        value="value_example",
+                                                    ),
+                                                ],
+                                                selector="selector_example",
+                                            ),
+                                        ],
+                                        pdf_top_left_content="Good",
+                                        pdf_top_right_content="Morning",
+                                        show_filters=False,
+                                    ),
+                                    visualization_object="f7c359bc-c230-4487-b15b-ad9685bcb537",
+                                    visualization_object_custom_filters=[
+                                        {},
+                                    ],
+                                ),
+                            ),
+                        ],
                         tags=[
                             "["Revenue","Sales"]",
                         ],
                         title="title_example",
+                        visual_exports=[
+                            AutomationVisualExport(
+                                request_payload=VisualExportRequest(
+                                    dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                                    file_name="filename",
+                                    metadata={},
+                                ),
+                            ),
+                        ],
                     ),
                 ],
                 cache_extra_limit=1,
@@ -353,6 +415,26 @@ with gooddata_api_client.ApiClient() as api_client:
                 early_access="early_access_example",
                 early_access_values=[
                     "early_access_values_example",
+                ],
+                filter_views=[
+                    DeclarativeFilterView(
+                        analytical_dashboard=DeclarativeAnalyticalDashboardIdentifier(
+                            id="dashboard123",
+                            type="analyticalDashboard",
+                        ),
+                        content=JsonNode(),
+                        description="description_example",
+                        id="filterView-1",
+                        is_default=True,
+                        tags=[
+                            "["Revenue","Sales"]",
+                        ],
+                        title="title_example",
+                        user=DeclarativeUserIdentifier(
+                            id="employee123",
+                            type="user",
+                        ),
+                    ),
                 ],
                 hierarchy_permissions=[
                     DeclarativeWorkspaceHierarchyPermission(

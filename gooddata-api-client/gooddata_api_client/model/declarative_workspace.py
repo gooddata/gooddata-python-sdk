@@ -33,6 +33,7 @@ from gooddata_api_client.exceptions import ApiAttributeError
 def lazy_import():
     from gooddata_api_client.model.declarative_automation import DeclarativeAutomation
     from gooddata_api_client.model.declarative_custom_application_setting import DeclarativeCustomApplicationSetting
+    from gooddata_api_client.model.declarative_filter_view import DeclarativeFilterView
     from gooddata_api_client.model.declarative_setting import DeclarativeSetting
     from gooddata_api_client.model.declarative_single_workspace_permission import DeclarativeSingleWorkspacePermission
     from gooddata_api_client.model.declarative_user_data_filter import DeclarativeUserDataFilter
@@ -42,6 +43,7 @@ def lazy_import():
     from gooddata_api_client.model.workspace_identifier import WorkspaceIdentifier
     globals()['DeclarativeAutomation'] = DeclarativeAutomation
     globals()['DeclarativeCustomApplicationSetting'] = DeclarativeCustomApplicationSetting
+    globals()['DeclarativeFilterView'] = DeclarativeFilterView
     globals()['DeclarativeSetting'] = DeclarativeSetting
     globals()['DeclarativeSingleWorkspacePermission'] = DeclarativeSingleWorkspacePermission
     globals()['DeclarativeUserDataFilter'] = DeclarativeUserDataFilter
@@ -135,6 +137,7 @@ class DeclarativeWorkspace(ModelNormal):
             'description': (str,),  # noqa: E501
             'early_access': (str,),  # noqa: E501
             'early_access_values': ([str],),  # noqa: E501
+            'filter_views': ([DeclarativeFilterView],),  # noqa: E501
             'hierarchy_permissions': ([DeclarativeWorkspaceHierarchyPermission],),  # noqa: E501
             'model': (DeclarativeWorkspaceModel,),  # noqa: E501
             'parent': (WorkspaceIdentifier,),  # noqa: E501
@@ -159,6 +162,7 @@ class DeclarativeWorkspace(ModelNormal):
         'description': 'description',  # noqa: E501
         'early_access': 'earlyAccess',  # noqa: E501
         'early_access_values': 'earlyAccessValues',  # noqa: E501
+        'filter_views': 'filterViews',  # noqa: E501
         'hierarchy_permissions': 'hierarchyPermissions',  # noqa: E501
         'model': 'model',  # noqa: E501
         'parent': 'parent',  # noqa: E501
@@ -220,6 +224,7 @@ class DeclarativeWorkspace(ModelNormal):
             description (str): Description of the workspace. [optional]  # noqa: E501
             early_access (str): Early access defined on level Workspace. [optional]  # noqa: E501
             early_access_values ([str]): Early access defined on level Workspace. [optional]  # noqa: E501
+            filter_views ([DeclarativeFilterView]): [optional]  # noqa: E501
             hierarchy_permissions ([DeclarativeWorkspaceHierarchyPermission]): [optional]  # noqa: E501
             model (DeclarativeWorkspaceModel): [optional]  # noqa: E501
             parent (WorkspaceIdentifier): [optional]  # noqa: E501
@@ -325,6 +330,7 @@ class DeclarativeWorkspace(ModelNormal):
             description (str): Description of the workspace. [optional]  # noqa: E501
             early_access (str): Early access defined on level Workspace. [optional]  # noqa: E501
             early_access_values ([str]): Early access defined on level Workspace. [optional]  # noqa: E501
+            filter_views ([DeclarativeFilterView]): [optional]  # noqa: E501
             hierarchy_permissions ([DeclarativeWorkspaceHierarchyPermission]): [optional]  # noqa: E501
             model (DeclarativeWorkspaceModel): [optional]  # noqa: E501
             parent (WorkspaceIdentifier): [optional]  # noqa: E501

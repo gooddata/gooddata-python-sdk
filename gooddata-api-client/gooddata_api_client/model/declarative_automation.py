@@ -32,11 +32,17 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.automation_schedule import AutomationSchedule
+    from gooddata_api_client.model.automation_tabular_export import AutomationTabularExport
+    from gooddata_api_client.model.automation_visual_export import AutomationVisualExport
+    from gooddata_api_client.model.declarative_analytical_dashboard_identifier import DeclarativeAnalyticalDashboardIdentifier
     from gooddata_api_client.model.declarative_export_definition_identifier import DeclarativeExportDefinitionIdentifier
     from gooddata_api_client.model.declarative_notification_channel_identifier import DeclarativeNotificationChannelIdentifier
     from gooddata_api_client.model.declarative_user_identifier import DeclarativeUserIdentifier
     from gooddata_api_client.model.json_node import JsonNode
     globals()['AutomationSchedule'] = AutomationSchedule
+    globals()['AutomationTabularExport'] = AutomationTabularExport
+    globals()['AutomationVisualExport'] = AutomationVisualExport
+    globals()['DeclarativeAnalyticalDashboardIdentifier'] = DeclarativeAnalyticalDashboardIdentifier
     globals()['DeclarativeExportDefinitionIdentifier'] = DeclarativeExportDefinitionIdentifier
     globals()['DeclarativeNotificationChannelIdentifier'] = DeclarativeNotificationChannelIdentifier
     globals()['DeclarativeUserIdentifier'] = DeclarativeUserIdentifier
@@ -99,10 +105,14 @@ class DeclarativeAutomation(ModelNormal):
         },
         ('recipients',): {
         },
+        ('tabular_exports',): {
+        },
         ('tags',): {
         },
         ('title',): {
             'max_length': 255,
+        },
+        ('visual_exports',): {
         },
     }
 
@@ -130,6 +140,7 @@ class DeclarativeAutomation(ModelNormal):
         lazy_import()
         return {
             'id': (str,),  # noqa: E501
+            'analytical_dashboard': (DeclarativeAnalyticalDashboardIdentifier,),  # noqa: E501
             'created_at': (str, none_type,),  # noqa: E501
             'created_by': (DeclarativeUserIdentifier,),  # noqa: E501
             'description': (str,),  # noqa: E501
@@ -142,8 +153,10 @@ class DeclarativeAutomation(ModelNormal):
             'recipients': ([DeclarativeUserIdentifier],),  # noqa: E501
             'schedule': (AutomationSchedule,),  # noqa: E501
             'state': (str,),  # noqa: E501
+            'tabular_exports': ([AutomationTabularExport],),  # noqa: E501
             'tags': ([str],),  # noqa: E501
             'title': (str,),  # noqa: E501
+            'visual_exports': ([AutomationVisualExport],),  # noqa: E501
         }
 
     @cached_property
@@ -153,6 +166,7 @@ class DeclarativeAutomation(ModelNormal):
 
     attribute_map = {
         'id': 'id',  # noqa: E501
+        'analytical_dashboard': 'analyticalDashboard',  # noqa: E501
         'created_at': 'createdAt',  # noqa: E501
         'created_by': 'createdBy',  # noqa: E501
         'description': 'description',  # noqa: E501
@@ -165,8 +179,10 @@ class DeclarativeAutomation(ModelNormal):
         'recipients': 'recipients',  # noqa: E501
         'schedule': 'schedule',  # noqa: E501
         'state': 'state',  # noqa: E501
+        'tabular_exports': 'tabularExports',  # noqa: E501
         'tags': 'tags',  # noqa: E501
         'title': 'title',  # noqa: E501
+        'visual_exports': 'visualExports',  # noqa: E501
     }
 
     read_only_vars = {
@@ -213,6 +229,7 @@ class DeclarativeAutomation(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            analytical_dashboard (DeclarativeAnalyticalDashboardIdentifier): [optional]  # noqa: E501
             created_at (str, none_type): Time of the entity creation.. [optional]  # noqa: E501
             created_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
@@ -225,8 +242,10 @@ class DeclarativeAutomation(ModelNormal):
             recipients ([DeclarativeUserIdentifier]): [optional]  # noqa: E501
             schedule (AutomationSchedule): [optional]  # noqa: E501
             state (str): Current state of the automation.. [optional] if omitted the server will use the default value of "ACTIVE"  # noqa: E501
+            tabular_exports ([AutomationTabularExport]): [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
+            visual_exports ([AutomationVisualExport]): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -316,6 +335,7 @@ class DeclarativeAutomation(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            analytical_dashboard (DeclarativeAnalyticalDashboardIdentifier): [optional]  # noqa: E501
             created_at (str, none_type): Time of the entity creation.. [optional]  # noqa: E501
             created_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
@@ -328,8 +348,10 @@ class DeclarativeAutomation(ModelNormal):
             recipients ([DeclarativeUserIdentifier]): [optional]  # noqa: E501
             schedule (AutomationSchedule): [optional]  # noqa: E501
             state (str): Current state of the automation.. [optional] if omitted the server will use the default value of "ACTIVE"  # noqa: E501
+            tabular_exports ([AutomationTabularExport]): [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
+            visual_exports ([AutomationVisualExport]): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

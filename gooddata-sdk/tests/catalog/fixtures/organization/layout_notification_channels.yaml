@@ -71,7 +71,7 @@ interactions:
         content-length:
           - '27'
         set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Wed, 16 Oct 2024 10:34:30 GMT;
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Wed, 23 Oct 2024 09:59:56 GMT;
             Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
@@ -83,6 +83,8 @@ interactions:
         notificationChannels:
           - id: webhook
             name: Webhook
+            customDashboardUrl: https://dashboard.site
+            allowedRecipients: CREATOR
             destination:
               type: WEBHOOK
               url: https://webhook.site
@@ -146,7 +148,7 @@ interactions:
         X-XSS-Protection:
           - '0'
         set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Wed, 16 Oct 2024 10:34:30 GMT;
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Wed, 23 Oct 2024 09:59:56 GMT;
             Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
@@ -217,19 +219,20 @@ interactions:
         X-XSS-Protection:
           - '0'
         content-length:
-          - '198'
+          - '242'
         set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Wed, 16 Oct 2024 10:34:30 GMT;
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Wed, 23 Oct 2024 09:59:56 GMT;
             Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           notificationChannels:
-            - destination:
+            - allowedRecipients: CREATOR
+              customDashboardUrl: https://dashboard.site
+              destination:
                 hasToken: true
                 type: WEBHOOK
                 url: https://webhook.site
               destinationType: WEBHOOK
-              enableMultipleRecipients: true
               id: webhook
               name: Webhook
   - request:
@@ -296,7 +299,7 @@ interactions:
         X-XSS-Protection:
           - '0'
         set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Wed, 16 Oct 2024 10:34:30 GMT;
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Wed, 23 Oct 2024 09:59:56 GMT;
             Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
@@ -369,7 +372,7 @@ interactions:
         content-length:
           - '27'
         set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Wed, 16 Oct 2024 10:34:30 GMT;
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Wed, 23 Oct 2024 09:59:56 GMT;
             Path=/; HTTPOnly; SameSite=Lax
       body:
         string:

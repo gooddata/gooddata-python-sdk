@@ -50,6 +50,8 @@ docs/AttributeItem.md
 docs/AttributeResultHeader.md
 docs/AttributesApi.md
 docs/AutomationSchedule.md
+docs/AutomationTabularExport.md
+docs/AutomationVisualExport.md
 docs/AutomationsApi.md
 docs/AvailableAssignees.md
 docs/AvailableDriversApi.md
@@ -62,6 +64,7 @@ docs/ChatResult.md
 docs/ClusteringRequest.md
 docs/ClusteringResult.md
 docs/ColumnLocation.md
+docs/ColumnOverride.md
 docs/ColumnStatistic.md
 docs/ColumnStatisticWarning.md
 docs/ColumnStatisticsRequest.md
@@ -99,6 +102,7 @@ docs/DatasetsApi.md
 docs/DateFilter.md
 docs/DeclarativeAnalyticalDashboard.md
 docs/DeclarativeAnalyticalDashboardExtension.md
+docs/DeclarativeAnalyticalDashboardIdentifier.md
 docs/DeclarativeAnalyticalDashboardPermissionAssignment.md
 docs/DeclarativeAnalyticalDashboardPermissionForAssignee.md
 docs/DeclarativeAnalyticalDashboardPermissionForAssigneeAllOf.md
@@ -128,6 +132,7 @@ docs/DeclarativeExportDefinitionIdentifier.md
 docs/DeclarativeExportDefinitionRequestPayload.md
 docs/DeclarativeFact.md
 docs/DeclarativeFilterContext.md
+docs/DeclarativeFilterView.md
 docs/DeclarativeJwk.md
 docs/DeclarativeJwkSpecification.md
 docs/DeclarativeLabel.md
@@ -307,6 +312,8 @@ docs/JsonApiAutomationIn.md
 docs/JsonApiAutomationInAttributes.md
 docs/JsonApiAutomationInAttributesAlert.md
 docs/JsonApiAutomationInAttributesSchedule.md
+docs/JsonApiAutomationInAttributesTabularExportsInner.md
+docs/JsonApiAutomationInAttributesVisualExportsInner.md
 docs/JsonApiAutomationInDocument.md
 docs/JsonApiAutomationInRelationships.md
 docs/JsonApiAutomationInRelationshipsAnalyticalDashboard.md
@@ -817,6 +824,7 @@ docs/SqlQuery.md
 docs/SqlQueryAllOf.md
 docs/Table.md
 docs/TableAllOf.md
+docs/TableOverride.md
 docs/TableWarning.md
 docs/TabularExportApi.md
 docs/TabularExportRequest.md
@@ -991,6 +999,8 @@ gooddata_api_client/model/attribute_header_out_attribute_header.py
 gooddata_api_client/model/attribute_item.py
 gooddata_api_client/model/attribute_result_header.py
 gooddata_api_client/model/automation_schedule.py
+gooddata_api_client/model/automation_tabular_export.py
+gooddata_api_client/model/automation_visual_export.py
 gooddata_api_client/model/available_assignees.py
 gooddata_api_client/model/chat_history_interaction.py
 gooddata_api_client/model/chat_history_request.py
@@ -1000,6 +1010,7 @@ gooddata_api_client/model/chat_result.py
 gooddata_api_client/model/clustering_request.py
 gooddata_api_client/model/clustering_result.py
 gooddata_api_client/model/column_location.py
+gooddata_api_client/model/column_override.py
 gooddata_api_client/model/column_statistic.py
 gooddata_api_client/model/column_statistic_warning.py
 gooddata_api_client/model/column_statistics_request.py
@@ -1029,6 +1040,7 @@ gooddata_api_client/model/dataset_workspace_data_filter_identifier.py
 gooddata_api_client/model/date_filter.py
 gooddata_api_client/model/declarative_analytical_dashboard.py
 gooddata_api_client/model/declarative_analytical_dashboard_extension.py
+gooddata_api_client/model/declarative_analytical_dashboard_identifier.py
 gooddata_api_client/model/declarative_analytical_dashboard_permission_assignment.py
 gooddata_api_client/model/declarative_analytical_dashboard_permission_for_assignee.py
 gooddata_api_client/model/declarative_analytical_dashboard_permission_for_assignee_all_of.py
@@ -1058,6 +1070,7 @@ gooddata_api_client/model/declarative_export_definition_identifier.py
 gooddata_api_client/model/declarative_export_definition_request_payload.py
 gooddata_api_client/model/declarative_fact.py
 gooddata_api_client/model/declarative_filter_context.py
+gooddata_api_client/model/declarative_filter_view.py
 gooddata_api_client/model/declarative_jwk.py
 gooddata_api_client/model/declarative_jwk_specification.py
 gooddata_api_client/model/declarative_label.py
@@ -1226,6 +1239,8 @@ gooddata_api_client/model/json_api_automation_in.py
 gooddata_api_client/model/json_api_automation_in_attributes.py
 gooddata_api_client/model/json_api_automation_in_attributes_alert.py
 gooddata_api_client/model/json_api_automation_in_attributes_schedule.py
+gooddata_api_client/model/json_api_automation_in_attributes_tabular_exports_inner.py
+gooddata_api_client/model/json_api_automation_in_attributes_visual_exports_inner.py
 gooddata_api_client/model/json_api_automation_in_document.py
 gooddata_api_client/model/json_api_automation_in_relationships.py
 gooddata_api_client/model/json_api_automation_in_relationships_analytical_dashboard.py
@@ -1719,6 +1734,7 @@ gooddata_api_client/model/sql_query.py
 gooddata_api_client/model/sql_query_all_of.py
 gooddata_api_client/model/table.py
 gooddata_api_client/model/table_all_of.py
+gooddata_api_client/model/table_override.py
 gooddata_api_client/model/table_warning.py
 gooddata_api_client/model/tabular_export_request.py
 gooddata_api_client/model/test_definition_request.py

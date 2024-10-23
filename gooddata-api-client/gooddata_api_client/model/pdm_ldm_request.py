@@ -33,8 +33,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 def lazy_import():
     from gooddata_api_client.model.declarative_table import DeclarativeTable
     from gooddata_api_client.model.pdm_sql import PdmSql
+    from gooddata_api_client.model.table_override import TableOverride
     globals()['DeclarativeTable'] = DeclarativeTable
     globals()['PdmSql'] = PdmSql
+    globals()['TableOverride'] = TableOverride
 
 
 class PdmLdmRequest(ModelNormal):
@@ -91,6 +93,7 @@ class PdmLdmRequest(ModelNormal):
         lazy_import()
         return {
             'sqls': ([PdmSql],),  # noqa: E501
+            'table_overrides': ([TableOverride],),  # noqa: E501
             'tables': ([DeclarativeTable],),  # noqa: E501
         }
 
@@ -101,6 +104,7 @@ class PdmLdmRequest(ModelNormal):
 
     attribute_map = {
         'sqls': 'sqls',  # noqa: E501
+        'table_overrides': 'tableOverrides',  # noqa: E501
         'tables': 'tables',  # noqa: E501
     }
 
@@ -146,6 +150,7 @@ class PdmLdmRequest(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             sqls ([PdmSql]): List of SQL datasets.. [optional]  # noqa: E501
+            table_overrides ([TableOverride]): (BETA) List of table overrides.. [optional]  # noqa: E501
             tables ([DeclarativeTable]): List of physical database tables.. [optional]  # noqa: E501
         """
 
@@ -233,6 +238,7 @@ class PdmLdmRequest(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             sqls ([PdmSql]): List of SQL datasets.. [optional]  # noqa: E501
+            table_overrides ([TableOverride]): (BETA) List of table overrides.. [optional]  # noqa: E501
             tables ([DeclarativeTable]): List of physical database tables.. [optional]  # noqa: E501
         """
 

@@ -65,6 +65,7 @@ from gooddata_sdk.catalog.export.request import (
     ExportCustomOverride,
     ExportRequest,
     ExportSettings,
+    VisualExportRequest,
 )
 from gooddata_sdk.catalog.filter_by import CatalogFilterBy
 from gooddata_sdk.catalog.identifier import (

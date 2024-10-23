@@ -8,7 +8,9 @@ Method | HTTP request | Description
 [**delete_entity_filter_views**](FilterViewsApi.md#delete_entity_filter_views) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Delete Filter view
 [**get_all_entities_filter_views**](FilterViewsApi.md#get_all_entities_filter_views) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterViews | Get all Filter views
 [**get_entity_filter_views**](FilterViewsApi.md#get_entity_filter_views) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Get Filter view
+[**get_filter_views**](FilterViewsApi.md#get_filter_views) | **GET** /api/v1/layout/workspaces/{workspaceId}/filterViews | Get filter views
 [**patch_entity_filter_views**](FilterViewsApi.md#patch_entity_filter_views) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Patch Filter view
+[**set_filter_views**](FilterViewsApi.md#set_filter_views) | **PUT** /api/v1/layout/workspaces/{workspaceId}/filterViews | Set filter views
 [**update_entity_filter_views**](FilterViewsApi.md#update_entity_filter_views) | **PUT** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Put Filter views
 
 
@@ -371,6 +373,86 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **get_filter_views**
+> [DeclarativeFilterView] get_filter_views(workspace_id)
+
+Get filter views
+
+Retrieve filter views for the specific workspace
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import filter_views_api
+from gooddata_api_client.model.declarative_filter_view import DeclarativeFilterView
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = filter_views_api.FilterViewsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    exclude = [
+        "ACTIVITY_INFO",
+    ] # [str] |  (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get filter views
+        api_response = api_instance.get_filter_views(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling FilterViewsApi->get_filter_views: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Get filter views
+        api_response = api_instance.get_filter_views(workspace_id, exclude=exclude)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling FilterViewsApi->get_filter_views: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **exclude** | **[str]**|  | [optional]
+
+### Return type
+
+[**[DeclarativeFilterView]**](DeclarativeFilterView.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Retrieved filterViews. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **patch_entity_filter_views**
 > JsonApiFilterViewOutDocument patch_entity_filter_views(workspace_id, object_id, json_api_filter_view_patch_document)
 
@@ -476,6 +558,93 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **set_filter_views**
+> set_filter_views(workspace_id, declarative_filter_view)
+
+Set filter views
+
+Set filter views for the specific workspace.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import filter_views_api
+from gooddata_api_client.model.declarative_filter_view import DeclarativeFilterView
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = filter_views_api.FilterViewsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    declarative_filter_view = [
+        DeclarativeFilterView(
+            analytical_dashboard=DeclarativeAnalyticalDashboardIdentifier(
+                id="dashboard123",
+                type="analyticalDashboard",
+            ),
+            content=JsonNode(),
+            description="description_example",
+            id="filterView-1",
+            is_default=True,
+            tags=[
+                "["Revenue","Sales"]",
+            ],
+            title="title_example",
+            user=DeclarativeUserIdentifier(
+                id="employee123",
+                type="user",
+            ),
+        ),
+    ] # [DeclarativeFilterView] | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Set filter views
+        api_instance.set_filter_views(workspace_id, declarative_filter_view)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling FilterViewsApi->set_filter_views: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **declarative_filter_view** | [**[DeclarativeFilterView]**](DeclarativeFilterView.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | FilterViews successfully set. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

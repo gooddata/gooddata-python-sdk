@@ -14,6 +14,7 @@ Name | Type | Description | Notes
 **description** | **str** | Description of the workspace | [optional] 
 **early_access** | **str** | Early access defined on level Workspace | [optional] 
 **early_access_values** | **[str]** | Early access defined on level Workspace | [optional] 
+**filter_views** | [**[DeclarativeFilterView]**](DeclarativeFilterView.md) |  | [optional] 
 **hierarchy_permissions** | [**[DeclarativeWorkspaceHierarchyPermission]**](DeclarativeWorkspaceHierarchyPermission.md) |  | [optional] 
 **model** | [**DeclarativeWorkspaceModel**](DeclarativeWorkspaceModel.md) |  | [optional] 
 **parent** | [**WorkspaceIdentifier**](WorkspaceIdentifier.md) |  | [optional] 
