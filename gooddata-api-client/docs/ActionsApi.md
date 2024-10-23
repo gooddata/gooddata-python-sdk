@@ -99,13 +99,13 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = actions_api.ActionsApi(api_client)
     workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
     chat_request = ChatRequest(
-        chat_history_thread_id="chat_history_thread_id_example",
         limit_create=3,
         limit_create_context=10,
         limit_search=5,
         question="question_example",
         relevant_score_threshold=0.4,
         search_score_threshold=0.9,
+        thread_id_suffix="thread_id_suffix_example",
         title_to_descriptor_ratio=0.7,
         user_context=UserContext(
             active_object=ActiveObjectIdentification(
@@ -186,8 +186,8 @@ with gooddata_api_client.ApiClient() as api_client:
     workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
     chat_history_request = ChatHistoryRequest(
         chat_history_interaction_id=1,
-        chat_history_thread_id="chat_history_thread_id_example",
         reset=True,
+        thread_id_suffix="thread_id_suffix_example",
         user_feedback="POSITIVE",
     ) # ChatHistoryRequest | 
 
@@ -2092,7 +2092,7 @@ with gooddata_api_client.ApiClient() as api_client:
         date_granularities="all",
         denorm_prefix="dr",
         fact_prefix="f",
-        generate_long_ids=True,
+        generate_long_ids=False,
         grain_multivalue_reference_prefix="grmr",
         grain_prefix="gr",
         grain_reference_prefix="grr",
@@ -2108,6 +2108,19 @@ with gooddata_api_client.ApiClient() as api_client:
                     ],
                     statement="select * from abc",
                     title="My special dataset",
+                ),
+            ],
+            table_overrides=[
+                TableOverride(
+                    columns=[
+                        ColumnOverride(
+                            label_target_column="users",
+                            label_type="HYPERLINK",
+                            ldm_type_override="FACT",
+                            name="column_name",
+                        ),
+                    ],
+                    path=["schema","table_name"],
                 ),
             ],
             tables=[

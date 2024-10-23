@@ -22,6 +22,7 @@ from gooddata_api_client.model_utils import (  # noqa: F401
     none_type,
     validate_and_convert_types
 )
+from gooddata_api_client.model.declarative_filter_view import DeclarativeFilterView
 from gooddata_api_client.model.json_api_filter_view_in_document import JsonApiFilterViewInDocument
 from gooddata_api_client.model.json_api_filter_view_out_document import JsonApiFilterViewOutDocument
 from gooddata_api_client.model.json_api_filter_view_out_list import JsonApiFilterViewOutList
@@ -367,6 +368,66 @@ class FilterViewsApi(object):
             },
             api_client=api_client
         )
+        self.get_filter_views_endpoint = _Endpoint(
+            settings={
+                'response_type': ([DeclarativeFilterView],),
+                'auth': [],
+                'endpoint_path': '/api/v1/layout/workspaces/{workspaceId}/filterViews',
+                'operation_id': 'get_filter_views',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'exclude',
+                ],
+                'required': [
+                    'workspace_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                    'exclude',
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                    ('exclude',): {
+
+                        "ACTIVITY_INFO": "ACTIVITY_INFO"
+                    },
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'exclude':
+                        ([str],),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'exclude': 'exclude',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'exclude': 'query',
+                },
+                'collection_format_map': {
+                    'exclude': 'multi',
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
         self.patch_entity_filter_views_endpoint = _Endpoint(
             settings={
                 'response_type': (JsonApiFilterViewOutDocument,),
@@ -445,6 +506,60 @@ class FilterViewsApi(object):
                 ],
                 'content_type': [
                     'application/vnd.gooddata.api+json'
+                ]
+            },
+            api_client=api_client
+        )
+        self.set_filter_views_endpoint = _Endpoint(
+            settings={
+                'response_type': None,
+                'auth': [],
+                'endpoint_path': '/api/v1/layout/workspaces/{workspaceId}/filterViews',
+                'operation_id': 'set_filter_views',
+                'http_method': 'PUT',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'declarative_filter_view',
+                ],
+                'required': [
+                    'workspace_id',
+                    'declarative_filter_view',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'declarative_filter_view':
+                        ([DeclarativeFilterView],),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'declarative_filter_view': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [],
+                'content_type': [
+                    'application/json'
                 ]
             },
             api_client=api_client
@@ -885,6 +1000,90 @@ class FilterViewsApi(object):
             object_id
         return self.get_entity_filter_views_endpoint.call_with_http_info(**kwargs)
 
+    def get_filter_views(
+        self,
+        workspace_id,
+        **kwargs
+    ):
+        """Get filter views  # noqa: E501
+
+        Retrieve filter views for the specific workspace  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.get_filter_views(workspace_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+
+        Keyword Args:
+            exclude ([str]): [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            [DeclarativeFilterView]
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        return self.get_filter_views_endpoint.call_with_http_info(**kwargs)
+
     def patch_entity_filter_views(
         self,
         workspace_id,
@@ -976,6 +1175,93 @@ class FilterViewsApi(object):
         kwargs['json_api_filter_view_patch_document'] = \
             json_api_filter_view_patch_document
         return self.patch_entity_filter_views_endpoint.call_with_http_info(**kwargs)
+
+    def set_filter_views(
+        self,
+        workspace_id,
+        declarative_filter_view,
+        **kwargs
+    ):
+        """Set filter views  # noqa: E501
+
+        Set filter views for the specific workspace.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.set_filter_views(workspace_id, declarative_filter_view, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            declarative_filter_view ([DeclarativeFilterView]):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            None
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['declarative_filter_view'] = \
+            declarative_filter_view
+        return self.set_filter_views_endpoint.call_with_http_info(**kwargs)
 
     def update_entity_filter_views(
         self,

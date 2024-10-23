@@ -5,6 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **str** |  | 
+**analytical_dashboard** | [**DeclarativeAnalyticalDashboardIdentifier**](DeclarativeAnalyticalDashboardIdentifier.md) |  | [optional] 
 **created_at** | **str, none_type** | Time of the entity creation. | [optional] 
 **created_by** | [**DeclarativeUserIdentifier**](DeclarativeUserIdentifier.md) |  | [optional] 
 **description** | **str** |  | [optional] 
@@ -17,8 +18,10 @@ Name | Type | Description | Notes
 **recipients** | [**[DeclarativeUserIdentifier]**](DeclarativeUserIdentifier.md) |  | [optional] 
 **schedule** | [**AutomationSchedule**](AutomationSchedule.md) |  | [optional] 
 **state** | **str** | Current state of the automation. | [optional]  if omitted the server will use the default value of "ACTIVE"
+**tabular_exports** | [**[AutomationTabularExport]**](AutomationTabularExport.md) |  | [optional] 
 **tags** | **[str]** |  | [optional] 
 **title** | **str** |  | [optional] 
+**visual_exports** | [**[AutomationVisualExport]**](AutomationVisualExport.md) |  | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

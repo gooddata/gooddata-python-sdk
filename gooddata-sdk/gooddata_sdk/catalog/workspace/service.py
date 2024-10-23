@@ -1246,7 +1246,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
                 List of declarative automations.
         """
         return [
-            CatalogDeclarativeAutomation.from_api(automation)
+            CatalogDeclarativeAutomation.from_dict(automation.to_dict())
             for automation in self._layout_api.get_automations(workspace_id)
         ]
 

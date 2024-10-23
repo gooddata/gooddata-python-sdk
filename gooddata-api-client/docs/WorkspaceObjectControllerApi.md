@@ -329,6 +329,24 @@ with gooddata_api_client.ApiClient() as api_client:
                 alert=JsonApiAutomationInAttributesAlert(
                     condition=AlertCondition(),
                     execution=AlertAfm(
+                        attributes=[
+                            AttributeItem(
+                                label=AfmObjectIdentifierLabel(
+                                    identifier=AfmObjectIdentifierLabelIdentifier(
+                                        id="sample_item.price",
+                                        type="label",
+                                    ),
+                                ),
+                                local_identifier="2",
+                                show_all_values=False,
+                            ),
+                        ],
+                        aux_measures=[
+                            MeasureItem(
+                                definition=MeasureDefinition(),
+                                local_identifier="metric_1",
+                            ),
+                        ],
                         filters=[
                             FilterDefinition(),
                         ],
@@ -351,10 +369,65 @@ with gooddata_api_client.ApiClient() as api_client:
                     timezone="Europe/Prague",
                 ),
                 state="ACTIVE",
+                tabular_exports=[
+                    JsonApiAutomationInAttributesTabularExportsInner(
+                        request_payload=TabularExportRequest(
+                            custom_override=CustomOverride(
+                                labels={
+                                    "key": CustomLabel(
+                                        title="title_example",
+                                    ),
+                                },
+                                metrics={
+                                    "key": CustomMetric(
+                                        format="format_example",
+                                        title="title_example",
+                                    ),
+                                },
+                            ),
+                            execution_result="ff483727196c9dc862c7fd3a5a84df55c96d61a4",
+                            file_name="result",
+                            format="CSV",
+                            metadata=JsonNode(),
+                            related_dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                            settings=Settings(
+                                merge_headers=True,
+                                pdf_page_size="a4 landscape",
+                                pdf_table_style=[
+                                    PdfTableStyle(
+                                        properties=[
+                                            PdfTableStyleProperty(
+                                                key="key_example",
+                                                value="value_example",
+                                            ),
+                                        ],
+                                        selector="selector_example",
+                                    ),
+                                ],
+                                pdf_top_left_content="Good",
+                                pdf_top_right_content="Morning",
+                                show_filters=False,
+                            ),
+                            visualization_object="f7c359bc-c230-4487-b15b-ad9685bcb537",
+                            visualization_object_custom_filters=[
+                                {},
+                            ],
+                        ),
+                    ),
+                ],
                 tags=[
                     "tags_example",
                 ],
                 title="title_example",
+                visual_exports=[
+                    JsonApiAutomationInAttributesVisualExportsInner(
+                        request_payload=VisualExportRequest(
+                            dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                            file_name="filename",
+                            metadata={},
+                        ),
+                    ),
+                ],
             ),
             id="id1",
             relationships=JsonApiAutomationInRelationships(
@@ -6119,6 +6192,24 @@ with gooddata_api_client.ApiClient() as api_client:
                 alert=JsonApiAutomationInAttributesAlert(
                     condition=AlertCondition(),
                     execution=AlertAfm(
+                        attributes=[
+                            AttributeItem(
+                                label=AfmObjectIdentifierLabel(
+                                    identifier=AfmObjectIdentifierLabelIdentifier(
+                                        id="sample_item.price",
+                                        type="label",
+                                    ),
+                                ),
+                                local_identifier="2",
+                                show_all_values=False,
+                            ),
+                        ],
+                        aux_measures=[
+                            MeasureItem(
+                                definition=MeasureDefinition(),
+                                local_identifier="metric_1",
+                            ),
+                        ],
                         filters=[
                             FilterDefinition(),
                         ],
@@ -6141,10 +6232,65 @@ with gooddata_api_client.ApiClient() as api_client:
                     timezone="Europe/Prague",
                 ),
                 state="ACTIVE",
+                tabular_exports=[
+                    JsonApiAutomationInAttributesTabularExportsInner(
+                        request_payload=TabularExportRequest(
+                            custom_override=CustomOverride(
+                                labels={
+                                    "key": CustomLabel(
+                                        title="title_example",
+                                    ),
+                                },
+                                metrics={
+                                    "key": CustomMetric(
+                                        format="format_example",
+                                        title="title_example",
+                                    ),
+                                },
+                            ),
+                            execution_result="ff483727196c9dc862c7fd3a5a84df55c96d61a4",
+                            file_name="result",
+                            format="CSV",
+                            metadata=JsonNode(),
+                            related_dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                            settings=Settings(
+                                merge_headers=True,
+                                pdf_page_size="a4 landscape",
+                                pdf_table_style=[
+                                    PdfTableStyle(
+                                        properties=[
+                                            PdfTableStyleProperty(
+                                                key="key_example",
+                                                value="value_example",
+                                            ),
+                                        ],
+                                        selector="selector_example",
+                                    ),
+                                ],
+                                pdf_top_left_content="Good",
+                                pdf_top_right_content="Morning",
+                                show_filters=False,
+                            ),
+                            visualization_object="f7c359bc-c230-4487-b15b-ad9685bcb537",
+                            visualization_object_custom_filters=[
+                                {},
+                            ],
+                        ),
+                    ),
+                ],
                 tags=[
                     "tags_example",
                 ],
                 title="title_example",
+                visual_exports=[
+                    JsonApiAutomationInAttributesVisualExportsInner(
+                        request_payload=VisualExportRequest(
+                            dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                            file_name="filename",
+                            metadata={},
+                        ),
+                    ),
+                ],
             ),
             id="id1",
             relationships=JsonApiAutomationInRelationships(
@@ -7570,6 +7716,24 @@ with gooddata_api_client.ApiClient() as api_client:
                 alert=JsonApiAutomationInAttributesAlert(
                     condition=AlertCondition(),
                     execution=AlertAfm(
+                        attributes=[
+                            AttributeItem(
+                                label=AfmObjectIdentifierLabel(
+                                    identifier=AfmObjectIdentifierLabelIdentifier(
+                                        id="sample_item.price",
+                                        type="label",
+                                    ),
+                                ),
+                                local_identifier="2",
+                                show_all_values=False,
+                            ),
+                        ],
+                        aux_measures=[
+                            MeasureItem(
+                                definition=MeasureDefinition(),
+                                local_identifier="metric_1",
+                            ),
+                        ],
                         filters=[
                             FilterDefinition(),
                         ],
@@ -7592,10 +7756,65 @@ with gooddata_api_client.ApiClient() as api_client:
                     timezone="Europe/Prague",
                 ),
                 state="ACTIVE",
+                tabular_exports=[
+                    JsonApiAutomationInAttributesTabularExportsInner(
+                        request_payload=TabularExportRequest(
+                            custom_override=CustomOverride(
+                                labels={
+                                    "key": CustomLabel(
+                                        title="title_example",
+                                    ),
+                                },
+                                metrics={
+                                    "key": CustomMetric(
+                                        format="format_example",
+                                        title="title_example",
+                                    ),
+                                },
+                            ),
+                            execution_result="ff483727196c9dc862c7fd3a5a84df55c96d61a4",
+                            file_name="result",
+                            format="CSV",
+                            metadata=JsonNode(),
+                            related_dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                            settings=Settings(
+                                merge_headers=True,
+                                pdf_page_size="a4 landscape",
+                                pdf_table_style=[
+                                    PdfTableStyle(
+                                        properties=[
+                                            PdfTableStyleProperty(
+                                                key="key_example",
+                                                value="value_example",
+                                            ),
+                                        ],
+                                        selector="selector_example",
+                                    ),
+                                ],
+                                pdf_top_left_content="Good",
+                                pdf_top_right_content="Morning",
+                                show_filters=False,
+                            ),
+                            visualization_object="f7c359bc-c230-4487-b15b-ad9685bcb537",
+                            visualization_object_custom_filters=[
+                                {},
+                            ],
+                        ),
+                    ),
+                ],
                 tags=[
                     "tags_example",
                 ],
                 title="title_example",
+                visual_exports=[
+                    JsonApiAutomationInAttributesVisualExportsInner(
+                        request_payload=VisualExportRequest(
+                            dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                            file_name="filename",
+                            metadata={},
+                        ),
+                    ),
+                ],
             ),
             id="id1",
             relationships=JsonApiAutomationInRelationships(

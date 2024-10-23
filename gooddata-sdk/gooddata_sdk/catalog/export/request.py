@@ -1,17 +1,18 @@
 # (C) 2023 GoodData Corporation
 from typing import Optional
 
-import attr
+from attrs import define
 from gooddata_api_client.model.custom_label import CustomLabel as ApiCustomLabel
 from gooddata_api_client.model.custom_metric import CustomMetric as ApiCustomMetric
 from gooddata_api_client.model.custom_override import CustomOverride as ApiCustomOverride
 from gooddata_api_client.model.settings import Settings as ApiSettings
 from gooddata_api_client.model.tabular_export_request import TabularExportRequest
+from gooddata_api_client.model.visual_export_request import VisualExportRequest as VisualExportRequestApi
 
 from gooddata_sdk.catalog.base import Base
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(auto_attribs=True, kw_only=True)
 class ExportCustomLabel(Base):
     title: str
 
@@ -20,7 +21,7 @@ class ExportCustomLabel(Base):
         return ApiCustomLabel
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(auto_attribs=True, kw_only=True)
 class ExportCustomMetric(Base):
     title: str
     format: str
@@ -30,7 +31,7 @@ class ExportCustomMetric(Base):
         return ApiCustomMetric
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(auto_attribs=True, kw_only=True)
 class ExportCustomOverride(Base):
     labels: Optional[dict[str, ExportCustomLabel]] = None
     metrics: Optional[dict[str, ExportCustomMetric]] = None
@@ -40,7 +41,7 @@ class ExportCustomOverride(Base):
         return ApiCustomOverride
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(auto_attribs=True, kw_only=True)
 class ExportSettings(Base):
     merge_headers: bool
     show_filters: bool
@@ -50,7 +51,7 @@ class ExportSettings(Base):
         return ApiSettings
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(auto_attribs=True, kw_only=True)
 class ExportRequest(Base):
     """
     ExportRequest class is used to create an export request in the desired format, filename, and settings.
@@ -96,3 +97,27 @@ class ExportRequest(Base):
             str: Full filename with the format extension.
         """
         return f"{self.file_name}.{self.format.lower()}"
+
+
+@define(auto_attribs=True, kw_only=True)
+class VisualExportRequest(Base):
+    """
+    ExportRequest class is used to create an export request in the desired format, filename, and settings.
+    Attributes:
+        dashboard_id (str): Dashboard identifier.
+        file_name (str): File name to be used for retrieving the PDF document.
+        metadata (Optional[Dict[str, bool]]): Optional dictionary containing settings for the export request.
+    """
+
+    dashboard_id: str
+    file_name: str
+    metadata: Optional[dict] = None
+
+    @staticmethod
+    def client_class() -> type[VisualExportRequestApi]:
+        """
+        Returns the appropriate client class for the visual export request.
+        Returns:
+            type[TabularExportRequest]: VisualExportRequest class
+        """
+        return VisualExportRequestApi

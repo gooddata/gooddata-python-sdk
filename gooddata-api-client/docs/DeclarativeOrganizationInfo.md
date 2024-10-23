@@ -16,6 +16,7 @@ Name | Type | Description | Notes
 **jit_enabled** | **bool** | Flag to enable/disable JIT provisioning in the given organization | [optional] 
 **oauth_client_id** | **str** | Identifier of the authentication provider | [optional] 
 **oauth_client_secret** | **str** | Communication secret of the authentication provider (never returned back). | [optional] 
+**oauth_custom_auth_attributes** | **{str: (str,)}** | Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute. | [optional] 
 **oauth_issuer_id** | **str** | Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider. | [optional] 
 **oauth_issuer_location** | **str** | URI of the authentication provider. | [optional] 
 **oauth_subject_id_claim** | **str** | Any string identifying the claim in ID token, that should be used for user identification. The default value is &#39;sub&#39;. | [optional] 

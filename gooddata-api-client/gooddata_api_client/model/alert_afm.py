@@ -31,8 +31,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.attribute_item import AttributeItem
     from gooddata_api_client.model.filter_definition import FilterDefinition
     from gooddata_api_client.model.measure_item import MeasureItem
+    globals()['AttributeItem'] = AttributeItem
     globals()['FilterDefinition'] = FilterDefinition
     globals()['MeasureItem'] = MeasureItem
 
@@ -67,6 +69,8 @@ class AlertAfm(ModelNormal):
     validations = {
         ('measures',): {
         },
+        ('attributes',): {
+        },
     }
 
     @cached_property
@@ -94,6 +98,8 @@ class AlertAfm(ModelNormal):
         return {
             'filters': ([FilterDefinition],),  # noqa: E501
             'measures': ([MeasureItem],),  # noqa: E501
+            'attributes': ([AttributeItem],),  # noqa: E501
+            'aux_measures': ([MeasureItem],),  # noqa: E501
         }
 
     @cached_property
@@ -104,6 +110,8 @@ class AlertAfm(ModelNormal):
     attribute_map = {
         'filters': 'filters',  # noqa: E501
         'measures': 'measures',  # noqa: E501
+        'attributes': 'attributes',  # noqa: E501
+        'aux_measures': 'auxMeasures',  # noqa: E501
     }
 
     read_only_vars = {
@@ -151,6 +159,8 @@ class AlertAfm(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            attributes ([AttributeItem]): Attributes to be used in the computation.. [optional]  # noqa: E501
+            aux_measures ([MeasureItem]): Metrics to be referenced from other AFM objects (e.g. filters) but not included in the result.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -242,6 +252,8 @@ class AlertAfm(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            attributes ([AttributeItem]): Attributes to be used in the computation.. [optional]  # noqa: E501
+            aux_measures ([MeasureItem]): Metrics to be referenced from other AFM objects (e.g. filters) but not included in the result.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

@@ -76,6 +76,7 @@ class DeclarativeSetting(ModelNormal):
             'OPENAI_CONFIG': "OPENAI_CONFIG",
             'ENABLE_FILE_ANALYTICS': "ENABLE_FILE_ANALYTICS",
             'ALERT': "ALERT",
+            'SEPARATORS': "SEPARATORS",
         },
     }
 

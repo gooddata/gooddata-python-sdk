@@ -37,7 +37,7 @@ from gooddata_sdk.catalog.base import Base
 @define(auto_attribs=True, kw_only=True)
 class CatalogWebhook(Base):
     type: str = field(default="WEBHOOK", init=False)
-    url: Optional[str] = None
+    url: str
     token: Optional[str] = field(default=None, eq=False)
     has_token: Optional[bool] = field(default=None, eq=False)
 
@@ -53,7 +53,7 @@ class CatalogDeclarativeNotificationChannel(Base):
     description: Optional[str] = None
     destination_type: Optional[str] = None
     custom_dashboard_url: Optional[str] = None
-    enable_multiple_recipients: Optional[bool] = None
+    allowed_recipients: Optional[str] = None
     # destination: Optional[Union[CatalogDefaultSmtp, CatalogSmtp, CatalogWebhook]] = None
     destination: Optional[CatalogWebhook] = None
 

@@ -86,6 +86,7 @@ class DimAttribute(ModelNormal):
         """
         return {
             'id': (str,),  # noqa: E501
+            'title': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
         }
 
@@ -96,6 +97,7 @@ class DimAttribute(ModelNormal):
 
     attribute_map = {
         'id': 'id',  # noqa: E501
+        'title': 'title',  # noqa: E501
         'type': 'type',  # noqa: E501
     }
 
@@ -106,11 +108,12 @@ class DimAttribute(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, id, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, id, title, *args, **kwargs):  # noqa: E501
         """DimAttribute - a model defined in OpenAPI
 
         Args:
             id (str): ID of the object
+            title (str): Title of attribute.
 
         Keyword Args:
             type (str): Object type. defaults to "attribute", must be one of ["attribute", ]  # noqa: E501
@@ -177,6 +180,7 @@ class DimAttribute(ModelNormal):
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
         self.id = id
+        self.title = title
         self.type = type
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
@@ -198,11 +202,12 @@ class DimAttribute(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, id, *args, **kwargs):  # noqa: E501
+    def __init__(self, id, title, *args, **kwargs):  # noqa: E501
         """DimAttribute - a model defined in OpenAPI
 
         Args:
             id (str): ID of the object
+            title (str): Title of attribute.
 
         Keyword Args:
             type (str): Object type. defaults to "attribute", must be one of ["attribute", ]  # noqa: E501
@@ -267,6 +272,7 @@ class DimAttribute(ModelNormal):
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
         self.id = id
+        self.title = title
         self.type = type
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
