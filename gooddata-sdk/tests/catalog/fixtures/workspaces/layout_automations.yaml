@@ -69,7 +69,7 @@ interactions:
         X-XSS-Protection:
           - '0'
         set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Wed, 23 Oct 2024 11:21:42 GMT;
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Thu, 24 Oct 2024 09:45:11 GMT;
             Path=/; HTTPOnly; SameSite=Lax
       body:
         string: []
@@ -143,7 +143,7 @@ interactions:
         X-XSS-Protection:
           - '0'
         set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Wed, 23 Oct 2024 11:21:42 GMT;
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Thu, 24 Oct 2024 09:45:11 GMT;
             Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
@@ -161,6 +161,7 @@ interactions:
             type: notificationChannel
           schedule:
             cron: 0 0 * * *
+            firstRun: '2023-10-05T14:30:00+00:00'
             timezone: UTC
       headers:
         Accept-Encoding:
@@ -221,7 +222,7 @@ interactions:
         X-XSS-Protection:
           - '0'
         set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Wed, 23 Oct 2024 11:21:42 GMT;
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Thu, 24 Oct 2024 09:45:11 GMT;
             Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
@@ -292,9 +293,9 @@ interactions:
         X-XSS-Protection:
           - '0'
         content-length:
-          - '203'
+          - '237'
         set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Wed, 23 Oct 2024 11:21:42 GMT;
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Thu, 24 Oct 2024 09:45:11 GMT;
             Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
@@ -306,6 +307,7 @@ interactions:
               type: notificationChannel
             schedule:
               cron: 0 0 * * *
+              firstRun: '2023-10-05T14:30:00Z'
               timezone: UTC
             state: ACTIVE
             title: Automation
@@ -372,7 +374,7 @@ interactions:
         X-XSS-Protection:
           - '0'
         set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Wed, 23 Oct 2024 11:21:42 GMT;
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Thu, 24 Oct 2024 09:45:11 GMT;
             Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
@@ -443,7 +445,7 @@ interactions:
         X-XSS-Protection:
           - '0'
         set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Wed, 23 Oct 2024 11:21:42 GMT;
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Thu, 24 Oct 2024 09:45:11 GMT;
             Path=/; HTTPOnly; SameSite=Lax
       body:
         string: []
@@ -511,7 +513,7 @@ interactions:
         X-XSS-Protection:
           - '0'
         set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Wed, 23 Oct 2024 11:21:42 GMT;
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Thu, 24 Oct 2024 09:45:11 GMT;
             Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''

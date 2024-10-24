@@ -1,6 +1,5 @@
 # (C) 2024 GoodData Corporation
 import builtins
-from datetime import datetime
 from typing import Any, Optional
 
 from attrs import define, field
@@ -26,7 +25,7 @@ from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.
 class CatalogAutomationSchedule(Base):
     cron: str
     cron_description: Optional[str] = field(default=None, eq=False)
-    first_run: Optional[datetime] = None
+    first_run: Optional[str] = None
     timezone: Optional[str] = "UTC"
 
     @staticmethod
