@@ -947,9 +947,7 @@ def test_layout_automations(test_config):
                 title="Automation",
                 state="ACTIVE",
                 notification_channel=CatalogNotificationChannelIdentifier(id="webhook"),
-                schedule=CatalogAutomationSchedule(
-                    cron="0 0 * * *",
-                ),
+                schedule=CatalogAutomationSchedule(cron="0 0 * * *", first_run="2023-10-05 14:30:00+00:00"),
                 metadata={"key": "value"},
             )
         ]
