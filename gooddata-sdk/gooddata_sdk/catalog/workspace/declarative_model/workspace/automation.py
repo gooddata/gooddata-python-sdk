@@ -60,7 +60,7 @@ class CatalogDeclarativeAutomation(CatalogAnalyticsBaseMeta):
     title: Optional[str] = None
     recipients: Optional[list[CatalogUserIdentifier]] = None
     metadata: Optional[dict] = None
-    export_definitions: Optional[CatalogExportDefinitionIdentifier] = None
+    export_definitions: Optional[list[CatalogExportDefinitionIdentifier]] = None
     notification_channel: Optional[CatalogNotificationChannelIdentifier] = None
     schedule: Optional[CatalogAutomationSchedule] = None
     tabular_exports: Optional[CatalogAutomationTabularExport] = None
