@@ -73,6 +73,7 @@ from gooddata_sdk.catalog.identifier import (
     CatalogDatasetWorkspaceDataFilterIdentifier,
     CatalogExportDefinitionIdentifier,
     CatalogNotificationChannelIdentifier,
+    CatalogUserIdentifier,
     CatalogWorkspaceIdentifier,
 )
 from gooddata_sdk.catalog.organization.entity_model.directive import CatalogCspDirective
