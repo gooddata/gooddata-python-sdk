@@ -819,6 +819,39 @@ with gooddata_api_client.ApiClient() as api_client:
     workspace_id = "workspaceId_example" # str | 
     declarative_automation = [
         DeclarativeAutomation(
+            alert=AutomationAlert(
+                condition=AutomationAlertCondition(None),
+                execution=AlertAfm(
+                    attributes=[
+                        AttributeItem(
+                            label=AfmObjectIdentifierLabel(
+                                identifier=AfmObjectIdentifierLabelIdentifier(
+                                    id="sample_item.price",
+                                    type="label",
+                                ),
+                            ),
+                            local_identifier="2",
+                            show_all_values=False,
+                        ),
+                    ],
+                    aux_measures=[
+                        MeasureItem(
+                            definition=MeasureDefinition(),
+                            local_identifier="metric_1",
+                        ),
+                    ],
+                    filters=[
+                        FilterDefinition(),
+                    ],
+                    measures=[
+                        MeasureItem(
+                            definition=MeasureDefinition(),
+                            local_identifier="metric_1",
+                        ),
+                    ],
+                ),
+                trigger="ALWAYS",
+            ),
             analytical_dashboard=DeclarativeAnalyticalDashboardIdentifier(
                 id="dashboard123",
                 type="analyticalDashboard",
