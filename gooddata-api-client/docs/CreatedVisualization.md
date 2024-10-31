@@ -6,6 +6,7 @@ List of created visualization objects
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **dimensionality** | [**[DimAttribute]**](DimAttribute.md) | List of attributes representing the dimensionality of the new visualization | 
+**filters** | [**[CreatedVisualizationFiltersInner]**](CreatedVisualizationFiltersInner.md) | List of filters to be applied to the new visualization | 
 **id** | **str** | Proposed ID of the new visualization | 
 **metrics** | [**[Metric]**](Metric.md) | List of metrics to be used in the new visualization | 
 **title** | **str** | Proposed title of the new visualization | 
