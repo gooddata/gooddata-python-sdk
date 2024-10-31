@@ -634,6 +634,58 @@
         ],
         "type": "object"
       },
+      "AttributeNegativeFilter": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Filter"
+          },
+          {
+            "properties": {
+              "exclude": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "using": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "exclude",
+          "using"
+        ],
+        "type": "object"
+      },
+      "AttributePositiveFilter": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Filter"
+          },
+          {
+            "properties": {
+              "include": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "using": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "include",
+          "using"
+        ],
+        "type": "object"
+      },
       "AttributeResultHeader": {
         "description": "Header containing the information related to attributes.",
         "properties": {
@@ -950,6 +1002,26 @@
             },
             "type": "array"
           },
+          "filters": {
+            "description": "List of filters to be applied to the new visualization",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/AttributeNegativeFilter"
+                },
+                {
+                  "$ref": "#/components/schemas/AttributePositiveFilter"
+                },
+                {
+                  "$ref": "#/components/schemas/DateAbsoluteFilter"
+                },
+                {
+                  "$ref": "#/components/schemas/DateRelativeFilter"
+                }
+              ]
+            },
+            "type": "array"
+          },
           "id": {
             "description": "Proposed ID of the new visualization",
             "example": "revenue_by_country",
@@ -983,6 +1055,7 @@
         },
         "required": [
           "dimensionality",
+          "filters",
           "id",
           "metrics",
           "title",
@@ -1057,6 +1130,31 @@
         },
         "type": "object"
       },
+      "DateAbsoluteFilter": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Filter"
+          },
+          {
+            "properties": {
+              "from": {
+                "type": "string"
+              },
+              "to": {
+                "type": "string"
+              },
+              "using": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "using"
+        ],
+        "type": "object"
+      },
       "DateFilter": {
         "description": "Abstract filter definition type for dates.",
         "oneOf": [
@@ -1066,6 +1164,56 @@
           {
             "$ref": "#/components/schemas/RelativeDateFilter"
           }
+        ],
+        "type": "object"
+      },
+      "DateRelativeFilter": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Filter"
+          },
+          {
+            "properties": {
+              "from": {
+                "format": "int32",
+                "type": "integer"
+              },
+              "granularity": {
+                "enum": [
+                  "MINUTE",
+                  "HOUR",
+                  "DAY",
+                  "WEEK",
+                  "MONTH",
+                  "QUARTER",
+                  "YEAR",
+                  "MINUTE_OF_HOUR",
+                  "HOUR_OF_DAY",
+                  "DAY_OF_WEEK",
+                  "DAY_OF_MONTH",
+                  "DAY_OF_YEAR",
+                  "WEEK_OF_YEAR",
+                  "MONTH_OF_YEAR",
+                  "QUARTER_OF_YEAR"
+                ],
+                "type": "string"
+              },
+              "to": {
+                "format": "int32",
+                "type": "integer"
+              },
+              "using": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "from",
+          "granularity",
+          "to",
+          "using"
         ],
         "type": "object"
       },
@@ -1546,6 +1694,10 @@
             "type": "number"
           }
         },
+        "type": "object"
+      },
+      "Filter": {
+        "description": "List of filters to be applied to the new visualization",
         "type": "object"
       },
       "FilterBy": {

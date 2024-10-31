@@ -536,6 +536,40 @@
         ],
         "type": "object"
       },
+      "AutomationAlert": {
+        "properties": {
+          "condition": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ComparisonWrapper"
+              },
+              {
+                "$ref": "#/components/schemas/RangeWrapper"
+              },
+              {
+                "$ref": "#/components/schemas/RelativeWrapper"
+              }
+            ]
+          },
+          "execution": {
+            "$ref": "#/components/schemas/AlertAfm"
+          },
+          "trigger": {
+            "default": "ALWAYS",
+            "description": "Trigger behavior for the alert.\nALWAYS - alert is triggered every time the condition is met.\nONCE - alert is triggered only once when the condition is met.\n",
+            "enum": [
+              "ALWAYS",
+              "ONCE"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "condition",
+          "execution"
+        ],
+        "type": "object"
+      },
       "AutomationSchedule": {
         "properties": {
           "cron": {
@@ -1407,6 +1441,9 @@
       },
       "DeclarativeAutomation": {
         "properties": {
+          "alert": {
+            "$ref": "#/components/schemas/AutomationAlert"
+          },
           "analyticalDashboard": {
             "$ref": "#/components/schemas/DeclarativeAnalyticalDashboardIdentifier"
           },
