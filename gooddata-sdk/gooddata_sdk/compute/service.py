@@ -4,6 +4,7 @@ from __future__ import annotations
 import logging
 
 from gooddata_api_client.model.chat_history_request import ChatHistoryRequest
+from gooddata_api_client.model.chat_history_result import ChatHistoryResult
 from gooddata_api_client.model.chat_request import ChatRequest
 from gooddata_api_client.model.chat_result import ChatResult
 
@@ -83,7 +84,7 @@ class ComputeService:
         response = self._actions_api.ai_chat(workspace_id, chat_request, _check_return_type=False)
         return response
 
-    def ai_chat_history(self, workspace_id: str, chat_history_interaction_id: int = 0) -> ChatResult:
+    def ai_chat_history(self, workspace_id: str, chat_history_interaction_id: int = 0) -> ChatHistoryResult:
         """
         Get chat history with AI in GoodData workspace.
 
@@ -96,3 +97,13 @@ class ComputeService:
         chat_history_request = ChatHistoryRequest(chat_history_interaction_id=chat_history_interaction_id)
         response = self._actions_api.ai_chat_history(workspace_id, chat_history_request, _check_return_type=False)
         return response
+
+    def ai_chat_history_reset(self, workspace_id: str) -> None:
+        """
+        Reset chat history with AI in GoodData workspace.
+
+        Args:
+            workspace_id: workspace identifier
+        """
+        chat_history_request = ChatHistoryRequest(reset=True)
+        self._actions_api.ai_chat_history(workspace_id, chat_history_request, _check_return_type=False)
