@@ -3,6 +3,10 @@ from __future__ import annotations
 
 import logging
 
+from gooddata_api_client.model.chat_history_request import ChatHistoryRequest
+from gooddata_api_client.model.chat_request import ChatRequest
+from gooddata_api_client.model.chat_result import ChatResult
+
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.model.execution import Execution, ExecutionDefinition, ResultCacheMetadata
 
@@ -64,3 +68,31 @@ class ComputeService:
                 ),
             )
         return ResultCacheMetadata(result_cache_metadata=result_cache_metadata)
+
+    def ai_chat(self, workspace_id: str, question: str) -> ChatResult:
+        """
+        Chat with AI in GoodData workspace.
+
+        Args:
+            workspace_id: workspace identifier
+            question: question to ask AI
+        Returns:
+            str: Chat response
+        """
+        chat_request = ChatRequest(question=question)
+        response = self._actions_api.ai_chat(workspace_id, chat_request, _check_return_type=False)
+        return response
+
+    def ai_chat_history(self, workspace_id: str, chat_history_interaction_id: int = 0) -> ChatResult:
+        """
+        Get chat history with AI in GoodData workspace.
+
+        Args:
+            workspace_id: workspace identifier
+            chat_history_interaction_id: collect history starting from this interaction id
+        Returns:
+            str: Chat history response
+        """
+        chat_history_request = ChatHistoryRequest(chat_history_interaction_id=chat_history_interaction_id)
+        response = self._actions_api.ai_chat_history(workspace_id, chat_history_request, _check_return_type=False)
+        return response
