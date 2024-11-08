@@ -46,6 +46,14 @@ jobs:
         - name: Bump version in codebase
           run: |
             make release-ci VERSION=${{ steps.bump.outputs.new_version }}
+        - name: Specify release branch
+          run: |
+            if [ "${{ github.event.inputs.bump_type }}" == "patch" ]; then
+              RELEASE_BRANCH="patch/${{ steps.bump.outputs.new_version }}"
+            else
+              RELEASE_BRANCH="rel/${{ steps.bump.outputs.new_version }}"
+            fi
+            echo "release_branch=$RELEASE_BRANCH" >> $GITHUB_OUTPUT
         - name: Commit version bump and push to custom branch
           id: commit
           uses: EndBug/add-and-commit@v9
@@ -53,7 +61,7 @@ jobs:
             message: "Bump to ${{ steps.bump.outputs.new_version }}"
             committer_name: GitHub Actions
             committer_email: github-actions@github.com
-            new_branch: "release/${{ steps.bump.outputs.new_version }}"
+            new_branch: ${{ steps.bump.outputs.release_branch }}
         - name: Create PR with the version bump
           id: pr
           if: ${{ steps.commit.outputs.pushed == 'true' }}
@@ -61,7 +69,7 @@ jobs:
             PR_URL=$(gh pr create \
               --title "[bot] bump to ${{ steps.bump.outputs.new_version }}" \
               --body ":rocket: Automated PR to bump to ${{ steps.bump.outputs.new_version }}." \
-              --base master --head "release/${{ steps.bump.outputs.new_version }}")
+              --base master --head ${{ steps.bump.outputs.release_branch }})
             PR_NUMBER=$(basename $PR_URL)
             echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
           env:
@@ -73,34 +81,6 @@ jobs:
             gh pr merge ${{ steps.pr.outputs.pr_number }} --merge --auto
           env:
             GH_TOKEN: ${{ secrets.TOKEN_GITHUB_YENKINS_ADMIN }}
-        - name: Wait for PR to be merged
-          run: |
-            while true; do
-              PR_MERGED=$(gh api repos/gooddata/gooddata-python-sdk/pulls/${{ steps.pr.outputs.pr_number }} | jq .merged)
-              if [ "$PR_MERGED" = "true" ]; then
-                echo "PR has been merged!"
-                break
-              else
-                echo "PR is not yet merged. Waiting..."
-                sleep 10
-              fi
-            done
-          env:
-            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    create-release-branch:
-      needs:
-        - bump-version
-      runs-on: ubuntu-latest
-      if: "${{ github.event.inputs.bump_type != 'patch' }}"
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v4
-        - name: Create documentation rel/${{ github.event.inputs.bump_type }} branch
-          run: |
-            git config user.name GitHub Actions
-            git config user.email github-actions@github.com
-            git checkout -b rel/${{ needs.bump-version.outputs.new_version }}
-            git push origin rel/${{ needs.bump-version.outputs.new_version }}
 # TODO: this part waits for docs build and publish optimization it takes too long (~15 minutes)
 #    trigger-release:
 #      needs:
