@@ -581,8 +581,8 @@ server will expose two HTTP endpoints:
 - `/ready` - indicates whether the server is up and ready to serve requests
 
   The endpoint will respond with status `500` if the server is not ready. Otherwise will respond with
-  `202`. The server is deemed ready when all its modules (which includes your FlexFunctions) are
-  up and the Flight RPC server is 'unlocked' to handle requests.
+  `202`. The server is deemed ready when all its modules are up and the Flight RPC server is
+  'unlocked' to handle requests.
 
 - `/live` - indicates whether the server is still alive and can be used. The liveness is determined
   from the status of the modules.

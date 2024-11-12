@@ -4,17 +4,17 @@ from typing import Optional, Union
 import structlog
 from gooddata_flight_server import FlightDataTaskResult, Task, TaskError, TaskResult
 
-from gooddata_flexfun.flexfun.flex_fun import FlexFun
+from gooddata_flexconnect.function.function import FlexConnectFunction
 
-_LOGGER = structlog.get_logger("gooddata_flexfun.task")
+_LOGGER = structlog.get_logger("gooddata_flexconnect.task")
 
 
-class FlexFunTask(Task):
+class FlexConnectFunctionTask(Task):
     __slots__ = ("_fun", "_parameters", "_columns", "_headers")
 
     def __init__(
         self,
-        fun: FlexFun,
+        fun: FlexConnectFunction,
         parameters: dict,
         columns: Optional[tuple[str, ...]],
         headers: dict[str, list[str]],
@@ -29,7 +29,7 @@ class FlexFunTask(Task):
         self._columns = columns
         self._headers = headers
 
-        _LOGGER.info("flexfun_task_created", fun=fun.Name, task_id=self._task_id)
+        _LOGGER.info("flexconnect_task_created", fun=fun.Name, task_id=self._task_id)
 
     @property
     def fun_name(self) -> Optional[str]:
@@ -37,7 +37,7 @@ class FlexFunTask(Task):
 
     def run(self) -> Union[TaskResult, TaskError]:
         structlog.contextvars.bind_contextvars(fun=self._fun.Name, task_id=self._task_id)
-        _LOGGER.info("flexfun_task_run")
+        _LOGGER.info("flexconnect_task_run")
 
         result = self._fun.call(
             parameters=self._parameters,
@@ -48,6 +48,6 @@ class FlexFunTask(Task):
         return FlightDataTaskResult.for_data(result)
 
     def on_task_cancel(self) -> None:
-        _LOGGER.info("flexfun_task_cancel", fun=self._fun.Name, task_id=self._task_id)
+        _LOGGER.info("flexconnect_task_cancel", fun=self._fun.Name, task_id=self._task_id)
 
         self._fun.cancel()

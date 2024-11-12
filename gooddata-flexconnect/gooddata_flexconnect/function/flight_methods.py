@@ -16,16 +16,16 @@ from gooddata_flight_server import (
     flight_server_methods,
 )
 
-from gooddata_flexfun.flexfun.flex_fun import FlexFun
-from gooddata_flexfun.flexfun.flex_fun_registry import FlexFunRegistry
-from gooddata_flexfun.flexfun.flex_fun_task import FlexFunTask
+from gooddata_flexconnect.function.function import FlexConnectFunction
+from gooddata_flexconnect.function.function_registry import FlexConnectFunctionRegistry
+from gooddata_flexconnect.function.function_task import FlexConnectFunctionTask
 
-_LOGGER = structlog.get_logger("gooddata_flexfun.rpc")
+_LOGGER = structlog.get_logger("gooddata_flexconnect.rpc")
 _DEFAULT_TASK_WAIT = 60.0
 
 
-class _FlexFunServerMethods(FlightServerMethods):
-    def __init__(self, ctx: ServerContext, registry: FlexFunRegistry) -> None:
+class _FlexConnectServerMethods(FlightServerMethods):
+    def __init__(self, ctx: ServerContext, registry: FlexConnectFunctionRegistry) -> None:
         self._ctx = ctx
         self._registry = registry
 
@@ -38,7 +38,7 @@ class _FlexFunServerMethods(FlightServerMethods):
 
         return pyarrow.flight.FlightDescriptor.for_command(orjson.dumps(cmd))
 
-    def _create_fun_info(self, fun: type[FlexFun]) -> pyarrow.flight.FlightInfo:
+    def _create_fun_info(self, fun: type[FlexConnectFunction]) -> pyarrow.flight.FlightInfo:
         # these are for type checker; the registry will only register functions
         # that have proper metadata on them
         assert fun.Name is not None
@@ -57,18 +57,21 @@ class _FlexFunServerMethods(FlightServerMethods):
     ) -> tuple[str, dict, Optional[tuple[str, ...]]]:
         if descriptor.command is None or not len(descriptor.command):
             raise ErrorInfo.bad_argument(
-                "Incorrect FlexFun invocation. Flight descriptor must contain command with the invocation payload."
+                "Incorrect FlexConnect function invocation. Flight descriptor must contain command "
+                "with the invocation payload."
             )
 
         try:
             payload = orjson.loads(descriptor.command)
         except Exception:
-            raise ErrorInfo.bad_argument("Incorrect FlexFun invocation. The invocation payload is not a valid JSON.")
+            raise ErrorInfo.bad_argument(
+                "Incorrect FlexConnect function invocation. The invocation payload is " "not a valid JSON."
+            )
 
         fun = payload.get("functionName")
         if fun is None or not len(fun):
             raise ErrorInfo.bad_argument(
-                "Incorrect FlexFun invocation. The invocation payload does not specify 'functionName'."
+                "Incorrect FlexConnect function invocation. The invocation payload does not specify 'functionName'."
             )
 
         parameters = payload.get("parameters") or {}
@@ -80,13 +83,13 @@ class _FlexFunServerMethods(FlightServerMethods):
         self,
         context: pyarrow.flight.ServerCallContext,
         descriptor: pyarrow.flight.FlightDescriptor,
-    ) -> FlexFunTask:
+    ) -> FlexConnectFunctionTask:
         fun_name, parameters, columns = self._extract_invocation_payload(descriptor)
         headers = self.call_info_middleware(context).headers
-        flex_fun = self._registry.create_function(fun_name)
+        fun = self._registry.create_function(fun_name)
 
-        return FlexFunTask(
-            fun=flex_fun,
+        return FlexConnectFunctionTask(
+            fun=fun,
             parameters=parameters,
             columns=columns,
             headers=headers,
@@ -100,7 +103,7 @@ class _FlexFunServerMethods(FlightServerMethods):
         if task_result.cancelled:
             raise ErrorInfo.for_reason(
                 ErrorCode.COMMAND_CANCELLED,
-                f"FlexFun invocation was cancelled. Invocation task was: '{task_result.task_id}'.",
+                f"FlexConnect function invocation was cancelled. Invocation task was: '{task_result.task_id}'.",
             ).to_server_error()
 
         result = task_result.result
@@ -127,9 +130,9 @@ class _FlexFunServerMethods(FlightServerMethods):
         self, context: pyarrow.flight.ServerCallContext, criteria: bytes
     ) -> Generator[pyarrow.flight.FlightInfo, None, None]:
         structlog.contextvars.bind_contextvars(peer=context.peer())
-        _LOGGER.info("list_flights", available_funs=self._registry.flex_funs_names)
+        _LOGGER.info("list_flights", available_funs=self._registry.function_names)
 
-        return (self._create_fun_info(fun) for fun in self._registry.flex_funs.values())
+        return (self._create_fun_info(fun) for fun in self._registry.functions.values())
 
     def get_flight_info(
         self,
@@ -137,7 +140,7 @@ class _FlexFunServerMethods(FlightServerMethods):
         descriptor: pyarrow.flight.FlightDescriptor,
     ) -> pyarrow.flight.FlightInfo:
         structlog.contextvars.bind_contextvars(peer=context.peer())
-        task: Optional[FlexFunTask] = None
+        task: Optional[FlexConnectFunctionTask] = None
 
         try:
             task = self._prepare_task(context, descriptor)
@@ -163,7 +166,7 @@ class _FlexFunServerMethods(FlightServerMethods):
             if task is not None:
                 _LOGGER.error("get_flight_info_failed", task_id=task.task_id, fun=task.fun_name, exc_info=True)
             else:
-                _LOGGER.error("flexfun_submit_failed", exc_info=True)
+                _LOGGER.error("flexconnect_fun_submit_failed", exc_info=True)
 
             raise
 
@@ -190,23 +193,23 @@ class _FlexFunServerMethods(FlightServerMethods):
             raise
 
 
-_FLEXFUN_CONFIG_SECTION = "flexfun"
-_FLEXFUN_FUNCTION_LIST = "functions"
+_FLEX_CONNECT_CONFIG_SECTION = "flexconnect"
+_FLEX_CONNECT_FUNCTION_LIST = "functions"
 
 
 @flight_server_methods
-def create_flexfun_flight_methods(ctx: ServerContext) -> FlightServerMethods:
+def create_flexconnect_flight_methods(ctx: ServerContext) -> FlightServerMethods:
     """
-    This factory creates implementation of Flight RPC methods that realize the FlexFun server.
+    This factory creates implementation of Flight RPC methods that realize the FlexConnect server.
 
-    FlexFun Server hosts one or more functions developed externally, and linked to the server
+    FlexConnect Server hosts one or more functions developed externally, and linked to the server
     at runtime - during startup.
 
     :param ctx: server's context
     :return: new instance of Flight RPC server methods to integrate into the server
     """
-    modules = list(ctx.settings.get(f"{_FLEXFUN_CONFIG_SECTION}.{_FLEXFUN_FUNCTION_LIST}") or [])
-    _LOGGER.info("flexfun_init", modules=modules)
-    registry = FlexFunRegistry().load(ctx, modules)
+    modules = list(ctx.settings.get(f"{_FLEX_CONNECT_CONFIG_SECTION}.{_FLEX_CONNECT_FUNCTION_LIST}") or [])
+    _LOGGER.info("flexconnect_init", modules=modules)
+    registry = FlexConnectFunctionRegistry().load(ctx, modules)
 
-    return _FlexFunServerMethods(ctx, registry)
+    return _FlexConnectServerMethods(ctx, registry)

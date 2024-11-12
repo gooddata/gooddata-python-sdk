@@ -1,7 +1,6 @@
 # (C) 2024 GoodData Corporation
 
-from gooddata_flexfun.flexfun.flex_fun import FlexFun
-from gooddata_flexfun.flexfun.flex_fun_execution_context import (
+from gooddata_flexconnect.function.execution_context import (
     ExecutionContext,
     ExecutionContextAbsoluteDateFilter,
     ExecutionContextAttribute,
@@ -14,4 +13,5 @@ from gooddata_flexfun.flexfun.flex_fun_execution_context import (
     LabelElementsExecutionRequest,
     ReportExecutionRequest,
 )
-from gooddata_flexfun.flexfun.flight_methods import create_flexfun_flight_methods
+from gooddata_flexconnect.function.flight_methods import create_flexconnect_flight_methods
+from gooddata_flexconnect.function.function import FlexConnectFunction

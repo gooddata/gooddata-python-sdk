@@ -8,8 +8,8 @@ from pathlib import Path
 from typing import Union
 
 import pytest
-from gooddata_flexfun.flexfun.flight_methods import (
-    create_flexfun_flight_methods,
+from gooddata_flexconnect.function.flight_methods import (
+    create_flexconnect_flight_methods,
 )
 from gooddata_flight_server import FlightServerMethods, FlightServerMethodsFactory, GoodDataFlightServer, create_server
 
@@ -71,7 +71,7 @@ def server(
 
 
 @contextlib.contextmanager
-def flexfun_server(
+def flexconnect_server(
     modules: Iterable[str],
     tls: bool = False,
     mtls: bool = False,
@@ -79,9 +79,9 @@ def flexfun_server(
     envvar = ", ".join([f'"{module}"' for module in modules])
     envvar = f"[{envvar}]"
 
-    os.environ["GOODDATA_FLIGHT_FLEXFUN__FUNCTIONS"] = envvar
+    os.environ["GOODDATA_FLIGHT_FLEXCONNECT__FUNCTIONS"] = envvar
 
-    with server(create_flexfun_flight_methods, tls, mtls) as s:
+    with server(create_flexconnect_flight_methods, tls, mtls) as s:
         yield s
 
 
