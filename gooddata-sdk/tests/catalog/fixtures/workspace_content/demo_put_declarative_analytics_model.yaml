@@ -2911,6 +2911,7 @@ interactions:
             settings: []
             userDataFilters: []
             automations: []
+            filterViews: []
           - id: demo_west
             name: Demo West
             customApplicationSettings: []
@@ -2948,6 +2949,7 @@ interactions:
             settings: []
             userDataFilters: []
             automations: []
+            filterViews: []
           - id: demo_west_california
             name: Demo West California
             customApplicationSettings: []
@@ -2972,6 +2974,7 @@ interactions:
             settings: []
             userDataFilters: []
             automations: []
+            filterViews: []
       headers:
         Accept-Encoding:
           - br, gzip, deflate

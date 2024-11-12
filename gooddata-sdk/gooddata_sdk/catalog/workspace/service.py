@@ -21,6 +21,7 @@ from gooddata_sdk import CatalogDeclarativeAutomation
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.permission.service import CatalogPermissionService
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import (
+    CatalogDeclarativeFilterView,
     CatalogDeclarativeUserDataFilters,
     CatalogDeclarativeWorkspaceDataFilters,
     CatalogDeclarativeWorkspaceModel,
@@ -28,6 +29,10 @@ from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import
     get_workspace_folder,
 )
 from gooddata_sdk.catalog.workspace.entity_model.content_objects.workspace_setting import CatalogWorkspaceSetting
+from gooddata_sdk.catalog.workspace.entity_model.filter_view import (
+    CatalogFilterView,
+    CatalogFilterViewDocument,
+)
 from gooddata_sdk.catalog.workspace.entity_model.user_data_filter import (
     CatalogUserDataFilter,
     CatalogUserDataFilterDocument,
@@ -1263,3 +1268,174 @@ class CatalogWorkspaceService(CatalogServiceBase):
         """
         api_automations = [automation.to_api() for automation in automations]
         self._layout_api.set_automations(workspace_id, api_automations)
+
+    def list_filters_views(self, workspace_id: str) -> list[CatalogFilterView]:
+        """list all filter views.
+
+        Args:
+            workspace_id (str):
+                String containing id of the workspace.
+
+        Returns:
+            list[CatalogFilterView]:
+                List of filter view entities.
+        """
+        get_filter_views = functools.partial(
+            self._entities_api.get_all_entities_filter_views,
+            workspace_id,
+            _check_return_type=False,
+            include=["ALL"],
+        )
+        filter_views = load_all_entities_dict(get_filter_views, camel_case=False)
+        return [CatalogFilterView.from_dict(v, camel_case=False) for v in filter_views["data"]]
+
+    def create_or_update_filter_view(self, workspace_id: str, filter_view: CatalogFilterView) -> None:
+        """Create a new filter view or overwrite an existing one.
+
+        Args:
+            workspace_id (str):
+                String containing id of the workspace.
+            filter_view (CatalogFilterView):
+                FilterView entity object.
+
+        Returns:
+            None
+        """
+        filter_view_document = CatalogFilterViewDocument(data=filter_view)
+        if filter_view.id is None:
+            self._entities_api.create_entity_filter_views(
+                workspace_id=workspace_id,
+                json_api_filter_view_in_document=filter_view_document.to_api(),
+            )
+        else:
+            try:
+                self.get_filter_view(workspace_id=workspace_id, filter_view_id=filter_view.id)
+                self._entities_api.update_entity_filter_views(
+                    workspace_id=workspace_id,
+                    object_id=filter_view.id,
+                    json_api_filter_view_in_document=filter_view_document.to_api(),
+                )
+            except NotFoundException:
+                self._entities_api.create_entity_filter_views(
+                    workspace_id=workspace_id,
+                    json_api_filter_view_in_document=filter_view_document.to_api(),
+                )
+
+    def get_filter_view(self, workspace_id: str, filter_view_id: str) -> CatalogFilterView:
+        """Get filter view by its id.
+
+        Args:
+            workspace_id (str):
+                String containing id of the workspace.
+            filter_view_id (str):
+                String containing id of the filter view.
+
+        Returns:
+            CatalogFilterView:
+                FilterView entity object.
+        """
+        filter_view_dict = self._entities_api.get_entity_filter_views(
+            workspace_id=workspace_id,
+            object_id=filter_view_id,
+            include=["ALL"],
+            _check_return_type=False,
+        ).data
+
+        return CatalogFilterView.from_dict(filter_view_dict, camel_case=True)
+
+    def delete_filter_view(self, workspace_id: str, filter_view_id: str) -> None:
+        """Delete filter view.
+
+        Args:
+            workspace_id (str):
+                String containing id of the workspace.
+            filter_view_id (str):
+                String containing id of the deleting filter view.
+
+        Returns:
+            None
+        """
+        self._entities_api.delete_entity_filter_views(workspace_id=workspace_id, object_id=filter_view_id)
+
+    def get_declarative_filter_views(self, workspace_id: str) -> list[CatalogDeclarativeFilterView]:
+        """Retrieve a list of declarative filter views.
+
+        Args:
+            workspace_id (str):
+                Workspace identification string e.g. "demo"
+
+        Returns:
+            list[CatalogDeclarativeFilterView]:
+                List of declarative filter views.
+        """
+        return [
+            CatalogDeclarativeFilterView.from_dict(filter_view.to_dict(), camel_case=False)
+            for filter_view in self._layout_api.get_filter_views(workspace_id)
+        ]
+
+    def put_declarative_filter_views(self, workspace_id: str, filter_views: list[CatalogDeclarativeFilterView]) -> None:
+        """Set filter views for the workspace.
+
+        Args:
+            workspace_id (str):
+                Workspace identification string e.g. "demo"
+            filter_views (list[CatalogDeclarativeFilterView]):
+                List of declarative filter views.
+
+        Returns:
+            None
+        """
+        api_filter_views = [filter_view.to_api() for filter_view in filter_views]
+        self._layout_api.set_filter_views(workspace_id=workspace_id, declarative_filter_view=api_filter_views)
+
+    def store_declarative_filter_views(self, workspace_id: str, layout_root_path: Path = Path.cwd()) -> None:
+        """Store filter views layout in a directory hierarchy.
+
+        Args:
+            workspace_id (str):
+                id of the related workspace
+            layout_root_path (Path, optional):
+                Path to the root of the layout directory. Defaults to Path.cwd().
+
+        Returns:
+            None
+        """
+        filter_views = self.get_declarative_filter_views(workspace_id)
+        CatalogDeclarativeFilterView.store_filter_views_to_disk(
+            filter_views, self.layout_organization_folder(layout_root_path)
+        )
+
+    def load_declarative_filter_views(self, layout_root_path: Path = Path.cwd()) -> list[CatalogDeclarativeFilterView]:
+        """Loads filter views layout, which was stored using `store_declarative_filter_views`.
+
+        Args:
+            layout_root_path (Path, optional):
+                Path to the root of the layout directory. Defaults to Path.cwd().
+
+        Returns:
+            list[CatalogDeclarativeFilterView]:
+                List of declarative filter views.
+        """
+        return CatalogDeclarativeFilterView.load_filter_views_from_disk(
+            self.layout_organization_folder(layout_root_path)
+        )
+
+    def load_and_put_declarative_filter_views(self, workspace_id: str, layout_root_path: Path = Path.cwd()) -> None:
+        """Loads and sets the layouts stored using `store_declarative_filter_views`.
+
+        This method combines `load_declarative_filter_views` and `put_declarative_filter_views`
+        methods to load and set layouts stored using `store_declarative_filter_views`.
+
+        Args:
+            workspace_id (str):
+                String containing id of the workspace
+            layout_root_path (Path, optional):
+                Path to the root of the layout directory. Defaults to Path.cwd().
+
+        Returns:
+            None
+        """
+        declarative_filter_views = CatalogDeclarativeFilterView.load_filter_views_from_disk(
+            self.layout_organization_folder(layout_root_path)
+        )
+        self.put_declarative_filter_views(workspace_id, declarative_filter_views)

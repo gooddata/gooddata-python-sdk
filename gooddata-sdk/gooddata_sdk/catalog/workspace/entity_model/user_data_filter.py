@@ -91,13 +91,13 @@ class CatalogUserDataFilter(Base):
             return JsonApiUserDataFilterIn(id=self.id, attributes=attributes, relationships=relationships)
 
     @property
-    def user_id(self) -> str | None:
+    def user_id(self) -> Union[str, None]:
         if self.relationships and self.relationships.user:
             return self.relationships.user["data"].id
         return None
 
     @property
-    def user_group_id(self) -> str | None:
+    def user_group_id(self) -> Union[str, None]:
         if self.relationships and self.relationships.user_group:
             return self.relationships.user_group["data"].id
         return None
