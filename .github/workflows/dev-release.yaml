@@ -21,7 +21,7 @@ jobs:
           - gooddata-sdk
           - gooddata-dbt
           - gooddata-flight-server
-          - gooddata-flexfun
+          - gooddata-flexconnect
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4

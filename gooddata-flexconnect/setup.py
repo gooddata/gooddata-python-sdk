@@ -16,8 +16,8 @@ REQUIRES = [
 ]
 
 setup(
-    name="gooddata-flexfun",
-    description="Set of gooddata-flight-server methods to host custom functions for GoodData Cloud",
+    name="gooddata-flexconnect",
+    description="Build your own data source for GoodData Cloud and GoodData Cloud Native.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     version="1.30.0",
@@ -31,7 +31,7 @@ setup(
     include_package_data=True,
     python_requires=">=3.9.0",
     project_urls={
-        "Documentation": "https://gooddata-flexfun.readthedocs.io/en/v1.30.0",
+        "Documentation": "https://gooddata-flexconnect.readthedocs.io/en/v1.30.0",
         "Source": "https://github.com/gooddata/gooddata-python-sdk",
     },
     classifiers=[

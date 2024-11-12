@@ -12,8 +12,8 @@ build:
     python: "3.11"
 
 sphinx:
-  configuration: gooddata-flexfun/docs/conf.py
+  configuration: gooddata-flexconnect/docs/conf.py
 
 python:
   install:
-    - requirements: gooddata-flexfun/docs/requirements.txt
+    - requirements: gooddata-flexconnect/docs/requirements.txt

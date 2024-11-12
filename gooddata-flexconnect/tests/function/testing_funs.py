@@ -1,11 +1,11 @@
 #  (C) 2024 GoodData Corporation
 
 import pyarrow
-from gooddata_flexfun.flexfun.flex_fun import FlexFun
+from gooddata_flexconnect.function.function import FlexConnectFunction
 from gooddata_flight_server import ArrowData, ServerContext
 
 
-class Fun1(FlexFun):
+class Fun1(FlexConnectFunction):
     Name = "fun1"
     Schema = pyarrow.schema(fields=[pyarrow.field("col", pyarrow.int64())])
 
@@ -18,7 +18,7 @@ class Fun1(FlexFun):
         pass
 
 
-class Fun2(FlexFun):
+class Fun2(FlexConnectFunction):
     Name = "fun2"
     Schema = pyarrow.schema(fields=[pyarrow.field("col", pyarrow.string())])
 
