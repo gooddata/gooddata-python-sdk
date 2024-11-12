@@ -91,7 +91,7 @@ class FlightServerMethods:
             if task_result.cancelled:
                 raise ErrorInfo.for_reason(
                     ErrorCode.COMMAND_CANCELLED,
-                    f"FlexFun invocation was cancelled. Invocation task was: '{task_result.task_id}'.",
+                    f"FlexConnect function invocation was cancelled. Invocation task was: '{task_result.task_id}'.",
                 ).to_server_error()
 
             result = task_result.result

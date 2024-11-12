@@ -1,5 +1,5 @@
 # (C) 2024 GoodData Corporation
-from gooddata_flexfun.flexfun.flex_fun_execution_context import (
+from gooddata_flexconnect.function.execution_context import (
     ExecutionContext,
     ExecutionContextAttribute,
     ExecutionContextNegativeAttributeFilter,

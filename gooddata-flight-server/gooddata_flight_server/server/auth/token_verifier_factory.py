@@ -22,7 +22,7 @@ def _import_verification_strategy(module_name: str) -> type[TokenVerificationStr
             continue
 
         if member == TokenVerificationStrategy:
-            # the FlexFun class is likely imported in the module -
+            # the TokenVerificationStrategy class is likely imported in the module -
             # don't want that to interfere
             continue
 

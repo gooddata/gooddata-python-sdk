@@ -29,7 +29,7 @@ jobs:
           - gooddata-sdk
           - gooddata-dbt
           - gooddata-flight-server
-          - gooddata-flexfun
+          - gooddata-flexconnect
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -83,7 +83,7 @@ jobs:
           - gooddata-sdk
           - gooddata-dbt
           - gooddata-flight-server
-          - gooddata-flexfun
+          - gooddata-flexconnect
     steps:
       - name: Obtain ${{ matrix.component }} artifacts
         uses: actions/download-artifact@v4

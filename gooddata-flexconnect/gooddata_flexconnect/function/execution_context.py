@@ -236,7 +236,7 @@ ExecutionContextFilter: TypeAlias = Union[
 @dataclass
 class ExecutionRequest:
     """
-    Information about the execution request that is sent to the FlexFun.
+    Information about the execution request that is sent to the FlexConnect function.
     DEPRECATED: Use ReportExecutionRequest instead.
     """
 
@@ -481,7 +481,7 @@ def _dict_to_attributes(attributes: list[dict]) -> list[ExecutionContextAttribut
 @dataclass
 class ExecutionContext:
     """
-    Execution context of the FlexFun
+    Execution context of the FlexConnect function
     """
 
     execution_type: ExecutionType
@@ -491,17 +491,17 @@ class ExecutionContext:
 
     organization_id: str
     """
-    The ID of the organization that the FlexFun is executed in.
+    The ID of the organization that the FlexConnect function is executed in.
     """
 
     workspace_id: str
     """
-    The ID of the workspace that the FlexFun is executed in.
+    The ID of the workspace that the FlexConnect function is executed in.
     """
 
     user_id: str
     """
-    The ID of the user that invoked the FlexFun.
+    The ID of the user that invoked the FlexConnect function.
     """
 
     timestamp: Optional[str]
@@ -532,13 +532,13 @@ class ExecutionContext:
 
     report_execution_request: Optional[ReportExecutionRequest]
     """
-    The report execution request that the FlexFun should process.
+    The report execution request that the FlexConnect function should process.
     Only present if the execution type is "REPORT".
     """
 
     label_elements_execution_request: Optional[LabelElementsExecutionRequest]
     """
-    The label elements execution request that the FlexFun should process.
+    The label elements execution request that the FlexConnect function should process.
     Only present if the execution type is "LABEL_ELEMENTS".
     """
 
@@ -568,8 +568,9 @@ class ExecutionContext:
     @staticmethod
     def from_parameters(parameters: dict) -> Optional["ExecutionContext"]:
         """
-        Create ExecutionContext from FlexFun parameters.
-        :param parameters: the parameters dictionary of the FlexFun invocation
+        Create ExecutionContext from FlexConnect function parameters.
+
+        :param parameters: the parameters dictionary of the FlexConnect function invocation
         :return: None if the parameters do not contain the execution context, otherwise the execution context
         """
         return ExecutionContext.from_dict(parameters["executionContext"]) if "executionContext" in parameters else None
