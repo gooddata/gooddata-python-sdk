@@ -13,49 +13,20 @@ from database technologies.
    and from then on can be used during report computation.
 
 
-## Getting Started using the FlexConnect Template
+## Getting Started using the FlexConnect
 
-The easiest way to get started writing FlexConnect functions is to use [the template repository](https://github.com/gooddata/gooddata-flexconnect-template).
-It provides a simple example of a FlexConnect function that can be used as a starting point for your own FlexConnect functions with all the necessary infrastructure in place.
-It also has a README that explains how to get started with the template and some general tips on how to write FlexConnect functions.
+The easiest and recommended way to get started with FlexConnect is to use [the template repository](https://github.com/gooddata/gooddata-flexconnect-template).
 
-## Getting started using the FlexConnect package directly
+The template repository is set up with project infrastructure and boilerplate related to testing, packaging and
+running your FlexConnect functions. You can start building your own data source in under a minute.
 
-Install the package alongside the gooddata-flight-server using pip:
+The template also comes with extensive documentation which will guide you through all important steps and facets
+of building production-ready FlexConnect functions.
 
-```bash
-pip install gooddata-flight-server gooddata-flexconnect
-```
+If you are eager to get started, here is a short snippet to bootstrap a new FlexConnect project:
 
-Next, update the GoodData Flight Server configuration to load the FlexConnect functions.
-
-```toml
-[flexconnect]
-
-# specify one or more modules that contain your FlexConnect function implementations
-#
-functions = [
-    "flexconnect.your_function"
-]
-```
-
-Then when running the GoodData Flight Server, use the `--methods-provider` option to load the FlexConnect.
-For example:
-
-```bash
-#!/bin/bash
-
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-SERVER_CMD="${SCRIPT_DIR}/.venv/bin/gooddata-flight-server"
-
-export PYTHONPATH="${SCRIPT_DIR}/src"
-export CONFIG_ENV="${1:-dev}"
-
-$SERVER_CMD start \
-              --methods-provider gooddata_flexconnect \
-              --config \
-                config/${CONFIG_ENV}.server.toml \
-                config/flexconnect.config.toml \
-              --logging-config config/default.logging.ini \
-              --dev-log
+```shell
+git clone git@github.com:gooddata/gooddata-flexconnect-template.git my-flexconnect
+cd my-flexconnect
+rm -rf .git && git init && git add . && git commit -m "Initial commit"
 ```
