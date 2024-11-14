@@ -55,6 +55,7 @@ jobs:
             make release-ci VERSION=${{ steps.bump.outputs.new_version }}
 
         - name: Specify release branch
+          id: branch
           run: |
             if [ "${{ github.event.inputs.bump_type }}" == "patch" ]; then
               RELEASE_BRANCH="patch/${{ steps.bump.outputs.new_version }}"
@@ -69,7 +70,7 @@ jobs:
             git config user.email github-actions@github.com
             git add -A
             git commit -m "Bump to ${{steps.bump.outputs.new_version}}"
-            git push origin ${{ steps.bump.outputs.release_branch }}
+            git push origin ${{ steps.branch.outputs.release_branch }}
             git push origin master
 
 # TODO: this part waits for docs build and publish optimization it takes too long (~15 minutes)
