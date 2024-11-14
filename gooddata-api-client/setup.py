@@ -16,7 +16,7 @@ this_directory = Path(__file__).parent
 long_description = (this_directory / "README.md").read_text(encoding="utf-8")
 
 NAME = "gooddata-api-client"
-VERSION = "1.30.0"
+VERSION = "1.31.0"
 # To install the library, run the following
 #
 # python setup.py install
