@@ -28,26 +28,32 @@ jobs:
           uses: actions/checkout@v4
           with:
             token: ${{ secrets.TOKEN_GITHUB_YENKINS_ADMIN }} # needed to push to the protected branch
+
         - uses: actions/setup-python@v5
           with:
             python-version-file: '.python-version'
             cache: 'pip'
             cache-dependency-path: |
               release-requirements.txt
+
         - name: Install dependencies
           run: |
             pip install -r release-requirements.txt
+
         - name: Bump version
           id: bump
           run: |
             NEW_VERSION=$(python ./scripts/bump_version.py ${{ github.event.inputs.bump_type }})
             echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+
         - name: Bump version in documentation
           run: |
             python scripts/bump_doc_dependencies.py ${{ steps.bump.outputs.new_version }}
+
         - name: Bump version in codebase
           run: |
             make release-ci VERSION=${{ steps.bump.outputs.new_version }}
+
         - name: Specify release branch
           run: |
             if [ "${{ github.event.inputs.bump_type }}" == "patch" ]; then
@@ -56,33 +62,15 @@ jobs:
               RELEASE_BRANCH="rel/${{ steps.bump.outputs.new_version }}"
             fi
             echo "release_branch=$RELEASE_BRANCH" >> $GITHUB_OUTPUT
-        - name: Commit version bump and push to custom branch
-          id: commit
-          uses: EndBug/add-and-commit@v9
-          with:
-            message: "Bump to ${{ steps.bump.outputs.new_version }}"
-            committer_name: GitHub Actions
-            committer_email: github-actions@github.com
-            new_branch: ${{ steps.bump.outputs.release_branch }}
-        - name: Create PR with the version bump
-          id: pr
-          if: ${{ steps.commit.outputs.pushed == 'true' }}
+
+        - name: Create and push the new version ${{steps.bump.outputs.new_version}}
           run: |
-            PR_URL=$(gh pr create \
-              --title "[bot] bump to ${{ steps.bump.outputs.new_version }}" \
-              --body ":rocket: Automated PR to bump to ${{ steps.bump.outputs.new_version }}." \
-              --base master --head ${{ steps.bump.outputs.release_branch }})
-            PR_NUMBER=$(basename $PR_URL)
-            echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
-          env:
-            GH_TOKEN: ${{ secrets.TOKEN_GITHUB_YENKINS }}
-        - name: Approve the PR as yenkins-admin
-          if: ${{ steps.commit.outputs.pushed == 'true' }}
-          run: |
-            gh pr review ${{ steps.pr.outputs.pr_number }} --approve
-            gh pr merge ${{ steps.pr.outputs.pr_number }} --merge --auto
-          env:
-            GH_TOKEN: ${{ secrets.TOKEN_GITHUB_YENKINS_ADMIN }}
+            git config user.name github-actions
+            git config user.email github-actions@github.com
+            git add -A
+            git commit -m "Bump to ${{steps.bump.outputs.new_version}}"
+            git push origin master ${{ steps.bump.outputs.release_branch }}
+
 # TODO: this part waits for docs build and publish optimization it takes too long (~15 minutes)
 #    trigger-release:
 #      needs:
