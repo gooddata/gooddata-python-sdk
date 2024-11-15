@@ -1,7 +1,10 @@
 {{ $orig_name := .paragraph }}
 {{ $context := .context }}
+{{ $jsonPath := printf "versioned_docs/%s/links.json" (partial "version.html" (dict "context" $context)).dirpath }}
 
-{{ with getJSON (printf "versioned_docs/%s/links.json" (partial "version.html" (dict "context" $context)).dirpath) }}
+{{ if fileExists $jsonPath }}
+
+{{ with getJSON $jsonPath }}
     {{ $links := . }}
     {{/* We have to handle the case of Optional[name] or list[name] */}}
     {{ $name := $orig_name }}
@@ -18,4 +21,8 @@
     {{ else }}
         {{ $orig_name }}
     {{ end }}
+{{ end }}
+
+{{ else }}
+    Missing links.json for this version!
 {{ end }}

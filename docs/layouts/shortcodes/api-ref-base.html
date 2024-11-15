@@ -1,0 +1,29 @@
+{{ $page := . }}
+{{ $dirpath := (partial "version.html" (dict "context" .)).dirpath }}
+
+{{ $jsonPath := printf "versioned_docs/%s/data.json" $dirpath }}
+
+{{ if fileExists $jsonPath }}
+
+    {{ with getJSON $jsonPath }}
+        {{ $data := . }}
+        {{ with getJSON (printf "versioned_docs/%s/links.json" $dirpath) }}
+            {{ $links := . }}
+            <style>
+                html {
+                    scroll-behavior: smooth;
+                }
+            </style>
+            <div class="python-api-ref-link">
+                {{ range $name, $data := $links }}
+                    {{ $path := $data.path }}
+                    <span style="top: -250px; position: relative;" id="{{ $path }}"></span>
+                    {{ partial "api-ref-partial.html" $path }}
+                {{ end }}
+            </div>
+        {{ end }}
+    {{ end }}
+
+{{ else }}
+    Missing data.json for this version!
+{{ end }}
