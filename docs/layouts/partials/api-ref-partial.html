@@ -1,6 +1,9 @@
 {{ $path := split .path "." }}
+{{ $jsonPath := printf "versioned_docs/%s/data.json" (partial "version.html" (dict "context" .context )).dirpath }}
 
-{{ with getJSON (printf "versioned_docs/%s/data.json") (partial "version.html" (dict "context" .context )).dirpath }}
+{{ if fileExists $jsonPath }}
+
+{{ with getJSON $jsonPath }}
     {{ $currentData := . }}
     {{ range $path }}
         {{ if (eq $currentData.kind "class") }}
@@ -17,6 +20,10 @@
 
 
     <div class="python-ref">
-        {{ partial "python-object.html" (dict "object" $objData "path" $path "context" .) }}
+        {{ partial "api-ref-object-partial.html" (dict "object" $objData "path" $path "context" .) }}
     </div>
+{{ end }}
+
+{{ else }}
+    Missing data.json for this version!
 {{ end }}

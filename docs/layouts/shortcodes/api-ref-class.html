@@ -1,21 +1,25 @@
 {{ $path := split (.Get 0) "."  }}
 {{ $page := .Page }}
+{{ $jsonPath := printf "versioned_docs/%s/data.json" (partial "version.html" (dict "context" $page)).dirpath }}
 
-{{ with getJSON (printf "versioned_docs/%s/data.json" (partial "version.html" (dict "context" $page)).dirpath) }}
-  {{ $currentData := . }}
-  {{ range $path }}
-  {{ if (eq $currentData.kind "class") }}
-  {{ $currentData = $currentData.functions }}
+{{ if fileExists $jsonPath }}
+
+  {{ with getJSON $jsonPath }}
+    {{ $currentData := . }}
+    {{ range $path }}
+    {{ if (eq $currentData.kind "class") }}
+    {{ $currentData = $currentData.functions }}
+    {{ end }}
+    {{$currentData = index $currentData .}}
   {{ end }}
-  {{$currentData = index $currentData .}}
-  {{ end }}
 
-  {{ $objData := $currentData }}
 
-  {{ $publicMethodsCounter := 0 }}
-  {{ $publicPropertiesCounter := 0 }}
+{{ $objData := $currentData }}
 
-  {{ range $name, $func := $objData.functions }}
+{{ $publicMethodsCounter := 0 }}
+{{ $publicPropertiesCounter := 0 }}
+
+{{ range $name, $func := $objData.functions }}
     {{ if (not (hasPrefix $name "_"))}}
       {{ if $func.is_property }}
         {{ $publicPropertiesCounter = add $publicPropertiesCounter 1 }}
@@ -24,11 +28,10 @@
       {{ end }}
   {{ end }}
 
-  {{ end }}
-
+{{ end }}
 
   <div class="python-ref">
-  {{ partial "python-object.html" (dict "object" $objData "path" $path "context" $page) }}
+  {{ partial "api-ref-object-partial.html" (dict "object" $objData "path" $path "context" $page) }}
 
     <h2> Properties </h2>
   {{ if gt $publicPropertiesCounter 0 }}
@@ -45,10 +48,10 @@
           <tr>
 
           <td>
-              {{ partial "python-api-link-partial.html" (dict "paragraph" $name "context" $page) }}
+              {{ partial "api-ref-link-partial.html" (dict "paragraph" $name "context" $page) }}
           </td>
           {{ if $func.docstring_parsed }}
-          <td>{{ partial "python-api-link-all-partial.html" (dict "paragraph" $func.docstring_parsed.short_description "context" $page) }}</td>
+          <td>{{ partial "api-ref-link-all-partial.html" (dict "paragraph" $func.docstring_parsed.short_description "context" $page) }}</td>
           {{ else }}
           <td><i>None</i></td>
           {{ end }}
@@ -77,12 +80,12 @@
     <tr>
 
         {{ if and (not (hasPrefix $name "_")) (not $func.is_property)}}
-          {{ $parenthesisArgsString := partial "python-function-parenthesis.html" $func}}
+          {{ $parenthesisArgsString := partial "api-ref-function-parenthesis.html" $func}}
 
-          <td>{{ partial "python-api-link-partial.html" (dict "paragraph" $name "context" $page) }}({{- $parenthesisArgsString -}})
+          <td>{{ partial "api-ref-link-partial.html" (dict "paragraph" $name "context" $page) }}({{- $parenthesisArgsString -}})
           </td>
           {{ if $func.docstring_parsed }}
-          <td>{{ partial "python-api-link-all-partial.html" (dict "paragraph" $func.docstring_parsed.short_description "context" $page) }}</td>
+          <td>{{ partial "api-ref-link-all-partial.html" (dict "paragraph" $func.docstring_parsed.short_description "context" $page) }}</td>
           {{ else }}
           <td><i>None</i></td>
           {{ end }}
@@ -96,4 +99,8 @@
     {{ end }}
 
   </div>
+{{ end }}
+
+{{ else }}
+    Missing data.json for this version!
 {{ end }}
