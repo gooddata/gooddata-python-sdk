@@ -26,7 +26,7 @@ of building production-ready FlexConnect functions.
 If you are eager to get started, here is a short snippet to bootstrap a new FlexConnect project:
 
 ```shell
-git clone git@github.com:gooddata/gooddata-flexconnect-template.git my-flexconnect
+git clone https://github.com/gooddata/gooddata-flexconnect-template.git my-flexconnect
 cd my-flexconnect
 rm -rf .git && git init && git add . && git commit -m "Initial commit"
 ```
