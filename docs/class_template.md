@@ -3,4 +3,4 @@ linkTitle: "LINK"
 no_list: true
 ---
 
-{{< python-class "PATH" >}}
+{{< api-ref-class "PATH" >}}

@@ -1,0 +1,34 @@
+{{ $page := .Page }}
+{{ $path := split (.Get 0) "."  }}
+{{ $version := partial "version.html" (dict "context" $page)}}
+{{ $jsonPath := printf "versioned_docs/%s/data.json" $version.dirpath }}
+
+{{ if fileExists $jsonPath }}
+
+    {{ if and $version $version.dirpath }}
+        {{ with getJSON $jsonPath }}
+            {{ $currentData := .}}
+            {{ range $path }}
+                {{ if (eq $currentData.kind "class") }}
+                    {{ $currentData = $currentData.functions }}
+                {{ end }}
+                {{$currentData = index $currentData .}}
+        {{ end }}
+
+        {{ $objData := $currentData }}
+
+
+        <div class="python-ref">
+            {{ partial "api-ref-object-partial.html" (dict "object" $objData "path" $path "context" $page) }}
+        </div>
+    {{ end }}
+
+    {{ else }}
+
+    Problem parsing the data.json!
+
+    {{ end }}
+
+{{ else }}
+    Missing data.json for this version!
+{{ end }}

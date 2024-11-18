@@ -1,6 +1,9 @@
 {{ $path := split (.Get 0) "."  }}
 {{ $page := .Page }}
-{{ $data := getJSON (printf "versioned_docs/%s/data.json" (partial "version.html" (dict "context" .Page)).dirpath) }}
+{{ $jsonPath := printf "versioned_docs/%s/data.json" (partial "version.html" (dict "context" .Page)).dirpath }}
+
+{{ if fileExists $jsonPath }}
+{{ $data := getJSON $jsonPath }}
 
 
 {{ $currentData := $data}}
@@ -27,10 +30,14 @@
             {{ if ne $objName "kind" }}
                 <tr>
                     <td>{{$objData.kind}}</td>
-                    <td>{{partial "python-api-link-partial.html" (dict "paragraph" $objName "context" $page) }} </td>
+                    <td>{{partial "api-ref-link-partial.html" (dict "paragraph" $objName "context" $page) }} </td>
                 </tr>
             {{ end }}
         {{ end }}
     </tbody>
     </table>
 </div>
+
+{{ else }}
+    Missing data.json for this version!
+{{ end }}

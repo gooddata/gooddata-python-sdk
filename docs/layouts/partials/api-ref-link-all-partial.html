@@ -1,7 +1,10 @@
 {{ $context := .context}}
 {{ $paragraph := .paragraph}}
+{{ $jsonPath := printf "versioned_docs/%s/links.json" (partial "version.html" (dict "context" $context)).dirpath }}
 
-{{ with getJSON (printf "versioned_docs/%s/links.json" (partial "version.html" (dict "context" $context)).dirpath) }}
+{{ if fileExists $jsonPath }}
+
+{{ with getJSON $jsonPath }}
     {{ $links := . }}
 
     {{ range $name, $data := $links }}
@@ -35,4 +38,8 @@
     {{ $paragraph = replaceRE $trailingBacktickRemovalPattern "</a>" $paragraph}}
 
     {{ $paragraph | safeHTML }}
+{{ end }}
+
+{{ else }}
+    Missing links.json for this version!
 {{ end }}
