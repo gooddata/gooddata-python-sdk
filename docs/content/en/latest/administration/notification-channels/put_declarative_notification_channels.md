@@ -6,20 +6,7 @@ no_list: true
 superheading: "catalog_organization."
 ---
 
-
-
-``put_declarative_notification_channels(notification_channels: list[CatalogDeclarativeNotificationChannel])``
-
-Put declarative notification channels in the current organization.
-
-{{% parameters-block title="Parameters"%}}
-{{< parameter p_name="notification_channels" p_type="list[CatalogDeclarativeNotificationChannel]" >}}
-List of declarative notification channels.
-{{< /parameter >}}
-{{% /parameters-block %}}
-
-{{% parameters-block title="Returns" None="yes" %}}
-{{% /parameters-block %}}
+{{< api-ref "sdk.CatalogOrganizationService.put_declarative_notification_channels" >}}
 
 ## Example
 

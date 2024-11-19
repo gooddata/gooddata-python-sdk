@@ -6,22 +6,7 @@ no_list: true
 superheading: "catalog_user."
 ---
 
-
-
-``get_declarative_users()``
-
-
-Gets all users including authentication properties.
-
-
-{{% parameters-block  title="Parameters" None="yes" %}}
-{{% /parameters-block %}}
-
-{{% parameters-block title="Returns" %}}
-{{< parameter p_type="CatalogDeclarativeUsers" >}}
-Declarative users object.
-{{< /parameter >}}
-{{% /parameters-block %}}
+{{< api-ref "sdk.CatalogUserService.get_declarative_users" >}}
 
 ## Example
 

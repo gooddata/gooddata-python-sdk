@@ -5,27 +5,7 @@ weight: 20
 superheading: "catalog_data_source."
 ---
 
-
-
-``get_data_source(data_source_id: str)``
-
-Gets data source using data source id.
-
-
-{{% parameters-block  title="Parameters"%}}
-
-{{< parameter p_name="data_source_id" p_type="str" >}}
-Data source identification string e.g. "demo"
-{{< /parameter >}}
-
-{{% /parameters-block %}}
-
-{{% parameters-block title="Returns"%}}
-{{< parameter p_type="CatalogDataSource" >}}
-Data source object.
-{{< /parameter >}}
-
-{{% /parameters-block %}}
+{{< api-ref "sdk.CatalogDataSourceService.get_data_source" >}}
 
 ## Example
 
