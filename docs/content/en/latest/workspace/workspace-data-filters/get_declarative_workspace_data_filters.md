@@ -5,18 +5,7 @@ weight: 140
 superheading: "catalog_workspace."
 ---
 
-``get_declarative_workspace_data_filters()``
-
-Gets a workspace data filers layout.
-
-{{% parameters-block  title="Parameters" None="yes"%}}
-{{% /parameters-block %}}
-
-{{% parameters-block title="Returns" %}}
-{{< parameter p_type="CatalogDeclarativeWorkspaceDataFilters" >}}
-Object containing List of declarative workspace data filters.
-{{< /parameter >}}
-{{% /parameters-block %}}
+{{< api-ref "sdk.CatalogWorkspaceService.get_declarative_workspace_data_filters" >}}
 
 ## Example
 
