@@ -7,6 +7,9 @@ import attr
 from attrs import define
 from gooddata_api_client.model.assignee_identifier import AssigneeIdentifier
 from gooddata_api_client.model.dataset_workspace_data_filter_identifier import DatasetWorkspaceDataFilterIdentifier
+from gooddata_api_client.model.declarative_analytical_dashboard_identifier import (
+    DeclarativeAnalyticalDashboardIdentifier,
+)
 from gooddata_api_client.model.declarative_export_definition_identifier import DeclarativeExportDefinitionIdentifier
 from gooddata_api_client.model.declarative_notification_channel_identifier import (
     DeclarativeNotificationChannelIdentifier,
@@ -114,3 +117,13 @@ class CatalogNotificationChannelIdentifier(Base):
     @staticmethod
     def client_class() -> builtins.type[DeclarativeNotificationChannelIdentifier]:
         return DeclarativeNotificationChannelIdentifier
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogDeclarativeAnalyticalDashboardIdentifier(Base):
+    id: str
+    type: str = attr.field(validator=value_in_allowed)
+
+    @staticmethod
+    def client_class() -> builtins.type[DeclarativeAnalyticalDashboardIdentifier]:
+        return DeclarativeAnalyticalDashboardIdentifier

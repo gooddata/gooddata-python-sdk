@@ -2777,7 +2777,8 @@
       "settings": [],
       "user_data_filters": [],
       "custom_application_settings": [],
-      "automations": []
+      "automations": [],
+      "filter_views": []
     },
     {
       "id": "demo_west",
@@ -2832,7 +2833,8 @@
       "settings": [],
       "user_data_filters": [],
       "custom_application_settings": [],
-      "automations": []
+      "automations": [],
+      "filter_views": []
     },
     {
       "id": "demo_west_california",
@@ -2861,7 +2863,8 @@
       "settings": [],
       "user_data_filters": [],
       "custom_application_settings": [],
-      "automations": []
+      "automations": [],
+      "filter_views": []
     }
   ],
   "workspace_data_filters": [
