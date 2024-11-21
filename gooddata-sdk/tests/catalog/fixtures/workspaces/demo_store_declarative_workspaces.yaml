@@ -107,6 +107,7 @@ interactions:
           workspaces:
             - automations: []
               customApplicationSettings: []
+              filterViews: []
               hierarchyPermissions:
                 - assignee:
                     id: demo2
@@ -1962,6 +1963,7 @@ interactions:
               userDataFilters: []
             - automations: []
               customApplicationSettings: []
+              filterViews: []
               hierarchyPermissions: []
               id: demo_west
               model:
@@ -1999,6 +2001,7 @@ interactions:
               userDataFilters: []
             - automations: []
               customApplicationSettings: []
+              filterViews: []
               hierarchyPermissions: []
               id: demo_west_california
               model:
@@ -2126,6 +2129,7 @@ interactions:
           workspaces:
             - automations: []
               customApplicationSettings: []
+              filterViews: []
               hierarchyPermissions:
                 - assignee:
                     id: demo2
@@ -3981,6 +3985,7 @@ interactions:
               userDataFilters: []
             - automations: []
               customApplicationSettings: []
+              filterViews: []
               hierarchyPermissions: []
               id: demo_west
               model:
@@ -4018,6 +4023,7 @@ interactions:
               userDataFilters: []
             - automations: []
               customApplicationSettings: []
+              filterViews: []
               hierarchyPermissions: []
               id: demo_west_california
               model:

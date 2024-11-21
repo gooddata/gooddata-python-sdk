@@ -11,6 +11,7 @@ from gooddata_sdk import (
     CatalogAutomationSchedule,
     CatalogDataSourcePostgres,
     CatalogDeclarativeAutomation,
+    CatalogDeclarativeFilterView,
     CatalogDeclarativeUserDataFilter,
     CatalogDeclarativeUserDataFilters,
     CatalogDeclarativeWorkspaceDataFilters,
@@ -23,7 +24,11 @@ from gooddata_sdk import (
     GoodDataSdk,
     PostgresAttributes,
 )
-from gooddata_sdk.catalog.identifier import CatalogNotificationChannelIdentifier, CatalogUserIdentifier
+from gooddata_sdk.catalog.identifier import (
+    CatalogDeclarativeAnalyticalDashboardIdentifier,
+    CatalogNotificationChannelIdentifier,
+    CatalogUserIdentifier,
+)
 from gooddata_sdk.catalog.organization.layout.notification_channel import (
     CatalogDeclarativeNotificationChannel,
     CatalogWebhook,
@@ -959,3 +964,70 @@ def test_layout_automations(test_config):
         automations = sdk.catalog_workspace.get_declarative_automations(workspace_id)
         assert len(automations) == 0
         sdk.catalog_organization.put_declarative_notification_channels([])
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "layout_filter_views.yaml"))
+def test_layout_filter_views(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    workspace_id = test_config["workspace"]
+
+    filter_views = sdk.catalog_workspace.get_declarative_filter_views(workspace_id)
+    assert len(filter_views) == 0
+
+    content = json.loads(
+        """
+        {
+            "filters": [
+                {
+                  "dateFilter": {
+                    "from": "0",
+                    "to": "0",
+                    "granularity": "GDC.time.month",
+                    "type": "relative"
+                  }
+                },
+                {
+                  "attributeFilter": {
+                    "displayForm": {
+                      "identifier": {
+                        "id": "demo:campaign_name",
+                        "type": "label"
+                      }
+                    },
+                    "negativeSelection": true,
+                    "attributeElements": {
+                      "uris": []
+                    },
+                    "localIdentifier": "14b0807447ef4bc28f43e4fc5c337d1d",
+                    "filterElementsBy": [],
+                    "selectionMode": "multi"
+                  }
+                }
+            ],
+            "version": "2"
+        }
+        """
+    )
+
+    try:
+        filter_views_expected = [
+            CatalogDeclarativeFilterView(
+                id="filter_view",
+                title="Filter View",
+                is_default=True,
+                description="Filter View",
+                tags=["tag1", "tag2"],
+                user=CatalogUserIdentifier(id="demo", type="user"),
+                analytical_dashboard=CatalogDeclarativeAnalyticalDashboardIdentifier(
+                    id="campaign", type="analyticalDashboard"
+                ),
+                content=content,
+            )
+        ]
+        sdk.catalog_workspace.put_declarative_filter_views(workspace_id, filter_views_expected)
+        filter_views_o = sdk.catalog_workspace.get_declarative_filter_views(workspace_id)
+        assert filter_views_expected == filter_views_o
+    finally:
+        sdk.catalog_workspace.put_declarative_filter_views(workspace_id, [])
+        filter_views = sdk.catalog_workspace.get_declarative_filter_views(workspace_id)
+        assert len(filter_views) == 0

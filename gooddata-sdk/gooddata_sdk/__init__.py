@@ -71,6 +71,7 @@ from gooddata_sdk.catalog.filter_by import CatalogFilterBy
 from gooddata_sdk.catalog.identifier import (
     CatalogAssigneeIdentifier,
     CatalogDatasetWorkspaceDataFilterIdentifier,
+    CatalogDeclarativeAnalyticalDashboardIdentifier,
     CatalogExportDefinitionIdentifier,
     CatalogNotificationChannelIdentifier,
     CatalogUserIdentifier,
@@ -175,6 +176,7 @@ from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.ld
     CatalogDeclarativeModel,
 )
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import (
+    CatalogDeclarativeFilterView,
     CatalogDeclarativeUserDataFilter,
     CatalogDeclarativeUserDataFilters,
     CatalogDeclarativeWorkspace,

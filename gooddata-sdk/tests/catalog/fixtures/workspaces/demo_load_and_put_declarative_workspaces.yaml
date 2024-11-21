@@ -1996,6 +1996,7 @@ interactions:
             userDataFilters: []
             customApplicationSettings: []
             automations: []
+            filterViews: []
           - id: demo_west
             name: Demo West
             model:
@@ -2033,6 +2034,7 @@ interactions:
             userDataFilters: []
             customApplicationSettings: []
             automations: []
+            filterViews: []
           - id: demo_west_california
             name: Demo West California
             model:
@@ -2057,6 +2059,7 @@ interactions:
             userDataFilters: []
             customApplicationSettings: []
             automations: []
+            filterViews: []
       headers:
         Accept-Encoding:
           - br, gzip, deflate
@@ -2225,6 +2228,7 @@ interactions:
           workspaces:
             - automations: []
               customApplicationSettings: []
+              filterViews: []
               hierarchyPermissions:
                 - assignee:
                     id: demo2
@@ -3904,6 +3908,7 @@ interactions:
               userDataFilters: []
             - automations: []
               customApplicationSettings: []
+              filterViews: []
               hierarchyPermissions: []
               id: demo_west
               model:
@@ -3941,6 +3946,7 @@ interactions:
               userDataFilters: []
             - automations: []
               customApplicationSettings: []
+              filterViews: []
               hierarchyPermissions: []
               id: demo_west_california
               model:
@@ -5675,6 +5681,7 @@ interactions:
             settings: []
             userDataFilters: []
             automations: []
+            filterViews: []
           - id: demo_west
             name: Demo West
             customApplicationSettings: []
@@ -5712,6 +5719,7 @@ interactions:
             settings: []
             userDataFilters: []
             automations: []
+            filterViews: []
           - id: demo_west_california
             name: Demo West California
             customApplicationSettings: []
@@ -5736,6 +5744,7 @@ interactions:
             settings: []
             userDataFilters: []
             automations: []
+            filterViews: []
       headers:
         Accept-Encoding:
           - br, gzip, deflate

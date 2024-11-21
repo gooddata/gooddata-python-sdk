@@ -1,7 +1,9 @@
 {
   "workspaces": [
     {
+      "automations": [],
       "customApplicationSettings": [],
+      "filterViews": [],
       "hierarchyPermissions": [
         {
           "assignee": {
@@ -2791,7 +2793,9 @@
       "automations": []
     },
     {
+      "automations": [],
       "customApplicationSettings": [],
+      "filterViews": [],
       "hierarchyPermissions": [],
       "id": "demo_west",
       "model": {
@@ -2848,7 +2852,9 @@
       "automations": []
     },
     {
+      "automations": [],
       "customApplicationSettings": [],
+      "filterViews": [],
       "hierarchyPermissions": [],
       "id": "demo_west_california",
       "model": {
