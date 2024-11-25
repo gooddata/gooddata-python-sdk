@@ -5,6 +5,7 @@ from gooddata_flexconnect.function.execution_context import (
     ExecutionContextAbsoluteDateFilter,
     ExecutionContextAttribute,
     ExecutionContextAttributeSorting,
+    ExecutionContextFilter,
     ExecutionContextNegativeAttributeFilter,
     ExecutionContextPositiveAttributeFilter,
     ExecutionContextRelativeDateFilter,
