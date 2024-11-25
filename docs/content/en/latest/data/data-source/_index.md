@@ -183,6 +183,7 @@ CatalogDataSourceMsSql(
 
 ### Databricks
 
+Using Machine-to-Machine (M2M) authentication (client_id + client_secret):
 ```python
 CatalogDataSourceDatabricks(
     id=data_source_id,
@@ -193,9 +194,26 @@ CatalogDataSourceDatabricks(
     ),
     schema=xyz,
     parameters=[{"name":"catalog", "value": os.environ["DATABRICKS_CATALOG"]}],
-    credentials=BasicCredentials(
-        username=os.environ["DATABRICKS_USER"],
-        password=os.environ["DATABRICKS_PASSWORD"],
+    credentials=ClientSecretCredentials(
+        client_id=os.environ["DATABRICKS_CLIENT_ID"],
+        client_secret=os.environ["DATABRICKS_CLIENT_SECRET"],
+    ),
+)
+```
+
+Using personal access token authentication:
+```python
+CatalogDataSourceDatabricks(
+    id=data_source_id,
+    name=data_source_name,
+    db_specific_attributes=DatabricksAttributes(
+        host=os.environ["DATABRICKS_HOST"],
+        http_path=os.environ["DATABRICKS_HTTP_PATH"]
+    ),
+    schema=xyz,
+    parameters=[{"name":"catalog", "value": os.environ["DATABRICKS_CATALOG"]}],
+    credentials=TokenCredentials(
+        token=os.environ["DATABRICKS_PERSONAL_ACCESS_TOKEN"]
     ),
 )
 ```

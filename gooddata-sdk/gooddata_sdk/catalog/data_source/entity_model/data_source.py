@@ -16,6 +16,7 @@ from gooddata_api_client.model.json_api_data_source_patch_document import JsonAp
 from gooddata_sdk.catalog.base import Base, value_in_allowed
 from gooddata_sdk.catalog.entity import (
     BasicCredentials,
+    ClientSecretCredentials,
     Credentials,
     KeyPairCredentials,
     TokenCredentials,
@@ -34,6 +35,7 @@ def db_attrs_with_template(instance: CatalogDataSource, *args: Any) -> None:
 class CatalogDataSourceBase(Base):
     _SUPPORTED_CREDENTIALS: ClassVar[list[type[Credentials]]] = [
         BasicCredentials,
+        ClientSecretCredentials,
         TokenCredentials,
         TokenCredentialsFromFile,
         KeyPairCredentials,
