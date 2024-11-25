@@ -7,16 +7,19 @@ from typing import Optional
 from gooddata_api_client.exceptions import NotFoundException
 from gooddata_api_client.model.declarative_notification_channels import DeclarativeNotificationChannels
 from gooddata_api_client.model.json_api_csp_directive_in_document import JsonApiCspDirectiveInDocument
+from gooddata_api_client.model.json_api_identity_provider_in_document import JsonApiIdentityProviderInDocument
 from gooddata_api_client.model.json_api_organization_setting_in_document import JsonApiOrganizationSettingInDocument
 
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.organization.entity_model.directive import CatalogCspDirective
+from gooddata_sdk.catalog.organization.entity_model.identity_provider import CatalogIdentityProvider
 from gooddata_sdk.catalog.organization.entity_model.jwk import CatalogJwk, CatalogJwkDocument
 from gooddata_sdk.catalog.organization.entity_model.organization import CatalogOrganizationDocument
 from gooddata_sdk.catalog.organization.entity_model.setting import CatalogOrganizationSetting
+from gooddata_sdk.catalog.organization.layout.identity_provider import CatalogDeclarativeIdentityProvider
 from gooddata_sdk.catalog.organization.layout.notification_channel import CatalogDeclarativeNotificationChannel
 from gooddata_sdk.client import GoodDataApiClient
-from gooddata_sdk.utils import load_all_entities
+from gooddata_sdk.utils import load_all_entities, load_all_entities_dict
 
 
 class CatalogOrganizationService(CatalogServiceBase):
@@ -188,7 +191,7 @@ class CatalogOrganizationService(CatalogServiceBase):
 
         Args:
             organization_setting (CatalogOrganizationSettings):
-                A catalog organization setting an object to be created.
+                A catalog organization setting object to be created.
 
         Returns:
             None
@@ -225,7 +228,7 @@ class CatalogOrganizationService(CatalogServiceBase):
 
         Args:
             organization_setting (CatalogOrganizationSettings):
-                A catalog organization setting an object to be updated.
+                A catalog organization setting object to be updated.
 
         Returns:
             None
@@ -249,7 +252,7 @@ class CatalogOrganizationService(CatalogServiceBase):
         """Returns a list of all csp directives in the current organization.
 
         Returns:
-            list[CatalogOrganizationSettings]:
+            list[CatalogCspDirective]:
                 List of csp directives in the current organization.
         """
         get_csp_directives = functools.partial(
@@ -277,7 +280,7 @@ class CatalogOrganizationService(CatalogServiceBase):
 
         Args:
             csp_directive (CatalogCspDirective):
-                A catalog csp directive an object to be created.
+                A catalog csp directive object to be created.
 
         Returns:
             None
@@ -309,7 +312,7 @@ class CatalogOrganizationService(CatalogServiceBase):
 
         Args:
             csp_directive (CatalogCspDirective):
-                A catalog csp directive an object to be updated.
+                A catalog csp directive object to be updated.
 
         Returns:
             None
@@ -323,6 +326,86 @@ class CatalogOrganizationService(CatalogServiceBase):
             self._entities_api.update_entity_csp_directives(csp_directive.id, csp_directive_document)
         except NotFoundException:
             raise ValueError(f"Can not update {csp_directive.id} csp directive. This csp directive does not exist.")
+
+    def list_identity_providers(self) -> list[CatalogIdentityProvider]:
+        """Returns a list of all identity providers in the current organization.
+
+        Returns:
+            list[CatalogIdentityProvider]:
+                List of identity providers in the current organization.
+        """
+        get_identity_providers = functools.partial(
+            self._entities_api.get_all_entities_identity_providers,
+            _check_return_type=False,
+        )
+        identity_providers = load_all_entities_dict(get_identity_providers, camel_case=False)
+        return [
+            CatalogIdentityProvider.from_dict(identity_provider, camel_case=False)
+            for identity_provider in identity_providers["data"]
+        ]
+
+    def get_identity_provider(self, identity_provider_id: str) -> CatalogIdentityProvider:
+        """Get an individual identity provider.
+
+        Args:
+            identity_provider_id (str):
+                Identity provider identification string e.g. "demo"
+
+        Returns:
+            CatalogIdentityProvider:
+                Catalog identity provider object containing structure of the identity provider.
+        """
+        identity_provider_api = self._entities_api.get_entity_identity_providers(id=identity_provider_id).data
+        return CatalogIdentityProvider.from_api(identity_provider_api)
+
+    def create_identity_provider(self, identity_provider: CatalogIdentityProvider) -> None:
+        """Create a new identity provider.
+
+        Args:
+            identity_provider (CatalogIdentityProvider):
+                A catalog identity provider object to be created.
+
+        Returns:
+            None
+        """
+        identity_provider_document = JsonApiIdentityProviderInDocument(data=identity_provider.to_api())
+        self._entities_api.create_entity_identity_providers(
+            json_api_identity_provider_in_document=identity_provider_document
+        )
+
+    def delete_identity_provider(self, identity_provider_id: str) -> None:
+        """Delete an identity provider.
+
+        Args:
+            identity_provider_id (str):
+                Identity provider identification string e.g. "demo"
+
+        Returns:
+            None
+        """
+        self._entities_api.delete_entity_identity_providers(identity_provider_id)
+
+    def update_identity_provider(self, identity_provider: CatalogIdentityProvider) -> None:
+        """Update an identity provider.
+
+        Args:
+            identity_provider (CatalogIdentityProvider):
+                A catalog identity provider object to be updated.
+
+        Returns:
+            None
+
+        Raises:
+            ValueError:
+                Identity provider does not exist.
+        """
+        try:
+            identity_provider_document = JsonApiIdentityProviderInDocument(data=identity_provider.to_api())
+            self._entities_api.update_entity_identity_providers(identity_provider.id, identity_provider_document)
+        except NotFoundException:
+            raise ValueError(
+                f"Can not update {identity_provider.id} identity provider. " f"This identity provider does not exist."
+            )
 
     # Layout APIs
 
@@ -354,3 +437,29 @@ class CatalogOrganizationService(CatalogServiceBase):
         """
         api_ncs = [nc.to_api() for nc in notification_channels]
         self._layout_api.set_notification_channels(DeclarativeNotificationChannels(notification_channels=api_ncs))
+
+    def get_declarative_identity_providers(self) -> list[CatalogDeclarativeIdentityProvider]:
+        """
+        Get all declarative identity providers in the current organization.
+
+        Returns:
+            list[CatalogDeclarativeIdentityProvider]:
+                List of declarative identity providers.
+        """
+        return [
+            CatalogDeclarativeIdentityProvider.from_api(idp) for idp in self._layout_api.get_identity_providers_layout()
+        ]
+
+    def put_declarative_identity_providers(self, identity_providers: list[CatalogDeclarativeIdentityProvider]) -> None:
+        """
+        Put declarative identity providers in the current organization.
+
+        Args:
+            identity_providers (list[CatalogDeclarativeIdentityProvider]):
+                List of declarative identity providers.
+
+        Returns:
+            None
+        """
+        api_idps = [idp.to_api() for idp in identity_providers]
+        self._layout_api.set_identity_providers(declarative_identity_provider=api_idps)
