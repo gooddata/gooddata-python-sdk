@@ -46,6 +46,8 @@ with gooddata_api_client.ApiClient() as api_client:
         data=JsonApiDataSourceIn(
             attributes=JsonApiDataSourceInAttributes(
                 cache_strategy="ALWAYS",
+                client_id="client_id_example",
+                client_secret="client_secret_example",
                 name="name_example",
                 parameters=[
                     JsonApiDataSourceInAttributesParametersInner(
@@ -546,6 +548,8 @@ with gooddata_api_client.ApiClient() as api_client:
         data=JsonApiDataSourcePatch(
             attributes=JsonApiDataSourcePatchAttributes(
                 cache_strategy="ALWAYS",
+                client_id="client_id_example",
+                client_secret="client_secret_example",
                 name="name_example",
                 parameters=[
                     JsonApiDataSourceInAttributesParametersInner(
@@ -650,6 +654,8 @@ with gooddata_api_client.ApiClient() as api_client:
         data=JsonApiDataSourceIn(
             attributes=JsonApiDataSourceInAttributes(
                 cache_strategy="ALWAYS",
+                client_id="client_id_example",
+                client_secret="client_secret_example",
                 name="name_example",
                 parameters=[
                     JsonApiDataSourceInAttributesParametersInner(

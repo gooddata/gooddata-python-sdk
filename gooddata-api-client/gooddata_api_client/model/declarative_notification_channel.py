@@ -69,6 +69,7 @@ class DeclarativeNotificationChannel(ModelNormal):
             'WEBHOOK': "WEBHOOK",
             'SMTP': "SMTP",
             'DEFAULT_SMTP': "DEFAULT_SMTP",
+            'IN_PLATFORM': "IN_PLATFORM",
         },
     }
 

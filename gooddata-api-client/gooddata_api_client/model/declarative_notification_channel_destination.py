@@ -32,9 +32,11 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.default_smtp import DefaultSmtp
+    from gooddata_api_client.model.in_platform import InPlatform
     from gooddata_api_client.model.smtp import Smtp
     from gooddata_api_client.model.webhook import Webhook
     globals()['DefaultSmtp'] = DefaultSmtp
+    globals()['InPlatform'] = InPlatform
     globals()['Smtp'] = Smtp
     globals()['Webhook'] = Webhook
 
@@ -76,11 +78,6 @@ class DeclarativeNotificationChannelDestination(ModelComposed):
     }
 
     validations = {
-        ('from_email',): {
-            'regex': {
-                'pattern': r'(?:[a-z0-9!#$%&\'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+\/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)])',  # noqa: E501
-            },
-        },
         ('token',): {
             'max_length': 10000,
         },
@@ -185,7 +182,7 @@ class DeclarativeNotificationChannelDestination(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            from_email (str): E-mail address to send notifications from.. [optional] if omitted the server will use the default value of "no-reply@gooddata.com"  # noqa: E501
+            from_email (str): E-mail address to send notifications from.. [optional] if omitted the server will use the default value of no-reply@gooddata.com  # noqa: E501
             from_email_name (str): An optional e-mail name to send notifications from.. [optional] if omitted the server will use the default value of "GoodData"  # noqa: E501
             host (str): The SMTP server address.. [optional]  # noqa: E501
             password (str): The SMTP server password.. [optional]  # noqa: E501
@@ -298,7 +295,7 @@ class DeclarativeNotificationChannelDestination(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            from_email (str): E-mail address to send notifications from.. [optional] if omitted the server will use the default value of "no-reply@gooddata.com"  # noqa: E501
+            from_email (str): E-mail address to send notifications from.. [optional] if omitted the server will use the default value of no-reply@gooddata.com  # noqa: E501
             from_email_name (str): An optional e-mail name to send notifications from.. [optional] if omitted the server will use the default value of "GoodData"  # noqa: E501
             host (str): The SMTP server address.. [optional]  # noqa: E501
             password (str): The SMTP server password.. [optional]  # noqa: E501
@@ -380,6 +377,7 @@ class DeclarativeNotificationChannelDestination(ModelComposed):
           ],
           'oneOf': [
               DefaultSmtp,
+              InPlatform,
               Smtp,
               Webhook,
           ],

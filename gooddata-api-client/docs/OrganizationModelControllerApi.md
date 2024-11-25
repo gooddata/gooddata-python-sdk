@@ -269,6 +269,8 @@ with gooddata_api_client.ApiClient() as api_client:
         data=JsonApiDataSourceIn(
             attributes=JsonApiDataSourceInAttributes(
                 cache_strategy="ALWAYS",
+                client_id="client_id_example",
+                client_secret="client_secret_example",
                 name="name_example",
                 parameters=[
                     JsonApiDataSourceInAttributesParametersInner(
@@ -370,9 +372,15 @@ with gooddata_api_client.ApiClient() as api_client:
     json_api_identity_provider_in_document = JsonApiIdentityProviderInDocument(
         data=JsonApiIdentityProviderIn(
             attributes=JsonApiIdentityProviderInAttributes(
+                custom_claim_mapping={
+                    "key": "key_example",
+                },
                 identifiers=["gooddata.com"],
-                specification=JsonApiIdentityProviderInAttributesSpecification(),
-                type="SAML",
+                oauth_client_id="oauth_client_id_example",
+                oauth_client_secret="oauth_client_secret_example",
+                oauth_issuer_id="myOidcProvider",
+                oauth_issuer_location="oauth_issuer_location_example",
+                saml_metadata="saml_metadata_example",
             ),
             id="id1",
             type="identityProvider",
@@ -1362,7 +1370,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
     id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "filter=type==IdentityProviderTypeValue;identifiers==v1,v2,v3" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=identifiers==v1,v2,v3;customClaimMapping==MapValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -2421,7 +2429,7 @@ configuration = gooddata_api_client.Configuration(
 with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    filter = "filter=type==IdentityProviderTypeValue;identifiers==v1,v2,v3" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=identifiers==v1,v2,v3;customClaimMapping==MapValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
     size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
     sort = [
@@ -3618,7 +3626,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
     id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "filter=type==IdentityProviderTypeValue;identifiers==v1,v2,v3" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=identifiers==v1,v2,v3;customClaimMapping==MapValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -4590,6 +4598,8 @@ with gooddata_api_client.ApiClient() as api_client:
         data=JsonApiDataSourcePatch(
             attributes=JsonApiDataSourcePatchAttributes(
                 cache_strategy="ALWAYS",
+                client_id="client_id_example",
+                client_secret="client_secret_example",
                 name="name_example",
                 parameters=[
                     JsonApiDataSourceInAttributesParametersInner(
@@ -4690,16 +4700,22 @@ with gooddata_api_client.ApiClient() as api_client:
     id = "/6bUUGjjNSwg0_bs" # str | 
     json_api_identity_provider_patch_document = JsonApiIdentityProviderPatchDocument(
         data=JsonApiIdentityProviderPatch(
-            attributes=JsonApiIdentityProviderPatchAttributes(
+            attributes=JsonApiIdentityProviderInAttributes(
+                custom_claim_mapping={
+                    "key": "key_example",
+                },
                 identifiers=["gooddata.com"],
-                specification=JsonApiIdentityProviderInAttributesSpecification(),
-                type="SAML",
+                oauth_client_id="oauth_client_id_example",
+                oauth_client_secret="oauth_client_secret_example",
+                oauth_issuer_id="myOidcProvider",
+                oauth_issuer_location="oauth_issuer_location_example",
+                saml_metadata="saml_metadata_example",
             ),
             id="id1",
             type="identityProvider",
         ),
     ) # JsonApiIdentityProviderPatchDocument | 
-    filter = "filter=type==IdentityProviderTypeValue;identifiers==v1,v2,v3" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=identifiers==v1,v2,v3;customClaimMapping==MapValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -5732,6 +5748,8 @@ with gooddata_api_client.ApiClient() as api_client:
         data=JsonApiDataSourceIn(
             attributes=JsonApiDataSourceInAttributes(
                 cache_strategy="ALWAYS",
+                client_id="client_id_example",
+                client_secret="client_secret_example",
                 name="name_example",
                 parameters=[
                     JsonApiDataSourceInAttributesParametersInner(
@@ -5833,15 +5851,21 @@ with gooddata_api_client.ApiClient() as api_client:
     json_api_identity_provider_in_document = JsonApiIdentityProviderInDocument(
         data=JsonApiIdentityProviderIn(
             attributes=JsonApiIdentityProviderInAttributes(
+                custom_claim_mapping={
+                    "key": "key_example",
+                },
                 identifiers=["gooddata.com"],
-                specification=JsonApiIdentityProviderInAttributesSpecification(),
-                type="SAML",
+                oauth_client_id="oauth_client_id_example",
+                oauth_client_secret="oauth_client_secret_example",
+                oauth_issuer_id="myOidcProvider",
+                oauth_issuer_location="oauth_issuer_location_example",
+                saml_metadata="saml_metadata_example",
             ),
             id="id1",
             type="identityProvider",
         ),
     ) # JsonApiIdentityProviderInDocument | 
-    filter = "filter=type==IdentityProviderTypeValue;identifiers==v1,v2,v3" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=identifiers==v1,v2,v3;customClaimMapping==MapValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:

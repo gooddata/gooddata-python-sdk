@@ -31,12 +31,12 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_identity_provider_in_attributes import JsonApiIdentityProviderInAttributes
     from gooddata_api_client.model.json_api_identity_provider_out import JsonApiIdentityProviderOut
+    from gooddata_api_client.model.json_api_identity_provider_out_attributes import JsonApiIdentityProviderOutAttributes
     from gooddata_api_client.model.object_links import ObjectLinks
     from gooddata_api_client.model.object_links_container import ObjectLinksContainer
-    globals()['JsonApiIdentityProviderInAttributes'] = JsonApiIdentityProviderInAttributes
     globals()['JsonApiIdentityProviderOut'] = JsonApiIdentityProviderOut
+    globals()['JsonApiIdentityProviderOutAttributes'] = JsonApiIdentityProviderOutAttributes
     globals()['ObjectLinks'] = ObjectLinks
     globals()['ObjectLinksContainer'] = ObjectLinksContainer
 
@@ -102,9 +102,9 @@ class JsonApiIdentityProviderOutWithLinks(ModelComposed):
         """
         lazy_import()
         return {
-            'attributes': (JsonApiIdentityProviderInAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
+            'attributes': (JsonApiIdentityProviderOutAttributes,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
         }
 
@@ -114,9 +114,9 @@ class JsonApiIdentityProviderOutWithLinks(ModelComposed):
 
 
     attribute_map = {
-        'attributes': 'attributes',  # noqa: E501
         'id': 'id',  # noqa: E501
         'type': 'type',  # noqa: E501
+        'attributes': 'attributes',  # noqa: E501
         'links': 'links',  # noqa: E501
     }
 
@@ -129,7 +129,6 @@ class JsonApiIdentityProviderOutWithLinks(ModelComposed):
         """JsonApiIdentityProviderOutWithLinks - a model defined in OpenAPI
 
         Keyword Args:
-            attributes (JsonApiIdentityProviderInAttributes):
             id (str): API identifier of an object
             type (str): Object type. defaults to "identityProvider", must be one of ["identityProvider", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
@@ -162,6 +161,7 @@ class JsonApiIdentityProviderOutWithLinks(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            attributes (JsonApiIdentityProviderOutAttributes): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """
 
@@ -237,7 +237,6 @@ class JsonApiIdentityProviderOutWithLinks(ModelComposed):
         """JsonApiIdentityProviderOutWithLinks - a model defined in OpenAPI
 
         Keyword Args:
-            attributes (JsonApiIdentityProviderInAttributes):
             id (str): API identifier of an object
             type (str): Object type. defaults to "identityProvider", must be one of ["identityProvider", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
@@ -270,6 +269,7 @@ class JsonApiIdentityProviderOutWithLinks(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            attributes (JsonApiIdentityProviderOutAttributes): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """
 

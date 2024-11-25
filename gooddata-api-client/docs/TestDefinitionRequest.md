@@ -6,6 +6,8 @@ A request containing all information for testing data source definition.
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **type** | **str** | Type of database, where test should connect to. | 
+**client_id** | **str** | Id for client based authentication for data sources which supports it. | [optional] 
+**client_secret** | **str** | Secret for client based authentication for data sources which supports it. | [optional] 
 **parameters** | [**[DataSourceParameter]**](DataSourceParameter.md) |  | [optional] 
 **password** | **str** | Database user password. | [optional] 
 **private_key** | **str** | Private key for data sources which supports key-pair authentication. | [optional] 

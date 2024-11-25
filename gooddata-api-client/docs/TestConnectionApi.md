@@ -38,6 +38,8 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = test_connection_api.TestConnectionApi(api_client)
     data_source_id = "myPostgres" # str | Data source id
     test_request = TestRequest(
+        client_id="client_id_example",
+        client_secret="client_secret_example",
         parameters=[
             DataSourceParameter(
                 name="name_example",
@@ -121,6 +123,8 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = test_connection_api.TestConnectionApi(api_client)
     test_definition_request = TestDefinitionRequest(
+        client_id="client_id_example",
+        client_secret="client_secret_example",
         parameters=[
             DataSourceParameter(
                 name="name_example",

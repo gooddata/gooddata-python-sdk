@@ -44,6 +44,7 @@ from gooddata_api_client.api.jwks_api import JWKSApi
 from gooddata_api_client.api.ldm_declarative_apis_api import LDMDeclarativeAPIsApi
 from gooddata_api_client.api.llm_endpoints_api import LLMEndpointsApi
 from gooddata_api_client.api.labels_api import LabelsApi
+from gooddata_api_client.api.manage_permissions_api import ManagePermissionsApi
 from gooddata_api_client.api.metadata_sync_api import MetadataSyncApi
 from gooddata_api_client.api.metrics_api import MetricsApi
 from gooddata_api_client.api.notification_channels_api import NotificationChannelsApi
