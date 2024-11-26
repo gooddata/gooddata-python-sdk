@@ -109,6 +109,8 @@ with gooddata_api_client.ApiClient() as api_client:
         data_sources=[
             DeclarativeDataSource(
                 cache_strategy="ALWAYS",
+                client_id="client1234",
+                client_secret="client_secret_example",
                 decoded_parameters=[
                     Parameter(
                         name="name_example",
@@ -142,6 +144,20 @@ with gooddata_api_client.ApiClient() as api_client:
                 username="demo",
             ),
         ],
+        identity_providers=[
+            DeclarativeIdentityProvider(
+                custom_claim_mapping={
+                    "key": "key_example",
+                },
+                id="filterView-1",
+                identifiers=["gooddata.com"],
+                oauth_client_id="oauth_client_id_example",
+                oauth_client_secret="oauth_client_secret_example",
+                oauth_issuer_id="myOidcProvider",
+                oauth_issuer_location="oauth_issuer_location_example",
+                saml_metadata="saml_metadata_example",
+            ),
+        ],
         jwks=[
             DeclarativeJwk(
                 content=DeclarativeJwkSpecification(),
@@ -159,6 +175,9 @@ with gooddata_api_client.ApiClient() as api_client:
             ),
         ],
         organization=DeclarativeOrganizationInfo(
+            allowed_origins=[
+                "allowed_origins_example",
+            ],
             color_palettes=[
                 DeclarativeColorPalette(
                     content=JsonNode(),

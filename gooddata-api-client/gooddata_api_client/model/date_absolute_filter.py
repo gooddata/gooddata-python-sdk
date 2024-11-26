@@ -90,9 +90,9 @@ class DateAbsoluteFilter(ModelComposed):
         """
         lazy_import()
         return {
-            'using': (str,),  # noqa: E501
             '_from': (str,),  # noqa: E501
             'to': (str,),  # noqa: E501
+            'using': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -101,9 +101,9 @@ class DateAbsoluteFilter(ModelComposed):
 
 
     attribute_map = {
-        'using': 'using',  # noqa: E501
         '_from': 'from',  # noqa: E501
         'to': 'to',  # noqa: E501
+        'using': 'using',  # noqa: E501
     }
 
     read_only_vars = {
@@ -115,6 +115,8 @@ class DateAbsoluteFilter(ModelComposed):
         """DateAbsoluteFilter - a model defined in OpenAPI
 
         Keyword Args:
+            _from (str):
+            to (str):
             using (str):
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
@@ -146,8 +148,6 @@ class DateAbsoluteFilter(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            _from (str): [optional]  # noqa: E501
-            to (str): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -221,6 +221,8 @@ class DateAbsoluteFilter(ModelComposed):
         """DateAbsoluteFilter - a model defined in OpenAPI
 
         Keyword Args:
+            _from (str):
+            to (str):
             using (str):
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
@@ -252,8 +254,6 @@ class DateAbsoluteFilter(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            _from (str): [optional]  # noqa: E501
-            to (str): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

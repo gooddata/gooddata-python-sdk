@@ -84,6 +84,7 @@ class TestDefinitionRequest(ModelNormal):
             'SINGLESTORE': "SINGLESTORE",
             'MOTHERDUCK': "MOTHERDUCK",
             'FLIGHTRPC': "FLIGHTRPC",
+            'FLEXCONNECT': "FLEXCONNECT",
         },
     }
 
@@ -114,6 +115,8 @@ class TestDefinitionRequest(ModelNormal):
         lazy_import()
         return {
             'type': (str,),  # noqa: E501
+            'client_id': (str,),  # noqa: E501
+            'client_secret': (str,),  # noqa: E501
             'parameters': ([DataSourceParameter],),  # noqa: E501
             'password': (str,),  # noqa: E501
             'private_key': (str,),  # noqa: E501
@@ -131,6 +134,8 @@ class TestDefinitionRequest(ModelNormal):
 
     attribute_map = {
         'type': 'type',  # noqa: E501
+        'client_id': 'clientId',  # noqa: E501
+        'client_secret': 'clientSecret',  # noqa: E501
         'parameters': 'parameters',  # noqa: E501
         'password': 'password',  # noqa: E501
         'private_key': 'privateKey',  # noqa: E501
@@ -185,6 +190,8 @@ class TestDefinitionRequest(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            client_id (str): Id for client based authentication for data sources which supports it.. [optional]  # noqa: E501
+            client_secret (str): Secret for client based authentication for data sources which supports it.. [optional]  # noqa: E501
             parameters ([DataSourceParameter]): [optional]  # noqa: E501
             password (str): Database user password.. [optional]  # noqa: E501
             private_key (str): Private key for data sources which supports key-pair authentication.. [optional]  # noqa: E501
@@ -282,6 +289,8 @@ class TestDefinitionRequest(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            client_id (str): Id for client based authentication for data sources which supports it.. [optional]  # noqa: E501
+            client_secret (str): Secret for client based authentication for data sources which supports it.. [optional]  # noqa: E501
             parameters ([DataSourceParameter]): [optional]  # noqa: E501
             password (str): Database user password.. [optional]  # noqa: E501
             private_key (str): Private key for data sources which supports key-pair authentication.. [optional]  # noqa: E501

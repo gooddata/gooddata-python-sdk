@@ -6,6 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**ai_chat**](ActionsApi.md#ai_chat) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/chat | (BETA) Chat with AI
 [**ai_chat_history**](ActionsApi.md#ai_chat_history) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/chatHistory | (BETA) Get Chat History
+[**ai_chat_stream**](ActionsApi.md#ai_chat_stream) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/chatStream | (BETA) Chat with AI
 [**ai_route**](ActionsApi.md#ai_route) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/route | (BETA) Route to supported use cases based on this input query.
 [**ai_search**](ActionsApi.md#ai_search) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/search | (BETA) Semantic Search in Metadata
 [**all_platform_usage**](ActionsApi.md#all_platform_usage) | **GET** /api/v1/actions/collectUsage | Info about the platform usage.
@@ -220,6 +221,91 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **ai_chat_stream**
+> [dict] ai_chat_stream(workspace_id, chat_request)
+
+(BETA) Chat with AI
+
+(BETA) Combines multiple use cases such as search, create visualizations, ...
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.chat_request import ChatRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    chat_request = ChatRequest(
+        limit_create=3,
+        limit_create_context=10,
+        limit_search=5,
+        question="question_example",
+        relevant_score_threshold=0.4,
+        search_score_threshold=0.9,
+        thread_id_suffix="thread_id_suffix_example",
+        title_to_descriptor_ratio=0.7,
+        user_context=UserContext(
+            active_object=ActiveObjectIdentification(
+                id="id_example",
+                type="type_example",
+                workspace_id="workspace_id_example",
+            ),
+        ),
+    ) # ChatRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (BETA) Chat with AI
+        api_response = api_instance.ai_chat_stream(workspace_id, chat_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->ai_chat_stream: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **chat_request** | [**ChatRequest**](ChatRequest.md)|  |
+
+### Return type
+
+**[dict]**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: text/event-stream
 
 
 ### HTTP response details
@@ -4563,6 +4649,8 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = actions_api.ActionsApi(api_client)
     data_source_id = "myPostgres" # str | Data source id
     test_request = TestRequest(
+        client_id="client_id_example",
+        client_secret="client_secret_example",
         parameters=[
             DataSourceParameter(
                 name="name_example",
@@ -4646,6 +4734,8 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = actions_api.ActionsApi(api_client)
     test_definition_request = TestDefinitionRequest(
+        client_id="client_id_example",
+        client_secret="client_secret_example",
         parameters=[
             DataSourceParameter(
                 name="name_example",

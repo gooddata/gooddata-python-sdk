@@ -133,6 +133,7 @@ class DeclarativeOrganizationInfo(ModelNormal):
             'id': (str,),  # noqa: E501
             'name': (str,),  # noqa: E501
             'permissions': ([DeclarativeOrganizationPermission],),  # noqa: E501
+            'allowed_origins': ([str],),  # noqa: E501
             'color_palettes': ([DeclarativeColorPalette],),  # noqa: E501
             'csp_directives': ([DeclarativeCspDirective],),  # noqa: E501
             'early_access': (str,),  # noqa: E501
@@ -158,6 +159,7 @@ class DeclarativeOrganizationInfo(ModelNormal):
         'id': 'id',  # noqa: E501
         'name': 'name',  # noqa: E501
         'permissions': 'permissions',  # noqa: E501
+        'allowed_origins': 'allowedOrigins',  # noqa: E501
         'color_palettes': 'colorPalettes',  # noqa: E501
         'csp_directives': 'cspDirectives',  # noqa: E501
         'early_access': 'earlyAccess',  # noqa: E501
@@ -220,6 +222,7 @@ class DeclarativeOrganizationInfo(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            allowed_origins ([str]): [optional]  # noqa: E501
             color_palettes ([DeclarativeColorPalette]): A list of color palettes.. [optional]  # noqa: E501
             csp_directives ([DeclarativeCspDirective]): A list of CSP directives.. [optional]  # noqa: E501
             early_access (str): Early access defined on level Organization. [optional]  # noqa: E501
@@ -328,6 +331,7 @@ class DeclarativeOrganizationInfo(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            allowed_origins ([str]): [optional]  # noqa: E501
             color_palettes ([DeclarativeColorPalette]): A list of color palettes.. [optional]  # noqa: E501
             csp_directives ([DeclarativeCspDirective]): A list of CSP directives.. [optional]  # noqa: E501
             early_access (str): Early access defined on level Organization. [optional]  # noqa: E501

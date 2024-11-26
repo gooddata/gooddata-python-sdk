@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **id** | **str** | Identifier of the organization. | 
 **name** | **str** | Formal name of the organization. | 
 **permissions** | [**[DeclarativeOrganizationPermission]**](DeclarativeOrganizationPermission.md) |  | 
+**allowed_origins** | **[str]** |  | [optional] 
 **color_palettes** | [**[DeclarativeColorPalette]**](DeclarativeColorPalette.md) | A list of color palettes. | [optional] 
 **csp_directives** | [**[DeclarativeCspDirective]**](DeclarativeCspDirective.md) | A list of CSP directives. | [optional] 
 **early_access** | **str** | Early access defined on level Organization | [optional] 

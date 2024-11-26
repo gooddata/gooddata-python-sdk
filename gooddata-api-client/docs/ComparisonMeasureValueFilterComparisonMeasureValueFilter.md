@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **operator** | **str** |  | 
 **value** | **float** |  | 
 **apply_on_result** | **bool** |  | [optional] 
+**local_identifier** | **str** |  | [optional] 
 **treat_null_values_as** | **float** |  | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 

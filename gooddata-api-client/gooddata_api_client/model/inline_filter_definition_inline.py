@@ -84,6 +84,7 @@ class InlineFilterDefinitionInline(ModelNormal):
         return {
             'filter': (str,),  # noqa: E501
             'apply_on_result': (bool,),  # noqa: E501
+            'local_identifier': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -94,6 +95,7 @@ class InlineFilterDefinitionInline(ModelNormal):
     attribute_map = {
         'filter': 'filter',  # noqa: E501
         'apply_on_result': 'applyOnResult',  # noqa: E501
+        'local_identifier': 'localIdentifier',  # noqa: E501
     }
 
     read_only_vars = {
@@ -141,6 +143,7 @@ class InlineFilterDefinitionInline(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             apply_on_result (bool): [optional]  # noqa: E501
+            local_identifier (str): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -231,6 +234,7 @@ class InlineFilterDefinitionInline(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             apply_on_result (bool): [optional]  # noqa: E501
+            local_identifier (str): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

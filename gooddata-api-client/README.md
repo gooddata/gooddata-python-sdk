@@ -207,7 +207,9 @@ Class | Method | HTTP request | Description
 *IdentityProvidersApi* | [**delete_entity_identity_providers**](docs/IdentityProvidersApi.md#delete_entity_identity_providers) | **DELETE** /api/v1/entities/identityProviders/{id} | Delete Identity Provider
 *IdentityProvidersApi* | [**get_all_entities_identity_providers**](docs/IdentityProvidersApi.md#get_all_entities_identity_providers) | **GET** /api/v1/entities/identityProviders | Get all Identity Providers
 *IdentityProvidersApi* | [**get_entity_identity_providers**](docs/IdentityProvidersApi.md#get_entity_identity_providers) | **GET** /api/v1/entities/identityProviders/{id} | Get Identity Provider
+*IdentityProvidersApi* | [**get_identity_providers_layout**](docs/IdentityProvidersApi.md#get_identity_providers_layout) | **GET** /api/v1/layout/identityProviders | Get all identity providers layout
 *IdentityProvidersApi* | [**patch_entity_identity_providers**](docs/IdentityProvidersApi.md#patch_entity_identity_providers) | **PATCH** /api/v1/entities/identityProviders/{id} | Patch Identity Provider
+*IdentityProvidersApi* | [**set_identity_providers**](docs/IdentityProvidersApi.md#set_identity_providers) | **PUT** /api/v1/layout/identityProviders | Set all identity providers
 *IdentityProvidersApi* | [**update_entity_identity_providers**](docs/IdentityProvidersApi.md#update_entity_identity_providers) | **PUT** /api/v1/entities/identityProviders/{id} | Put Identity Provider
 *InvalidateCacheApi* | [**register_upload_notification**](docs/InvalidateCacheApi.md#register_upload_notification) | **POST** /api/v1/actions/dataSources/{dataSourceId}/uploadNotification | Register an upload notification
 *JWKSApi* | [**create_entity_jwks**](docs/JWKSApi.md#create_entity_jwks) | **POST** /api/v1/entities/jwks | Post Jwks
@@ -226,6 +228,9 @@ Class | Method | HTTP request | Description
 *LLMEndpointsApi* | [**update_entity_llm_endpoints**](docs/LLMEndpointsApi.md#update_entity_llm_endpoints) | **PUT** /api/v1/entities/llmEndpoints/{id} | PUT LLM endpoint entity
 *LabelsApi* | [**get_all_entities_labels**](docs/LabelsApi.md#get_all_entities_labels) | **GET** /api/v1/entities/workspaces/{workspaceId}/labels | Get all Labels
 *LabelsApi* | [**get_entity_labels**](docs/LabelsApi.md#get_entity_labels) | **GET** /api/v1/entities/workspaces/{workspaceId}/labels/{objectId} | Get a Label
+*ManagePermissionsApi* | [**get_data_source_permissions**](docs/ManagePermissionsApi.md#get_data_source_permissions) | **GET** /api/v1/layout/dataSources/{dataSourceId}/permissions | Get permissions for the data source
+*ManagePermissionsApi* | [**manage_data_source_permissions**](docs/ManagePermissionsApi.md#manage_data_source_permissions) | **POST** /api/v1/actions/dataSources/{dataSourceId}/managePermissions | Manage Permissions for a Data Source
+*ManagePermissionsApi* | [**set_data_source_permissions**](docs/ManagePermissionsApi.md#set_data_source_permissions) | **PUT** /api/v1/layout/dataSources/{dataSourceId}/permissions | Set data source permissions.
 *MetadataSyncApi* | [**metadata_sync**](docs/MetadataSyncApi.md#metadata_sync) | **POST** /api/v1/actions/workspaces/{workspaceId}/metadataSync | (BETA) Sync Metadata to other services
 *MetadataSyncApi* | [**metadata_sync_organization**](docs/MetadataSyncApi.md#metadata_sync_organization) | **POST** /api/v1/actions/organization/metadataSync | (BETA) Sync organization scope Metadata to other services
 *MetricsApi* | [**create_entity_metrics**](docs/MetricsApi.md#create_entity_metrics) | **POST** /api/v1/entities/workspaces/{workspaceId}/metrics | Post Metrics
@@ -238,7 +243,9 @@ Class | Method | HTTP request | Description
 *NotificationChannelsApi* | [**delete_entity_notification_channels**](docs/NotificationChannelsApi.md#delete_entity_notification_channels) | **DELETE** /api/v1/entities/notificationChannels/{id} | Delete Notification Channel entity
 *NotificationChannelsApi* | [**get_all_entities_notification_channels**](docs/NotificationChannelsApi.md#get_all_entities_notification_channels) | **GET** /api/v1/entities/notificationChannels | Get all Notification Channel entities
 *NotificationChannelsApi* | [**get_entity_notification_channels**](docs/NotificationChannelsApi.md#get_entity_notification_channels) | **GET** /api/v1/entities/notificationChannels/{id} | Get Notification Channel entity
+*NotificationChannelsApi* | [**get_notification_channels_layout**](docs/NotificationChannelsApi.md#get_notification_channels_layout) | **GET** /api/v1/layout/notificationChannels | Get all notification channels layout
 *NotificationChannelsApi* | [**patch_entity_notification_channels**](docs/NotificationChannelsApi.md#patch_entity_notification_channels) | **PATCH** /api/v1/entities/notificationChannels/{id} | Patch Notification Channel entity
+*NotificationChannelsApi* | [**set_notification_channels**](docs/NotificationChannelsApi.md#set_notification_channels) | **PUT** /api/v1/layout/notificationChannels | Set all notification channels
 *NotificationChannelsApi* | [**update_entity_notification_channels**](docs/NotificationChannelsApi.md#update_entity_notification_channels) | **PUT** /api/v1/entities/notificationChannels/{id} | Put Notification Channel entity
 *OptionsApi* | [**get_all_options**](docs/OptionsApi.md#get_all_options) | **GET** /api/v1/options | Links for all configuration options
 *OrganizationDeclarativeAPIsApi* | [**get_organization_layout**](docs/OrganizationDeclarativeAPIsApi.md#get_organization_layout) | **GET** /api/v1/layout/organization | Get organization layout
@@ -280,6 +287,7 @@ Class | Method | HTTP request | Description
 *ScanningApi* | [**scan_sql**](docs/ScanningApi.md#scan_sql) | **POST** /api/v1/actions/dataSources/{dataSourceId}/scanSql | Collect metadata about SQL query
 *SmartFunctionsApi* | [**ai_chat**](docs/SmartFunctionsApi.md#ai_chat) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/chat | (BETA) Chat with AI
 *SmartFunctionsApi* | [**ai_chat_history**](docs/SmartFunctionsApi.md#ai_chat_history) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/chatHistory | (BETA) Get Chat History
+*SmartFunctionsApi* | [**ai_chat_stream**](docs/SmartFunctionsApi.md#ai_chat_stream) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/chatStream | (BETA) Chat with AI
 *SmartFunctionsApi* | [**ai_route**](docs/SmartFunctionsApi.md#ai_route) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/route | (BETA) Route to supported use cases based on this input query.
 *SmartFunctionsApi* | [**ai_search**](docs/SmartFunctionsApi.md#ai_search) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/search | (BETA) Semantic Search in Metadata
 *SmartFunctionsApi* | [**anomaly_detection**](docs/SmartFunctionsApi.md#anomaly_detection) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/{resultId} | (EXPERIMENTAL) Smart functions - Anomaly Detection
@@ -375,6 +383,7 @@ Class | Method | HTTP request | Description
 *WorkspacesSettingsApi* | [**workspace_resolve_settings**](docs/WorkspacesSettingsApi.md#workspace_resolve_settings) | **POST** /api/v1/actions/workspaces/{workspaceId}/resolveSettings | Values for selected settings.
 *ActionsApi* | [**ai_chat**](docs/ActionsApi.md#ai_chat) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/chat | (BETA) Chat with AI
 *ActionsApi* | [**ai_chat_history**](docs/ActionsApi.md#ai_chat_history) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/chatHistory | (BETA) Get Chat History
+*ActionsApi* | [**ai_chat_stream**](docs/ActionsApi.md#ai_chat_stream) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/chatStream | (BETA) Chat with AI
 *ActionsApi* | [**ai_route**](docs/ActionsApi.md#ai_route) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/route | (BETA) Route to supported use cases based on this input query.
 *ActionsApi* | [**ai_search**](docs/ActionsApi.md#ai_search) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/search | (BETA) Semantic Search in Metadata
 *ActionsApi* | [**all_platform_usage**](docs/ActionsApi.md#all_platform_usage) | **GET** /api/v1/actions/collectUsage | Info about the platform usage.
@@ -629,6 +638,7 @@ Class | Method | HTTP request | Description
 *LayoutApi* | [**get_data_source_permissions**](docs/LayoutApi.md#get_data_source_permissions) | **GET** /api/v1/layout/dataSources/{dataSourceId}/permissions | Get permissions for the data source
 *LayoutApi* | [**get_data_sources_layout**](docs/LayoutApi.md#get_data_sources_layout) | **GET** /api/v1/layout/dataSources | Get all data sources
 *LayoutApi* | [**get_filter_views**](docs/LayoutApi.md#get_filter_views) | **GET** /api/v1/layout/workspaces/{workspaceId}/filterViews | Get filter views
+*LayoutApi* | [**get_identity_providers_layout**](docs/LayoutApi.md#get_identity_providers_layout) | **GET** /api/v1/layout/identityProviders | Get all identity providers layout
 *LayoutApi* | [**get_logical_model**](docs/LayoutApi.md#get_logical_model) | **GET** /api/v1/layout/workspaces/{workspaceId}/logicalModel | Get logical model
 *LayoutApi* | [**get_notification_channels_layout**](docs/LayoutApi.md#get_notification_channels_layout) | **GET** /api/v1/layout/notificationChannels | Get all notification channels layout
 *LayoutApi* | [**get_organization_layout**](docs/LayoutApi.md#get_organization_layout) | **GET** /api/v1/layout/organization | Get organization layout
@@ -652,6 +662,7 @@ Class | Method | HTTP request | Description
 *LayoutApi* | [**set_automations**](docs/LayoutApi.md#set_automations) | **PUT** /api/v1/layout/workspaces/{workspaceId}/automations | Set automations
 *LayoutApi* | [**set_data_source_permissions**](docs/LayoutApi.md#set_data_source_permissions) | **PUT** /api/v1/layout/dataSources/{dataSourceId}/permissions | Set data source permissions.
 *LayoutApi* | [**set_filter_views**](docs/LayoutApi.md#set_filter_views) | **PUT** /api/v1/layout/workspaces/{workspaceId}/filterViews | Set filter views
+*LayoutApi* | [**set_identity_providers**](docs/LayoutApi.md#set_identity_providers) | **PUT** /api/v1/layout/identityProviders | Set all identity providers
 *LayoutApi* | [**set_logical_model**](docs/LayoutApi.md#set_logical_model) | **PUT** /api/v1/layout/workspaces/{workspaceId}/logicalModel | Set logical model
 *LayoutApi* | [**set_notification_channels**](docs/LayoutApi.md#set_notification_channels) | **PUT** /api/v1/layout/notificationChannels | Set all notification channels
 *LayoutApi* | [**set_organization_layout**](docs/LayoutApi.md#set_organization_layout) | **PUT** /api/v1/layout/organization | Set organization layout
@@ -977,6 +988,7 @@ Class | Method | HTTP request | Description
  - [DeclarativeFact](docs/DeclarativeFact.md)
  - [DeclarativeFilterContext](docs/DeclarativeFilterContext.md)
  - [DeclarativeFilterView](docs/DeclarativeFilterView.md)
+ - [DeclarativeIdentityProvider](docs/DeclarativeIdentityProvider.md)
  - [DeclarativeJwk](docs/DeclarativeJwk.md)
  - [DeclarativeJwkSpecification](docs/DeclarativeJwkSpecification.md)
  - [DeclarativeLabel](docs/DeclarativeLabel.md)
@@ -1072,6 +1084,8 @@ Class | Method | HTTP request | Description
  - [HistogramBucket](docs/HistogramBucket.md)
  - [HistogramProperties](docs/HistogramProperties.md)
  - [IdentifierDuplications](docs/IdentifierDuplications.md)
+ - [InPlatform](docs/InPlatform.md)
+ - [InPlatformAllOf](docs/InPlatformAllOf.md)
  - [InlineFilterDefinition](docs/InlineFilterDefinition.md)
  - [InlineFilterDefinitionInline](docs/InlineFilterDefinitionInline.md)
  - [InlineMeasureDefinition](docs/InlineMeasureDefinition.md)
@@ -1316,14 +1330,13 @@ Class | Method | HTTP request | Description
  - [JsonApiFilterViewPatchDocument](docs/JsonApiFilterViewPatchDocument.md)
  - [JsonApiIdentityProviderIn](docs/JsonApiIdentityProviderIn.md)
  - [JsonApiIdentityProviderInAttributes](docs/JsonApiIdentityProviderInAttributes.md)
- - [JsonApiIdentityProviderInAttributesSpecification](docs/JsonApiIdentityProviderInAttributesSpecification.md)
  - [JsonApiIdentityProviderInDocument](docs/JsonApiIdentityProviderInDocument.md)
  - [JsonApiIdentityProviderOut](docs/JsonApiIdentityProviderOut.md)
+ - [JsonApiIdentityProviderOutAttributes](docs/JsonApiIdentityProviderOutAttributes.md)
  - [JsonApiIdentityProviderOutDocument](docs/JsonApiIdentityProviderOutDocument.md)
  - [JsonApiIdentityProviderOutList](docs/JsonApiIdentityProviderOutList.md)
  - [JsonApiIdentityProviderOutWithLinks](docs/JsonApiIdentityProviderOutWithLinks.md)
  - [JsonApiIdentityProviderPatch](docs/JsonApiIdentityProviderPatch.md)
- - [JsonApiIdentityProviderPatchAttributes](docs/JsonApiIdentityProviderPatchAttributes.md)
  - [JsonApiIdentityProviderPatchDocument](docs/JsonApiIdentityProviderPatchDocument.md)
  - [JsonApiJwkIn](docs/JsonApiJwkIn.md)
  - [JsonApiJwkInAttributes](docs/JsonApiJwkInAttributes.md)
@@ -1567,7 +1580,6 @@ Class | Method | HTTP request | Description
  - [NotificationChannelDestination](docs/NotificationChannelDestination.md)
  - [ObjectLinks](docs/ObjectLinks.md)
  - [ObjectLinksContainer](docs/ObjectLinksContainer.md)
- - [OidcIdpSpecification](docs/OidcIdpSpecification.md)
  - [OrganizationPermissionAssignment](docs/OrganizationPermissionAssignment.md)
  - [PageMetadata](docs/PageMetadata.md)
  - [Paging](docs/Paging.md)
@@ -1613,7 +1625,6 @@ Class | Method | HTTP request | Description
  - [RouteResult](docs/RouteResult.md)
  - [RsaSpecification](docs/RsaSpecification.md)
  - [RulePermission](docs/RulePermission.md)
- - [SamlIdpSpecification](docs/SamlIdpSpecification.md)
  - [ScanRequest](docs/ScanRequest.md)
  - [ScanResultPdm](docs/ScanResultPdm.md)
  - [ScanSqlRequest](docs/ScanSqlRequest.md)
