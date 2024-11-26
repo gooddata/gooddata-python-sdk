@@ -80,6 +80,7 @@ class JsonApiDataSourceIdentifierOutAttributes(ModelNormal):
             'SINGLESTORE': "SINGLESTORE",
             'MOTHERDUCK': "MOTHERDUCK",
             'FLIGHTRPC': "FLIGHTRPC",
+            'FLEXCONNECT': "FLEXCONNECT",
         },
     }
 

@@ -57,13 +57,12 @@ class RouteResult(ModelNormal):
 
     allowed_values = {
         ('use_case',): {
-            'SEARCH_ALL': "SEARCH_ALL",
-            'SEARCH_VISUALIZATIONS': "SEARCH_VISUALIZATIONS",
-            'SEARCH_DASHBOARDS': "SEARCH_DASHBOARDS",
+            'INVALID': "INVALID",
+            'GENERAL': "GENERAL",
+            'SEARCH': "SEARCH",
             'CREATE_VISUALIZATION': "CREATE_VISUALIZATION",
             'EXTEND_VISUALIZATION': "EXTEND_VISUALIZATION",
-            'GENERAL': "GENERAL",
-            'INVALID': "INVALID",
+            'HOWTO': "HOWTO",
         },
     }
 

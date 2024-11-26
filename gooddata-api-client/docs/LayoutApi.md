@@ -9,6 +9,7 @@ Method | HTTP request | Description
 [**get_data_source_permissions**](LayoutApi.md#get_data_source_permissions) | **GET** /api/v1/layout/dataSources/{dataSourceId}/permissions | Get permissions for the data source
 [**get_data_sources_layout**](LayoutApi.md#get_data_sources_layout) | **GET** /api/v1/layout/dataSources | Get all data sources
 [**get_filter_views**](LayoutApi.md#get_filter_views) | **GET** /api/v1/layout/workspaces/{workspaceId}/filterViews | Get filter views
+[**get_identity_providers_layout**](LayoutApi.md#get_identity_providers_layout) | **GET** /api/v1/layout/identityProviders | Get all identity providers layout
 [**get_logical_model**](LayoutApi.md#get_logical_model) | **GET** /api/v1/layout/workspaces/{workspaceId}/logicalModel | Get logical model
 [**get_notification_channels_layout**](LayoutApi.md#get_notification_channels_layout) | **GET** /api/v1/layout/notificationChannels | Get all notification channels layout
 [**get_organization_layout**](LayoutApi.md#get_organization_layout) | **GET** /api/v1/layout/organization | Get organization layout
@@ -32,6 +33,7 @@ Method | HTTP request | Description
 [**set_automations**](LayoutApi.md#set_automations) | **PUT** /api/v1/layout/workspaces/{workspaceId}/automations | Set automations
 [**set_data_source_permissions**](LayoutApi.md#set_data_source_permissions) | **PUT** /api/v1/layout/dataSources/{dataSourceId}/permissions | Set data source permissions.
 [**set_filter_views**](LayoutApi.md#set_filter_views) | **PUT** /api/v1/layout/workspaces/{workspaceId}/filterViews | Set filter views
+[**set_identity_providers**](LayoutApi.md#set_identity_providers) | **PUT** /api/v1/layout/identityProviders | Set all identity providers
 [**set_logical_model**](LayoutApi.md#set_logical_model) | **PUT** /api/v1/layout/workspaces/{workspaceId}/logicalModel | Set logical model
 [**set_notification_channels**](LayoutApi.md#set_notification_channels) | **PUT** /api/v1/layout/notificationChannels | Set all notification channels
 [**set_organization_layout**](LayoutApi.md#set_organization_layout) | **PUT** /api/v1/layout/organization | Set organization layout
@@ -411,6 +413,69 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Retrieved filterViews. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_identity_providers_layout**
+> [DeclarativeIdentityProvider] get_identity_providers_layout()
+
+Get all identity providers layout
+
+Gets complete layout of identity providers.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import layout_api
+from gooddata_api_client.model.declarative_identity_provider import DeclarativeIdentityProvider
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = layout_api.LayoutApi(api_client)
+
+    # example, this endpoint has no required or optional parameters
+    try:
+        # Get all identity providers layout
+        api_response = api_instance.get_identity_providers_layout()
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling LayoutApi->get_identity_providers_layout: %s\n" % e)
+```
+
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**[DeclarativeIdentityProvider]**](DeclarativeIdentityProvider.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Retrieved layout of all identity providers. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -1389,6 +1454,8 @@ with gooddata_api_client.ApiClient() as api_client:
         data_sources=[
             DeclarativeDataSource(
                 cache_strategy="ALWAYS",
+                client_id="client1234",
+                client_secret="client_secret_example",
                 decoded_parameters=[
                     Parameter(
                         name="name_example",
@@ -2518,7 +2585,7 @@ No authorization required
 
 Set data source permissions.
 
-et data source permissions.
+set data source permissions.
 
 ### Example
 
@@ -2675,6 +2742,85 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **204** | FilterViews successfully set. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **set_identity_providers**
+> set_identity_providers(declarative_identity_provider)
+
+Set all identity providers
+
+Sets identity providers in organization.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import layout_api
+from gooddata_api_client.model.declarative_identity_provider import DeclarativeIdentityProvider
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = layout_api.LayoutApi(api_client)
+    declarative_identity_provider = [
+        DeclarativeIdentityProvider(
+            custom_claim_mapping={
+                "key": "key_example",
+            },
+            id="filterView-1",
+            identifiers=["gooddata.com"],
+            oauth_client_id="oauth_client_id_example",
+            oauth_client_secret="oauth_client_secret_example",
+            oauth_issuer_id="myOidcProvider",
+            oauth_issuer_location="oauth_issuer_location_example",
+            saml_metadata="saml_metadata_example",
+        ),
+    ] # [DeclarativeIdentityProvider] | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Set all identity providers
+        api_instance.set_identity_providers(declarative_identity_provider)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling LayoutApi->set_identity_providers: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **declarative_identity_provider** | [**[DeclarativeIdentityProvider]**](DeclarativeIdentityProvider.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | All identity providers set. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -2987,6 +3133,8 @@ with gooddata_api_client.ApiClient() as api_client:
         data_sources=[
             DeclarativeDataSource(
                 cache_strategy="ALWAYS",
+                client_id="client1234",
+                client_secret="client_secret_example",
                 decoded_parameters=[
                     Parameter(
                         name="name_example",
@@ -3020,6 +3168,20 @@ with gooddata_api_client.ApiClient() as api_client:
                 username="demo",
             ),
         ],
+        identity_providers=[
+            DeclarativeIdentityProvider(
+                custom_claim_mapping={
+                    "key": "key_example",
+                },
+                id="filterView-1",
+                identifiers=["gooddata.com"],
+                oauth_client_id="oauth_client_id_example",
+                oauth_client_secret="oauth_client_secret_example",
+                oauth_issuer_id="myOidcProvider",
+                oauth_issuer_location="oauth_issuer_location_example",
+                saml_metadata="saml_metadata_example",
+            ),
+        ],
         jwks=[
             DeclarativeJwk(
                 content=DeclarativeJwkSpecification(),
@@ -3037,6 +3199,9 @@ with gooddata_api_client.ApiClient() as api_client:
             ),
         ],
         organization=DeclarativeOrganizationInfo(
+            allowed_origins=[
+                "allowed_origins_example",
+            ],
             color_palettes=[
                 DeclarativeColorPalette(
                     content=JsonNode(),

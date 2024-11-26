@@ -567,6 +567,14 @@
       "TestDefinitionRequest": {
         "description": "A request containing all information for testing data source definition.",
         "properties": {
+          "clientId": {
+            "description": "Id for client based authentication for data sources which supports it.",
+            "type": "string"
+          },
+          "clientSecret": {
+            "description": "Secret for client based authentication for data sources which supports it.",
+            "type": "string"
+          },
           "parameters": {
             "items": {
               "$ref": "#/components/schemas/DataSourceParameter"
@@ -620,7 +628,8 @@
               "PINOT",
               "SINGLESTORE",
               "MOTHERDUCK",
-              "FLIGHTRPC"
+              "FLIGHTRPC",
+              "FLEXCONNECT"
             ],
             "example": "POSTGRESQL",
             "type": "string"
@@ -665,6 +674,14 @@
       "TestRequest": {
         "description": "A request containing all information for testing existing data source.",
         "properties": {
+          "clientId": {
+            "description": "Id for client based authentication for data sources which supports it.",
+            "type": "string"
+          },
+          "clientSecret": {
+            "description": "Secret for client based authentication for data sources which supports it.",
+            "type": "string"
+          },
           "parameters": {
             "items": {
               "$ref": "#/components/schemas/DataSourceParameter"

@@ -86,6 +86,7 @@ class DeclarativeDataSource(ModelNormal):
             'SINGLESTORE': "SINGLESTORE",
             'MOTHERDUCK': "MOTHERDUCK",
             'FLIGHTRPC': "FLIGHTRPC",
+            'FLEXCONNECT': "FLEXCONNECT",
         },
         ('cache_strategy',): {
             'ALWAYS': "ALWAYS",
@@ -103,6 +104,12 @@ class DeclarativeDataSource(ModelNormal):
             'max_length': 255,
         },
         ('schema',): {
+            'max_length': 255,
+        },
+        ('client_id',): {
+            'max_length': 255,
+        },
+        ('client_secret',): {
             'max_length': 255,
         },
         ('password',): {
@@ -153,6 +160,8 @@ class DeclarativeDataSource(ModelNormal):
             'schema': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
             'cache_strategy': (str,),  # noqa: E501
+            'client_id': (str,),  # noqa: E501
+            'client_secret': (str,),  # noqa: E501
             'decoded_parameters': ([Parameter],),  # noqa: E501
             'parameters': ([Parameter],),  # noqa: E501
             'password': (str,),  # noqa: E501
@@ -175,6 +184,8 @@ class DeclarativeDataSource(ModelNormal):
         'schema': 'schema',  # noqa: E501
         'type': 'type',  # noqa: E501
         'cache_strategy': 'cacheStrategy',  # noqa: E501
+        'client_id': 'clientId',  # noqa: E501
+        'client_secret': 'clientSecret',  # noqa: E501
         'decoded_parameters': 'decodedParameters',  # noqa: E501
         'parameters': 'parameters',  # noqa: E501
         'password': 'password',  # noqa: E501
@@ -234,6 +245,8 @@ class DeclarativeDataSource(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             cache_strategy (str): Determines how the results coming from a particular datasource should be cached. - ALWAYS: The results from the datasource should be cached normally (the default). - NEVER: The results from the datasource should never be cached.. [optional]  # noqa: E501
+            client_id (str): Id of client with permission to connect to the data source.. [optional]  # noqa: E501
+            client_secret (str): The client secret to use to connect to the database providing the data for the data source.. [optional]  # noqa: E501
             decoded_parameters ([Parameter]): [optional]  # noqa: E501
             parameters ([Parameter]): [optional]  # noqa: E501
             password (str): Password for the data-source user, property is never returned back.. [optional]  # noqa: E501
@@ -339,6 +352,8 @@ class DeclarativeDataSource(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             cache_strategy (str): Determines how the results coming from a particular datasource should be cached. - ALWAYS: The results from the datasource should be cached normally (the default). - NEVER: The results from the datasource should never be cached.. [optional]  # noqa: E501
+            client_id (str): Id of client with permission to connect to the data source.. [optional]  # noqa: E501
+            client_secret (str): The client secret to use to connect to the database providing the data for the data source.. [optional]  # noqa: E501
             decoded_parameters ([Parameter]): [optional]  # noqa: E501
             parameters ([Parameter]): [optional]  # noqa: E501
             password (str): Password for the data-source user, property is never returned back.. [optional]  # noqa: E501

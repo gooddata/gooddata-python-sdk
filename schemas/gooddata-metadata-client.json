@@ -62,6 +62,9 @@
                 "pattern": "^\\d{4}-\\d{1,2}-\\d{1,2}( \\d{1,2}:\\d{1,2})?$",
                 "type": "string"
               },
+              "localIdentifier": {
+                "type": "string"
+              },
               "to": {
                 "example": "2020-07-16 23:59",
                 "pattern": "^\\d{4}-\\d{1,2}-\\d{1,2}( \\d{1,2}:\\d{1,2})?$",
@@ -721,6 +724,9 @@
             "properties": {
               "applyOnResult": {
                 "type": "boolean"
+              },
+              "localIdentifier": {
+                "type": "string"
               },
               "measure": {
                 "$ref": "#/components/schemas/AfmIdentifier"
@@ -1738,6 +1744,17 @@
             ],
             "type": "string"
           },
+          "clientId": {
+            "description": "Id of client with permission to connect to the data source.",
+            "example": "client1234",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "clientSecret": {
+            "description": "The client secret to use to connect to the database providing the data for the data source.",
+            "maxLength": 255,
+            "type": "string"
+          },
           "decodedParameters": {
             "items": {
               "$ref": "#/components/schemas/Parameter"
@@ -1823,7 +1840,8 @@
               "PINOT",
               "SINGLESTORE",
               "MOTHERDUCK",
-              "FLIGHTRPC"
+              "FLIGHTRPC",
+              "FLEXCONNECT"
             ],
             "example": "POSTGRESQL",
             "type": "string"
@@ -2349,6 +2367,69 @@
         ],
         "type": "object"
       },
+      "DeclarativeIdentityProvider": {
+        "description": "Notification channels.",
+        "properties": {
+          "customClaimMapping": {
+            "additionalProperties": {
+              "description": "Map of custom claim overrides. To be used when your Idp does not provide default claims (sub, email, name, given_name, family_name, urn.gooddata.user_groups [optional]). Define the key pair for the claim you wish to override, where the key is the default name of the attribute and the value is your custom name for the given attribute.",
+              "maxLength": 10000,
+              "type": "string"
+            },
+            "description": "Map of custom claim overrides. To be used when your Idp does not provide default claims (sub, email, name, given_name, family_name, urn.gooddata.user_groups [optional]). Define the key pair for the claim you wish to override, where the key is the default name of the attribute and the value is your custom name for the given attribute.",
+            "maxLength": 10000,
+            "type": "object"
+          },
+          "id": {
+            "description": "FilterView object ID.",
+            "example": "filterView-1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "identifiers": {
+            "description": "List of identifiers for this IdP, where an identifier is a domain name. Users with email addresses belonging to these domains will be authenticated by this IdP. In multiple provider setup, this field is mandatory.",
+            "example": [
+              "gooddata.com"
+            ],
+            "items": {
+              "description": "List of identifiers for this IdP, where an identifier is a domain name. Users with email addresses belonging to these domains will be authenticated by this IdP. In multiple provider setup, this field is mandatory.",
+              "example": "[\"gooddata.com\"]",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "oauthClientId": {
+            "description": "The OAuth client id of your OIDC provider. This field is mandatory for OIDC IdP.",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "oauthClientSecret": {
+            "description": "The OAuth client secret of your OIDC provider. This field is mandatory for OIDC IdP.",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "oauthIssuerId": {
+            "description": "Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.",
+            "example": "myOidcProvider",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "oauthIssuerLocation": {
+            "description": "The location of your OIDC provider. This field is mandatory for OIDC IdP.",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "samlMetadata": {
+            "description": "Base64 encoded xml document with SAML metadata. This document is issued by your SAML provider. It includes the issuer's name, expiration information, and keys that can be used to validate the response from the identity provider. This field is mandatory for SAML IdP.",
+            "maxLength": 15000,
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "type": "object"
+      },
       "DeclarativeJwk": {
         "description": "A declarative form of the JWK.",
         "properties": {
@@ -2580,6 +2661,9 @@
                 "$ref": "#/components/schemas/DefaultSmtp"
               },
               {
+                "$ref": "#/components/schemas/InPlatform"
+              },
+              {
                 "$ref": "#/components/schemas/Smtp"
               },
               {
@@ -2591,7 +2675,8 @@
             "enum": [
               "WEBHOOK",
               "SMTP",
-              "DEFAULT_SMTP"
+              "DEFAULT_SMTP",
+              "IN_PLATFORM"
             ],
             "nullable": true,
             "readOnly": true,
@@ -2663,6 +2748,12 @@
             },
             "type": "array"
           },
+          "identityProviders": {
+            "items": {
+              "$ref": "#/components/schemas/DeclarativeIdentityProvider"
+            },
+            "type": "array"
+          },
           "jwks": {
             "items": {
               "$ref": "#/components/schemas/DeclarativeJwk"
@@ -2711,6 +2802,12 @@
       "DeclarativeOrganizationInfo": {
         "description": "Information available about an organization.",
         "properties": {
+          "allowedOrigins": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
           "colorPalettes": {
             "description": "A list of color palettes.",
             "items": {
@@ -3890,7 +3987,7 @@
               "fromEmail": {
                 "default": "no-reply@gooddata.com",
                 "description": "E-mail address to send notifications from. Currently this does not have any effect. E-mail 'no-reply@gooddata.com' is used instead.",
-                "pattern": "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)])",
+                "format": "email",
                 "type": "string"
               },
               "fromEmailName": {
@@ -4452,6 +4549,27 @@
         ],
         "type": "object"
       },
+      "InPlatform": {
+        "allOf": [
+          {
+            "properties": {
+              "type": {
+                "description": "The destination type.",
+                "enum": [
+                  "IN_PLATFORM"
+                ],
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "description": "In-platform destination for notifications.",
+        "required": [
+          "type"
+        ],
+        "type": "object"
+      },
       "InlineFilterDefinition": {
         "description": "Filter in form of direct MAQL query.",
         "properties": {
@@ -4461,6 +4579,9 @@
                 "type": "boolean"
               },
               "filter": {
+                "type": "string"
+              },
+              "localIdentifier": {
                 "type": "string"
               }
             },
@@ -7884,7 +8005,8 @@
                   "PINOT",
                   "SINGLESTORE",
                   "MOTHERDUCK",
-                  "FLIGHTRPC"
+                  "FLIGHTRPC",
+                  "FLEXCONNECT"
                 ],
                 "type": "string"
               }
@@ -7999,6 +8121,18 @@
                 "nullable": true,
                 "type": "string"
               },
+              "clientId": {
+                "description": "The client id to use to connect to the database providing the data for the data source (for example a Databricks Service Account).",
+                "maxLength": 255,
+                "nullable": true,
+                "type": "string"
+              },
+              "clientSecret": {
+                "description": "The client secret to use to connect to the database providing the data for the data source (for example a Databricks Service Account).",
+                "maxLength": 255,
+                "nullable": true,
+                "type": "string"
+              },
               "name": {
                 "description": "User-facing name of the data source.",
                 "maxLength": 255,
@@ -8048,7 +8182,7 @@
                 "type": "string"
               },
               "token": {
-                "description": "The token to use to connect to the database providing the data for the data source (for example a BigQuery Sevice Acount).",
+                "description": "The token to use to connect to the database providing the data for the data source (for example a BigQuery Service Account).",
                 "maxLength": 10000,
                 "nullable": true,
                 "type": "string"
@@ -8078,7 +8212,8 @@
                   "PINOT",
                   "SINGLESTORE",
                   "MOTHERDUCK",
-                  "FLIGHTRPC"
+                  "FLIGHTRPC",
+                  "FLEXCONNECT"
                 ],
                 "type": "string"
               },
@@ -8145,7 +8280,8 @@
                 "enum": [
                   "USERNAME_PASSWORD",
                   "TOKEN",
-                  "KEY_PAIR"
+                  "KEY_PAIR",
+                  "CLIENT_SECRET"
                 ],
                 "nullable": true,
                 "type": "string"
@@ -8156,6 +8292,12 @@
                   "ALWAYS",
                   "NEVER"
                 ],
+                "nullable": true,
+                "type": "string"
+              },
+              "clientId": {
+                "description": "The client id to use to connect to the database providing the data for the data source (for example a Databricks Service Account).",
+                "maxLength": 255,
                 "nullable": true,
                 "type": "string"
               },
@@ -8234,7 +8376,8 @@
                   "PINOT",
                   "SINGLESTORE",
                   "MOTHERDUCK",
-                  "FLIGHTRPC"
+                  "FLIGHTRPC",
+                  "FLEXCONNECT"
                 ],
                 "type": "string"
               },
@@ -8361,6 +8504,18 @@
                 "nullable": true,
                 "type": "string"
               },
+              "clientId": {
+                "description": "The client id to use to connect to the database providing the data for the data source (for example a Databricks Service Account).",
+                "maxLength": 255,
+                "nullable": true,
+                "type": "string"
+              },
+              "clientSecret": {
+                "description": "The client secret to use to connect to the database providing the data for the data source (for example a Databricks Service Account).",
+                "maxLength": 255,
+                "nullable": true,
+                "type": "string"
+              },
               "name": {
                 "description": "User-facing name of the data source.",
                 "maxLength": 255,
@@ -8410,7 +8565,7 @@
                 "type": "string"
               },
               "token": {
-                "description": "The token to use to connect to the database providing the data for the data source (for example a BigQuery Sevice Acount).",
+                "description": "The token to use to connect to the database providing the data for the data source (for example a BigQuery Service Account).",
                 "maxLength": 10000,
                 "nullable": true,
                 "type": "string"
@@ -8440,7 +8595,8 @@
                   "PINOT",
                   "SINGLESTORE",
                   "MOTHERDUCK",
-                  "FLIGHTRPC"
+                  "FLIGHTRPC",
+                  "FLEXCONNECT"
                 ],
                 "type": "string"
               },
@@ -10533,6 +10689,14 @@
         "properties": {
           "attributes": {
             "properties": {
+              "customClaimMapping": {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "description": "Map of custom claim overrides. To be used when your Idp does not provide default claims (sub, email, name, given_name, family_name, urn.gooddata.user_groups [optional]). Define the key pair for the claim you wish to override, where the key is the default name of the attribute and the value is your custom name for the given attribute.",
+                "maxLength": 10000,
+                "type": "object"
+              },
               "identifiers": {
                 "description": "List of identifiers for this IdP, where an identifier is a domain name. Users with email addresses belonging to these domains will be authenticated by this IdP. In multiple provider setup, this field is mandatory.",
                 "example": [
@@ -10543,32 +10707,33 @@
                 },
                 "type": "array"
               },
-              "specification": {
-                "description": "Specification of the identity provider.",
-                "oneOf": [
-                  {
-                    "$ref": "#/components/schemas/SamlIdpSpecification"
-                  },
-                  {
-                    "$ref": "#/components/schemas/OidcIdpSpecification"
-                  }
-                ],
-                "type": "object"
+              "oauthClientId": {
+                "description": "The OAuth client id of your OIDC provider. This field is mandatory for OIDC IdP.",
+                "maxLength": 255,
+                "type": "string"
               },
-              "type": {
-                "description": "Type of the identity provider.",
-                "enum": [
-                  "SAML",
-                  "OIDC"
-                ],
-                "example": "SAML",
+              "oauthClientSecret": {
+                "description": "The OAuth client secret of your OIDC provider. This field is mandatory for OIDC IdP.",
+                "maxLength": 255,
+                "type": "string"
+              },
+              "oauthIssuerId": {
+                "description": "Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.",
+                "example": "myOidcProvider",
+                "maxLength": 255,
+                "type": "string"
+              },
+              "oauthIssuerLocation": {
+                "description": "The location of your OIDC provider. This field is mandatory for OIDC IdP.",
+                "maxLength": 255,
+                "type": "string"
+              },
+              "samlMetadata": {
+                "description": "Base64 encoded xml document with SAML metadata. This document is issued by your SAML provider. It includes the issuer's name, expiration information, and keys that can be used to validate the response from the identity provider. This field is mandatory for SAML IdP.",
+                "maxLength": 15000,
                 "type": "string"
               }
             },
-            "required": [
-              "specification",
-              "type"
-            ],
             "type": "object"
           },
           "id": {
@@ -10587,7 +10752,6 @@
           }
         },
         "required": [
-          "attributes",
           "id",
           "type"
         ],
@@ -10609,6 +10773,14 @@
         "properties": {
           "attributes": {
             "properties": {
+              "customClaimMapping": {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "description": "Map of custom claim overrides. To be used when your Idp does not provide default claims (sub, email, name, given_name, family_name, urn.gooddata.user_groups [optional]). Define the key pair for the claim you wish to override, where the key is the default name of the attribute and the value is your custom name for the given attribute.",
+                "maxLength": 10000,
+                "type": "object"
+              },
               "identifiers": {
                 "description": "List of identifiers for this IdP, where an identifier is a domain name. Users with email addresses belonging to these domains will be authenticated by this IdP. In multiple provider setup, this field is mandatory.",
                 "example": [
@@ -10619,32 +10791,23 @@
                 },
                 "type": "array"
               },
-              "specification": {
-                "description": "Specification of the identity provider.",
-                "oneOf": [
-                  {
-                    "$ref": "#/components/schemas/SamlIdpSpecification"
-                  },
-                  {
-                    "$ref": "#/components/schemas/OidcIdpSpecification"
-                  }
-                ],
-                "type": "object"
+              "oauthClientId": {
+                "description": "The OAuth client id of your OIDC provider. This field is mandatory for OIDC IdP.",
+                "maxLength": 255,
+                "type": "string"
               },
-              "type": {
-                "description": "Type of the identity provider.",
-                "enum": [
-                  "SAML",
-                  "OIDC"
-                ],
-                "example": "SAML",
+              "oauthIssuerId": {
+                "description": "Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.",
+                "example": "myOidcProvider",
+                "maxLength": 255,
+                "type": "string"
+              },
+              "oauthIssuerLocation": {
+                "description": "The location of your OIDC provider. This field is mandatory for OIDC IdP.",
+                "maxLength": 255,
                 "type": "string"
               }
             },
-            "required": [
-              "specification",
-              "type"
-            ],
             "type": "object"
           },
           "id": {
@@ -10663,7 +10826,6 @@
           }
         },
         "required": [
-          "attributes",
           "id",
           "type"
         ],
@@ -10725,6 +10887,14 @@
         "properties": {
           "attributes": {
             "properties": {
+              "customClaimMapping": {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "description": "Map of custom claim overrides. To be used when your Idp does not provide default claims (sub, email, name, given_name, family_name, urn.gooddata.user_groups [optional]). Define the key pair for the claim you wish to override, where the key is the default name of the attribute and the value is your custom name for the given attribute.",
+                "maxLength": 10000,
+                "type": "object"
+              },
               "identifiers": {
                 "description": "List of identifiers for this IdP, where an identifier is a domain name. Users with email addresses belonging to these domains will be authenticated by this IdP. In multiple provider setup, this field is mandatory.",
                 "example": [
@@ -10735,25 +10905,30 @@
                 },
                 "type": "array"
               },
-              "specification": {
-                "description": "Specification of the identity provider.",
-                "oneOf": [
-                  {
-                    "$ref": "#/components/schemas/SamlIdpSpecification"
-                  },
-                  {
-                    "$ref": "#/components/schemas/OidcIdpSpecification"
-                  }
-                ],
-                "type": "object"
+              "oauthClientId": {
+                "description": "The OAuth client id of your OIDC provider. This field is mandatory for OIDC IdP.",
+                "maxLength": 255,
+                "type": "string"
               },
-              "type": {
-                "description": "Type of the identity provider.",
-                "enum": [
-                  "SAML",
-                  "OIDC"
-                ],
-                "example": "SAML",
+              "oauthClientSecret": {
+                "description": "The OAuth client secret of your OIDC provider. This field is mandatory for OIDC IdP.",
+                "maxLength": 255,
+                "type": "string"
+              },
+              "oauthIssuerId": {
+                "description": "Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.",
+                "example": "myOidcProvider",
+                "maxLength": 255,
+                "type": "string"
+              },
+              "oauthIssuerLocation": {
+                "description": "The location of your OIDC provider. This field is mandatory for OIDC IdP.",
+                "maxLength": 255,
+                "type": "string"
+              },
+              "samlMetadata": {
+                "description": "Base64 encoded xml document with SAML metadata. This document is issued by your SAML provider. It includes the issuer's name, expiration information, and keys that can be used to validate the response from the identity provider. This field is mandatory for SAML IdP.",
+                "maxLength": 15000,
                 "type": "string"
               }
             },
@@ -10775,7 +10950,6 @@
           }
         },
         "required": [
-          "attributes",
           "id",
           "type"
         ],
@@ -12060,6 +12234,9 @@
                     "$ref": "#/components/schemas/DefaultSmtp"
                   },
                   {
+                    "$ref": "#/components/schemas/InPlatform"
+                  },
+                  {
                     "$ref": "#/components/schemas/Smtp"
                   },
                   {
@@ -12071,7 +12248,8 @@
                 "enum": [
                   "WEBHOOK",
                   "SMTP",
-                  "DEFAULT_SMTP"
+                  "DEFAULT_SMTP",
+                  "IN_PLATFORM"
                 ],
                 "nullable": true,
                 "type": "string"
@@ -12164,6 +12342,9 @@
                     "$ref": "#/components/schemas/DefaultSmtp"
                   },
                   {
+                    "$ref": "#/components/schemas/InPlatform"
+                  },
+                  {
                     "$ref": "#/components/schemas/Smtp"
                   },
                   {
@@ -12175,7 +12356,8 @@
                 "enum": [
                   "WEBHOOK",
                   "SMTP",
-                  "DEFAULT_SMTP"
+                  "DEFAULT_SMTP",
+                  "IN_PLATFORM"
                 ],
                 "nullable": true,
                 "type": "string"
@@ -12289,6 +12471,9 @@
                     "$ref": "#/components/schemas/DefaultSmtp"
                   },
                   {
+                    "$ref": "#/components/schemas/InPlatform"
+                  },
+                  {
                     "$ref": "#/components/schemas/Smtp"
                   },
                   {
@@ -12300,7 +12485,8 @@
                 "enum": [
                   "WEBHOOK",
                   "SMTP",
-                  "DEFAULT_SMTP"
+                  "DEFAULT_SMTP",
+                  "IN_PLATFORM"
                 ],
                 "nullable": true,
                 "type": "string"
@@ -12374,6 +12560,9 @@
                     "$ref": "#/components/schemas/DefaultSmtp"
                   },
                   {
+                    "$ref": "#/components/schemas/InPlatform"
+                  },
+                  {
                     "$ref": "#/components/schemas/Smtp"
                   },
                   {
@@ -12385,7 +12574,8 @@
                 "enum": [
                   "WEBHOOK",
                   "SMTP",
-                  "DEFAULT_SMTP"
+                  "DEFAULT_SMTP",
+                  "IN_PLATFORM"
                 ],
                 "nullable": true,
                 "type": "string"
@@ -16774,6 +16964,9 @@
               "label": {
                 "$ref": "#/components/schemas/AfmIdentifier"
               },
+              "localIdentifier": {
+                "type": "string"
+              },
               "notIn": {
                 "$ref": "#/components/schemas/AttributeFilterElements"
               }
@@ -16865,6 +17058,9 @@
           },
           {
             "$ref": "#/components/schemas/DefaultSmtp"
+          },
+          {
+            "$ref": "#/components/schemas/InPlatform"
           }
         ],
         "properties": {
@@ -16896,44 +17092,6 @@
             "$ref": "#/components/schemas/ObjectLinks"
           }
         },
-        "type": "object"
-      },
-      "OidcIdpSpecification": {
-        "description": "Specification of an OIDC identity provider",
-        "properties": {
-          "oauthClientId": {
-            "maxLength": 255,
-            "type": "string"
-          },
-          "oauthClientSecret": {
-            "maxLength": 255,
-            "type": "string",
-            "writeOnly": true
-          },
-          "oauthIssuerId": {
-            "description": "Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.",
-            "example": "myOidcProvider",
-            "maxLength": 255,
-            "type": "string"
-          },
-          "oauthIssuerLocation": {
-            "maxLength": 255,
-            "type": "string"
-          },
-          "oauthSubjectIdClaim": {
-            "description": "Any string identifying the claim in ID token, that should be used for user identification. The default value is 'sub'.",
-            "example": "oid",
-            "maxLength": 255,
-            "type": "string"
-          }
-        },
-        "required": [
-          "oauthClientId",
-          "oauthClientSecret",
-          "oauthIssuerId",
-          "oauthIssuerLocation",
-          "oauthSubjectIdClaim"
-        ],
         "type": "object"
       },
       "OrganizationPermissionAssignment": {
@@ -17300,6 +17458,9 @@
               },
               "label": {
                 "$ref": "#/components/schemas/AfmIdentifier"
+              },
+              "localIdentifier": {
+                "type": "string"
               }
             },
             "required": [
@@ -17353,6 +17514,9 @@
                 "example": 100,
                 "type": "number"
               },
+              "localIdentifier": {
+                "type": "string"
+              },
               "measure": {
                 "$ref": "#/components/schemas/AfmIdentifier"
               },
@@ -17405,6 +17569,9 @@
             "properties": {
               "applyOnResult": {
                 "type": "boolean"
+              },
+              "localIdentifier": {
+                "type": "string"
               },
               "measures": {
                 "items": {
@@ -17551,6 +17718,9 @@
                   "QUARTER_OF_YEAR"
                 ],
                 "example": "DAY",
+                "type": "string"
+              },
+              "localIdentifier": {
                 "type": "string"
               },
               "to": {
@@ -17719,21 +17889,6 @@
         ],
         "type": "object"
       },
-      "SamlIdpSpecification": {
-        "description": "Specification of a SAML identity provider",
-        "properties": {
-          "metadata": {
-            "description": "Base64 encoded xml document with SAML metadata. This document is issued by your SAML provider. It includes the issuer's name, expiration information, and keys that can be used to validate the response from the identity provider.",
-            "maxLength": 15000,
-            "type": "string",
-            "writeOnly": true
-          }
-        },
-        "required": [
-          "metadata"
-        ],
-        "type": "object"
-      },
       "Settings": {
         "description": "Additional settings.",
         "properties": {
@@ -17858,7 +18013,7 @@
               "fromEmail": {
                 "default": "no-reply@gooddata.com",
                 "description": "E-mail address to send notifications from.",
-                "pattern": "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)])",
+                "format": "email",
                 "type": "string"
               },
               "fromEmailName": {
@@ -18855,6 +19010,7 @@
         },
         "summary": "Manage Permissions for a Data Source",
         "tags": [
+          "Manage Permissions",
           "Permissions",
           "actions"
         ]
@@ -21956,7 +22112,7 @@
         "parameters": [
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=type==IdentityProviderTypeValue;identifiers==v1,v2,v3",
+            "example": "filter=identifiers==v1,v2,v3;customClaimMapping==MapValue",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -22061,7 +22217,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=type==IdentityProviderTypeValue;identifiers==v1,v2,v3",
+            "example": "filter=identifiers==v1,v2,v3;customClaimMapping==MapValue",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -22095,7 +22251,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=type==IdentityProviderTypeValue;identifiers==v1,v2,v3",
+            "example": "filter=identifiers==v1,v2,v3;customClaimMapping==MapValue",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -22130,7 +22286,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=type==IdentityProviderTypeValue;identifiers==v1,v2,v3",
+            "example": "filter=identifiers==v1,v2,v3;customClaimMapping==MapValue",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -22181,7 +22337,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=type==IdentityProviderTypeValue;identifiers==v1,v2,v3",
+            "example": "filter=identifiers==v1,v2,v3;customClaimMapping==MapValue",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -33805,7 +33961,8 @@
         },
         "summary": "Get permissions for the data source",
         "tags": [
-          "layout"
+          "layout",
+          "Manage Permissions"
         ],
         "x-gdc-security-info": {
           "description": "Permissions required to manipulate permissions.",
@@ -33815,7 +33972,7 @@
         }
       },
       "put": {
-        "description": "et data source permissions.",
+        "description": "set data source permissions.",
         "operationId": "setDataSourcePermissions",
         "parameters": [
           {
@@ -33844,10 +34001,76 @@
         },
         "summary": "Set data source permissions.",
         "tags": [
-          "layout"
+          "layout",
+          "Manage Permissions"
         ],
         "x-gdc-security-info": {
           "description": "Permissions to modify the user data filters.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
+    "/api/v1/layout/identityProviders": {
+      "get": {
+        "description": "Gets complete layout of identity providers.",
+        "operationId": "getIdentityProvidersLayout",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/DeclarativeIdentityProvider"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Retrieved layout of all identity providers."
+          }
+        },
+        "summary": "Get all identity providers layout",
+        "tags": [
+          "layout",
+          "Identity Providers"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permission required to get identity providers layout.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      },
+      "put": {
+        "description": "Sets identity providers in organization.",
+        "operationId": "setIdentityProviders",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "items": {
+                  "$ref": "#/components/schemas/DeclarativeIdentityProvider"
+                },
+                "type": "array"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "All identity providers set."
+          }
+        },
+        "summary": "Set all identity providers",
+        "tags": [
+          "layout",
+          "Identity Providers"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permission required to set identity providers layout.",
           "permissions": [
             "MANAGE"
           ]
@@ -33872,7 +34095,8 @@
         },
         "summary": "Get all notification channels layout",
         "tags": [
-          "layout"
+          "layout",
+          "Notification Channels"
         ],
         "x-gdc-security-info": {
           "description": "Permission required to get notification channels layout.",
@@ -33901,7 +34125,8 @@
         },
         "summary": "Set all notification channels",
         "tags": [
-          "layout"
+          "layout",
+          "Notification Channels"
         ],
         "x-gdc-security-info": {
           "description": "Permission required to set data filters layout.",

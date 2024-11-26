@@ -93,6 +93,7 @@ class NegativeAttributeFilterNegativeAttributeFilter(ModelNormal):
             'label': (AfmIdentifier,),  # noqa: E501
             'not_in': (AttributeFilterElements,),  # noqa: E501
             'apply_on_result': (bool,),  # noqa: E501
+            'local_identifier': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -104,6 +105,7 @@ class NegativeAttributeFilterNegativeAttributeFilter(ModelNormal):
         'label': 'label',  # noqa: E501
         'not_in': 'notIn',  # noqa: E501
         'apply_on_result': 'applyOnResult',  # noqa: E501
+        'local_identifier': 'localIdentifier',  # noqa: E501
     }
 
     read_only_vars = {
@@ -152,6 +154,7 @@ class NegativeAttributeFilterNegativeAttributeFilter(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             apply_on_result (bool): [optional]  # noqa: E501
+            local_identifier (str): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -244,6 +247,7 @@ class NegativeAttributeFilterNegativeAttributeFilter(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             apply_on_result (bool): [optional]  # noqa: E501
+            local_identifier (str): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

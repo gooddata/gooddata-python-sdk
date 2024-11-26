@@ -97,6 +97,7 @@ class RangeMeasureValueFilterRangeMeasureValueFilter(ModelNormal):
             'operator': (str,),  # noqa: E501
             'to': (float,),  # noqa: E501
             'apply_on_result': (bool,),  # noqa: E501
+            'local_identifier': (str,),  # noqa: E501
             'treat_null_values_as': (float,),  # noqa: E501
         }
 
@@ -111,6 +112,7 @@ class RangeMeasureValueFilterRangeMeasureValueFilter(ModelNormal):
         'operator': 'operator',  # noqa: E501
         'to': 'to',  # noqa: E501
         'apply_on_result': 'applyOnResult',  # noqa: E501
+        'local_identifier': 'localIdentifier',  # noqa: E501
         'treat_null_values_as': 'treatNullValuesAs',  # noqa: E501
     }
 
@@ -162,6 +164,7 @@ class RangeMeasureValueFilterRangeMeasureValueFilter(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             apply_on_result (bool): [optional]  # noqa: E501
+            local_identifier (str): [optional]  # noqa: E501
             treat_null_values_as (float): [optional]  # noqa: E501
         """
 
@@ -259,6 +262,7 @@ class RangeMeasureValueFilterRangeMeasureValueFilter(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             apply_on_result (bool): [optional]  # noqa: E501
+            local_identifier (str): [optional]  # noqa: E501
             treat_null_values_as (float): [optional]  # noqa: E501
         """
 

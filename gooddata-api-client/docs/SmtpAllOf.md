@@ -4,7 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**from_email** | **str** | E-mail address to send notifications from. | [optional]  if omitted the server will use the default value of "no-reply@gooddata.com"
+**from_email** | **str** | E-mail address to send notifications from. | [optional]  if omitted the server will use the default value of no-reply@gooddata.com
 **from_email_name** | **str** | An optional e-mail name to send notifications from. | [optional]  if omitted the server will use the default value of "GoodData"
 **host** | **str** | The SMTP server address. | [optional] 
 **password** | **str** | The SMTP server password. | [optional] 

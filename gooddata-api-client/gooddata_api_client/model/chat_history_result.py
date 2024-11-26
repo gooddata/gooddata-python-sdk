@@ -89,6 +89,7 @@ class ChatHistoryResult(ModelNormal):
         lazy_import()
         return {
             'interactions': ([ChatHistoryInteraction],),  # noqa: E501
+            'thread_id': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -98,6 +99,7 @@ class ChatHistoryResult(ModelNormal):
 
     attribute_map = {
         'interactions': 'interactions',  # noqa: E501
+        'thread_id': 'threadId',  # noqa: E501
     }
 
     read_only_vars = {
@@ -107,11 +109,12 @@ class ChatHistoryResult(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, interactions, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, interactions, thread_id, *args, **kwargs):  # noqa: E501
         """ChatHistoryResult - a model defined in OpenAPI
 
         Args:
             interactions ([ChatHistoryInteraction]): List of chat history interactions.
+            thread_id (str): The conversation thread ID.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -176,6 +179,7 @@ class ChatHistoryResult(ModelNormal):
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
         self.interactions = interactions
+        self.thread_id = thread_id
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -196,11 +200,12 @@ class ChatHistoryResult(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, interactions, *args, **kwargs):  # noqa: E501
+    def __init__(self, interactions, thread_id, *args, **kwargs):  # noqa: E501
         """ChatHistoryResult - a model defined in OpenAPI
 
         Args:
             interactions ([ChatHistoryInteraction]): List of chat history interactions.
+            thread_id (str): The conversation thread ID.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -263,6 +268,7 @@ class ChatHistoryResult(ModelNormal):
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
         self.interactions = interactions
+        self.thread_id = thread_id
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

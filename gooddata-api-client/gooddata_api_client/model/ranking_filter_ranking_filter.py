@@ -96,6 +96,7 @@ class RankingFilterRankingFilter(ModelNormal):
             'operator': (str,),  # noqa: E501
             'value': (int,),  # noqa: E501
             'apply_on_result': (bool,),  # noqa: E501
+            'local_identifier': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -108,6 +109,7 @@ class RankingFilterRankingFilter(ModelNormal):
         'operator': 'operator',  # noqa: E501
         'value': 'value',  # noqa: E501
         'apply_on_result': 'applyOnResult',  # noqa: E501
+        'local_identifier': 'localIdentifier',  # noqa: E501
     }
 
     read_only_vars = {
@@ -157,6 +159,7 @@ class RankingFilterRankingFilter(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             apply_on_result (bool): [optional]  # noqa: E501
+            local_identifier (str): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -251,6 +254,7 @@ class RankingFilterRankingFilter(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             apply_on_result (bool): [optional]  # noqa: E501
+            local_identifier (str): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
