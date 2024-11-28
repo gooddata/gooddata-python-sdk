@@ -104,6 +104,7 @@ class CatalogDeclarativeDataSource(Base):
     parameters: Optional[list[CatalogParameter]] = None
     decoded_parameters: Optional[list[CatalogParameter]] = None
     permissions: list[CatalogDeclarativeDataSourcePermission] = attr.field(factory=list)
+    client_id: Optional[str] = None
 
     def to_test_request(
         self,
@@ -111,7 +112,6 @@ class CatalogDeclarativeDataSource(Base):
         token: Optional[str] = None,
         private_key: Optional[str] = None,
         private_key_passphrase: Optional[str] = None,
-        client_id: Optional[str] = None,
         client_secret: Optional[str] = None,
     ) -> TestDefinitionRequest:
         kwargs: dict[str, Any] = {"schema": self.schema}
@@ -125,8 +125,6 @@ class CatalogDeclarativeDataSource(Base):
             kwargs["private_key"] = private_key
         if private_key_passphrase is not None:
             kwargs["private_key_passphrase"] = private_key
-        if client_id is not None:
-            kwargs["client_id"] = client_id
         if client_secret is not None:
             kwargs["client_secret"] = client_secret
         return TestDefinitionRequest(type=self.type, url=self.url, **kwargs)
@@ -147,7 +145,6 @@ class CatalogDeclarativeDataSource(Base):
         token: Optional[str] = None,
         private_key: Optional[str] = None,
         private_key_passphrase: Optional[str] = None,
-        client_id: Optional[str] = None,
         client_secret: Optional[str] = None,
     ) -> DeclarativeDataSource:
         dictionary = self._get_snake_dict()
@@ -159,8 +156,6 @@ class CatalogDeclarativeDataSource(Base):
             dictionary["private_key"] = private_key
         if private_key_passphrase is not None:
             dictionary["private_key_passphrase"] = private_key_passphrase
-        if client_id is not None:
-            dictionary["client_id"] = client_id
         if client_secret is not None:
             dictionary["client_secret"] = client_secret
         return self.client_class().from_dict(dictionary)
