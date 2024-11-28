@@ -63,8 +63,8 @@ class CatalogDeclarativeAutomation(CatalogAnalyticsBaseMeta):
     export_definitions: Optional[list[CatalogExportDefinitionIdentifier]] = None
     notification_channel: Optional[CatalogNotificationChannelIdentifier] = None
     schedule: Optional[CatalogAutomationSchedule] = None
-    tabular_exports: Optional[CatalogAutomationTabularExport] = None
-    visual_exports: Optional[CatalogAutomationVisualExport] = None
+    tabular_exports: Optional[list[CatalogAutomationTabularExport]] = None
+    visual_exports: Optional[list[CatalogAutomationVisualExport]] = None
 
     @staticmethod
     def client_class() -> builtins.type[DeclarativeAutomation]:
