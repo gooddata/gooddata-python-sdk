@@ -11,7 +11,7 @@ REQUIRES = [
     "pyyaml>=5.1",
     "attrs>=21.4.0,<=24.2.0",
     "cattrs>=22.1.0,<=24.1.1",
-    "requests~=2.31.0",
+    "requests~=2.32.0",
     "tabulate~=0.8.10",
 ]
 
