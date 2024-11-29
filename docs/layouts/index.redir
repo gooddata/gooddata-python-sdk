@@ -2,6 +2,7 @@
 / {{ .Site.BaseURL }}/latest/ 301!
 /docs/ {{ .Site.BaseURL }}/latest/ 301!
 /1.32/ {{ .Site.BaseURL }}/latest 301!
+/1.32.1/ {{ .Site.BaseURL }}/latest 301!
 /1.32.0/ {{ .Site.BaseURL }}/latest 301!
 /1.31.0/ {{ .Site.BaseURL }}/1.31 301!
 /1.30.0/ {{ .Site.BaseURL }}/1.30 301!
