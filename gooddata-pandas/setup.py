@@ -7,7 +7,7 @@ this_directory = Path(__file__).parent
 long_description = (this_directory / "README.md").read_text(encoding="utf-8")
 
 REQUIRES = [
-    "gooddata-sdk~=1.32.1",
+    "gooddata-sdk~=1.32.2",
     "pandas>=2.0.0,<3.0.0",
 ]
 
@@ -16,7 +16,7 @@ setup(
     description="GoodData Cloud to pandas",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    version="1.32.1",
+    version="1.32.2",
     author="GoodData",
     author_email="support@gooddata.com",
     license="MIT",
@@ -26,7 +26,7 @@ setup(
     packages=find_packages(exclude=["tests*"]),
     python_requires=">=3.9.0",
     project_urls={
-        "Documentation": "https://gooddata-pandas.readthedocs.io/en/v1.32.1",
+        "Documentation": "https://gooddata-pandas.readthedocs.io/en/v1.32.2",
         "Source": "https://github.com/gooddata/gooddata-python-sdk",
     },
     classifiers=[
