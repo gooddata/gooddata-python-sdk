@@ -13,7 +13,7 @@ REQUIRES = [
     "attrs>=21.4.0,<=24.2.0",
     "cattrs>=22.1.0,<=24.1.1",
     "brotli==1.1.0",
-    "requests~=2.31.0",
+    "requests~=2.32.0",
     "python-dotenv>=1.0.0,<2.0.0",
 ]
 
