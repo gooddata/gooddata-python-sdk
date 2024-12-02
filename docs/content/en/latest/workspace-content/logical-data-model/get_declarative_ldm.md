@@ -5,25 +5,7 @@ weight: 80
 superheading: "catalog_workspace_content."
 ---
 
-
-
-``get_declarative_ldm(workspace_id: str)``
-
-Gets a logical model layout.
-
-On CatalogDeclarativeModel user can call ``modify_mapped_data_source(data_source_mapping: dict)`` method, which substitutes data source id in datasets.
-
-{{% parameters-block  title="Parameters" %}}
-{{< parameter p_name="workspace_id" p_type="string" >}}
-Workspace identification string e.g. "demo"
-{{< /parameter >}}
-{{% /parameters-block %}}
-
-{{% parameters-block title="Returns" %}}
-{{< parameter p_type="CatalogDeclarativeModel" >}}
-Object Containing declarative Logical Data Model
-{{< /parameter >}}
-{{% /parameters-block %}}
+{{< api-ref "sdk.CatalogWorkspaceContentService.get_declarative_ldm" >}}
 
 ## Example
 

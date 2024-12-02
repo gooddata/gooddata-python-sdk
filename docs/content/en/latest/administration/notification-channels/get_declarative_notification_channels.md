@@ -6,20 +6,7 @@ no_list: true
 superheading: "catalog_organization."
 ---
 
-
-
-``get_declarative_notification_channels()``
-
-Get all declarative notification channels in the current organization.
-
-{{% parameters-block  title="Parameters" None="yes" %}}
-{{% /parameters-block %}}
-
-{{% parameters-block title="Returns" %}}
-{{< parameter p_type="list[CatalogDeclarativeNotificationChannel]" >}}
-List of declarative notification channels.
-{{< /parameter >}}
-{{% /parameters-block %}}
+{{< api-ref "sdk.CatalogOrganizationService.get_declarative_notification_channels" >}}
 
 ## Example
 

@@ -6,27 +6,8 @@ no_list: true
 superheading: "catalog_user."
 ---
 
+{{< api-ref "sdk.CatalogUserService.get_user_api_token" >}}
 
-
-``get_user_api_token(user_id: str, api_token_id: str)``
-
-Get user api token.
-
-{{% parameters-block  title="Parameters"%}}
-{{< parameter p_name="user_id" p_type="string" >}}
-User identification string. e.g. "admin"
-{{< /parameter >}}
-{{< parameter p_name="api_token_id" p_type="string" >}}
-API token identification string. e.g. "admin_token"
-{{< /parameter >}}
-{{% /parameters-block %}}
-
-{{% parameters-block title="Returns" %}}
-{{< parameter p_type="CatalogApiToken" >}}
-Instance of CatalogApiToken holding the information about API token.
-Note that the bearer token is not returned. It will always be None.
-{{< /parameter >}}
-{{% /parameters-block %}}
 ## Example
 
 ```python
