@@ -59,15 +59,17 @@ class EntityIdentifier(ModelNormal):
         ('type',): {
             'ANALYTICALDASHBOARD': "analyticalDashboard",
             'ATTRIBUTE': "attribute",
+            'ATTRIBUTEHIERARCHY': "attributeHierarchy",
             'DASHBOARDPLUGIN': "dashboardPlugin",
             'DATASET': "dataset",
             'FACT': "fact",
             'LABEL': "label",
             'METRIC': "metric",
             'USERDATAFILTER': "userDataFilter",
-            'PROMPT': "prompt",
+            'AUTOMATION': "automation",
             'VISUALIZATIONOBJECT': "visualizationObject",
             'FILTERCONTEXT': "filterContext",
+            'FILTERVIEW': "filterView",
         },
     }
 

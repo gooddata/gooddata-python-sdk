@@ -1840,7 +1840,6 @@
               "PINOT",
               "SINGLESTORE",
               "MOTHERDUCK",
-              "FLIGHTRPC",
               "FLEXCONNECT"
             ],
             "example": "POSTGRESQL",
@@ -2686,6 +2685,15 @@
             "description": "Identifier of a notification channel",
             "example": "notification-channel-1",
             "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "inPlatformNotification": {
+            "default": "DISABLED",
+            "description": "In-platform notifications configuration. No effect if the destination type is IN_PLATFORM.\nDISABLED - in-platform notifications are not sent\nENABLED - in-platform notifications are sent in addition to the regular notifications\n",
+            "enum": [
+              "DISABLED",
+              "ENABLED"
+            ],
             "type": "string"
           },
           "name": {
@@ -4050,15 +4058,17 @@
             "enum": [
               "analyticalDashboard",
               "attribute",
+              "attributeHierarchy",
               "dashboardPlugin",
               "dataset",
               "fact",
               "label",
               "metric",
               "userDataFilter",
-              "prompt",
+              "automation",
               "visualizationObject",
-              "filterContext"
+              "filterContext",
+              "filterView"
             ],
             "example": "metric",
             "type": "string"
@@ -4148,15 +4158,17 @@
             "enum": [
               "analyticalDashboard",
               "attribute",
+              "attributeHierarchy",
               "dashboardPlugin",
               "dataset",
               "fact",
               "label",
               "metric",
               "userDataFilter",
-              "prompt",
+              "automation",
               "visualizationObject",
-              "filterContext"
+              "filterContext",
+              "filterView"
             ],
             "example": "metric",
             "type": "string"
@@ -8005,7 +8017,6 @@
                   "PINOT",
                   "SINGLESTORE",
                   "MOTHERDUCK",
-                  "FLIGHTRPC",
                   "FLEXCONNECT"
                 ],
                 "type": "string"
@@ -8212,7 +8223,6 @@
                   "PINOT",
                   "SINGLESTORE",
                   "MOTHERDUCK",
-                  "FLIGHTRPC",
                   "FLEXCONNECT"
                 ],
                 "type": "string"
@@ -8376,7 +8386,6 @@
                   "PINOT",
                   "SINGLESTORE",
                   "MOTHERDUCK",
-                  "FLIGHTRPC",
                   "FLEXCONNECT"
                 ],
                 "type": "string"
@@ -8595,7 +8604,6 @@
                   "PINOT",
                   "SINGLESTORE",
                   "MOTHERDUCK",
-                  "FLIGHTRPC",
                   "FLEXCONNECT"
                 ],
                 "type": "string"
@@ -12254,6 +12262,14 @@
                 "nullable": true,
                 "type": "string"
               },
+              "inPlatformNotification": {
+                "description": "In-platform notifications configuration. No effect if the destination type is IN_PLATFORM.\nDISABLED - in-platform notifications are not sent\nENABLED - in-platform notifications are sent in addition to the regular notifications\n",
+                "enum": [
+                  "DISABLED",
+                  "ENABLED"
+                ],
+                "type": "string"
+              },
               "name": {
                 "maxLength": 255,
                 "nullable": true,
@@ -12360,6 +12376,14 @@
                   "IN_PLATFORM"
                 ],
                 "nullable": true,
+                "type": "string"
+              },
+              "inPlatformNotification": {
+                "description": "In-platform notifications configuration. No effect if the destination type is IN_PLATFORM.\nDISABLED - in-platform notifications are not sent\nENABLED - in-platform notifications are sent in addition to the regular notifications\n",
+                "enum": [
+                  "DISABLED",
+                  "ENABLED"
+                ],
                 "type": "string"
               },
               "name": {
@@ -12491,6 +12515,14 @@
                 "nullable": true,
                 "type": "string"
               },
+              "inPlatformNotification": {
+                "description": "In-platform notifications configuration. No effect if the destination type is IN_PLATFORM.\nDISABLED - in-platform notifications are not sent\nENABLED - in-platform notifications are sent in addition to the regular notifications\n",
+                "enum": [
+                  "DISABLED",
+                  "ENABLED"
+                ],
+                "type": "string"
+              },
               "name": {
                 "maxLength": 255,
                 "nullable": true,
@@ -12578,6 +12610,14 @@
                   "IN_PLATFORM"
                 ],
                 "nullable": true,
+                "type": "string"
+              },
+              "inPlatformNotification": {
+                "description": "In-platform notifications configuration. No effect if the destination type is IN_PLATFORM.\nDISABLED - in-platform notifications are not sent\nENABLED - in-platform notifications are sent in addition to the regular notifications\n",
+                "enum": [
+                  "DISABLED",
+                  "ENABLED"
+                ],
                 "type": "string"
               },
               "name": {
@@ -25151,7 +25191,7 @@
           },
           {
             "description": "Include Meta objects.",
-            "example": "metaInclude=config,permissions,hierarchy,dataModelDatasets,page,all",
+            "example": "metaInclude=permissions,config,hierarchy,dataModelDatasets,page,all",
             "explode": false,
             "in": "query",
             "name": "metaInclude",
@@ -25160,8 +25200,8 @@
               "description": "Included meta objects",
               "items": {
                 "enum": [
-                  "config",
                   "permissions",
+                  "config",
                   "hierarchy",
                   "dataModelDatasets",
                   "page",
@@ -25227,7 +25267,7 @@
           },
           {
             "description": "Include Meta objects.",
-            "example": "metaInclude=config,permissions,hierarchy,dataModelDatasets,all",
+            "example": "metaInclude=permissions,config,hierarchy,dataModelDatasets,all",
             "explode": false,
             "in": "query",
             "name": "metaInclude",
@@ -25236,8 +25276,8 @@
               "description": "Included meta objects",
               "items": {
                 "enum": [
-                  "config",
                   "permissions",
+                  "config",
                   "hierarchy",
                   "dataModelDatasets",
                   "all",
@@ -25361,7 +25401,7 @@
           },
           {
             "description": "Include Meta objects.",
-            "example": "metaInclude=config,permissions,hierarchy,dataModelDatasets,all",
+            "example": "metaInclude=permissions,config,hierarchy,dataModelDatasets,all",
             "explode": false,
             "in": "query",
             "name": "metaInclude",
@@ -25370,8 +25410,8 @@
               "description": "Included meta objects",
               "items": {
                 "enum": [
-                  "config",
                   "permissions",
+                  "config",
                   "hierarchy",
                   "dataModelDatasets",
                   "all",

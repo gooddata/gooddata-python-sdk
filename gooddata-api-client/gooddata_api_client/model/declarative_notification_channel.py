@@ -71,6 +71,10 @@ class DeclarativeNotificationChannel(ModelNormal):
             'DEFAULT_SMTP': "DEFAULT_SMTP",
             'IN_PLATFORM': "IN_PLATFORM",
         },
+        ('in_platform_notification',): {
+            'DISABLED': "DISABLED",
+            'ENABLED': "ENABLED",
+        },
     }
 
     validations = {
@@ -116,6 +120,7 @@ class DeclarativeNotificationChannel(ModelNormal):
             'description': (str,),  # noqa: E501
             'destination': (DeclarativeNotificationChannelDestination,),  # noqa: E501
             'destination_type': (str, none_type,),  # noqa: E501
+            'in_platform_notification': (str,),  # noqa: E501
             'name': (str,),  # noqa: E501
         }
 
@@ -131,6 +136,7 @@ class DeclarativeNotificationChannel(ModelNormal):
         'description': 'description',  # noqa: E501
         'destination': 'destination',  # noqa: E501
         'destination_type': 'destinationType',  # noqa: E501
+        'in_platform_notification': 'inPlatformNotification',  # noqa: E501
         'name': 'name',  # noqa: E501
     }
 
@@ -184,6 +190,7 @@ class DeclarativeNotificationChannel(ModelNormal):
             description (str): Description of a notification channel.. [optional]  # noqa: E501
             destination (DeclarativeNotificationChannelDestination): [optional]  # noqa: E501
             destination_type (str, none_type): [optional]  # noqa: E501
+            in_platform_notification (str): In-platform notifications configuration. No effect if the destination type is IN_PLATFORM. DISABLED - in-platform notifications are not sent ENABLED - in-platform notifications are sent in addition to the regular notifications . [optional] if omitted the server will use the default value of "DISABLED"  # noqa: E501
             name (str): Name of a notification channel.. [optional]  # noqa: E501
         """
 
@@ -279,6 +286,7 @@ class DeclarativeNotificationChannel(ModelNormal):
             description (str): Description of a notification channel.. [optional]  # noqa: E501
             destination (DeclarativeNotificationChannelDestination): [optional]  # noqa: E501
             destination_type (str, none_type): [optional]  # noqa: E501
+            in_platform_notification (str): In-platform notifications configuration. No effect if the destination type is IN_PLATFORM. DISABLED - in-platform notifications are not sent ENABLED - in-platform notifications are sent in addition to the regular notifications . [optional] if omitted the server will use the default value of "DISABLED"  # noqa: E501
             name (str): Name of a notification channel.. [optional]  # noqa: E501
         """
 

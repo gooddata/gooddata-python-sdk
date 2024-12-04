@@ -628,7 +628,6 @@
               "PINOT",
               "SINGLESTORE",
               "MOTHERDUCK",
-              "FLIGHTRPC",
               "FLEXCONNECT"
             ],
             "example": "POSTGRESQL",
