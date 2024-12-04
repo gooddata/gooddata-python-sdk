@@ -83,7 +83,6 @@ class JsonApiDataSourceInAttributes(ModelNormal):
             'PINOT': "PINOT",
             'SINGLESTORE': "SINGLESTORE",
             'MOTHERDUCK': "MOTHERDUCK",
-            'FLIGHTRPC': "FLIGHTRPC",
             'FLEXCONNECT': "FLEXCONNECT",
         },
         ('cache_strategy',): {

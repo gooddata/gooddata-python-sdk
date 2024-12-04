@@ -171,6 +171,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 description="This is a channel",
                 destination=DeclarativeNotificationChannelDestination(None),
                 id="notification-channel-1",
+                in_platform_notification="DISABLED",
                 name="channel",
             ),
         ],

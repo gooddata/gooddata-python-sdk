@@ -83,7 +83,6 @@ class JsonApiDataSourceOutAttributes(ModelNormal):
             'PINOT': "PINOT",
             'SINGLESTORE': "SINGLESTORE",
             'MOTHERDUCK': "MOTHERDUCK",
-            'FLIGHTRPC': "FLIGHTRPC",
             'FLEXCONNECT': "FLEXCONNECT",
         },
         ('authentication_type',): {

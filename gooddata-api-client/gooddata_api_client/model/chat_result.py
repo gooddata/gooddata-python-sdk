@@ -94,6 +94,7 @@ class ChatResult(ModelNormal):
         return {
             'chat_history_interaction_id': (int,),  # noqa: E501
             'created_visualizations': (CreatedVisualizations,),  # noqa: E501
+            'error_response': (str,),  # noqa: E501
             'found_objects': (FoundObjects,),  # noqa: E501
             'routing': (RouteResult,),  # noqa: E501
             'text_response': (str,),  # noqa: E501
@@ -108,6 +109,7 @@ class ChatResult(ModelNormal):
     attribute_map = {
         'chat_history_interaction_id': 'chatHistoryInteractionId',  # noqa: E501
         'created_visualizations': 'createdVisualizations',  # noqa: E501
+        'error_response': 'errorResponse',  # noqa: E501
         'found_objects': 'foundObjects',  # noqa: E501
         'routing': 'routing',  # noqa: E501
         'text_response': 'textResponse',  # noqa: E501
@@ -157,6 +159,7 @@ class ChatResult(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             chat_history_interaction_id (int): Chat History interaction ID. Unique ID for each interaction.. [optional]  # noqa: E501
             created_visualizations (CreatedVisualizations): [optional]  # noqa: E501
+            error_response (str): Error response in anything fails.. [optional]  # noqa: E501
             found_objects (FoundObjects): [optional]  # noqa: E501
             routing (RouteResult): [optional]  # noqa: E501
             text_response (str): Text response for general questions.. [optional]  # noqa: E501
@@ -248,6 +251,7 @@ class ChatResult(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             chat_history_interaction_id (int): Chat History interaction ID. Unique ID for each interaction.. [optional]  # noqa: E501
             created_visualizations (CreatedVisualizations): [optional]  # noqa: E501
+            error_response (str): Error response in anything fails.. [optional]  # noqa: E501
             found_objects (FoundObjects): [optional]  # noqa: E501
             routing (RouteResult): [optional]  # noqa: E501
             text_response (str): Text response for general questions.. [optional]  # noqa: E501

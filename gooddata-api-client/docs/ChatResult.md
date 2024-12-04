@@ -6,6 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **chat_history_interaction_id** | **int** | Chat History interaction ID. Unique ID for each interaction. | [optional] 
 **created_visualizations** | [**CreatedVisualizations**](CreatedVisualizations.md) |  | [optional] 
+**error_response** | **str** | Error response in anything fails. | [optional] 
 **found_objects** | [**FoundObjects**](FoundObjects.md) |  | [optional] 
 **routing** | [**RouteResult**](RouteResult.md) |  | [optional] 
 **text_response** | **str** | Text response for general questions. | [optional] 

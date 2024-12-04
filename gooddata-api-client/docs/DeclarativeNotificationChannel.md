@@ -11,6 +11,7 @@ Name | Type | Description | Notes
 **description** | **str** | Description of a notification channel. | [optional] 
 **destination** | [**DeclarativeNotificationChannelDestination**](DeclarativeNotificationChannelDestination.md) |  | [optional] 
 **destination_type** | **str, none_type** |  | [optional] [readonly] 
+**in_platform_notification** | **str** | In-platform notifications configuration. No effect if the destination type is IN_PLATFORM. DISABLED - in-platform notifications are not sent ENABLED - in-platform notifications are sent in addition to the regular notifications  | [optional]  if omitted the server will use the default value of "DISABLED"
 **name** | **str** | Name of a notification channel. | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 
