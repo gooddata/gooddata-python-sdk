@@ -720,6 +720,10 @@
           "createdVisualizations": {
             "$ref": "#/components/schemas/CreatedVisualizations"
           },
+          "errorResponse": {
+            "description": "Error response in anything fails.",
+            "type": "string"
+          },
           "foundObjects": {
             "$ref": "#/components/schemas/FoundObjects"
           },
@@ -873,6 +877,10 @@
           },
           "createdVisualizations": {
             "$ref": "#/components/schemas/CreatedVisualizations"
+          },
+          "errorResponse": {
+            "description": "Error response in anything fails.",
+            "type": "string"
           },
           "foundObjects": {
             "$ref": "#/components/schemas/FoundObjects"
@@ -2082,12 +2090,6 @@
       },
       "MeasureGroupHeaders": {
         "properties": {
-          "first": {
-            "$ref": "#/components/schemas/MeasureHeaderOut"
-          },
-          "last": {
-            "$ref": "#/components/schemas/MeasureHeaderOut"
-          },
           "measureGroupHeaders": {
             "items": {
               "$ref": "#/components/schemas/MeasureHeaderOut"

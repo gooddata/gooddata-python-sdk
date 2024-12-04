@@ -83,7 +83,6 @@ class TestDefinitionRequest(ModelNormal):
             'PINOT': "PINOT",
             'SINGLESTORE': "SINGLESTORE",
             'MOTHERDUCK': "MOTHERDUCK",
-            'FLIGHTRPC': "FLIGHTRPC",
             'FLEXCONNECT': "FLEXCONNECT",
         },
     }

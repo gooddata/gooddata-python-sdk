@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **description** | **str, none_type** |  | [optional] 
 **destination** | [**JsonApiNotificationChannelInAttributesDestination**](JsonApiNotificationChannelInAttributesDestination.md) |  | [optional] 
 **destination_type** | **str, none_type** |  | [optional] 
+**in_platform_notification** | **str** | In-platform notifications configuration. No effect if the destination type is IN_PLATFORM. DISABLED - in-platform notifications are not sent ENABLED - in-platform notifications are sent in addition to the regular notifications  | [optional] 
 **name** | **str, none_type** |  | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 
