@@ -1,0 +1,33 @@
+{
+  "id": "total_customers_per_month_current_year",
+  "title": "Total Customers per Month - Current Year",
+  "visualizationType": "LINE",
+  "metrics": [
+    {
+      "id": "total_customers",
+      "type": "metric",
+      "title": "Total Customers"
+    }
+  ],
+  "dimensionality": [
+    {
+      "id": "date.month",
+      "type": "attribute",
+      "title": "Date - Month/Year"
+    }
+  ],
+  "filters": [
+    {
+      "using": "date",
+      "granularity": "YEAR",
+      "_from": 0,
+      "to": 0
+    }
+  ],
+  "suggestions": [
+    {
+      "query": "Consider switching to a COLUMN chart for clearer comparisons of Total Customers per month.",
+      "label": "Switch to COLUMN chart"
+    }
+  ]
+}

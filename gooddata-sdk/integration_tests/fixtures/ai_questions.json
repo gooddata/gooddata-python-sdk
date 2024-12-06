@@ -1,0 +1,18 @@
+[
+    {
+        "question": "What is total returns per month? show as COLUMN chart",
+        "expected_objects_file": "column_total_returns_by_month.json"
+    },
+    {
+        "question": "Add filter by current year, show as COLUMN chart",
+        "expected_objects_file": "column_total_returns_by_month_filter_current_year.json"
+    },
+    {
+        "question": "Switch to LINE chart",
+        "expected_objects_file": "line_total_returns_by_month_filter_current_year.json"
+    },
+    {
+        "question": "Replace metric Total Customers instead of total returns",
+        "expected_objects_file": "line_total_customers_by_month_filter_current_year.json"
+    }
+]

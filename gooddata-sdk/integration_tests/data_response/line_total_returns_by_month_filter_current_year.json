@@ -1,0 +1,33 @@
+{
+    "id": "total_returns_per_month_current_year",
+    "title": "Total Returns Per Month - Current Year",
+    "visualizationType": "LINE",
+    "metrics": [
+      {
+        "id": "total_returns",
+        "type": "metric",
+        "title": "Total Returns"
+      }
+    ],
+    "dimensionality": [
+      {
+        "id": "return_date.month",
+        "type": "attribute",
+        "title": "Return date - Month/Year"
+      }
+    ],
+    "filters": [
+      {
+        "using": "return_date",
+        "granularity": "YEAR",
+        "_from": 0,
+        "to": 0
+      }
+    ],
+    "suggestions": [
+      {
+        "query": "Switch to a line chart to better represent the trend of total returns over months.",
+        "label": "Show Line Chart Trend"
+      }
+    ]
+}
