@@ -150,6 +150,11 @@ class _FlexConnectServerMethods(FlightServerMethods):
                 # XXX: this should be enhanced to implement polling
                 task_result = self._ctx.task_executor.wait_for_result(task.task_id, self._call_deadline)
             except TaskWaitTimeoutError:
+                cancelled = self._ctx.task_executor.cancel(task.task_id)
+                _LOGGER.warning(
+                    "flexconnect_fun_call_timeout", task_id=task.task_id, fun=task.fun_name, cancelled=cancelled
+                )
+
                 raise ErrorInfo.for_reason(
                     ErrorCode.TIMEOUT, f"GetFlightInfo timed out while waiting for task {task.task_id}."
                 ).to_timeout_error()
