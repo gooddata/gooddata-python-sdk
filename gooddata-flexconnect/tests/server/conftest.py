@@ -76,10 +76,11 @@ def flexconnect_server(
     tls: bool = False,
     mtls: bool = False,
 ) -> GoodDataFlightServer:
-    envvar = ", ".join([f'"{module}"' for module in modules])
-    envvar = f"[{envvar}]"
+    funs = ", ".join([f'"{module}"' for module in modules])
+    funs = f"[{funs}]"
 
-    os.environ["GOODDATA_FLIGHT_FLEXCONNECT__FUNCTIONS"] = envvar
+    os.environ["GOODDATA_FLIGHT_FLEXCONNECT__FUNCTIONS"] = funs
+    os.environ["GOODDATA_FLIGHT_FLEXCONNECT__CALL_DEADLINE_MS"] = "500"
 
     with server(create_flexconnect_flight_methods, tls, mtls) as s:
         yield s

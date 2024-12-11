@@ -5,8 +5,8 @@ from gooddata_flexconnect.function.function import FlexConnectFunction
 from gooddata_flight_server import ArrowData
 
 
-class _SimpleFun(FlexConnectFunction):
-    Name = "SimpleFun"
+class _SimpleFun1(FlexConnectFunction):
+    Name = "SimpleFun1"
     Schema = pyarrow.schema(
         fields=[
             pyarrow.field("col1", pyarrow.int64()),
