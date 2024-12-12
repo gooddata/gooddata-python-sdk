@@ -1,15 +1,16 @@
 #  (C) 2024 GoodData Corporation
+import time
 from typing import Optional
 
 import pyarrow
 from gooddata_flexconnect.function.function import FlexConnectFunction
-from gooddata_flight_server import ArrowData, ServerContext
+from gooddata_flight_server import ArrowData
 
 _DATA: Optional[pyarrow.Table] = None
 
 
-class _SimpleFun2(FlexConnectFunction):
-    Name = "SimpleFun2"
+class _LongRunningFun(FlexConnectFunction):
+    Name = "LongRunningFun"
     Schema = pyarrow.schema(
         fields=[
             pyarrow.field("col1", pyarrow.int64()),
@@ -24,18 +25,15 @@ class _SimpleFun2(FlexConnectFunction):
         columns: tuple[str, ...],
         headers: dict[str, list[str]],
     ) -> ArrowData:
-        assert _DATA is not None
-        return _DATA
+        # sleep is intentionally setup to be longer than the deadline for
+        # the function invocation (see conftest.py // flexconnect_server fixture)
+        time.sleep(1)
 
-    @staticmethod
-    def on_load(ctx: ServerContext) -> None:
-        # on load emulates some kid of one-off setup
-        global _DATA
-        _DATA = pyarrow.table(
+        return pyarrow.table(
             data={
                 "col1": [1, 2, 3],
                 "col2": ["a", "b", "c"],
                 "col3": [True, False, True],
             },
-            schema=_SimpleFun2.Schema,
+            schema=self.Schema,
         )
