@@ -45,6 +45,14 @@ class FlexConnectFunctionTask(Task):
             headers=self._headers,
         )
 
+        # switch task to non-cancellable state; once the code creates
+        # and returns the result, the task successfully executed and there
+        # is nothing to cancel.
+        #
+        # NOTE: if the switch finds that task got cancelled already, it
+        # bails and raises error.
+        self.switch_non_cancellable()
+
         return FlightDataTaskResult.for_data(result)
 
     def on_task_cancel(self) -> None:

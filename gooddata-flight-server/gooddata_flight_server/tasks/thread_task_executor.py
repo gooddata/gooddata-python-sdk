@@ -270,7 +270,7 @@ class _TaskExecution:
         """
         Cancels the execution.
 
-        IMPORTANT: task executor most not hold any locks at the time of cancellation.
+        IMPORTANT: task executor must not hold any locks at the time of cancellation.
 
         :return: True if cancel was successful, false if it was not possible
         """

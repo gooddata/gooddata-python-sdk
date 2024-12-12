@@ -21,13 +21,13 @@ from gooddata_flexconnect.function.function_registry import FlexConnectFunctionR
 from gooddata_flexconnect.function.function_task import FlexConnectFunctionTask
 
 _LOGGER = structlog.get_logger("gooddata_flexconnect.rpc")
-_DEFAULT_TASK_WAIT = 60.0
 
 
 class _FlexConnectServerMethods(FlightServerMethods):
-    def __init__(self, ctx: ServerContext, registry: FlexConnectFunctionRegistry) -> None:
+    def __init__(self, ctx: ServerContext, registry: FlexConnectFunctionRegistry, call_deadline_ms: float) -> None:
         self._ctx = ctx
         self._registry = registry
+        self._call_deadline = call_deadline_ms / 1000
 
     @staticmethod
     def _create_descriptor(fun_name: str, metadata: Optional[dict]) -> pyarrow.flight.FlightDescriptor:
@@ -148,8 +148,13 @@ class _FlexConnectServerMethods(FlightServerMethods):
 
             try:
                 # XXX: this should be enhanced to implement polling
-                task_result = self._ctx.task_executor.wait_for_result(task.task_id, _DEFAULT_TASK_WAIT)
+                task_result = self._ctx.task_executor.wait_for_result(task.task_id, self._call_deadline)
             except TaskWaitTimeoutError:
+                cancelled = self._ctx.task_executor.cancel(task.task_id)
+                _LOGGER.warning(
+                    "flexconnect_fun_call_timeout", task_id=task.task_id, fun=task.fun_name, cancelled=cancelled
+                )
+
                 raise ErrorInfo.for_reason(
                     ErrorCode.TIMEOUT, f"GetFlightInfo timed out while waiting for task {task.task_id}."
                 ).to_timeout_error()
@@ -195,6 +200,27 @@ class _FlexConnectServerMethods(FlightServerMethods):
 
 _FLEX_CONNECT_CONFIG_SECTION = "flexconnect"
 _FLEX_CONNECT_FUNCTION_LIST = "functions"
+_FLEX_CONNECT_CALL_DEADLINE_MS = "call_deadline_ms"
+_DEFAULT_FLEX_CONNECT_CALL_DEADLINE_MS = 180_000
+
+
+def _read_call_deadline_ms(ctx: ServerContext) -> int:
+    call_deadline = ctx.settings.get(f"{_FLEX_CONNECT_CONFIG_SECTION}.{_FLEX_CONNECT_CALL_DEADLINE_MS}")
+    if call_deadline is None:
+        return _DEFAULT_FLEX_CONNECT_CALL_DEADLINE_MS
+
+    try:
+        call_deadline_ms = int(call_deadline)
+        if call_deadline_ms <= 0:
+            raise ValueError()
+
+        return call_deadline_ms
+    except ValueError:
+        raise ValueError(
+            f"Value of {_FLEX_CONNECT_CONFIG_SECTION}.{_FLEX_CONNECT_CALL_DEADLINE_MS} must "
+            f"be a positive number - duration, in milliseconds, that FlexConnect function "
+            f"calls are expected to run."
+        )
 
 
 @flight_server_methods
@@ -209,7 +235,9 @@ def create_flexconnect_flight_methods(ctx: ServerContext) -> FlightServerMethods
     :return: new instance of Flight RPC server methods to integrate into the server
     """
     modules = list(ctx.settings.get(f"{_FLEX_CONNECT_CONFIG_SECTION}.{_FLEX_CONNECT_FUNCTION_LIST}") or [])
+    call_deadline_ms = _read_call_deadline_ms(ctx)
+
     _LOGGER.info("flexconnect_init", modules=modules)
     registry = FlexConnectFunctionRegistry().load(ctx, modules)
 
-    return _FlexConnectServerMethods(ctx, registry)
+    return _FlexConnectServerMethods(ctx, registry, call_deadline_ms)
