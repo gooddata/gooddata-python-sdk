@@ -105,9 +105,10 @@ jobs:
     needs: publish
     steps:
       - name: Notify to slack
-        uses: slackapi/slack-github-action@v1.25.0
+        uses: slackapi/slack-github-action@v2.0.0
         with:
-          channel-id: ${{ matrix.channels }}
-          slack-message: "The release of *gooddata-python-sdk@${{ github.ref_name }}*, has been successful. :tada:"
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          method: chat.postMessage
+          token: ${{ secrets.SLACK_BOT_TOKEN }}
+          payload: |
+            channel: ${{ matrix.channels }}
+            text: "The release of *gooddata-python-sdk@${{ github.ref_name }}*, has been successful. :tada:"
