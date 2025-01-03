@@ -2,7 +2,7 @@
 
 ## Getting Started
 
-1. Ensure you have at minimum Python 3.12 installed; Python 3.11, 3.10 and 3.9 are optional for multi-environment tests
+1. Ensure you have at minimum Python 3.13 installed; Python 3.12, 3.11, 3.10 and 3.9 are optional for multi-environment tests
 
    This repo uses [tox](https://tox.readthedocs.io/en/latest/) and by default will try to run tests against all
    supported versions. If you have only subset of supported python interpreters installed, see
@@ -21,7 +21,7 @@
     source .venv/bin/activate
     ```
 
-   The `make dev` command will create a new Python 3.12 virtual environment in the `.venv` directory, install all
+   The `make dev` command will create a new Python 3.13 virtual environment in the `.venv` directory, install all
    third party dependencies into it and setup git hooks.
 
    Additionally, if you use [direnv](https://direnv.net/) you can run `direnv allow .envrc` to enable automatic

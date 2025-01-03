@@ -19,7 +19,7 @@ all:
 .PHONY: dev
 dev:
 	rm -rf .venv
-	python3.12 -m venv .venv --upgrade-deps
+	python3.13 -m venv .venv --upgrade-deps
 	.venv/bin/pip3 install -r dev-requirements.txt
 	.venv/bin/pre-commit install
 

@@ -1,5 +1,5 @@
 # (C) 2021 GoodData Corporation
-IN_TEST_ENVS = py312,py311,py310,py39
+IN_TEST_ENVS = py313,py312,py311,py310,py39
 ifdef TEST_ENVS
 	IN_TEST_ENVS = $(TEST_ENVS)
 endif
@@ -50,6 +50,10 @@ test-ci-py311-build: Dockerfile
 .PHONY: test-ci-py312-build
 test-ci-py312-build: Dockerfile
 	docker build --build-arg "PY_TAG=3.12.6-slim-bookworm" --build-arg "ENV_TAG=py312" -t python-sdk:py312 .
+
+.PHONY: test-ci-py313-build
+test-ci-py313-build: Dockerfile
+	docker build --build-arg "PY_TAG=3.13.1-slim-bookworm" --build-arg "ENV_TAG=py313" -t python-sdk:py313 .
 
 # test-ci target triggers unit tests for each requested environment
 .PHONY: test-ci
