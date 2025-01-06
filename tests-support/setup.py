@@ -3,7 +3,7 @@
 from setuptools import find_packages, setup
 
 REQUIRES = [
-    "pyyaml>=5.1",
+    "pyyaml>=6.0",
 ]
 
 setup(

@@ -9,7 +9,7 @@ long_description = (this_directory / "README.md").read_text(encoding="utf-8")
 REQUIRES = [
     "gooddata-api-client~=1.33.0",
     "python-dateutil>=2.5.3",
-    "pyyaml>=5.1",
+    "pyyaml>=6.0",
     "attrs>=21.4.0,<=24.2.0",
     "cattrs>=22.1.0,<=24.1.1",
     "brotli==1.1.0",

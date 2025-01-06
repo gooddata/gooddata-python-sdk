@@ -1,6 +1,6 @@
 -r ./tox-requirements.txt
 -r ./release-requirements.txt
-pre-commit~=3.8.0
+pre-commit~=4.0.1
 
 -r ./fmt-requirements.txt
 
