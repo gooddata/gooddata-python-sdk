@@ -1,4 +1,4 @@
-# (C) 2024 GoodData Corporation
+# (C) 2025 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -69,9 +69,9 @@ interactions:
         X-XSS-Protection:
           - '0'
         content-length:
-          - '303'
+          - '1228'
         set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:25 GMT;
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 06 Jan 2025 11:44:46 GMT;
             Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
@@ -91,6 +91,41 @@ interactions:
               type: POSTGRESQL
               url: jdbc:postgresql://localhost:5432/demo
               username: demouser
+            - clientId: client-id
+              id: demo-test-ds-databricks-client-secret
+              name: demo-test-ds-databricks-client-secret
+              parameters:
+                - name: catalog
+                  value: demo
+              permissions:
+                - assignee:
+                    id: demo2
+                    type: user
+                  name: MANAGE
+                - assignee:
+                    id: demoGroup
+                    type: userGroup
+                  name: USE
+              schema: demo
+              type: DATABRICKS
+              url: jdbc:databricks://dbc-1234-abc.cloud.databricks.com:443;UserAgentEntry=gooddata+cloud-native/v3;httpPath=/sql/1.0/warehouses/9876fdsa
+            - id: demo-test-ds-databricks-token
+              name: demo-test-ds-databricks-token
+              parameters:
+                - name: catalog
+                  value: demo
+              permissions:
+                - assignee:
+                    id: demo2
+                    type: user
+                  name: MANAGE
+                - assignee:
+                    id: demoGroup
+                    type: userGroup
+                  name: USE
+              schema: demo
+              type: DATABRICKS
+              url: jdbc:databricks://dbc-1234-abc.cloud.databricks.com:443;UserAgentEntry=gooddata+cloud-native/v3;httpPath=/sql/1.0/warehouses/9876fdsa
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/layout/dataSources
@@ -158,9 +193,9 @@ interactions:
         X-XSS-Protection:
           - '0'
         content-length:
-          - '303'
+          - '1228'
         set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:25 GMT;
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 06 Jan 2025 11:44:46 GMT;
             Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
@@ -180,6 +215,41 @@ interactions:
               type: POSTGRESQL
               url: jdbc:postgresql://localhost:5432/demo
               username: demouser
+            - clientId: client-id
+              id: demo-test-ds-databricks-client-secret
+              name: demo-test-ds-databricks-client-secret
+              parameters:
+                - name: catalog
+                  value: demo
+              permissions:
+                - assignee:
+                    id: demo2
+                    type: user
+                  name: MANAGE
+                - assignee:
+                    id: demoGroup
+                    type: userGroup
+                  name: USE
+              schema: demo
+              type: DATABRICKS
+              url: jdbc:databricks://dbc-1234-abc.cloud.databricks.com:443;UserAgentEntry=gooddata+cloud-native/v3;httpPath=/sql/1.0/warehouses/9876fdsa
+            - id: demo-test-ds-databricks-token
+              name: demo-test-ds-databricks-token
+              parameters:
+                - name: catalog
+                  value: demo
+              permissions:
+                - assignee:
+                    id: demo2
+                    type: user
+                  name: MANAGE
+                - assignee:
+                    id: demoGroup
+                    type: userGroup
+                  name: USE
+              schema: demo
+              type: DATABRICKS
+              url: jdbc:databricks://dbc-1234-abc.cloud.databricks.com:443;UserAgentEntry=gooddata+cloud-native/v3;httpPath=/sql/1.0/warehouses/9876fdsa
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/entities/organization
@@ -245,7 +315,7 @@ interactions:
         X-XSS-Protection:
           - '0'
         set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:25 GMT;
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 06 Jan 2025 11:44:46 GMT;
             Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
@@ -274,7 +344,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '275'
+          - '255'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -314,7 +384,7 @@ interactions:
         X-XSS-Protection:
           - '0'
         set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:25 GMT;
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 06 Jan 2025 11:44:46 GMT;
             Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
@@ -324,8 +394,7 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              allowedOrigins: []
-              oauthClientId: b538d572-c26e-4758-a98b-7ac92840dfa5
+              oauthClientId: e76fea3d-624e-4a32-9b15-912e7b107085
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -393,7 +462,7 @@ interactions:
         X-XSS-Protection:
           - '0'
         set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:25 GMT;
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 06 Jan 2025 11:44:46 GMT;
             Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
@@ -422,7 +491,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '275'
+          - '255'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -462,7 +531,7 @@ interactions:
         X-XSS-Protection:
           - '0'
         set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:25 GMT;
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 06 Jan 2025 11:44:46 GMT;
             Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
@@ -472,7 +541,6 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              allowedOrigins: []
-              oauthClientId: b538d572-c26e-4758-a98b-7ac92840dfa5
+              oauthClientId: e76fea3d-624e-4a32-9b15-912e7b107085
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default

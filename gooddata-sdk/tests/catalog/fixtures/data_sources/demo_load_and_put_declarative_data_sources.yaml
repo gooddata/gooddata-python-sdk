@@ -1,4 +1,4 @@
-# (C) 2024 GoodData Corporation
+# (C) 2025 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -66,7 +66,7 @@ interactions:
         X-XSS-Protection:
           - '0'
         set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:25 GMT;
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 06 Jan 2025 11:44:46 GMT;
             Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
@@ -135,7 +135,7 @@ interactions:
         X-XSS-Protection:
           - '0'
         set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:25 GMT;
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 06 Jan 2025 11:44:46 GMT;
             Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
@@ -164,7 +164,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '275'
+          - '255'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -204,7 +204,7 @@ interactions:
         X-XSS-Protection:
           - '0'
         set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:25 GMT;
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 06 Jan 2025 11:44:46 GMT;
             Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
@@ -214,8 +214,7 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              allowedOrigins: []
-              oauthClientId: b538d572-c26e-4758-a98b-7ac92840dfa5
+              oauthClientId: e76fea3d-624e-4a32-9b15-912e7b107085
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -251,6 +250,43 @@ interactions:
                   type: userGroup
                 name: USE
             password: demopass
+          - id: demo-test-ds-databricks-client-secret
+            name: demo-test-ds-databricks-client-secret
+            schema: demo
+            type: DATABRICKS
+            url: jdbc:databricks://dbc-1234-abc.cloud.databricks.com:443;httpPath=/sql/1.0/warehouses/9876fdsa;
+            parameters:
+              - name: catalog
+                value: demo
+            permissions:
+              - assignee:
+                  id: demo2
+                  type: user
+                name: MANAGE
+              - assignee:
+                  id: demoGroup
+                  type: userGroup
+                name: USE
+            clientId: client-id
+            clientSecret: databricks-client-secret
+          - id: demo-test-ds-databricks-token
+            name: demo-test-ds-databricks-token
+            schema: demo
+            type: DATABRICKS
+            url: jdbc:databricks://dbc-1234-abc.cloud.databricks.com:443;httpPath=/sql/1.0/warehouses/9876fdsa;
+            parameters:
+              - name: catalog
+                value: demo
+            permissions:
+              - assignee:
+                  id: demo2
+                  type: user
+                name: MANAGE
+              - assignee:
+                  id: demoGroup
+                  type: userGroup
+                name: USE
+            token: databricks-token
           - id: demo-vertica-ds
             name: demo-vertica-ds
             schema: demo
@@ -316,7 +352,7 @@ interactions:
         X-XSS-Protection:
           - '0'
         set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:25 GMT;
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 06 Jan 2025 11:44:47 GMT;
             Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
@@ -387,9 +423,9 @@ interactions:
         X-XSS-Protection:
           - '0'
         content-length:
-          - '773'
+          - '1698'
         set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:25 GMT;
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 06 Jan 2025 11:44:47 GMT;
             Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
@@ -424,6 +460,41 @@ interactions:
               type: POSTGRESQL
               url: jdbc:postgresql://localhost:5432/demo
               username: demouser
+            - clientId: client-id
+              id: demo-test-ds-databricks-client-secret
+              name: demo-test-ds-databricks-client-secret
+              parameters:
+                - name: catalog
+                  value: demo
+              permissions:
+                - assignee:
+                    id: demo2
+                    type: user
+                  name: MANAGE
+                - assignee:
+                    id: demoGroup
+                    type: userGroup
+                  name: USE
+              schema: demo
+              type: DATABRICKS
+              url: jdbc:databricks://dbc-1234-abc.cloud.databricks.com:443;UserAgentEntry=gooddata+cloud-native/v3;httpPath=/sql/1.0/warehouses/9876fdsa
+            - id: demo-test-ds-databricks-token
+              name: demo-test-ds-databricks-token
+              parameters:
+                - name: catalog
+                  value: demo
+              permissions:
+                - assignee:
+                    id: demo2
+                    type: user
+                  name: MANAGE
+                - assignee:
+                    id: demoGroup
+                    type: userGroup
+                  name: USE
+              schema: demo
+              type: DATABRICKS
+              url: jdbc:databricks://dbc-1234-abc.cloud.databricks.com:443;UserAgentEntry=gooddata+cloud-native/v3;httpPath=/sql/1.0/warehouses/9876fdsa
             - id: demo-vertica-ds
               name: demo-vertica-ds
               permissions: []
@@ -451,6 +522,43 @@ interactions:
                   type: userGroup
                 name: USE
             password: demopass
+          - id: demo-test-ds-databricks-client-secret
+            name: demo-test-ds-databricks-client-secret
+            schema: demo
+            type: DATABRICKS
+            url: jdbc:databricks://dbc-1234-abc.cloud.databricks.com:443;httpPath=/sql/1.0/warehouses/9876fdsa;
+            parameters:
+              - name: catalog
+                value: demo
+            permissions:
+              - assignee:
+                  id: demo2
+                  type: user
+                name: MANAGE
+              - assignee:
+                  id: demoGroup
+                  type: userGroup
+                name: USE
+            clientId: client-id
+            clientSecret: databricks-client-secret
+          - id: demo-test-ds-databricks-token
+            name: demo-test-ds-databricks-token
+            schema: demo
+            type: DATABRICKS
+            url: jdbc:databricks://dbc-1234-abc.cloud.databricks.com:443;httpPath=/sql/1.0/warehouses/9876fdsa;
+            parameters:
+              - name: catalog
+                value: demo
+            permissions:
+              - assignee:
+                  id: demo2
+                  type: user
+                name: MANAGE
+              - assignee:
+                  id: demoGroup
+                  type: userGroup
+                name: USE
+            token: databricks-token
       headers:
         Accept-Encoding:
           - br, gzip, deflate
@@ -510,7 +618,7 @@ interactions:
         X-XSS-Protection:
           - '0'
         set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:25 GMT;
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 06 Jan 2025 11:44:47 GMT;
             Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
