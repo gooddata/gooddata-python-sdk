@@ -1,0 +1,33 @@
+{
+  "dataSources": [
+    {
+      "id": "demo-test-ds-databricks-token",
+      "name": "demo-test-ds-databricks-token",
+      "permissions": [
+        {
+          "assignee": {
+            "id": "demo2",
+            "type": "user"
+          },
+          "name": "MANAGE"
+        },
+        {
+          "assignee": {
+            "id": "demoGroup",
+            "type": "userGroup"
+          },
+          "name": "USE"
+        }
+      ],
+      "schema": "demo",
+      "type": "DATABRICKS",
+      "url": "jdbc:databricks://dbc-1234-abc.cloud.databricks.com:443;httpPath=/sql/1.0/warehouses/9876fdsa;",
+      "parameters": [
+        {
+          "name": "catalog",
+          "value": "demo"
+        }
+      ]
+    }
+  ]
+}

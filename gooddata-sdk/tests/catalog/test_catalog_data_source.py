@@ -43,6 +43,7 @@ from gooddata_sdk import (
     VerticaAttributes,
 )
 from gooddata_sdk.catalog.data_source.entity_model.data_source import DatabaseAttributes
+from gooddata_sdk.catalog.entity import ClientSecretCredentialsFromFile
 from tests_support.file_utils import load_json
 from tests_support.vcrpy_utils import get_vcr
 
@@ -415,6 +416,19 @@ def test_delete_declarative_data_sources(test_config):
     credentials_path = _current_dir / "load" / "data_source_credentials" / "data_sources_credentials.yaml"
     expected_json_path = _current_dir / "expected" / "declarative_data_sources.json"
 
+    def token_from_file_side_effect(arg):
+        if arg == "~/home/secrets.json":
+            return test_config["bigquery_token"]
+        elif arg == "databricks-token":
+            return test_config["databricks_token"]
+        else:
+            raise ValueError(f"Unexpected argument: {arg}")
+
+    TokenCredentialsFromFile.token_from_file = MagicMock(side_effect=token_from_file_side_effect)
+    ClientSecretCredentialsFromFile.client_secret_from_file = MagicMock(
+        return_value=test_config["databricks_client_secret"]
+    )
+
     try:
         sdk.catalog_data_source.put_declarative_data_sources(CatalogDeclarativeDataSources(data_sources=[]))
         data_sources_o = sdk.catalog_data_source.get_declarative_data_sources()
@@ -445,18 +459,34 @@ def test_load_and_put_declarative_data_sources(test_config):
     expected_json_path = _current_dir / "expected" / "declarative_data_sources.json"
     try:
         sdk.catalog_data_source.put_declarative_data_sources(CatalogDeclarativeDataSources(data_sources=[]))
-        TokenCredentialsFromFile.token_from_file = MagicMock(return_value=test_config["bigquery_token"])
+
+        def token_from_file_side_effect(arg):
+            if arg == "~/home/secrets.json":
+                return test_config["bigquery_token"]
+            elif arg == "databricks-token":
+                return test_config["databricks_token"]
+            else:
+                raise ValueError(f"Unexpected argument: {arg}")
+
+        TokenCredentialsFromFile.token_from_file = MagicMock(side_effect=token_from_file_side_effect)
+        ClientSecretCredentialsFromFile.client_secret_from_file = MagicMock(
+            return_value=test_config["databricks_client_secret"]
+        )
         sdk.catalog_data_source.load_and_put_declarative_data_sources(load_folder, credentials_path)
         data_sources_o = sdk.catalog_data_source.get_declarative_data_sources()
-        assert len(data_sources_o.data_sources) == 3
+        assert len(data_sources_o.data_sources) == 5
         assert [data_source.id for data_source in data_sources_o.data_sources] == [
             "demo-bigquery-ds",
             "demo-test-ds",
+            "demo-test-ds-databricks-client-secret",
+            "demo-test-ds-databricks-token",
             "demo-vertica-ds",
         ]
         assert [data_source.type for data_source in data_sources_o.data_sources] == [
             "BIGQUERY",
             "POSTGRESQL",
+            "DATABRICKS",
+            "DATABRICKS",
             "VERTICA",
         ]
         assert len(data_sources_o.data_sources[0].parameters) == 1
@@ -473,6 +503,21 @@ def test_put_declarative_data_sources_connection(test_config):
     path = _current_dir / "expected" / "declarative_data_sources.json"
     credentials_path = _current_dir / "load" / "data_source_credentials" / "data_sources_credentials.yaml"
     data_sources_e = sdk.catalog_data_source.get_declarative_data_sources()
+    # Must filter out databricks data sources for this test as they do not have valid URLs
+    data_sources_e.data_sources = [item for item in data_sources_e.data_sources if "databricks" not in item.id]
+
+    def token_from_file_side_effect(arg):
+        if arg == "~/home/secrets.json":
+            return test_config["bigquery_token"]
+        elif arg == "databricks-token":
+            return test_config["databricks_token"]
+        else:
+            raise ValueError(f"Unexpected argument: {arg}")
+
+    TokenCredentialsFromFile.token_from_file = MagicMock(side_effect=token_from_file_side_effect)
+    ClientSecretCredentialsFromFile.client_secret_from_file = MagicMock(
+        return_value=test_config["databricks_client_secret"]
+    )
 
     try:
         sdk.catalog_data_source.put_declarative_data_sources(data_sources_e, credentials_path, test_data_sources=True)
@@ -506,6 +551,8 @@ def test_declarative_data_sources(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     credentials_path = _current_dir / "load" / "data_source_credentials" / "data_sources_credentials.yaml"
     data_sources_e = sdk.catalog_data_source.get_declarative_data_sources()
+    # Must filter out databricks data sources for this test as they do not have valid URLs
+    data_sources_e.data_sources = [item for item in data_sources_e.data_sources if "databricks" not in item.id]
 
     try:
         sdk.catalog_data_source.test_data_sources_connection(data_sources_e)
@@ -514,12 +561,62 @@ def test_declarative_data_sources(test_config):
         sdk.catalog_data_source.test_data_sources_connection(data_sources_e, credentials_path)
 
 
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_test_declarative_data_sources_databricks_client_secret.yaml"))
+def test_declarative_data_sources_databricks_client_secret(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    path = _current_dir / "expected" / "declarative_data_sources_databricks_client_secret.json"
+    ClientSecretCredentialsFromFile.client_secret_from_file = MagicMock(
+        return_value=test_config["databricks_client_secret"]
+    )
+    sdk._client._actions_api.test_data_source_definition = MagicMock()
+
+    credentials_path = _current_dir / "load" / "data_source_credentials" / "data_sources_credentials.yaml"
+    data_sources_e = CatalogDeclarativeDataSources.from_dict(load_json(path))
+
+    sdk.catalog_data_source.test_data_sources_connection(data_sources_e, credentials_path)
+    args, kwargs = sdk._client._actions_api.test_data_source_definition.call_args
+    assert len(args) == 1
+    assert args[0]._data_store["url"] == data_sources_e.data_sources[0].url
+    assert args[0]._data_store["client_id"] == data_sources_e.data_sources[0].client_id
+    assert args[0]._data_store["client_secret"] == test_config["databricks_client_secret"]
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_test_declarative_data_sources_databricks_token.yaml"))
+def test_declarative_data_sources_databricks_token(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    path = _current_dir / "expected" / "declarative_data_sources_databricks_token.json"
+    TokenCredentialsFromFile.token_from_file = MagicMock(return_value=test_config["databricks_token"])
+    sdk._client._actions_api.test_data_source_definition = MagicMock()
+
+    credentials_path = _current_dir / "load" / "data_source_credentials" / "data_sources_credentials.yaml"
+    data_sources_e = CatalogDeclarativeDataSources.from_dict(load_json(path))
+
+    sdk.catalog_data_source.test_data_sources_connection(data_sources_e, credentials_path)
+    args, kwargs = sdk._client._actions_api.test_data_source_definition.call_args
+    assert len(args) == 1
+    assert args[0]._data_store["url"] == data_sources_e.data_sources[0].url
+    assert args[0]._data_store["token"] == test_config["databricks_token"]
+
+
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_cache_strategy.yaml"))
 def test_cache_strategy(test_config: dict):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     data_source_id = test_config["data_source"]
     path = _current_dir / "expected" / "declarative_data_sources.json"
     credentials_path = _current_dir / "load" / "data_source_credentials" / "data_sources_credentials.yaml"
+
+    def token_from_file_side_effect(arg):
+        if arg == "~/home/secrets.json":
+            return test_config["bigquery_token"]
+        elif arg == "databricks-token":
+            return test_config["databricks_token"]
+        else:
+            raise ValueError(f"Unexpected argument: {arg}")
+
+    TokenCredentialsFromFile.token_from_file = MagicMock(side_effect=token_from_file_side_effect)
+    ClientSecretCredentialsFromFile.client_secret_from_file = MagicMock(
+        return_value=test_config["databricks_client_secret"]
+    )
 
     try:
         sdk.catalog_data_source.patch_data_source_attributes(data_source_id, {"cache_strategy": "NEVER"})
