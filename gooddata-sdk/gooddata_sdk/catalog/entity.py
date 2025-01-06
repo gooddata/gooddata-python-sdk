@@ -274,3 +274,31 @@ class ClientSecretCredentials(Credentials):
             # You have to fill it to keep it or update it
             client_secret="",
         )
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class ClientSecretCredentialsFromFile(Credentials):
+    file_path: Path
+    client_secret: str = attr.field(init=False, repr=lambda value: "***")
+
+    def __attrs_post_init__(self) -> None:
+        self.client_secret = self.client_secret_from_file(self.file_path)
+
+    def to_api_args(self) -> dict[str, Any]:
+        return {
+            self.CLIENT_SECRET: self.client_secret,
+        }
+
+    @classmethod
+    def is_part_of_api(cls, entity: dict[str, Any]) -> bool:
+        return cls.CLIENT_SECRET in entity
+
+    @classmethod
+    def from_api(cls, entity: dict[str, Any]) -> ClientSecretCredentialsFromFile:
+        # Credentials are not returned for security reasons
+        raise NotImplementedError
+
+    @staticmethod
+    def client_secret_from_file(file_path: Union[str, Path]) -> str:
+        with open(file_path, "rb") as fp:
+            return base64.b64encode(fp.read()).decode("utf-8")

@@ -17,6 +17,7 @@ from gooddata_sdk.catalog.data_source.action_model.requests.scan_sql_request imp
 from gooddata_sdk.catalog.data_source.action_model.responses.scan_sql_response import ScanSqlResponse
 from gooddata_sdk.catalog.data_source.declarative_model.data_source import (
     BIGQUERY_TYPE,
+    DATABRICKS_TYPE,
     CatalogDeclarativeDataSource,
     CatalogDeclarativeDataSources,
 )
@@ -25,7 +26,7 @@ from gooddata_sdk.catalog.data_source.declarative_model.physical_model.pdm impor
     CatalogScanResultPdm,
 )
 from gooddata_sdk.catalog.data_source.entity_model.data_source import CatalogDataSource
-from gooddata_sdk.catalog.entity import TokenCredentialsFromFile
+from gooddata_sdk.catalog.entity import ClientSecretCredentialsFromFile, TokenCredentialsFromFile
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.ldm import CatalogDeclarativeModel
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.utils import get_ds_credentials, load_all_entities_dict, read_layout_from_file
@@ -474,6 +475,19 @@ class CatalogDataSourceService(CatalogServiceBase):
                     response = self._actions_api.test_data_source_definition(
                         declarative_data_source.to_test_request(token=token)
                     )
+                elif declarative_data_source.type == DATABRICKS_TYPE:
+                    if declarative_data_source.client_id is not None:
+                        client_secret = ClientSecretCredentialsFromFile.client_secret_from_file(
+                            credentials[declarative_data_source.id]
+                        )
+                        response = self._actions_api.test_data_source_definition(
+                            declarative_data_source.to_test_request(client_secret=client_secret)
+                        )
+                    else:
+                        token = TokenCredentialsFromFile.token_from_file(credentials[declarative_data_source.id])
+                        response = self._actions_api.test_data_source_definition(
+                            declarative_data_source.to_test_request(token=token)
+                        )
                 else:
                     response = self._actions_api.test_data_source_definition(
                         declarative_data_source.to_test_request(password=credentials[declarative_data_source.id])
@@ -528,6 +542,6 @@ class CatalogDataSourceService(CatalogServiceBase):
         if data.get("data_sources") is None:
             raise ValueError("The file has a wrong structure. There should be a root key 'data_sources'.")
         if len(data["data_sources"]) == 0:
-            raise ValueError("There are no pairs of data source id and token.")
+            raise ValueError("There are no pairs of data source id and credentials.")
         credentials = data["data_sources"]
         return credentials

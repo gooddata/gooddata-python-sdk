@@ -12,12 +12,13 @@ from gooddata_api_client.model.declarative_data_sources import DeclarativeDataSo
 from gooddata_api_client.model.test_definition_request import TestDefinitionRequest
 
 from gooddata_sdk.catalog.base import Base, value_in_allowed
-from gooddata_sdk.catalog.entity import TokenCredentialsFromFile
+from gooddata_sdk.catalog.entity import ClientSecretCredentialsFromFile, TokenCredentialsFromFile
 from gooddata_sdk.catalog.parameter import CatalogParameter
 from gooddata_sdk.catalog.permission.declarative_model.permission import CatalogDeclarativeDataSourcePermission
 from gooddata_sdk.utils import create_directory, get_ds_credentials, read_layout_from_file, write_layout_to_file
 
 BIGQUERY_TYPE = "BIGQUERY"
+DATABRICKS_TYPE = "DATABRICKS"
 LAYOUT_DATA_SOURCES_DIR = "data_sources"
 
 
@@ -33,6 +34,15 @@ class CatalogDeclarativeDataSources(Base):
                 if data_source.type == BIGQUERY_TYPE:
                     token = TokenCredentialsFromFile.token_from_file(credentials[data_source.id])
                     data_sources.append(data_source.to_api(token=token))
+                elif data_source.type == DATABRICKS_TYPE:
+                    if data_source.client_id is not None:
+                        client_secret = ClientSecretCredentialsFromFile.client_secret_from_file(
+                            credentials[data_source.id]
+                        )
+                        data_sources.append(data_source.to_api(client_secret=client_secret))
+                    else:
+                        token = TokenCredentialsFromFile.token_from_file(credentials[data_source.id])
+                        data_sources.append(data_source.to_api(token=token))
                 else:
                     data_sources.append(data_source.to_api(password=credentials[data_source.id]))
             else:
@@ -125,8 +135,13 @@ class CatalogDeclarativeDataSource(Base):
             kwargs["private_key"] = private_key
         if private_key_passphrase is not None:
             kwargs["private_key_passphrase"] = private_key
+        if self.client_id is not None:
+            kwargs["client_id"] = self.client_id
         if client_secret is not None:
             kwargs["client_secret"] = client_secret
+        if self.parameters is not None:
+            kwargs["parameters"] = [param.to_data_source_parameter() for param in self.parameters]
+
         return TestDefinitionRequest(type=self.type, url=self.url, **kwargs)
 
     @staticmethod
