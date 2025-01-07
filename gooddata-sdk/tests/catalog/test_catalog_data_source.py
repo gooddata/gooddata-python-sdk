@@ -839,7 +839,6 @@ def test_jdbc_urls_creation(
     parameters: Optional[list],
     url_params: Optional[list],
 ):
-    db_class: type[CatalogDataSource] = db_class
     data_source = db_class(
         id="test",
         name="Test",
