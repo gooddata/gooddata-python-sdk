@@ -1,6 +1,8 @@
 -r ./tox-requirements.txt
 -r ./release-requirements.txt
+
 pre-commit~=4.0.1
+gitlint~=0.19.1
 
 -r ./fmt-requirements.txt
 

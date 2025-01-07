@@ -1,0 +1,19 @@
+# (C) 2025 GoodData Corporation
+[general]
+# do not enforce maximum line length rules
+ignore=T1, B1, B2, B5, T5
+
+# prevent a warning about regexes in the ignore-by-title section
+regex-style-search=true
+
+# enable our extended conventional commits rule
+extra-path=packages/repo-tools/src/quiver_monorepo/conventional_commit_gitlint_rule.py
+
+# ignore all release commits (merge and revert commits are ignored by default)
+[ignore-by-title]
+regex=^Release(.*)
+ignore=all
+
+# add the most likely scopes for each package
+[gdc-title-conventional-commits]
+scopes=gooddata-api-client,gooddata-dbt,gooddata-fdw,gooddata-flexconnect,gooddata-flight-server,gooddata-pandas,gooddata-sdk
