@@ -60,6 +60,15 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: dist/
+      - name: Generate changelog
+        id: changelog
+        uses: requarks/changelog-action@v1
+        with:
+          token: "${{ secrets.GITHUB_TOKEN }}"
+          tag: ${{ github.ref_name }}
+          writeToFile: false
+          includeRefIssues: false
+          useGitmojis: false
       - name: Create GitHub release
         uses: "softprops/action-gh-release@v2"
         with:

@@ -70,7 +70,7 @@ jobs:
             git config user.email github-actions@github.com
             git checkout -b ${{ steps.branch.outputs.release_branch }}
             git add -A
-            git commit -m "Bump to ${{steps.bump.outputs.new_version}}"
+            git commit -m "Release ${{steps.bump.outputs.new_version}}"
             git push origin ${{ steps.branch.outputs.release_branch }}
             git checkout master
             git merge ${{ steps.branch.outputs.release_branch }}
