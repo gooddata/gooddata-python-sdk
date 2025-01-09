@@ -72,6 +72,7 @@ jobs:
       - name: Create GitHub release
         uses: "softprops/action-gh-release@v2"
         with:
+          body: ${{ steps.changelog.outputs.changes }}
           token: "${{ secrets.GITHUB_TOKEN }}"
           draft: false
           prerelease: false
@@ -107,9 +108,6 @@ jobs:
           packages_dir: dist/${{ matrix.component }}
           verbose: true
   slack-notification:
-    strategy:
-      matrix:
-        channels: [ "#releases" ]
     runs-on: ubuntu-latest
     needs: publish
     steps:
@@ -119,5 +117,5 @@ jobs:
           method: chat.postMessage
           token: ${{ secrets.SLACK_BOT_TOKEN }}
           payload: |
-            channel: ${{ matrix.channels }}
+            channel: "#releases"
             text: "The release of *gooddata-python-sdk@${{ github.ref_name }}*, has been successful. :tada:"
