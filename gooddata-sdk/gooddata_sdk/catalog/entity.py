@@ -182,9 +182,23 @@ class TokenCredentialsFromFile(Credentials):
         raise NotImplementedError
 
     @staticmethod
-    def token_from_file(file_path: Union[str, Path]) -> str:
+    def token_from_file(file_path: Union[str, Path], base64_encode: bool = True) -> str:
+        """
+        Reads a token from a file and optionally base64 encodes it.
+
+        Args:
+            file_path (Union[str, Path]): The path to the file containing the token.
+            base64_encode (bool): Whether to base64 encode the token. Defaults to True.
+
+        Returns:
+            str: The token, optionally base64 encoded.
+
+        Raises:
+            FileNotFoundError: If the file does not exist.
+        """
         with open(file_path, "rb") as fp:
-            return base64.b64encode(fp.read()).decode("utf-8")
+            content = fp.read()
+            return base64.b64encode(content).decode("utf-8") if base64_encode else content.decode("utf-8")
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -208,11 +222,24 @@ class TokenCredentialsFromEnvVar(Credentials):
         raise NotImplementedError
 
     @staticmethod
-    def token_from_env_var(env_var_name: str) -> str:
+    def token_from_env_var(env_var_name: str, base64_encode: bool = True) -> str:
+        """
+        Retrieves a token from an environment variable.
+
+        Args:
+            env_var_name (str): The name of the environment variable containing the token.
+            base64_encode (bool): Whether to base64 encode the token. Defaults to True for backwards compatibility.
+
+        Returns:
+            str: The token, optionally base64 encoded.
+
+        Raises:
+            ValueError: If the environment variable is not set or is empty.
+        """
         token = os.getenv(env_var_name)
         if token is None or token == "":
             raise ValueError(f"Environment variable {env_var_name} is not set")
-        return base64.b64encode(token.encode("utf-8")).decode("utf-8")
+        return base64.b64encode(token.encode("utf-8")).decode("utf-8") if base64_encode else token
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -299,6 +326,17 @@ class ClientSecretCredentialsFromFile(Credentials):
         raise NotImplementedError
 
     @staticmethod
-    def client_secret_from_file(file_path: Union[str, Path]) -> str:
+    def client_secret_from_file(file_path: Union[str, Path], base64_encode: bool = False) -> str:
+        """
+        Reads the client secret from a file.
+
+        Args:
+            file_path (Union[str, Path]): The path to the file containing the client secret.
+            base64_encode (bool): Whether to base64 encode the client secret or not. Defaults to False.
+
+        Returns:
+            str: The client secret, optionally base64 encoded.
+        """
         with open(file_path, "rb") as fp:
-            return base64.b64encode(fp.read()).decode("utf-8")
+            content = fp.read()
+            return base64.b64encode(content).decode("utf-8") if base64_encode else content.decode("utf-8")
