@@ -8,8 +8,8 @@ long_description = (this_directory / "README.md").read_text(encoding="utf-8")
 
 REQUIRES = [
     "dynaconf>=3.1.11,<4.0.0",
-    "gooddata-flight-server~=1.33.0",
-    "gooddata-sdk~=1.33.0",
+    "gooddata-flight-server~=1.34.0",
+    "gooddata-sdk~=1.34.0",
     "orjson>=3.9.15,<4.0.0",
     "pyarrow>=16.1.0",
     "structlog>=24.0.0,<25.0.0",
@@ -20,7 +20,7 @@ setup(
     description="Build your own data source for GoodData Cloud and GoodData Cloud Native.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    version="1.33.0",
+    version="1.34.0",
     author="GoodData",
     author_email="support@gooddata.com",
     license="MIT",
@@ -31,7 +31,7 @@ setup(
     include_package_data=True,
     python_requires=">=3.9.0",
     project_urls={
-        "Documentation": "https://gooddata-flexconnect.readthedocs.io/en/v1.33.0",
+        "Documentation": "https://gooddata-flexconnect.readthedocs.io/en/v1.34.0",
         "Source": "https://github.com/gooddata/gooddata-python-sdk",
     },
     classifiers=[
