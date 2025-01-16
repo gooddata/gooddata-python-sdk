@@ -264,9 +264,7 @@ class FlightRpcService:
     def wait_for_stop(self, timeout: Optional[float] = None) -> bool:
         if self._flight_shutdown_thread is None:
             # this is really some mess in the caller code.. did not call stop() but tries to wait for it..
-            raise AssertionError(
-                "Flight server stop() was not issued yet attempting to wait for " "the server to stop."
-            )
+            raise AssertionError("Flight server stop() was not issued yet attempting to wait for the server to stop.")
 
         if self._flight_shutdown_thread.is_alive():
             self._flight_shutdown_thread.join(timeout=timeout)

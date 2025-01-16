@@ -78,9 +78,9 @@ class ExportService(CatalogServiceBase):
         Raises:
             ValueError: If the server is not able to return a response or if the input values are invalid.
         """
-        assert (
-            timeout > 0 and retry > 0 and max_retry > 0
-        ), f"Timeout value '{timeout}' or retry value '{retry}' or max retry value '{max_retry}' is negative."
+        assert timeout > 0 and retry > 0 and max_retry > 0, (
+            f"Timeout value '{timeout}' or retry value '{retry}' or max retry value '{max_retry}' is negative."
+        )
         assert timeout > retry, f"Retry value {retry} cannot be higher than timeout value {timeout}"
         assert retry <= max_retry, f"Retry value {retry} must be smaller or the same as max retry value {max_retry}"
         response = get_func(workspace_id=workspace_id, export_id=export_id, _preload_content=False)

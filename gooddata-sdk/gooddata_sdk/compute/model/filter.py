@@ -157,8 +157,7 @@ class RelativeDateFilter(Filter):
 
         if granularity not in _GRANULARITY:
             raise ValueError(
-                f"Invalid relative date filter granularity '{granularity}'."
-                f"It is expected to be one of: {_GRANULARITY}"
+                f"Invalid relative date filter granularity '{granularity}'. It is expected to be one of: {_GRANULARITY}"
             )
 
         self._dataset = dataset
@@ -373,8 +372,7 @@ class MetricValueFilter(Filter):
         else:
             if not isinstance(values, (int, float)) and len(values) != 1:
                 raise ValueError(
-                    f"Invalid number of values for {operator}. "
-                    f"Expected single int, float or one-sized list or tuple."
+                    f"Invalid number of values for {operator}. Expected single int, float or one-sized list or tuple."
                 )
             # Convert int to float as AFM model filters accept float values
             self._values = (float(values),) if isinstance(values, (int, float)) else values
@@ -456,8 +454,7 @@ class RankingFilter(Filter):
 
         if operator not in _RANKING_OPERATORS:
             raise ValueError(
-                f"Invalid ranking filter operator type '{operator}'."
-                f"It is expected to be one of: {_RANKING_OPERATORS}"
+                f"Invalid ranking filter operator type '{operator}'. It is expected to be one of: {_RANKING_OPERATORS}"
             )
 
         self._metrics = [_extract_id_or_local_id(m) for m in metrics]
@@ -504,6 +501,5 @@ class RankingFilter(Filter):
         )
         metric_ids = [m.id if isinstance(m, ObjId) else m for m in self.metrics]
         return (
-            f"{self.operator.capitalize()} {self.value}{dimensionality_str} "
-            f"{labels.get(metric_ids[0], metric_ids[0])}"
+            f"{self.operator.capitalize()} {self.value}{dimensionality_str} {labels.get(metric_ids[0], metric_ids[0])}"
         )

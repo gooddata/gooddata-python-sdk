@@ -55,7 +55,7 @@ class FlexConnectFunctionRegistry:
 
         if fun.Schema is None:
             raise ValueError(
-                f"FlexConnect function '{fun.Name}' implemented in class {fun.__name__} d" f"oes not specify schema."
+                f"FlexConnect function '{fun.Name}' implemented in class {fun.__name__} does not specify schema."
             )
 
         return fun.Name
