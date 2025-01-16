@@ -30,12 +30,10 @@ T = TypeVar("T")
 P = ParamSpec("P")
 
 
-def rpc_decorator() -> (
-    Callable[
-        [Callable[Concatenate[Any, pyarrow.flight.ServerCallContext, P], T]],
-        Callable[Concatenate[Any, pyarrow.flight.ServerCallContext, P], T],
-    ]
-):
+def rpc_decorator() -> Callable[
+    [Callable[Concatenate[Any, pyarrow.flight.ServerCallContext, P], T]],
+    Callable[Concatenate[Any, pyarrow.flight.ServerCallContext, P], T],
+]:
     def _factory(
         fun: Callable[Concatenate[Any, pyarrow.flight.ServerCallContext, P], T],
     ) -> Callable[Concatenate[Any, pyarrow.flight.ServerCallContext, P], T]:

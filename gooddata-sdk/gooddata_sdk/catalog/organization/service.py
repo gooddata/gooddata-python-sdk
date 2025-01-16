@@ -404,7 +404,7 @@ class CatalogOrganizationService(CatalogServiceBase):
             self._entities_api.update_entity_identity_providers(identity_provider.id, identity_provider_document)
         except NotFoundException:
             raise ValueError(
-                f"Can not update {identity_provider.id} identity provider. " f"This identity provider does not exist."
+                f"Can not update {identity_provider.id} identity provider. This identity provider does not exist."
             )
 
     # Layout APIs

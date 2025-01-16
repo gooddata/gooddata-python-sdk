@@ -115,8 +115,7 @@ def extract_filters_from_quals(quals: list[Qual], table_columns: dict[str, Colum
                 new_filter = _qual_to_attribute_filter(filter_entity, qual)
         else:
             _log_info(
-                f"extract_filters_from_quals: field_name={qual.field_name} is not attribute, "
-                f"but {type(filter_entity)}"
+                f"extract_filters_from_quals: field_name={qual.field_name} is not attribute, but {type(filter_entity)}"
             )
         if new_filter:
             filters.append(new_filter)

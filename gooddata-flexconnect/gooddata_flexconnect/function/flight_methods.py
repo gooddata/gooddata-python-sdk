@@ -65,7 +65,7 @@ class _FlexConnectServerMethods(FlightServerMethods):
             payload = orjson.loads(descriptor.command)
         except Exception:
             raise ErrorInfo.bad_argument(
-                "Incorrect FlexConnect function invocation. The invocation payload is " "not a valid JSON."
+                "Incorrect FlexConnect function invocation. The invocation payload is not a valid JSON."
             )
 
         fun = payload.get("functionName")
