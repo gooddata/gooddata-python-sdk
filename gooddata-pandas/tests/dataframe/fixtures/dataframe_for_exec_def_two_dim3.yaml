@@ -1,4 +1,4 @@
-# (C) 2024 GoodData Corporation
+# (C) 2025 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -121,7 +121,7 @@ interactions:
         content-length:
           - '1219'
         set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 14:26:19 GMT;
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Fri, 17 Jan 2025 13:32:54 GMT;
             Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
@@ -182,10 +182,10 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: c0d3f99ac025ee852c254fa8266d36d330773e5b:d3cec2868b6c54aafe391424a1618c7247c4bcd0d9dfa7191069d0442a865ea8
+              executionResult: b8b059ac5801f7dcd12bb4260ddcb9252d4b3e23:51c2c048d26843b7b1f25c4b1a8f5d142e01616477c45bd916bd524bb4936135
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/c0d3f99ac025ee852c254fa8266d36d330773e5b%3Ad3cec2868b6c54aafe391424a1618c7247c4bcd0d9dfa7191069d0442a865ea8/metadata
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/b8b059ac5801f7dcd12bb4260ddcb9252d4b3e23%3A51c2c048d26843b7b1f25c4b1a8f5d142e01616477c45bd916bd524bb4936135/metadata
       body: null
       headers:
         Accept:
@@ -252,7 +252,7 @@ interactions:
         content-length:
           - '2168'
         set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 14:26:19 GMT;
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Fri, 17 Jan 2025 13:32:54 GMT;
             Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
@@ -355,7 +355,7 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: c0d3f99ac025ee852c254fa8266d36d330773e5b:d3cec2868b6c54aafe391424a1618c7247c4bcd0d9dfa7191069d0442a865ea8
+              executionResult: b8b059ac5801f7dcd12bb4260ddcb9252d4b3e23:51c2c048d26843b7b1f25c4b1a8f5d142e01616477c45bd916bd524bb4936135
           resultSpec:
             dimensions:
               - localIdentifier: dim_0
@@ -372,7 +372,7 @@ interactions:
           resultSize: 3136
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/c0d3f99ac025ee852c254fa8266d36d330773e5b%3Ad3cec2868b6c54aafe391424a1618c7247c4bcd0d9dfa7191069d0442a865ea8?offset=0%2C0&limit=100%2C100
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/b8b059ac5801f7dcd12bb4260ddcb9252d4b3e23%3A51c2c048d26843b7b1f25c4b1a8f5d142e01616477c45bd916bd524bb4936135?offset=0%2C0&limit=100%2C100
       body: null
       headers:
         Accept:
@@ -439,7 +439,7 @@ interactions:
         content-length:
           - '21409'
         set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 14:26:19 GMT;
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Fri, 17 Jan 2025 13:32:54 GMT;
             Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
@@ -1628,7 +1628,7 @@ interactions:
               - 96
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/c0d3f99ac025ee852c254fa8266d36d330773e5b%3Ad3cec2868b6c54aafe391424a1618c7247c4bcd0d9dfa7191069d0442a865ea8/metadata
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/b8b059ac5801f7dcd12bb4260ddcb9252d4b3e23%3A51c2c048d26843b7b1f25c4b1a8f5d142e01616477c45bd916bd524bb4936135/metadata
       body: null
       headers:
         Accept:
@@ -1695,7 +1695,7 @@ interactions:
         content-length:
           - '2168'
         set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 14:26:19 GMT;
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Fri, 17 Jan 2025 13:32:54 GMT;
             Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
@@ -1798,7 +1798,7 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: c0d3f99ac025ee852c254fa8266d36d330773e5b:d3cec2868b6c54aafe391424a1618c7247c4bcd0d9dfa7191069d0442a865ea8
+              executionResult: b8b059ac5801f7dcd12bb4260ddcb9252d4b3e23:51c2c048d26843b7b1f25c4b1a8f5d142e01616477c45bd916bd524bb4936135
           resultSpec:
             dimensions:
               - localIdentifier: dim_0
@@ -1815,7 +1815,7 @@ interactions:
           resultSize: 3136
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/c0d3f99ac025ee852c254fa8266d36d330773e5b%3Ad3cec2868b6c54aafe391424a1618c7247c4bcd0d9dfa7191069d0442a865ea8?offset=0%2C0&limit=100%2C100
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/b8b059ac5801f7dcd12bb4260ddcb9252d4b3e23%3A51c2c048d26843b7b1f25c4b1a8f5d142e01616477c45bd916bd524bb4936135?offset=0%2C0&limit=100%2C100
       body: null
       headers:
         Accept:
@@ -1882,7 +1882,7 @@ interactions:
         content-length:
           - '21409'
         set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 14:26:19 GMT;
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Fri, 17 Jan 2025 13:32:54 GMT;
             Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
