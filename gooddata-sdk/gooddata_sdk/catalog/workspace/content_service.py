@@ -103,7 +103,9 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
 
         return CatalogWorkspaceContent.create_workspace_content_catalog(valid_obj_fun, datasets, attributes, metrics)
 
-    def get_attributes_catalog(self, workspace_id: str, include: Optional[list[str]] = None) -> list[CatalogAttribute]:
+    def get_attributes_catalog(
+        self, workspace_id: str, include: Optional[list[str]] = None, rsql_filter: Optional[str] = None
+    ) -> list[CatalogAttribute]:
         """Retrieve all attributes in a given workspace.
 
         Args:
@@ -112,6 +114,8 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
             include (list[str]):
                 Entities to include.
                 Available: datasets, labels, attributeHierarchies, dataset, defaultView, ALL
+            rsql_filter (str):
+                An optional filter to be passed to API.
 
         Returns:
             list[CatalogAttribute]:
@@ -127,6 +131,8 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
             include=include,
             _check_return_type=False,
         )
+        if rsql_filter is not None:
+            get_attributes = functools.partial(get_attributes, filter=rsql_filter)
         attributes = load_all_entities(get_attributes)
         catalog_attributes = [CatalogAttribute.from_api(a, side_loads=attributes.included) for a in attributes.data]
         return catalog_attributes
