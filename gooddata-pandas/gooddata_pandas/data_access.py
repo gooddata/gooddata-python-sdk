@@ -16,7 +16,7 @@ from gooddata_sdk import (
     ObjId,
     TableDimension,
 )
-from gooddata_sdk.utils import IdObjType
+from gooddata_sdk.utils import IdObjType, filter_for_attributes_labels
 
 from gooddata_pandas.utils import (
     ColumnsDef,
@@ -446,7 +446,12 @@ def compute_and_extract(
     if not exec_def.has_attributes():
         return _extract_for_metrics_only(response, cols, col_to_metric_idx), dict()
     else:
-        attributes = sdk.catalog_workspace_content.get_attributes_catalog(workspace_id, include=["labels", "datasets"])
+        filter_query = filter_for_attributes_labels(exec_def.attributes)
+        # if there is to many labels then all attributes are fetched and no rsql filter is used
+        # it prevention again 414 Request-URI Too Long
+        attributes = sdk.catalog_workspace_content.get_attributes_catalog(
+            workspace_id, include=["labels", "datasets"], rsql_filter=filter_query
+        )
         return _extract_from_attributes_and_maybe_metrics(
             response,
             attributes,
