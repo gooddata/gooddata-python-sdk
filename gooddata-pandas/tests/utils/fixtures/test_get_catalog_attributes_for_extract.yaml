@@ -1,0 +1,266 @@
+# (C) 2025 GoodData Corporation
+version: 1
+interactions:
+  - request:
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3Din%3D%28campaign_name%29&page=0&size=500
+      body: null
+      headers:
+        Accept:
+          - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+    response:
+      status:
+        code: 200
+        message: OK
+      headers:
+        Access-Control-Allow-Credentials:
+          - 'true'
+        Access-Control-Expose-Headers:
+          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
+        Content-Length:
+          - '1541'
+        Content-Security-Policy:
+          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
+            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
+            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
+            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
+            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
+            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
+            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
+            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
+            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
+            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
+            *.wistia.net embedwistia-a.akamaihd.net'
+        Content-Type:
+          - application/vnd.gooddata.api+json
+        DATE: &id001
+          - PLACEHOLDER
+        Expires:
+          - '0'
+        GoodData-Deployment:
+          - aio
+        Permission-Policy:
+          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
+            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
+            'none';
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Server:
+          - nginx
+        Vary:
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-XSS-Protection:
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 20 Jan 2025 10:18:23 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
+      body:
+        string:
+          data:
+            - id: campaign_name
+              type: attribute
+              attributes:
+                title: Campaign name
+                description: Campaign name
+                tags:
+                  - Campaigns
+                areRelationsValid: true
+                sourceColumn: campaign_name
+                sourceColumnDataType: STRING
+              relationships:
+                dataset:
+                  data:
+                    id: campaigns
+                    type: dataset
+                labels:
+                  data:
+                    - id: campaign_name
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_name
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+          included:
+            - id: campaigns
+              type: dataset
+              attributes:
+                title: Campaigns
+                description: Campaigns
+                tags:
+                  - Campaigns
+                grain:
+                  - id: campaign_id
+                    type: attribute
+                dataSourceTableId: demo-test-ds:campaigns
+                dataSourceTablePath:
+                  - demo
+                  - campaigns
+                type: NORMAL
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/campaigns
+            - id: campaign_name
+              type: label
+              attributes:
+                title: Campaign name
+                description: Campaign name
+                tags:
+                  - Campaigns
+                primary: true
+                sourceColumn: campaign_name
+                sourceColumnDataType: STRING
+                valueType: TEXT
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_name
+          links:
+            self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3D%3D%27campaign_name%27&page=0&size=500
+            next: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3D%3D%27campaign_name%27&page=1&size=500
+  - request:
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3Din%3D%28region%29&page=0&size=500
+      body: null
+      headers:
+        Accept:
+          - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+    response:
+      status:
+        code: 200
+        message: OK
+      headers:
+        Access-Control-Allow-Credentials:
+          - 'true'
+        Access-Control-Expose-Headers:
+          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
+        Content-Length:
+          - '1450'
+        Content-Security-Policy:
+          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
+            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
+            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
+            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
+            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
+            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
+            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
+            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
+            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
+            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
+            *.wistia.net embedwistia-a.akamaihd.net'
+        Content-Type:
+          - application/vnd.gooddata.api+json
+        DATE: *id001
+        Expires:
+          - '0'
+        GoodData-Deployment:
+          - aio
+        Permission-Policy:
+          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
+            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
+            'none';
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Server:
+          - nginx
+        Vary:
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-XSS-Protection:
+          - '0'
+        set-cookie:
+          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 20 Jan 2025 10:18:23 GMT;
+            Path=/; HTTPOnly; SameSite=Lax
+      body:
+        string:
+          data:
+            - id: region
+              type: attribute
+              attributes:
+                title: Region
+                description: Region
+                tags:
+                  - Customers
+                areRelationsValid: true
+                sourceColumn: region
+                sourceColumnDataType: STRING
+              relationships:
+                dataset:
+                  data:
+                    id: customers
+                    type: dataset
+                labels:
+                  data:
+                    - id: region
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/region
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+          included:
+            - id: customers
+              type: dataset
+              attributes:
+                title: Customers
+                description: Customers
+                tags:
+                  - Customers
+                grain:
+                  - id: customer_id
+                    type: attribute
+                dataSourceTableId: demo-test-ds:customers
+                dataSourceTablePath:
+                  - demo
+                  - customers
+                type: NORMAL
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/customers
+            - id: region
+              type: label
+              attributes:
+                title: Region
+                description: Region
+                tags:
+                  - Customers
+                primary: true
+                sourceColumn: region
+                sourceColumnDataType: STRING
+                valueType: TEXT
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/region
+          links:
+            self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3D%3D%27region%27&page=0&size=500
+            next: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3D%3D%27region%27&page=1&size=500

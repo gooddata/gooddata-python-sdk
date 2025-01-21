@@ -9,7 +9,7 @@ from collections.abc import KeysView
 from enum import Enum, auto
 from pathlib import Path
 from shutil import rmtree
-from typing import Any, Callable, NamedTuple, Optional, Union, cast, no_type_check
+from typing import Any, Callable, NamedTuple, Union, cast, no_type_check
 from warnings import warn
 from xml.etree import ElementTree as ET
 
@@ -427,13 +427,27 @@ def ref_extract(ref: dict[str, Any]) -> Union[str, ObjId]:
     raise ValueError("invalid ref. must be identifier or localIdentifier")
 
 
-def filter_for_attributes_labels(attributes: list[Attribute], character_limit: int = 1500) -> Optional[str]:
+def filter_for_attributes_labels(attributes: list[Attribute], character_limit: int = 1500) -> list[str]:
     """
     Character limit is to prevent 414 Request-URI Too Large error from server.
     """
     # set(...) does not work deterministically; therefore, it is necessary to use dict.fromkeys
     label_ids = dict.fromkeys([attribute.label.id for attribute in attributes])
-    rsql_query = f"labels.id=in=({','.join(label_ids)})"
-    if len(rsql_query) < character_limit:
-        return rsql_query
-    return None
+
+    longest_id = max(map(len, label_ids))
+    assert character_limit >= len("labels.id=in=()") + longest_id, (
+        f"Character limit must be at least {len('labels.id=in=()') + longest_id}"
+    )
+    queries = []
+    current_batch: list[str] = []
+
+    for label_id in label_ids:
+        if len(f"labels.id=in=({','.join(current_batch + [label_id])})") <= character_limit:
+            current_batch.append(label_id)
+        else:
+            queries.append(f"labels.id=in=({','.join(current_batch)})")
+            current_batch = [label_id]
+
+    if current_batch:  # Add remaining batch
+        queries.append(f"labels.id=in=({','.join(current_batch)})")
+    return queries

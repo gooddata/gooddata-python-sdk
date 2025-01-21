@@ -9,6 +9,7 @@ import pandas
 from gooddata_sdk import (
     Attribute,
     CatalogAttribute,
+    GoodDataSdk,
     Metric,
     ObjId,
     SimpleMetric,
@@ -16,6 +17,7 @@ from gooddata_sdk import (
     VisualizationMetric,
 )
 from gooddata_sdk.type_converter import AttributeConverterStore, DateConverter, DatetimeConverter, IntegerConverter
+from gooddata_sdk.utils import filter_for_attributes_labels
 from pandas import Index, MultiIndex
 
 LabelItemDef = Union[Attribute, ObjId, str]
@@ -27,6 +29,25 @@ ColumnsDef = dict[str, DataItemDef]
 IntegerConverter.set_external_fnc(lambda self, value: pandas.to_numeric(value))
 DateConverter.set_external_fnc(lambda self, value: pandas.to_datetime(value))
 DatetimeConverter.set_external_fnc(lambda self, value: pandas.to_datetime(value))
+
+
+def get_catalog_attributes_for_extract(
+    sdk: GoodDataSdk, workspace_id: str, attributes: list[Attribute], character_limit: int = 1500
+) -> list[CatalogAttribute]:
+    """
+    Get catalog attributes for the given attributes.
+    It uses the filter_for_attributes_labels function to get the
+    RSQL queries for the attributes and then fetches the catalog attributes for the given workspace.
+    This approach prevents loading all catalog attributes providing significant speed-up.
+    """
+    rsql_queries = filter_for_attributes_labels(attributes, character_limit)
+    return [
+        attr
+        for query in rsql_queries
+        for attr in sdk.catalog_workspace_content.get_attributes_catalog(
+            workspace_id, include=["labels", "datasets"], rsql_filter=query
+        )
+    ]
 
 
 def _unique_local_id() -> str:
