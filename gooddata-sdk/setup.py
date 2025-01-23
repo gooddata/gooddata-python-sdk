@@ -7,7 +7,7 @@ this_directory = Path(__file__).parent
 long_description = (this_directory / "README.md").read_text(encoding="utf-8")
 
 REQUIRES = [
-    "gooddata-api-client~=1.34.0",
+    "gooddata-api-client~=1.35.0",
     "python-dateutil>=2.5.3",
     "pyyaml>=6.0",
     "attrs>=21.4.0,<=24.2.0",
@@ -22,7 +22,7 @@ setup(
     description="GoodData Cloud Python SDK",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    version="1.34.0",
+    version="1.35.0",
     author="GoodData",
     author_email="support@gooddata.com",
     license="MIT",
@@ -36,7 +36,7 @@ setup(
         "bin/gdc",
     ],
     project_urls={
-        "Documentation": "https://www.gooddata.com/docs/python-sdk/1.34.0",
+        "Documentation": "https://www.gooddata.com/docs/python-sdk/1.35.0",
         "Source": "https://github.com/gooddata/gooddata-python-sdk",
     },
     classifiers=[
