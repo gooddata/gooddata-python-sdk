@@ -240,18 +240,19 @@ def _prepare_tabular_definition(
     return ExecutionDefinition(attributes=attributes, metrics=metrics, filters=filters, dimensions=dims)
 
 
-def _as_table(response: ExecutionResponse) -> ExecutionTable:
+def _as_table(response: ExecutionResponse, always_two_dimensional: bool = False) -> ExecutionTable:
     first_page_offset = [0, 0]
     first_page_limit = [_TABLE_ROW_BATCH_SIZE, _MAX_METRICS]
 
-    if not response.exec_def.has_attributes():
-        # there are no attributes, there shall be at most one row with the metrics, so get that as first page
-        first_page_limit = [first_page_limit[1]]
-        first_page_offset = [0]
-    elif not response.exec_def.has_metrics():
-        # there are no metrics; there may be many attribute headers
-        first_page_limit = [first_page_limit[0]]
-        first_page_offset = [0]
+    if not always_two_dimensional:
+        if not response.exec_def.has_attributes():
+            # there are no attributes, there shall be at most one row with the metrics, so get that as first page
+            first_page_limit = [first_page_limit[1]]
+            first_page_offset = [0]
+        elif not response.exec_def.has_metrics():
+            # there are no metrics; there may be many attribute headers
+            first_page_limit = [first_page_limit[0]]
+            first_page_offset = [0]
 
     first_page = response.read_result(offset=first_page_offset, limit=first_page_limit)
 
@@ -771,18 +772,23 @@ class TableService:
     def __init__(self, api_client: GoodDataApiClient) -> None:
         self._compute = ComputeService(api_client)
 
-    def for_visualization(self, workspace_id: str, visualization: Visualization) -> ExecutionTable:
+    def for_visualization(
+        self, workspace_id: str, visualization: Visualization, always_two_dimensional: bool = False
+    ) -> ExecutionTable:
         # Assume the received visualization is a pivot table if:
         # - we can parse out "table" suffix from the attributes.contents.visualizationUrl
         # or
         # - it contains row ("attribute") bucket
+
+        # use always_two_dimensional to ignore special handling of cases where the visualization
+        # to be executed should contain only metrics and no attributes or vice-versa.
         exec_def = (
             _get_exec_for_pivot(visualization)
             if _vis_is_table(visualization) or visualization.has_bucket_of_type(BucketType.ROWS)
             else get_exec_for_non_pivot(visualization)
         )
         response = self._compute.for_exec_def(workspace_id=workspace_id, exec_def=exec_def)
-        return _as_table(response)
+        return _as_table(response, always_two_dimensional)
 
     def for_items(
         self, workspace_id: str, items: list[Union[Attribute, Metric]], filters: Optional[list[Filter]] = None
