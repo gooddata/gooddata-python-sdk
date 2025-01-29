@@ -29,7 +29,15 @@ from gooddata_sdk.compute.model.metric import (
     PopDatesetMetric,
     SimpleMetric,
 )
-from gooddata_sdk.utils import IdObjType, SideLoads, load_all_entities, ref_extract, ref_extract_obj_id, safeget
+from gooddata_sdk.utils import (
+    IdObjType,
+    ObjRefType,
+    SideLoads,
+    load_all_entities,
+    ref_extract,
+    ref_extract_obj_id,
+    safeget,
+)
 
 #
 # Conversion from types stored in visualization into the gooddata_afm_client models.
@@ -166,23 +174,30 @@ def _convert_filter_to_computable(filter_obj: dict[str, Any]) -> Filter:
         # fallback to use URIs; SDK may be able to create filter with attr elements as uris...
         in_values = f["in"]["values"] if "values" in f["in"] else f["in"]["uris"]
 
-        return PositiveAttributeFilter(label=ref_extract(f["displayForm"]), values=in_values)
+        return PositiveAttributeFilter(
+            label=ref_extract(f["displayForm"], ObjRefType.LABEL),
+            values=in_values,
+        )
 
     elif "negativeAttributeFilter" in filter_obj:
         f = filter_obj["negativeAttributeFilter"]
         # fallback to use URIs; SDK may be able to create filter with attr elements as uris...
         not_in_values = f["notIn"]["values"] if "values" in f["notIn"] else f["notIn"]["uris"]
 
-        return NegativeAttributeFilter(label=ref_extract(f["displayForm"]), values=not_in_values)
+        return NegativeAttributeFilter(
+            label=ref_extract(f["displayForm"], ObjRefType.LABEL),
+            values=not_in_values,
+        )
+
     elif "relativeDateFilter" in filter_obj:
         f = filter_obj["relativeDateFilter"]
 
         # there is filter present, but uses all time
         if ("from" not in f) or ("to" not in f):
-            return AllTimeFilter(ref_extract_obj_id(f["dataSet"]))
+            return AllTimeFilter(ref_extract_obj_id(f["dataSet"], ObjRefType.DATASET))
 
         return RelativeDateFilter(
-            dataset=ref_extract_obj_id(f["dataSet"]),
+            dataset=ref_extract_obj_id(f["dataSet"], ObjRefType.DATASET),
             granularity=_GRANULARITY_CONVERSION[f["granularity"]],
             from_shift=f["from"],
             to_shift=f["to"],
@@ -191,7 +206,12 @@ def _convert_filter_to_computable(filter_obj: dict[str, Any]) -> Filter:
     elif "absoluteDateFilter" in filter_obj:
         f = filter_obj["absoluteDateFilter"]
 
-        return AbsoluteDateFilter(dataset=ref_extract_obj_id(f["dataSet"]), from_date=f["from"], to_date=f["to"])
+        return AbsoluteDateFilter(
+            dataset=ref_extract_obj_id(f["dataSet"], ObjRefType.DATASET),
+            from_date=f["from"],
+            to_date=f["to"],
+        )
+
     elif "measureValueFilter" in filter_obj:
         f = filter_obj["measureValueFilter"]
 
@@ -211,6 +231,7 @@ def _convert_filter_to_computable(filter_obj: dict[str, Any]) -> Filter:
                 values=c["value"],
                 treat_nulls_as=treat_values_as_null,
             )
+
         elif "range" in condition:
             c = condition["range"]
             treat_values_as_null = c.get("treatNullValuesAs")
@@ -220,6 +241,7 @@ def _convert_filter_to_computable(filter_obj: dict[str, Any]) -> Filter:
                 values=(c["from"], c["to"]),
                 treat_nulls_as=treat_values_as_null,
             )
+
     elif "rankingFilter" in filter_obj:
         f = filter_obj["rankingFilter"]
         # mypy is unable to automatically convert Union[str, ObjId] to Union[str, ObjId, Attribute, Metric]
@@ -254,7 +276,7 @@ def _convert_metric_to_computable(metric: dict[str, Any]) -> Metric:
 
         return SimpleMetric(
             local_id=local_id,
-            item=ref_extract_obj_id(d["item"]),
+            item=ref_extract_obj_id(d["item"], ObjRefType.FACT),
             aggregation=aggregation,
             compute_ratio=compute_ratio,
             filters=filters,
@@ -262,7 +284,12 @@ def _convert_metric_to_computable(metric: dict[str, Any]) -> Metric:
 
     elif "popMeasureDefinition" in measure_def:
         d = measure_def["popMeasureDefinition"]
-        date_attributes = [PopDate(attribute=ref_extract_obj_id(d["popAttribute"]), periods_ago=1)]
+        date_attributes = [
+            PopDate(
+                attribute=ref_extract_obj_id(d["popAttribute"], ObjRefType.ATTRIBUTE),
+                periods_ago=1,
+            ),
+        ]
 
         return PopDateMetric(
             local_id=local_id,
@@ -273,7 +300,9 @@ def _convert_metric_to_computable(metric: dict[str, Any]) -> Metric:
     elif "previousPeriodMeasure" in measure_def:
         d = measure_def["previousPeriodMeasure"]
 
-        date_datasets = [PopDateDataset(ref_extract(dd["dataSet"]), dd["periodsAgo"]) for dd in d["dateDataSets"]]
+        date_datasets = [
+            PopDateDataset(ref_extract(dd["dataSet"], ObjRefType.DATASET), dd["periodsAgo"]) for dd in d["dateDataSets"]
+        ]
 
         return PopDatesetMetric(
             local_id=local_id,
@@ -394,7 +423,11 @@ class VisualizationAttribute:
         return self._a.get("showAllValues")
 
     def as_computable(self) -> Attribute:
-        return Attribute(local_id=self.local_id, label=ref_extract(self.label), show_all_values=self.show_all_values)
+        return Attribute(
+            local_id=self.local_id,
+            label=ref_extract(self.label, ObjRefType.LABEL),
+            show_all_values=self.show_all_values,
+        )
 
     def __str__(self) -> str:
         return self.__repr__()
