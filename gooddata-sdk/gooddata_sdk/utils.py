@@ -9,7 +9,7 @@ from collections.abc import KeysView
 from enum import Enum, auto
 from pathlib import Path
 from shutil import rmtree
-from typing import Any, Callable, NamedTuple, Optional, Union, cast, no_type_check
+from typing import Any, Callable, NamedTuple, Union, cast, no_type_check
 from warnings import warn
 from xml.etree import ElementTree as ET
 
@@ -41,25 +41,6 @@ class HttpMethod(Enum):
     PUT = auto()
     DELETE = auto()
     PATCH = auto()
-
-
-class ObjRefType(Enum):
-    """Enum representing valid tiger object reference types."""
-
-    ATTRIBUTE = "attribute"
-    METRIC = "metric"
-    LABEL = "label"
-    DATASET = "dataset"
-    FACT = "fact"
-
-
-UI_TO_TIGER_REF_TYPE = {
-    "attribute": ObjRefType.ATTRIBUTE,
-    "measure": ObjRefType.METRIC,
-    "displayForm": ObjRefType.LABEL,
-    "dataSet": ObjRefType.DATASET,
-    "fact": ObjRefType.FACT,
-}
 
 
 def id_obj_to_key(id_obj: IdObjType) -> str:
@@ -415,47 +396,28 @@ def read_json(path: Union[str, Path]) -> Any:
         return json.loads(f.read())
 
 
-def ref_extract_obj_id(ref: dict[str, Any], default_type: Optional[ObjRefType] = None) -> ObjId:
+def ref_extract_obj_id(ref: dict[str, Any]) -> ObjId:
     """
     Extracts ObjId from a ref dictionary.
-
-    The ref dictionary will most likely conform to one of two forms:
-    - ui-sdk -> ref: { identifier: str, type: str }
-    - tiger -> ref: { identifier: { id: str, type: str } }
-
     :param ref: the ref to extract from
-    :param default_type: the type of the object to fall back to in case of string identifier
     :return: the extracted ObjId
     :raises ValueError: if the ref is not an identifier
     """
-    identifier = ref.get("identifier")
-    if not identifier:
-        raise ValueError("invalid ref. must be identifier")
+    if "identifier" in ref:
+        return ObjId(id=ref["identifier"]["id"], type=ref["identifier"]["type"])
 
-    if isinstance(identifier, str):
-        if default_type:
-            return ObjId(id=identifier, type=default_type.value)
-
-        ui_type = ref.get("type")
-        if not ui_type or ui_type not in UI_TO_TIGER_REF_TYPE:
-            raise ValueError("UI objRef type is not recognized and fallback type is not provided")
-
-        converted_type = UI_TO_TIGER_REF_TYPE[ui_type].value
-        return ObjId(id=identifier, type=converted_type)
-
-    return ObjId(id=identifier["id"], type=identifier["type"])
+    raise ValueError("invalid ref. must be identifier")
 
 
-def ref_extract(ref: dict[str, Any], default_type: Optional[ObjRefType] = None) -> Union[str, ObjId]:
+def ref_extract(ref: dict[str, Any]) -> Union[str, ObjId]:
     """
     Extracts an object id from a ref dictionary: either an identifier or a localIdentifier.
     :param ref: the ref to extract from
-    :param default_type: ref type to use in case of ui-sdk form of identifier object
     :return: thr extracted object id
     :raises ValueError: if the ref is not an identifier or localIdentifier
     """
     try:
-        return ref_extract_obj_id(ref, default_type)
+        return ref_extract_obj_id(ref)
     except ValueError:
         pass
 
