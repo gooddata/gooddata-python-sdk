@@ -1,0 +1,135 @@
+{
+  "id": "923fb97a-4eb8-4cd7-b564-e72361addc79",
+  "type": "visualizationObject",
+  "attributes": {
+    "title": "testik",
+    "description": "",
+    "areRelationsValid": true,
+    "content": {
+      "buckets": [
+        {
+          "items": [
+            {
+              "attribute": {
+                "localIdentifier": "bb94cc071f67461f97cc30a8ef54fbb7",
+                "displayForm": {
+                  "identifier": "Agent.Name",
+                  "type": "displayForm"
+                }
+              }
+            },
+            {
+              "attribute": {
+                "localIdentifier": "e497c4b2398c4f7faaa2212ddb2c5df7",
+                "displayForm": {
+                  "identifier": "Engaged_Role.Name",
+                  "type": "displayForm"
+                }
+              }
+            },
+            {
+              "attribute": {
+                "localIdentifier": "0baaee3c223f4fd6a707a98beca780ca",
+                "displayForm": {
+                  "identifier": "Engagement.Engagement",
+                  "type": "displayForm"
+                }
+              }
+            },
+            {
+              "attribute": {
+                "localIdentifier": "44bc41d90b99431cac722b0fae53c7b2",
+                "displayForm": {
+                  "identifier": "Question.Name",
+                  "type": "displayForm"
+                }
+              }
+            }
+          ],
+          "localIdentifier": "attribute"
+        }
+      ],
+      "filters": [
+        {
+          "relativeDateFilter": {
+            "dataSet": {
+              "identifier": "Start_Time",
+              "type": "dataSet"
+            },
+            "granularity": "GDC.time.date",
+            "from": -1,
+            "to": -1
+          }
+        },
+        {
+          "negativeAttributeFilter": {
+            "localIdentifier": "81d4b8d638444fe1a08605e6acff289e",
+            "displayForm": {
+              "identifier": "Question.Question",
+              "type": "displayForm"
+            },
+            "notIn": {
+              "uris": []
+            }
+          }
+        },
+        {
+          "negativeAttributeFilter": {
+            "localIdentifier": "71156c3bcc7846668c3bb3ca2e09945c",
+            "displayForm": {
+              "identifier": "Engagement_Type.Type",
+              "type": "displayForm"
+            },
+            "notIn": {
+              "uris": []
+            }
+          }
+        },
+        {
+          "negativeAttributeFilter": {
+            "localIdentifier": "d4df08d678b645258473a455a5de560b",
+            "displayForm": {
+              "identifier": "Review_Type.Type",
+              "type": "displayForm"
+            },
+            "notIn": {
+              "uris": []
+            }
+          }
+        },
+        {
+          "negativeAttributeFilter": {
+            "localIdentifier": "64c8e3f20f22427c9b0e30a78f522019",
+            "displayForm": {
+              "identifier": "Agent.Agent",
+              "type": "displayForm"
+            },
+            "notIn": {
+              "uris": []
+            }
+          }
+        }
+      ],
+      "properties": {
+        "sortItems": [
+          {
+            "attributeSortItem": {
+              "attributeIdentifier": "bb94cc071f67461f97cc30a8ef54fbb7",
+              "direction": "asc"
+            }
+          }
+        ]
+      },
+      "sorts": [
+        {
+          "attributeSortItem": {
+            "attributeIdentifier": "bb94cc071f67461f97cc30a8ef54fbb7",
+            "direction": "asc"
+          }
+        }
+      ],
+      "visualizationUrl": "local:table",
+      "version": "2"
+    }
+  }
+}
