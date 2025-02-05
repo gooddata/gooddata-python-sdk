@@ -7,3 +7,8 @@
 # - "latestTag" - docker image tag for the latest patch version. Must be changed
 #                 on every patch release of respective branch
 
+[[versions]]
+    version = "Latest"
+    dirpath = "latest"
+    url = "/latest/"
+    productName = "Python SDK Latest"
