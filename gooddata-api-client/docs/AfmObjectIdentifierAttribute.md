@@ -1,5 +1,6 @@
 # AfmObjectIdentifierAttribute
 
+Reference to the date attribute to use.
 
 ## Properties
 Name | Type | Description | Notes

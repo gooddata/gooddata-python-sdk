@@ -31,14 +31,14 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.attribute_header_out import AttributeHeaderOut
-    from gooddata_api_client.model.attribute_header_out_attribute_header import AttributeHeaderOutAttributeHeader
+    from gooddata_api_client.model.attribute_header import AttributeHeader
+    from gooddata_api_client.model.attribute_header_attribute_header import AttributeHeaderAttributeHeader
     from gooddata_api_client.model.measure_group_headers import MeasureGroupHeaders
-    from gooddata_api_client.model.measure_header_out import MeasureHeaderOut
-    globals()['AttributeHeaderOut'] = AttributeHeaderOut
-    globals()['AttributeHeaderOutAttributeHeader'] = AttributeHeaderOutAttributeHeader
+    from gooddata_api_client.model.measure_header import MeasureHeader
+    globals()['AttributeHeader'] = AttributeHeader
+    globals()['AttributeHeaderAttributeHeader'] = AttributeHeaderAttributeHeader
     globals()['MeasureGroupHeaders'] = MeasureGroupHeaders
-    globals()['MeasureHeaderOut'] = MeasureHeaderOut
+    globals()['MeasureHeader'] = MeasureHeader
 
 
 class ResultDimensionHeader(ModelComposed):
@@ -94,8 +94,10 @@ class ResultDimensionHeader(ModelComposed):
         """
         lazy_import()
         return {
-            'measure_group_headers': ([MeasureHeaderOut],),  # noqa: E501
-            'attribute_header': (AttributeHeaderOutAttributeHeader,),  # noqa: E501
+            'first': (MeasureHeader,),  # noqa: E501
+            'last': (MeasureHeader,),  # noqa: E501
+            'measure_group_headers': ([MeasureHeader],),  # noqa: E501
+            'attribute_header': (AttributeHeaderAttributeHeader,),  # noqa: E501
         }
 
     @cached_property
@@ -104,6 +106,8 @@ class ResultDimensionHeader(ModelComposed):
 
 
     attribute_map = {
+        'first': 'first',  # noqa: E501
+        'last': 'last',  # noqa: E501
         'measure_group_headers': 'measureGroupHeaders',  # noqa: E501
         'attribute_header': 'attributeHeader',  # noqa: E501
     }
@@ -147,8 +151,10 @@ class ResultDimensionHeader(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            measure_group_headers ([MeasureHeaderOut]): [optional]  # noqa: E501
-            attribute_header (AttributeHeaderOutAttributeHeader): [optional]  # noqa: E501
+            first (MeasureHeader): [optional]  # noqa: E501
+            last (MeasureHeader): [optional]  # noqa: E501
+            measure_group_headers ([MeasureHeader]): [optional]  # noqa: E501
+            attribute_header (AttributeHeaderAttributeHeader): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -252,8 +258,10 @@ class ResultDimensionHeader(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            measure_group_headers ([MeasureHeaderOut]): [optional]  # noqa: E501
-            attribute_header (AttributeHeaderOutAttributeHeader): [optional]  # noqa: E501
+            first (MeasureHeader): [optional]  # noqa: E501
+            last (MeasureHeader): [optional]  # noqa: E501
+            measure_group_headers ([MeasureHeader]): [optional]  # noqa: E501
+            attribute_header (AttributeHeaderAttributeHeader): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -325,7 +333,7 @@ class ResultDimensionHeader(ModelComposed):
           'allOf': [
           ],
           'oneOf': [
-              AttributeHeaderOut,
+              AttributeHeader,
               MeasureGroupHeaders,
           ],
         }

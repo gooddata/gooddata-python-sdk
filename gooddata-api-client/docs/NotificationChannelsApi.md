@@ -11,6 +11,8 @@ Method | HTTP request | Description
 [**get_notification_channels_layout**](NotificationChannelsApi.md#get_notification_channels_layout) | **GET** /api/v1/layout/notificationChannels | Get all notification channels layout
 [**patch_entity_notification_channels**](NotificationChannelsApi.md#patch_entity_notification_channels) | **PATCH** /api/v1/entities/notificationChannels/{id} | Patch Notification Channel entity
 [**set_notification_channels**](NotificationChannelsApi.md#set_notification_channels) | **PUT** /api/v1/layout/notificationChannels | Set all notification channels
+[**test_existing_notification_channel**](NotificationChannelsApi.md#test_existing_notification_channel) | **POST** /api/v1/actions/notificationChannels/{notificationChannelId}/test | Test existing notification channel.
+[**test_notification_channel**](NotificationChannelsApi.md#test_notification_channel) | **POST** /api/v1/actions/notificationChannels/test | Test notification channel.
 [**update_entity_notification_channels**](NotificationChannelsApi.md#update_entity_notification_channels) | **PUT** /api/v1/entities/notificationChannels/{id} | Put Notification Channel entity
 
 
@@ -45,9 +47,9 @@ with gooddata_api_client.ApiClient() as api_client:
             attributes=JsonApiNotificationChannelInAttributes(
                 allowed_recipients="CREATOR",
                 custom_dashboard_url="custom_dashboard_url_example",
+                dashboard_link_visibility="HIDDEN",
                 description="description_example",
                 destination=JsonApiNotificationChannelInAttributesDestination(None),
-                destination_type="WEBHOOK",
                 in_platform_notification="DISABLED",
                 name="name_example",
             ),
@@ -416,9 +418,9 @@ with gooddata_api_client.ApiClient() as api_client:
             attributes=JsonApiNotificationChannelInAttributes(
                 allowed_recipients="CREATOR",
                 custom_dashboard_url="custom_dashboard_url_example",
+                dashboard_link_visibility="HIDDEN",
                 description="description_example",
                 destination=JsonApiNotificationChannelInAttributesDestination(None),
-                destination_type="WEBHOOK",
                 in_platform_notification="DISABLED",
                 name="name_example",
             ),
@@ -509,6 +511,7 @@ with gooddata_api_client.ApiClient() as api_client:
             DeclarativeNotificationChannel(
                 allowed_recipients="INTERNAL",
                 custom_dashboard_url="custom_dashboard_url_example",
+                dashboard_link_visibility="INTERNAL_ONLY",
                 description="This is a channel",
                 destination=DeclarativeNotificationChannelDestination(None),
                 id="notification-channel-1",
@@ -555,6 +558,157 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **test_existing_notification_channel**
+> TestResponse test_existing_notification_channel(notification_channel_id)
+
+Test existing notification channel.
+
+Tests the existing notification channel by sending a test notification.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import notification_channels_api
+from gooddata_api_client.model.test_response import TestResponse
+from gooddata_api_client.model.test_destination_request import TestDestinationRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = notification_channels_api.NotificationChannelsApi(api_client)
+    notification_channel_id = "notificationChannelId_example" # str | 
+    test_destination_request = TestDestinationRequest(
+        destination=DeclarativeNotificationChannelDestination(None),
+    ) # TestDestinationRequest |  (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Test existing notification channel.
+        api_response = api_instance.test_existing_notification_channel(notification_channel_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling NotificationChannelsApi->test_existing_notification_channel: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Test existing notification channel.
+        api_response = api_instance.test_existing_notification_channel(notification_channel_id, test_destination_request=test_destination_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling NotificationChannelsApi->test_existing_notification_channel: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **notification_channel_id** | **str**|  |
+ **test_destination_request** | [**TestDestinationRequest**](TestDestinationRequest.md)|  | [optional]
+
+### Return type
+
+[**TestResponse**](TestResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | The result of the test of a notification channel connection. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **test_notification_channel**
+> TestResponse test_notification_channel(test_destination_request)
+
+Test notification channel.
+
+Tests the notification channel by sending a test notification.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import notification_channels_api
+from gooddata_api_client.model.test_response import TestResponse
+from gooddata_api_client.model.test_destination_request import TestDestinationRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = notification_channels_api.NotificationChannelsApi(api_client)
+    test_destination_request = TestDestinationRequest(
+        destination=DeclarativeNotificationChannelDestination(None),
+    ) # TestDestinationRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Test notification channel.
+        api_response = api_instance.test_notification_channel(test_destination_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling NotificationChannelsApi->test_notification_channel: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **test_destination_request** | [**TestDestinationRequest**](TestDestinationRequest.md)|  |
+
+### Return type
+
+[**TestResponse**](TestResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | The result of the test of a notification channel connection. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **update_entity_notification_channels**
 > JsonApiNotificationChannelOutDocument update_entity_notification_channels(id, json_api_notification_channel_in_document)
 
@@ -587,9 +741,9 @@ with gooddata_api_client.ApiClient() as api_client:
             attributes=JsonApiNotificationChannelInAttributes(
                 allowed_recipients="CREATOR",
                 custom_dashboard_url="custom_dashboard_url_example",
+                dashboard_link_visibility="HIDDEN",
                 description="description_example",
                 destination=JsonApiNotificationChannelInAttributesDestination(None),
-                destination_type="WEBHOOK",
                 in_platform_notification="DISABLED",
                 name="name_example",
             ),

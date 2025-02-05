@@ -1,5 +1,6 @@
 # AfmObjectIdentifierCore
 
+Reference to the metric, fact or attribute object to use for the metric.
 
 ## Properties
 Name | Type | Description | Notes

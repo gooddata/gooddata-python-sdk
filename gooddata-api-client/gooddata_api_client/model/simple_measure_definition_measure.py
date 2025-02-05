@@ -163,7 +163,7 @@ class SimpleMeasureDefinitionMeasure(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             aggregation (str): Definition of aggregation type of the metric.. [optional]  # noqa: E501
-            compute_ratio (bool): If true compute the percentage of given metric values (broken down by AFM attributes) to the total (not broken down).. [optional] if omitted the server will use the default value of False  # noqa: E501
+            compute_ratio (bool): If true, compute the percentage of given metric values (broken down by AFM attributes) to the total (not broken down).. [optional] if omitted the server will use the default value of False  # noqa: E501
             filters ([FilterDefinitionForSimpleMeasure]): Metrics can be filtered by attribute filters with the same interface as ones for global AFM. Note that only one DateFilter is allowed.. [optional]  # noqa: E501
         """
 
@@ -255,7 +255,7 @@ class SimpleMeasureDefinitionMeasure(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             aggregation (str): Definition of aggregation type of the metric.. [optional]  # noqa: E501
-            compute_ratio (bool): If true compute the percentage of given metric values (broken down by AFM attributes) to the total (not broken down).. [optional] if omitted the server will use the default value of False  # noqa: E501
+            compute_ratio (bool): If true, compute the percentage of given metric values (broken down by AFM attributes) to the total (not broken down).. [optional] if omitted the server will use the default value of False  # noqa: E501
             filters ([FilterDefinitionForSimpleMeasure]): Metrics can be filtered by attribute filters with the same interface as ones for global AFM. Note that only one DateFilter is allowed.. [optional]  # noqa: E501
         """
 

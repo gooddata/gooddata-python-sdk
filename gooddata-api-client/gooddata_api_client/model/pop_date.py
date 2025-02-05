@@ -114,7 +114,7 @@ class PopDate(ModelNormal):
 
         Args:
             attribute (AfmObjectIdentifierAttribute):
-            periods_ago (int):
+            periods_ago (int): Number of periods ago to calculate the previous period for.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -205,7 +205,7 @@ class PopDate(ModelNormal):
 
         Args:
             attribute (AfmObjectIdentifierAttribute):
-            periods_ago (int):
+            periods_ago (int): Number of periods ago to calculate the previous period for.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types

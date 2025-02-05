@@ -49,7 +49,6 @@ with gooddata_api_client.ApiClient() as api_client:
                 identifiers=["gooddata.com"],
                 oauth_client_id="oauth_client_id_example",
                 oauth_client_secret="oauth_client_secret_example",
-                oauth_issuer_id="myOidcProvider",
                 oauth_issuer_location="oauth_issuer_location_example",
                 saml_metadata="saml_metadata_example",
             ),
@@ -415,14 +414,13 @@ with gooddata_api_client.ApiClient() as api_client:
     id = "/6bUUGjjNSwg0_bs" # str | 
     json_api_identity_provider_patch_document = JsonApiIdentityProviderPatchDocument(
         data=JsonApiIdentityProviderPatch(
-            attributes=JsonApiIdentityProviderInAttributes(
+            attributes=JsonApiIdentityProviderPatchAttributes(
                 custom_claim_mapping={
                     "key": "key_example",
                 },
                 identifiers=["gooddata.com"],
                 oauth_client_id="oauth_client_id_example",
                 oauth_client_secret="oauth_client_secret_example",
-                oauth_issuer_id="myOidcProvider",
                 oauth_issuer_location="oauth_issuer_location_example",
                 saml_metadata="saml_metadata_example",
             ),
@@ -517,7 +515,6 @@ with gooddata_api_client.ApiClient() as api_client:
             identifiers=["gooddata.com"],
             oauth_client_id="oauth_client_id_example",
             oauth_client_secret="oauth_client_secret_example",
-            oauth_issuer_id="myOidcProvider",
             oauth_issuer_location="oauth_issuer_location_example",
             saml_metadata="saml_metadata_example",
         ),
@@ -596,7 +593,6 @@ with gooddata_api_client.ApiClient() as api_client:
                 identifiers=["gooddata.com"],
                 oauth_client_id="oauth_client_id_example",
                 oauth_client_secret="oauth_client_secret_example",
-                oauth_issuer_id="myOidcProvider",
                 oauth_issuer_location="oauth_issuer_location_example",
                 saml_metadata="saml_metadata_example",
             ),

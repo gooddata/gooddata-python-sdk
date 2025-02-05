@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **filters** | [**[CreatedVisualizationFiltersInner]**](CreatedVisualizationFiltersInner.md) | List of filters to be applied to the new visualization | 
 **id** | **str** | Proposed ID of the new visualization | 
 **metrics** | [**[Metric]**](Metric.md) | List of metrics to be used in the new visualization | 
+**suggestions** | [**[Suggestion]**](Suggestion.md) | Suggestions for next steps | 
 **title** | **str** | Proposed title of the new visualization | 
 **visualization_type** | **str** | Visualization type requested in question | 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]

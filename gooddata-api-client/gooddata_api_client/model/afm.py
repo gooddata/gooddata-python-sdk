@@ -122,7 +122,7 @@ class AFM(ModelNormal):
 
         Args:
             attributes ([AttributeItem]): Attributes to be used in the computation.
-            filters ([FilterDefinition]): Various filter types to filter execution result.
+            filters ([FilterDefinition]): Various filter types to filter the execution result.
             measures ([MeasureItem]): Metrics to be computed.
 
         Keyword Args:
@@ -216,7 +216,7 @@ class AFM(ModelNormal):
 
         Args:
             attributes ([AttributeItem]): Attributes to be used in the computation.
-            filters ([FilterDefinition]): Various filter types to filter execution result.
+            filters ([FilterDefinition]): Various filter types to filter the execution result.
             measures ([MeasureItem]): Metrics to be computed.
 
         Keyword Args:

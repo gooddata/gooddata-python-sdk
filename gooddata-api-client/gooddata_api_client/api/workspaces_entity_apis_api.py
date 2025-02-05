@@ -82,8 +82,8 @@ class WorkspacesEntityAPIsApi(object):
                     },
                     ('meta_include',): {
 
-                        "PERMISSIONS": "permissions",
                         "CONFIG": "config",
+                        "PERMISSIONS": "permissions",
                         "HIERARCHY": "hierarchy",
                         "DATAMODELDATASETS": "dataModelDatasets",
                         "ALL": "all",
@@ -225,8 +225,8 @@ class WorkspacesEntityAPIsApi(object):
                     },
                     ('meta_include',): {
 
-                        "PERMISSIONS": "permissions",
                         "CONFIG": "config",
+                        "PERMISSIONS": "permissions",
                         "HIERARCHY": "hierarchy",
                         "DATAMODELDATASETS": "dataModelDatasets",
                         "PAGE": "page",
@@ -329,8 +329,8 @@ class WorkspacesEntityAPIsApi(object):
                     },
                     ('meta_include',): {
 
-                        "PERMISSIONS": "permissions",
                         "CONFIG": "config",
+                        "PERMISSIONS": "permissions",
                         "HIERARCHY": "hierarchy",
                         "DATAMODELDATASETS": "dataModelDatasets",
                         "ALL": "all",

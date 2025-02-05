@@ -109,7 +109,7 @@ class InlineFilterDefinitionInline(ModelNormal):
         """InlineFilterDefinitionInline - a model defined in OpenAPI
 
         Args:
-            filter (str):
+            filter (str): MAQL query representing the filter.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -200,7 +200,7 @@ class InlineFilterDefinitionInline(ModelNormal):
         """InlineFilterDefinitionInline - a model defined in OpenAPI
 
         Args:
-            filter (str):
+            filter (str): MAQL query representing the filter.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types

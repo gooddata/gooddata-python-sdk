@@ -31,8 +31,8 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.measure_header_out import MeasureHeaderOut
-    globals()['MeasureHeaderOut'] = MeasureHeaderOut
+    from gooddata_api_client.model.measure_header import MeasureHeader
+    globals()['MeasureHeader'] = MeasureHeader
 
 
 class MeasureGroupHeaders(ModelNormal):
@@ -88,7 +88,9 @@ class MeasureGroupHeaders(ModelNormal):
         """
         lazy_import()
         return {
-            'measure_group_headers': ([MeasureHeaderOut],),  # noqa: E501
+            'first': (MeasureHeader,),  # noqa: E501
+            'last': (MeasureHeader,),  # noqa: E501
+            'measure_group_headers': ([MeasureHeader],),  # noqa: E501
         }
 
     @cached_property
@@ -97,6 +99,8 @@ class MeasureGroupHeaders(ModelNormal):
 
 
     attribute_map = {
+        'first': 'first',  # noqa: E501
+        'last': 'last',  # noqa: E501
         'measure_group_headers': 'measureGroupHeaders',  # noqa: E501
     }
 
@@ -141,7 +145,9 @@ class MeasureGroupHeaders(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            measure_group_headers ([MeasureHeaderOut]): [optional]  # noqa: E501
+            first (MeasureHeader): [optional]  # noqa: E501
+            last (MeasureHeader): [optional]  # noqa: E501
+            measure_group_headers ([MeasureHeader]): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -227,7 +233,9 @@ class MeasureGroupHeaders(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            measure_group_headers ([MeasureHeaderOut]): [optional]  # noqa: E501
+            first (MeasureHeader): [optional]  # noqa: E501
+            last (MeasureHeader): [optional]  # noqa: E501
+            measure_group_headers ([MeasureHeader]): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

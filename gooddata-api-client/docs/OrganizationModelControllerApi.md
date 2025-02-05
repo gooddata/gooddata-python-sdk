@@ -378,7 +378,6 @@ with gooddata_api_client.ApiClient() as api_client:
                 identifiers=["gooddata.com"],
                 oauth_client_id="oauth_client_id_example",
                 oauth_client_secret="oauth_client_secret_example",
-                oauth_issuer_id="myOidcProvider",
                 oauth_issuer_location="oauth_issuer_location_example",
                 saml_metadata="saml_metadata_example",
             ),
@@ -537,6 +536,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 provider="OPENAI",
                 title="title_example",
                 token="token_example",
+                workspace_ids=["demo","trial"],
             ),
             id="id1",
             type="llmEndpoint",
@@ -612,9 +612,9 @@ with gooddata_api_client.ApiClient() as api_client:
             attributes=JsonApiNotificationChannelInAttributes(
                 allowed_recipients="CREATOR",
                 custom_dashboard_url="custom_dashboard_url_example",
+                dashboard_link_visibility="HIDDEN",
                 description="description_example",
                 destination=JsonApiNotificationChannelInAttributesDestination(None),
-                destination_type="WEBHOOK",
                 in_platform_notification="DISABLED",
                 name="name_example",
             ),
@@ -1071,7 +1071,7 @@ with gooddata_api_client.ApiClient() as api_client:
         "include=parent",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
     meta_include = [
-        "metaInclude=permissions,config,hierarchy,dataModelDatasets,all",
+        "metaInclude=config,permissions,hierarchy,dataModelDatasets,all",
     ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
@@ -3160,7 +3160,7 @@ with gooddata_api_client.ApiClient() as api_client:
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
     meta_include = [
-        "metaInclude=permissions,config,hierarchy,dataModelDatasets,page,all",
+        "metaInclude=config,permissions,hierarchy,dataModelDatasets,page,all",
     ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
@@ -4334,7 +4334,7 @@ with gooddata_api_client.ApiClient() as api_client:
         "include=parent",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
     meta_include = [
-        "metaInclude=permissions,config,hierarchy,dataModelDatasets,all",
+        "metaInclude=config,permissions,hierarchy,dataModelDatasets,all",
     ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
@@ -4701,14 +4701,13 @@ with gooddata_api_client.ApiClient() as api_client:
     id = "/6bUUGjjNSwg0_bs" # str | 
     json_api_identity_provider_patch_document = JsonApiIdentityProviderPatchDocument(
         data=JsonApiIdentityProviderPatch(
-            attributes=JsonApiIdentityProviderInAttributes(
+            attributes=JsonApiIdentityProviderPatchAttributes(
                 custom_claim_mapping={
                     "key": "key_example",
                 },
                 identifiers=["gooddata.com"],
                 oauth_client_id="oauth_client_id_example",
                 oauth_client_secret="oauth_client_secret_example",
-                oauth_issuer_id="myOidcProvider",
                 oauth_issuer_location="oauth_issuer_location_example",
                 saml_metadata="saml_metadata_example",
             ),
@@ -4893,6 +4892,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 provider="OPENAI",
                 title="title_example",
                 token="token_example",
+                workspace_ids=["demo","trial"],
             ),
             id="id1",
             type="llmEndpoint",
@@ -4981,9 +4981,9 @@ with gooddata_api_client.ApiClient() as api_client:
             attributes=JsonApiNotificationChannelInAttributes(
                 allowed_recipients="CREATOR",
                 custom_dashboard_url="custom_dashboard_url_example",
+                dashboard_link_visibility="HIDDEN",
                 description="description_example",
                 destination=JsonApiNotificationChannelInAttributesDestination(None),
-                destination_type="WEBHOOK",
                 in_platform_notification="DISABLED",
                 name="name_example",
             ),
@@ -5859,7 +5859,6 @@ with gooddata_api_client.ApiClient() as api_client:
                 identifiers=["gooddata.com"],
                 oauth_client_id="oauth_client_id_example",
                 oauth_client_secret="oauth_client_secret_example",
-                oauth_issuer_id="myOidcProvider",
                 oauth_issuer_location="oauth_issuer_location_example",
                 saml_metadata="saml_metadata_example",
             ),
@@ -6044,6 +6043,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 provider="OPENAI",
                 title="title_example",
                 token="token_example",
+                workspace_ids=["demo","trial"],
             ),
             id="id1",
             type="llmEndpoint",
@@ -6132,9 +6132,9 @@ with gooddata_api_client.ApiClient() as api_client:
             attributes=JsonApiNotificationChannelInAttributes(
                 allowed_recipients="CREATOR",
                 custom_dashboard_url="custom_dashboard_url_example",
+                dashboard_link_visibility="HIDDEN",
                 description="description_example",
                 destination=JsonApiNotificationChannelInAttributesDestination(None),
-                destination_type="WEBHOOK",
                 in_platform_notification="DISABLED",
                 name="name_example",
             ),

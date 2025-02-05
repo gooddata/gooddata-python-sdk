@@ -725,8 +725,8 @@ class OrganizationModelControllerApi(object):
                     },
                     ('meta_include',): {
 
-                        "PERMISSIONS": "permissions",
                         "CONFIG": "config",
+                        "PERMISSIONS": "permissions",
                         "HIERARCHY": "hierarchy",
                         "DATAMODELDATASETS": "dataModelDatasets",
                         "ALL": "all",
@@ -2664,8 +2664,8 @@ class OrganizationModelControllerApi(object):
                     },
                     ('meta_include',): {
 
-                        "PERMISSIONS": "permissions",
                         "CONFIG": "config",
+                        "PERMISSIONS": "permissions",
                         "HIERARCHY": "hierarchy",
                         "DATAMODELDATASETS": "dataModelDatasets",
                         "PAGE": "page",
@@ -3681,8 +3681,8 @@ class OrganizationModelControllerApi(object):
                     },
                     ('meta_include',): {
 
-                        "PERMISSIONS": "permissions",
                         "CONFIG": "config",
+                        "PERMISSIONS": "permissions",
                         "HIERARCHY": "hierarchy",
                         "DATAMODELDATASETS": "dataModelDatasets",
                         "ALL": "all",

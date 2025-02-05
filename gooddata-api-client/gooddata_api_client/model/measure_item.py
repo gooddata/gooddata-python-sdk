@@ -119,7 +119,7 @@ class MeasureItem(ModelNormal):
 
         Args:
             definition (MeasureDefinition):
-            local_identifier (str):
+            local_identifier (str): Local identifier of the metric. This can be used to reference the metric in other parts of the execution definition.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -210,7 +210,7 @@ class MeasureItem(ModelNormal):
 
         Args:
             definition (MeasureDefinition):
-            local_identifier (str):
+            local_identifier (str): Local identifier of the metric. This can be used to reference the metric in other parts of the execution definition.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types

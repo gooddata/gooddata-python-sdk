@@ -115,7 +115,7 @@ class PopDateMeasureDefinitionOverPeriodMeasure(ModelNormal):
         """PopDateMeasureDefinitionOverPeriodMeasure - a model defined in OpenAPI
 
         Args:
-            date_attributes ([PopDate]):
+            date_attributes ([PopDate]): Attributes to use for determining the period to calculate the PoP for.
             measure_identifier (AfmLocalIdentifier):
 
         Keyword Args:
@@ -206,7 +206,7 @@ class PopDateMeasureDefinitionOverPeriodMeasure(ModelNormal):
         """PopDateMeasureDefinitionOverPeriodMeasure - a model defined in OpenAPI
 
         Args:
-            date_attributes ([PopDate]):
+            date_attributes ([PopDate]): Attributes to use for determining the period to calculate the PoP for.
             measure_identifier (AfmLocalIdentifier):
 
         Keyword Args:

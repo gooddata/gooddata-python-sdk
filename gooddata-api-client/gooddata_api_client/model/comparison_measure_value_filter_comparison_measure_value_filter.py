@@ -100,6 +100,7 @@ class ComparisonMeasureValueFilterComparisonMeasureValueFilter(ModelNormal):
             'operator': (str,),  # noqa: E501
             'value': (float,),  # noqa: E501
             'apply_on_result': (bool,),  # noqa: E501
+            'dimensionality': ([AfmIdentifier],),  # noqa: E501
             'local_identifier': (str,),  # noqa: E501
             'treat_null_values_as': (float,),  # noqa: E501
         }
@@ -114,6 +115,7 @@ class ComparisonMeasureValueFilterComparisonMeasureValueFilter(ModelNormal):
         'operator': 'operator',  # noqa: E501
         'value': 'value',  # noqa: E501
         'apply_on_result': 'applyOnResult',  # noqa: E501
+        'dimensionality': 'dimensionality',  # noqa: E501
         'local_identifier': 'localIdentifier',  # noqa: E501
         'treat_null_values_as': 'treatNullValuesAs',  # noqa: E501
     }
@@ -165,8 +167,9 @@ class ComparisonMeasureValueFilterComparisonMeasureValueFilter(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             apply_on_result (bool): [optional]  # noqa: E501
+            dimensionality ([AfmIdentifier]): References to the attributes to be used when filtering.. [optional]  # noqa: E501
             local_identifier (str): [optional]  # noqa: E501
-            treat_null_values_as (float): [optional]  # noqa: E501
+            treat_null_values_as (float): A value that will be substituted for null values in the metric for the comparisons.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -261,8 +264,9 @@ class ComparisonMeasureValueFilterComparisonMeasureValueFilter(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             apply_on_result (bool): [optional]  # noqa: E501
+            dimensionality ([AfmIdentifier]): References to the attributes to be used when filtering.. [optional]  # noqa: E501
             local_identifier (str): [optional]  # noqa: E501
-            treat_null_values_as (float): [optional]  # noqa: E501
+            treat_null_values_as (float): A value that will be substituted for null values in the metric for the comparisons.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

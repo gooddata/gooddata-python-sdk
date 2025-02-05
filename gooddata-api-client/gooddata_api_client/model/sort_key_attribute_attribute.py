@@ -153,7 +153,7 @@ class SortKeyAttributeAttribute(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             direction (str): Sorting elements - ascending/descending order.. [optional]  # noqa: E501
-            sort_type (str): Mechanism by which this attribute should be sorted. Available options are: - DEFAULT: sorting based on default rules (using sort column if defined, otherwise this label)  - LABEL: sorting by this label values  - ATTRIBUTE: sorting by values of this label's attribute (or rather the primary label)  - AREA: sorting by area (total or subtotal) corresponding to each attribute value. The area is computed by summing up all metric values in all other dimensions.. [optional] if omitted the server will use the default value of "DEFAULT"  # noqa: E501
+            sort_type (str): Mechanism by which this attribute should be sorted. Available options are: - DEFAULT: sorting based on default rules (using sort column if defined, otherwise this label)  - LABEL: sorting by this label values  - ATTRIBUTE: sorting by values of this label's attribute (or rather the primary label)  - ATTRIBUTE: sorting by values of this label's attribute (or rather the primary label)- AREA: sorting by area (total or subtotal) corresponding to each attribute value. The area is computed by summing up all metric values in all other dimensions.. [optional] if omitted the server will use the default value of "DEFAULT"  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -244,7 +244,7 @@ class SortKeyAttributeAttribute(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             direction (str): Sorting elements - ascending/descending order.. [optional]  # noqa: E501
-            sort_type (str): Mechanism by which this attribute should be sorted. Available options are: - DEFAULT: sorting based on default rules (using sort column if defined, otherwise this label)  - LABEL: sorting by this label values  - ATTRIBUTE: sorting by values of this label's attribute (or rather the primary label)  - AREA: sorting by area (total or subtotal) corresponding to each attribute value. The area is computed by summing up all metric values in all other dimensions.. [optional] if omitted the server will use the default value of "DEFAULT"  # noqa: E501
+            sort_type (str): Mechanism by which this attribute should be sorted. Available options are: - DEFAULT: sorting based on default rules (using sort column if defined, otherwise this label)  - LABEL: sorting by this label values  - ATTRIBUTE: sorting by values of this label's attribute (or rather the primary label)  - ATTRIBUTE: sorting by values of this label's attribute (or rather the primary label)- AREA: sorting by area (total or subtotal) corresponding to each attribute value. The area is computed by summing up all metric values in all other dimensions.. [optional] if omitted the server will use the default value of "DEFAULT"  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
