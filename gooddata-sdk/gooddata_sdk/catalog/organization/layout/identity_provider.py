@@ -15,7 +15,6 @@ class CatalogDeclarativeIdentityProvider(Base):
     identifiers: Optional[list[str]] = None
     oauth_client_id: Optional[str] = None
     oauth_client_secret: Optional[str] = None
-    oauth_issuer_id: Optional[str] = None
     oauth_issuer_location: Optional[str] = None
     saml_metadata: Optional[str] = None
 
