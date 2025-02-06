@@ -476,7 +476,7 @@ class CatalogDataSourceService(CatalogServiceBase):
                         declarative_data_source.to_test_request(token=token)
                     )
                 elif declarative_data_source.type == DATABRICKS_TYPE:
-                    if declarative_data_source.client_id is not None:
+                    if declarative_data_source.client_id and declarative_data_source.client_id.strip():
                         client_secret = ClientSecretCredentialsFromFile.client_secret_from_file(
                             credentials[declarative_data_source.id]
                         )

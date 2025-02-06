@@ -35,7 +35,7 @@ class CatalogDeclarativeDataSources(Base):
                     token = TokenCredentialsFromFile.token_from_file(credentials[data_source.id])
                     data_sources.append(data_source.to_api(token=token))
                 elif data_source.type == DATABRICKS_TYPE:
-                    if data_source.client_id is not None:
+                    if data_source.client_id and data_source.client_id.strip():
                         client_secret = ClientSecretCredentialsFromFile.client_secret_from_file(
                             credentials[data_source.id]
                         )
