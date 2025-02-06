@@ -484,7 +484,9 @@ class CatalogDataSourceService(CatalogServiceBase):
                             declarative_data_source.to_test_request(client_secret=client_secret)
                         )
                     else:
-                        token = TokenCredentialsFromFile.token_from_file(credentials[declarative_data_source.id])
+                        token = TokenCredentialsFromFile.token_from_file(
+                            file_path=credentials[declarative_data_source.id], base64_encode=False
+                        )
                         response = self._actions_api.test_data_source_definition(
                             declarative_data_source.to_test_request(token=token)
                         )

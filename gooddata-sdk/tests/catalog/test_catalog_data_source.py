@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Union
 from unittest import mock
 from unittest.mock import MagicMock
 
@@ -416,13 +416,13 @@ def test_delete_declarative_data_sources(test_config):
     credentials_path = _current_dir / "load" / "data_source_credentials" / "data_sources_credentials.yaml"
     expected_json_path = _current_dir / "expected" / "declarative_data_sources.json"
 
-    def token_from_file_side_effect(arg):
-        if arg == "~/home/secrets.json":
+    def token_from_file_side_effect(file_path: Union[str, Path], base64_encode: bool):
+        if file_path == "~/home/secrets.json":
             return test_config["bigquery_token"]
-        elif arg == "databricks-token":
+        elif file_path == "databricks-token":
             return test_config["databricks_token"]
         else:
-            raise ValueError(f"Unexpected argument: {arg}")
+            raise ValueError(f"Unexpected argument: {file_path}")
 
     TokenCredentialsFromFile.token_from_file = MagicMock(side_effect=token_from_file_side_effect)
     ClientSecretCredentialsFromFile.client_secret_from_file = MagicMock(
@@ -460,13 +460,13 @@ def test_load_and_put_declarative_data_sources(test_config):
     try:
         sdk.catalog_data_source.put_declarative_data_sources(CatalogDeclarativeDataSources(data_sources=[]))
 
-        def token_from_file_side_effect(arg):
-            if arg == "~/home/secrets.json":
+        def token_from_file_side_effect(file_path: Union[str, Path], base64_encode: bool = True):
+            if file_path == "~/home/secrets.json":
                 return test_config["bigquery_token"]
-            elif arg == "databricks-token":
+            elif file_path == "databricks-token":
                 return test_config["databricks_token"]
             else:
-                raise ValueError(f"Unexpected argument: {arg}")
+                raise ValueError(f"Unexpected argument: {file_path}")
 
         TokenCredentialsFromFile.token_from_file = MagicMock(side_effect=token_from_file_side_effect)
         ClientSecretCredentialsFromFile.client_secret_from_file = MagicMock(
@@ -506,13 +506,13 @@ def test_put_declarative_data_sources_connection(test_config):
     # Must filter out databricks data sources for this test as they do not have valid URLs
     data_sources_e.data_sources = [item for item in data_sources_e.data_sources if "databricks" not in item.id]
 
-    def token_from_file_side_effect(arg):
-        if arg == "~/home/secrets.json":
+    def token_from_file_side_effect(file_path: Union[str, Path], base64_encode: bool):
+        if file_path == "~/home/secrets.json":
             return test_config["bigquery_token"]
-        elif arg == "databricks-token":
+        elif file_path == "databricks-token":
             return test_config["databricks_token"]
         else:
-            raise ValueError(f"Unexpected argument: {arg}")
+            raise ValueError(f"Unexpected argument: {file_path}")
 
     TokenCredentialsFromFile.token_from_file = MagicMock(side_effect=token_from_file_side_effect)
     ClientSecretCredentialsFromFile.client_secret_from_file = MagicMock(
@@ -605,13 +605,13 @@ def test_cache_strategy(test_config: dict):
     path = _current_dir / "expected" / "declarative_data_sources.json"
     credentials_path = _current_dir / "load" / "data_source_credentials" / "data_sources_credentials.yaml"
 
-    def token_from_file_side_effect(arg):
-        if arg == "~/home/secrets.json":
+    def token_from_file_side_effect(file_path: Union[str, Path], base64_encode: bool):
+        if file_path == "~/home/secrets.json":
             return test_config["bigquery_token"]
-        elif arg == "databricks-token":
+        elif file_path == "databricks-token":
             return test_config["databricks_token"]
         else:
-            raise ValueError(f"Unexpected argument: {arg}")
+            raise ValueError(f"Unexpected argument: {file_path}")
 
     TokenCredentialsFromFile.token_from_file = MagicMock(side_effect=token_from_file_side_effect)
     ClientSecretCredentialsFromFile.client_secret_from_file = MagicMock(
