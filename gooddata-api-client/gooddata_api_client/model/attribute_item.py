@@ -121,7 +121,7 @@ class AttributeItem(ModelNormal):
 
         Args:
             label (AfmObjectIdentifierLabel):
-            local_identifier (str):
+            local_identifier (str): Local identifier of the attribute. This can be used to reference the attribute in other parts of the execution definition.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -154,7 +154,7 @@ class AttributeItem(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            show_all_values (bool): Specifies that the label should be outer-joined.. [optional] if omitted the server will use the default value of False  # noqa: E501
+            show_all_values (bool): Indicates whether to show all values of given attribute even if the data bound to those values is not available.. [optional] if omitted the server will use the default value of False  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -213,7 +213,7 @@ class AttributeItem(ModelNormal):
 
         Args:
             label (AfmObjectIdentifierLabel):
-            local_identifier (str):
+            local_identifier (str): Local identifier of the attribute. This can be used to reference the attribute in other parts of the execution definition.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -246,7 +246,7 @@ class AttributeItem(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            show_all_values (bool): Specifies that the label should be outer-joined.. [optional] if omitted the server will use the default value of False  # noqa: E501
+            show_all_values (bool): Indicates whether to show all values of given attribute even if the data bound to those values is not available.. [optional] if omitted the server will use the default value of False  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

@@ -1,6 +1,6 @@
 # ArithmeticMeasureDefinition
 
-Metric representing arithmetics between metrics.
+Metric representing arithmetics between other metrics.
 
 ## Properties
 Name | Type | Description | Notes

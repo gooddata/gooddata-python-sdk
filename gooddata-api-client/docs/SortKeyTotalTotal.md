@@ -4,7 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**total_identifier** | **str** |  | 
+**total_identifier** | **str** | Local identifier of the total to sort by. | 
 **data_column_locators** | [**DataColumnLocators**](DataColumnLocators.md) |  | [optional] 
 **direction** | **str** | Sorting elements - ascending/descending order. | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]

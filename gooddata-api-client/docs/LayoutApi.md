@@ -2416,7 +2416,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                     type="label",
                                 ),
                             ),
-                            local_identifier="2",
+                            local_identifier="attribute_1",
                             show_all_values=False,
                         ),
                     ],
@@ -2455,6 +2455,11 @@ with gooddata_api_client.ApiClient() as api_client:
                 DeclarativeExportDefinitionIdentifier(
                     id="export123",
                     type="exportDefinition",
+                ),
+            ],
+            external_recipients=[
+                AutomationExternalRecipient(
+                    email="email_example",
                 ),
             ],
             id="/6bUUGjjNSwg0_bs",
@@ -2781,7 +2786,6 @@ with gooddata_api_client.ApiClient() as api_client:
             identifiers=["gooddata.com"],
             oauth_client_id="oauth_client_id_example",
             oauth_client_secret="oauth_client_secret_example",
-            oauth_issuer_id="myOidcProvider",
             oauth_issuer_location="oauth_issuer_location_example",
             saml_metadata="saml_metadata_example",
         ),
@@ -3057,6 +3061,7 @@ with gooddata_api_client.ApiClient() as api_client:
             DeclarativeNotificationChannel(
                 allowed_recipients="INTERNAL",
                 custom_dashboard_url="custom_dashboard_url_example",
+                dashboard_link_visibility="INTERNAL_ONLY",
                 description="This is a channel",
                 destination=DeclarativeNotificationChannelDestination(None),
                 id="notification-channel-1",
@@ -3178,7 +3183,6 @@ with gooddata_api_client.ApiClient() as api_client:
                 identifiers=["gooddata.com"],
                 oauth_client_id="oauth_client_id_example",
                 oauth_client_secret="oauth_client_secret_example",
-                oauth_issuer_id="myOidcProvider",
                 oauth_issuer_location="oauth_issuer_location_example",
                 saml_metadata="saml_metadata_example",
             ),
@@ -3193,6 +3197,7 @@ with gooddata_api_client.ApiClient() as api_client:
             DeclarativeNotificationChannel(
                 allowed_recipients="INTERNAL",
                 custom_dashboard_url="custom_dashboard_url_example",
+                dashboard_link_visibility="INTERNAL_ONLY",
                 description="This is a channel",
                 destination=DeclarativeNotificationChannelDestination(None),
                 id="notification-channel-1",
@@ -3350,7 +3355,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                                 type="label",
                                             ),
                                         ),
-                                        local_identifier="2",
+                                        local_identifier="attribute_1",
                                         show_all_values=False,
                                     ),
                                 ],
@@ -3389,6 +3394,11 @@ with gooddata_api_client.ApiClient() as api_client:
                             DeclarativeExportDefinitionIdentifier(
                                 id="export123",
                                 type="exportDefinition",
+                            ),
+                        ],
+                        external_recipients=[
+                            AutomationExternalRecipient(
+                                email="email_example",
                             ),
                         ],
                         id="/6bUUGjjNSwg0_bs",
@@ -4435,7 +4445,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                                 type="label",
                                             ),
                                         ),
-                                        local_identifier="2",
+                                        local_identifier="attribute_1",
                                         show_all_values=False,
                                     ),
                                 ],
@@ -4474,6 +4484,11 @@ with gooddata_api_client.ApiClient() as api_client:
                             DeclarativeExportDefinitionIdentifier(
                                 id="export123",
                                 type="exportDefinition",
+                            ),
+                        ],
+                        external_recipients=[
+                            AutomationExternalRecipient(
+                                email="email_example",
                             ),
                         ],
                         id="/6bUUGjjNSwg0_bs",

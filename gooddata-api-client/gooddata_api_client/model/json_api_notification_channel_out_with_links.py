@@ -31,12 +31,12 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_notification_channel_in_attributes import JsonApiNotificationChannelInAttributes
     from gooddata_api_client.model.json_api_notification_channel_out import JsonApiNotificationChannelOut
+    from gooddata_api_client.model.json_api_notification_channel_out_attributes import JsonApiNotificationChannelOutAttributes
     from gooddata_api_client.model.object_links import ObjectLinks
     from gooddata_api_client.model.object_links_container import ObjectLinksContainer
-    globals()['JsonApiNotificationChannelInAttributes'] = JsonApiNotificationChannelInAttributes
     globals()['JsonApiNotificationChannelOut'] = JsonApiNotificationChannelOut
+    globals()['JsonApiNotificationChannelOutAttributes'] = JsonApiNotificationChannelOutAttributes
     globals()['ObjectLinks'] = ObjectLinks
     globals()['ObjectLinksContainer'] = ObjectLinksContainer
 
@@ -104,7 +104,7 @@ class JsonApiNotificationChannelOutWithLinks(ModelComposed):
         return {
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
-            'attributes': (JsonApiNotificationChannelInAttributes,),  # noqa: E501
+            'attributes': (JsonApiNotificationChannelOutAttributes,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
         }
 
@@ -161,7 +161,7 @@ class JsonApiNotificationChannelOutWithLinks(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiNotificationChannelInAttributes): [optional]  # noqa: E501
+            attributes (JsonApiNotificationChannelOutAttributes): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """
 
@@ -269,7 +269,7 @@ class JsonApiNotificationChannelOutWithLinks(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiNotificationChannelInAttributes): [optional]  # noqa: E501
+            attributes (JsonApiNotificationChannelOutAttributes): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """
 

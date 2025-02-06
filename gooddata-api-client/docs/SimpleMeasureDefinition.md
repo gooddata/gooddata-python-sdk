@@ -1,5 +1,6 @@
 # SimpleMeasureDefinition
 
+Metric defined by referencing a MAQL metric or an LDM fact object with aggregation.
 
 ## Properties
 Name | Type | Description | Notes

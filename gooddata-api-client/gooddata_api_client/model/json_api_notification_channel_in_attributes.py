@@ -63,13 +63,12 @@ class JsonApiNotificationChannelInAttributes(ModelNormal):
         ('allowed_recipients',): {
             'CREATOR': "CREATOR",
             'INTERNAL': "INTERNAL",
+            'EXTERNAL': "EXTERNAL",
         },
-        ('destination_type',): {
-            'None': None,
-            'WEBHOOK': "WEBHOOK",
-            'SMTP': "SMTP",
-            'DEFAULT_SMTP': "DEFAULT_SMTP",
-            'IN_PLATFORM': "IN_PLATFORM",
+        ('dashboard_link_visibility',): {
+            'HIDDEN': "HIDDEN",
+            'INTERNAL_ONLY': "INTERNAL_ONLY",
+            'ALL': "ALL",
         },
         ('in_platform_notification',): {
             'DISABLED': "DISABLED",
@@ -111,9 +110,9 @@ class JsonApiNotificationChannelInAttributes(ModelNormal):
         return {
             'allowed_recipients': (str,),  # noqa: E501
             'custom_dashboard_url': (str,),  # noqa: E501
+            'dashboard_link_visibility': (str,),  # noqa: E501
             'description': (str, none_type,),  # noqa: E501
             'destination': (JsonApiNotificationChannelInAttributesDestination,),  # noqa: E501
-            'destination_type': (str, none_type,),  # noqa: E501
             'in_platform_notification': (str,),  # noqa: E501
             'name': (str, none_type,),  # noqa: E501
         }
@@ -126,9 +125,9 @@ class JsonApiNotificationChannelInAttributes(ModelNormal):
     attribute_map = {
         'allowed_recipients': 'allowedRecipients',  # noqa: E501
         'custom_dashboard_url': 'customDashboardUrl',  # noqa: E501
+        'dashboard_link_visibility': 'dashboardLinkVisibility',  # noqa: E501
         'description': 'description',  # noqa: E501
         'destination': 'destination',  # noqa: E501
-        'destination_type': 'destinationType',  # noqa: E501
         'in_platform_notification': 'inPlatformNotification',  # noqa: E501
         'name': 'name',  # noqa: E501
     }
@@ -174,11 +173,11 @@ class JsonApiNotificationChannelInAttributes(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            allowed_recipients (str): Allowed recipients of notifications from this channel. CREATOR - only the creator INTERNAL - all users within the organization . [optional]  # noqa: E501
+            allowed_recipients (str): Allowed recipients of notifications from this channel. CREATOR - only the creator INTERNAL - all users within the organization EXTERNAL - all recipients including those outside the organization . [optional]  # noqa: E501
             custom_dashboard_url (str): Custom dashboard url that is going to be used in the notification. If not specified it is going to be deduced based on the context. Allowed placeholders are {workspaceId}, {dashboardId}.. [optional]  # noqa: E501
+            dashboard_link_visibility (str): Dashboard link visibility in notifications. HIDDEN - the link will not be included INTERNAL_ONLY - only internal users will see the link ALL - all users will see the link . [optional]  # noqa: E501
             description (str, none_type): [optional]  # noqa: E501
             destination (JsonApiNotificationChannelInAttributesDestination): [optional]  # noqa: E501
-            destination_type (str, none_type): [optional]  # noqa: E501
             in_platform_notification (str): In-platform notifications configuration. No effect if the destination type is IN_PLATFORM. DISABLED - in-platform notifications are not sent ENABLED - in-platform notifications are sent in addition to the regular notifications . [optional]  # noqa: E501
             name (str, none_type): [optional]  # noqa: E501
         """
@@ -266,11 +265,11 @@ class JsonApiNotificationChannelInAttributes(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            allowed_recipients (str): Allowed recipients of notifications from this channel. CREATOR - only the creator INTERNAL - all users within the organization . [optional]  # noqa: E501
+            allowed_recipients (str): Allowed recipients of notifications from this channel. CREATOR - only the creator INTERNAL - all users within the organization EXTERNAL - all recipients including those outside the organization . [optional]  # noqa: E501
             custom_dashboard_url (str): Custom dashboard url that is going to be used in the notification. If not specified it is going to be deduced based on the context. Allowed placeholders are {workspaceId}, {dashboardId}.. [optional]  # noqa: E501
+            dashboard_link_visibility (str): Dashboard link visibility in notifications. HIDDEN - the link will not be included INTERNAL_ONLY - only internal users will see the link ALL - all users will see the link . [optional]  # noqa: E501
             description (str, none_type): [optional]  # noqa: E501
             destination (JsonApiNotificationChannelInAttributesDestination): [optional]  # noqa: E501
-            destination_type (str, none_type): [optional]  # noqa: E501
             in_platform_notification (str): In-platform notifications configuration. No effect if the destination type is IN_PLATFORM. DISABLED - in-platform notifications are not sent ENABLED - in-platform notifications are sent in addition to the regular notifications . [optional]  # noqa: E501
             name (str, none_type): [optional]  # noqa: E501
         """

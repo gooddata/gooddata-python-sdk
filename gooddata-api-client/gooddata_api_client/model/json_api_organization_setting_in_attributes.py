@@ -73,6 +73,8 @@ class JsonApiOrganizationSettingInAttributes(ModelNormal):
             'ENABLE_FILE_ANALYTICS': "ENABLE_FILE_ANALYTICS",
             'ALERT': "ALERT",
             'SEPARATORS': "SEPARATORS",
+            'DATE_FILTER_CONFIG': "DATE_FILTER_CONFIG",
+            'JIT_PROVISIONING': "JIT_PROVISIONING",
         },
     }
 

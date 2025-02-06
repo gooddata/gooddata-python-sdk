@@ -32,10 +32,12 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.json_api_automation_in_attributes_alert import JsonApiAutomationInAttributesAlert
+    from gooddata_api_client.model.json_api_automation_in_attributes_external_recipients_inner import JsonApiAutomationInAttributesExternalRecipientsInner
     from gooddata_api_client.model.json_api_automation_in_attributes_schedule import JsonApiAutomationInAttributesSchedule
     from gooddata_api_client.model.json_api_automation_in_attributes_tabular_exports_inner import JsonApiAutomationInAttributesTabularExportsInner
     from gooddata_api_client.model.json_api_automation_in_attributes_visual_exports_inner import JsonApiAutomationInAttributesVisualExportsInner
     globals()['JsonApiAutomationInAttributesAlert'] = JsonApiAutomationInAttributesAlert
+    globals()['JsonApiAutomationInAttributesExternalRecipientsInner'] = JsonApiAutomationInAttributesExternalRecipientsInner
     globals()['JsonApiAutomationInAttributesSchedule'] = JsonApiAutomationInAttributesSchedule
     globals()['JsonApiAutomationInAttributesTabularExportsInner'] = JsonApiAutomationInAttributesTabularExportsInner
     globals()['JsonApiAutomationInAttributesVisualExportsInner'] = JsonApiAutomationInAttributesVisualExportsInner
@@ -113,6 +115,7 @@ class JsonApiAutomationInAttributes(ModelNormal):
             'are_relations_valid': (bool,),  # noqa: E501
             'description': (str,),  # noqa: E501
             'details': (bool, date, datetime, dict, float, int, list, str, none_type,),  # noqa: E501
+            'external_recipients': ([JsonApiAutomationInAttributesExternalRecipientsInner],),  # noqa: E501
             'metadata': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}, none_type,),  # noqa: E501
             'schedule': (JsonApiAutomationInAttributesSchedule,),  # noqa: E501
             'state': (str,),  # noqa: E501
@@ -132,6 +135,7 @@ class JsonApiAutomationInAttributes(ModelNormal):
         'are_relations_valid': 'areRelationsValid',  # noqa: E501
         'description': 'description',  # noqa: E501
         'details': 'details',  # noqa: E501
+        'external_recipients': 'externalRecipients',  # noqa: E501
         'metadata': 'metadata',  # noqa: E501
         'schedule': 'schedule',  # noqa: E501
         'state': 'state',  # noqa: E501
@@ -186,6 +190,7 @@ class JsonApiAutomationInAttributes(ModelNormal):
             are_relations_valid (bool): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             details (bool, date, datetime, dict, float, int, list, str, none_type): Additional details to be included in the automated message.. [optional]  # noqa: E501
+            external_recipients ([JsonApiAutomationInAttributesExternalRecipientsInner]): External recipients of the automation action results.. [optional]  # noqa: E501
             metadata ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}, none_type): Additional information for the automation.. [optional]  # noqa: E501
             schedule (JsonApiAutomationInAttributesSchedule): [optional]  # noqa: E501
             state (str): Current state of the automation.. [optional]  # noqa: E501
@@ -282,6 +287,7 @@ class JsonApiAutomationInAttributes(ModelNormal):
             are_relations_valid (bool): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             details (bool, date, datetime, dict, float, int, list, str, none_type): Additional details to be included in the automated message.. [optional]  # noqa: E501
+            external_recipients ([JsonApiAutomationInAttributesExternalRecipientsInner]): External recipients of the automation action results.. [optional]  # noqa: E501
             metadata ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}, none_type): Additional information for the automation.. [optional]  # noqa: E501
             schedule (JsonApiAutomationInAttributesSchedule): [optional]  # noqa: E501
             state (str): Current state of the automation.. [optional]  # noqa: E501

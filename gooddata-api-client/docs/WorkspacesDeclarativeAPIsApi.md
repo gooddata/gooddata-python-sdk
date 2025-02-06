@@ -564,7 +564,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                                 type="label",
                                             ),
                                         ),
-                                        local_identifier="2",
+                                        local_identifier="attribute_1",
                                         show_all_values=False,
                                     ),
                                 ],
@@ -603,6 +603,11 @@ with gooddata_api_client.ApiClient() as api_client:
                             DeclarativeExportDefinitionIdentifier(
                                 id="export123",
                                 type="exportDefinition",
+                            ),
+                        ],
+                        external_recipients=[
+                            AutomationExternalRecipient(
+                                email="email_example",
                             ),
                         ],
                         id="/6bUUGjjNSwg0_bs",
