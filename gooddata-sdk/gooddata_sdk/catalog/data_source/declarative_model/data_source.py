@@ -41,7 +41,9 @@ class CatalogDeclarativeDataSources(Base):
                         )
                         data_sources.append(data_source.to_api(client_secret=client_secret))
                     else:
-                        token = TokenCredentialsFromFile.token_from_file(credentials[data_source.id])
+                        token = TokenCredentialsFromFile.token_from_file(
+                            file_path=credentials[data_source.id], base64_encode=False
+                        )
                         data_sources.append(data_source.to_api(token=token))
                 else:
                     data_sources.append(data_source.to_api(password=credentials[data_source.id]))
