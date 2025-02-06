@@ -19,7 +19,7 @@
             "type": "array"
           },
           "filters": {
-            "description": "Various filter types to filter execution result.",
+            "description": "Various filter types to filter the execution result.",
             "items": {
               "$ref": "#/components/schemas/FilterDefinition"
             },
@@ -134,6 +134,7 @@
         "type": "object"
       },
       "AfmExecutionResponse": {
+        "description": "Response to AFM execution request",
         "properties": {
           "executionResponse": {
             "$ref": "#/components/schemas/ExecutionResponse"
@@ -145,6 +146,7 @@
         "type": "object"
       },
       "AfmIdentifier": {
+        "description": "Reference to the attribute label to which the filter should be applied.",
         "oneOf": [
           {
             "$ref": "#/components/schemas/AfmObjectIdentifier"
@@ -208,6 +210,7 @@
         "type": "object"
       },
       "AfmObjectIdentifierAttribute": {
+        "description": "Reference to the date attribute to use.",
         "properties": {
           "identifier": {
             "properties": {
@@ -236,6 +239,7 @@
         "type": "object"
       },
       "AfmObjectIdentifierCore": {
+        "description": "Reference to the metric, fact or attribute object to use for the metric.",
         "properties": {
           "identifier": {
             "properties": {
@@ -267,6 +271,7 @@
         "type": "object"
       },
       "AfmObjectIdentifierDataset": {
+        "description": "Reference to the date dataset to which the filter should be applied.",
         "properties": {
           "identifier": {
             "properties": {
@@ -444,7 +449,7 @@
         "type": "object"
       },
       "ArithmeticMeasureDefinition": {
-        "description": "Metric representing arithmetics between metrics.",
+        "description": "Metric representing arithmetics between other metrics.",
         "properties": {
           "arithmeticMeasure": {
             "properties": {
@@ -526,13 +531,14 @@
         "type": "object"
       },
       "AttributeFormat": {
+        "description": "Attribute format describes formatting information to effectively format attribute values when needed.",
         "properties": {
           "locale": {
-            "description": "Format locale",
+            "description": "Format locale code like 'en-US', 'cs-CZ', etc.",
             "type": "string"
           },
           "pattern": {
-            "description": "Format pattern",
+            "description": "ICU formatting pattern like 'y', 'dd.MM.y', etc.",
             "type": "string"
           }
         },
@@ -542,7 +548,7 @@
         ],
         "type": "object"
       },
-      "AttributeHeaderOut": {
+      "AttributeHeader": {
         "properties": {
           "attributeHeader": {
             "properties": {
@@ -550,12 +556,14 @@
                 "$ref": "#/components/schemas/RestApiIdentifier"
               },
               "attributeName": {
+                "description": "Attribute name.",
                 "type": "string"
               },
               "format": {
                 "$ref": "#/components/schemas/AttributeFormat"
               },
               "granularity": {
+                "description": "Date granularity of the attribute, only filled for date attributes.",
                 "enum": [
                   "MINUTE",
                   "HOUR",
@@ -579,9 +587,11 @@
                 "$ref": "#/components/schemas/RestApiIdentifier"
               },
               "labelName": {
+                "description": "Label name.",
                 "type": "string"
               },
               "localIdentifier": {
+                "description": "Local identifier of the attribute this header relates to.",
                 "pattern": "^[.a-zA-Z0-9_-]+$",
                 "type": "string"
               },
@@ -589,6 +599,7 @@
                 "$ref": "#/components/schemas/RestApiIdentifier"
               },
               "valueType": {
+                "description": "Attribute value type.",
                 "enum": [
                   "TEXT",
                   "HYPERLINK",
@@ -622,12 +633,14 @@
             "$ref": "#/components/schemas/AfmObjectIdentifierLabel"
           },
           "localIdentifier": {
+            "description": "Local identifier of the attribute. This can be used to reference the attribute in other parts of the execution definition.",
+            "example": "attribute_1",
             "pattern": "^[.a-zA-Z0-9_-]+$",
             "type": "string"
           },
           "showAllValues": {
             "default": false,
-            "description": "Specifies that the label should be outer-joined.",
+            "description": "Indicates whether to show all values of given attribute even if the data bound to those values is not available.",
             "type": "boolean"
           }
         },
@@ -982,6 +995,13 @@
               "applyOnResult": {
                 "type": "boolean"
               },
+              "dimensionality": {
+                "description": "References to the attributes to be used when filtering.",
+                "items": {
+                  "$ref": "#/components/schemas/AfmIdentifier"
+                },
+                "type": "array"
+              },
               "localIdentifier": {
                 "type": "string"
               },
@@ -1001,6 +1021,7 @@
                 "type": "string"
               },
               "treatNullValuesAs": {
+                "description": "A value that will be substituted for null values in the metric for the comparisons.",
                 "example": 0,
                 "type": "number"
               },
@@ -1064,6 +1085,13 @@
             },
             "type": "array"
           },
+          "suggestions": {
+            "description": "Suggestions for next steps",
+            "items": {
+              "$ref": "#/components/schemas/Suggestion"
+            },
+            "type": "array"
+          },
           "title": {
             "description": "Proposed title of the new visualization",
             "example": "Revenue by Country",
@@ -1088,6 +1116,7 @@
           "filters",
           "id",
           "metrics",
+          "suggestions",
           "title",
           "visualizationType"
         ],
@@ -1143,6 +1172,7 @@
         "type": "object"
       },
       "DataColumnLocators": {
+        "description": "Data column locators for the values.",
         "properties": {
           "properties": {
             "additionalProperties": {
@@ -1535,8 +1565,10 @@
         "type": "object"
       },
       "ExecutionLinks": {
+        "description": "Links to the execution result.",
         "properties": {
           "executionResult": {
+            "description": "Link to the result data.",
             "type": "string"
           }
         },
@@ -1546,8 +1578,10 @@
         "type": "object"
       },
       "ExecutionResponse": {
+        "description": "Response to AFM execution request body",
         "properties": {
           "dimensions": {
+            "description": "Dimensions of the result",
             "items": {
               "$ref": "#/components/schemas/ResultDimension"
             },
@@ -1909,6 +1943,7 @@
                 "type": "boolean"
               },
               "filter": {
+                "description": "MAQL query representing the filter.",
                 "type": "string"
               },
               "localIdentifier": {
@@ -1932,6 +1967,7 @@
           "inline": {
             "properties": {
               "maql": {
+                "description": "MAQL query defining the metric.",
                 "type": "string"
               }
             },
@@ -2089,25 +2125,35 @@
         "type": "object"
       },
       "MeasureGroupHeaders": {
+        "description": "Measure group headers",
         "properties": {
+          "first": {
+            "$ref": "#/components/schemas/MeasureHeader"
+          },
+          "last": {
+            "$ref": "#/components/schemas/MeasureHeader"
+          },
           "measureGroupHeaders": {
             "items": {
-              "$ref": "#/components/schemas/MeasureHeaderOut"
+              "$ref": "#/components/schemas/MeasureHeader"
             },
             "type": "array"
           }
         },
         "type": "object"
       },
-      "MeasureHeaderOut": {
+      "MeasureHeader": {
         "properties": {
           "format": {
+            "description": "Format to be used to format the measure data.",
             "type": "string"
           },
           "localIdentifier": {
+            "description": "Local identifier of the measure this header relates to.",
             "type": "string"
           },
           "name": {
+            "description": "Name of the measure.",
             "type": "string"
           }
         },
@@ -2117,11 +2163,13 @@
         "type": "object"
       },
       "MeasureItem": {
+        "description": "Metric is a quantity that is calculated from the data.",
         "properties": {
           "definition": {
             "$ref": "#/components/schemas/MeasureDefinition"
           },
           "localIdentifier": {
+            "description": "Local identifier of the metric. This can be used to reference the metric in other parts of the execution definition.",
             "example": "metric_1",
             "pattern": "^[.a-zA-Z0-9_-]+$",
             "type": "string"
@@ -2267,11 +2315,14 @@
         "type": "object"
       },
       "PopDataset": {
+        "description": "Combination of the date data set to use and how many periods ago to calculate the previous period for.",
         "properties": {
           "dataset": {
             "$ref": "#/components/schemas/AfmObjectIdentifierDataset"
           },
           "periodsAgo": {
+            "description": "Number of periods ago to calculate the previous period for.",
+            "example": 1,
             "format": "int32",
             "type": "integer"
           }
@@ -2288,6 +2339,7 @@
           "previousPeriodMeasure": {
             "properties": {
               "dateDatasets": {
+                "description": "Specification of which date data sets to use for determining the period to calculate the previous period for.",
                 "items": {
                   "$ref": "#/components/schemas/PopDataset"
                 },
@@ -2310,11 +2362,14 @@
         "type": "object"
       },
       "PopDate": {
+        "description": "Combination of the date attribute to use and how many periods ago to calculate the PoP for.",
         "properties": {
           "attribute": {
             "$ref": "#/components/schemas/AfmObjectIdentifierAttribute"
           },
           "periodsAgo": {
+            "description": "Number of periods ago to calculate the previous period for.",
+            "example": 1,
             "format": "int32",
             "type": "integer"
           }
@@ -2331,6 +2386,7 @@
           "overPeriodMeasure": {
             "properties": {
               "dateAttributes": {
+                "description": "Attributes to use for determining the period to calculate the PoP for.",
                 "items": {
                   "$ref": "#/components/schemas/PopDate"
                 },
@@ -2401,6 +2457,13 @@
               "applyOnResult": {
                 "type": "boolean"
               },
+              "dimensionality": {
+                "description": "References to the attributes to be used when filtering.",
+                "items": {
+                  "$ref": "#/components/schemas/AfmIdentifier"
+                },
+                "type": "array"
+              },
               "from": {
                 "example": 100,
                 "type": "number"
@@ -2424,6 +2487,7 @@
                 "type": "number"
               },
               "treatNullValuesAs": {
+                "description": "A value that will be substituted for null values in the metric for the comparisons.",
                 "example": 0,
                 "type": "number"
               }
@@ -2450,16 +2514,25 @@
               "applyOnResult": {
                 "type": "boolean"
               },
+              "dimensionality": {
+                "description": "References to the attributes to be used when filtering.",
+                "items": {
+                  "$ref": "#/components/schemas/AfmIdentifier"
+                },
+                "type": "array"
+              },
               "localIdentifier": {
                 "type": "string"
               },
               "measures": {
+                "description": "References to the metrics to be used when filtering.",
                 "items": {
                   "$ref": "#/components/schemas/AfmIdentifier"
                 },
                 "type": "array"
               },
               "operator": {
+                "description": "The type of ranking to use, TOP or BOTTOM.",
                 "enum": [
                   "TOP",
                   "BOTTOM"
@@ -2467,6 +2540,7 @@
                 "type": "string"
               },
               "value": {
+                "description": "Number of top/bottom values to filter.",
                 "example": 5,
                 "format": "int32",
                 "type": "integer"
@@ -2593,6 +2667,7 @@
         "type": "object"
       },
       "ResultDimension": {
+        "description": "Single result dimension",
         "properties": {
           "headers": {
             "items": {
@@ -2601,6 +2676,7 @@
             "type": "array"
           },
           "localIdentifier": {
+            "description": "Local identifier of the dimension.",
             "type": "string"
           }
         },
@@ -2611,12 +2687,13 @@
         "type": "object"
       },
       "ResultDimensionHeader": {
+        "description": "One of the headers in a result dimension.",
         "oneOf": [
           {
             "$ref": "#/components/schemas/MeasureGroupHeaders"
           },
           {
-            "$ref": "#/components/schemas/AttributeHeaderOut"
+            "$ref": "#/components/schemas/AttributeHeader"
           }
         ],
         "type": "object"
@@ -2642,20 +2719,8 @@
         ],
         "type": "object"
       },
-      "RouteRequest": {
-        "properties": {
-          "question": {
-            "description": "Route to supported use cases based on this input query.",
-            "maxLength": 1000,
-            "type": "string"
-          }
-        },
-        "required": [
-          "question"
-        ],
-        "type": "object"
-      },
       "RouteResult": {
+        "description": "Question -> Use Case routing. May contain final answer is a special use case is not required.",
         "properties": {
           "reasoning": {
             "description": "Explanation why LLM picked this use case.",
@@ -2879,6 +2944,7 @@
         "type": "object"
       },
       "SimpleMeasureDefinition": {
+        "description": "Metric defined by referencing a MAQL metric or an LDM fact object with aggregation.",
         "properties": {
           "measure": {
             "properties": {
@@ -2899,7 +2965,7 @@
               },
               "computeRatio": {
                 "default": false,
-                "description": "If true compute the percentage of given metric values (broken down by AFM attributes) to the total (not broken down).",
+                "description": "If true, compute the percentage of given metric values (broken down by AFM attributes) to the total (not broken down).",
                 "example": true,
                 "type": "boolean"
               },
@@ -2970,7 +3036,7 @@
               },
               "sortType": {
                 "default": "DEFAULT",
-                "description": "Mechanism by which this attribute should be sorted. Available options are:\n- DEFAULT: sorting based on default rules (using sort column if defined, otherwise this label) \n- LABEL: sorting by this label values \n- ATTRIBUTE: sorting by values of this label's attribute (or rather the primary label) \n- AREA: sorting by area (total or subtotal) corresponding to each attribute value. The area is computed by summing up all metric values in all other dimensions.",
+                "description": "Mechanism by which this attribute should be sorted. Available options are:\n- DEFAULT: sorting based on default rules (using sort column if defined, otherwise this label) \n- LABEL: sorting by this label values \n- ATTRIBUTE: sorting by values of this label's attribute (or rather the primary label) \n- ATTRIBUTE: sorting by values of this label's attribute (or rather the primary label)- AREA: sorting by area (total or subtotal) corresponding to each attribute value. The area is computed by summing up all metric values in all other dimensions.",
                 "enum": [
                   "DEFAULT",
                   "LABEL",
@@ -3008,6 +3074,7 @@
                 "type": "string"
               },
               "totalIdentifier": {
+                "description": "Local identifier of the total to sort by.",
                 "type": "string"
               }
             },
@@ -3047,6 +3114,24 @@
         },
         "required": [
           "value"
+        ],
+        "type": "object"
+      },
+      "Suggestion": {
+        "description": "Suggestions for next steps",
+        "properties": {
+          "label": {
+            "description": "Suggestion button label",
+            "type": "string"
+          },
+          "query": {
+            "description": "Suggestion query",
+            "type": "string"
+          }
+        },
+        "required": [
+          "label",
+          "query"
         ],
         "type": "object"
       },
@@ -3311,51 +3396,6 @@
           }
         },
         "summary": "(BETA) Chat with AI",
-        "tags": [
-          "Smart Functions",
-          "actions"
-        ]
-      }
-    },
-    "/api/v1/actions/workspaces/{workspaceId}/ai/route": {
-      "post": {
-        "description": "(BETA) Uses similarity (e.g. cosine distance) to find most similar use cases.",
-        "operationId": "aiRoute",
-        "parameters": [
-          {
-            "description": "Workspace identifier",
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RouteRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RouteResult"
-                }
-              }
-            },
-            "description": "OK"
-          }
-        },
-        "summary": "(BETA) Route to supported use cases based on this input query.",
         "tags": [
           "Smart Functions",
           "actions"

@@ -119,7 +119,7 @@ class SortKeyTotalTotal(ModelNormal):
         """SortKeyTotalTotal - a model defined in OpenAPI
 
         Args:
-            total_identifier (str):
+            total_identifier (str): Local identifier of the total to sort by.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -210,7 +210,7 @@ class SortKeyTotalTotal(ModelNormal):
         """SortKeyTotalTotal - a model defined in OpenAPI
 
         Args:
-            total_identifier (str):
+            total_identifier (str): Local identifier of the total to sort by.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types

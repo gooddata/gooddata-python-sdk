@@ -32,6 +32,7 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.automation_alert import AutomationAlert
+    from gooddata_api_client.model.automation_external_recipient import AutomationExternalRecipient
     from gooddata_api_client.model.automation_schedule import AutomationSchedule
     from gooddata_api_client.model.automation_tabular_export import AutomationTabularExport
     from gooddata_api_client.model.automation_visual_export import AutomationVisualExport
@@ -41,6 +42,7 @@ def lazy_import():
     from gooddata_api_client.model.declarative_user_identifier import DeclarativeUserIdentifier
     from gooddata_api_client.model.json_node import JsonNode
     globals()['AutomationAlert'] = AutomationAlert
+    globals()['AutomationExternalRecipient'] = AutomationExternalRecipient
     globals()['AutomationSchedule'] = AutomationSchedule
     globals()['AutomationTabularExport'] = AutomationTabularExport
     globals()['AutomationVisualExport'] = AutomationVisualExport
@@ -100,6 +102,8 @@ class DeclarativeAutomation(ModelNormal):
         },
         ('export_definitions',): {
         },
+        ('external_recipients',): {
+        },
         ('modified_at',): {
             'regex': {
                 'pattern': r'[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}',  # noqa: E501
@@ -149,6 +153,7 @@ class DeclarativeAutomation(ModelNormal):
             'description': (str,),  # noqa: E501
             'details': ({str: (str,)},),  # noqa: E501
             'export_definitions': ([DeclarativeExportDefinitionIdentifier],),  # noqa: E501
+            'external_recipients': ([AutomationExternalRecipient],),  # noqa: E501
             'metadata': (JsonNode,),  # noqa: E501
             'modified_at': (str, none_type,),  # noqa: E501
             'modified_by': (DeclarativeUserIdentifier,),  # noqa: E501
@@ -176,6 +181,7 @@ class DeclarativeAutomation(ModelNormal):
         'description': 'description',  # noqa: E501
         'details': 'details',  # noqa: E501
         'export_definitions': 'exportDefinitions',  # noqa: E501
+        'external_recipients': 'externalRecipients',  # noqa: E501
         'metadata': 'metadata',  # noqa: E501
         'modified_at': 'modifiedAt',  # noqa: E501
         'modified_by': 'modifiedBy',  # noqa: E501
@@ -240,6 +246,7 @@ class DeclarativeAutomation(ModelNormal):
             description (str): [optional]  # noqa: E501
             details ({str: (str,)}): TODO. [optional]  # noqa: E501
             export_definitions ([DeclarativeExportDefinitionIdentifier]): [optional]  # noqa: E501
+            external_recipients ([AutomationExternalRecipient]): External recipients of the automation action results.. [optional]  # noqa: E501
             metadata (JsonNode): [optional]  # noqa: E501
             modified_at (str, none_type): Time of the last entity modification.. [optional]  # noqa: E501
             modified_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
@@ -347,6 +354,7 @@ class DeclarativeAutomation(ModelNormal):
             description (str): [optional]  # noqa: E501
             details ({str: (str,)}): TODO. [optional]  # noqa: E501
             export_definitions ([DeclarativeExportDefinitionIdentifier]): [optional]  # noqa: E501
+            external_recipients ([AutomationExternalRecipient]): External recipients of the automation action results.. [optional]  # noqa: E501
             metadata (JsonNode): [optional]  # noqa: E501
             modified_at (str, none_type): Time of the last entity modification.. [optional]  # noqa: E501
             modified_by (DeclarativeUserIdentifier): [optional]  # noqa: E501

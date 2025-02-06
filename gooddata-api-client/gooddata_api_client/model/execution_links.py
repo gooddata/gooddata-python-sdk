@@ -105,7 +105,7 @@ class ExecutionLinks(ModelNormal):
         """ExecutionLinks - a model defined in OpenAPI
 
         Args:
-            execution_result (str):
+            execution_result (str): Link to the result data.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -194,7 +194,7 @@ class ExecutionLinks(ModelNormal):
         """ExecutionLinks - a model defined in OpenAPI
 
         Args:
-            execution_result (str):
+            execution_result (str): Link to the result data.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types

@@ -34,9 +34,11 @@ def lazy_import():
     from gooddata_api_client.model.created_visualization_filters_inner import CreatedVisualizationFiltersInner
     from gooddata_api_client.model.dim_attribute import DimAttribute
     from gooddata_api_client.model.metric import Metric
+    from gooddata_api_client.model.suggestion import Suggestion
     globals()['CreatedVisualizationFiltersInner'] = CreatedVisualizationFiltersInner
     globals()['DimAttribute'] = DimAttribute
     globals()['Metric'] = Metric
+    globals()['Suggestion'] = Suggestion
 
 
 class CreatedVisualization(ModelNormal):
@@ -104,6 +106,7 @@ class CreatedVisualization(ModelNormal):
             'filters': ([CreatedVisualizationFiltersInner],),  # noqa: E501
             'id': (str,),  # noqa: E501
             'metrics': ([Metric],),  # noqa: E501
+            'suggestions': ([Suggestion],),  # noqa: E501
             'title': (str,),  # noqa: E501
             'visualization_type': (str,),  # noqa: E501
         }
@@ -118,6 +121,7 @@ class CreatedVisualization(ModelNormal):
         'filters': 'filters',  # noqa: E501
         'id': 'id',  # noqa: E501
         'metrics': 'metrics',  # noqa: E501
+        'suggestions': 'suggestions',  # noqa: E501
         'title': 'title',  # noqa: E501
         'visualization_type': 'visualizationType',  # noqa: E501
     }
@@ -129,7 +133,7 @@ class CreatedVisualization(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, dimensionality, filters, id, metrics, title, visualization_type, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, dimensionality, filters, id, metrics, suggestions, title, visualization_type, *args, **kwargs):  # noqa: E501
         """CreatedVisualization - a model defined in OpenAPI
 
         Args:
@@ -137,6 +141,7 @@ class CreatedVisualization(ModelNormal):
             filters ([CreatedVisualizationFiltersInner]): List of filters to be applied to the new visualization
             id (str): Proposed ID of the new visualization
             metrics ([Metric]): List of metrics to be used in the new visualization
+            suggestions ([Suggestion]): Suggestions for next steps
             title (str): Proposed title of the new visualization
             visualization_type (str): Visualization type requested in question
 
@@ -206,6 +211,7 @@ class CreatedVisualization(ModelNormal):
         self.filters = filters
         self.id = id
         self.metrics = metrics
+        self.suggestions = suggestions
         self.title = title
         self.visualization_type = visualization_type
         for var_name, var_value in kwargs.items():
@@ -228,7 +234,7 @@ class CreatedVisualization(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, dimensionality, filters, id, metrics, title, visualization_type, *args, **kwargs):  # noqa: E501
+    def __init__(self, dimensionality, filters, id, metrics, suggestions, title, visualization_type, *args, **kwargs):  # noqa: E501
         """CreatedVisualization - a model defined in OpenAPI
 
         Args:
@@ -236,6 +242,7 @@ class CreatedVisualization(ModelNormal):
             filters ([CreatedVisualizationFiltersInner]): List of filters to be applied to the new visualization
             id (str): Proposed ID of the new visualization
             metrics ([Metric]): List of metrics to be used in the new visualization
+            suggestions ([Suggestion]): Suggestions for next steps
             title (str): Proposed title of the new visualization
             visualization_type (str): Visualization type requested in question
 
@@ -303,6 +310,7 @@ class CreatedVisualization(ModelNormal):
         self.filters = filters
         self.id = id
         self.metrics = metrics
+        self.suggestions = suggestions
         self.title = title
         self.visualization_type = visualization_type
         for var_name, var_value in kwargs.items():

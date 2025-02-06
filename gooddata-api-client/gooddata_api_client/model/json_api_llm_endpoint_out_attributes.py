@@ -100,12 +100,13 @@ class JsonApiLlmEndpointOutAttributes(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'provider': (str,),  # noqa: E501
             'title': (str,),  # noqa: E501
             'base_url': (str, none_type,),  # noqa: E501
             'description': (str, none_type,),  # noqa: E501
-            'llm_model': (str, none_type,),  # noqa: E501
+            'llm_model': (str,),  # noqa: E501
             'llm_organization': (str, none_type,),  # noqa: E501
+            'provider': (str,),  # noqa: E501
+            'workspace_ids': ([str],),  # noqa: E501
         }
 
     @cached_property
@@ -114,12 +115,13 @@ class JsonApiLlmEndpointOutAttributes(ModelNormal):
 
 
     attribute_map = {
-        'provider': 'provider',  # noqa: E501
         'title': 'title',  # noqa: E501
         'base_url': 'baseUrl',  # noqa: E501
         'description': 'description',  # noqa: E501
         'llm_model': 'llmModel',  # noqa: E501
         'llm_organization': 'llmOrganization',  # noqa: E501
+        'provider': 'provider',  # noqa: E501
+        'workspace_ids': 'workspaceIds',  # noqa: E501
     }
 
     read_only_vars = {
@@ -136,7 +138,6 @@ class JsonApiLlmEndpointOutAttributes(ModelNormal):
             title (str): User-facing title of the LLM Provider.
 
         Keyword Args:
-            provider (str): LLM Provider.. defaults to "OPENAI", must be one of ["OPENAI", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -169,11 +170,12 @@ class JsonApiLlmEndpointOutAttributes(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             base_url (str, none_type): Custom LLM endpoint.. [optional]  # noqa: E501
             description (str, none_type): User-facing description of the LLM Provider.. [optional]  # noqa: E501
-            llm_model (str, none_type): LLM Model. We provide a default model for each provider, but you can override it here.. [optional]  # noqa: E501
+            llm_model (str): LLM Model. We provide a default model for each provider, but you can override it here.. [optional]  # noqa: E501
             llm_organization (str, none_type): Organization in LLM provider.. [optional]  # noqa: E501
+            provider (str): LLM Provider.. [optional] if omitted the server will use the default value of "OPENAI"  # noqa: E501
+            workspace_ids ([str]): List of workspace IDs for which LLM endpoint is valid. If empty, it is valid for all workspaces.. [optional]  # noqa: E501
         """
 
-        provider = kwargs.get('provider', "OPENAI")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
@@ -203,7 +205,6 @@ class JsonApiLlmEndpointOutAttributes(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.provider = provider
         self.title = title
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
@@ -232,7 +233,6 @@ class JsonApiLlmEndpointOutAttributes(ModelNormal):
             title (str): User-facing title of the LLM Provider.
 
         Keyword Args:
-            provider (str): LLM Provider.. defaults to "OPENAI", must be one of ["OPENAI", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -265,11 +265,12 @@ class JsonApiLlmEndpointOutAttributes(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             base_url (str, none_type): Custom LLM endpoint.. [optional]  # noqa: E501
             description (str, none_type): User-facing description of the LLM Provider.. [optional]  # noqa: E501
-            llm_model (str, none_type): LLM Model. We provide a default model for each provider, but you can override it here.. [optional]  # noqa: E501
+            llm_model (str): LLM Model. We provide a default model for each provider, but you can override it here.. [optional]  # noqa: E501
             llm_organization (str, none_type): Organization in LLM provider.. [optional]  # noqa: E501
+            provider (str): LLM Provider.. [optional] if omitted the server will use the default value of "OPENAI"  # noqa: E501
+            workspace_ids ([str]): List of workspace IDs for which LLM endpoint is valid. If empty, it is valid for all workspaces.. [optional]  # noqa: E501
         """
 
-        provider = kwargs.get('provider', "OPENAI")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', False)
         _path_to_item = kwargs.pop('_path_to_item', ())
@@ -297,7 +298,6 @@ class JsonApiLlmEndpointOutAttributes(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.provider = provider
         self.title = title
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

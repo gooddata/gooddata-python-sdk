@@ -337,7 +337,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                         type="label",
                                     ),
                                 ),
-                                local_identifier="2",
+                                local_identifier="attribute_1",
                                 show_all_values=False,
                             ),
                         ],
@@ -362,6 +362,11 @@ with gooddata_api_client.ApiClient() as api_client:
                 are_relations_valid=True,
                 description="description_example",
                 details=None,
+                external_recipients=[
+                    JsonApiAutomationInAttributesExternalRecipientsInner(
+                        email="email_example",
+                    ),
+                ],
                 metadata={},
                 schedule=JsonApiAutomationInAttributesSchedule(
                     cron="0 */30 9-17 ? * MON-FRI",
@@ -6200,7 +6205,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                         type="label",
                                     ),
                                 ),
-                                local_identifier="2",
+                                local_identifier="attribute_1",
                                 show_all_values=False,
                             ),
                         ],
@@ -6225,6 +6230,11 @@ with gooddata_api_client.ApiClient() as api_client:
                 are_relations_valid=True,
                 description="description_example",
                 details=None,
+                external_recipients=[
+                    JsonApiAutomationInAttributesExternalRecipientsInner(
+                        email="email_example",
+                    ),
+                ],
                 metadata={},
                 schedule=JsonApiAutomationInAttributesSchedule(
                     cron="0 */30 9-17 ? * MON-FRI",
@@ -7724,7 +7734,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                         type="label",
                                     ),
                                 ),
-                                local_identifier="2",
+                                local_identifier="attribute_1",
                                 show_all_values=False,
                             ),
                         ],
@@ -7749,6 +7759,11 @@ with gooddata_api_client.ApiClient() as api_client:
                 are_relations_valid=True,
                 description="description_example",
                 details=None,
+                external_recipients=[
+                    JsonApiAutomationInAttributesExternalRecipientsInner(
+                        email="email_example",
+                    ),
+                ],
                 metadata={},
                 schedule=JsonApiAutomationInAttributesSchedule(
                     cron="0 */30 9-17 ? * MON-FRI",

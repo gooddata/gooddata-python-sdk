@@ -1,5 +1,6 @@
 # AfmIdentifier
 
+Reference to the attribute label to which the filter should be applied.
 
 ## Properties
 Name | Type | Description | Notes

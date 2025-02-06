@@ -114,7 +114,7 @@ class ResultDimension(ModelNormal):
 
         Args:
             headers ([ResultDimensionHeader]):
-            local_identifier (str):
+            local_identifier (str): Local identifier of the dimension.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -205,7 +205,7 @@ class ResultDimension(ModelNormal):
 
         Args:
             headers ([ResultDimensionHeader]):
-            local_identifier (str):
+            local_identifier (str): Local identifier of the dimension.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types

@@ -105,11 +105,12 @@ class JsonApiLlmEndpointPatchAttributes(ModelNormal):
         return {
             'base_url': (str, none_type,),  # noqa: E501
             'description': (str, none_type,),  # noqa: E501
-            'llm_model': (str, none_type,),  # noqa: E501
+            'llm_model': (str,),  # noqa: E501
             'llm_organization': (str, none_type,),  # noqa: E501
             'provider': (str,),  # noqa: E501
             'title': (str,),  # noqa: E501
             'token': (str,),  # noqa: E501
+            'workspace_ids': ([str],),  # noqa: E501
         }
 
     @cached_property
@@ -125,6 +126,7 @@ class JsonApiLlmEndpointPatchAttributes(ModelNormal):
         'provider': 'provider',  # noqa: E501
         'title': 'title',  # noqa: E501
         'token': 'token',  # noqa: E501
+        'workspace_ids': 'workspaceIds',  # noqa: E501
     }
 
     read_only_vars = {
@@ -170,11 +172,12 @@ class JsonApiLlmEndpointPatchAttributes(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             base_url (str, none_type): Custom LLM endpoint.. [optional]  # noqa: E501
             description (str, none_type): User-facing description of the LLM Provider.. [optional]  # noqa: E501
-            llm_model (str, none_type): LLM Model. We provide a default model for each provider, but you can override it here.. [optional]  # noqa: E501
+            llm_model (str): LLM Model. We provide a default model for each provider, but you can override it here.. [optional]  # noqa: E501
             llm_organization (str, none_type): Organization in LLM provider.. [optional]  # noqa: E501
             provider (str): LLM Provider.. [optional] if omitted the server will use the default value of "OPENAI"  # noqa: E501
             title (str): User-facing title of the LLM Provider.. [optional]  # noqa: E501
             token (str): The token to use to connect to the LLM provider.. [optional]  # noqa: E501
+            workspace_ids ([str]): List of workspace IDs for which LLM endpoint is valid. If empty, it is valid for all workspaces.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -262,11 +265,12 @@ class JsonApiLlmEndpointPatchAttributes(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             base_url (str, none_type): Custom LLM endpoint.. [optional]  # noqa: E501
             description (str, none_type): User-facing description of the LLM Provider.. [optional]  # noqa: E501
-            llm_model (str, none_type): LLM Model. We provide a default model for each provider, but you can override it here.. [optional]  # noqa: E501
+            llm_model (str): LLM Model. We provide a default model for each provider, but you can override it here.. [optional]  # noqa: E501
             llm_organization (str, none_type): Organization in LLM provider.. [optional]  # noqa: E501
             provider (str): LLM Provider.. [optional] if omitted the server will use the default value of "OPENAI"  # noqa: E501
             title (str): User-facing title of the LLM Provider.. [optional]  # noqa: E501
             token (str): The token to use to connect to the LLM provider.. [optional]  # noqa: E501
+            workspace_ids ([str]): List of workspace IDs for which LLM endpoint is valid. If empty, it is valid for all workspaces.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

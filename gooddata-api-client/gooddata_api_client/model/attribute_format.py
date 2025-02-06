@@ -107,8 +107,8 @@ class AttributeFormat(ModelNormal):
         """AttributeFormat - a model defined in OpenAPI
 
         Args:
-            locale (str): Format locale
-            pattern (str): Format pattern
+            locale (str): Format locale code like 'en-US', 'cs-CZ', etc.
+            pattern (str): ICU formatting pattern like 'y', 'dd.MM.y', etc.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -198,8 +198,8 @@ class AttributeFormat(ModelNormal):
         """AttributeFormat - a model defined in OpenAPI
 
         Args:
-            locale (str): Format locale
-            pattern (str): Format pattern
+            locale (str): Format locale code like 'en-US', 'cs-CZ', etc.
+            pattern (str): ICU formatting pattern like 'y', 'dd.MM.y', etc.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types

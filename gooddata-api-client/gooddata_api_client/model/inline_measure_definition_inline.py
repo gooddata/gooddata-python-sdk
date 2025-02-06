@@ -105,7 +105,7 @@ class InlineMeasureDefinitionInline(ModelNormal):
         """InlineMeasureDefinitionInline - a model defined in OpenAPI
 
         Args:
-            maql (str):
+            maql (str): MAQL query defining the metric.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -194,7 +194,7 @@ class InlineMeasureDefinitionInline(ModelNormal):
         """InlineMeasureDefinitionInline - a model defined in OpenAPI
 
         Args:
-            maql (str):
+            maql (str): MAQL query defining the metric.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types

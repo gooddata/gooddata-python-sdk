@@ -1,5 +1,6 @@
 # RouteResult
 
+Question -> Use Case routing. May contain final answer is a special use case is not required.
 
 ## Properties
 Name | Type | Description | Notes

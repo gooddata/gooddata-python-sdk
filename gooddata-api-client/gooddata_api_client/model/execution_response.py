@@ -115,7 +115,7 @@ class ExecutionResponse(ModelNormal):
         """ExecutionResponse - a model defined in OpenAPI
 
         Args:
-            dimensions ([ResultDimension]):
+            dimensions ([ResultDimension]): Dimensions of the result
             links (ExecutionLinks):
 
         Keyword Args:
@@ -206,7 +206,7 @@ class ExecutionResponse(ModelNormal):
         """ExecutionResponse - a model defined in OpenAPI
 
         Args:
-            dimensions ([ResultDimension]):
+            dimensions ([ResultDimension]): Dimensions of the result
             links (ExecutionLinks):
 
         Keyword Args:

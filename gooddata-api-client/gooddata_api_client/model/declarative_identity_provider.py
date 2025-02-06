@@ -72,9 +72,6 @@ class DeclarativeIdentityProvider(ModelNormal):
         ('oauth_client_secret',): {
             'max_length': 255,
         },
-        ('oauth_issuer_id',): {
-            'max_length': 255,
-        },
         ('oauth_issuer_location',): {
             'max_length': 255,
         },
@@ -105,11 +102,10 @@ class DeclarativeIdentityProvider(ModelNormal):
         """
         return {
             'id': (str,),  # noqa: E501
-            'custom_claim_mapping': ({str: (str,)},),  # noqa: E501
             'identifiers': ([str],),  # noqa: E501
+            'custom_claim_mapping': ({str: (str,)},),  # noqa: E501
             'oauth_client_id': (str,),  # noqa: E501
             'oauth_client_secret': (str,),  # noqa: E501
-            'oauth_issuer_id': (str,),  # noqa: E501
             'oauth_issuer_location': (str,),  # noqa: E501
             'saml_metadata': (str,),  # noqa: E501
         }
@@ -121,11 +117,10 @@ class DeclarativeIdentityProvider(ModelNormal):
 
     attribute_map = {
         'id': 'id',  # noqa: E501
-        'custom_claim_mapping': 'customClaimMapping',  # noqa: E501
         'identifiers': 'identifiers',  # noqa: E501
+        'custom_claim_mapping': 'customClaimMapping',  # noqa: E501
         'oauth_client_id': 'oauthClientId',  # noqa: E501
         'oauth_client_secret': 'oauthClientSecret',  # noqa: E501
-        'oauth_issuer_id': 'oauthIssuerId',  # noqa: E501
         'oauth_issuer_location': 'oauthIssuerLocation',  # noqa: E501
         'saml_metadata': 'samlMetadata',  # noqa: E501
     }
@@ -137,11 +132,12 @@ class DeclarativeIdentityProvider(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, id, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, id, identifiers, *args, **kwargs):  # noqa: E501
         """DeclarativeIdentityProvider - a model defined in OpenAPI
 
         Args:
             id (str): FilterView object ID.
+            identifiers ([str]): List of identifiers for this IdP, where an identifier is a domain name. Users with email addresses belonging to these domains will be authenticated by this IdP. In multiple provider setup, this field is mandatory.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -175,10 +171,8 @@ class DeclarativeIdentityProvider(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             custom_claim_mapping ({str: (str,)}): Map of custom claim overrides. To be used when your Idp does not provide default claims (sub, email, name, given_name, family_name, urn.gooddata.user_groups [optional]). Define the key pair for the claim you wish to override, where the key is the default name of the attribute and the value is your custom name for the given attribute.. [optional]  # noqa: E501
-            identifiers ([str]): List of identifiers for this IdP, where an identifier is a domain name. Users with email addresses belonging to these domains will be authenticated by this IdP. In multiple provider setup, this field is mandatory.. [optional]  # noqa: E501
             oauth_client_id (str): The OAuth client id of your OIDC provider. This field is mandatory for OIDC IdP.. [optional]  # noqa: E501
             oauth_client_secret (str): The OAuth client secret of your OIDC provider. This field is mandatory for OIDC IdP.. [optional]  # noqa: E501
-            oauth_issuer_id (str): Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.. [optional]  # noqa: E501
             oauth_issuer_location (str): The location of your OIDC provider. This field is mandatory for OIDC IdP.. [optional]  # noqa: E501
             saml_metadata (str): Base64 encoded xml document with SAML metadata. This document is issued by your SAML provider. It includes the issuer's name, expiration information, and keys that can be used to validate the response from the identity provider. This field is mandatory for SAML IdP.. [optional]  # noqa: E501
         """
@@ -213,6 +207,7 @@ class DeclarativeIdentityProvider(ModelNormal):
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
         self.id = id
+        self.identifiers = identifiers
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -233,11 +228,12 @@ class DeclarativeIdentityProvider(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, id, *args, **kwargs):  # noqa: E501
+    def __init__(self, id, identifiers, *args, **kwargs):  # noqa: E501
         """DeclarativeIdentityProvider - a model defined in OpenAPI
 
         Args:
             id (str): FilterView object ID.
+            identifiers ([str]): List of identifiers for this IdP, where an identifier is a domain name. Users with email addresses belonging to these domains will be authenticated by this IdP. In multiple provider setup, this field is mandatory.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -271,10 +267,8 @@ class DeclarativeIdentityProvider(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             custom_claim_mapping ({str: (str,)}): Map of custom claim overrides. To be used when your Idp does not provide default claims (sub, email, name, given_name, family_name, urn.gooddata.user_groups [optional]). Define the key pair for the claim you wish to override, where the key is the default name of the attribute and the value is your custom name for the given attribute.. [optional]  # noqa: E501
-            identifiers ([str]): List of identifiers for this IdP, where an identifier is a domain name. Users with email addresses belonging to these domains will be authenticated by this IdP. In multiple provider setup, this field is mandatory.. [optional]  # noqa: E501
             oauth_client_id (str): The OAuth client id of your OIDC provider. This field is mandatory for OIDC IdP.. [optional]  # noqa: E501
             oauth_client_secret (str): The OAuth client secret of your OIDC provider. This field is mandatory for OIDC IdP.. [optional]  # noqa: E501
-            oauth_issuer_id (str): Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.. [optional]  # noqa: E501
             oauth_issuer_location (str): The location of your OIDC provider. This field is mandatory for OIDC IdP.. [optional]  # noqa: E501
             saml_metadata (str): Base64 encoded xml document with SAML metadata. This document is issued by your SAML provider. It includes the issuer's name, expiration information, and keys that can be used to validate the response from the identity provider. This field is mandatory for SAML IdP.. [optional]  # noqa: E501
         """
@@ -307,6 +301,7 @@ class DeclarativeIdentityProvider(ModelNormal):
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
         self.id = id
+        self.identifiers = identifiers
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

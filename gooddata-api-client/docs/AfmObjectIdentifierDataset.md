@@ -1,5 +1,6 @@
 # AfmObjectIdentifierDataset
 
+Reference to the date dataset to which the filter should be applied.
 
 ## Properties
 Name | Type | Description | Notes

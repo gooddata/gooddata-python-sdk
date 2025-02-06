@@ -407,6 +407,23 @@ class CatalogOrganizationService(CatalogServiceBase):
                 f"Can not update {identity_provider.id} identity provider. This identity provider does not exist."
             )
 
+    def patch_identity_provider_attributes(self, identity_provider_id: str, attributes: dict) -> None:
+        """Applies changes to the specified identity provider.
+
+        Args:
+            identity_provider_id (str):
+                Identity Provider identification string. e.g. "auth0"
+            attributes (dict):
+                A dictionary containing attributes of the identity provider to be changed.
+
+        Returns:
+            None
+        """
+
+        self._entities_api.patch_entity_identity_providers(
+            identity_provider_id, CatalogIdentityProvider.to_api_patch(identity_provider_id, attributes)
+        )
+
     # Layout APIs
 
     def get_declarative_notification_channels(self) -> list[CatalogDeclarativeNotificationChannel]:

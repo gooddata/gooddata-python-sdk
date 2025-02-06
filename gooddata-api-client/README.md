@@ -246,6 +246,8 @@ Class | Method | HTTP request | Description
 *NotificationChannelsApi* | [**get_notification_channels_layout**](docs/NotificationChannelsApi.md#get_notification_channels_layout) | **GET** /api/v1/layout/notificationChannels | Get all notification channels layout
 *NotificationChannelsApi* | [**patch_entity_notification_channels**](docs/NotificationChannelsApi.md#patch_entity_notification_channels) | **PATCH** /api/v1/entities/notificationChannels/{id} | Patch Notification Channel entity
 *NotificationChannelsApi* | [**set_notification_channels**](docs/NotificationChannelsApi.md#set_notification_channels) | **PUT** /api/v1/layout/notificationChannels | Set all notification channels
+*NotificationChannelsApi* | [**test_existing_notification_channel**](docs/NotificationChannelsApi.md#test_existing_notification_channel) | **POST** /api/v1/actions/notificationChannels/{notificationChannelId}/test | Test existing notification channel.
+*NotificationChannelsApi* | [**test_notification_channel**](docs/NotificationChannelsApi.md#test_notification_channel) | **POST** /api/v1/actions/notificationChannels/test | Test notification channel.
 *NotificationChannelsApi* | [**update_entity_notification_channels**](docs/NotificationChannelsApi.md#update_entity_notification_channels) | **PUT** /api/v1/entities/notificationChannels/{id} | Put Notification Channel entity
 *OptionsApi* | [**get_all_options**](docs/OptionsApi.md#get_all_options) | **GET** /api/v1/options | Links for all configuration options
 *OrganizationDeclarativeAPIsApi* | [**get_organization_layout**](docs/OrganizationDeclarativeAPIsApi.md#get_organization_layout) | **GET** /api/v1/layout/organization | Get organization layout
@@ -288,7 +290,6 @@ Class | Method | HTTP request | Description
 *SmartFunctionsApi* | [**ai_chat**](docs/SmartFunctionsApi.md#ai_chat) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/chat | (BETA) Chat with AI
 *SmartFunctionsApi* | [**ai_chat_history**](docs/SmartFunctionsApi.md#ai_chat_history) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/chatHistory | (BETA) Get Chat History
 *SmartFunctionsApi* | [**ai_chat_stream**](docs/SmartFunctionsApi.md#ai_chat_stream) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/chatStream | (BETA) Chat with AI
-*SmartFunctionsApi* | [**ai_route**](docs/SmartFunctionsApi.md#ai_route) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/route | (BETA) Route to supported use cases based on this input query.
 *SmartFunctionsApi* | [**ai_search**](docs/SmartFunctionsApi.md#ai_search) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/search | (BETA) Semantic Search in Metadata
 *SmartFunctionsApi* | [**anomaly_detection**](docs/SmartFunctionsApi.md#anomaly_detection) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/{resultId} | (EXPERIMENTAL) Smart functions - Anomaly Detection
 *SmartFunctionsApi* | [**anomaly_detection_result**](docs/SmartFunctionsApi.md#anomaly_detection_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/result/{resultId} | (EXPERIMENTAL) Smart functions - Anomaly Detection Result
@@ -296,6 +297,7 @@ Class | Method | HTTP request | Description
 *SmartFunctionsApi* | [**clustering_result**](docs/SmartFunctionsApi.md#clustering_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/clustering/result/{resultId} | (EXPERIMENTAL) Smart functions - Clustering Result
 *SmartFunctionsApi* | [**forecast**](docs/SmartFunctionsApi.md#forecast) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/{resultId} | (BETA) Smart functions - Forecast
 *SmartFunctionsApi* | [**forecast_result**](docs/SmartFunctionsApi.md#forecast_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/result/{resultId} | (BETA) Smart functions - Forecast Result
+*TabularExportApi* | [**create_dashboard_export_request**](docs/TabularExportApi.md#create_dashboard_export_request) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/export/tabular | (EXPERIMENTAL) Create dashboard tabular export request
 *TabularExportApi* | [**create_tabular_export**](docs/TabularExportApi.md#create_tabular_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/tabular | Create tabular export request
 *TabularExportApi* | [**get_tabular_export**](docs/TabularExportApi.md#get_tabular_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/tabular/{exportId} | Retrieve exported files
 *TestConnectionApi* | [**test_data_source**](docs/TestConnectionApi.md#test_data_source) | **POST** /api/v1/actions/dataSources/{dataSourceId}/test | Test data source connection by data source id
@@ -384,7 +386,6 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**ai_chat**](docs/ActionsApi.md#ai_chat) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/chat | (BETA) Chat with AI
 *ActionsApi* | [**ai_chat_history**](docs/ActionsApi.md#ai_chat_history) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/chatHistory | (BETA) Get Chat History
 *ActionsApi* | [**ai_chat_stream**](docs/ActionsApi.md#ai_chat_stream) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/chatStream | (BETA) Chat with AI
-*ActionsApi* | [**ai_route**](docs/ActionsApi.md#ai_route) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/route | (BETA) Route to supported use cases based on this input query.
 *ActionsApi* | [**ai_search**](docs/ActionsApi.md#ai_search) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/search | (BETA) Semantic Search in Metadata
 *ActionsApi* | [**all_platform_usage**](docs/ActionsApi.md#all_platform_usage) | **GET** /api/v1/actions/collectUsage | Info about the platform usage.
 *ActionsApi* | [**anomaly_detection**](docs/ActionsApi.md#anomaly_detection) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/{resultId} | (EXPERIMENTAL) Smart functions - Anomaly Detection
@@ -399,6 +400,7 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**compute_report**](docs/ActionsApi.md#compute_report) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute | Executes analytical request and returns link to the result
 *ActionsApi* | [**compute_valid_descendants**](docs/ActionsApi.md#compute_valid_descendants) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidDescendants | (BETA) Valid descendants
 *ActionsApi* | [**compute_valid_objects**](docs/ActionsApi.md#compute_valid_objects) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidObjects | Valid objects
+*ActionsApi* | [**create_dashboard_export_request**](docs/ActionsApi.md#create_dashboard_export_request) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/export/tabular | (EXPERIMENTAL) Create dashboard tabular export request
 *ActionsApi* | [**create_pdf_export**](docs/ActionsApi.md#create_pdf_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/visual | Create visual - pdf export request
 *ActionsApi* | [**create_tabular_export**](docs/ActionsApi.md#create_tabular_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/tabular | Create tabular export request
 *ActionsApi* | [**dashboard_permissions**](docs/ActionsApi.md#dashboard_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/permissions | Get Dashboard Permissions
@@ -411,6 +413,7 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**get_dependent_entities_graph_from_entry_points**](docs/ActionsApi.md#get_dependent_entities_graph_from_entry_points) | **POST** /api/v1/actions/workspaces/{workspaceId}/dependentEntitiesGraph | Computes the dependent entities graph from given entry points
 *ActionsApi* | [**get_exported_file**](docs/ActionsApi.md#get_exported_file) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId} | Retrieve exported files
 *ActionsApi* | [**get_metadata**](docs/ActionsApi.md#get_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId}/metadata | Retrieve metadata context
+*ActionsApi* | [**get_notifications**](docs/ActionsApi.md#get_notifications) | **GET** /api/v1/actions/notifications | Get latest notifications.
 *ActionsApi* | [**get_tabular_export**](docs/ActionsApi.md#get_tabular_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/tabular/{exportId} | Retrieve exported files
 *ActionsApi* | [**get_translation_tags**](docs/ActionsApi.md#get_translation_tags) | **GET** /api/v1/actions/workspaces/{workspaceId}/translations | Get translation tags.
 *ActionsApi* | [**inherited_entity_conflicts**](docs/ActionsApi.md#inherited_entity_conflicts) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityConflicts | Finds identifier conflicts in workspace hierarchy.
@@ -423,6 +426,8 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**manage_data_source_permissions**](docs/ActionsApi.md#manage_data_source_permissions) | **POST** /api/v1/actions/dataSources/{dataSourceId}/managePermissions | Manage Permissions for a Data Source
 *ActionsApi* | [**manage_organization_permissions**](docs/ActionsApi.md#manage_organization_permissions) | **POST** /api/v1/actions/organization/managePermissions | Manage Permissions for a Organization
 *ActionsApi* | [**manage_workspace_permissions**](docs/ActionsApi.md#manage_workspace_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/managePermissions | Manage Permissions for a Workspace
+*ActionsApi* | [**mark_as_read_notification**](docs/ActionsApi.md#mark_as_read_notification) | **POST** /api/v1/actions/notifications/{notificationId}/markAsRead | Mark notification as read.
+*ActionsApi* | [**mark_as_read_notification_all**](docs/ActionsApi.md#mark_as_read_notification_all) | **POST** /api/v1/actions/notifications/markAsRead | Mark all notifications as read.
 *ActionsApi* | [**metadata_sync**](docs/ActionsApi.md#metadata_sync) | **POST** /api/v1/actions/workspaces/{workspaceId}/metadataSync | (BETA) Sync Metadata to other services
 *ActionsApi* | [**metadata_sync_organization**](docs/ActionsApi.md#metadata_sync_organization) | **POST** /api/v1/actions/organization/metadataSync | (BETA) Sync organization scope Metadata to other services
 *ActionsApi* | [**overridden_child_entities**](docs/ActionsApi.md#overridden_child_entities) | **GET** /api/v1/actions/workspaces/{workspaceId}/overriddenChildEntities | Finds identifier overrides in workspace hierarchy.
@@ -440,6 +445,8 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**set_translations**](docs/ActionsApi.md#set_translations) | **POST** /api/v1/actions/workspaces/{workspaceId}/translations/set | Set translations for entities.
 *ActionsApi* | [**test_data_source**](docs/ActionsApi.md#test_data_source) | **POST** /api/v1/actions/dataSources/{dataSourceId}/test | Test data source connection by data source id
 *ActionsApi* | [**test_data_source_definition**](docs/ActionsApi.md#test_data_source_definition) | **POST** /api/v1/actions/dataSource/test | Test connection by data source definition
+*ActionsApi* | [**test_existing_notification_channel**](docs/ActionsApi.md#test_existing_notification_channel) | **POST** /api/v1/actions/notificationChannels/{notificationChannelId}/test | Test existing notification channel.
+*ActionsApi* | [**test_notification_channel**](docs/ActionsApi.md#test_notification_channel) | **POST** /api/v1/actions/notificationChannels/test | Test notification channel.
 *ActionsApi* | [**unsubscribe_all_automations**](docs/ActionsApi.md#unsubscribe_all_automations) | **DELETE** /api/v1/actions/organization/automations/unsubscribe | Unsubscribe from all automations in all workspaces
 *ActionsApi* | [**unsubscribe_automation**](docs/ActionsApi.md#unsubscribe_automation) | **DELETE** /api/v1/actions/workspaces/{workspaceId}/automations/{automationId}/unsubscribe | Unsubscribe from an automation
 *ActionsApi* | [**unsubscribe_workspace_automations**](docs/ActionsApi.md#unsubscribe_workspace_automations) | **DELETE** /api/v1/actions/workspaces/{workspaceId}/automations/unsubscribe | Unsubscribe from all automations in the workspace
@@ -888,6 +895,8 @@ Class | Method | HTTP request | Description
  - [AlertAfm](docs/AlertAfm.md)
  - [AlertCondition](docs/AlertCondition.md)
  - [AlertConditionOperand](docs/AlertConditionOperand.md)
+ - [AlertDescription](docs/AlertDescription.md)
+ - [AlertEvaluationRow](docs/AlertEvaluationRow.md)
  - [AnomalyDetectionRequest](docs/AnomalyDetectionRequest.md)
  - [AnomalyDetectionResult](docs/AnomalyDetectionResult.md)
  - [ApiEntitlement](docs/ApiEntitlement.md)
@@ -900,8 +909,8 @@ Class | Method | HTTP request | Description
  - [AttributeFilter](docs/AttributeFilter.md)
  - [AttributeFilterElements](docs/AttributeFilterElements.md)
  - [AttributeFormat](docs/AttributeFormat.md)
- - [AttributeHeaderOut](docs/AttributeHeaderOut.md)
- - [AttributeHeaderOutAttributeHeader](docs/AttributeHeaderOutAttributeHeader.md)
+ - [AttributeHeader](docs/AttributeHeader.md)
+ - [AttributeHeaderAttributeHeader](docs/AttributeHeaderAttributeHeader.md)
  - [AttributeItem](docs/AttributeItem.md)
  - [AttributeNegativeFilter](docs/AttributeNegativeFilter.md)
  - [AttributeNegativeFilterAllOf](docs/AttributeNegativeFilterAllOf.md)
@@ -910,6 +919,9 @@ Class | Method | HTTP request | Description
  - [AttributeResultHeader](docs/AttributeResultHeader.md)
  - [AutomationAlert](docs/AutomationAlert.md)
  - [AutomationAlertCondition](docs/AutomationAlertCondition.md)
+ - [AutomationExternalRecipient](docs/AutomationExternalRecipient.md)
+ - [AutomationNotification](docs/AutomationNotification.md)
+ - [AutomationNotificationAllOf](docs/AutomationNotificationAllOf.md)
  - [AutomationSchedule](docs/AutomationSchedule.md)
  - [AutomationTabularExport](docs/AutomationTabularExport.md)
  - [AutomationVisualExport](docs/AutomationVisualExport.md)
@@ -1063,6 +1075,7 @@ Class | Method | HTTP request | Description
  - [ExecutionSettings](docs/ExecutionSettings.md)
  - [ExportRequest](docs/ExportRequest.md)
  - [ExportResponse](docs/ExportResponse.md)
+ - [ExportResult](docs/ExportResult.md)
  - [File](docs/File.md)
  - [Filter](docs/Filter.md)
  - [FilterBy](docs/FilterBy.md)
@@ -1159,6 +1172,7 @@ Class | Method | HTTP request | Description
  - [JsonApiAutomationIn](docs/JsonApiAutomationIn.md)
  - [JsonApiAutomationInAttributes](docs/JsonApiAutomationInAttributes.md)
  - [JsonApiAutomationInAttributesAlert](docs/JsonApiAutomationInAttributesAlert.md)
+ - [JsonApiAutomationInAttributesExternalRecipientsInner](docs/JsonApiAutomationInAttributesExternalRecipientsInner.md)
  - [JsonApiAutomationInAttributesSchedule](docs/JsonApiAutomationInAttributesSchedule.md)
  - [JsonApiAutomationInAttributesTabularExportsInner](docs/JsonApiAutomationInAttributesTabularExportsInner.md)
  - [JsonApiAutomationInAttributesVisualExportsInner](docs/JsonApiAutomationInAttributesVisualExportsInner.md)
@@ -1337,6 +1351,7 @@ Class | Method | HTTP request | Description
  - [JsonApiIdentityProviderOutList](docs/JsonApiIdentityProviderOutList.md)
  - [JsonApiIdentityProviderOutWithLinks](docs/JsonApiIdentityProviderOutWithLinks.md)
  - [JsonApiIdentityProviderPatch](docs/JsonApiIdentityProviderPatch.md)
+ - [JsonApiIdentityProviderPatchAttributes](docs/JsonApiIdentityProviderPatchAttributes.md)
  - [JsonApiIdentityProviderPatchDocument](docs/JsonApiIdentityProviderPatchDocument.md)
  - [JsonApiJwkIn](docs/JsonApiJwkIn.md)
  - [JsonApiJwkInAttributes](docs/JsonApiJwkInAttributes.md)
@@ -1393,6 +1408,7 @@ Class | Method | HTTP request | Description
  - [JsonApiNotificationChannelInDocument](docs/JsonApiNotificationChannelInDocument.md)
  - [JsonApiNotificationChannelLinkage](docs/JsonApiNotificationChannelLinkage.md)
  - [JsonApiNotificationChannelOut](docs/JsonApiNotificationChannelOut.md)
+ - [JsonApiNotificationChannelOutAttributes](docs/JsonApiNotificationChannelOutAttributes.md)
  - [JsonApiNotificationChannelOutDocument](docs/JsonApiNotificationChannelOutDocument.md)
  - [JsonApiNotificationChannelOutList](docs/JsonApiNotificationChannelOutList.md)
  - [JsonApiNotificationChannelOutWithLinks](docs/JsonApiNotificationChannelOutWithLinks.md)
@@ -1568,16 +1584,23 @@ Class | Method | HTTP request | Description
  - [MeasureDefinition](docs/MeasureDefinition.md)
  - [MeasureExecutionResultHeader](docs/MeasureExecutionResultHeader.md)
  - [MeasureGroupHeaders](docs/MeasureGroupHeaders.md)
- - [MeasureHeaderOut](docs/MeasureHeaderOut.md)
+ - [MeasureHeader](docs/MeasureHeader.md)
  - [MeasureItem](docs/MeasureItem.md)
  - [MeasureResultHeader](docs/MeasureResultHeader.md)
  - [MeasureValueFilter](docs/MeasureValueFilter.md)
  - [Metric](docs/Metric.md)
+ - [MetricRecord](docs/MetricRecord.md)
  - [NegativeAttributeFilter](docs/NegativeAttributeFilter.md)
  - [NegativeAttributeFilterNegativeAttributeFilter](docs/NegativeAttributeFilterNegativeAttributeFilter.md)
  - [Note](docs/Note.md)
  - [Notes](docs/Notes.md)
+ - [Notification](docs/Notification.md)
  - [NotificationChannelDestination](docs/NotificationChannelDestination.md)
+ - [NotificationContent](docs/NotificationContent.md)
+ - [NotificationData](docs/NotificationData.md)
+ - [Notifications](docs/Notifications.md)
+ - [NotificationsMeta](docs/NotificationsMeta.md)
+ - [NotificationsMetaTotal](docs/NotificationsMetaTotal.md)
  - [ObjectLinks](docs/ObjectLinks.md)
  - [ObjectLinksContainer](docs/ObjectLinksContainer.md)
  - [OrganizationPermissionAssignment](docs/OrganizationPermissionAssignment.md)
@@ -1621,7 +1644,6 @@ Class | Method | HTTP request | Description
  - [ResultDimension](docs/ResultDimension.md)
  - [ResultDimensionHeader](docs/ResultDimensionHeader.md)
  - [ResultSpec](docs/ResultSpec.md)
- - [RouteRequest](docs/RouteRequest.md)
  - [RouteResult](docs/RouteResult.md)
  - [RsaSpecification](docs/RsaSpecification.md)
  - [RulePermission](docs/RulePermission.md)
@@ -1650,12 +1672,16 @@ Class | Method | HTTP request | Description
  - [SqlColumn](docs/SqlColumn.md)
  - [SqlQuery](docs/SqlQuery.md)
  - [SqlQueryAllOf](docs/SqlQueryAllOf.md)
+ - [Suggestion](docs/Suggestion.md)
  - [Table](docs/Table.md)
  - [TableAllOf](docs/TableAllOf.md)
  - [TableOverride](docs/TableOverride.md)
  - [TableWarning](docs/TableWarning.md)
  - [TabularExportRequest](docs/TabularExportRequest.md)
  - [TestDefinitionRequest](docs/TestDefinitionRequest.md)
+ - [TestDestinationRequest](docs/TestDestinationRequest.md)
+ - [TestNotification](docs/TestNotification.md)
+ - [TestNotificationAllOf](docs/TestNotificationAllOf.md)
  - [TestQueryDuration](docs/TestQueryDuration.md)
  - [TestRequest](docs/TestRequest.md)
  - [TestResponse](docs/TestResponse.md)
@@ -1683,6 +1709,10 @@ Class | Method | HTTP request | Description
  - [VisualExportRequest](docs/VisualExportRequest.md)
  - [Webhook](docs/Webhook.md)
  - [WebhookAllOf](docs/WebhookAllOf.md)
+ - [WebhookAutomationInfo](docs/WebhookAutomationInfo.md)
+ - [WebhookMessage](docs/WebhookMessage.md)
+ - [WebhookMessageData](docs/WebhookMessageData.md)
+ - [WebhookRecipient](docs/WebhookRecipient.md)
  - [WorkspaceDataSource](docs/WorkspaceDataSource.md)
  - [WorkspaceIdentifier](docs/WorkspaceIdentifier.md)
  - [WorkspacePermissionAssignment](docs/WorkspacePermissionAssignment.md)

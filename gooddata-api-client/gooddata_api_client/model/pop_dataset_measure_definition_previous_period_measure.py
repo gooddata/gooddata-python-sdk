@@ -115,7 +115,7 @@ class PopDatasetMeasureDefinitionPreviousPeriodMeasure(ModelNormal):
         """PopDatasetMeasureDefinitionPreviousPeriodMeasure - a model defined in OpenAPI
 
         Args:
-            date_datasets ([PopDataset]):
+            date_datasets ([PopDataset]): Specification of which date data sets to use for determining the period to calculate the previous period for.
             measure_identifier (AfmLocalIdentifier):
 
         Keyword Args:
@@ -206,7 +206,7 @@ class PopDatasetMeasureDefinitionPreviousPeriodMeasure(ModelNormal):
         """PopDatasetMeasureDefinitionPreviousPeriodMeasure - a model defined in OpenAPI
 
         Args:
-            date_datasets ([PopDataset]):
+            date_datasets ([PopDataset]): Specification of which date data sets to use for determining the period to calculate the previous period for.
             measure_identifier (AfmLocalIdentifier):
 
         Keyword Args:

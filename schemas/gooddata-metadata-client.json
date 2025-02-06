@@ -99,6 +99,7 @@
         "type": "object"
       },
       "AfmIdentifier": {
+        "description": "Reference to the attribute label to which the filter should be applied.",
         "oneOf": [
           {
             "$ref": "#/components/schemas/AfmObjectIdentifier"
@@ -162,6 +163,7 @@
         "type": "object"
       },
       "AfmObjectIdentifierAttribute": {
+        "description": "Reference to the date attribute to use.",
         "properties": {
           "identifier": {
             "properties": {
@@ -190,6 +192,7 @@
         "type": "object"
       },
       "AfmObjectIdentifierCore": {
+        "description": "Reference to the metric, fact or attribute object to use for the metric.",
         "properties": {
           "identifier": {
             "properties": {
@@ -221,6 +224,7 @@
         "type": "object"
       },
       "AfmObjectIdentifierDataset": {
+        "description": "Reference to the date dataset to which the filter should be applied.",
         "properties": {
           "identifier": {
             "properties": {
@@ -413,7 +417,7 @@
         "type": "object"
       },
       "ArithmeticMeasureDefinition": {
-        "description": "Metric representing arithmetics between metrics.",
+        "description": "Metric representing arithmetics between other metrics.",
         "properties": {
           "arithmeticMeasure": {
             "properties": {
@@ -524,12 +528,14 @@
             "$ref": "#/components/schemas/AfmObjectIdentifierLabel"
           },
           "localIdentifier": {
+            "description": "Local identifier of the attribute. This can be used to reference the attribute in other parts of the execution definition.",
+            "example": "attribute_1",
             "pattern": "^[.a-zA-Z0-9_-]+$",
             "type": "string"
           },
           "showAllValues": {
             "default": false,
-            "description": "Specifies that the label should be outer-joined.",
+            "description": "Indicates whether to show all values of given attribute even if the data bound to those values is not available.",
             "type": "boolean"
           }
         },
@@ -570,6 +576,19 @@
         "required": [
           "condition",
           "execution"
+        ],
+        "type": "object"
+      },
+      "AutomationExternalRecipient": {
+        "properties": {
+          "email": {
+            "description": "E-mail address to send notifications from.",
+            "format": "email",
+            "type": "string"
+          }
+        },
+        "required": [
+          "email"
         ],
         "type": "object"
       },
@@ -725,6 +744,13 @@
               "applyOnResult": {
                 "type": "boolean"
               },
+              "dimensionality": {
+                "description": "References to the attributes to be used when filtering.",
+                "items": {
+                  "$ref": "#/components/schemas/AfmIdentifier"
+                },
+                "type": "array"
+              },
               "localIdentifier": {
                 "type": "string"
               },
@@ -744,6 +770,7 @@
                 "type": "string"
               },
               "treatNullValuesAs": {
+                "description": "A value that will be substituted for null values in the metric for the comparisons.",
                 "example": 0,
                 "type": "number"
               },
@@ -1480,6 +1507,14 @@
           "exportDefinitions": {
             "items": {
               "$ref": "#/components/schemas/DeclarativeExportDefinitionIdentifier"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "externalRecipients": {
+            "description": "External recipients of the automation action results.",
+            "items": {
+              "$ref": "#/components/schemas/AutomationExternalRecipient"
             },
             "type": "array",
             "uniqueItems": true
@@ -2407,12 +2442,6 @@
             "maxLength": 255,
             "type": "string"
           },
-          "oauthIssuerId": {
-            "description": "Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.",
-            "example": "myOidcProvider",
-            "maxLength": 255,
-            "type": "string"
-          },
           "oauthIssuerLocation": {
             "description": "The location of your OIDC provider. This field is mandatory for OIDC IdP.",
             "maxLength": 255,
@@ -2425,7 +2454,8 @@
           }
         },
         "required": [
-          "id"
+          "id",
+          "identifiers"
         ],
         "type": "object"
       },
@@ -2637,15 +2667,26 @@
         "properties": {
           "allowedRecipients": {
             "default": "INTERNAL",
-            "description": "Allowed recipients of notifications from this channel.\nCREATOR - only the creator\nINTERNAL - all users within the organization\n",
+            "description": "Allowed recipients of notifications from this channel.\nCREATOR - only the creator\nINTERNAL - all users within the organization\nEXTERNAL - all recipients including those outside the organization\n",
             "enum": [
               "CREATOR",
-              "INTERNAL"
+              "INTERNAL",
+              "EXTERNAL"
             ],
             "type": "string"
           },
           "customDashboardUrl": {
             "description": "Custom dashboard url that is going to be used in the notification. If not specified it is going to be deduced based on the context. Allowed placeholders are {workspaceId}, {dashboardId}.",
+            "type": "string"
+          },
+          "dashboardLinkVisibility": {
+            "default": "INTERNAL_ONLY",
+            "description": "Dashboard link visibility in notifications.\nHIDDEN - the link will not be included\nINTERNAL_ONLY - only internal users will see the link\nALL - all users will see the link\n",
+            "enum": [
+              "HIDDEN",
+              "INTERNAL_ONLY",
+              "ALL"
+            ],
             "type": "string"
           },
           "description": {
@@ -3136,7 +3177,9 @@
               "OPENAI_CONFIG",
               "ENABLE_FILE_ANALYTICS",
               "ALERT",
-              "SEPARATORS"
+              "SEPARATORS",
+              "DATE_FILTER_CONFIG",
+              "JIT_PROVISIONING"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -4591,6 +4634,7 @@
                 "type": "boolean"
               },
               "filter": {
+                "description": "MAQL query representing the filter.",
                 "type": "string"
               },
               "localIdentifier": {
@@ -4614,6 +4658,7 @@
           "inline": {
             "properties": {
               "maql": {
+                "description": "MAQL query defining the metric.",
                 "type": "string"
               }
             },
@@ -6030,6 +6075,23 @@
                 "description": "Additional details to be included in the automated message.",
                 "maxLength": 10000
               },
+              "externalRecipients": {
+                "description": "External recipients of the automation action results.",
+                "items": {
+                  "properties": {
+                    "email": {
+                      "description": "E-mail address to send notifications from.",
+                      "format": "email",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "email"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
               "metadata": {
                 "description": "Additional information for the automation.",
                 "maxLength": 15000,
@@ -6259,6 +6321,23 @@
               "details": {
                 "description": "Additional details to be included in the automated message.",
                 "maxLength": 10000
+              },
+              "externalRecipients": {
+                "description": "External recipients of the automation action results.",
+                "items": {
+                  "properties": {
+                    "email": {
+                      "description": "E-mail address to send notifications from.",
+                      "format": "email",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "email"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
               },
               "metadata": {
                 "description": "Additional information for the automation.",
@@ -6593,6 +6672,23 @@
               "details": {
                 "description": "Additional details to be included in the automated message.",
                 "maxLength": 10000
+              },
+              "externalRecipients": {
+                "description": "External recipients of the automation action results.",
+                "items": {
+                  "properties": {
+                    "email": {
+                      "description": "E-mail address to send notifications from.",
+                      "format": "email",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "email"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
               },
               "metadata": {
                 "description": "Additional information for the automation.",
@@ -10725,12 +10821,6 @@
                 "maxLength": 255,
                 "type": "string"
               },
-              "oauthIssuerId": {
-                "description": "Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.",
-                "example": "myOidcProvider",
-                "maxLength": 255,
-                "type": "string"
-              },
               "oauthIssuerLocation": {
                 "description": "The location of your OIDC provider. This field is mandatory for OIDC IdP.",
                 "maxLength": 255,
@@ -10742,6 +10832,9 @@
                 "type": "string"
               }
             },
+            "required": [
+              "identifiers"
+            ],
             "type": "object"
           },
           "id": {
@@ -10760,6 +10853,7 @@
           }
         },
         "required": [
+          "attributes",
           "id",
           "type"
         ],
@@ -10804,18 +10898,15 @@
                 "maxLength": 255,
                 "type": "string"
               },
-              "oauthIssuerId": {
-                "description": "Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.",
-                "example": "myOidcProvider",
-                "maxLength": 255,
-                "type": "string"
-              },
               "oauthIssuerLocation": {
                 "description": "The location of your OIDC provider. This field is mandatory for OIDC IdP.",
                 "maxLength": 255,
                 "type": "string"
               }
             },
+            "required": [
+              "identifiers"
+            ],
             "type": "object"
           },
           "id": {
@@ -10834,6 +10925,7 @@
           }
         },
         "required": [
+          "attributes",
           "id",
           "type"
         ],
@@ -10923,12 +11015,6 @@
                 "maxLength": 255,
                 "type": "string"
               },
-              "oauthIssuerId": {
-                "description": "Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.",
-                "example": "myOidcProvider",
-                "maxLength": 255,
-                "type": "string"
-              },
               "oauthIssuerLocation": {
                 "description": "The location of your OIDC provider. This field is mandatory for OIDC IdP.",
                 "maxLength": 255,
@@ -10958,6 +11044,7 @@
           }
         },
         "required": [
+          "attributes",
           "id",
           "type"
         ],
@@ -11416,7 +11503,6 @@
               "llmModel": {
                 "description": "LLM Model. We provide a default model for each provider, but you can override it here.",
                 "maxLength": 255,
-                "nullable": true,
                 "type": "string"
               },
               "llmOrganization": {
@@ -11430,7 +11516,6 @@
                 "enum": [
                   "OPENAI"
                 ],
-                "example": "OPENAI",
                 "type": "string"
               },
               "title": {
@@ -11442,10 +11527,21 @@
                 "description": "The token to use to connect to the LLM provider.",
                 "maxLength": 10000,
                 "type": "string"
+              },
+              "workspaceIds": {
+                "description": "List of workspace IDs for which LLM endpoint is valid. If empty, it is valid for all workspaces.",
+                "example": [
+                  "demo",
+                  "trial"
+                ],
+                "items": {
+                  "maxLength": 255,
+                  "type": "string"
+                },
+                "type": "array"
               }
             },
             "required": [
-              "provider",
               "title",
               "token"
             ],
@@ -11504,7 +11600,6 @@
               "llmModel": {
                 "description": "LLM Model. We provide a default model for each provider, but you can override it here.",
                 "maxLength": 255,
-                "nullable": true,
                 "type": "string"
               },
               "llmOrganization": {
@@ -11518,17 +11613,27 @@
                 "enum": [
                   "OPENAI"
                 ],
-                "example": "OPENAI",
                 "type": "string"
               },
               "title": {
                 "description": "User-facing title of the LLM Provider.",
                 "maxLength": 255,
                 "type": "string"
+              },
+              "workspaceIds": {
+                "description": "List of workspace IDs for which LLM endpoint is valid. If empty, it is valid for all workspaces.",
+                "example": [
+                  "demo",
+                  "trial"
+                ],
+                "items": {
+                  "maxLength": 255,
+                  "type": "string"
+                },
+                "type": "array"
               }
             },
             "required": [
-              "provider",
               "title"
             ],
             "type": "object"
@@ -11626,7 +11731,6 @@
               "llmModel": {
                 "description": "LLM Model. We provide a default model for each provider, but you can override it here.",
                 "maxLength": 255,
-                "nullable": true,
                 "type": "string"
               },
               "llmOrganization": {
@@ -11640,7 +11744,6 @@
                 "enum": [
                   "OPENAI"
                 ],
-                "example": "OPENAI",
                 "type": "string"
               },
               "title": {
@@ -11652,6 +11755,18 @@
                 "description": "The token to use to connect to the LLM provider.",
                 "maxLength": 10000,
                 "type": "string"
+              },
+              "workspaceIds": {
+                "description": "List of workspace IDs for which LLM endpoint is valid. If empty, it is valid for all workspaces.",
+                "example": [
+                  "demo",
+                  "trial"
+                ],
+                "items": {
+                  "maxLength": 255,
+                  "type": "string"
+                },
+                "type": "array"
               }
             },
             "type": "object"
@@ -12219,15 +12334,25 @@
           "attributes": {
             "properties": {
               "allowedRecipients": {
-                "description": "Allowed recipients of notifications from this channel.\nCREATOR - only the creator\nINTERNAL - all users within the organization\n",
+                "description": "Allowed recipients of notifications from this channel.\nCREATOR - only the creator\nINTERNAL - all users within the organization\nEXTERNAL - all recipients including those outside the organization\n",
                 "enum": [
                   "CREATOR",
-                  "INTERNAL"
+                  "INTERNAL",
+                  "EXTERNAL"
                 ],
                 "type": "string"
               },
               "customDashboardUrl": {
                 "description": "Custom dashboard url that is going to be used in the notification. If not specified it is going to be deduced based on the context. Allowed placeholders are {workspaceId}, {dashboardId}.",
+                "type": "string"
+              },
+              "dashboardLinkVisibility": {
+                "description": "Dashboard link visibility in notifications.\nHIDDEN - the link will not be included\nINTERNAL_ONLY - only internal users will see the link\nALL - all users will see the link\n",
+                "enum": [
+                  "HIDDEN",
+                  "INTERNAL_ONLY",
+                  "ALL"
+                ],
                 "type": "string"
               },
               "description": {
@@ -12251,16 +12376,6 @@
                     "$ref": "#/components/schemas/Webhook"
                   }
                 ]
-              },
-              "destinationType": {
-                "enum": [
-                  "WEBHOOK",
-                  "SMTP",
-                  "DEFAULT_SMTP",
-                  "IN_PLATFORM"
-                ],
-                "nullable": true,
-                "type": "string"
               },
               "inPlatformNotification": {
                 "description": "In-platform notifications configuration. No effect if the destination type is IN_PLATFORM.\nDISABLED - in-platform notifications are not sent\nENABLED - in-platform notifications are sent in addition to the regular notifications\n",
@@ -12335,15 +12450,25 @@
           "attributes": {
             "properties": {
               "allowedRecipients": {
-                "description": "Allowed recipients of notifications from this channel.\nCREATOR - only the creator\nINTERNAL - all users within the organization\n",
+                "description": "Allowed recipients of notifications from this channel.\nCREATOR - only the creator\nINTERNAL - all users within the organization\nEXTERNAL - all recipients including those outside the organization\n",
                 "enum": [
                   "CREATOR",
-                  "INTERNAL"
+                  "INTERNAL",
+                  "EXTERNAL"
                 ],
                 "type": "string"
               },
               "customDashboardUrl": {
                 "description": "Custom dashboard url that is going to be used in the notification. If not specified it is going to be deduced based on the context. Allowed placeholders are {workspaceId}, {dashboardId}.",
+                "type": "string"
+              },
+              "dashboardLinkVisibility": {
+                "description": "Dashboard link visibility in notifications.\nHIDDEN - the link will not be included\nINTERNAL_ONLY - only internal users will see the link\nALL - all users will see the link\n",
+                "enum": [
+                  "HIDDEN",
+                  "INTERNAL_ONLY",
+                  "ALL"
+                ],
                 "type": "string"
               },
               "description": {
@@ -12472,15 +12597,25 @@
           "attributes": {
             "properties": {
               "allowedRecipients": {
-                "description": "Allowed recipients of notifications from this channel.\nCREATOR - only the creator\nINTERNAL - all users within the organization\n",
+                "description": "Allowed recipients of notifications from this channel.\nCREATOR - only the creator\nINTERNAL - all users within the organization\nEXTERNAL - all recipients including those outside the organization\n",
                 "enum": [
                   "CREATOR",
-                  "INTERNAL"
+                  "INTERNAL",
+                  "EXTERNAL"
                 ],
                 "type": "string"
               },
               "customDashboardUrl": {
                 "description": "Custom dashboard url that is going to be used in the notification. If not specified it is going to be deduced based on the context. Allowed placeholders are {workspaceId}, {dashboardId}.",
+                "type": "string"
+              },
+              "dashboardLinkVisibility": {
+                "description": "Dashboard link visibility in notifications.\nHIDDEN - the link will not be included\nINTERNAL_ONLY - only internal users will see the link\nALL - all users will see the link\n",
+                "enum": [
+                  "HIDDEN",
+                  "INTERNAL_ONLY",
+                  "ALL"
+                ],
                 "type": "string"
               },
               "description": {
@@ -12504,16 +12639,6 @@
                     "$ref": "#/components/schemas/Webhook"
                   }
                 ]
-              },
-              "destinationType": {
-                "enum": [
-                  "WEBHOOK",
-                  "SMTP",
-                  "DEFAULT_SMTP",
-                  "IN_PLATFORM"
-                ],
-                "nullable": true,
-                "type": "string"
               },
               "inPlatformNotification": {
                 "description": "In-platform notifications configuration. No effect if the destination type is IN_PLATFORM.\nDISABLED - in-platform notifications are not sent\nENABLED - in-platform notifications are sent in addition to the regular notifications\n",
@@ -12569,15 +12694,25 @@
           "attributes": {
             "properties": {
               "allowedRecipients": {
-                "description": "Allowed recipients of notifications from this channel.\nCREATOR - only the creator\nINTERNAL - all users within the organization\n",
+                "description": "Allowed recipients of notifications from this channel.\nCREATOR - only the creator\nINTERNAL - all users within the organization\nEXTERNAL - all recipients including those outside the organization\n",
                 "enum": [
                   "CREATOR",
-                  "INTERNAL"
+                  "INTERNAL",
+                  "EXTERNAL"
                 ],
                 "type": "string"
               },
               "customDashboardUrl": {
                 "description": "Custom dashboard url that is going to be used in the notification. If not specified it is going to be deduced based on the context. Allowed placeholders are {workspaceId}, {dashboardId}.",
+                "type": "string"
+              },
+              "dashboardLinkVisibility": {
+                "description": "Dashboard link visibility in notifications.\nHIDDEN - the link will not be included\nINTERNAL_ONLY - only internal users will see the link\nALL - all users will see the link\n",
+                "enum": [
+                  "HIDDEN",
+                  "INTERNAL_ONLY",
+                  "ALL"
+                ],
                 "type": "string"
               },
               "description": {
@@ -12601,16 +12736,6 @@
                     "$ref": "#/components/schemas/Webhook"
                   }
                 ]
-              },
-              "destinationType": {
-                "enum": [
-                  "WEBHOOK",
-                  "SMTP",
-                  "DEFAULT_SMTP",
-                  "IN_PLATFORM"
-                ],
-                "nullable": true,
-                "type": "string"
               },
               "inPlatformNotification": {
                 "description": "In-platform notifications configuration. No effect if the destination type is IN_PLATFORM.\nDISABLED - in-platform notifications are not sent\nENABLED - in-platform notifications are sent in addition to the regular notifications\n",
@@ -13093,7 +13218,9 @@
                   "OPENAI_CONFIG",
                   "ENABLE_FILE_ANALYTICS",
                   "ALERT",
-                  "SEPARATORS"
+                  "SEPARATORS",
+                  "DATE_FILTER_CONFIG",
+                  "JIT_PROVISIONING"
                 ],
                 "type": "string"
               }
@@ -13159,7 +13286,9 @@
                   "OPENAI_CONFIG",
                   "ENABLE_FILE_ANALYTICS",
                   "ALERT",
-                  "SEPARATORS"
+                  "SEPARATORS",
+                  "DATE_FILTER_CONFIG",
+                  "JIT_PROVISIONING"
                 ],
                 "type": "string"
               }
@@ -13265,7 +13394,9 @@
                   "OPENAI_CONFIG",
                   "ENABLE_FILE_ANALYTICS",
                   "ALERT",
-                  "SEPARATORS"
+                  "SEPARATORS",
+                  "DATE_FILTER_CONFIG",
+                  "JIT_PROVISIONING"
                 ],
                 "type": "string"
               }
@@ -14737,7 +14868,9 @@
                   "OPENAI_CONFIG",
                   "ENABLE_FILE_ANALYTICS",
                   "ALERT",
-                  "SEPARATORS"
+                  "SEPARATORS",
+                  "DATE_FILTER_CONFIG",
+                  "JIT_PROVISIONING"
                 ],
                 "type": "string"
               }
@@ -14803,7 +14936,9 @@
                   "OPENAI_CONFIG",
                   "ENABLE_FILE_ANALYTICS",
                   "ALERT",
-                  "SEPARATORS"
+                  "SEPARATORS",
+                  "DATE_FILTER_CONFIG",
+                  "JIT_PROVISIONING"
                 ],
                 "type": "string"
               }
@@ -16546,7 +16681,9 @@
                   "OPENAI_CONFIG",
                   "ENABLE_FILE_ANALYTICS",
                   "ALERT",
-                  "SEPARATORS"
+                  "SEPARATORS",
+                  "DATE_FILTER_CONFIG",
+                  "JIT_PROVISIONING"
                 ],
                 "type": "string"
               }
@@ -16612,7 +16749,9 @@
                   "OPENAI_CONFIG",
                   "ENABLE_FILE_ANALYTICS",
                   "ALERT",
-                  "SEPARATORS"
+                  "SEPARATORS",
+                  "DATE_FILTER_CONFIG",
+                  "JIT_PROVISIONING"
                 ],
                 "type": "string"
               }
@@ -16744,7 +16883,9 @@
                   "OPENAI_CONFIG",
                   "ENABLE_FILE_ANALYTICS",
                   "ALERT",
-                  "SEPARATORS"
+                  "SEPARATORS",
+                  "DATE_FILTER_CONFIG",
+                  "JIT_PROVISIONING"
                 ],
                 "type": "string"
               }
@@ -16810,7 +16951,9 @@
                   "OPENAI_CONFIG",
                   "ENABLE_FILE_ANALYTICS",
                   "ALERT",
-                  "SEPARATORS"
+                  "SEPARATORS",
+                  "DATE_FILTER_CONFIG",
+                  "JIT_PROVISIONING"
                 ],
                 "type": "string"
               }
@@ -16965,11 +17108,13 @@
         "type": "object"
       },
       "MeasureItem": {
+        "description": "Metric is a quantity that is calculated from the data.",
         "properties": {
           "definition": {
             "$ref": "#/components/schemas/MeasureDefinition"
           },
           "localIdentifier": {
+            "description": "Local identifier of the metric. This can be used to reference the metric in other parts of the execution definition.",
             "example": "metric_1",
             "pattern": "^[.a-zA-Z0-9_-]+$",
             "type": "string"
@@ -17389,11 +17534,14 @@
         "type": "object"
       },
       "PopDataset": {
+        "description": "Combination of the date data set to use and how many periods ago to calculate the previous period for.",
         "properties": {
           "dataset": {
             "$ref": "#/components/schemas/AfmObjectIdentifierDataset"
           },
           "periodsAgo": {
+            "description": "Number of periods ago to calculate the previous period for.",
+            "example": 1,
             "format": "int32",
             "type": "integer"
           }
@@ -17410,6 +17558,7 @@
           "previousPeriodMeasure": {
             "properties": {
               "dateDatasets": {
+                "description": "Specification of which date data sets to use for determining the period to calculate the previous period for.",
                 "items": {
                   "$ref": "#/components/schemas/PopDataset"
                 },
@@ -17432,11 +17581,14 @@
         "type": "object"
       },
       "PopDate": {
+        "description": "Combination of the date attribute to use and how many periods ago to calculate the PoP for.",
         "properties": {
           "attribute": {
             "$ref": "#/components/schemas/AfmObjectIdentifierAttribute"
           },
           "periodsAgo": {
+            "description": "Number of periods ago to calculate the previous period for.",
+            "example": 1,
             "format": "int32",
             "type": "integer"
           }
@@ -17453,6 +17605,7 @@
           "overPeriodMeasure": {
             "properties": {
               "dateAttributes": {
+                "description": "Attributes to use for determining the period to calculate the PoP for.",
                 "items": {
                   "$ref": "#/components/schemas/PopDate"
                 },
@@ -17550,6 +17703,13 @@
               "applyOnResult": {
                 "type": "boolean"
               },
+              "dimensionality": {
+                "description": "References to the attributes to be used when filtering.",
+                "items": {
+                  "$ref": "#/components/schemas/AfmIdentifier"
+                },
+                "type": "array"
+              },
               "from": {
                 "example": 100,
                 "type": "number"
@@ -17573,6 +17733,7 @@
                 "type": "number"
               },
               "treatNullValuesAs": {
+                "description": "A value that will be substituted for null values in the metric for the comparisons.",
                 "example": 0,
                 "type": "number"
               }
@@ -17610,16 +17771,25 @@
               "applyOnResult": {
                 "type": "boolean"
               },
+              "dimensionality": {
+                "description": "References to the attributes to be used when filtering.",
+                "items": {
+                  "$ref": "#/components/schemas/AfmIdentifier"
+                },
+                "type": "array"
+              },
               "localIdentifier": {
                 "type": "string"
               },
               "measures": {
+                "description": "References to the metrics to be used when filtering.",
                 "items": {
                   "$ref": "#/components/schemas/AfmIdentifier"
                 },
                 "type": "array"
               },
               "operator": {
+                "description": "The type of ranking to use, TOP or BOTTOM.",
                 "enum": [
                   "TOP",
                   "BOTTOM"
@@ -17627,6 +17797,7 @@
                 "type": "string"
               },
               "value": {
+                "description": "Number of top/bottom values to filter.",
                 "example": 5,
                 "format": "int32",
                 "type": "integer"
@@ -17843,7 +18014,9 @@
               "OPENAI_CONFIG",
               "ENABLE_FILE_ANALYTICS",
               "ALERT",
-              "SEPARATORS"
+              "SEPARATORS",
+              "DATE_FILTER_CONFIG",
+              "JIT_PROVISIONING"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -17979,6 +18152,7 @@
         "type": "object"
       },
       "SimpleMeasureDefinition": {
+        "description": "Metric defined by referencing a MAQL metric or an LDM fact object with aggregation.",
         "properties": {
           "measure": {
             "properties": {
@@ -17999,7 +18173,7 @@
               },
               "computeRatio": {
                 "default": false,
-                "description": "If true compute the percentage of given metric values (broken down by AFM attributes) to the total (not broken down).",
+                "description": "If true, compute the percentage of given metric values (broken down by AFM attributes) to the total (not broken down).",
                 "example": true,
                 "type": "boolean"
               },
@@ -18203,7 +18377,7 @@
             "type": "string"
           },
           "visualizationObjectCustomFilters": {
-            "description": "Optional custom filters (as array of IFilter objects defined in UI SDK) to be applied when visualizationObject is given. (HTML/PDF only)",
+            "description": "Optional custom filters (as array of IFilter objects defined in UI SDK) to be applied when visualizationObject is given.",
             "example": "[{\"negativeAttributeFilter\":{\"displayForm\":{\"identifier\":{\"id\":\"products.category\",\"type\":\"label\"}},\"notIn\":{\"values\":[\"Books\"]}}}]",
             "items": {
               "type": "object"
@@ -25191,7 +25365,7 @@
           },
           {
             "description": "Include Meta objects.",
-            "example": "metaInclude=permissions,config,hierarchy,dataModelDatasets,page,all",
+            "example": "metaInclude=config,permissions,hierarchy,dataModelDatasets,page,all",
             "explode": false,
             "in": "query",
             "name": "metaInclude",
@@ -25200,8 +25374,8 @@
               "description": "Included meta objects",
               "items": {
                 "enum": [
-                  "permissions",
                   "config",
+                  "permissions",
                   "hierarchy",
                   "dataModelDatasets",
                   "page",
@@ -25267,7 +25441,7 @@
           },
           {
             "description": "Include Meta objects.",
-            "example": "metaInclude=permissions,config,hierarchy,dataModelDatasets,all",
+            "example": "metaInclude=config,permissions,hierarchy,dataModelDatasets,all",
             "explode": false,
             "in": "query",
             "name": "metaInclude",
@@ -25276,8 +25450,8 @@
               "description": "Included meta objects",
               "items": {
                 "enum": [
-                  "permissions",
                   "config",
+                  "permissions",
                   "hierarchy",
                   "dataModelDatasets",
                   "all",
@@ -25401,7 +25575,7 @@
           },
           {
             "description": "Include Meta objects.",
-            "example": "metaInclude=permissions,config,hierarchy,dataModelDatasets,all",
+            "example": "metaInclude=config,permissions,hierarchy,dataModelDatasets,all",
             "explode": false,
             "in": "query",
             "name": "metaInclude",
@@ -25410,8 +25584,8 @@
               "description": "Included meta objects",
               "items": {
                 "enum": [
-                  "permissions",
                   "config",
+                  "permissions",
                   "hierarchy",
                   "dataModelDatasets",
                   "all",

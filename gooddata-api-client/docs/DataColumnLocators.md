@@ -1,5 +1,6 @@
 # DataColumnLocators
 
+Data column locators for the values.
 
 ## Properties
 Name | Type | Description | Notes
