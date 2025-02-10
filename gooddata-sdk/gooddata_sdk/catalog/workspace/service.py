@@ -541,6 +541,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
             provision_workspace: Should new workspace for the target language be provisioned?
                                         Including setting of corresponding locales.
             store_layouts: Store declarative layouts of all workspaces to disk
+            place_in_hierarchy (bool): Flag if localized workspace should be placed in the hierarchy.
 
         Returns:
             None
