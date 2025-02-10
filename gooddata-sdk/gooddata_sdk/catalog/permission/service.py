@@ -120,7 +120,7 @@ class CatalogPermissionService(CatalogServiceBase):
             None
 
         Returns:
-            [CatalogDeclarativeOrganizationPermission]:
+            list[CatalogDeclarativeOrganizationPermission]:
                 List of all declarative organization permissions.
         """
 
@@ -136,8 +136,8 @@ class CatalogPermissionService(CatalogServiceBase):
         """Put a list of all declarative organization permissions.
 
         Args:
-            org_permissions([CatalogDeclarativeOrganizationPermission])
-                list of declarative organization permissions
+            org_permissions (list[CatalogDeclarativeOrganizationPermission]):
+                List of declarative organization permissions.
 
         Returns:
             None

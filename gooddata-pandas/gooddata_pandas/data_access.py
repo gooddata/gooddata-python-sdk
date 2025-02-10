@@ -358,7 +358,7 @@ def _extract_from_attributes_and_maybe_metrics(
 
     Args:
         response (ExecutionResponse): The execution response to extract data from.
-        catalog (CatalogWorkspaceContent): The catalog workspace content.
+        attributes (list[CatalogAttribute]): The catalog of attributes.
         cols (list[str]): A list of column names.
         col_to_attr_idx (dict[str, int]): A mapping of pandas column names to attribute dimension indices.
         col_to_metric_idx (dict[str, int]): A mapping of pandas column names to metric dimension indices.
