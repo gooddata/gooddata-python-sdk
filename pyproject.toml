@@ -21,6 +21,7 @@ lint.select = [
     "SIM",
     "UP",
     "W", # pycodestyle warnings
+    "D417", # undocumented-param
 ]
 lint.ignore = [
     # rules recommended to be ignored when using ruff format
@@ -44,6 +45,8 @@ target-version = "py39"
 [tool.ruff.format]
 exclude = ['(gooddata-api-client|.*\.snapshot\..*)']
 
+[tool.ruff.lint.pydocstyle]
+convention = "google"
 
 [tool.tbump]
 # Uncomment this if your project is hosted on GitHub:
