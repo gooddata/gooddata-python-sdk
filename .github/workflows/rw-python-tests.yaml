@@ -20,7 +20,7 @@ jobs:
           make test-ci
         env:
           TEST_ENVS: ${{ matrix.python_version }}
-     - name: Upload coverage to Codecov
+      - name: Upload coverage to Codecov
         if: ${{ matrix.python_version == 'py313' }}
         uses: codecov/codecov-action@v3
         with:
