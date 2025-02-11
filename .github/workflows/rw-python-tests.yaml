@@ -20,11 +20,11 @@ jobs:
           make test-ci
         env:
           TEST_ENVS: ${{ matrix.python_version }}
-#     - name: Upload coverage to Codecov
-#        if: ${{ matrix.python_version == 'py313' }}
-#        uses: codecov/codecov-action@v3
-#        with:
-#          files: ./gooddata-sdk/coverage.xml,./gooddata-pandas/coverage.xml,./gooddata-fdw/coverage.xml,./gooddata-flight-server/coverage.xml,./gooddata-flexconnect/coverage.xml
+      - name: Upload coverage to Codecov
+        if: ${{ matrix.python_version == 'py313' }}
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./gooddata-sdk/coverage.xml,./gooddata-pandas/coverage.xml,./gooddata-fdw/coverage.xml,./gooddata-flight-server/coverage.xml,./gooddata-flexconnect/coverage.xml
   lint-and-format-check:
     runs-on: ubuntu-latest
     if: ${{inputs.changed-python-modules == 'true'}}
