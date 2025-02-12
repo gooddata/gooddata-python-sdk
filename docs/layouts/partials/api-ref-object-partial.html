@@ -8,19 +8,19 @@
 
 {{ $parenthesisArgsString := partial "api-ref-function-parenthesis.html" $objData}}
 {{ if not $objData.is_property }}
-<p><code>
-    {{ (index (last 1 $path) 0) }}({{- $parenthesisArgsString -}}) -> {{ partial "api-ref-link-partial.html" (dict "paragraph" $objData.signature.return_annotation "context" $context) }}
-</code></p>
+<p><code>{{ (index (last 1 $path) 0) }}({{- $parenthesisArgsString -}}) -> {{ partial "api-ref-link-partial.html" (dict
+    "paragraph" $objData.signature.return_annotation "context" $context) }}</code></p>
 {{ else }}
-    <p><code>
-    {{ (index (last 1 $path) 0) }} -> {{ partial "api-ref-link-partial.html" (dict "paragraph" $objData.signature.return_annotation "context" $context) }}
-    </code></p>
+<p><code>{{ (index (last 1 $path) 0) }} -> {{ partial "api-ref-link-partial.html" (dict "paragraph"
+    $objData.signature.return_annotation "context" $context) }}</code></p>
 {{ end }}
 
 {{ if $objData.docstring_parsed}}
 <div class="python-ref-description">
-    <p> {{ partial "api-ref-link-all-partial.html" (dict "paragraph" ($objData.docstring_parsed.short_description | safeHTML) "context" $context) }}</p>
-    <p> {{ partial "api-ref-link-all-partial.html" (dict "paragraph" ($objData.docstring_parsed.long_description | safeHTML) "context" $context)}}</p>
+    <p> {{ partial "api-ref-link-all-partial.html" (dict "paragraph" ($objData.docstring_parsed.short_description |
+        safeHTML) "context" $context) }}</p>
+    <p> {{ partial "api-ref-link-all-partial.html" (dict "paragraph" ($objData.docstring_parsed.long_description |
+        safeHTML) "context" $context)}}</p>
 </div>
 {{ end }}
 
@@ -29,51 +29,53 @@
 {{ if $objData.docstring_parsed }}
 {{ if (index $objData.docstring_parsed "params") }}
 {{ if (gt (len $objData.docstring_parsed.params)  0) }}
-    <table class="gd-docs-parameters-block">
-        <thead>
-            <tr>
-                <th>name</th>
-                <th>type</th>
-                <th>description</th>
-            </tr>
-        </thead>
-        <tbody>
-        {{range $objData.docstring_parsed.params}}
-            <tr>
-                <td> {{ .arg_name }} </td>
-                <td> {{ partial "api-ref-link-partial.html" (dict "paragraph" .type_name "context" $context) }} </td>
-                <td> {{ partial "api-ref-link-all-partial.html" (dict "paragraph" (.description | safeHTML) "context" $context) }} </td>
-            </tr>
-        {{end}}
-        </tbody>
-    </table>
+<table class="gd-docs-parameters-block">
+    <thead>
+    <tr>
+        <th>name</th>
+        <th>type</th>
+        <th>description</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{range $objData.docstring_parsed.params}}
+    <tr>
+        <td> {{ .arg_name }}</td>
+        <td> {{ partial "api-ref-link-partial.html" (dict "paragraph" .type_name "context" $context) }}</td>
+        <td> {{ partial "api-ref-link-all-partial.html" (dict "paragraph" (.description | safeHTML) "context" $context)
+            }}
+        </td>
+    </tr>
+    {{end}}
+    </tbody>
+</table>
 {{ else }}
-    <i> None </i>
+<i> None </i>
 {{ end }}
 {{ else if (ne $objData.signature.return_type "None") }}
-    <table class="gd-docs-parameters-block">
-        <thead>
-            <tr>
-                <th>name</th>
-                <th>type</th>
-                <th>description</th>
-            </tr>
-        </thead>
-        <tbody>
-        {{range $objData.signature.params}}
-            <tr>
-                <td> {{ index . 0 }} </td>
-                <td> {{ partial "api-ref-link-partial.html" (dict "paragraph" (index . 1) "context" $context) }} </td>
-                <td> <i> None </i> </td>
-            </tr>
-        {{end}}
-        </tbody>
-    </table>
+<table class="gd-docs-parameters-block">
+    <thead>
+    <tr>
+        <th>name</th>
+        <th>type</th>
+        <th>description</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{range $objData.signature.params}}
+    <tr>
+        <td> {{ index . 0 }}</td>
+        <td> {{ partial "api-ref-link-partial.html" (dict "paragraph" (index . 1) "context" $context) }}</td>
+        <td><i> None </i></td>
+    </tr>
+    {{end}}
+    </tbody>
+</table>
 {{ else }}
-    <i> None </i>
+<i> None </i>
 {{ end }}
 {{ else }}
-    <i> None </i>
+<i> None </i>
 {{ end }}
 {{ end }}
 
@@ -84,34 +86,35 @@
 {{ else if or $objData.docstring_parsed.returns.type_name (ne $objData.signature.return_annotation "None") }}
 {{ $typeName := "" }}
 {{ if $objData.docstring_parsed.returns.type_name }}
-    {{ $typeName = $objData.docstring_parsed.returns.type_name }}
+{{ $typeName = $objData.docstring_parsed.returns.type_name }}
 {{ else }}
-    {{ $typeName = $objData.signature.return_type }}
+{{ $typeName = $objData.signature.return_type }}
 {{ end }}
 
 {{ $description := $objData.docstring_parsed.returns.description }}
 
 <table class="gd-docs-parameters-block">
-<thead>
-<tr>
-<th>type</th>
-<th>description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-    {{ partial "api-ref-link-partial.html" (dict "paragraph" $typeName "context" $context) }}
-</td>
-<td>
-    {{ if $description }}
-    {{ partial "api-ref-link-all-partial.html" (dict "paragraph" ($objData.docstring_parsed.returns.description | safeHTML) "context" $context) }}
-    {{ else }}
-    <i> None </i>
-    {{ end }}
-</td>
-</tr>
-</tbody>
+    <thead>
+    <tr>
+        <th>type</th>
+        <th>description</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>
+            {{ partial "api-ref-link-partial.html" (dict "paragraph" $typeName "context" $context) }}
+        </td>
+        <td>
+            {{ if $description }}
+            {{ partial "api-ref-link-all-partial.html" (dict "paragraph" ($objData.docstring_parsed.returns.description
+            | safeHTML) "context" $context) }}
+            {{ else }}
+            <i> None </i>
+            {{ end }}
+        </td>
+    </tr>
+    </tbody>
 </table>
 {{ else }}
 <i> None </i>
@@ -124,8 +127,10 @@
 <h1> {{index (last 2 $path) 0}}.{{ index (last 1 $path) 0 }} </h1>
 {{ if $objData.docstring_parsed }}
 <div class="python-ref-description">
-    <p> {{ partial "api-ref-link-all-partial.html" (dict "paragraph" ($objData.docstring_parsed.short_description | safeHTML) "context" $context) }}</p>
-    <p> {{ partial "api-ref-link-all-partial.html" (dict "paragraph" ($objData.docstring_parsed.long_description | safeHTML) "context" $context) }}</p>
+    <p> {{ partial "api-ref-link-all-partial.html" (dict "paragraph" ($objData.docstring_parsed.short_description |
+        safeHTML) "context" $context) }}</p>
+    <p> {{ partial "api-ref-link-all-partial.html" (dict "paragraph" ($objData.docstring_parsed.long_description |
+        safeHTML) "context" $context) }}</p>
 </div>
 {{ end }}
 {{end}}
