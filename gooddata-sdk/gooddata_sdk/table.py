@@ -244,7 +244,9 @@ def _as_table(response: ExecutionResponse, always_two_dimensional: bool = False)
     first_page_offset = [0, 0]
     first_page_limit = [_TABLE_ROW_BATCH_SIZE, _MAX_METRICS]
 
-    if not always_two_dimensional:
+    # always adjust paging based on presence of metrics/attrs if not always_two_dimensional
+    # (behavior expected in FDW), otherwise, adjust if response contains only one-dimensional data
+    if not always_two_dimensional or len(response.dimensions) == 1:
         if not response.exec_def.has_attributes():
             # there are no attributes, there shall be at most one row with the metrics, so get that as first page
             first_page_limit = [first_page_limit[1]]
