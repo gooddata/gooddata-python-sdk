@@ -214,7 +214,10 @@ class ExportService(CatalogServiceBase):
         if not self._dashboard_id_exists(workspace_id, dashboard_id):
             raise ValueError(f"Dashboard id '{dashboard_id}' does not exist for workspace '{workspace_id}'.")
         store_path = store_path if isinstance(store_path, Path) else Path(store_path)
-        request = VisualExportRequest(dashboard_id=dashboard_id, file_name=file_name, metadata=metadata)
+        if metadata is None:
+            request = VisualExportRequest(dashboard_id=dashboard_id, file_name=file_name)
+        else:
+            request = VisualExportRequest(dashboard_id=dashboard_id, file_name=file_name, metadata=metadata)
         file_path = store_path / f"{file_name}.pdf"
         create_func = self._actions_api.create_pdf_export
         get_func = self._actions_api.get_exported_file
