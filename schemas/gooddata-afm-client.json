@@ -727,8 +727,7 @@
         "properties": {
           "chatHistoryInteractionId": {
             "description": "Chat History interaction ID. Unique ID for each interaction.",
-            "format": "int64",
-            "type": "integer"
+            "type": "string"
           },
           "createdVisualizations": {
             "$ref": "#/components/schemas/CreatedVisualizations"
@@ -782,8 +781,7 @@
         "properties": {
           "chatHistoryInteractionId": {
             "description": "Return chat history records only after this interaction ID. If empty, complete chat history is returned.",
-            "format": "int64",
-            "type": "integer"
+            "type": "string"
           },
           "reset": {
             "description": "User feedback.",
@@ -851,7 +849,7 @@
             "type": "string"
           },
           "relevantScoreThreshold": {
-            "default": 0.4,
+            "default": 0.45,
             "description": "Score, above which we return found objects. Below this score objects are not relevant.",
             "format": "double",
             "type": "number"
@@ -885,8 +883,7 @@
         "properties": {
           "chatHistoryInteractionId": {
             "description": "Chat History interaction ID. Unique ID for each interaction.",
-            "format": "int64",
-            "type": "integer"
+            "type": "string"
           },
           "createdVisualizations": {
             "$ref": "#/components/schemas/CreatedVisualizations"
@@ -2848,6 +2845,10 @@
       },
       "SearchResult": {
         "properties": {
+          "reasoning": {
+            "description": "If something is not working properly this field will contain explanation.",
+            "type": "string"
+          },
           "relationships": {
             "items": {
               "$ref": "#/components/schemas/SearchRelationshipObject"
@@ -2862,6 +2863,7 @@
           }
         },
         "required": [
+          "reasoning",
           "relationships",
           "results"
         ],
