@@ -4,7 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**chat_history_interaction_id** | **int** | Chat History interaction ID. Unique ID for each interaction. | [optional] 
+**chat_history_interaction_id** | **str** | Chat History interaction ID. Unique ID for each interaction. | [optional] 
 **created_visualizations** | [**CreatedVisualizations**](CreatedVisualizations.md) |  | [optional] 
 **error_response** | **str** | Error response in anything fails. | [optional] 
 **found_objects** | [**FoundObjects**](FoundObjects.md) |  | [optional] 

@@ -787,6 +787,7 @@ docs/PdmSql.md
 docs/PermissionsApi.md
 docs/PermissionsAssignment.md
 docs/PermissionsForAssignee.md
+docs/PermissionsForAssigneeAllOf.md
 docs/PermissionsForAssigneeRule.md
 docs/PlatformUsage.md
 docs/PlatformUsageRequest.md
@@ -806,6 +807,11 @@ docs/RangeMeasureValueFilterRangeMeasureValueFilter.md
 docs/RangeWrapper.md
 docs/RankingFilter.md
 docs/RankingFilterRankingFilter.md
+docs/RawCustomLabel.md
+docs/RawCustomMetric.md
+docs/RawCustomOverride.md
+docs/RawExportApi.md
+docs/RawExportRequest.md
 docs/ReferenceIdentifier.md
 docs/ReferenceSourceColumn.md
 docs/Relative.md
@@ -836,6 +842,8 @@ docs/Settings.md
 docs/SimpleMeasureDefinition.md
 docs/SimpleMeasureDefinitionMeasure.md
 docs/Skeleton.md
+docs/SlidesExportRequest.md
+docs/SlideshowExportApi.md
 docs/SmartFunctionResponse.md
 docs/SmartFunctionsApi.md
 docs/Smtp.md
@@ -965,8 +973,10 @@ gooddata_api_client/api/organization_entity_apis_api.py
 gooddata_api_client/api/organization_model_controller_api.py
 gooddata_api_client/api/permissions_api.py
 gooddata_api_client/api/plugins_api.py
+gooddata_api_client/api/raw_export_api.py
 gooddata_api_client/api/reporting_settings_api.py
 gooddata_api_client/api/scanning_api.py
+gooddata_api_client/api/slideshow_export_api.py
 gooddata_api_client/api/smart_functions_api.py
 gooddata_api_client/api/tabular_export_api.py
 gooddata_api_client/api/test_connection_api.py
@@ -1737,6 +1747,7 @@ gooddata_api_client/model/pdm_ldm_request.py
 gooddata_api_client/model/pdm_sql.py
 gooddata_api_client/model/permissions_assignment.py
 gooddata_api_client/model/permissions_for_assignee.py
+gooddata_api_client/model/permissions_for_assignee_all_of.py
 gooddata_api_client/model/permissions_for_assignee_rule.py
 gooddata_api_client/model/platform_usage.py
 gooddata_api_client/model/platform_usage_request.py
@@ -1755,6 +1766,10 @@ gooddata_api_client/model/range_measure_value_filter_range_measure_value_filter.
 gooddata_api_client/model/range_wrapper.py
 gooddata_api_client/model/ranking_filter.py
 gooddata_api_client/model/ranking_filter_ranking_filter.py
+gooddata_api_client/model/raw_custom_label.py
+gooddata_api_client/model/raw_custom_metric.py
+gooddata_api_client/model/raw_custom_override.py
+gooddata_api_client/model/raw_export_request.py
 gooddata_api_client/model/reference_identifier.py
 gooddata_api_client/model/reference_source_column.py
 gooddata_api_client/model/relative.py
@@ -1783,6 +1798,7 @@ gooddata_api_client/model/settings.py
 gooddata_api_client/model/simple_measure_definition.py
 gooddata_api_client/model/simple_measure_definition_measure.py
 gooddata_api_client/model/skeleton.py
+gooddata_api_client/model/slides_export_request.py
 gooddata_api_client/model/smart_function_response.py
 gooddata_api_client/model/smtp.py
 gooddata_api_client/model/smtp_all_of.py

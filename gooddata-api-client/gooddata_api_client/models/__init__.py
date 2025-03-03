@@ -753,6 +753,7 @@ from gooddata_api_client.model.pdm_ldm_request import PdmLdmRequest
 from gooddata_api_client.model.pdm_sql import PdmSql
 from gooddata_api_client.model.permissions_assignment import PermissionsAssignment
 from gooddata_api_client.model.permissions_for_assignee import PermissionsForAssignee
+from gooddata_api_client.model.permissions_for_assignee_all_of import PermissionsForAssigneeAllOf
 from gooddata_api_client.model.permissions_for_assignee_rule import PermissionsForAssigneeRule
 from gooddata_api_client.model.platform_usage import PlatformUsage
 from gooddata_api_client.model.platform_usage_request import PlatformUsageRequest
@@ -771,6 +772,10 @@ from gooddata_api_client.model.range_measure_value_filter_range_measure_value_fi
 from gooddata_api_client.model.range_wrapper import RangeWrapper
 from gooddata_api_client.model.ranking_filter import RankingFilter
 from gooddata_api_client.model.ranking_filter_ranking_filter import RankingFilterRankingFilter
+from gooddata_api_client.model.raw_custom_label import RawCustomLabel
+from gooddata_api_client.model.raw_custom_metric import RawCustomMetric
+from gooddata_api_client.model.raw_custom_override import RawCustomOverride
+from gooddata_api_client.model.raw_export_request import RawExportRequest
 from gooddata_api_client.model.reference_identifier import ReferenceIdentifier
 from gooddata_api_client.model.reference_source_column import ReferenceSourceColumn
 from gooddata_api_client.model.relative import Relative
@@ -799,6 +804,7 @@ from gooddata_api_client.model.settings import Settings
 from gooddata_api_client.model.simple_measure_definition import SimpleMeasureDefinition
 from gooddata_api_client.model.simple_measure_definition_measure import SimpleMeasureDefinitionMeasure
 from gooddata_api_client.model.skeleton import Skeleton
+from gooddata_api_client.model.slides_export_request import SlidesExportRequest
 from gooddata_api_client.model.smart_function_response import SmartFunctionResponse
 from gooddata_api_client.model.smtp import Smtp
 from gooddata_api_client.model.smtp_all_of import SmtpAllOf

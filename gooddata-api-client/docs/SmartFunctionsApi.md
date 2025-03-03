@@ -50,7 +50,7 @@ with gooddata_api_client.ApiClient() as api_client:
         limit_create_context=10,
         limit_search=5,
         question="question_example",
-        relevant_score_threshold=0.4,
+        relevant_score_threshold=0.45,
         search_score_threshold=0.9,
         thread_id_suffix="thread_id_suffix_example",
         title_to_descriptor_ratio=0.7,
@@ -132,7 +132,7 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = smart_functions_api.SmartFunctionsApi(api_client)
     workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
     chat_history_request = ChatHistoryRequest(
-        chat_history_interaction_id=1,
+        chat_history_interaction_id="chat_history_interaction_id_example",
         reset=True,
         thread_id_suffix="thread_id_suffix_example",
         user_feedback="POSITIVE",
@@ -210,7 +210,7 @@ with gooddata_api_client.ApiClient() as api_client:
         limit_create_context=10,
         limit_search=5,
         question="question_example",
-        relevant_score_threshold=0.4,
+        relevant_score_threshold=0.45,
         search_score_threshold=0.9,
         thread_id_suffix="thread_id_suffix_example",
         title_to_descriptor_ratio=0.7,

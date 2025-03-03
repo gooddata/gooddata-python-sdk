@@ -75,6 +75,7 @@ class JsonApiOrganizationSettingInAttributes(ModelNormal):
             'SEPARATORS': "SEPARATORS",
             'DATE_FILTER_CONFIG': "DATE_FILTER_CONFIG",
             'JIT_PROVISIONING': "JIT_PROVISIONING",
+            'DASHBOARD_FILTERS_APPLY_MODE': "DASHBOARD_FILTERS_APPLY_MODE",
         },
     }
 

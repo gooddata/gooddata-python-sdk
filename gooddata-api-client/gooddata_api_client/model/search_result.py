@@ -90,6 +90,7 @@ class SearchResult(ModelNormal):
         """
         lazy_import()
         return {
+            'reasoning': (str,),  # noqa: E501
             'relationships': ([SearchRelationshipObject],),  # noqa: E501
             'results': ([SearchResultObject],),  # noqa: E501
         }
@@ -100,6 +101,7 @@ class SearchResult(ModelNormal):
 
 
     attribute_map = {
+        'reasoning': 'reasoning',  # noqa: E501
         'relationships': 'relationships',  # noqa: E501
         'results': 'results',  # noqa: E501
     }
@@ -111,10 +113,11 @@ class SearchResult(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, relationships, results, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, reasoning, relationships, results, *args, **kwargs):  # noqa: E501
         """SearchResult - a model defined in OpenAPI
 
         Args:
+            reasoning (str): If something is not working properly this field will contain explanation.
             relationships ([SearchRelationshipObject]):
             results ([SearchResultObject]):
 
@@ -180,6 +183,7 @@ class SearchResult(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.reasoning = reasoning
         self.relationships = relationships
         self.results = results
         for var_name, var_value in kwargs.items():
@@ -202,10 +206,11 @@ class SearchResult(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, relationships, results, *args, **kwargs):  # noqa: E501
+    def __init__(self, reasoning, relationships, results, *args, **kwargs):  # noqa: E501
         """SearchResult - a model defined in OpenAPI
 
         Args:
+            reasoning (str): If something is not working properly this field will contain explanation.
             relationships ([SearchRelationshipObject]):
             results ([SearchResultObject]):
 
@@ -269,6 +274,7 @@ class SearchResult(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.reasoning = reasoning
         self.relationships = relationships
         self.results = results
         for var_name, var_value in kwargs.items():

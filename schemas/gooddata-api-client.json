@@ -1172,8 +1172,7 @@
         "properties": {
           "chatHistoryInteractionId": {
             "description": "Chat History interaction ID. Unique ID for each interaction.",
-            "format": "int64",
-            "type": "integer"
+            "type": "string"
           },
           "createdVisualizations": {
             "$ref": "#/components/schemas/CreatedVisualizations"
@@ -1227,8 +1226,7 @@
         "properties": {
           "chatHistoryInteractionId": {
             "description": "Return chat history records only after this interaction ID. If empty, complete chat history is returned.",
-            "format": "int64",
-            "type": "integer"
+            "type": "string"
           },
           "reset": {
             "description": "User feedback.",
@@ -1296,7 +1294,7 @@
             "type": "string"
           },
           "relevantScoreThreshold": {
-            "default": 0.4,
+            "default": 0.45,
             "description": "Score, above which we return found objects. Below this score objects are not relevant.",
             "format": "double",
             "type": "number"
@@ -1330,8 +1328,7 @@
         "properties": {
           "chatHistoryInteractionId": {
             "description": "Chat History interaction ID. Unique ID for each interaction.",
-            "format": "int64",
-            "type": "integer"
+            "type": "string"
           },
           "createdVisualizations": {
             "$ref": "#/components/schemas/CreatedVisualizations"
@@ -1884,14 +1881,6 @@
       },
       "DashboardPermissionsAssignment": {
         "description": "Desired levels of permissions for an assignee.",
-        "oneOf": [
-          {
-            "$ref": "#/components/schemas/PermissionsForAssignee"
-          },
-          {
-            "$ref": "#/components/schemas/PermissionsForAssigneeRule"
-          }
-        ],
         "properties": {
           "permissions": {
             "items": {
@@ -4332,7 +4321,8 @@
               "ALERT",
               "SEPARATORS",
               "DATE_FILTER_CONFIG",
-              "JIT_PROVISIONING"
+              "JIT_PROVISIONING",
+              "DASHBOARD_FILTERS_APPLY_MODE"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -12741,7 +12731,7 @@
                 "additionalProperties": {
                   "type": "string"
                 },
-                "description": "Map of custom claim overrides. To be used when your Idp does not provide default claims (sub, email, name, given_name, family_name, urn.gooddata.user_groups [optional]). Define the key pair for the claim you wish to override, where the key is the default name of the attribute and the value is your custom name for the given attribute.",
+                "description": "Map of custom claim overrides. To be used when your Idp does not provide default claims (sub, email, name, given_name, family_name). Define the key pair for the claim you wish to override, where the key is the default name of the attribute and the value is your custom name for the given attribute.",
                 "maxLength": 10000,
                 "type": "object"
               },
@@ -12823,7 +12813,7 @@
                 "additionalProperties": {
                   "type": "string"
                 },
-                "description": "Map of custom claim overrides. To be used when your Idp does not provide default claims (sub, email, name, given_name, family_name, urn.gooddata.user_groups [optional]). Define the key pair for the claim you wish to override, where the key is the default name of the attribute and the value is your custom name for the given attribute.",
+                "description": "Map of custom claim overrides. To be used when your Idp does not provide default claims (sub, email, name, given_name, family_name). Define the key pair for the claim you wish to override, where the key is the default name of the attribute and the value is your custom name for the given attribute.",
                 "maxLength": 10000,
                 "type": "object"
               },
@@ -12935,7 +12925,7 @@
                 "additionalProperties": {
                   "type": "string"
                 },
-                "description": "Map of custom claim overrides. To be used when your Idp does not provide default claims (sub, email, name, given_name, family_name, urn.gooddata.user_groups [optional]). Define the key pair for the claim you wish to override, where the key is the default name of the attribute and the value is your custom name for the given attribute.",
+                "description": "Map of custom claim overrides. To be used when your Idp does not provide default claims (sub, email, name, given_name, family_name). Define the key pair for the claim you wish to override, where the key is the default name of the attribute and the value is your custom name for the given attribute.",
                 "maxLength": 10000,
                 "type": "object"
               },
@@ -15164,7 +15154,8 @@
                   "ALERT",
                   "SEPARATORS",
                   "DATE_FILTER_CONFIG",
-                  "JIT_PROVISIONING"
+                  "JIT_PROVISIONING",
+                  "DASHBOARD_FILTERS_APPLY_MODE"
                 ],
                 "type": "string"
               }
@@ -15232,7 +15223,8 @@
                   "ALERT",
                   "SEPARATORS",
                   "DATE_FILTER_CONFIG",
-                  "JIT_PROVISIONING"
+                  "JIT_PROVISIONING",
+                  "DASHBOARD_FILTERS_APPLY_MODE"
                 ],
                 "type": "string"
               }
@@ -15340,7 +15332,8 @@
                   "ALERT",
                   "SEPARATORS",
                   "DATE_FILTER_CONFIG",
-                  "JIT_PROVISIONING"
+                  "JIT_PROVISIONING",
+                  "DASHBOARD_FILTERS_APPLY_MODE"
                 ],
                 "type": "string"
               }
@@ -16814,7 +16807,8 @@
                   "ALERT",
                   "SEPARATORS",
                   "DATE_FILTER_CONFIG",
-                  "JIT_PROVISIONING"
+                  "JIT_PROVISIONING",
+                  "DASHBOARD_FILTERS_APPLY_MODE"
                 ],
                 "type": "string"
               }
@@ -16882,7 +16876,8 @@
                   "ALERT",
                   "SEPARATORS",
                   "DATE_FILTER_CONFIG",
-                  "JIT_PROVISIONING"
+                  "JIT_PROVISIONING",
+                  "DASHBOARD_FILTERS_APPLY_MODE"
                 ],
                 "type": "string"
               }
@@ -18627,7 +18622,8 @@
                   "ALERT",
                   "SEPARATORS",
                   "DATE_FILTER_CONFIG",
-                  "JIT_PROVISIONING"
+                  "JIT_PROVISIONING",
+                  "DASHBOARD_FILTERS_APPLY_MODE"
                 ],
                 "type": "string"
               }
@@ -18695,7 +18691,8 @@
                   "ALERT",
                   "SEPARATORS",
                   "DATE_FILTER_CONFIG",
-                  "JIT_PROVISIONING"
+                  "JIT_PROVISIONING",
+                  "DASHBOARD_FILTERS_APPLY_MODE"
                 ],
                 "type": "string"
               }
@@ -18829,7 +18826,8 @@
                   "ALERT",
                   "SEPARATORS",
                   "DATE_FILTER_CONFIG",
-                  "JIT_PROVISIONING"
+                  "JIT_PROVISIONING",
+                  "DASHBOARD_FILTERS_APPLY_MODE"
                 ],
                 "type": "string"
               }
@@ -18897,7 +18895,8 @@
                   "ALERT",
                   "SEPARATORS",
                   "DATE_FILTER_CONFIG",
-                  "JIT_PROVISIONING"
+                  "JIT_PROVISIONING",
+                  "DASHBOARD_FILTERS_APPLY_MODE"
                 ],
                 "type": "string"
               }
@@ -19782,26 +19781,44 @@
         "type": "object"
       },
       "PermissionsForAssignee": {
-        "description": "Desired levels of permissions for an assignee identified by an identifier.",
-        "properties": {
-          "assigneeIdentifier": {
-            "$ref": "#/components/schemas/AssigneeIdentifier"
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DashboardPermissionsAssignment"
+          },
+          {
+            "properties": {
+              "assigneeIdentifier": {
+                "$ref": "#/components/schemas/AssigneeIdentifier"
+              }
+            },
+            "type": "object"
           }
-        },
+        ],
+        "description": "Desired levels of permissions for an assignee identified by an identifier.",
         "required": [
-          "assigneeIdentifier"
+          "assigneeIdentifier",
+          "permissions"
         ],
         "type": "object"
       },
       "PermissionsForAssigneeRule": {
-        "description": "Desired levels of permissions for a collection of assignees identified by a rule.",
-        "properties": {
-          "assigneeRule": {
-            "$ref": "#/components/schemas/AssigneeRule"
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DashboardPermissionsAssignment"
+          },
+          {
+            "properties": {
+              "assigneeRule": {
+                "$ref": "#/components/schemas/AssigneeRule"
+              }
+            },
+            "type": "object"
           }
-        },
+        ],
+        "description": "Desired levels of permissions for a collection of assignees identified by a rule.",
         "required": [
-          "assigneeRule"
+          "assigneeRule",
+          "permissions"
         ],
         "type": "object"
       },
@@ -20126,6 +20143,84 @@
         ],
         "type": "object"
       },
+      "RawCustomLabel": {
+        "description": "Custom label object override.",
+        "properties": {
+          "title": {
+            "description": "Override value.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "title"
+        ],
+        "type": "object"
+      },
+      "RawCustomMetric": {
+        "description": "Custom metric object override.",
+        "properties": {
+          "title": {
+            "description": "Metric title override.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "title"
+        ],
+        "type": "object"
+      },
+      "RawCustomOverride": {
+        "description": "Custom cell value overrides (IDs will be replaced with specified values).",
+        "properties": {
+          "labels": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/RawCustomLabel"
+            },
+            "description": "Currently No-Op. Map of CustomLabels with keys used as placeholders in export result.",
+            "type": "object"
+          },
+          "metrics": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/RawCustomMetric"
+            },
+            "description": "Map of CustomMetrics with keys used as placeholders in export result.",
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "RawExportRequest": {
+        "description": "Export request object describing the export properties and overrides for raw exports.",
+        "properties": {
+          "customOverride": {
+            "$ref": "#/components/schemas/RawCustomOverride"
+          },
+          "execution": {
+            "$ref": "#/components/schemas/AFM"
+          },
+          "fileName": {
+            "description": "Filename of downloaded file without extension.",
+            "example": "result",
+            "type": "string"
+          },
+          "format": {
+            "description": "Requested resulting file type.",
+            "enum": [
+              "ARROW_FILE",
+              "ARROW_STREAM",
+              "CSV"
+            ],
+            "example": "CSV",
+            "type": "string"
+          }
+        },
+        "required": [
+          "execution",
+          "fileName",
+          "format"
+        ],
+        "type": "object"
+      },
       "ReferenceIdentifier": {
         "description": "A reference identifier.",
         "properties": {
@@ -20326,7 +20421,8 @@
               "ALERT",
               "SEPARATORS",
               "DATE_FILTER_CONFIG",
-              "JIT_PROVISIONING"
+              "JIT_PROVISIONING",
+              "DASHBOARD_FILTERS_APPLY_MODE"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -20745,6 +20841,10 @@
       },
       "SearchResult": {
         "properties": {
+          "reasoning": {
+            "description": "If something is not working properly this field will contain explanation.",
+            "type": "string"
+          },
           "relationships": {
             "items": {
               "$ref": "#/components/schemas/SearchRelationshipObject"
@@ -20759,6 +20859,7 @@
           }
         },
         "required": [
+          "reasoning",
           "relationships",
           "results"
         ],
@@ -20957,6 +21058,47 @@
           "name": "skeleton",
           "namespace": "urn:oasis:names:tc:xliff:document:2.0"
         }
+      },
+      "SlidesExportRequest": {
+        "description": "Export request object describing the export properties and metadata for slides exports.",
+        "properties": {
+          "dashboardId": {
+            "description": "Dashboard identifier",
+            "example": "761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+            "type": "string"
+          },
+          "fileName": {
+            "description": "File name to be used for retrieving the pdf document.",
+            "example": "filename",
+            "type": "string"
+          },
+          "format": {
+            "description": "Requested resulting file type.",
+            "enum": [
+              "PDF",
+              "PPTX"
+            ],
+            "example": "PDF",
+            "type": "string"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "widgetIds": {
+            "description": "List of widget identifiers to be exported. Note that only one widget is currently supported.",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 1,
+            "type": "array"
+          }
+        },
+        "required": [
+          "dashboardId",
+          "fileName",
+          "format"
+        ],
+        "type": "object"
       },
       "SmartFunctionResponse": {
         "properties": {
@@ -22536,7 +22678,7 @@
   "paths": {
     "/api/v1/actions/collectUsage": {
       "get": {
-        "description": "Provides information about platform usage, like amount of users, workspaces, ...",
+        "description": "Provides information about platform usage, like amount of users, workspaces, ...\n\n_NOTE_: The `admin` user is always excluded from this amount.",
         "operationId": "allPlatformUsage",
         "responses": {
           "200": {
@@ -22566,7 +22708,7 @@
         }
       },
       "post": {
-        "description": "Provides information about platform usage, like amount of users, workspaces, ...",
+        "description": "Provides information about platform usage, like amount of users, workspaces, ...\n\n_NOTE_: The `admin` user is always excluded from this amount.",
         "operationId": "particularPlatformUsage",
         "requestBody": {
           "content": {
@@ -25583,6 +25725,296 @@
         ]
       }
     },
+    "/api/v1/actions/workspaces/{workspaceId}/export/raw": {
+      "post": {
+        "description": "Note: This API is an experimental and is going to change. Please, use it accordingly.An raw export job will be created based on the export request and put to queue to be executed. The result of the operation will be an exportResult identifier that will be assembled by the client into a url that can be polled.",
+        "operationId": "createRawExport",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RawExportRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExportResponse"
+                }
+              }
+            },
+            "description": "Raw export request created successfully."
+          }
+        },
+        "summary": "(EXPERIMENTAL) Create raw export request",
+        "tags": [
+          "Raw export",
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to execute raw export.",
+          "permissions": [
+            "EXPORT_TABULAR"
+          ]
+        }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/export/raw/{exportId}": {
+      "get": {
+        "description": "Note: This API is an experimental and is going to change. Please, use it accordingly.After clients creates a POST export request, the processing of it will start shortly asynchronously. To retrieve the result, client has to check periodically for the result on this endpoint. In case the result isn't ready yet, the service returns 202. If the result is ready, it returns 200 and octet stream of the result file with provided filename.",
+        "operationId": "getRawExport",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "exportId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.apache.arrow.file": {},
+              "application/vnd.apache.arrow.stream": {},
+              "text/csv": {}
+            },
+            "description": "Binary export result.",
+            "headers": {
+              "Content-Disposition": {
+                "schema": {
+                  "example": "attachment; filename='result.csv'",
+                  "pattern": "attachment; filename='[^']+'",
+                  "type": "string"
+                },
+                "style": "simple"
+              }
+            }
+          },
+          "202": {
+            "content": {
+              "application/vnd.apache.arrow.file": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              },
+              "application/vnd.apache.arrow.stream": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Request is accepted, provided exportId exists, but export is not yet ready."
+          }
+        },
+        "summary": "(EXPERIMENTAL) Retrieve exported files",
+        "tags": [
+          "Raw export",
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Minimal permission required to use this endpoint.",
+          "permissions": [
+            "EXPORT_TABULAR"
+          ]
+        }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/export/slides": {
+      "post": {
+        "description": "Note: This API is an experimental and is going to change. Please, use it accordingly. A slides export job will be created based on the export request and put to queue to be executed. The result of the operation will be an exportResult identifier that will be assembled by the client into a url that can be polled.",
+        "operationId": "createSlidesExport",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SlidesExportRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExportResponse"
+                }
+              }
+            },
+            "description": "Raw export request created successfully."
+          }
+        },
+        "summary": "(EXPERIMENTAL) Create slides export request",
+        "tags": [
+          "Slideshow export",
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to execute slides export.",
+          "permissions": [
+            "EXPORT_PDF"
+          ]
+        }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/export/slides/{exportId}": {
+      "get": {
+        "description": "Note: This API is an experimental and is going to change. Please, use it accordingly. After clients creates a POST export request, the processing of it will start shortly asynchronously. To retrieve the result, client has to check periodically for the result on this endpoint. In case the result isn't ready yet, the service returns 202. If the result is ready, it returns 200 and octet stream of the result file with provided filename.",
+        "operationId": "getSlidesExport",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "exportId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/pdf": {},
+              "application/vnd.openxmlformats-officedocument.presentationml.presentation": {}
+            },
+            "description": "Binary export result.",
+            "headers": {
+              "Content-Disposition": {
+                "schema": {
+                  "example": "attachment; filename='result.pdf'",
+                  "pattern": "attachment; filename='[^']+'",
+                  "type": "string"
+                },
+                "style": "simple"
+              }
+            }
+          },
+          "202": {
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              },
+              "application/vnd.openxmlformats-officedocument.presentationml.presentation": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Request is accepted, provided exportId exists, but export is not yet ready."
+          }
+        },
+        "summary": "(EXPERIMENTAL) Retrieve exported files",
+        "tags": [
+          "Slideshow export",
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Minimal permission required to use this endpoint.",
+          "permissions": [
+            "EXPORT_PDF"
+          ]
+        }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/export/slides/{exportId}/metadata": {
+      "get": {
+        "description": "Note: This API is an experimental and is going to change. Please, use it accordingly. This endpoint serves as a cache for user-defined metadata of the export for the front end UI to retrieve it, if one was created using the POST ../export/slides endpoint. The metadata structure is not verified.",
+        "operationId": "getSlidesExportMetadata",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "exportId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {}
+            },
+            "description": "Json metadata representation"
+          }
+        },
+        "summary": "(EXPERIMENTAL) Retrieve metadata context",
+        "tags": [
+          "Slideshow export",
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Minimal permission required to use this endpoint.",
+          "permissions": [
+            "EXPORT_PDF"
+          ]
+        }
+      }
+    },
     "/api/v1/actions/workspaces/{workspaceId}/export/tabular": {
       "post": {
         "description": "An tabular export job will be created based on the export request and put to queue to be executed. The result of the operation will be an exportResult identifier that will be assembled by the client into a url that can be polled.",
@@ -25832,7 +26264,7 @@
     },
     "/api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId}/metadata": {
       "get": {
-        "description": "This endpoints serves as a cache for user defined metadata for the front end ui to retrieve them, if one was created using the POST ../export/visual endpoint. The metadata structure is not verified. If metadata for given {exportId} has been found, endpoint returns the value 200 else 404.",
+        "description": "This endpoint serves as a cache for user-defined metadata of the export for the front end UI to retrieve it, if one was created using the POST ../export/visual endpoint. The metadata structure is not verified.",
         "operationId": "getMetadata",
         "parameters": [
           {

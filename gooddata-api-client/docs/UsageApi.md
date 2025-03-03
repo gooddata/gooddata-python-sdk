@@ -13,7 +13,7 @@ Method | HTTP request | Description
 
 Info about the platform usage.
 
-Provides information about platform usage, like amount of users, workspaces, ...
+Provides information about platform usage, like amount of users, workspaces, ...  _NOTE_: The `admin` user is always excluded from this amount.
 
 ### Example
 
@@ -76,7 +76,7 @@ No authorization required
 
 Info about the platform usage for particular items.
 
-Provides information about platform usage, like amount of users, workspaces, ...
+Provides information about platform usage, like amount of users, workspaces, ...  _NOTE_: The `admin` user is always excluded from this amount.
 
 ### Example
 
