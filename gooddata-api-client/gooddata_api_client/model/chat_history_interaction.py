@@ -100,7 +100,7 @@ class ChatHistoryInteraction(ModelNormal):
         """
         lazy_import()
         return {
-            'chat_history_interaction_id': (int,),  # noqa: E501
+            'chat_history_interaction_id': (str,),  # noqa: E501
             'interaction_finished': (bool,),  # noqa: E501
             'question': (str,),  # noqa: E501
             'routing': (RouteResult,),  # noqa: E501
@@ -141,7 +141,7 @@ class ChatHistoryInteraction(ModelNormal):
         """ChatHistoryInteraction - a model defined in OpenAPI
 
         Args:
-            chat_history_interaction_id (int): Chat History interaction ID. Unique ID for each interaction.
+            chat_history_interaction_id (str): Chat History interaction ID. Unique ID for each interaction.
             interaction_finished (bool): Has the interaction already finished? Can be used for polling when interaction is in progress.
             question (str): User question
             routing (RouteResult):
@@ -242,7 +242,7 @@ class ChatHistoryInteraction(ModelNormal):
         """ChatHistoryInteraction - a model defined in OpenAPI
 
         Args:
-            chat_history_interaction_id (int): Chat History interaction ID. Unique ID for each interaction.
+            chat_history_interaction_id (str): Chat History interaction ID. Unique ID for each interaction.
             interaction_finished (bool): Has the interaction already finished? Can be used for polling when interaction is in progress.
             question (str): User question
             routing (RouteResult):

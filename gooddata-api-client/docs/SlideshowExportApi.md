@@ -1,20 +1,20 @@
-# gooddata_api_client.VisualExportApi
+# gooddata_api_client.SlideshowExportApi
 
 All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**create_pdf_export**](VisualExportApi.md#create_pdf_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/visual | Create visual - pdf export request
-[**get_exported_file**](VisualExportApi.md#get_exported_file) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId} | Retrieve exported files
-[**get_metadata**](VisualExportApi.md#get_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId}/metadata | Retrieve metadata context
+[**create_slides_export**](SlideshowExportApi.md#create_slides_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/slides | (EXPERIMENTAL) Create slides export request
+[**get_slides_export**](SlideshowExportApi.md#get_slides_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/slides/{exportId} | (EXPERIMENTAL) Retrieve exported files
+[**get_slides_export_metadata**](SlideshowExportApi.md#get_slides_export_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/slides/{exportId}/metadata | (EXPERIMENTAL) Retrieve metadata context
 
 
-# **create_pdf_export**
-> ExportResponse create_pdf_export(workspace_id, visual_export_request)
+# **create_slides_export**
+> ExportResponse create_slides_export(workspace_id, slides_export_request)
 
-Create visual - pdf export request
+(EXPERIMENTAL) Create slides export request
 
-An visual export job will be created based on the export request and put to queue to be executed. The result of the operation will be an exportResult identifier that will be assembled by the client into a url that can be polled.
+Note: This API is an experimental and is going to change. Please, use it accordingly. A slides export job will be created based on the export request and put to queue to be executed. The result of the operation will be an exportResult identifier that will be assembled by the client into a url that can be polled.
 
 ### Example
 
@@ -22,9 +22,9 @@ An visual export job will be created based on the export request and put to queu
 ```python
 import time
 import gooddata_api_client
-from gooddata_api_client.api import visual_export_api
+from gooddata_api_client.api import slideshow_export_api
 from gooddata_api_client.model.export_response import ExportResponse
-from gooddata_api_client.model.visual_export_request import VisualExportRequest
+from gooddata_api_client.model.slides_export_request import SlidesExportRequest
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -36,21 +36,25 @@ configuration = gooddata_api_client.Configuration(
 # Enter a context with an instance of the API client
 with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
-    api_instance = visual_export_api.VisualExportApi(api_client)
+    api_instance = slideshow_export_api.SlideshowExportApi(api_client)
     workspace_id = "workspaceId_example" # str | 
-    visual_export_request = VisualExportRequest(
+    slides_export_request = SlidesExportRequest(
         dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
         file_name="filename",
-        metadata={},
-    ) # VisualExportRequest | 
+        format="PDF",
+        metadata=JsonNode(),
+        widget_ids=[
+            "widget_ids_example",
+        ],
+    ) # SlidesExportRequest | 
 
     # example passing only required values which don't have defaults set
     try:
-        # Create visual - pdf export request
-        api_response = api_instance.create_pdf_export(workspace_id, visual_export_request)
+        # (EXPERIMENTAL) Create slides export request
+        api_response = api_instance.create_slides_export(workspace_id, slides_export_request)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
-        print("Exception when calling VisualExportApi->create_pdf_export: %s\n" % e)
+        print("Exception when calling SlideshowExportApi->create_slides_export: %s\n" % e)
 ```
 
 
@@ -59,7 +63,7 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
- **visual_export_request** | [**VisualExportRequest**](VisualExportRequest.md)|  |
+ **slides_export_request** | [**SlidesExportRequest**](SlidesExportRequest.md)|  |
 
 ### Return type
 
@@ -79,16 +83,16 @@ No authorization required
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**201** | Visual export request created successfully. |  -  |
+**201** | Raw export request created successfully. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **get_exported_file**
-> get_exported_file(workspace_id, export_id)
+# **get_slides_export**
+> get_slides_export(workspace_id, export_id)
 
-Retrieve exported files
+(EXPERIMENTAL) Retrieve exported files
 
-Returns 202 until original POST export request is not processed.Returns 200 with exported data once the export is done.
+Note: This API is an experimental and is going to change. Please, use it accordingly. After clients creates a POST export request, the processing of it will start shortly asynchronously. To retrieve the result, client has to check periodically for the result on this endpoint. In case the result isn't ready yet, the service returns 202. If the result is ready, it returns 200 and octet stream of the result file with provided filename.
 
 ### Example
 
@@ -96,7 +100,7 @@ Returns 202 until original POST export request is not processed.Returns 200 with
 ```python
 import time
 import gooddata_api_client
-from gooddata_api_client.api import visual_export_api
+from gooddata_api_client.api import slideshow_export_api
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -108,16 +112,16 @@ configuration = gooddata_api_client.Configuration(
 # Enter a context with an instance of the API client
 with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
-    api_instance = visual_export_api.VisualExportApi(api_client)
+    api_instance = slideshow_export_api.SlideshowExportApi(api_client)
     workspace_id = "workspaceId_example" # str | 
     export_id = "exportId_example" # str | 
 
     # example passing only required values which don't have defaults set
     try:
-        # Retrieve exported files
-        api_instance.get_exported_file(workspace_id, export_id)
+        # (EXPERIMENTAL) Retrieve exported files
+        api_instance.get_slides_export(workspace_id, export_id)
     except gooddata_api_client.ApiException as e:
-        print("Exception when calling VisualExportApi->get_exported_file: %s\n" % e)
+        print("Exception when calling SlideshowExportApi->get_slides_export: %s\n" % e)
 ```
 
 
@@ -139,7 +143,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/pdf
+ - **Accept**: application/pdf, application/vnd.openxmlformats-officedocument.presentationml.presentation
 
 
 ### HTTP response details
@@ -151,12 +155,12 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **get_metadata**
-> get_metadata(workspace_id, export_id)
+# **get_slides_export_metadata**
+> get_slides_export_metadata(workspace_id, export_id)
 
-Retrieve metadata context
+(EXPERIMENTAL) Retrieve metadata context
 
-This endpoint serves as a cache for user-defined metadata of the export for the front end UI to retrieve it, if one was created using the POST ../export/visual endpoint. The metadata structure is not verified.
+Note: This API is an experimental and is going to change. Please, use it accordingly. This endpoint serves as a cache for user-defined metadata of the export for the front end UI to retrieve it, if one was created using the POST ../export/slides endpoint. The metadata structure is not verified.
 
 ### Example
 
@@ -164,7 +168,7 @@ This endpoint serves as a cache for user-defined metadata of the export for the 
 ```python
 import time
 import gooddata_api_client
-from gooddata_api_client.api import visual_export_api
+from gooddata_api_client.api import slideshow_export_api
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -176,16 +180,16 @@ configuration = gooddata_api_client.Configuration(
 # Enter a context with an instance of the API client
 with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
-    api_instance = visual_export_api.VisualExportApi(api_client)
+    api_instance = slideshow_export_api.SlideshowExportApi(api_client)
     workspace_id = "workspaceId_example" # str | 
     export_id = "exportId_example" # str | 
 
     # example passing only required values which don't have defaults set
     try:
-        # Retrieve metadata context
-        api_instance.get_metadata(workspace_id, export_id)
+        # (EXPERIMENTAL) Retrieve metadata context
+        api_instance.get_slides_export_metadata(workspace_id, export_id)
     except gooddata_api_client.ApiException as e:
-        print("Exception when calling VisualExportApi->get_metadata: %s\n" % e)
+        print("Exception when calling SlideshowExportApi->get_slides_export_metadata: %s\n" % e)
 ```
 
 

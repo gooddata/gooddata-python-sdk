@@ -136,7 +136,7 @@ class UsageApi(object):
     ):
         """Info about the platform usage.  # noqa: E501
 
-        Provides information about platform usage, like amount of users, workspaces, ...  # noqa: E501
+        Provides information about platform usage, like amount of users, workspaces, ...  _NOTE_: The `admin` user is always excluded from this amount.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -215,7 +215,7 @@ class UsageApi(object):
     ):
         """Info about the platform usage for particular items.  # noqa: E501
 
-        Provides information about platform usage, like amount of users, workspaces, ...  # noqa: E501
+        Provides information about platform usage, like amount of users, workspaces, ...  _NOTE_: The `admin` user is always excluded from this amount.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 

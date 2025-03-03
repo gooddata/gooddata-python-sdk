@@ -282,11 +282,16 @@ Class | Method | HTTP request | Description
 *PluginsApi* | [**get_entity_dashboard_plugins**](docs/PluginsApi.md#get_entity_dashboard_plugins) | **GET** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | Get a Plugin
 *PluginsApi* | [**patch_entity_dashboard_plugins**](docs/PluginsApi.md#patch_entity_dashboard_plugins) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | Patch a Plugin
 *PluginsApi* | [**update_entity_dashboard_plugins**](docs/PluginsApi.md#update_entity_dashboard_plugins) | **PUT** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | Put a Plugin
+*RawExportApi* | [**create_raw_export**](docs/RawExportApi.md#create_raw_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/raw | (EXPERIMENTAL) Create raw export request
+*RawExportApi* | [**get_raw_export**](docs/RawExportApi.md#get_raw_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/raw/{exportId} | (EXPERIMENTAL) Retrieve exported files
 *ReportingSettingsApi* | [**resolve_all_settings_without_workspace**](docs/ReportingSettingsApi.md#resolve_all_settings_without_workspace) | **GET** /api/v1/actions/resolveSettings | Values for all settings without workspace.
 *ReportingSettingsApi* | [**resolve_settings_without_workspace**](docs/ReportingSettingsApi.md#resolve_settings_without_workspace) | **POST** /api/v1/actions/resolveSettings | Values for selected settings without workspace.
 *ScanningApi* | [**get_data_source_schemata**](docs/ScanningApi.md#get_data_source_schemata) | **GET** /api/v1/actions/dataSources/{dataSourceId}/scanSchemata | Get a list of schema names of a database
 *ScanningApi* | [**scan_data_source**](docs/ScanningApi.md#scan_data_source) | **POST** /api/v1/actions/dataSources/{dataSourceId}/scan | Scan a database to get a physical data model (PDM)
 *ScanningApi* | [**scan_sql**](docs/ScanningApi.md#scan_sql) | **POST** /api/v1/actions/dataSources/{dataSourceId}/scanSql | Collect metadata about SQL query
+*SlideshowExportApi* | [**create_slides_export**](docs/SlideshowExportApi.md#create_slides_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/slides | (EXPERIMENTAL) Create slides export request
+*SlideshowExportApi* | [**get_slides_export**](docs/SlideshowExportApi.md#get_slides_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/slides/{exportId} | (EXPERIMENTAL) Retrieve exported files
+*SlideshowExportApi* | [**get_slides_export_metadata**](docs/SlideshowExportApi.md#get_slides_export_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/slides/{exportId}/metadata | (EXPERIMENTAL) Retrieve metadata context
 *SmartFunctionsApi* | [**ai_chat**](docs/SmartFunctionsApi.md#ai_chat) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/chat | (BETA) Chat with AI
 *SmartFunctionsApi* | [**ai_chat_history**](docs/SmartFunctionsApi.md#ai_chat_history) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/chatHistory | (BETA) Get Chat History
 *SmartFunctionsApi* | [**ai_chat_stream**](docs/SmartFunctionsApi.md#ai_chat_stream) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/chatStream | (BETA) Chat with AI
@@ -402,6 +407,8 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**compute_valid_objects**](docs/ActionsApi.md#compute_valid_objects) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidObjects | Valid objects
 *ActionsApi* | [**create_dashboard_export_request**](docs/ActionsApi.md#create_dashboard_export_request) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/export/tabular | (EXPERIMENTAL) Create dashboard tabular export request
 *ActionsApi* | [**create_pdf_export**](docs/ActionsApi.md#create_pdf_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/visual | Create visual - pdf export request
+*ActionsApi* | [**create_raw_export**](docs/ActionsApi.md#create_raw_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/raw | (EXPERIMENTAL) Create raw export request
+*ActionsApi* | [**create_slides_export**](docs/ActionsApi.md#create_slides_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/slides | (EXPERIMENTAL) Create slides export request
 *ActionsApi* | [**create_tabular_export**](docs/ActionsApi.md#create_tabular_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/tabular | Create tabular export request
 *ActionsApi* | [**dashboard_permissions**](docs/ActionsApi.md#dashboard_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/permissions | Get Dashboard Permissions
 *ActionsApi* | [**explain_afm**](docs/ActionsApi.md#explain_afm) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/explain | AFM explain resource.
@@ -414,6 +421,9 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**get_exported_file**](docs/ActionsApi.md#get_exported_file) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId} | Retrieve exported files
 *ActionsApi* | [**get_metadata**](docs/ActionsApi.md#get_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId}/metadata | Retrieve metadata context
 *ActionsApi* | [**get_notifications**](docs/ActionsApi.md#get_notifications) | **GET** /api/v1/actions/notifications | Get latest notifications.
+*ActionsApi* | [**get_raw_export**](docs/ActionsApi.md#get_raw_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/raw/{exportId} | (EXPERIMENTAL) Retrieve exported files
+*ActionsApi* | [**get_slides_export**](docs/ActionsApi.md#get_slides_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/slides/{exportId} | (EXPERIMENTAL) Retrieve exported files
+*ActionsApi* | [**get_slides_export_metadata**](docs/ActionsApi.md#get_slides_export_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/slides/{exportId}/metadata | (EXPERIMENTAL) Retrieve metadata context
 *ActionsApi* | [**get_tabular_export**](docs/ActionsApi.md#get_tabular_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/tabular/{exportId} | Retrieve exported files
 *ActionsApi* | [**get_translation_tags**](docs/ActionsApi.md#get_translation_tags) | **GET** /api/v1/actions/workspaces/{workspaceId}/translations | Get translation tags.
 *ActionsApi* | [**inherited_entity_conflicts**](docs/ActionsApi.md#inherited_entity_conflicts) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityConflicts | Finds identifier conflicts in workspace hierarchy.
@@ -1613,6 +1623,7 @@ Class | Method | HTTP request | Description
  - [PdmSql](docs/PdmSql.md)
  - [PermissionsAssignment](docs/PermissionsAssignment.md)
  - [PermissionsForAssignee](docs/PermissionsForAssignee.md)
+ - [PermissionsForAssigneeAllOf](docs/PermissionsForAssigneeAllOf.md)
  - [PermissionsForAssigneeRule](docs/PermissionsForAssigneeRule.md)
  - [PlatformUsage](docs/PlatformUsage.md)
  - [PlatformUsageRequest](docs/PlatformUsageRequest.md)
@@ -1631,6 +1642,10 @@ Class | Method | HTTP request | Description
  - [RangeWrapper](docs/RangeWrapper.md)
  - [RankingFilter](docs/RankingFilter.md)
  - [RankingFilterRankingFilter](docs/RankingFilterRankingFilter.md)
+ - [RawCustomLabel](docs/RawCustomLabel.md)
+ - [RawCustomMetric](docs/RawCustomMetric.md)
+ - [RawCustomOverride](docs/RawCustomOverride.md)
+ - [RawExportRequest](docs/RawExportRequest.md)
  - [ReferenceIdentifier](docs/ReferenceIdentifier.md)
  - [ReferenceSourceColumn](docs/ReferenceSourceColumn.md)
  - [Relative](docs/Relative.md)
@@ -1659,6 +1674,7 @@ Class | Method | HTTP request | Description
  - [SimpleMeasureDefinition](docs/SimpleMeasureDefinition.md)
  - [SimpleMeasureDefinitionMeasure](docs/SimpleMeasureDefinitionMeasure.md)
  - [Skeleton](docs/Skeleton.md)
+ - [SlidesExportRequest](docs/SlidesExportRequest.md)
  - [SmartFunctionResponse](docs/SmartFunctionResponse.md)
  - [Smtp](docs/Smtp.md)
  - [SmtpAllOf](docs/SmtpAllOf.md)

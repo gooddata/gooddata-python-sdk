@@ -53,8 +53,10 @@ from gooddata_api_client.api.organization_declarative_apis_api import Organizati
 from gooddata_api_client.api.organization_entity_apis_api import OrganizationEntityAPIsApi
 from gooddata_api_client.api.permissions_api import PermissionsApi
 from gooddata_api_client.api.plugins_api import PluginsApi
+from gooddata_api_client.api.raw_export_api import RawExportApi
 from gooddata_api_client.api.reporting_settings_api import ReportingSettingsApi
 from gooddata_api_client.api.scanning_api import ScanningApi
+from gooddata_api_client.api.slideshow_export_api import SlideshowExportApi
 from gooddata_api_client.api.smart_functions_api import SmartFunctionsApi
 from gooddata_api_client.api.tabular_export_api import TabularExportApi
 from gooddata_api_client.api.test_connection_api import TestConnectionApi

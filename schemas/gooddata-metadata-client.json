@@ -887,14 +887,6 @@
       },
       "DashboardPermissionsAssignment": {
         "description": "Desired levels of permissions for an assignee.",
-        "oneOf": [
-          {
-            "$ref": "#/components/schemas/PermissionsForAssignee"
-          },
-          {
-            "$ref": "#/components/schemas/PermissionsForAssigneeRule"
-          }
-        ],
         "properties": {
           "permissions": {
             "items": {
@@ -3179,7 +3171,8 @@
               "ALERT",
               "SEPARATORS",
               "DATE_FILTER_CONFIG",
-              "JIT_PROVISIONING"
+              "JIT_PROVISIONING",
+              "DASHBOARD_FILTERS_APPLY_MODE"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -10797,7 +10790,7 @@
                 "additionalProperties": {
                   "type": "string"
                 },
-                "description": "Map of custom claim overrides. To be used when your Idp does not provide default claims (sub, email, name, given_name, family_name, urn.gooddata.user_groups [optional]). Define the key pair for the claim you wish to override, where the key is the default name of the attribute and the value is your custom name for the given attribute.",
+                "description": "Map of custom claim overrides. To be used when your Idp does not provide default claims (sub, email, name, given_name, family_name). Define the key pair for the claim you wish to override, where the key is the default name of the attribute and the value is your custom name for the given attribute.",
                 "maxLength": 10000,
                 "type": "object"
               },
@@ -10879,7 +10872,7 @@
                 "additionalProperties": {
                   "type": "string"
                 },
-                "description": "Map of custom claim overrides. To be used when your Idp does not provide default claims (sub, email, name, given_name, family_name, urn.gooddata.user_groups [optional]). Define the key pair for the claim you wish to override, where the key is the default name of the attribute and the value is your custom name for the given attribute.",
+                "description": "Map of custom claim overrides. To be used when your Idp does not provide default claims (sub, email, name, given_name, family_name). Define the key pair for the claim you wish to override, where the key is the default name of the attribute and the value is your custom name for the given attribute.",
                 "maxLength": 10000,
                 "type": "object"
               },
@@ -10991,7 +10984,7 @@
                 "additionalProperties": {
                   "type": "string"
                 },
-                "description": "Map of custom claim overrides. To be used when your Idp does not provide default claims (sub, email, name, given_name, family_name, urn.gooddata.user_groups [optional]). Define the key pair for the claim you wish to override, where the key is the default name of the attribute and the value is your custom name for the given attribute.",
+                "description": "Map of custom claim overrides. To be used when your Idp does not provide default claims (sub, email, name, given_name, family_name). Define the key pair for the claim you wish to override, where the key is the default name of the attribute and the value is your custom name for the given attribute.",
                 "maxLength": 10000,
                 "type": "object"
               },
@@ -13220,7 +13213,8 @@
                   "ALERT",
                   "SEPARATORS",
                   "DATE_FILTER_CONFIG",
-                  "JIT_PROVISIONING"
+                  "JIT_PROVISIONING",
+                  "DASHBOARD_FILTERS_APPLY_MODE"
                 ],
                 "type": "string"
               }
@@ -13288,7 +13282,8 @@
                   "ALERT",
                   "SEPARATORS",
                   "DATE_FILTER_CONFIG",
-                  "JIT_PROVISIONING"
+                  "JIT_PROVISIONING",
+                  "DASHBOARD_FILTERS_APPLY_MODE"
                 ],
                 "type": "string"
               }
@@ -13396,7 +13391,8 @@
                   "ALERT",
                   "SEPARATORS",
                   "DATE_FILTER_CONFIG",
-                  "JIT_PROVISIONING"
+                  "JIT_PROVISIONING",
+                  "DASHBOARD_FILTERS_APPLY_MODE"
                 ],
                 "type": "string"
               }
@@ -14870,7 +14866,8 @@
                   "ALERT",
                   "SEPARATORS",
                   "DATE_FILTER_CONFIG",
-                  "JIT_PROVISIONING"
+                  "JIT_PROVISIONING",
+                  "DASHBOARD_FILTERS_APPLY_MODE"
                 ],
                 "type": "string"
               }
@@ -14938,7 +14935,8 @@
                   "ALERT",
                   "SEPARATORS",
                   "DATE_FILTER_CONFIG",
-                  "JIT_PROVISIONING"
+                  "JIT_PROVISIONING",
+                  "DASHBOARD_FILTERS_APPLY_MODE"
                 ],
                 "type": "string"
               }
@@ -16683,7 +16681,8 @@
                   "ALERT",
                   "SEPARATORS",
                   "DATE_FILTER_CONFIG",
-                  "JIT_PROVISIONING"
+                  "JIT_PROVISIONING",
+                  "DASHBOARD_FILTERS_APPLY_MODE"
                 ],
                 "type": "string"
               }
@@ -16751,7 +16750,8 @@
                   "ALERT",
                   "SEPARATORS",
                   "DATE_FILTER_CONFIG",
-                  "JIT_PROVISIONING"
+                  "JIT_PROVISIONING",
+                  "DASHBOARD_FILTERS_APPLY_MODE"
                 ],
                 "type": "string"
               }
@@ -16885,7 +16885,8 @@
                   "ALERT",
                   "SEPARATORS",
                   "DATE_FILTER_CONFIG",
-                  "JIT_PROVISIONING"
+                  "JIT_PROVISIONING",
+                  "DASHBOARD_FILTERS_APPLY_MODE"
                 ],
                 "type": "string"
               }
@@ -16953,7 +16954,8 @@
                   "ALERT",
                   "SEPARATORS",
                   "DATE_FILTER_CONFIG",
-                  "JIT_PROVISIONING"
+                  "JIT_PROVISIONING",
+                  "DASHBOARD_FILTERS_APPLY_MODE"
                 ],
                 "type": "string"
               }
@@ -17472,26 +17474,44 @@
         "type": "object"
       },
       "PermissionsForAssignee": {
-        "description": "Desired levels of permissions for an assignee identified by an identifier.",
-        "properties": {
-          "assigneeIdentifier": {
-            "$ref": "#/components/schemas/AssigneeIdentifier"
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DashboardPermissionsAssignment"
+          },
+          {
+            "properties": {
+              "assigneeIdentifier": {
+                "$ref": "#/components/schemas/AssigneeIdentifier"
+              }
+            },
+            "type": "object"
           }
-        },
+        ],
+        "description": "Desired levels of permissions for an assignee identified by an identifier.",
         "required": [
-          "assigneeIdentifier"
+          "assigneeIdentifier",
+          "permissions"
         ],
         "type": "object"
       },
       "PermissionsForAssigneeRule": {
-        "description": "Desired levels of permissions for a collection of assignees identified by a rule.",
-        "properties": {
-          "assigneeRule": {
-            "$ref": "#/components/schemas/AssigneeRule"
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DashboardPermissionsAssignment"
+          },
+          {
+            "properties": {
+              "assigneeRule": {
+                "$ref": "#/components/schemas/AssigneeRule"
+              }
+            },
+            "type": "object"
           }
-        },
+        ],
+        "description": "Desired levels of permissions for a collection of assignees identified by a rule.",
         "required": [
-          "assigneeRule"
+          "assigneeRule",
+          "permissions"
         ],
         "type": "object"
       },
@@ -18016,7 +18036,8 @@
               "ALERT",
               "SEPARATORS",
               "DATE_FILTER_CONFIG",
-              "JIT_PROVISIONING"
+              "JIT_PROVISIONING",
+              "DASHBOARD_FILTERS_APPLY_MODE"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -19070,7 +19091,7 @@
   "paths": {
     "/api/v1/actions/collectUsage": {
       "get": {
-        "description": "Provides information about platform usage, like amount of users, workspaces, ...",
+        "description": "Provides information about platform usage, like amount of users, workspaces, ...\n\n_NOTE_: The `admin` user is always excluded from this amount.",
         "operationId": "allPlatformUsage",
         "responses": {
           "200": {
@@ -19100,7 +19121,7 @@
         }
       },
       "post": {
-        "description": "Provides information about platform usage, like amount of users, workspaces, ...",
+        "description": "Provides information about platform usage, like amount of users, workspaces, ...\n\n_NOTE_: The `admin` user is always excluded from this amount.",
         "operationId": "particularPlatformUsage",
         "requestBody": {
           "content": {

@@ -159,7 +159,7 @@ class JsonApiIdentityProviderPatchAttributes(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            custom_claim_mapping ({str: (str,)}): Map of custom claim overrides. To be used when your Idp does not provide default claims (sub, email, name, given_name, family_name, urn.gooddata.user_groups [optional]). Define the key pair for the claim you wish to override, where the key is the default name of the attribute and the value is your custom name for the given attribute.. [optional]  # noqa: E501
+            custom_claim_mapping ({str: (str,)}): Map of custom claim overrides. To be used when your Idp does not provide default claims (sub, email, name, given_name, family_name). Define the key pair for the claim you wish to override, where the key is the default name of the attribute and the value is your custom name for the given attribute.. [optional]  # noqa: E501
             identifiers ([str]): List of identifiers for this IdP, where an identifier is a domain name. Users with email addresses belonging to these domains will be authenticated by this IdP. In multiple provider setup, this field is mandatory.. [optional]  # noqa: E501
             oauth_client_id (str): The OAuth client id of your OIDC provider. This field is mandatory for OIDC IdP.. [optional]  # noqa: E501
             oauth_client_secret (str): The OAuth client secret of your OIDC provider. This field is mandatory for OIDC IdP.. [optional]  # noqa: E501
@@ -250,7 +250,7 @@ class JsonApiIdentityProviderPatchAttributes(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            custom_claim_mapping ({str: (str,)}): Map of custom claim overrides. To be used when your Idp does not provide default claims (sub, email, name, given_name, family_name, urn.gooddata.user_groups [optional]). Define the key pair for the claim you wish to override, where the key is the default name of the attribute and the value is your custom name for the given attribute.. [optional]  # noqa: E501
+            custom_claim_mapping ({str: (str,)}): Map of custom claim overrides. To be used when your Idp does not provide default claims (sub, email, name, given_name, family_name). Define the key pair for the claim you wish to override, where the key is the default name of the attribute and the value is your custom name for the given attribute.. [optional]  # noqa: E501
             identifiers ([str]): List of identifiers for this IdP, where an identifier is a domain name. Users with email addresses belonging to these domains will be authenticated by this IdP. In multiple provider setup, this field is mandatory.. [optional]  # noqa: E501
             oauth_client_id (str): The OAuth client id of your OIDC provider. This field is mandatory for OIDC IdP.. [optional]  # noqa: E501
             oauth_client_secret (str): The OAuth client secret of your OIDC provider. This field is mandatory for OIDC IdP.. [optional]  # noqa: E501

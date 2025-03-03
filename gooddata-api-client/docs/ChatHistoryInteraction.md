@@ -5,7 +5,7 @@ List of chat history interactions.
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**chat_history_interaction_id** | **int** | Chat History interaction ID. Unique ID for each interaction. | 
+**chat_history_interaction_id** | **str** | Chat History interaction ID. Unique ID for each interaction. | 
 **interaction_finished** | **bool** | Has the interaction already finished? Can be used for polling when interaction is in progress. | 
 **question** | **str** | User question | 
 **routing** | [**RouteResult**](RouteResult.md) |  | 

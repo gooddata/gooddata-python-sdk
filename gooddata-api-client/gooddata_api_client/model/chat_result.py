@@ -92,7 +92,7 @@ class ChatResult(ModelNormal):
         """
         lazy_import()
         return {
-            'chat_history_interaction_id': (int,),  # noqa: E501
+            'chat_history_interaction_id': (str,),  # noqa: E501
             'created_visualizations': (CreatedVisualizations,),  # noqa: E501
             'error_response': (str,),  # noqa: E501
             'found_objects': (FoundObjects,),  # noqa: E501
@@ -157,7 +157,7 @@ class ChatResult(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            chat_history_interaction_id (int): Chat History interaction ID. Unique ID for each interaction.. [optional]  # noqa: E501
+            chat_history_interaction_id (str): Chat History interaction ID. Unique ID for each interaction.. [optional]  # noqa: E501
             created_visualizations (CreatedVisualizations): [optional]  # noqa: E501
             error_response (str): Error response in anything fails.. [optional]  # noqa: E501
             found_objects (FoundObjects): [optional]  # noqa: E501
@@ -249,7 +249,7 @@ class ChatResult(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            chat_history_interaction_id (int): Chat History interaction ID. Unique ID for each interaction.. [optional]  # noqa: E501
+            chat_history_interaction_id (str): Chat History interaction ID. Unique ID for each interaction.. [optional]  # noqa: E501
             created_visualizations (CreatedVisualizations): [optional]  # noqa: E501
             error_response (str): Error response in anything fails.. [optional]  # noqa: E501
             found_objects (FoundObjects): [optional]  # noqa: E501
