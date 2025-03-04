@@ -5,18 +5,7 @@ weight: 60
 superheading: "catalog_workspace."
 ---
 
-``put_declarative_workspaces(workspace: CatalogDeclarativeWorkspaces)``
-
-Sets the layout of all workspaces and their hierarchy.
-
-{{% parameters-block title="Parameters" %}}
-{{< parameter p_type="CatalogDeclarativeWorkspaces" p_name="workspace" >}}
-Declarative Workspaces object including all the workspaces for given organization.
-{{< /parameter >}}
-{{% /parameters-block %}}
-
-{{% parameters-block title="Returns" None="yes" %}}
-{{% /parameters-block %}}
+{{< api-ref "sdk.CatalogWorkspaceService.put_declarative_workspaces" >}}
 
 ## Example
 
