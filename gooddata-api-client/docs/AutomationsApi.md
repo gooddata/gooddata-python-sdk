@@ -11,6 +11,8 @@ Method | HTTP request | Description
 [**get_entity_automations**](AutomationsApi.md#get_entity_automations) | **GET** /api/v1/entities/workspaces/{workspaceId}/automations/{objectId} | Get an Automation
 [**patch_entity_automations**](AutomationsApi.md#patch_entity_automations) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/automations/{objectId} | Patch an Automation
 [**set_automations**](AutomationsApi.md#set_automations) | **PUT** /api/v1/layout/workspaces/{workspaceId}/automations | Set automations
+[**trigger_automation**](AutomationsApi.md#trigger_automation) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/trigger | Trigger automation.
+[**trigger_existing_automation**](AutomationsApi.md#trigger_existing_automation) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/{automationId}/trigger | Trigger existing automation.
 [**update_entity_automations**](AutomationsApi.md#update_entity_automations) | **PUT** /api/v1/entities/workspaces/{workspaceId}/automations/{objectId} | Put an Automation
 
 
@@ -1006,6 +1008,225 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **204** | Automations successfully set. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **trigger_automation**
+> trigger_automation(workspace_id, trigger_automation_request)
+
+Trigger automation.
+
+Trigger the automation in the request.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import automations_api
+from gooddata_api_client.model.trigger_automation_request import TriggerAutomationRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = automations_api.AutomationsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    trigger_automation_request = TriggerAutomationRequest(
+        automation=AdHocAutomation(
+            analytical_dashboard=DeclarativeAnalyticalDashboardIdentifier(
+                id="dashboard123",
+                type="analyticalDashboard",
+            ),
+            description="description_example",
+            details={
+                "key": "key_example",
+            },
+            external_recipients=[
+                AutomationExternalRecipient(
+                    email="email_example",
+                ),
+            ],
+            metadata=JsonNode(),
+            notification_channel=DeclarativeNotificationChannelIdentifier(
+                id="webhook123",
+                type="notificationChannel",
+            ),
+            recipients=[
+                DeclarativeUserIdentifier(
+                    id="employee123",
+                    type="user",
+                ),
+            ],
+            tabular_exports=[
+                AutomationTabularExport(
+                    request_payload=TabularExportRequest(
+                        custom_override=CustomOverride(
+                            labels={
+                                "key": CustomLabel(
+                                    title="title_example",
+                                ),
+                            },
+                            metrics={
+                                "key": CustomMetric(
+                                    format="format_example",
+                                    title="title_example",
+                                ),
+                            },
+                        ),
+                        execution_result="ff483727196c9dc862c7fd3a5a84df55c96d61a4",
+                        file_name="result",
+                        format="CSV",
+                        metadata=JsonNode(),
+                        related_dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                        settings=Settings(
+                            merge_headers=True,
+                            pdf_page_size="a4 landscape",
+                            pdf_table_style=[
+                                PdfTableStyle(
+                                    properties=[
+                                        PdfTableStyleProperty(
+                                            key="key_example",
+                                            value="value_example",
+                                        ),
+                                    ],
+                                    selector="selector_example",
+                                ),
+                            ],
+                            pdf_top_left_content="Good",
+                            pdf_top_right_content="Morning",
+                            show_filters=False,
+                        ),
+                        visualization_object="f7c359bc-c230-4487-b15b-ad9685bcb537",
+                        visualization_object_custom_filters=[
+                            {},
+                        ],
+                    ),
+                ),
+            ],
+            tags=["Revenue","Sales"],
+            title="title_example",
+            visual_exports=[
+                AutomationVisualExport(
+                    request_payload=VisualExportRequest(
+                        dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                        file_name="filename",
+                        metadata={},
+                    ),
+                ),
+            ],
+        ),
+    ) # TriggerAutomationRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Trigger automation.
+        api_instance.trigger_automation(workspace_id, trigger_automation_request)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling AutomationsApi->trigger_automation: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **trigger_automation_request** | [**TriggerAutomationRequest**](TriggerAutomationRequest.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | The automation is successfully triggered. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **trigger_existing_automation**
+> trigger_existing_automation(workspace_id, automation_id)
+
+Trigger existing automation.
+
+Trigger the existing automation to execute immediately.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import automations_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = automations_api.AutomationsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    automation_id = "automationId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Trigger existing automation.
+        api_instance.trigger_existing_automation(workspace_id, automation_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling AutomationsApi->trigger_existing_automation: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **automation_id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | The automation is successfully triggered. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

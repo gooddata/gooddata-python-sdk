@@ -88,8 +88,6 @@ class MeasureGroupHeaders(ModelNormal):
         """
         lazy_import()
         return {
-            'first': (MeasureHeader,),  # noqa: E501
-            'last': (MeasureHeader,),  # noqa: E501
             'measure_group_headers': ([MeasureHeader],),  # noqa: E501
         }
 
@@ -99,8 +97,6 @@ class MeasureGroupHeaders(ModelNormal):
 
 
     attribute_map = {
-        'first': 'first',  # noqa: E501
-        'last': 'last',  # noqa: E501
         'measure_group_headers': 'measureGroupHeaders',  # noqa: E501
     }
 
@@ -145,8 +141,6 @@ class MeasureGroupHeaders(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            first (MeasureHeader): [optional]  # noqa: E501
-            last (MeasureHeader): [optional]  # noqa: E501
             measure_group_headers ([MeasureHeader]): [optional]  # noqa: E501
         """
 
@@ -233,8 +227,6 @@ class MeasureGroupHeaders(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            first (MeasureHeader): [optional]  # noqa: E501
-            last (MeasureHeader): [optional]  # noqa: E501
             measure_group_headers ([MeasureHeader]): [optional]  # noqa: E501
         """
 

@@ -8,6 +8,7 @@ docs/AbsoluteDateFilterAbsoluteDateFilter.md
 docs/AbstractMeasureValueFilter.md
 docs/ActionsApi.md
 docs/ActiveObjectIdentification.md
+docs/AdHocAutomation.md
 docs/AfmExecution.md
 docs/AfmExecutionResponse.md
 docs/AfmIdentifier.md
@@ -878,6 +879,7 @@ docs/TotalDimension.md
 docs/TotalExecutionResultHeader.md
 docs/TotalResultHeader.md
 docs/TranslationsApi.md
+docs/TriggerAutomationRequest.md
 docs/UnsubscribeApi.md
 docs/UsageApi.md
 docs/UserAssignee.md
@@ -1007,6 +1009,7 @@ gooddata_api_client/model/absolute_date_filter.py
 gooddata_api_client/model/absolute_date_filter_absolute_date_filter.py
 gooddata_api_client/model/abstract_measure_value_filter.py
 gooddata_api_client/model/active_object_identification.py
+gooddata_api_client/model/ad_hoc_automation.py
 gooddata_api_client/model/afm.py
 gooddata_api_client/model/afm_execution.py
 gooddata_api_client/model/afm_execution_response.py
@@ -1829,6 +1832,7 @@ gooddata_api_client/model/total.py
 gooddata_api_client/model/total_dimension.py
 gooddata_api_client/model/total_execution_result_header.py
 gooddata_api_client/model/total_result_header.py
+gooddata_api_client/model/trigger_automation_request.py
 gooddata_api_client/model/user_assignee.py
 gooddata_api_client/model/user_context.py
 gooddata_api_client/model/user_group_assignee.py

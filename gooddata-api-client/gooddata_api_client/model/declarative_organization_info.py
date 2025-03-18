@@ -138,7 +138,6 @@ class DeclarativeOrganizationInfo(ModelNormal):
             'csp_directives': ([DeclarativeCspDirective],),  # noqa: E501
             'early_access': (str,),  # noqa: E501
             'early_access_values': ([str],),  # noqa: E501
-            'jit_enabled': (bool,),  # noqa: E501
             'oauth_client_id': (str,),  # noqa: E501
             'oauth_client_secret': (str,),  # noqa: E501
             'oauth_custom_auth_attributes': ({str: (str,)},),  # noqa: E501
@@ -164,7 +163,6 @@ class DeclarativeOrganizationInfo(ModelNormal):
         'csp_directives': 'cspDirectives',  # noqa: E501
         'early_access': 'earlyAccess',  # noqa: E501
         'early_access_values': 'earlyAccessValues',  # noqa: E501
-        'jit_enabled': 'jitEnabled',  # noqa: E501
         'oauth_client_id': 'oauthClientId',  # noqa: E501
         'oauth_client_secret': 'oauthClientSecret',  # noqa: E501
         'oauth_custom_auth_attributes': 'oauthCustomAuthAttributes',  # noqa: E501
@@ -227,7 +225,6 @@ class DeclarativeOrganizationInfo(ModelNormal):
             csp_directives ([DeclarativeCspDirective]): A list of CSP directives.. [optional]  # noqa: E501
             early_access (str): Early access defined on level Organization. [optional]  # noqa: E501
             early_access_values ([str]): Early access defined on level Organization. [optional]  # noqa: E501
-            jit_enabled (bool): Flag to enable/disable JIT provisioning in the given organization. [optional]  # noqa: E501
             oauth_client_id (str): Identifier of the authentication provider. [optional]  # noqa: E501
             oauth_client_secret (str): Communication secret of the authentication provider (never returned back).. [optional]  # noqa: E501
             oauth_custom_auth_attributes ({str: (str,)}): Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.. [optional]  # noqa: E501
@@ -336,7 +333,6 @@ class DeclarativeOrganizationInfo(ModelNormal):
             csp_directives ([DeclarativeCspDirective]): A list of CSP directives.. [optional]  # noqa: E501
             early_access (str): Early access defined on level Organization. [optional]  # noqa: E501
             early_access_values ([str]): Early access defined on level Organization. [optional]  # noqa: E501
-            jit_enabled (bool): Flag to enable/disable JIT provisioning in the given organization. [optional]  # noqa: E501
             oauth_client_id (str): Identifier of the authentication provider. [optional]  # noqa: E501
             oauth_client_secret (str): Communication secret of the authentication provider (never returned back).. [optional]  # noqa: E501
             oauth_custom_auth_attributes ({str: (str,)}): Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.. [optional]  # noqa: E501

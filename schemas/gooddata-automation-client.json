@@ -1,6 +1,79 @@
 {
   "components": {
     "schemas": {
+      "AdHocAutomation": {
+        "properties": {
+          "analyticalDashboard": {
+            "$ref": "#/components/schemas/DeclarativeAnalyticalDashboardIdentifier"
+          },
+          "description": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "details": {
+            "additionalProperties": {
+              "description": "Additional details to be included in the automated message.",
+              "maxLength": 10000,
+              "type": "string"
+            },
+            "description": "Additional details to be included in the automated message.",
+            "maxLength": 10000,
+            "type": "object"
+          },
+          "externalRecipients": {
+            "description": "External recipients of the automation action results.",
+            "items": {
+              "$ref": "#/components/schemas/AutomationExternalRecipient"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "notificationChannel": {
+            "$ref": "#/components/schemas/DeclarativeNotificationChannelIdentifier"
+          },
+          "recipients": {
+            "items": {
+              "$ref": "#/components/schemas/DeclarativeUserIdentifier"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "tabularExports": {
+            "items": {
+              "$ref": "#/components/schemas/AutomationTabularExport"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "tags": {
+            "description": "A list of tags.",
+            "example": [
+              "Revenue",
+              "Sales"
+            ],
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "title": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "visualExports": {
+            "items": {
+              "$ref": "#/components/schemas/AutomationVisualExport"
+            },
+            "type": "array",
+            "uniqueItems": true
+          }
+        },
+        "type": "object"
+      },
       "AlertDescription": {
         "properties": {
           "attribute": {
@@ -88,6 +161,19 @@
         },
         "type": "object"
       },
+      "AutomationExternalRecipient": {
+        "properties": {
+          "email": {
+            "description": "E-mail address to send notifications from.",
+            "format": "email",
+            "type": "string"
+          }
+        },
+        "required": [
+          "email"
+        ],
+        "type": "object"
+      },
       "AutomationNotification": {
         "allOf": [
           {
@@ -104,6 +190,151 @@
         ],
         "required": [
           "content"
+        ],
+        "type": "object"
+      },
+      "AutomationTabularExport": {
+        "properties": {
+          "requestPayload": {
+            "$ref": "#/components/schemas/TabularExportRequest"
+          }
+        },
+        "required": [
+          "requestPayload"
+        ],
+        "type": "object"
+      },
+      "AutomationVisualExport": {
+        "properties": {
+          "requestPayload": {
+            "$ref": "#/components/schemas/VisualExportRequest"
+          }
+        },
+        "required": [
+          "requestPayload"
+        ],
+        "type": "object"
+      },
+      "CustomLabel": {
+        "description": "Custom label object override.",
+        "properties": {
+          "title": {
+            "description": "Override value.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "title"
+        ],
+        "type": "object"
+      },
+      "CustomMetric": {
+        "description": "Custom metric object override.",
+        "properties": {
+          "format": {
+            "description": "Format override.",
+            "type": "string"
+          },
+          "title": {
+            "description": "Metric title override.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "format",
+          "title"
+        ],
+        "type": "object"
+      },
+      "CustomOverride": {
+        "description": "Custom cell value overrides (IDs will be replaced with specified values).",
+        "properties": {
+          "labels": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/CustomLabel"
+            },
+            "description": "Map of CustomLabels with keys used as placeholders in document.",
+            "type": "object"
+          },
+          "metrics": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/CustomMetric"
+            },
+            "description": "Map of CustomMetrics with keys used as placeholders in document.",
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "DeclarativeAnalyticalDashboardIdentifier": {
+        "description": "An analytical dashboard identifier.",
+        "properties": {
+          "id": {
+            "description": "Identifier of the analytical dashboard.",
+            "example": "dashboard123",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "A type.",
+            "enum": [
+              "analyticalDashboard"
+            ],
+            "example": "analyticalDashboard",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "DeclarativeNotificationChannelIdentifier": {
+        "description": "A notification channel identifier.",
+        "properties": {
+          "id": {
+            "description": "Notification channel identifier.",
+            "example": "webhook123",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "A type.",
+            "enum": [
+              "notificationChannel"
+            ],
+            "example": "notificationChannel",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "DeclarativeUserIdentifier": {
+        "description": "A user identifier.",
+        "properties": {
+          "id": {
+            "description": "User identifier.",
+            "example": "employee123",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "A type.",
+            "enum": [
+              "user"
+            ],
+            "example": "user",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
         ],
         "type": "object"
       },
@@ -182,6 +413,13 @@
         "required": [
           "type"
         ],
+        "type": "object"
+      },
+      "JsonNode": {
+        "description": "Metadata definition in free-form JSON format.",
+        "example": {},
+        "maxLength": 15000,
+        "nullable": true,
         "type": "object"
       },
       "MetricRecord": {
@@ -322,6 +560,104 @@
         ],
         "type": "object"
       },
+      "PdfTableStyle": {
+        "description": "Custom CSS styles for the table. (PDF, HTML)",
+        "example": [
+          {
+            "properties": [
+              {
+                "key": "font-size",
+                "value": "30px"
+              }
+            ],
+            "selector": "th"
+          }
+        ],
+        "properties": {
+          "properties": {
+            "description": "List of CSS properties.",
+            "items": {
+              "$ref": "#/components/schemas/PdfTableStyleProperty"
+            },
+            "type": "array"
+          },
+          "selector": {
+            "description": "CSS selector where to apply given properties.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "selector"
+        ],
+        "type": "object"
+      },
+      "PdfTableStyleProperty": {
+        "description": "CSS property.",
+        "properties": {
+          "key": {
+            "description": "CSS property key.",
+            "type": "string"
+          },
+          "value": {
+            "description": "CSS property value.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "value"
+        ],
+        "type": "object"
+      },
+      "Settings": {
+        "description": "Additional settings.",
+        "properties": {
+          "mergeHeaders": {
+            "description": "Merge equal headers in neighbouring cells. (XLSX)",
+            "example": true,
+            "type": "boolean"
+          },
+          "pdfPageSize": {
+            "description": "Page size and orientation. (PDF)",
+            "example": "a4 landscape",
+            "type": "string"
+          },
+          "pdfTableStyle": {
+            "description": "Custom CSS styles for the table. (PDF, HTML)",
+            "example": [
+              {
+                "properties": [
+                  {
+                    "key": "font-size",
+                    "value": "30px"
+                  }
+                ],
+                "selector": "th"
+              }
+            ],
+            "items": {
+              "$ref": "#/components/schemas/PdfTableStyle"
+            },
+            "type": "array"
+          },
+          "pdfTopLeftContent": {
+            "description": "Top left header content. (PDF)",
+            "example": "Good",
+            "type": "string"
+          },
+          "pdfTopRightContent": {
+            "description": "Top right header content. (PDF)",
+            "example": "Morning",
+            "type": "string"
+          },
+          "showFilters": {
+            "description": "Print applied filters on top of the document. (PDF/HTML when visualizationObject is given)",
+            "example": false,
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
       "Smtp": {
         "description": "Custom SMTP destination for notifications. The properties host, port, username, and password are required on create and update",
         "properties": {
@@ -370,6 +706,64 @@
         },
         "required": [
           "type"
+        ],
+        "type": "object"
+      },
+      "TabularExportRequest": {
+        "description": "Export request object describing the export properties and overrides for tabular exports.",
+        "properties": {
+          "customOverride": {
+            "$ref": "#/components/schemas/CustomOverride"
+          },
+          "executionResult": {
+            "description": "Execution result identifier.",
+            "example": "ff483727196c9dc862c7fd3a5a84df55c96d61a4",
+            "type": "string"
+          },
+          "fileName": {
+            "description": "Filename of downloaded file without extension.",
+            "example": "result",
+            "type": "string"
+          },
+          "format": {
+            "description": "Expected file format.",
+            "enum": [
+              "CSV",
+              "XLSX",
+              "HTML",
+              "PDF"
+            ],
+            "example": "CSV",
+            "type": "string"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "relatedDashboardId": {
+            "description": "Analytical dashboard identifier. Optional identifier, which informs the system that the export is related to a specific dashboard.",
+            "example": "761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+            "type": "string"
+          },
+          "settings": {
+            "$ref": "#/components/schemas/Settings"
+          },
+          "visualizationObject": {
+            "description": "Visualization object identifier. Alternative to executionResult property.",
+            "example": "f7c359bc-c230-4487-b15b-ad9685bcb537",
+            "type": "string"
+          },
+          "visualizationObjectCustomFilters": {
+            "description": "Optional custom filters (as array of IFilter objects defined in UI SDK) to be applied when visualizationObject is given.",
+            "example": "[{\"negativeAttributeFilter\":{\"displayForm\":{\"identifier\":{\"id\":\"products.category\",\"type\":\"label\"}},\"notIn\":{\"values\":[\"Books\"]}}}]",
+            "items": {
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "fileName",
+          "format"
         ],
         "type": "object"
       },
@@ -433,6 +827,42 @@
         },
         "required": [
           "successful"
+        ],
+        "type": "object"
+      },
+      "TriggerAutomationRequest": {
+        "properties": {
+          "automation": {
+            "$ref": "#/components/schemas/AdHocAutomation"
+          }
+        },
+        "required": [
+          "automation"
+        ],
+        "type": "object"
+      },
+      "VisualExportRequest": {
+        "description": "Export request object describing the export properties and metadata for dashboard PDF exports.",
+        "properties": {
+          "dashboardId": {
+            "description": "Dashboard identifier",
+            "example": "761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+            "type": "string"
+          },
+          "fileName": {
+            "description": "File name to be used for retrieving the pdf document.",
+            "example": "filename",
+            "type": "string"
+          },
+          "metadata": {
+            "description": "Metadata definition in free-form JSON format.",
+            "example": "{}",
+            "type": "object"
+          }
+        },
+        "required": [
+          "dashboardId",
+          "fileName"
         ],
         "type": "object"
       },
@@ -772,6 +1202,7 @@
         },
         "summary": "Get latest notifications.",
         "tags": [
+          "Notification Channels",
           "actions"
         ]
       }
@@ -799,6 +1230,7 @@
         },
         "summary": "Mark all notifications as read.",
         "tags": [
+          "Notification Channels",
           "actions"
         ]
       }
@@ -825,6 +1257,77 @@
         },
         "summary": "Mark notification as read.",
         "tags": [
+          "Notification Channels",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/automations/trigger": {
+      "post": {
+        "description": "Trigger the automation in the request.",
+        "operationId": "triggerAutomation",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TriggerAutomationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "The automation is successfully triggered."
+          }
+        },
+        "summary": "Trigger automation.",
+        "tags": [
+          "Automations",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/automations/{automationId}/trigger": {
+      "post": {
+        "description": "Trigger the existing automation to execute immediately.",
+        "operationId": "triggerExistingAutomation",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "automationId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "The automation is successfully triggered."
+          }
+        },
+        "summary": "Trigger existing automation.",
+        "tags": [
+          "Automations",
           "actions"
         ]
       }

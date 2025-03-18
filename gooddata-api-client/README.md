@@ -112,6 +112,8 @@ Class | Method | HTTP request | Description
 *AutomationsApi* | [**get_entity_automations**](docs/AutomationsApi.md#get_entity_automations) | **GET** /api/v1/entities/workspaces/{workspaceId}/automations/{objectId} | Get an Automation
 *AutomationsApi* | [**patch_entity_automations**](docs/AutomationsApi.md#patch_entity_automations) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/automations/{objectId} | Patch an Automation
 *AutomationsApi* | [**set_automations**](docs/AutomationsApi.md#set_automations) | **PUT** /api/v1/layout/workspaces/{workspaceId}/automations | Set automations
+*AutomationsApi* | [**trigger_automation**](docs/AutomationsApi.md#trigger_automation) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/trigger | Trigger automation.
+*AutomationsApi* | [**trigger_existing_automation**](docs/AutomationsApi.md#trigger_existing_automation) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/{automationId}/trigger | Trigger existing automation.
 *AutomationsApi* | [**update_entity_automations**](docs/AutomationsApi.md#update_entity_automations) | **PUT** /api/v1/entities/workspaces/{workspaceId}/automations/{objectId} | Put an Automation
 *AvailableDriversApi* | [**get_data_source_drivers**](docs/AvailableDriversApi.md#get_data_source_drivers) | **GET** /api/v1/options/availableDrivers | Get all available data source drivers
 *CSPDirectivesApi* | [**create_entity_csp_directives**](docs/CSPDirectivesApi.md#create_entity_csp_directives) | **POST** /api/v1/entities/cspDirectives | Post CSP Directives
@@ -244,6 +246,9 @@ Class | Method | HTTP request | Description
 *NotificationChannelsApi* | [**get_all_entities_notification_channels**](docs/NotificationChannelsApi.md#get_all_entities_notification_channels) | **GET** /api/v1/entities/notificationChannels | Get all Notification Channel entities
 *NotificationChannelsApi* | [**get_entity_notification_channels**](docs/NotificationChannelsApi.md#get_entity_notification_channels) | **GET** /api/v1/entities/notificationChannels/{id} | Get Notification Channel entity
 *NotificationChannelsApi* | [**get_notification_channels_layout**](docs/NotificationChannelsApi.md#get_notification_channels_layout) | **GET** /api/v1/layout/notificationChannels | Get all notification channels layout
+*NotificationChannelsApi* | [**get_notifications**](docs/NotificationChannelsApi.md#get_notifications) | **GET** /api/v1/actions/notifications | Get latest notifications.
+*NotificationChannelsApi* | [**mark_as_read_notification**](docs/NotificationChannelsApi.md#mark_as_read_notification) | **POST** /api/v1/actions/notifications/{notificationId}/markAsRead | Mark notification as read.
+*NotificationChannelsApi* | [**mark_as_read_notification_all**](docs/NotificationChannelsApi.md#mark_as_read_notification_all) | **POST** /api/v1/actions/notifications/markAsRead | Mark all notifications as read.
 *NotificationChannelsApi* | [**patch_entity_notification_channels**](docs/NotificationChannelsApi.md#patch_entity_notification_channels) | **PATCH** /api/v1/entities/notificationChannels/{id} | Patch Notification Channel entity
 *NotificationChannelsApi* | [**set_notification_channels**](docs/NotificationChannelsApi.md#set_notification_channels) | **PUT** /api/v1/layout/notificationChannels | Set all notification channels
 *NotificationChannelsApi* | [**test_existing_notification_channel**](docs/NotificationChannelsApi.md#test_existing_notification_channel) | **POST** /api/v1/actions/notificationChannels/{notificationChannelId}/test | Test existing notification channel.
@@ -457,6 +462,8 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**test_data_source_definition**](docs/ActionsApi.md#test_data_source_definition) | **POST** /api/v1/actions/dataSource/test | Test connection by data source definition
 *ActionsApi* | [**test_existing_notification_channel**](docs/ActionsApi.md#test_existing_notification_channel) | **POST** /api/v1/actions/notificationChannels/{notificationChannelId}/test | Test existing notification channel.
 *ActionsApi* | [**test_notification_channel**](docs/ActionsApi.md#test_notification_channel) | **POST** /api/v1/actions/notificationChannels/test | Test notification channel.
+*ActionsApi* | [**trigger_automation**](docs/ActionsApi.md#trigger_automation) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/trigger | Trigger automation.
+*ActionsApi* | [**trigger_existing_automation**](docs/ActionsApi.md#trigger_existing_automation) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/{automationId}/trigger | Trigger existing automation.
 *ActionsApi* | [**unsubscribe_all_automations**](docs/ActionsApi.md#unsubscribe_all_automations) | **DELETE** /api/v1/actions/organization/automations/unsubscribe | Unsubscribe from all automations in all workspaces
 *ActionsApi* | [**unsubscribe_automation**](docs/ActionsApi.md#unsubscribe_automation) | **DELETE** /api/v1/actions/workspaces/{workspaceId}/automations/{automationId}/unsubscribe | Unsubscribe from an automation
 *ActionsApi* | [**unsubscribe_workspace_automations**](docs/ActionsApi.md#unsubscribe_workspace_automations) | **DELETE** /api/v1/actions/workspaces/{workspaceId}/automations/unsubscribe | Unsubscribe from all automations in the workspace
@@ -884,6 +891,7 @@ Class | Method | HTTP request | Description
  - [AbsoluteDateFilterAbsoluteDateFilter](docs/AbsoluteDateFilterAbsoluteDateFilter.md)
  - [AbstractMeasureValueFilter](docs/AbstractMeasureValueFilter.md)
  - [ActiveObjectIdentification](docs/ActiveObjectIdentification.md)
+ - [AdHocAutomation](docs/AdHocAutomation.md)
  - [AfmExecution](docs/AfmExecution.md)
  - [AfmExecutionResponse](docs/AfmExecutionResponse.md)
  - [AfmIdentifier](docs/AfmIdentifier.md)
@@ -1705,6 +1713,7 @@ Class | Method | HTTP request | Description
  - [TotalDimension](docs/TotalDimension.md)
  - [TotalExecutionResultHeader](docs/TotalExecutionResultHeader.md)
  - [TotalResultHeader](docs/TotalResultHeader.md)
+ - [TriggerAutomationRequest](docs/TriggerAutomationRequest.md)
  - [UserAssignee](docs/UserAssignee.md)
  - [UserContext](docs/UserContext.md)
  - [UserGroupAssignee](docs/UserGroupAssignee.md)

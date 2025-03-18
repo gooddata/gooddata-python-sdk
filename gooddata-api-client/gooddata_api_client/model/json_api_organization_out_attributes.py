@@ -116,7 +116,6 @@ class JsonApiOrganizationOutAttributes(ModelNormal):
             'early_access': (str, none_type,),  # noqa: E501
             'early_access_values': ([str], none_type,),  # noqa: E501
             'hostname': (str,),  # noqa: E501
-            'jit_enabled': (bool,),  # noqa: E501
             'name': (str, none_type,),  # noqa: E501
             'oauth_client_id': (str,),  # noqa: E501
             'oauth_custom_auth_attributes': ({str: (str,)},),  # noqa: E501
@@ -136,7 +135,6 @@ class JsonApiOrganizationOutAttributes(ModelNormal):
         'early_access': 'earlyAccess',  # noqa: E501
         'early_access_values': 'earlyAccessValues',  # noqa: E501
         'hostname': 'hostname',  # noqa: E501
-        'jit_enabled': 'jitEnabled',  # noqa: E501
         'name': 'name',  # noqa: E501
         'oauth_client_id': 'oauthClientId',  # noqa: E501
         'oauth_custom_auth_attributes': 'oauthCustomAuthAttributes',  # noqa: E501
@@ -191,7 +189,6 @@ class JsonApiOrganizationOutAttributes(ModelNormal):
             early_access (str, none_type): The early access feature identifier. It is used to enable experimental features. Deprecated in favor of earlyAccessValues.. [optional]  # noqa: E501
             early_access_values ([str], none_type): The early access feature identifiers. They are used to enable experimental features.. [optional]  # noqa: E501
             hostname (str): [optional]  # noqa: E501
-            jit_enabled (bool): Flag to enable/disable JIT provisioning in the given organization. [optional]  # noqa: E501
             name (str, none_type): [optional]  # noqa: E501
             oauth_client_id (str): [optional]  # noqa: E501
             oauth_custom_auth_attributes ({str: (str,)}): Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.. [optional]  # noqa: E501
@@ -288,7 +285,6 @@ class JsonApiOrganizationOutAttributes(ModelNormal):
             early_access (str, none_type): The early access feature identifier. It is used to enable experimental features. Deprecated in favor of earlyAccessValues.. [optional]  # noqa: E501
             early_access_values ([str], none_type): The early access feature identifiers. They are used to enable experimental features.. [optional]  # noqa: E501
             hostname (str): [optional]  # noqa: E501
-            jit_enabled (bool): Flag to enable/disable JIT provisioning in the given organization. [optional]  # noqa: E501
             name (str, none_type): [optional]  # noqa: E501
             oauth_client_id (str): [optional]  # noqa: E501
             oauth_custom_auth_attributes ({str: (str,)}): Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.. [optional]  # noqa: E501
