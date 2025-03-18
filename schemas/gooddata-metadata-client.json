@@ -2890,10 +2890,6 @@
             "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
-          "jitEnabled": {
-            "description": "Flag to enable/disable JIT provisioning in the given organization",
-            "type": "boolean"
-          },
           "name": {
             "description": "Formal name of the organization.",
             "example": "Alpha corporation",
@@ -12817,10 +12813,6 @@
                 "maxLength": 255,
                 "type": "string"
               },
-              "jitEnabled": {
-                "description": "Flag to enable/disable JIT provisioning in the given organization",
-                "type": "boolean"
-              },
               "name": {
                 "maxLength": 255,
                 "nullable": true,
@@ -12940,10 +12932,6 @@
               "hostname": {
                 "maxLength": 255,
                 "type": "string"
-              },
-              "jitEnabled": {
-                "description": "Flag to enable/disable JIT provisioning in the given organization",
-                "type": "boolean"
               },
               "name": {
                 "maxLength": 255,
@@ -13107,10 +13095,6 @@
               "hostname": {
                 "maxLength": 255,
                 "type": "string"
-              },
-              "jitEnabled": {
-                "description": "Flag to enable/disable JIT provisioning in the given organization",
-                "type": "boolean"
               },
               "name": {
                 "maxLength": 255,

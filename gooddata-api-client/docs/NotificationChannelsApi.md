@@ -9,6 +9,9 @@ Method | HTTP request | Description
 [**get_all_entities_notification_channels**](NotificationChannelsApi.md#get_all_entities_notification_channels) | **GET** /api/v1/entities/notificationChannels | Get all Notification Channel entities
 [**get_entity_notification_channels**](NotificationChannelsApi.md#get_entity_notification_channels) | **GET** /api/v1/entities/notificationChannels/{id} | Get Notification Channel entity
 [**get_notification_channels_layout**](NotificationChannelsApi.md#get_notification_channels_layout) | **GET** /api/v1/layout/notificationChannels | Get all notification channels layout
+[**get_notifications**](NotificationChannelsApi.md#get_notifications) | **GET** /api/v1/actions/notifications | Get latest notifications.
+[**mark_as_read_notification**](NotificationChannelsApi.md#mark_as_read_notification) | **POST** /api/v1/actions/notifications/{notificationId}/markAsRead | Mark notification as read.
+[**mark_as_read_notification_all**](NotificationChannelsApi.md#mark_as_read_notification_all) | **POST** /api/v1/actions/notifications/markAsRead | Mark all notifications as read.
 [**patch_entity_notification_channels**](NotificationChannelsApi.md#patch_entity_notification_channels) | **PATCH** /api/v1/entities/notificationChannels/{id} | Patch Notification Channel entity
 [**set_notification_channels**](NotificationChannelsApi.md#set_notification_channels) | **PUT** /api/v1/layout/notificationChannels | Set all notification channels
 [**test_existing_notification_channel**](NotificationChannelsApi.md#test_existing_notification_channel) | **POST** /api/v1/actions/notificationChannels/{notificationChannelId}/test | Test existing notification channel.
@@ -383,6 +386,215 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Retrieved layout of all notification channels. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_notifications**
+> Notifications get_notifications()
+
+Get latest notifications.
+
+Get latest in-platform notifications for the current user.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import notification_channels_api
+from gooddata_api_client.model.notifications import Notifications
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = notification_channels_api.NotificationChannelsApi(api_client)
+    workspace_id = "workspaceId_example" # str | Workspace ID to filter notifications by. (optional)
+    is_read = True # bool | Filter notifications by read status. (optional)
+    page = "0" # str | Zero-based page index (0..N) (optional) if omitted the server will use the default value of "0"
+    size = "20" # str | The size of the page to be returned. (optional) if omitted the server will use the default value of "20"
+    meta_include = [
+        "total",
+    ] # [str] | Additional meta information to include in the response. (optional)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Get latest notifications.
+        api_response = api_instance.get_notifications(workspace_id=workspace_id, is_read=is_read, page=page, size=size, meta_include=meta_include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling NotificationChannelsApi->get_notifications: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace ID to filter notifications by. | [optional]
+ **is_read** | **bool**| Filter notifications by read status. | [optional]
+ **page** | **str**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of "0"
+ **size** | **str**| The size of the page to be returned. | [optional] if omitted the server will use the default value of "20"
+ **meta_include** | **[str]**| Additional meta information to include in the response. | [optional]
+
+### Return type
+
+[**Notifications**](Notifications.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **mark_as_read_notification**
+> mark_as_read_notification(notification_id)
+
+Mark notification as read.
+
+Mark in-platform notification by its ID as read.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import notification_channels_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = notification_channels_api.NotificationChannelsApi(api_client)
+    notification_id = "notificationId_example" # str | Notification ID to mark as read.
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Mark notification as read.
+        api_instance.mark_as_read_notification(notification_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling NotificationChannelsApi->mark_as_read_notification: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **notification_id** | **str**| Notification ID to mark as read. |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **mark_as_read_notification_all**
+> mark_as_read_notification_all()
+
+Mark all notifications as read.
+
+Mark all user in-platform notifications as read.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import notification_channels_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = notification_channels_api.NotificationChannelsApi(api_client)
+    workspace_id = "workspaceId_example" # str | Workspace ID where to mark notifications as read. (optional)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Mark all notifications as read.
+        api_instance.mark_as_read_notification_all(workspace_id=workspace_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling NotificationChannelsApi->mark_as_read_notification_all: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace ID where to mark notifications as read. | [optional]
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

@@ -145,7 +145,7 @@ class RawCustomOverride(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            labels ({str: (RawCustomLabel,)}): Currently No-Op. Map of CustomLabels with keys used as placeholders in export result.. [optional]  # noqa: E501
+            labels ({str: (RawCustomLabel,)}): Map of CustomLabels with keys used as placeholders in export result.. [optional]  # noqa: E501
             metrics ({str: (RawCustomMetric,)}): Map of CustomMetrics with keys used as placeholders in export result.. [optional]  # noqa: E501
         """
 
@@ -232,7 +232,7 @@ class RawCustomOverride(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            labels ({str: (RawCustomLabel,)}): Currently No-Op. Map of CustomLabels with keys used as placeholders in export result.. [optional]  # noqa: E501
+            labels ({str: (RawCustomLabel,)}): Map of CustomLabels with keys used as placeholders in export result.. [optional]  # noqa: E501
             metrics ({str: (RawCustomMetric,)}): Map of CustomMetrics with keys used as placeholders in export result.. [optional]  # noqa: E501
         """
 

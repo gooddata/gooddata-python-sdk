@@ -14,7 +14,6 @@ Name | Type | Description | Notes
 **csp_directives** | [**[DeclarativeCspDirective]**](DeclarativeCspDirective.md) | A list of CSP directives. | [optional] 
 **early_access** | **str** | Early access defined on level Organization | [optional] 
 **early_access_values** | **[str]** | Early access defined on level Organization | [optional] 
-**jit_enabled** | **bool** | Flag to enable/disable JIT provisioning in the given organization | [optional] 
 **oauth_client_id** | **str** | Identifier of the authentication provider | [optional] 
 **oauth_client_secret** | **str** | Communication secret of the authentication provider (never returned back). | [optional] 
 **oauth_custom_auth_attributes** | **{str: (str,)}** | Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute. | [optional] 

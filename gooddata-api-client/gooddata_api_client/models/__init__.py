@@ -14,6 +14,7 @@ from gooddata_api_client.model.absolute_date_filter import AbsoluteDateFilter
 from gooddata_api_client.model.absolute_date_filter_absolute_date_filter import AbsoluteDateFilterAbsoluteDateFilter
 from gooddata_api_client.model.abstract_measure_value_filter import AbstractMeasureValueFilter
 from gooddata_api_client.model.active_object_identification import ActiveObjectIdentification
+from gooddata_api_client.model.ad_hoc_automation import AdHocAutomation
 from gooddata_api_client.model.afm_execution import AfmExecution
 from gooddata_api_client.model.afm_execution_response import AfmExecutionResponse
 from gooddata_api_client.model.afm_identifier import AfmIdentifier
@@ -835,6 +836,7 @@ from gooddata_api_client.model.total import Total
 from gooddata_api_client.model.total_dimension import TotalDimension
 from gooddata_api_client.model.total_execution_result_header import TotalExecutionResultHeader
 from gooddata_api_client.model.total_result_header import TotalResultHeader
+from gooddata_api_client.model.trigger_automation_request import TriggerAutomationRequest
 from gooddata_api_client.model.user_assignee import UserAssignee
 from gooddata_api_client.model.user_context import UserContext
 from gooddata_api_client.model.user_group_assignee import UserGroupAssignee

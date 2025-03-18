@@ -32,8 +32,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.afm import AFM
+    from gooddata_api_client.model.execution_settings import ExecutionSettings
     from gooddata_api_client.model.raw_custom_override import RawCustomOverride
     globals()['AFM'] = AFM
+    globals()['ExecutionSettings'] = ExecutionSettings
     globals()['RawCustomOverride'] = RawCustomOverride
 
 
@@ -99,6 +101,7 @@ class RawExportRequest(ModelNormal):
             'file_name': (str,),  # noqa: E501
             'format': (str,),  # noqa: E501
             'custom_override': (RawCustomOverride,),  # noqa: E501
+            'execution_settings': (ExecutionSettings,),  # noqa: E501
         }
 
     @cached_property
@@ -111,6 +114,7 @@ class RawExportRequest(ModelNormal):
         'file_name': 'fileName',  # noqa: E501
         'format': 'format',  # noqa: E501
         'custom_override': 'customOverride',  # noqa: E501
+        'execution_settings': 'executionSettings',  # noqa: E501
     }
 
     read_only_vars = {
@@ -160,6 +164,7 @@ class RawExportRequest(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             custom_override (RawCustomOverride): [optional]  # noqa: E501
+            execution_settings (ExecutionSettings): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -254,6 +259,7 @@ class RawExportRequest(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             custom_override (RawCustomOverride): [optional]  # noqa: E501
+            execution_settings (ExecutionSettings): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
