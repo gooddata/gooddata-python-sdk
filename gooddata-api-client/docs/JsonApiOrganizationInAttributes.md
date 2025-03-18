@@ -8,7 +8,6 @@ Name | Type | Description | Notes
 **early_access** | **str, none_type** | The early access feature identifier. It is used to enable experimental features. Deprecated in favor of earlyAccessValues. | [optional] 
 **early_access_values** | **[str], none_type** | The early access feature identifiers. They are used to enable experimental features. | [optional] 
 **hostname** | **str** |  | [optional] 
-**jit_enabled** | **bool** | Flag to enable/disable JIT provisioning in the given organization | [optional] 
 **name** | **str, none_type** |  | [optional] 
 **oauth_client_id** | **str** |  | [optional] 
 **oauth_client_secret** | **str** |  | [optional] 

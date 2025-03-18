@@ -200,7 +200,6 @@ with gooddata_api_client.ApiClient() as api_client:
             ],
             hostname="alpha.com",
             id="Alpha corporation",
-            jit_enabled=True,
             name="Alpha corporation",
             oauth_client_id="oauth_client_id_example",
             oauth_client_secret="oauth_client_secret_example",

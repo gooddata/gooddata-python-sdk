@@ -32,7 +32,9 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.created_visualization import CreatedVisualization
+    from gooddata_api_client.model.suggestion import Suggestion
     globals()['CreatedVisualization'] = CreatedVisualization
+    globals()['Suggestion'] = Suggestion
 
 
 class CreatedVisualizations(ModelNormal):
@@ -90,6 +92,7 @@ class CreatedVisualizations(ModelNormal):
         return {
             'objects': ([CreatedVisualization],),  # noqa: E501
             'reasoning': (str,),  # noqa: E501
+            'suggestions': ([Suggestion],),  # noqa: E501
         }
 
     @cached_property
@@ -100,6 +103,7 @@ class CreatedVisualizations(ModelNormal):
     attribute_map = {
         'objects': 'objects',  # noqa: E501
         'reasoning': 'reasoning',  # noqa: E501
+        'suggestions': 'suggestions',  # noqa: E501
     }
 
     read_only_vars = {
@@ -109,12 +113,13 @@ class CreatedVisualizations(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, objects, reasoning, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, objects, reasoning, suggestions, *args, **kwargs):  # noqa: E501
         """CreatedVisualizations - a model defined in OpenAPI
 
         Args:
             objects ([CreatedVisualization]): List of created visualization objects
             reasoning (str): Reasoning from LLM. Description of how and why the answer was generated.
+            suggestions ([Suggestion]): List of suggestions for next steps. Filled when no visualization was created, suggests alternatives.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -180,6 +185,7 @@ class CreatedVisualizations(ModelNormal):
 
         self.objects = objects
         self.reasoning = reasoning
+        self.suggestions = suggestions
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -200,12 +206,13 @@ class CreatedVisualizations(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, objects, reasoning, *args, **kwargs):  # noqa: E501
+    def __init__(self, objects, reasoning, suggestions, *args, **kwargs):  # noqa: E501
         """CreatedVisualizations - a model defined in OpenAPI
 
         Args:
             objects ([CreatedVisualization]): List of created visualization objects
             reasoning (str): Reasoning from LLM. Description of how and why the answer was generated.
+            suggestions ([Suggestion]): List of suggestions for next steps. Filled when no visualization was created, suggests alternatives.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -269,6 +276,7 @@ class CreatedVisualizations(ModelNormal):
 
         self.objects = objects
         self.reasoning = reasoning
+        self.suggestions = suggestions
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

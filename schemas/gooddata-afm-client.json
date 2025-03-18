@@ -1132,11 +1132,19 @@
           "reasoning": {
             "description": "Reasoning from LLM. Description of how and why the answer was generated.",
             "type": "string"
+          },
+          "suggestions": {
+            "description": "List of suggestions for next steps. Filled when no visualization was created, suggests alternatives.",
+            "items": {
+              "$ref": "#/components/schemas/Suggestion"
+            },
+            "type": "array"
           }
         },
         "required": [
           "objects",
-          "reasoning"
+          "reasoning",
+          "suggestions"
         ],
         "type": "object"
       },
@@ -2124,12 +2132,6 @@
       "MeasureGroupHeaders": {
         "description": "Measure group headers",
         "properties": {
-          "first": {
-            "$ref": "#/components/schemas/MeasureHeader"
-          },
-          "last": {
-            "$ref": "#/components/schemas/MeasureHeader"
-          },
           "measureGroupHeaders": {
             "items": {
               "$ref": "#/components/schemas/MeasureHeader"
@@ -3120,7 +3122,7 @@
         "type": "object"
       },
       "Suggestion": {
-        "description": "Suggestions for next steps",
+        "description": "List of suggestions for next steps. Filled when no visualization was created, suggests alternatives.",
         "properties": {
           "label": {
             "description": "Suggestion button label",

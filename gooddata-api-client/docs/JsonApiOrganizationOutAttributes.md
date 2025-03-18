@@ -9,7 +9,6 @@ Name | Type | Description | Notes
 **early_access** | **str, none_type** | The early access feature identifier. It is used to enable experimental features. Deprecated in favor of earlyAccessValues. | [optional] 
 **early_access_values** | **[str], none_type** | The early access feature identifiers. They are used to enable experimental features. | [optional] 
 **hostname** | **str** |  | [optional] 
-**jit_enabled** | **bool** | Flag to enable/disable JIT provisioning in the given organization | [optional] 
 **name** | **str, none_type** |  | [optional] 
 **oauth_client_id** | **str** |  | [optional] 
 **oauth_custom_auth_attributes** | **{str: (str,)}** | Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute. | [optional] 

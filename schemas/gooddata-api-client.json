@@ -160,6 +160,79 @@
         ],
         "type": "object"
       },
+      "AdHocAutomation": {
+        "properties": {
+          "analyticalDashboard": {
+            "$ref": "#/components/schemas/DeclarativeAnalyticalDashboardIdentifier"
+          },
+          "description": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "details": {
+            "additionalProperties": {
+              "description": "Additional details to be included in the automated message.",
+              "maxLength": 10000,
+              "type": "string"
+            },
+            "description": "Additional details to be included in the automated message.",
+            "maxLength": 10000,
+            "type": "object"
+          },
+          "externalRecipients": {
+            "description": "External recipients of the automation action results.",
+            "items": {
+              "$ref": "#/components/schemas/AutomationExternalRecipient"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "notificationChannel": {
+            "$ref": "#/components/schemas/DeclarativeNotificationChannelIdentifier"
+          },
+          "recipients": {
+            "items": {
+              "$ref": "#/components/schemas/DeclarativeUserIdentifier"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "tabularExports": {
+            "items": {
+              "$ref": "#/components/schemas/AutomationTabularExport"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "tags": {
+            "description": "A list of tags.",
+            "example": [
+              "Revenue",
+              "Sales"
+            ],
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "title": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "visualExports": {
+            "items": {
+              "$ref": "#/components/schemas/AutomationVisualExport"
+            },
+            "type": "array",
+            "uniqueItems": true
+          }
+        },
+        "type": "object"
+      },
       "AfmExecution": {
         "properties": {
           "execution": {
@@ -1789,11 +1862,19 @@
           "reasoning": {
             "description": "Reasoning from LLM. Description of how and why the answer was generated.",
             "type": "string"
+          },
+          "suggestions": {
+            "description": "List of suggestions for next steps. Filled when no visualization was created, suggests alternatives.",
+            "items": {
+              "$ref": "#/components/schemas/Suggestion"
+            },
+            "type": "array"
           }
         },
         "required": [
           "objects",
-          "reasoning"
+          "reasoning",
+          "suggestions"
         ],
         "type": "object"
       },
@@ -4039,10 +4120,6 @@
             "example": "Alpha corporation",
             "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
-          },
-          "jitEnabled": {
-            "description": "Flag to enable/disable JIT provisioning in the given organization",
-            "type": "boolean"
           },
           "name": {
             "description": "Formal name of the organization.",
@@ -14758,10 +14835,6 @@
                 "maxLength": 255,
                 "type": "string"
               },
-              "jitEnabled": {
-                "description": "Flag to enable/disable JIT provisioning in the given organization",
-                "type": "boolean"
-              },
               "name": {
                 "maxLength": 255,
                 "nullable": true,
@@ -14881,10 +14954,6 @@
               "hostname": {
                 "maxLength": 255,
                 "type": "string"
-              },
-              "jitEnabled": {
-                "description": "Flag to enable/disable JIT provisioning in the given organization",
-                "type": "boolean"
               },
               "name": {
                 "maxLength": 255,
@@ -15048,10 +15117,6 @@
               "hostname": {
                 "maxLength": 255,
                 "type": "string"
-              },
-              "jitEnabled": {
-                "description": "Flag to enable/disable JIT provisioning in the given organization",
-                "type": "boolean"
               },
               "name": {
                 "maxLength": 255,
@@ -19177,12 +19242,6 @@
       "MeasureGroupHeaders": {
         "description": "Measure group headers",
         "properties": {
-          "first": {
-            "$ref": "#/components/schemas/MeasureHeader"
-          },
-          "last": {
-            "$ref": "#/components/schemas/MeasureHeader"
-          },
           "measureGroupHeaders": {
             "items": {
               "$ref": "#/components/schemas/MeasureHeader"
@@ -20176,7 +20235,7 @@
             "additionalProperties": {
               "$ref": "#/components/schemas/RawCustomLabel"
             },
-            "description": "Currently No-Op. Map of CustomLabels with keys used as placeholders in export result.",
+            "description": "Map of CustomLabels with keys used as placeholders in export result.",
             "type": "object"
           },
           "metrics": {
@@ -20197,6 +20256,9 @@
           },
           "execution": {
             "$ref": "#/components/schemas/AFM"
+          },
+          "executionSettings": {
+            "$ref": "#/components/schemas/ExecutionSettings"
           },
           "fileName": {
             "description": "Filename of downloaded file without extension.",
@@ -21375,7 +21437,7 @@
         "type": "object"
       },
       "Suggestion": {
-        "description": "Suggestions for next steps",
+        "description": "List of suggestions for next steps. Filled when no visualization was created, suggests alternatives.",
         "properties": {
           "label": {
             "description": "Suggestion button label",
@@ -21832,6 +21894,17 @@
         },
         "required": [
           "function"
+        ],
+        "type": "object"
+      },
+      "TriggerAutomationRequest": {
+        "properties": {
+          "automation": {
+            "$ref": "#/components/schemas/AdHocAutomation"
+          }
+        },
+        "required": [
+          "automation"
         ],
         "type": "object"
       },
@@ -23456,6 +23529,7 @@
         },
         "summary": "Get latest notifications.",
         "tags": [
+          "Notification Channels",
           "actions"
         ]
       }
@@ -23483,6 +23557,7 @@
         },
         "summary": "Mark all notifications as read.",
         "tags": [
+          "Notification Channels",
           "actions"
         ]
       }
@@ -23509,6 +23584,7 @@
         },
         "summary": "Mark notification as read.",
         "tags": [
+          "Notification Channels",
           "actions"
         ]
       }
@@ -24534,6 +24610,42 @@
         ]
       }
     },
+    "/api/v1/actions/workspaces/{workspaceId}/automations/trigger": {
+      "post": {
+        "description": "Trigger the automation in the request.",
+        "operationId": "triggerAutomation",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TriggerAutomationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "The automation is successfully triggered."
+          }
+        },
+        "summary": "Trigger automation.",
+        "tags": [
+          "Automations",
+          "actions"
+        ]
+      }
+    },
     "/api/v1/actions/workspaces/{workspaceId}/automations/unsubscribe": {
       "delete": {
         "operationId": "unsubscribeWorkspaceAutomations",
@@ -24555,6 +24667,40 @@
         "summary": "Unsubscribe from all automations in the workspace",
         "tags": [
           "Unsubscribe",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/automations/{automationId}/trigger": {
+      "post": {
+        "description": "Trigger the existing automation to execute immediately.",
+        "operationId": "triggerExistingAutomation",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "automationId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "The automation is successfully triggered."
+          }
+        },
+        "summary": "Trigger existing automation.",
+        "tags": [
+          "Automations",
           "actions"
         ]
       }

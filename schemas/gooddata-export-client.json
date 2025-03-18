@@ -487,6 +487,21 @@
         ],
         "type": "object"
       },
+      "ExecutionSettings": {
+        "description": "Various settings affecting the process of AFM execution or its result",
+        "properties": {
+          "dataSamplingPercentage": {
+            "description": "Specifies the percentage of rows from fact datasets to use during computation. This feature is available only for workspaces that use a Vertica Data Source without table views.",
+            "exclusiveMaximum": true,
+            "exclusiveMinimum": true,
+            "format": "float",
+            "maximum": 100,
+            "minimum": 0,
+            "type": "number"
+          }
+        },
+        "type": "object"
+      },
       "ExportResponse": {
         "properties": {
           "exportResult": {
@@ -1001,7 +1016,7 @@
             "additionalProperties": {
               "$ref": "#/components/schemas/RawCustomLabel"
             },
-            "description": "Currently No-Op. Map of CustomLabels with keys used as placeholders in export result.",
+            "description": "Map of CustomLabels with keys used as placeholders in export result.",
             "type": "object"
           },
           "metrics": {
@@ -1022,6 +1037,9 @@
           },
           "execution": {
             "$ref": "#/components/schemas/AFM"
+          },
+          "executionSettings": {
+            "$ref": "#/components/schemas/ExecutionSettings"
           },
           "fileName": {
             "description": "Filename of downloaded file without extension.",
