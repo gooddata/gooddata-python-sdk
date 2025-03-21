@@ -5,6 +5,8 @@ from datetime import datetime
 from importlib.util import find_spec
 from typing import Optional, Union
 
+from gooddata_api_client.model.inline_filter_definition_inline import InlineFilterDefinitionInline
+
 if find_spec("icu") is not None:
     from icu import Locale, SimpleDateFormat  # type: ignore[import-not-found]
 
@@ -503,3 +505,38 @@ class RankingFilter(Filter):
         return (
             f"{self.operator.capitalize()} {self.value}{dimensionality_str} {labels.get(metric_ids[0], metric_ids[0])}"
         )
+
+
+class InlineFilter(Filter):
+    """Filter using a custom MAQL expression.
+
+    Automatically decides, whether to create or update.
+
+    Args:
+        maql (str): The MAQL expression string that defines the filter condition.
+
+    Example:
+        ```python
+        from gooddata_sdk import InlineFilter
+        from gooddata_pandas import GoodPandas
+
+        gp = GoodPandas.create_from_profile()
+        factory = gp.data_frames("demo")
+
+        filter_by = InlineFilter('{label/region} = "West"')
+
+        factory.not_indexed(columns=dict(order_amount="metric/order_amount"), filter_by=filter_by)
+        ```
+    """
+
+    def __init__(self, maql: str):
+        super().__init__()
+
+        self.maql = maql
+
+    def is_noop(self) -> bool:
+        return False
+
+    def as_api_model(self) -> afm_models.InlineFilterDefinition:
+        body = InlineFilterDefinitionInline(self.maql)
+        return afm_models.InlineFilterDefinition(body, _check_type=False)
