@@ -231,6 +231,7 @@ from gooddata_sdk.compute.model.filter import (
     AllTimeFilter,
     AttributeFilter,
     Filter,
+    InlineFilter,
     MetricValueFilter,
     NegativeAttributeFilter,
     PositiveAttributeFilter,
