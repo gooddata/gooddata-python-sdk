@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from datetime import datetime
 from importlib.util import find_spec
-from typing import Optional, Union
+from typing import Any, Optional, Union
 
 from gooddata_api_client.model.inline_filter_definition_inline import InlineFilterDefinitionInline
 
@@ -510,10 +510,10 @@ class RankingFilter(Filter):
 class InlineFilter(Filter):
     """Filter using a custom MAQL expression.
 
-    Automatically decides, whether to create or update.
+        Automatically decides, whether to create or update.
 
-    Args:
-        maql (str): The MAQL expression string that defines the filter condition.
+        Args:
+            maql (str): The MAQL expression string that defines the filter condition.
 
     Example:
         ```python
@@ -529,14 +529,22 @@ class InlineFilter(Filter):
         ```
     """
 
-    def __init__(self, maql: str):
-        super().__init__()
+    def __init__(
+        self, maql: str, apply_on_result: Optional[bool] = None, local_identifier: Optional[Union[ObjId, str]] = None
+    ) -> None:
+        super().__init__(apply_on_result)
 
         self.maql = maql
+        self.local_identifier = local_identifier
 
     def is_noop(self) -> bool:
         return False
 
     def as_api_model(self) -> afm_models.InlineFilterDefinition:
-        body = InlineFilterDefinitionInline(self.maql)
+        kwargs: dict[str, Any] = {}
+        if self.apply_on_result is not None:
+            kwargs["apply_on_result"] = self.apply_on_result
+        if self.local_identifier is not None:
+            kwargs["local_identifier"] = str(self.local_identifier)
+        body = InlineFilterDefinitionInline(self.maql, **kwargs)
         return afm_models.InlineFilterDefinition(body, _check_type=False)
