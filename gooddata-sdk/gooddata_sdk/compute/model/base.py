@@ -71,10 +71,10 @@ class ExecModelEntity:
 
 
 class Filter(ExecModelEntity):
-    def __init__(self) -> None:
+    def __init__(self, _apply_on_result: Optional[bool] = None) -> None:
         super().__init__()
 
-        self._apply_on_result = None
+        self._apply_on_result = _apply_on_result
 
     @property
     def apply_on_result(self) -> Union[bool, None]:
