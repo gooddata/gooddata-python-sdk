@@ -105,5 +105,21 @@ class ComputeService:
         Args:
             workspace_id: workspace identifier
         """
-        chat_history_request = ChatHistoryRequest(reset=True)
+        chat_history_request = ChatHistoryRequest(
+            reset=True,
+        )
+        self._actions_api.ai_chat_history(workspace_id, chat_history_request, _check_return_type=False)
+
+    def ai_chat_history_user_feedback(
+        self, workspace_id: str, chat_history_interaction_id: int = 0, user_feedback: str = "POSITIVE"
+    ) -> None:
+        """
+        Reset chat history with AI in GoodData workspace.
+
+        Args:
+            workspace_id: workspace identifier
+        """
+        chat_history_request = ChatHistoryRequest(
+            chat_history_interaction_id=chat_history_interaction_id, user_feedback=user_feedback
+        )
         self._actions_api.ai_chat_history(workspace_id, chat_history_request, _check_return_type=False)
