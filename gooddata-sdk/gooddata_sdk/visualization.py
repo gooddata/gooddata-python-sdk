@@ -782,6 +782,8 @@ class VisualizationService:
             _check_return_type=False,
             _request_timeout=timeout,
         )
-        side_loads = SideLoads(vis_obj.included)
+        side_loads = None
+        if hasattr(vis_obj, "included"):
+            side_loads = SideLoads(vis_obj.included)
 
         return Visualization(vis_obj.data, side_loads)
