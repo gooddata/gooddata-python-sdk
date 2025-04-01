@@ -5,23 +5,7 @@ weight: 110
 superheading: "catalog_workspace."
 ---
 
-
-
-``put_declarative_workspace(workspace_id: str, workspace: CatalogDeclarativeWorkspaceModel)``
-
-Sets a workspace layout.
-
-{{% parameters-block title="Parameters" %}}
-{{< parameter p_name="workspace_id" p_type="string" >}}
-Workspace identification string e.g. "demo"
-{{< /parameter >}}
-{{< parameter p_name="workspace" p_type="CatalogDeclarativeWorkspaceModel" >}}
-Object Containing declarative Logical Data Model and declarative Analytical Model.
-{{< /parameter >}}
-{{% /parameters-block %}}
-
-{{% parameters-block title="Returns" None="yes" %}}
-{{% /parameters-block %}}
+{{< api-ref "sdk.CatalogWorkspaceService.put_declarative_workspace" >}}
 
 ## Example
 
