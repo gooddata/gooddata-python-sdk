@@ -109,8 +109,8 @@ class ComputeToSdkConverter:
             # mypy is unable to automatically convert Union[str, ObjId] to Union[str, ObjId, Attribute, Metric]
             # so use explicit cast here
             dimensionality = (
-                [cast(Union[str, ObjId, Attribute, Metric], ref_extract(a)) for a in f["attributes"]]
-                if "attributes" in f
+                [cast(Union[str, ObjId, Attribute, Metric], ref_extract(a)) for a in f["dimensionality"]]
+                if "dimensionality" in f
                 else None
             )
 

@@ -202,6 +202,33 @@ def test_ranking_filter_conversion():
     assert result.value == 5
 
 
+def test_ranking_filter_with_dimensionality_conversion():
+    filter_dict = json.loads(
+        """
+        {
+          "rankingFilter": {
+            "measures": [{
+                "localIdentifier": "measure1.localId"
+            }],
+           "dimensionality": [{
+                "localIdentifier": "attribute1.localId"
+            }],
+            "operator": "TOP",
+            "value": 5
+          }
+        }
+        """
+    )
+
+    result = ComputeToSdkConverter.convert_filter(filter_dict)
+
+    assert isinstance(result, RankingFilter)
+    assert result.metrics[0] == "measure1.localId"
+    assert result.dimensionality[0] == "attribute1.localId"
+    assert result.operator == "TOP"
+    assert result.value == 5
+
+
 def test_simple_metric_conversion():
     metric_dict = json.loads(
         """
