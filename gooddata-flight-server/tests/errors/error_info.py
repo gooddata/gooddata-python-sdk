@@ -22,6 +22,17 @@ def test_serde_error_info2():
     assert deserialized.detail == error.detail
 
 
+def test_error_info_limits1():
+    error = ErrorInfo.for_reason(666, "error" * 500).with_detail("detail" * 500)
+
+    assert "truncated" in error.msg
+    assert "truncated" in error.detail
+
+    error = ErrorInfo(code=666, msg="error" * 500, detail="detail" * 500)
+    assert "truncated" in error.msg
+    assert "truncated" in error.detail
+
+
 def test_serde_retry_info1():
     retry = RetryInfo(
         flight_info=None,

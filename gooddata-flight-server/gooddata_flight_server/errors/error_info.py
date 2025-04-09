@@ -1,12 +1,28 @@
 #  (C) 2024 GoodData Corporation
 import base64
 import traceback
-from typing import Callable, Optional, Union
+from typing import Callable, Optional, Union, cast
 
 import orjson
 import pyarrow.flight
 
 from gooddata_flight_server.errors.error_code import ErrorCode
+
+_ERROR_INFO_MAX_MSG = 256
+_ERROR_INFO_MAX_DETAIL = 512
+
+
+def _truncate_str_value(val: Optional[str], max_len: int) -> Optional[str]:
+    if val is None:
+        return None
+
+    if len(val) <= max_len:
+        return val
+
+    # no big deal that the actual max length is slightly exceeded
+    # all this truncating happens because ErrorInfo is eventually
+    # passed via gRPC headers which have 16k hard limit
+    return val[:max_len] + " [truncated]"
 
 
 class ErrorInfo:
@@ -22,15 +38,15 @@ class ErrorInfo:
         body: Optional[bytes] = None,
         code: int = 0,
     ) -> None:
-        self._msg = msg
-        self._detail: Optional[str] = detail
+        self._msg = cast(str, _truncate_str_value(msg, _ERROR_INFO_MAX_MSG))
+        self._detail: Optional[str] = _truncate_str_value(detail, _ERROR_INFO_MAX_DETAIL)
         self._body: Optional[bytes] = body
         self._code: int = code
 
     @property
     def msg(self) -> str:
         """
-        :return: human readable error message
+        :return: human-readable error message
         """
         return self._msg
 
@@ -60,25 +76,35 @@ class ErrorInfo:
         """
         Updates error message.
 
-        :param msg: new message
+        :param msg: new message, up to 256 characters; will be truncated if the limit is exceeded
         :return: self, for call chaining sakes
         """
-        self._msg = msg
+        self._msg = cast(str, _truncate_str_value(msg, _ERROR_INFO_MAX_MSG))
+
         return self
 
     def with_detail(self, detail: Optional[str] = None) -> "ErrorInfo":
         """
         Updates or resets the error detail.
 
-        :param detail: detail to set; if None, the detail stored in the meta will be removed; default is None
+        :param detail: detail to set; if None, the detail stored in the meta will be removed; default is None;
+         detail can be up to 512 characters; will be truncated if the limit is exceeded
         :return: self, for call chaining sakes
         """
-        self._detail = detail
+        self._detail = _truncate_str_value(detail, _ERROR_INFO_MAX_DETAIL)
+
         return self
 
     def with_body(self, body: Optional[Union[bytes, str]]) -> "ErrorInfo":
         """
         Updates or resets the error body.
+
+        IMPORTANT: the ErrorInfo (and thus the contents of `body`) are passed out via FlightError.extra_info
+        property. The Flight RPC implementations pass the `extra_info` via gRPC headers. In turn, the gRPC headers
+        do have size limit. Keep this in mind when designing the value of `body`.
+
+        If you set body that is too large, you will run into problems like this:
+         https://github.com/grpc/grpc/issues/37852.
 
         :param body: body to set; if None, the body stored in the meta will be removed; default is None
         :return: self, for call chaining sakes
