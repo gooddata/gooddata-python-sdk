@@ -240,6 +240,7 @@ from gooddata_sdk.compute.model.filter import (
 )
 from gooddata_sdk.compute.model.metric import (
     ArithmeticMetric,
+    InlineMetric,
     Metric,
     PopDate,
     PopDateDataset,

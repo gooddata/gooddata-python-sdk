@@ -267,3 +267,16 @@ class ArithmeticMetric(Metric):
                 operator=self.operator, measure_identifiers=measure_identifiers
             )
         )
+
+
+class InlineMetric(Metric):
+    def __init__(self, maql: str, local_id: str) -> None:
+        super().__init__(local_id)
+        self._maql = maql
+
+    @property
+    def maql(self) -> str:
+        return self._maql
+
+    def _body_as_api_model(self) -> afm_models.InlineMeasureDefinition:
+        return afm_models.InlineMeasureDefinition(inline=afm_models.InlineMeasureDefinitionInline(maql=self.maql))
