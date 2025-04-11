@@ -32,6 +32,7 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.declarative_data_source import DeclarativeDataSource
+    from gooddata_api_client.model.declarative_export_template import DeclarativeExportTemplate
     from gooddata_api_client.model.declarative_identity_provider import DeclarativeIdentityProvider
     from gooddata_api_client.model.declarative_jwk import DeclarativeJwk
     from gooddata_api_client.model.declarative_notification_channel import DeclarativeNotificationChannel
@@ -41,6 +42,7 @@ def lazy_import():
     from gooddata_api_client.model.declarative_workspace import DeclarativeWorkspace
     from gooddata_api_client.model.declarative_workspace_data_filter import DeclarativeWorkspaceDataFilter
     globals()['DeclarativeDataSource'] = DeclarativeDataSource
+    globals()['DeclarativeExportTemplate'] = DeclarativeExportTemplate
     globals()['DeclarativeIdentityProvider'] = DeclarativeIdentityProvider
     globals()['DeclarativeJwk'] = DeclarativeJwk
     globals()['DeclarativeNotificationChannel'] = DeclarativeNotificationChannel
@@ -106,6 +108,7 @@ class DeclarativeOrganization(ModelNormal):
         return {
             'organization': (DeclarativeOrganizationInfo,),  # noqa: E501
             'data_sources': ([DeclarativeDataSource],),  # noqa: E501
+            'export_templates': ([DeclarativeExportTemplate],),  # noqa: E501
             'identity_providers': ([DeclarativeIdentityProvider],),  # noqa: E501
             'jwks': ([DeclarativeJwk],),  # noqa: E501
             'notification_channels': ([DeclarativeNotificationChannel],),  # noqa: E501
@@ -123,6 +126,7 @@ class DeclarativeOrganization(ModelNormal):
     attribute_map = {
         'organization': 'organization',  # noqa: E501
         'data_sources': 'dataSources',  # noqa: E501
+        'export_templates': 'exportTemplates',  # noqa: E501
         'identity_providers': 'identityProviders',  # noqa: E501
         'jwks': 'jwks',  # noqa: E501
         'notification_channels': 'notificationChannels',  # noqa: E501
@@ -177,6 +181,7 @@ class DeclarativeOrganization(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             data_sources ([DeclarativeDataSource]): [optional]  # noqa: E501
+            export_templates ([DeclarativeExportTemplate]): [optional]  # noqa: E501
             identity_providers ([DeclarativeIdentityProvider]): [optional]  # noqa: E501
             jwks ([DeclarativeJwk]): [optional]  # noqa: E501
             notification_channels ([DeclarativeNotificationChannel]): [optional]  # noqa: E501
@@ -274,6 +279,7 @@ class DeclarativeOrganization(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             data_sources ([DeclarativeDataSource]): [optional]  # noqa: E501
+            export_templates ([DeclarativeExportTemplate]): [optional]  # noqa: E501
             identity_providers ([DeclarativeIdentityProvider]): [optional]  # noqa: E501
             jwks ([DeclarativeJwk]): [optional]  # noqa: E501
             notification_channels ([DeclarativeNotificationChannel]): [optional]  # noqa: E501

@@ -640,6 +640,7 @@ class ComputationApi(object):
                     'offset',
                     'limit',
                     'excluded_total_dimensions',
+                    'x_gdc_cancel_token',
                 ],
                 'required': [
                     'workspace_id',
@@ -675,6 +676,8 @@ class ComputationApi(object):
                         ([int],),
                     'excluded_total_dimensions':
                         ([str],),
+                    'x_gdc_cancel_token':
+                        (str,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
@@ -682,6 +685,7 @@ class ComputationApi(object):
                     'offset': 'offset',
                     'limit': 'limit',
                     'excluded_total_dimensions': 'excludedTotalDimensions',
+                    'x_gdc_cancel_token': 'X-GDC-CANCEL-TOKEN',
                 },
                 'location_map': {
                     'workspace_id': 'path',
@@ -689,6 +693,7 @@ class ComputationApi(object):
                     'offset': 'query',
                     'limit': 'query',
                     'excluded_total_dimensions': 'query',
+                    'x_gdc_cancel_token': 'header',
                 },
                 'collection_format_map': {
                     'offset': 'csv',
@@ -1433,6 +1438,7 @@ class ComputationApi(object):
             offset ([int]): Request page with these offsets. Format is offset=1,2,3,... - one offset for each dimensions in ResultSpec from originating AFM.. [optional] if omitted the server will use the default value of []
             limit ([int]): Return only this number of items. Format is limit=1,2,3,... - one limit for each dimensions in ResultSpec from originating AFM.. [optional] if omitted the server will use the default value of []
             excluded_total_dimensions ([str]): Identifiers of the dimensions where grand total data should not be returned for this request. A grand total will not be returned if all of its totalDimensions are in excludedTotalDimensions.. [optional] if omitted the server will use the default value of []
+            x_gdc_cancel_token (str): [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object

@@ -91,6 +91,7 @@ class JsonApiDataSourceOutAttributes(ModelNormal):
             'TOKEN': "TOKEN",
             'KEY_PAIR': "KEY_PAIR",
             'CLIENT_SECRET': "CLIENT_SECRET",
+            'ACCESS_TOKEN': "ACCESS_TOKEN",
         },
         ('cache_strategy',): {
             'None': None,

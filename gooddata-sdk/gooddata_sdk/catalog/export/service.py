@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Any, Callable, Optional, Union
 
 from gooddata_api_client.exceptions import NotFoundException
+from gooddata_api_client.model.slides_export_request import SlidesExportRequest as SlidesExportRequestApi
 from gooddata_api_client.model.tabular_export_request import TabularExportRequest
 from gooddata_api_client.model.visual_export_request import VisualExportRequest
 
@@ -11,6 +12,7 @@ from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.export.request import (
     ExportRequest,
     ExportSettings,
+    SlidesExportRequest,
 )
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.visualization import VisualizationService
@@ -140,7 +142,7 @@ class ExportService(CatalogServiceBase):
     def _export_common(
         self,
         workspace_id: str,
-        request: Union[VisualExportRequest, TabularExportRequest],
+        request: Union[VisualExportRequest, TabularExportRequest, SlidesExportRequestApi],
         file_path: Path,
         create_func: Callable,
         get_func: Callable,
@@ -314,3 +316,33 @@ class ExportService(CatalogServiceBase):
             retry=retry,
             max_retry=max_retry,
         )
+
+    def export_slides(
+        self,
+        workspace_id: str,
+        request: SlidesExportRequest,
+        store_path: Union[str, Path] = Path.cwd(),
+        timeout: float = 60.0,
+        retry: float = 0.2,
+        max_retry: float = 5.0,
+    ) -> None:
+        """
+        Exports slides based on slide export request.
+
+        Args:
+            workspace_id (str): The workspace id from which the visualization is to be exported.
+            request (SlidesExportRequest): The request object containing the export parameters.
+            store_path (Union[str, Path], optional): The path to store the exported file. Default to Path.cwd().
+            timeout (float, optional): The maximum time to wait for the export to finish. Defaults to 60.0.
+            retry (float, optional):
+                Initial wait time (in seconds) before retrying to get the exported content. Defaults to 0.2.
+            max_retry (float, optional): The maximum retry wait time (in seconds). Defaults to 5.0.
+
+        Returns:
+            None
+        """
+        store_path = store_path if isinstance(store_path, Path) else Path(store_path)
+        file_path = store_path / f"{request.file_name}.{request.format.lower()}"
+        create_func = self._actions_api.create_slides_export
+        get_func = self._actions_api.get_slides_export
+        self._export_common(workspace_id, request.to_api(), file_path, create_func, get_func, timeout, retry, max_retry)

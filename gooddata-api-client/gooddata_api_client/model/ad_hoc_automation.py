@@ -32,19 +32,19 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.automation_external_recipient import AutomationExternalRecipient
+    from gooddata_api_client.model.automation_metadata import AutomationMetadata
     from gooddata_api_client.model.automation_tabular_export import AutomationTabularExport
     from gooddata_api_client.model.automation_visual_export import AutomationVisualExport
     from gooddata_api_client.model.declarative_analytical_dashboard_identifier import DeclarativeAnalyticalDashboardIdentifier
     from gooddata_api_client.model.declarative_notification_channel_identifier import DeclarativeNotificationChannelIdentifier
     from gooddata_api_client.model.declarative_user_identifier import DeclarativeUserIdentifier
-    from gooddata_api_client.model.json_node import JsonNode
     globals()['AutomationExternalRecipient'] = AutomationExternalRecipient
+    globals()['AutomationMetadata'] = AutomationMetadata
     globals()['AutomationTabularExport'] = AutomationTabularExport
     globals()['AutomationVisualExport'] = AutomationVisualExport
     globals()['DeclarativeAnalyticalDashboardIdentifier'] = DeclarativeAnalyticalDashboardIdentifier
     globals()['DeclarativeNotificationChannelIdentifier'] = DeclarativeNotificationChannelIdentifier
     globals()['DeclarativeUserIdentifier'] = DeclarativeUserIdentifier
-    globals()['JsonNode'] = JsonNode
 
 
 class AdHocAutomation(ModelNormal):
@@ -122,7 +122,7 @@ class AdHocAutomation(ModelNormal):
             'description': (str,),  # noqa: E501
             'details': ({str: (str,)},),  # noqa: E501
             'external_recipients': ([AutomationExternalRecipient],),  # noqa: E501
-            'metadata': (JsonNode,),  # noqa: E501
+            'metadata': (AutomationMetadata,),  # noqa: E501
             'notification_channel': (DeclarativeNotificationChannelIdentifier,),  # noqa: E501
             'recipients': ([DeclarativeUserIdentifier],),  # noqa: E501
             'tabular_exports': ([AutomationTabularExport],),  # noqa: E501
@@ -195,7 +195,7 @@ class AdHocAutomation(ModelNormal):
             description (str): [optional]  # noqa: E501
             details ({str: (str,)}): Additional details to be included in the automated message.. [optional]  # noqa: E501
             external_recipients ([AutomationExternalRecipient]): External recipients of the automation action results.. [optional]  # noqa: E501
-            metadata (JsonNode): [optional]  # noqa: E501
+            metadata (AutomationMetadata): [optional]  # noqa: E501
             notification_channel (DeclarativeNotificationChannelIdentifier): [optional]  # noqa: E501
             recipients ([DeclarativeUserIdentifier]): [optional]  # noqa: E501
             tabular_exports ([AutomationTabularExport]): [optional]  # noqa: E501
@@ -291,7 +291,7 @@ class AdHocAutomation(ModelNormal):
             description (str): [optional]  # noqa: E501
             details ({str: (str,)}): Additional details to be included in the automated message.. [optional]  # noqa: E501
             external_recipients ([AutomationExternalRecipient]): External recipients of the automation action results.. [optional]  # noqa: E501
-            metadata (JsonNode): [optional]  # noqa: E501
+            metadata (AutomationMetadata): [optional]  # noqa: E501
             notification_channel (DeclarativeNotificationChannelIdentifier): [optional]  # noqa: E501
             recipients ([DeclarativeUserIdentifier]): [optional]  # noqa: E501
             tabular_exports ([AutomationTabularExport]): [optional]  # noqa: E501

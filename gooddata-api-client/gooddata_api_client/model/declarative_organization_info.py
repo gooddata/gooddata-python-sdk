@@ -141,6 +141,7 @@ class DeclarativeOrganizationInfo(ModelNormal):
             'oauth_client_id': (str,),  # noqa: E501
             'oauth_client_secret': (str,),  # noqa: E501
             'oauth_custom_auth_attributes': ({str: (str,)},),  # noqa: E501
+            'oauth_custom_scopes': ([str], none_type,),  # noqa: E501
             'oauth_issuer_id': (str,),  # noqa: E501
             'oauth_issuer_location': (str,),  # noqa: E501
             'oauth_subject_id_claim': (str,),  # noqa: E501
@@ -166,6 +167,7 @@ class DeclarativeOrganizationInfo(ModelNormal):
         'oauth_client_id': 'oauthClientId',  # noqa: E501
         'oauth_client_secret': 'oauthClientSecret',  # noqa: E501
         'oauth_custom_auth_attributes': 'oauthCustomAuthAttributes',  # noqa: E501
+        'oauth_custom_scopes': 'oauthCustomScopes',  # noqa: E501
         'oauth_issuer_id': 'oauthIssuerId',  # noqa: E501
         'oauth_issuer_location': 'oauthIssuerLocation',  # noqa: E501
         'oauth_subject_id_claim': 'oauthSubjectIdClaim',  # noqa: E501
@@ -228,6 +230,7 @@ class DeclarativeOrganizationInfo(ModelNormal):
             oauth_client_id (str): Identifier of the authentication provider. [optional]  # noqa: E501
             oauth_client_secret (str): Communication secret of the authentication provider (never returned back).. [optional]  # noqa: E501
             oauth_custom_auth_attributes ({str: (str,)}): Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.. [optional]  # noqa: E501
+            oauth_custom_scopes ([str], none_type): List of additional OAuth scopes which may be required by other providers (e.g. Snowflake). [optional]  # noqa: E501
             oauth_issuer_id (str): Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.. [optional]  # noqa: E501
             oauth_issuer_location (str): URI of the authentication provider.. [optional]  # noqa: E501
             oauth_subject_id_claim (str): Any string identifying the claim in ID token, that should be used for user identification. The default value is 'sub'.. [optional]  # noqa: E501
@@ -336,6 +339,7 @@ class DeclarativeOrganizationInfo(ModelNormal):
             oauth_client_id (str): Identifier of the authentication provider. [optional]  # noqa: E501
             oauth_client_secret (str): Communication secret of the authentication provider (never returned back).. [optional]  # noqa: E501
             oauth_custom_auth_attributes ({str: (str,)}): Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.. [optional]  # noqa: E501
+            oauth_custom_scopes ([str], none_type): List of additional OAuth scopes which may be required by other providers (e.g. Snowflake). [optional]  # noqa: E501
             oauth_issuer_id (str): Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.. [optional]  # noqa: E501
             oauth_issuer_location (str): URI of the authentication provider.. [optional]  # noqa: E501
             oauth_subject_id_claim (str): Any string identifying the claim in ID token, that should be used for user identification. The default value is 'sub'.. [optional]  # noqa: E501

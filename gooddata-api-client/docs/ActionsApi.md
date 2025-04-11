@@ -12,6 +12,7 @@ Method | HTTP request | Description
 [**anomaly_detection**](ActionsApi.md#anomaly_detection) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/{resultId} | (EXPERIMENTAL) Smart functions - Anomaly Detection
 [**anomaly_detection_result**](ActionsApi.md#anomaly_detection_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/result/{resultId} | (EXPERIMENTAL) Smart functions - Anomaly Detection Result
 [**available_assignees**](ActionsApi.md#available_assignees) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/availableAssignees | Get Available Assignees
+[**cancel_executions**](ActionsApi.md#cancel_executions) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/cancel | Applies all the given cancel tokens.
 [**check_entity_overrides**](ActionsApi.md#check_entity_overrides) | **POST** /api/v1/actions/workspaces/{workspaceId}/checkEntityOverrides | Finds entities with given ID in hierarchy.
 [**clean_translations**](ActionsApi.md#clean_translations) | **POST** /api/v1/actions/workspaces/{workspaceId}/translations/clean | Cleans up translations.
 [**clustering**](ActionsApi.md#clustering) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/clustering/{resultId} | (EXPERIMENTAL) Smart functions - Clustering
@@ -704,6 +705,79 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **cancel_executions**
+> AfmCancelTokens cancel_executions(workspace_id, afm_cancel_tokens)
+
+Applies all the given cancel tokens.
+
+Each cancel token corresponds to one unique execution request for the same result id. If all cancel tokens for the same result id are applied, the execution for this result id is canceled.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.afm_cancel_tokens import AfmCancelTokens
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    afm_cancel_tokens = AfmCancelTokens(
+        token_ids=[
+            "token_ids_example",
+        ],
+    ) # AfmCancelTokens | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Applies all the given cancel tokens.
+        api_response = api_instance.cancel_executions(workspace_id, afm_cancel_tokens)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->cancel_executions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **afm_cancel_tokens** | [**AfmCancelTokens**](AfmCancelTokens.md)|  |
+
+### Return type
+
+[**AfmCancelTokens**](AfmCancelTokens.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Status of the cancelling operation. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **check_entity_overrides**
 > [IdentifierDuplications] check_entity_overrides(workspace_id, hierarchy_object_identification)
 
@@ -1292,6 +1366,7 @@ with gooddata_api_client.ApiClient() as api_client:
         ),
         settings=ExecutionSettings(
             data_sampling_percentage=0,
+            timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
         ),
     ) # AfmExecution | 
     skip_cache = False # bool | Ignore all caches during execution of current request. (optional) if omitted the server will use the default value of False
@@ -1343,7 +1418,7 @@ No authorization required
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | AFM Execution response with links to the result and server-enhanced dimensions from the original request. |  -  |
+**200** | AFM Execution response with links to the result and server-enhanced dimensions from the original request. |  * X-GDC-CANCEL-TOKEN - A token that can be used to cancel this execution <br>  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -1745,6 +1820,7 @@ with gooddata_api_client.ApiClient() as api_client:
         ),
         execution_settings=ExecutionSettings(
             data_sampling_percentage=0,
+            timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
         ),
         file_name="result",
         format="CSV",
@@ -1823,6 +1899,10 @@ with gooddata_api_client.ApiClient() as api_client:
         file_name="filename",
         format="PDF",
         metadata=JsonNode(),
+        template_id="template_id_example",
+        visualization_ids=[
+            "visualization_ids_example",
+        ],
         widget_ids=[
             "widget_ids_example",
         ],
@@ -2129,6 +2209,7 @@ with gooddata_api_client.ApiClient() as api_client:
         ),
         settings=ExecutionSettings(
             data_sampling_percentage=0,
+            timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
         ),
     ) # AfmExecution | 
     explain_type = "MAQL" # str | Requested explain type. If not specified all types are bundled in a ZIP archive.  `MAQL` - MAQL Abstract Syntax Tree, execution dimensions and related info  `GRPC_MODEL` - Datasets used in execution  `GRPC_MODEL_SVG` - Generated SVG image of the datasets  `WDF` - Workspace data filters in execution workspace context  `QT` - Query Tree, created from MAQL AST using Logical Data Model,  contains all information needed to generate SQL  `QT_SVG` - Generated SVG image of the Query Tree  `OPT_QT` - Optimized Query Tree  `OPT_QT_SVG` - Generated SVG image of the Optimized Query Tree  `SQL` - Final SQL to be executed  `SETTINGS` - Settings used to execute explain request (optional)
@@ -2986,6 +3067,7 @@ Note: This API is an experimental and is going to change. Please, use it accordi
 import time
 import gooddata_api_client
 from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.get_slides_export202_response_inner import GetSlidesExport202ResponseInner
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -4846,6 +4928,7 @@ with gooddata_api_client.ApiClient() as api_client:
     excluded_total_dimensions = [
         "excludedTotalDimensions=dim_0,dim_1",
     ] # [str] | Identifiers of the dimensions where grand total data should not be returned for this request. A grand total will not be returned if all of its totalDimensions are in excludedTotalDimensions. (optional) if omitted the server will use the default value of []
+    x_gdc_cancel_token = "X-GDC-CANCEL-TOKEN_example" # str |  (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -4859,7 +4942,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # and optional values
     try:
         # Get a single execution result
-        api_response = api_instance.retrieve_result(workspace_id, result_id, offset=offset, limit=limit, excluded_total_dimensions=excluded_total_dimensions)
+        api_response = api_instance.retrieve_result(workspace_id, result_id, offset=offset, limit=limit, excluded_total_dimensions=excluded_total_dimensions, x_gdc_cancel_token=x_gdc_cancel_token)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling ActionsApi->retrieve_result: %s\n" % e)
@@ -4875,6 +4958,7 @@ Name | Type | Description  | Notes
  **offset** | **[int]**| Request page with these offsets. Format is offset&#x3D;1,2,3,... - one offset for each dimensions in ResultSpec from originating AFM. | [optional] if omitted the server will use the default value of []
  **limit** | **[int]**| Return only this number of items. Format is limit&#x3D;1,2,3,... - one limit for each dimensions in ResultSpec from originating AFM. | [optional] if omitted the server will use the default value of []
  **excluded_total_dimensions** | **[str]**| Identifiers of the dimensions where grand total data should not be returned for this request. A grand total will not be returned if all of its totalDimensions are in excludedTotalDimensions. | [optional] if omitted the server will use the default value of []
+ **x_gdc_cancel_token** | **str**|  | [optional]
 
 ### Return type
 
@@ -5600,7 +5684,15 @@ with gooddata_api_client.ApiClient() as api_client:
                     email="email_example",
                 ),
             ],
-            metadata=JsonNode(),
+            metadata=AutomationMetadata(
+                visible_filters=[
+                    VisibleFilter(
+                        local_identifier="local_identifier_example",
+                        title="title_example",
+                    ),
+                ],
+                widget="widget_example",
+            ),
             notification_channel=DeclarativeNotificationChannelIdentifier(
                 id="webhook123",
                 type="notificationChannel",

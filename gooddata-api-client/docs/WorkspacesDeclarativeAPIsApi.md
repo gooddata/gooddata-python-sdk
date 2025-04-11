@@ -611,7 +611,15 @@ with gooddata_api_client.ApiClient() as api_client:
                             ),
                         ],
                         id="/6bUUGjjNSwg0_bs",
-                        metadata=JsonNode(),
+                        metadata=AutomationMetadata(
+                            visible_filters=[
+                                VisibleFilter(
+                                    local_identifier="local_identifier_example",
+                                    title="title_example",
+                                ),
+                            ],
+                            widget="widget_example",
+                        ),
                         modified_at="2023-07-20 12:30",
                         modified_by=DeclarativeUserIdentifier(
                             id="employee123",

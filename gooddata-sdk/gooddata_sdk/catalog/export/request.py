@@ -1,11 +1,12 @@
 # (C) 2023 GoodData Corporation
-from typing import Optional
+from typing import Literal, Optional
 
 from attrs import define
 from gooddata_api_client.model.custom_label import CustomLabel as ApiCustomLabel
 from gooddata_api_client.model.custom_metric import CustomMetric as ApiCustomMetric
 from gooddata_api_client.model.custom_override import CustomOverride as ApiCustomOverride
 from gooddata_api_client.model.settings import Settings as ApiSettings
+from gooddata_api_client.model.slides_export_request import SlidesExportRequest as SlidesExportRequestApi
 from gooddata_api_client.model.tabular_export_request import TabularExportRequest
 from gooddata_api_client.model.visual_export_request import VisualExportRequest as VisualExportRequestApi
 
@@ -121,3 +122,31 @@ class VisualExportRequest(Base):
             type[TabularExportRequest]: VisualExportRequest class
         """
         return VisualExportRequestApi
+
+
+@define(auto_attribs=True, kw_only=True)
+class SlidesExportRequest(Base):
+    """
+    SlidesExportRequest class is used to create a slide export request in the desired format, filename, and settings.
+    Attributes:
+        dashboard_id (str): Dashboard identifier.
+        file_name (str): File name to be used for retrieving the PDF document.
+        metadata (Optional[Dict[str, bool]]): Optional dictionary containing settings for the export request.
+    """
+
+    file_name: str
+    format: Literal["PDF", "PPTX"]
+    dashboard_id: Optional[str] = None
+    widget_ids: Optional[list[str]] = None
+    visualization_ids: Optional[list[str]] = None
+    metadata: Optional[dict] = None
+    templateId: Optional[str] = None
+
+    @staticmethod
+    def client_class() -> type[SlidesExportRequestApi]:
+        """
+        Returns the appropriate client class for the visual export request.
+        Returns:
+            type[SlidesExportRequestApi]: SlidesExportRequestApi class
+        """
+        return SlidesExportRequestApi

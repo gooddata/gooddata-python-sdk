@@ -115,6 +115,22 @@
         ],
         "type": "object"
       },
+      "AfmCancelTokens": {
+        "description": "Any information related to cancellation.",
+        "properties": {
+          "tokenIds": {
+            "description": "Token ids to be used in the cancellation.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "tokenIds"
+        ],
+        "type": "object"
+      },
       "AfmExecution": {
         "properties": {
           "execution": {
@@ -1763,6 +1779,11 @@
             "maximum": 100,
             "minimum": 0,
             "type": "number"
+          },
+          "timestamp": {
+            "description": "Specifies the timestamp of the execution from which relative filters are resolved. If not set, the current time is used.",
+            "format": "date-time",
+            "type": "string"
           }
         },
         "type": "object"
@@ -3451,6 +3472,56 @@
         ]
       }
     },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/afm/cancel": {
+      "post": {
+        "description": "Each cancel token corresponds to one unique execution request for the same result id. If all cancel tokens for the same result id are applied, the execution for this result id is canceled.",
+        "operationId": "cancelExecutions",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AfmCancelTokens"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AfmCancelTokens"
+                }
+              }
+            },
+            "description": "Status of the cancelling operation."
+          }
+        },
+        "summary": "Applies all the given cancel tokens.",
+        "tags": [
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to view a report or label elements.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
+      }
+    },
     "/api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidDescendants": {
       "post": {
         "description": "(BETA) Returns map of lists of attributes that can be used as descendants of the given attributes.",
@@ -3579,11 +3650,13 @@
             }
           },
           {
+            "deprecated": true,
             "example": "2020-06-03T10:15:30+01:00",
             "in": "header",
             "name": "timestamp",
             "required": false,
             "schema": {
+              "description": "Timestamp for the execution. Deprecated, use `settings.timestamp` in the request body.",
               "format": "timestamp",
               "type": "string"
             }
@@ -3608,7 +3681,16 @@
                 }
               }
             },
-            "description": "AFM Execution response with links to the result and server-enhanced dimensions from the original request."
+            "description": "AFM Execution response with links to the result and server-enhanced dimensions from the original request.",
+            "headers": {
+              "X-GDC-CANCEL-TOKEN": {
+                "description": "A token that can be used to cancel this execution",
+                "schema": {
+                  "type": "string"
+                },
+                "style": "simple"
+              }
+            }
           }
         },
         "summary": "Executes analytical request and returns link to the result",
@@ -3698,6 +3780,14 @@
               "type": "array"
             },
             "style": "form"
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-CANCEL-TOKEN",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {

@@ -245,11 +245,13 @@ Class | Method | HTTP request | Description
 *NotificationChannelsApi* | [**delete_entity_notification_channels**](docs/NotificationChannelsApi.md#delete_entity_notification_channels) | **DELETE** /api/v1/entities/notificationChannels/{id} | Delete Notification Channel entity
 *NotificationChannelsApi* | [**get_all_entities_notification_channels**](docs/NotificationChannelsApi.md#get_all_entities_notification_channels) | **GET** /api/v1/entities/notificationChannels | Get all Notification Channel entities
 *NotificationChannelsApi* | [**get_entity_notification_channels**](docs/NotificationChannelsApi.md#get_entity_notification_channels) | **GET** /api/v1/entities/notificationChannels/{id} | Get Notification Channel entity
+*NotificationChannelsApi* | [**get_export_templates_layout**](docs/NotificationChannelsApi.md#get_export_templates_layout) | **GET** /api/v1/layout/exportTemplates | Get all export templates layout
 *NotificationChannelsApi* | [**get_notification_channels_layout**](docs/NotificationChannelsApi.md#get_notification_channels_layout) | **GET** /api/v1/layout/notificationChannels | Get all notification channels layout
 *NotificationChannelsApi* | [**get_notifications**](docs/NotificationChannelsApi.md#get_notifications) | **GET** /api/v1/actions/notifications | Get latest notifications.
 *NotificationChannelsApi* | [**mark_as_read_notification**](docs/NotificationChannelsApi.md#mark_as_read_notification) | **POST** /api/v1/actions/notifications/{notificationId}/markAsRead | Mark notification as read.
 *NotificationChannelsApi* | [**mark_as_read_notification_all**](docs/NotificationChannelsApi.md#mark_as_read_notification_all) | **POST** /api/v1/actions/notifications/markAsRead | Mark all notifications as read.
 *NotificationChannelsApi* | [**patch_entity_notification_channels**](docs/NotificationChannelsApi.md#patch_entity_notification_channels) | **PATCH** /api/v1/entities/notificationChannels/{id} | Patch Notification Channel entity
+*NotificationChannelsApi* | [**set_export_templates**](docs/NotificationChannelsApi.md#set_export_templates) | **PUT** /api/v1/layout/exportTemplates | Set all export templates
 *NotificationChannelsApi* | [**set_notification_channels**](docs/NotificationChannelsApi.md#set_notification_channels) | **PUT** /api/v1/layout/notificationChannels | Set all notification channels
 *NotificationChannelsApi* | [**test_existing_notification_channel**](docs/NotificationChannelsApi.md#test_existing_notification_channel) | **POST** /api/v1/actions/notificationChannels/{notificationChannelId}/test | Test existing notification channel.
 *NotificationChannelsApi* | [**test_notification_channel**](docs/NotificationChannelsApi.md#test_notification_channel) | **POST** /api/v1/actions/notificationChannels/test | Test notification channel.
@@ -294,9 +296,9 @@ Class | Method | HTTP request | Description
 *ScanningApi* | [**get_data_source_schemata**](docs/ScanningApi.md#get_data_source_schemata) | **GET** /api/v1/actions/dataSources/{dataSourceId}/scanSchemata | Get a list of schema names of a database
 *ScanningApi* | [**scan_data_source**](docs/ScanningApi.md#scan_data_source) | **POST** /api/v1/actions/dataSources/{dataSourceId}/scan | Scan a database to get a physical data model (PDM)
 *ScanningApi* | [**scan_sql**](docs/ScanningApi.md#scan_sql) | **POST** /api/v1/actions/dataSources/{dataSourceId}/scanSql | Collect metadata about SQL query
-*SlideshowExportApi* | [**create_slides_export**](docs/SlideshowExportApi.md#create_slides_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/slides | (EXPERIMENTAL) Create slides export request
-*SlideshowExportApi* | [**get_slides_export**](docs/SlideshowExportApi.md#get_slides_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/slides/{exportId} | (EXPERIMENTAL) Retrieve exported files
-*SlideshowExportApi* | [**get_slides_export_metadata**](docs/SlideshowExportApi.md#get_slides_export_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/slides/{exportId}/metadata | (EXPERIMENTAL) Retrieve metadata context
+*SlidesExportApi* | [**create_slides_export**](docs/SlidesExportApi.md#create_slides_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/slides | (EXPERIMENTAL) Create slides export request
+*SlidesExportApi* | [**get_slides_export**](docs/SlidesExportApi.md#get_slides_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/slides/{exportId} | (EXPERIMENTAL) Retrieve exported files
+*SlidesExportApi* | [**get_slides_export_metadata**](docs/SlidesExportApi.md#get_slides_export_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/slides/{exportId}/metadata | (EXPERIMENTAL) Retrieve metadata context
 *SmartFunctionsApi* | [**ai_chat**](docs/SmartFunctionsApi.md#ai_chat) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/chat | (BETA) Chat with AI
 *SmartFunctionsApi* | [**ai_chat_history**](docs/SmartFunctionsApi.md#ai_chat_history) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/chatHistory | (BETA) Get Chat History
 *SmartFunctionsApi* | [**ai_chat_stream**](docs/SmartFunctionsApi.md#ai_chat_stream) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/chatStream | (BETA) Chat with AI
@@ -401,6 +403,7 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**anomaly_detection**](docs/ActionsApi.md#anomaly_detection) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/{resultId} | (EXPERIMENTAL) Smart functions - Anomaly Detection
 *ActionsApi* | [**anomaly_detection_result**](docs/ActionsApi.md#anomaly_detection_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/result/{resultId} | (EXPERIMENTAL) Smart functions - Anomaly Detection Result
 *ActionsApi* | [**available_assignees**](docs/ActionsApi.md#available_assignees) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/availableAssignees | Get Available Assignees
+*ActionsApi* | [**cancel_executions**](docs/ActionsApi.md#cancel_executions) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/cancel | Applies all the given cancel tokens.
 *ActionsApi* | [**check_entity_overrides**](docs/ActionsApi.md#check_entity_overrides) | **POST** /api/v1/actions/workspaces/{workspaceId}/checkEntityOverrides | Finds entities with given ID in hierarchy.
 *ActionsApi* | [**clean_translations**](docs/ActionsApi.md#clean_translations) | **POST** /api/v1/actions/workspaces/{workspaceId}/translations/clean | Cleans up translations.
 *ActionsApi* | [**clustering**](docs/ActionsApi.md#clustering) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/clustering/{resultId} | (EXPERIMENTAL) Smart functions - Clustering
@@ -479,6 +482,7 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**create_entity_dashboard_plugins**](docs/EntitiesApi.md#create_entity_dashboard_plugins) | **POST** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins | Post Plugins
 *EntitiesApi* | [**create_entity_data_sources**](docs/EntitiesApi.md#create_entity_data_sources) | **POST** /api/v1/entities/dataSources | Post Data Sources
 *EntitiesApi* | [**create_entity_export_definitions**](docs/EntitiesApi.md#create_entity_export_definitions) | **POST** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions | Post Export Definitions
+*EntitiesApi* | [**create_entity_export_templates**](docs/EntitiesApi.md#create_entity_export_templates) | **POST** /api/v1/entities/exportTemplates | Post Export Template entities
 *EntitiesApi* | [**create_entity_filter_contexts**](docs/EntitiesApi.md#create_entity_filter_contexts) | **POST** /api/v1/entities/workspaces/{workspaceId}/filterContexts | Post Context Filters
 *EntitiesApi* | [**create_entity_filter_views**](docs/EntitiesApi.md#create_entity_filter_views) | **POST** /api/v1/entities/workspaces/{workspaceId}/filterViews | Post Filter views
 *EntitiesApi* | [**create_entity_identity_providers**](docs/EntitiesApi.md#create_entity_identity_providers) | **POST** /api/v1/entities/identityProviders | Post Identity Providers
@@ -507,6 +511,7 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**delete_entity_dashboard_plugins**](docs/EntitiesApi.md#delete_entity_dashboard_plugins) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | Delete a Plugin
 *EntitiesApi* | [**delete_entity_data_sources**](docs/EntitiesApi.md#delete_entity_data_sources) | **DELETE** /api/v1/entities/dataSources/{id} | Delete Data Source entity
 *EntitiesApi* | [**delete_entity_export_definitions**](docs/EntitiesApi.md#delete_entity_export_definitions) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/{objectId} | Delete an Export Definition
+*EntitiesApi* | [**delete_entity_export_templates**](docs/EntitiesApi.md#delete_entity_export_templates) | **DELETE** /api/v1/entities/exportTemplates/{id} | Delete Export Template entity
 *EntitiesApi* | [**delete_entity_filter_contexts**](docs/EntitiesApi.md#delete_entity_filter_contexts) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | Delete a Context Filter
 *EntitiesApi* | [**delete_entity_filter_views**](docs/EntitiesApi.md#delete_entity_filter_views) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Delete Filter view
 *EntitiesApi* | [**delete_entity_identity_providers**](docs/EntitiesApi.md#delete_entity_identity_providers) | **DELETE** /api/v1/entities/identityProviders/{id} | Delete Identity Provider
@@ -539,6 +544,7 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**get_all_entities_datasets**](docs/EntitiesApi.md#get_all_entities_datasets) | **GET** /api/v1/entities/workspaces/{workspaceId}/datasets | Get all Datasets
 *EntitiesApi* | [**get_all_entities_entitlements**](docs/EntitiesApi.md#get_all_entities_entitlements) | **GET** /api/v1/entities/entitlements | Get Entitlements
 *EntitiesApi* | [**get_all_entities_export_definitions**](docs/EntitiesApi.md#get_all_entities_export_definitions) | **GET** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions | Get all Export Definitions
+*EntitiesApi* | [**get_all_entities_export_templates**](docs/EntitiesApi.md#get_all_entities_export_templates) | **GET** /api/v1/entities/exportTemplates | GET all Export Template entities
 *EntitiesApi* | [**get_all_entities_facts**](docs/EntitiesApi.md#get_all_entities_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/facts | Get all Facts
 *EntitiesApi* | [**get_all_entities_filter_contexts**](docs/EntitiesApi.md#get_all_entities_filter_contexts) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterContexts | Get all Context Filters
 *EntitiesApi* | [**get_all_entities_filter_views**](docs/EntitiesApi.md#get_all_entities_filter_views) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterViews | Get all Filter views
@@ -577,6 +583,7 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**get_entity_datasets**](docs/EntitiesApi.md#get_entity_datasets) | **GET** /api/v1/entities/workspaces/{workspaceId}/datasets/{objectId} | Get a Dataset
 *EntitiesApi* | [**get_entity_entitlements**](docs/EntitiesApi.md#get_entity_entitlements) | **GET** /api/v1/entities/entitlements/{id} | Get Entitlement
 *EntitiesApi* | [**get_entity_export_definitions**](docs/EntitiesApi.md#get_entity_export_definitions) | **GET** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/{objectId} | Get an Export Definition
+*EntitiesApi* | [**get_entity_export_templates**](docs/EntitiesApi.md#get_entity_export_templates) | **GET** /api/v1/entities/exportTemplates/{id} | GET Export Template entity
 *EntitiesApi* | [**get_entity_facts**](docs/EntitiesApi.md#get_entity_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/facts/{objectId} | Get a Fact
 *EntitiesApi* | [**get_entity_filter_contexts**](docs/EntitiesApi.md#get_entity_filter_contexts) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | Get a Context Filter
 *EntitiesApi* | [**get_entity_filter_views**](docs/EntitiesApi.md#get_entity_filter_views) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Get Filter view
@@ -610,6 +617,7 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**patch_entity_dashboard_plugins**](docs/EntitiesApi.md#patch_entity_dashboard_plugins) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | Patch a Plugin
 *EntitiesApi* | [**patch_entity_data_sources**](docs/EntitiesApi.md#patch_entity_data_sources) | **PATCH** /api/v1/entities/dataSources/{id} | Patch Data Source entity
 *EntitiesApi* | [**patch_entity_export_definitions**](docs/EntitiesApi.md#patch_entity_export_definitions) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/{objectId} | Patch an Export Definition
+*EntitiesApi* | [**patch_entity_export_templates**](docs/EntitiesApi.md#patch_entity_export_templates) | **PATCH** /api/v1/entities/exportTemplates/{id} | Patch Export Template entity
 *EntitiesApi* | [**patch_entity_filter_contexts**](docs/EntitiesApi.md#patch_entity_filter_contexts) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | Patch a Context Filter
 *EntitiesApi* | [**patch_entity_filter_views**](docs/EntitiesApi.md#patch_entity_filter_views) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Patch Filter view
 *EntitiesApi* | [**patch_entity_identity_providers**](docs/EntitiesApi.md#patch_entity_identity_providers) | **PATCH** /api/v1/entities/identityProviders/{id} | Patch Identity Provider
@@ -638,6 +646,7 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**update_entity_dashboard_plugins**](docs/EntitiesApi.md#update_entity_dashboard_plugins) | **PUT** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | Put a Plugin
 *EntitiesApi* | [**update_entity_data_sources**](docs/EntitiesApi.md#update_entity_data_sources) | **PUT** /api/v1/entities/dataSources/{id} | Put Data Source entity
 *EntitiesApi* | [**update_entity_export_definitions**](docs/EntitiesApi.md#update_entity_export_definitions) | **PUT** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/{objectId} | Put an Export Definition
+*EntitiesApi* | [**update_entity_export_templates**](docs/EntitiesApi.md#update_entity_export_templates) | **PUT** /api/v1/entities/exportTemplates/{id} | PUT Export Template entity
 *EntitiesApi* | [**update_entity_filter_contexts**](docs/EntitiesApi.md#update_entity_filter_contexts) | **PUT** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | Put a Context Filter
 *EntitiesApi* | [**update_entity_filter_views**](docs/EntitiesApi.md#update_entity_filter_views) | **PUT** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Put Filter views
 *EntitiesApi* | [**update_entity_identity_providers**](docs/EntitiesApi.md#update_entity_identity_providers) | **PUT** /api/v1/entities/identityProviders/{id} | Put Identity Provider
@@ -661,6 +670,7 @@ Class | Method | HTTP request | Description
 *LayoutApi* | [**get_automations**](docs/LayoutApi.md#get_automations) | **GET** /api/v1/layout/workspaces/{workspaceId}/automations | Get automations
 *LayoutApi* | [**get_data_source_permissions**](docs/LayoutApi.md#get_data_source_permissions) | **GET** /api/v1/layout/dataSources/{dataSourceId}/permissions | Get permissions for the data source
 *LayoutApi* | [**get_data_sources_layout**](docs/LayoutApi.md#get_data_sources_layout) | **GET** /api/v1/layout/dataSources | Get all data sources
+*LayoutApi* | [**get_export_templates_layout**](docs/LayoutApi.md#get_export_templates_layout) | **GET** /api/v1/layout/exportTemplates | Get all export templates layout
 *LayoutApi* | [**get_filter_views**](docs/LayoutApi.md#get_filter_views) | **GET** /api/v1/layout/workspaces/{workspaceId}/filterViews | Get filter views
 *LayoutApi* | [**get_identity_providers_layout**](docs/LayoutApi.md#get_identity_providers_layout) | **GET** /api/v1/layout/identityProviders | Get all identity providers layout
 *LayoutApi* | [**get_logical_model**](docs/LayoutApi.md#get_logical_model) | **GET** /api/v1/layout/workspaces/{workspaceId}/logicalModel | Get logical model
@@ -685,6 +695,7 @@ Class | Method | HTTP request | Description
 *LayoutApi* | [**set_analytics_model**](docs/LayoutApi.md#set_analytics_model) | **PUT** /api/v1/layout/workspaces/{workspaceId}/analyticsModel | Set analytics model
 *LayoutApi* | [**set_automations**](docs/LayoutApi.md#set_automations) | **PUT** /api/v1/layout/workspaces/{workspaceId}/automations | Set automations
 *LayoutApi* | [**set_data_source_permissions**](docs/LayoutApi.md#set_data_source_permissions) | **PUT** /api/v1/layout/dataSources/{dataSourceId}/permissions | Set data source permissions.
+*LayoutApi* | [**set_export_templates**](docs/LayoutApi.md#set_export_templates) | **PUT** /api/v1/layout/exportTemplates | Set all export templates
 *LayoutApi* | [**set_filter_views**](docs/LayoutApi.md#set_filter_views) | **PUT** /api/v1/layout/workspaces/{workspaceId}/filterViews | Set filter views
 *LayoutApi* | [**set_identity_providers**](docs/LayoutApi.md#set_identity_providers) | **PUT** /api/v1/layout/identityProviders | Set all identity providers
 *LayoutApi* | [**set_logical_model**](docs/LayoutApi.md#set_logical_model) | **PUT** /api/v1/layout/workspaces/{workspaceId}/logicalModel | Set logical model
@@ -706,6 +717,7 @@ Class | Method | HTTP request | Description
 *OrganizationModelControllerApi* | [**create_entity_color_palettes**](docs/OrganizationModelControllerApi.md#create_entity_color_palettes) | **POST** /api/v1/entities/colorPalettes | Post Color Pallettes
 *OrganizationModelControllerApi* | [**create_entity_csp_directives**](docs/OrganizationModelControllerApi.md#create_entity_csp_directives) | **POST** /api/v1/entities/cspDirectives | Post CSP Directives
 *OrganizationModelControllerApi* | [**create_entity_data_sources**](docs/OrganizationModelControllerApi.md#create_entity_data_sources) | **POST** /api/v1/entities/dataSources | Post Data Sources
+*OrganizationModelControllerApi* | [**create_entity_export_templates**](docs/OrganizationModelControllerApi.md#create_entity_export_templates) | **POST** /api/v1/entities/exportTemplates | Post Export Template entities
 *OrganizationModelControllerApi* | [**create_entity_identity_providers**](docs/OrganizationModelControllerApi.md#create_entity_identity_providers) | **POST** /api/v1/entities/identityProviders | Post Identity Providers
 *OrganizationModelControllerApi* | [**create_entity_jwks**](docs/OrganizationModelControllerApi.md#create_entity_jwks) | **POST** /api/v1/entities/jwks | Post Jwks
 *OrganizationModelControllerApi* | [**create_entity_llm_endpoints**](docs/OrganizationModelControllerApi.md#create_entity_llm_endpoints) | **POST** /api/v1/entities/llmEndpoints | Post LLM endpoint entities
@@ -718,6 +730,7 @@ Class | Method | HTTP request | Description
 *OrganizationModelControllerApi* | [**delete_entity_color_palettes**](docs/OrganizationModelControllerApi.md#delete_entity_color_palettes) | **DELETE** /api/v1/entities/colorPalettes/{id} | Delete a Color Pallette
 *OrganizationModelControllerApi* | [**delete_entity_csp_directives**](docs/OrganizationModelControllerApi.md#delete_entity_csp_directives) | **DELETE** /api/v1/entities/cspDirectives/{id} | Delete CSP Directives
 *OrganizationModelControllerApi* | [**delete_entity_data_sources**](docs/OrganizationModelControllerApi.md#delete_entity_data_sources) | **DELETE** /api/v1/entities/dataSources/{id} | Delete Data Source entity
+*OrganizationModelControllerApi* | [**delete_entity_export_templates**](docs/OrganizationModelControllerApi.md#delete_entity_export_templates) | **DELETE** /api/v1/entities/exportTemplates/{id} | Delete Export Template entity
 *OrganizationModelControllerApi* | [**delete_entity_identity_providers**](docs/OrganizationModelControllerApi.md#delete_entity_identity_providers) | **DELETE** /api/v1/entities/identityProviders/{id} | Delete Identity Provider
 *OrganizationModelControllerApi* | [**delete_entity_jwks**](docs/OrganizationModelControllerApi.md#delete_entity_jwks) | **DELETE** /api/v1/entities/jwks/{id} | Delete Jwk
 *OrganizationModelControllerApi* | [**delete_entity_llm_endpoints**](docs/OrganizationModelControllerApi.md#delete_entity_llm_endpoints) | **DELETE** /api/v1/entities/llmEndpoints/{id} | 
@@ -732,6 +745,7 @@ Class | Method | HTTP request | Description
 *OrganizationModelControllerApi* | [**get_all_entities_data_source_identifiers**](docs/OrganizationModelControllerApi.md#get_all_entities_data_source_identifiers) | **GET** /api/v1/entities/dataSourceIdentifiers | Get all Data Source Identifiers
 *OrganizationModelControllerApi* | [**get_all_entities_data_sources**](docs/OrganizationModelControllerApi.md#get_all_entities_data_sources) | **GET** /api/v1/entities/dataSources | Get Data Source entities
 *OrganizationModelControllerApi* | [**get_all_entities_entitlements**](docs/OrganizationModelControllerApi.md#get_all_entities_entitlements) | **GET** /api/v1/entities/entitlements | Get Entitlements
+*OrganizationModelControllerApi* | [**get_all_entities_export_templates**](docs/OrganizationModelControllerApi.md#get_all_entities_export_templates) | **GET** /api/v1/entities/exportTemplates | GET all Export Template entities
 *OrganizationModelControllerApi* | [**get_all_entities_identity_providers**](docs/OrganizationModelControllerApi.md#get_all_entities_identity_providers) | **GET** /api/v1/entities/identityProviders | Get all Identity Providers
 *OrganizationModelControllerApi* | [**get_all_entities_jwks**](docs/OrganizationModelControllerApi.md#get_all_entities_jwks) | **GET** /api/v1/entities/jwks | Get all Jwks
 *OrganizationModelControllerApi* | [**get_all_entities_llm_endpoints**](docs/OrganizationModelControllerApi.md#get_all_entities_llm_endpoints) | **GET** /api/v1/entities/llmEndpoints | Get all LLM endpoint entities
@@ -747,6 +761,7 @@ Class | Method | HTTP request | Description
 *OrganizationModelControllerApi* | [**get_entity_data_source_identifiers**](docs/OrganizationModelControllerApi.md#get_entity_data_source_identifiers) | **GET** /api/v1/entities/dataSourceIdentifiers/{id} | Get Data Source Identifier
 *OrganizationModelControllerApi* | [**get_entity_data_sources**](docs/OrganizationModelControllerApi.md#get_entity_data_sources) | **GET** /api/v1/entities/dataSources/{id} | Get Data Source entity
 *OrganizationModelControllerApi* | [**get_entity_entitlements**](docs/OrganizationModelControllerApi.md#get_entity_entitlements) | **GET** /api/v1/entities/entitlements/{id} | Get Entitlement
+*OrganizationModelControllerApi* | [**get_entity_export_templates**](docs/OrganizationModelControllerApi.md#get_entity_export_templates) | **GET** /api/v1/entities/exportTemplates/{id} | GET Export Template entity
 *OrganizationModelControllerApi* | [**get_entity_identity_providers**](docs/OrganizationModelControllerApi.md#get_entity_identity_providers) | **GET** /api/v1/entities/identityProviders/{id} | Get Identity Provider
 *OrganizationModelControllerApi* | [**get_entity_jwks**](docs/OrganizationModelControllerApi.md#get_entity_jwks) | **GET** /api/v1/entities/jwks/{id} | Get Jwk
 *OrganizationModelControllerApi* | [**get_entity_llm_endpoints**](docs/OrganizationModelControllerApi.md#get_entity_llm_endpoints) | **GET** /api/v1/entities/llmEndpoints/{id} | Get LLM endpoint entity
@@ -760,6 +775,7 @@ Class | Method | HTTP request | Description
 *OrganizationModelControllerApi* | [**patch_entity_color_palettes**](docs/OrganizationModelControllerApi.md#patch_entity_color_palettes) | **PATCH** /api/v1/entities/colorPalettes/{id} | Patch Color Pallette
 *OrganizationModelControllerApi* | [**patch_entity_csp_directives**](docs/OrganizationModelControllerApi.md#patch_entity_csp_directives) | **PATCH** /api/v1/entities/cspDirectives/{id} | Patch CSP Directives
 *OrganizationModelControllerApi* | [**patch_entity_data_sources**](docs/OrganizationModelControllerApi.md#patch_entity_data_sources) | **PATCH** /api/v1/entities/dataSources/{id} | Patch Data Source entity
+*OrganizationModelControllerApi* | [**patch_entity_export_templates**](docs/OrganizationModelControllerApi.md#patch_entity_export_templates) | **PATCH** /api/v1/entities/exportTemplates/{id} | Patch Export Template entity
 *OrganizationModelControllerApi* | [**patch_entity_identity_providers**](docs/OrganizationModelControllerApi.md#patch_entity_identity_providers) | **PATCH** /api/v1/entities/identityProviders/{id} | Patch Identity Provider
 *OrganizationModelControllerApi* | [**patch_entity_jwks**](docs/OrganizationModelControllerApi.md#patch_entity_jwks) | **PATCH** /api/v1/entities/jwks/{id} | Patch Jwk
 *OrganizationModelControllerApi* | [**patch_entity_llm_endpoints**](docs/OrganizationModelControllerApi.md#patch_entity_llm_endpoints) | **PATCH** /api/v1/entities/llmEndpoints/{id} | Patch LLM endpoint entity
@@ -772,6 +788,7 @@ Class | Method | HTTP request | Description
 *OrganizationModelControllerApi* | [**update_entity_color_palettes**](docs/OrganizationModelControllerApi.md#update_entity_color_palettes) | **PUT** /api/v1/entities/colorPalettes/{id} | Put Color Pallette
 *OrganizationModelControllerApi* | [**update_entity_csp_directives**](docs/OrganizationModelControllerApi.md#update_entity_csp_directives) | **PUT** /api/v1/entities/cspDirectives/{id} | Put CSP Directives
 *OrganizationModelControllerApi* | [**update_entity_data_sources**](docs/OrganizationModelControllerApi.md#update_entity_data_sources) | **PUT** /api/v1/entities/dataSources/{id} | Put Data Source entity
+*OrganizationModelControllerApi* | [**update_entity_export_templates**](docs/OrganizationModelControllerApi.md#update_entity_export_templates) | **PUT** /api/v1/entities/exportTemplates/{id} | PUT Export Template entity
 *OrganizationModelControllerApi* | [**update_entity_identity_providers**](docs/OrganizationModelControllerApi.md#update_entity_identity_providers) | **PUT** /api/v1/entities/identityProviders/{id} | Put Identity Provider
 *OrganizationModelControllerApi* | [**update_entity_jwks**](docs/OrganizationModelControllerApi.md#update_entity_jwks) | **PUT** /api/v1/entities/jwks/{id} | Put Jwk
 *OrganizationModelControllerApi* | [**update_entity_llm_endpoints**](docs/OrganizationModelControllerApi.md#update_entity_llm_endpoints) | **PUT** /api/v1/entities/llmEndpoints/{id} | PUT LLM endpoint entity
@@ -892,6 +909,7 @@ Class | Method | HTTP request | Description
  - [AbstractMeasureValueFilter](docs/AbstractMeasureValueFilter.md)
  - [ActiveObjectIdentification](docs/ActiveObjectIdentification.md)
  - [AdHocAutomation](docs/AdHocAutomation.md)
+ - [AfmCancelTokens](docs/AfmCancelTokens.md)
  - [AfmExecution](docs/AfmExecution.md)
  - [AfmExecutionResponse](docs/AfmExecutionResponse.md)
  - [AfmIdentifier](docs/AfmIdentifier.md)
@@ -938,6 +956,7 @@ Class | Method | HTTP request | Description
  - [AutomationAlert](docs/AutomationAlert.md)
  - [AutomationAlertCondition](docs/AutomationAlertCondition.md)
  - [AutomationExternalRecipient](docs/AutomationExternalRecipient.md)
+ - [AutomationMetadata](docs/AutomationMetadata.md)
  - [AutomationNotification](docs/AutomationNotification.md)
  - [AutomationNotificationAllOf](docs/AutomationNotificationAllOf.md)
  - [AutomationSchedule](docs/AutomationSchedule.md)
@@ -963,6 +982,8 @@ Class | Method | HTTP request | Description
  - [ComparisonMeasureValueFilter](docs/ComparisonMeasureValueFilter.md)
  - [ComparisonMeasureValueFilterComparisonMeasureValueFilter](docs/ComparisonMeasureValueFilterComparisonMeasureValueFilter.md)
  - [ComparisonWrapper](docs/ComparisonWrapper.md)
+ - [ContentSlideTemplate](docs/ContentSlideTemplate.md)
+ - [CoverSlideTemplate](docs/CoverSlideTemplate.md)
  - [CreatedVisualization](docs/CreatedVisualization.md)
  - [CreatedVisualizationFiltersInner](docs/CreatedVisualizationFiltersInner.md)
  - [CreatedVisualizations](docs/CreatedVisualizations.md)
@@ -971,6 +992,7 @@ Class | Method | HTTP request | Description
  - [CustomOverride](docs/CustomOverride.md)
  - [DashboardPermissions](docs/DashboardPermissions.md)
  - [DashboardPermissionsAssignment](docs/DashboardPermissionsAssignment.md)
+ - [DashboardSlidesTemplate](docs/DashboardSlidesTemplate.md)
  - [DataColumnLocator](docs/DataColumnLocator.md)
  - [DataColumnLocators](docs/DataColumnLocators.md)
  - [DataSourceParameter](docs/DataSourceParameter.md)
@@ -1015,6 +1037,8 @@ Class | Method | HTTP request | Description
  - [DeclarativeExportDefinition](docs/DeclarativeExportDefinition.md)
  - [DeclarativeExportDefinitionIdentifier](docs/DeclarativeExportDefinitionIdentifier.md)
  - [DeclarativeExportDefinitionRequestPayload](docs/DeclarativeExportDefinitionRequestPayload.md)
+ - [DeclarativeExportTemplate](docs/DeclarativeExportTemplate.md)
+ - [DeclarativeExportTemplates](docs/DeclarativeExportTemplates.md)
  - [DeclarativeFact](docs/DeclarativeFact.md)
  - [DeclarativeFilterContext](docs/DeclarativeFilterContext.md)
  - [DeclarativeFilterView](docs/DeclarativeFilterView.md)
@@ -1106,6 +1130,7 @@ Class | Method | HTTP request | Description
  - [FrequencyBucket](docs/FrequencyBucket.md)
  - [FrequencyProperties](docs/FrequencyProperties.md)
  - [GenerateLdmRequest](docs/GenerateLdmRequest.md)
+ - [GetSlidesExport202ResponseInner](docs/GetSlidesExport202ResponseInner.md)
  - [GrainIdentifier](docs/GrainIdentifier.md)
  - [GrantedPermission](docs/GrantedPermission.md)
  - [GranularitiesFormatting](docs/GranularitiesFormatting.md)
@@ -1121,6 +1146,7 @@ Class | Method | HTTP request | Description
  - [InlineFilterDefinitionInline](docs/InlineFilterDefinitionInline.md)
  - [InlineMeasureDefinition](docs/InlineMeasureDefinition.md)
  - [InlineMeasureDefinitionInline](docs/InlineMeasureDefinitionInline.md)
+ - [IntroSlideTemplate](docs/IntroSlideTemplate.md)
  - [JsonApiAnalyticalDashboardIn](docs/JsonApiAnalyticalDashboardIn.md)
  - [JsonApiAnalyticalDashboardInAttributes](docs/JsonApiAnalyticalDashboardInAttributes.md)
  - [JsonApiAnalyticalDashboardInDocument](docs/JsonApiAnalyticalDashboardInDocument.md)
@@ -1191,6 +1217,7 @@ Class | Method | HTTP request | Description
  - [JsonApiAutomationInAttributes](docs/JsonApiAutomationInAttributes.md)
  - [JsonApiAutomationInAttributesAlert](docs/JsonApiAutomationInAttributesAlert.md)
  - [JsonApiAutomationInAttributesExternalRecipientsInner](docs/JsonApiAutomationInAttributesExternalRecipientsInner.md)
+ - [JsonApiAutomationInAttributesMetadata](docs/JsonApiAutomationInAttributesMetadata.md)
  - [JsonApiAutomationInAttributesSchedule](docs/JsonApiAutomationInAttributesSchedule.md)
  - [JsonApiAutomationInAttributesTabularExportsInner](docs/JsonApiAutomationInAttributesTabularExportsInner.md)
  - [JsonApiAutomationInAttributesVisualExportsInner](docs/JsonApiAutomationInAttributesVisualExportsInner.md)
@@ -1325,6 +1352,20 @@ Class | Method | HTTP request | Description
  - [JsonApiExportDefinitionPostOptionalId](docs/JsonApiExportDefinitionPostOptionalId.md)
  - [JsonApiExportDefinitionPostOptionalIdDocument](docs/JsonApiExportDefinitionPostOptionalIdDocument.md)
  - [JsonApiExportDefinitionToManyLinkage](docs/JsonApiExportDefinitionToManyLinkage.md)
+ - [JsonApiExportTemplateIn](docs/JsonApiExportTemplateIn.md)
+ - [JsonApiExportTemplateInAttributes](docs/JsonApiExportTemplateInAttributes.md)
+ - [JsonApiExportTemplateInAttributesDashboardSlidesTemplate](docs/JsonApiExportTemplateInAttributesDashboardSlidesTemplate.md)
+ - [JsonApiExportTemplateInAttributesWidgetSlidesTemplate](docs/JsonApiExportTemplateInAttributesWidgetSlidesTemplate.md)
+ - [JsonApiExportTemplateInDocument](docs/JsonApiExportTemplateInDocument.md)
+ - [JsonApiExportTemplateOut](docs/JsonApiExportTemplateOut.md)
+ - [JsonApiExportTemplateOutDocument](docs/JsonApiExportTemplateOutDocument.md)
+ - [JsonApiExportTemplateOutList](docs/JsonApiExportTemplateOutList.md)
+ - [JsonApiExportTemplateOutWithLinks](docs/JsonApiExportTemplateOutWithLinks.md)
+ - [JsonApiExportTemplatePatch](docs/JsonApiExportTemplatePatch.md)
+ - [JsonApiExportTemplatePatchAttributes](docs/JsonApiExportTemplatePatchAttributes.md)
+ - [JsonApiExportTemplatePatchDocument](docs/JsonApiExportTemplatePatchDocument.md)
+ - [JsonApiExportTemplatePostOptionalId](docs/JsonApiExportTemplatePostOptionalId.md)
+ - [JsonApiExportTemplatePostOptionalIdDocument](docs/JsonApiExportTemplatePostOptionalIdDocument.md)
  - [JsonApiFactLinkage](docs/JsonApiFactLinkage.md)
  - [JsonApiFactOut](docs/JsonApiFactOut.md)
  - [JsonApiFactOutAttributes](docs/JsonApiFactOutAttributes.md)
@@ -1670,6 +1711,7 @@ Class | Method | HTTP request | Description
  - [RouteResult](docs/RouteResult.md)
  - [RsaSpecification](docs/RsaSpecification.md)
  - [RulePermission](docs/RulePermission.md)
+ - [RunningSection](docs/RunningSection.md)
  - [ScanRequest](docs/ScanRequest.md)
  - [ScanResultPdm](docs/ScanResultPdm.md)
  - [ScanSqlRequest](docs/ScanSqlRequest.md)
@@ -1678,6 +1720,7 @@ Class | Method | HTTP request | Description
  - [SearchRequest](docs/SearchRequest.md)
  - [SearchResult](docs/SearchResult.md)
  - [SearchResultObject](docs/SearchResultObject.md)
+ - [SectionSlideTemplate](docs/SectionSlideTemplate.md)
  - [Settings](docs/Settings.md)
  - [SimpleMeasureDefinition](docs/SimpleMeasureDefinition.md)
  - [SimpleMeasureDefinitionMeasure](docs/SimpleMeasureDefinitionMeasure.md)
@@ -1731,6 +1774,7 @@ Class | Method | HTTP request | Description
  - [UserPermission](docs/UserPermission.md)
  - [ValidateByItem](docs/ValidateByItem.md)
  - [Value](docs/Value.md)
+ - [VisibleFilter](docs/VisibleFilter.md)
  - [VisualExportRequest](docs/VisualExportRequest.md)
  - [Webhook](docs/Webhook.md)
  - [WebhookAllOf](docs/WebhookAllOf.md)
@@ -1738,6 +1782,7 @@ Class | Method | HTTP request | Description
  - [WebhookMessage](docs/WebhookMessage.md)
  - [WebhookMessageData](docs/WebhookMessageData.md)
  - [WebhookRecipient](docs/WebhookRecipient.md)
+ - [WidgetSlidesTemplate](docs/WidgetSlidesTemplate.md)
  - [WorkspaceDataSource](docs/WorkspaceDataSource.md)
  - [WorkspaceIdentifier](docs/WorkspaceIdentifier.md)
  - [WorkspacePermissionAssignment](docs/WorkspacePermissionAssignment.md)
