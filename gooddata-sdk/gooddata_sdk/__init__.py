@@ -79,7 +79,20 @@ from gooddata_sdk.catalog.identifier import (
     CatalogUserIdentifier,
     CatalogWorkspaceIdentifier,
 )
+from gooddata_sdk.catalog.organization.common.dashboard_slides_template import CatalogDashboardSlidesTemplate
+from gooddata_sdk.catalog.organization.common.running_section import CatalogRunningSection
+from gooddata_sdk.catalog.organization.common.slide_template import (
+    CatalogContentSlideTemplate,
+    CatalogCoverSlideTemplate,
+    CatalogIntroSlideTemplate,
+    CatalogSectionSlideTemplate,
+)
+from gooddata_sdk.catalog.organization.common.widget_slides_template import CatalogWidgetSlidesTemplate
 from gooddata_sdk.catalog.organization.entity_model.directive import CatalogCspDirective
+from gooddata_sdk.catalog.organization.entity_model.export_template import (
+    CatalogExportTemplate,
+    CatalogExportTemplateAttributes,
+)
 from gooddata_sdk.catalog.organization.entity_model.jwk import (
     CatalogJwk,
     CatalogJwkAttributes,
@@ -88,6 +101,9 @@ from gooddata_sdk.catalog.organization.entity_model.jwk import (
 )
 from gooddata_sdk.catalog.organization.entity_model.organization import CatalogOrganization
 from gooddata_sdk.catalog.organization.entity_model.setting import CatalogOrganizationSetting
+from gooddata_sdk.catalog.organization.layout.export_template import (
+    CatalogDeclarativeExportTemplate,
+)
 from gooddata_sdk.catalog.organization.layout.notification_channel import (
     CatalogDeclarativeNotificationChannel,
     CatalogWebhook,

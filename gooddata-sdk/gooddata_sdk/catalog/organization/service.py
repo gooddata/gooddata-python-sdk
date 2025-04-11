@@ -5,11 +5,17 @@ import functools
 from typing import Optional
 
 from gooddata_api_client.exceptions import NotFoundException
+from gooddata_api_client.model.declarative_export_templates import DeclarativeExportTemplates
 from gooddata_api_client.model.declarative_notification_channels import DeclarativeNotificationChannels
 from gooddata_api_client.model.json_api_csp_directive_in_document import JsonApiCspDirectiveInDocument
+from gooddata_api_client.model.json_api_export_template_in_document import JsonApiExportTemplateInDocument
+from gooddata_api_client.model.json_api_export_template_post_optional_id_document import (
+    JsonApiExportTemplatePostOptionalIdDocument,
+)
 from gooddata_api_client.model.json_api_identity_provider_in_document import JsonApiIdentityProviderInDocument
 from gooddata_api_client.model.json_api_organization_setting_in_document import JsonApiOrganizationSettingInDocument
 
+from gooddata_sdk import CatalogDeclarativeExportTemplate, CatalogExportTemplate
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.organization.entity_model.directive import CatalogCspDirective
 from gooddata_sdk.catalog.organization.entity_model.identity_provider import CatalogIdentityProvider
@@ -424,6 +430,86 @@ class CatalogOrganizationService(CatalogServiceBase):
             identity_provider_id, CatalogIdentityProvider.to_api_patch(identity_provider_id, attributes)
         )
 
+    def create_or_update_export_template(self, export_template: CatalogExportTemplate) -> None:
+        """Create a new export template or overwrite an existing export template with the same id.
+
+        Args:
+            export_template (CatalogExportTemplate):
+                Catalog export template object to be created or updated.
+
+        Returns:
+            None
+
+        Raises:
+            ValueError: Export template cannot be updated.
+        """
+        try:
+            self.get_export_template(export_template.id)
+            self._entities_api.update_entity_export_templates(
+                id=export_template.id,
+                json_api_export_template_in_document=JsonApiExportTemplateInDocument.from_dict(
+                    {"data": export_template.to_dict()}
+                ),
+            )
+        except NotFoundException:
+            self._entities_api.create_entity_export_templates(
+                json_api_export_template_post_optional_id_document=JsonApiExportTemplatePostOptionalIdDocument(
+                    data=export_template.to_api()
+                )
+            )
+
+    def get_export_template(self, export_template_id: str) -> CatalogExportTemplate:
+        """Get an individual export template.
+
+        Args:
+            export_template_id (str):
+                Export template identification string e.g. "demo"
+
+        Returns:
+            CatalogJwk:
+                Catalog export template object containing the structure of the export template.
+        """
+        export_template_api = self._entities_api.get_entity_export_templates(id=export_template_id).data
+        return CatalogExportTemplate.from_api(export_template_api)
+
+    def delete_export_template(self, export_template_id: str) -> None:
+        """Delete an export template.
+
+        Args:
+            export_template_id (str):
+                Export template identification string e.g. "demo"
+
+        Returns:
+            None
+
+        Raises:
+            ValueError:
+                Export template does not exist.
+        """
+        try:
+            self._entities_api.delete_entity_export_templates(export_template_id)
+        except NotFoundException:
+            raise ValueError(
+                f"Can not delete {export_template_id} export template. This export template does not exist."
+            )
+
+    def list_export_templates(self) -> list[CatalogExportTemplate]:
+        """Returns a list of all export templates in the current organization.
+
+        Returns:
+            list[CatalogExportTemplate]:
+                List of export templates in the current organization.
+        """
+        get_export_templates = functools.partial(
+            self._entities_api.get_all_entities_export_templates,
+            _check_return_type=False,
+        )
+        export_templates = load_all_entities_dict(get_export_templates, camel_case=False)
+        return [
+            CatalogExportTemplate.from_dict(export_template, camel_case=False)
+            for export_template in export_templates["data"]
+        ]
+
     # Layout APIs
 
     def get_declarative_notification_channels(self) -> list[CatalogDeclarativeNotificationChannel]:
@@ -480,3 +566,36 @@ class CatalogOrganizationService(CatalogServiceBase):
         """
         api_idps = [idp.to_api() for idp in identity_providers]
         self._layout_api.set_identity_providers(declarative_identity_provider=api_idps)
+
+    def get_declarative_export_templates(self) -> list[CatalogDeclarativeExportTemplate]:
+        """
+        Get all declarative export templates in the current organization.
+
+        Returns:
+            list[CatalogDeclarativeExportTemplate]:
+                List of declarative export templates.
+        """
+        export_templates_api = self._layout_api.get_export_templates_layout()
+        if hasattr(export_templates_api, "export_templates"):
+            return [
+                CatalogDeclarativeExportTemplate.from_api(template)
+                for template in export_templates_api.export_templates
+            ]
+        else:
+            return []
+
+    def put_declarative_export_templates(self, export_templates: list[CatalogDeclarativeExportTemplate]) -> None:
+        """
+        Put declarative export templates in the current organization.
+
+        Args:
+            export_templates (list[CatalogDeclarativeExportTemplate]):
+                List of declarative export templates.
+
+        Returns:
+            None
+        """
+        api_export_templates = [export_template.to_api() for export_template in export_templates]
+        self._layout_api.set_export_templates(
+            declarative_export_templates=DeclarativeExportTemplates(export_templates=api_export_templates)
+        )
