@@ -144,6 +144,79 @@ with gooddata_api_client.ApiClient() as api_client:
                 username="demo",
             ),
         ],
+        export_templates=[
+            DeclarativeExportTemplate(
+                dashboard_slides_template=DashboardSlidesTemplate(
+                    applied_on=["PDF","PPTX"],
+                    content_slide=ContentSlideTemplate(
+                        description_field="{{dashboardFilters}}",
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                    ),
+                    cover_slide=CoverSlideTemplate(
+                        background_image=True,
+                        description_field="Exported at: {{exportedAt}}",
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                    ),
+                    intro_slide=IntroSlideTemplate(
+                        background_image=True,
+                        description_field='''About:
+{{dashboardDescription}}
+
+{{dashboardFilters}}''',
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        title_field="Introduction",
+                    ),
+                    section_slide=SectionSlideTemplate(
+                        background_image=True,
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                    ),
+                ),
+                id="default-export-template",
+                name="My default export template",
+                widget_slides_template=WidgetSlidesTemplate(
+                    applied_on=["PDF","PPTX"],
+                    content_slide=ContentSlideTemplate(
+                        description_field="{{dashboardFilters}}",
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                    ),
+                ),
+            ),
+        ],
         identity_providers=[
             DeclarativeIdentityProvider(
                 custom_claim_mapping={
@@ -206,6 +279,9 @@ with gooddata_api_client.ApiClient() as api_client:
             oauth_custom_auth_attributes={
                 "key": "key_example",
             },
+            oauth_custom_scopes=[
+                "oauth_custom_scopes_example",
+            ],
             oauth_issuer_id="myOidcProvider",
             oauth_issuer_location="oauth_issuer_location_example",
             oauth_subject_id_claim="oid",
@@ -371,7 +447,15 @@ with gooddata_api_client.ApiClient() as api_client:
                             ),
                         ],
                         id="/6bUUGjjNSwg0_bs",
-                        metadata=JsonNode(),
+                        metadata=AutomationMetadata(
+                            visible_filters=[
+                                VisibleFilter(
+                                    local_identifier="local_identifier_example",
+                                    title="title_example",
+                                ),
+                            ],
+                            widget="widget_example",
+                        ),
                         modified_at="2023-07-20 12:30",
                         modified_by=DeclarativeUserIdentifier(
                             id="employee123",

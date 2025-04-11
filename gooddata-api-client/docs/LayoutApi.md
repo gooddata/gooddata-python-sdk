@@ -8,6 +8,7 @@ Method | HTTP request | Description
 [**get_automations**](LayoutApi.md#get_automations) | **GET** /api/v1/layout/workspaces/{workspaceId}/automations | Get automations
 [**get_data_source_permissions**](LayoutApi.md#get_data_source_permissions) | **GET** /api/v1/layout/dataSources/{dataSourceId}/permissions | Get permissions for the data source
 [**get_data_sources_layout**](LayoutApi.md#get_data_sources_layout) | **GET** /api/v1/layout/dataSources | Get all data sources
+[**get_export_templates_layout**](LayoutApi.md#get_export_templates_layout) | **GET** /api/v1/layout/exportTemplates | Get all export templates layout
 [**get_filter_views**](LayoutApi.md#get_filter_views) | **GET** /api/v1/layout/workspaces/{workspaceId}/filterViews | Get filter views
 [**get_identity_providers_layout**](LayoutApi.md#get_identity_providers_layout) | **GET** /api/v1/layout/identityProviders | Get all identity providers layout
 [**get_logical_model**](LayoutApi.md#get_logical_model) | **GET** /api/v1/layout/workspaces/{workspaceId}/logicalModel | Get logical model
@@ -32,6 +33,7 @@ Method | HTTP request | Description
 [**set_analytics_model**](LayoutApi.md#set_analytics_model) | **PUT** /api/v1/layout/workspaces/{workspaceId}/analyticsModel | Set analytics model
 [**set_automations**](LayoutApi.md#set_automations) | **PUT** /api/v1/layout/workspaces/{workspaceId}/automations | Set automations
 [**set_data_source_permissions**](LayoutApi.md#set_data_source_permissions) | **PUT** /api/v1/layout/dataSources/{dataSourceId}/permissions | Set data source permissions.
+[**set_export_templates**](LayoutApi.md#set_export_templates) | **PUT** /api/v1/layout/exportTemplates | Set all export templates
 [**set_filter_views**](LayoutApi.md#set_filter_views) | **PUT** /api/v1/layout/workspaces/{workspaceId}/filterViews | Set filter views
 [**set_identity_providers**](LayoutApi.md#set_identity_providers) | **PUT** /api/v1/layout/identityProviders | Set all identity providers
 [**set_logical_model**](LayoutApi.md#set_logical_model) | **PUT** /api/v1/layout/workspaces/{workspaceId}/logicalModel | Set logical model
@@ -333,6 +335,69 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Retrieved all data sources. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_export_templates_layout**
+> DeclarativeExportTemplates get_export_templates_layout()
+
+Get all export templates layout
+
+Gets complete layout of export templates.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import layout_api
+from gooddata_api_client.model.declarative_export_templates import DeclarativeExportTemplates
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = layout_api.LayoutApi(api_client)
+
+    # example, this endpoint has no required or optional parameters
+    try:
+        # Get all export templates layout
+        api_response = api_instance.get_export_templates_layout()
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling LayoutApi->get_export_templates_layout: %s\n" % e)
+```
+
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**DeclarativeExportTemplates**](DeclarativeExportTemplates.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Retrieved layout of all export templates. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -2463,7 +2528,15 @@ with gooddata_api_client.ApiClient() as api_client:
                 ),
             ],
             id="/6bUUGjjNSwg0_bs",
-            metadata=JsonNode(),
+            metadata=AutomationMetadata(
+                visible_filters=[
+                    VisibleFilter(
+                        local_identifier="local_identifier_example",
+                        title="title_example",
+                    ),
+                ],
+                widget="widget_example",
+            ),
             modified_at="2023-07-20 12:30",
             modified_by=DeclarativeUserIdentifier(
                 id="employee123",
@@ -2660,6 +2733,146 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **set_export_templates**
+> set_export_templates(declarative_export_templates)
+
+Set all export templates
+
+Sets export templates in organization.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import layout_api
+from gooddata_api_client.model.declarative_export_templates import DeclarativeExportTemplates
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = layout_api.LayoutApi(api_client)
+    declarative_export_templates = DeclarativeExportTemplates(
+        export_templates=[
+            DeclarativeExportTemplate(
+                dashboard_slides_template=DashboardSlidesTemplate(
+                    applied_on=["PDF","PPTX"],
+                    content_slide=ContentSlideTemplate(
+                        description_field="{{dashboardFilters}}",
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                    ),
+                    cover_slide=CoverSlideTemplate(
+                        background_image=True,
+                        description_field="Exported at: {{exportedAt}}",
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                    ),
+                    intro_slide=IntroSlideTemplate(
+                        background_image=True,
+                        description_field='''About:
+{{dashboardDescription}}
+
+{{dashboardFilters}}''',
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        title_field="Introduction",
+                    ),
+                    section_slide=SectionSlideTemplate(
+                        background_image=True,
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                    ),
+                ),
+                id="default-export-template",
+                name="My default export template",
+                widget_slides_template=WidgetSlidesTemplate(
+                    applied_on=["PDF","PPTX"],
+                    content_slide=ContentSlideTemplate(
+                        description_field="{{dashboardFilters}}",
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                    ),
+                ),
+            ),
+        ],
+    ) # DeclarativeExportTemplates | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Set all export templates
+        api_instance.set_export_templates(declarative_export_templates)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling LayoutApi->set_export_templates: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **declarative_export_templates** | [**DeclarativeExportTemplates**](DeclarativeExportTemplates.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | All export templates set. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -3174,6 +3387,79 @@ with gooddata_api_client.ApiClient() as api_client:
                 username="demo",
             ),
         ],
+        export_templates=[
+            DeclarativeExportTemplate(
+                dashboard_slides_template=DashboardSlidesTemplate(
+                    applied_on=["PDF","PPTX"],
+                    content_slide=ContentSlideTemplate(
+                        description_field="{{dashboardFilters}}",
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                    ),
+                    cover_slide=CoverSlideTemplate(
+                        background_image=True,
+                        description_field="Exported at: {{exportedAt}}",
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                    ),
+                    intro_slide=IntroSlideTemplate(
+                        background_image=True,
+                        description_field='''About:
+{{dashboardDescription}}
+
+{{dashboardFilters}}''',
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        title_field="Introduction",
+                    ),
+                    section_slide=SectionSlideTemplate(
+                        background_image=True,
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                    ),
+                ),
+                id="default-export-template",
+                name="My default export template",
+                widget_slides_template=WidgetSlidesTemplate(
+                    applied_on=["PDF","PPTX"],
+                    content_slide=ContentSlideTemplate(
+                        description_field="{{dashboardFilters}}",
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                    ),
+                ),
+            ),
+        ],
         identity_providers=[
             DeclarativeIdentityProvider(
                 custom_claim_mapping={
@@ -3236,6 +3522,9 @@ with gooddata_api_client.ApiClient() as api_client:
             oauth_custom_auth_attributes={
                 "key": "key_example",
             },
+            oauth_custom_scopes=[
+                "oauth_custom_scopes_example",
+            ],
             oauth_issuer_id="myOidcProvider",
             oauth_issuer_location="oauth_issuer_location_example",
             oauth_subject_id_claim="oid",
@@ -3401,7 +3690,15 @@ with gooddata_api_client.ApiClient() as api_client:
                             ),
                         ],
                         id="/6bUUGjjNSwg0_bs",
-                        metadata=JsonNode(),
+                        metadata=AutomationMetadata(
+                            visible_filters=[
+                                VisibleFilter(
+                                    local_identifier="local_identifier_example",
+                                    title="title_example",
+                                ),
+                            ],
+                            widget="widget_example",
+                        ),
                         modified_at="2023-07-20 12:30",
                         modified_by=DeclarativeUserIdentifier(
                             id="employee123",
@@ -4491,7 +4788,15 @@ with gooddata_api_client.ApiClient() as api_client:
                             ),
                         ],
                         id="/6bUUGjjNSwg0_bs",
-                        metadata=JsonNode(),
+                        metadata=AutomationMetadata(
+                            visible_filters=[
+                                VisibleFilter(
+                                    local_identifier="local_identifier_example",
+                                    title="title_example",
+                                ),
+                            ],
+                            widget="widget_example",
+                        ),
                         modified_at="2023-07-20 12:30",
                         modified_by=DeclarativeUserIdentifier(
                             id="employee123",

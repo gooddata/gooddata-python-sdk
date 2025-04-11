@@ -29,7 +29,7 @@
             "uniqueItems": true
           },
           "metadata": {
-            "$ref": "#/components/schemas/JsonNode"
+            "$ref": "#/components/schemas/AutomationMetadata"
           },
           "notificationChannel": {
             "$ref": "#/components/schemas/DeclarativeNotificationChannelIdentifier"
@@ -172,6 +172,23 @@
         "required": [
           "email"
         ],
+        "type": "object"
+      },
+      "AutomationMetadata": {
+        "description": "Additional information for the automation.",
+        "maxLength": 15000,
+        "nullable": true,
+        "properties": {
+          "visibleFilters": {
+            "items": {
+              "$ref": "#/components/schemas/VisibleFilter"
+            },
+            "type": "array"
+          },
+          "widget": {
+            "type": "string"
+          }
+        },
         "type": "object"
       },
       "AutomationNotification": {
@@ -839,6 +856,17 @@
         "required": [
           "automation"
         ],
+        "type": "object"
+      },
+      "VisibleFilter": {
+        "properties": {
+          "localIdentifier": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          }
+        },
         "type": "object"
       },
       "VisualExportRequest": {

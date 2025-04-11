@@ -82,6 +82,7 @@ class EntitlementsRequest(ModelNormal):
             'UNLIMITEDDAILYALERTACTIONS': "UnlimitedDailyAlertActions",
             'SCHEDULEDACTIONMINIMUMRECURRENCEMINUTES': "ScheduledActionMinimumRecurrenceMinutes",
             'FEDERATEDIDENTITYMANAGEMENT': "FederatedIdentityManagement",
+            'AUDITLOGGING': "AuditLogging",
         },
     }
 

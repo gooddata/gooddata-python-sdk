@@ -8,7 +8,7 @@ Name | Type | Description | Notes
 **description** | **str** |  | [optional] 
 **details** | **{str: (str,)}** | Additional details to be included in the automated message. | [optional] 
 **external_recipients** | [**[AutomationExternalRecipient]**](AutomationExternalRecipient.md) | External recipients of the automation action results. | [optional] 
-**metadata** | [**JsonNode**](JsonNode.md) |  | [optional] 
+**metadata** | [**AutomationMetadata**](AutomationMetadata.md) |  | [optional] 
 **notification_channel** | [**DeclarativeNotificationChannelIdentifier**](DeclarativeNotificationChannelIdentifier.md) |  | [optional] 
 **recipients** | [**[DeclarativeUserIdentifier]**](DeclarativeUserIdentifier.md) |  | [optional] 
 **tabular_exports** | [**[AutomationTabularExport]**](AutomationTabularExport.md) |  | [optional] 

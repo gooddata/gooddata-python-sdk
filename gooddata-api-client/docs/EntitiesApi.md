@@ -14,6 +14,7 @@ Method | HTTP request | Description
 [**create_entity_dashboard_plugins**](EntitiesApi.md#create_entity_dashboard_plugins) | **POST** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins | Post Plugins
 [**create_entity_data_sources**](EntitiesApi.md#create_entity_data_sources) | **POST** /api/v1/entities/dataSources | Post Data Sources
 [**create_entity_export_definitions**](EntitiesApi.md#create_entity_export_definitions) | **POST** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions | Post Export Definitions
+[**create_entity_export_templates**](EntitiesApi.md#create_entity_export_templates) | **POST** /api/v1/entities/exportTemplates | Post Export Template entities
 [**create_entity_filter_contexts**](EntitiesApi.md#create_entity_filter_contexts) | **POST** /api/v1/entities/workspaces/{workspaceId}/filterContexts | Post Context Filters
 [**create_entity_filter_views**](EntitiesApi.md#create_entity_filter_views) | **POST** /api/v1/entities/workspaces/{workspaceId}/filterViews | Post Filter views
 [**create_entity_identity_providers**](EntitiesApi.md#create_entity_identity_providers) | **POST** /api/v1/entities/identityProviders | Post Identity Providers
@@ -42,6 +43,7 @@ Method | HTTP request | Description
 [**delete_entity_dashboard_plugins**](EntitiesApi.md#delete_entity_dashboard_plugins) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | Delete a Plugin
 [**delete_entity_data_sources**](EntitiesApi.md#delete_entity_data_sources) | **DELETE** /api/v1/entities/dataSources/{id} | Delete Data Source entity
 [**delete_entity_export_definitions**](EntitiesApi.md#delete_entity_export_definitions) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/{objectId} | Delete an Export Definition
+[**delete_entity_export_templates**](EntitiesApi.md#delete_entity_export_templates) | **DELETE** /api/v1/entities/exportTemplates/{id} | Delete Export Template entity
 [**delete_entity_filter_contexts**](EntitiesApi.md#delete_entity_filter_contexts) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | Delete a Context Filter
 [**delete_entity_filter_views**](EntitiesApi.md#delete_entity_filter_views) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Delete Filter view
 [**delete_entity_identity_providers**](EntitiesApi.md#delete_entity_identity_providers) | **DELETE** /api/v1/entities/identityProviders/{id} | Delete Identity Provider
@@ -74,6 +76,7 @@ Method | HTTP request | Description
 [**get_all_entities_datasets**](EntitiesApi.md#get_all_entities_datasets) | **GET** /api/v1/entities/workspaces/{workspaceId}/datasets | Get all Datasets
 [**get_all_entities_entitlements**](EntitiesApi.md#get_all_entities_entitlements) | **GET** /api/v1/entities/entitlements | Get Entitlements
 [**get_all_entities_export_definitions**](EntitiesApi.md#get_all_entities_export_definitions) | **GET** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions | Get all Export Definitions
+[**get_all_entities_export_templates**](EntitiesApi.md#get_all_entities_export_templates) | **GET** /api/v1/entities/exportTemplates | GET all Export Template entities
 [**get_all_entities_facts**](EntitiesApi.md#get_all_entities_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/facts | Get all Facts
 [**get_all_entities_filter_contexts**](EntitiesApi.md#get_all_entities_filter_contexts) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterContexts | Get all Context Filters
 [**get_all_entities_filter_views**](EntitiesApi.md#get_all_entities_filter_views) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterViews | Get all Filter views
@@ -112,6 +115,7 @@ Method | HTTP request | Description
 [**get_entity_datasets**](EntitiesApi.md#get_entity_datasets) | **GET** /api/v1/entities/workspaces/{workspaceId}/datasets/{objectId} | Get a Dataset
 [**get_entity_entitlements**](EntitiesApi.md#get_entity_entitlements) | **GET** /api/v1/entities/entitlements/{id} | Get Entitlement
 [**get_entity_export_definitions**](EntitiesApi.md#get_entity_export_definitions) | **GET** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/{objectId} | Get an Export Definition
+[**get_entity_export_templates**](EntitiesApi.md#get_entity_export_templates) | **GET** /api/v1/entities/exportTemplates/{id} | GET Export Template entity
 [**get_entity_facts**](EntitiesApi.md#get_entity_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/facts/{objectId} | Get a Fact
 [**get_entity_filter_contexts**](EntitiesApi.md#get_entity_filter_contexts) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | Get a Context Filter
 [**get_entity_filter_views**](EntitiesApi.md#get_entity_filter_views) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Get Filter view
@@ -145,6 +149,7 @@ Method | HTTP request | Description
 [**patch_entity_dashboard_plugins**](EntitiesApi.md#patch_entity_dashboard_plugins) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | Patch a Plugin
 [**patch_entity_data_sources**](EntitiesApi.md#patch_entity_data_sources) | **PATCH** /api/v1/entities/dataSources/{id} | Patch Data Source entity
 [**patch_entity_export_definitions**](EntitiesApi.md#patch_entity_export_definitions) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/{objectId} | Patch an Export Definition
+[**patch_entity_export_templates**](EntitiesApi.md#patch_entity_export_templates) | **PATCH** /api/v1/entities/exportTemplates/{id} | Patch Export Template entity
 [**patch_entity_filter_contexts**](EntitiesApi.md#patch_entity_filter_contexts) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | Patch a Context Filter
 [**patch_entity_filter_views**](EntitiesApi.md#patch_entity_filter_views) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Patch Filter view
 [**patch_entity_identity_providers**](EntitiesApi.md#patch_entity_identity_providers) | **PATCH** /api/v1/entities/identityProviders/{id} | Patch Identity Provider
@@ -173,6 +178,7 @@ Method | HTTP request | Description
 [**update_entity_dashboard_plugins**](EntitiesApi.md#update_entity_dashboard_plugins) | **PUT** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | Put a Plugin
 [**update_entity_data_sources**](EntitiesApi.md#update_entity_data_sources) | **PUT** /api/v1/entities/dataSources/{id} | Put Data Source entity
 [**update_entity_export_definitions**](EntitiesApi.md#update_entity_export_definitions) | **PUT** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/{objectId} | Put an Export Definition
+[**update_entity_export_templates**](EntitiesApi.md#update_entity_export_templates) | **PUT** /api/v1/entities/exportTemplates/{id} | PUT Export Template entity
 [**update_entity_filter_contexts**](EntitiesApi.md#update_entity_filter_contexts) | **PUT** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | Put a Context Filter
 [**update_entity_filter_views**](EntitiesApi.md#update_entity_filter_views) | **PUT** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Put Filter views
 [**update_entity_identity_providers**](EntitiesApi.md#update_entity_identity_providers) | **PUT** /api/v1/entities/identityProviders/{id} | Put Identity Provider
@@ -536,7 +542,15 @@ with gooddata_api_client.ApiClient() as api_client:
                         email="email_example",
                     ),
                 ],
-                metadata={},
+                metadata=JsonApiAutomationInAttributesMetadata(
+                    visible_filters=[
+                        VisibleFilter(
+                            local_identifier="local_identifier_example",
+                            title="title_example",
+                        ),
+                    ],
+                    widget="widget_example",
+                ),
                 schedule=JsonApiAutomationInAttributesSchedule(
                     cron="0 */30 9-17 ? * MON-FRI",
                     first_run=dateutil_parser('2025-01-01T12:00:00Z'),
@@ -1224,6 +1238,147 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiExportDefinitionOutDocument**](JsonApiExportDefinitionOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/vnd.gooddata.api+json
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**201** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **create_entity_export_templates**
+> JsonApiExportTemplateOutDocument create_entity_export_templates(json_api_export_template_post_optional_id_document)
+
+Post Export Template entities
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_export_template_post_optional_id_document import JsonApiExportTemplatePostOptionalIdDocument
+from gooddata_api_client.model.json_api_export_template_out_document import JsonApiExportTemplateOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    json_api_export_template_post_optional_id_document = JsonApiExportTemplatePostOptionalIdDocument(
+        data=JsonApiExportTemplatePostOptionalId(
+            attributes=JsonApiExportTemplateInAttributes(
+                dashboard_slides_template=JsonApiExportTemplateInAttributesDashboardSlidesTemplate(
+                    applied_on=["PDF","PPTX"],
+                    content_slide=ContentSlideTemplate(
+                        description_field="{{dashboardFilters}}",
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                    ),
+                    cover_slide=CoverSlideTemplate(
+                        background_image=True,
+                        description_field="Exported at: {{exportedAt}}",
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                    ),
+                    intro_slide=IntroSlideTemplate(
+                        background_image=True,
+                        description_field='''About:
+{{dashboardDescription}}
+
+{{dashboardFilters}}''',
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        title_field="Introduction",
+                    ),
+                    section_slide=SectionSlideTemplate(
+                        background_image=True,
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                    ),
+                ),
+                name="name_example",
+                widget_slides_template=JsonApiExportTemplateInAttributesWidgetSlidesTemplate(
+                    applied_on=["PDF","PPTX"],
+                    content_slide=ContentSlideTemplate(
+                        description_field="{{dashboardFilters}}",
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                    ),
+                ),
+            ),
+            id="id1",
+            type="exportTemplate",
+        ),
+    ) # JsonApiExportTemplatePostOptionalIdDocument | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Post Export Template entities
+        api_response = api_instance.create_entity_export_templates(json_api_export_template_post_optional_id_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->create_entity_export_templates: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **json_api_export_template_post_optional_id_document** | [**JsonApiExportTemplatePostOptionalIdDocument**](JsonApiExportTemplatePostOptionalIdDocument.md)|  |
+
+### Return type
+
+[**JsonApiExportTemplateOutDocument**](JsonApiExportTemplateOutDocument.md)
 
 ### Authorization
 
@@ -3632,6 +3787,79 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
  **object_id** | **str**|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | Successfully deleted |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **delete_entity_export_templates**
+> delete_entity_export_templates(id)
+
+Delete Export Template entity
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    id = "/6bUUGjjNSwg0_bs" # str | 
+    filter = "filter=name==someString;dashboardSlidesTemplate==DashboardSlidesTemplateValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Delete Export Template entity
+        api_instance.delete_entity_export_templates(id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->delete_entity_export_templates: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Delete Export Template entity
+        api_instance.delete_entity_export_templates(id, filter=filter)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->delete_entity_export_templates: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
  **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
 
 ### Return type
@@ -6223,6 +6451,84 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiExportDefinitionOutList**](JsonApiExportDefinitionOutList.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_all_entities_export_templates**
+> JsonApiExportTemplateOutList get_all_entities_export_templates()
+
+GET all Export Template entities
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_export_template_out_list import JsonApiExportTemplateOutList
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    filter = "filter=name==someString;dashboardSlidesTemplate==DashboardSlidesTemplateValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
+    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
+    sort = [
+        "sort_example",
+    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = [
+        "metaInclude=page,all",
+    ] # [str] | Include Meta objects. (optional)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # GET all Export Template entities
+        api_response = api_instance.get_all_entities_export_templates(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_all_entities_export_templates: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
+ **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
+ **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
+
+### Return type
+
+[**JsonApiExportTemplateOutList**](JsonApiExportTemplateOutList.md)
 
 ### Authorization
 
@@ -9460,6 +9766,82 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **get_entity_export_templates**
+> JsonApiExportTemplateOutDocument get_entity_export_templates(id)
+
+GET Export Template entity
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_export_template_out_document import JsonApiExportTemplateOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    id = "/6bUUGjjNSwg0_bs" # str | 
+    filter = "filter=name==someString;dashboardSlidesTemplate==DashboardSlidesTemplateValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # GET Export Template entity
+        api_response = api_instance.get_entity_export_templates(id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_entity_export_templates: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # GET Export Template entity
+        api_response = api_instance.get_entity_export_templates(id, filter=filter)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_entity_export_templates: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+[**JsonApiExportTemplateOutDocument**](JsonApiExportTemplateOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **get_entity_facts**
 > JsonApiFactOutDocument get_entity_facts(workspace_id, object_id)
 
@@ -11618,7 +12000,15 @@ with gooddata_api_client.ApiClient() as api_client:
                         email="email_example",
                     ),
                 ],
-                metadata={},
+                metadata=JsonApiAutomationInAttributesMetadata(
+                    visible_filters=[
+                        VisibleFilter(
+                            local_identifier="local_identifier_example",
+                            title="title_example",
+                        ),
+                    ],
+                    widget="widget_example",
+                ),
                 schedule=JsonApiAutomationInAttributesSchedule(
                     cron="0 */30 9-17 ? * MON-FRI",
                     first_run=dateutil_parser('2025-01-01T12:00:00Z'),
@@ -12419,6 +12809,160 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiExportDefinitionOutDocument**](JsonApiExportDefinitionOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/vnd.gooddata.api+json
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **patch_entity_export_templates**
+> JsonApiExportTemplateOutDocument patch_entity_export_templates(id, json_api_export_template_patch_document)
+
+Patch Export Template entity
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_export_template_out_document import JsonApiExportTemplateOutDocument
+from gooddata_api_client.model.json_api_export_template_patch_document import JsonApiExportTemplatePatchDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    id = "/6bUUGjjNSwg0_bs" # str | 
+    json_api_export_template_patch_document = JsonApiExportTemplatePatchDocument(
+        data=JsonApiExportTemplatePatch(
+            attributes=JsonApiExportTemplatePatchAttributes(
+                dashboard_slides_template=JsonApiExportTemplateInAttributesDashboardSlidesTemplate(
+                    applied_on=["PDF","PPTX"],
+                    content_slide=ContentSlideTemplate(
+                        description_field="{{dashboardFilters}}",
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                    ),
+                    cover_slide=CoverSlideTemplate(
+                        background_image=True,
+                        description_field="Exported at: {{exportedAt}}",
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                    ),
+                    intro_slide=IntroSlideTemplate(
+                        background_image=True,
+                        description_field='''About:
+{{dashboardDescription}}
+
+{{dashboardFilters}}''',
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        title_field="Introduction",
+                    ),
+                    section_slide=SectionSlideTemplate(
+                        background_image=True,
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                    ),
+                ),
+                name="name_example",
+                widget_slides_template=JsonApiExportTemplateInAttributesWidgetSlidesTemplate(
+                    applied_on=["PDF","PPTX"],
+                    content_slide=ContentSlideTemplate(
+                        description_field="{{dashboardFilters}}",
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                    ),
+                ),
+            ),
+            id="id1",
+            type="exportTemplate",
+        ),
+    ) # JsonApiExportTemplatePatchDocument | 
+    filter = "filter=name==someString;dashboardSlidesTemplate==DashboardSlidesTemplateValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Patch Export Template entity
+        api_response = api_instance.patch_entity_export_templates(id, json_api_export_template_patch_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->patch_entity_export_templates: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Patch Export Template entity
+        api_response = api_instance.patch_entity_export_templates(id, json_api_export_template_patch_document, filter=filter)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->patch_entity_export_templates: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+ **json_api_export_template_patch_document** | [**JsonApiExportTemplatePatchDocument**](JsonApiExportTemplatePatchDocument.md)|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+[**JsonApiExportTemplateOutDocument**](JsonApiExportTemplateOutDocument.md)
 
 ### Authorization
 
@@ -13249,6 +13793,9 @@ with gooddata_api_client.ApiClient() as api_client:
                 oauth_custom_auth_attributes={
                     "key": "key_example",
                 },
+                oauth_custom_scopes=[
+                    "oauth_custom_scopes_example",
+                ],
                 oauth_issuer_id="myOidcProvider",
                 oauth_issuer_location="oauth_issuer_location_example",
                 oauth_subject_id_claim="oid",
@@ -14493,7 +15040,15 @@ with gooddata_api_client.ApiClient() as api_client:
                         email="email_example",
                     ),
                 ],
-                metadata={},
+                metadata=JsonApiAutomationInAttributesMetadata(
+                    visible_filters=[
+                        VisibleFilter(
+                            local_identifier="local_identifier_example",
+                            title="title_example",
+                        ),
+                    ],
+                    widget="widget_example",
+                ),
                 schedule=JsonApiAutomationInAttributesSchedule(
                     cron="0 */30 9-17 ? * MON-FRI",
                     first_run=dateutil_parser('2025-01-01T12:00:00Z'),
@@ -15294,6 +15849,160 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiExportDefinitionOutDocument**](JsonApiExportDefinitionOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/vnd.gooddata.api+json
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **update_entity_export_templates**
+> JsonApiExportTemplateOutDocument update_entity_export_templates(id, json_api_export_template_in_document)
+
+PUT Export Template entity
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_export_template_in_document import JsonApiExportTemplateInDocument
+from gooddata_api_client.model.json_api_export_template_out_document import JsonApiExportTemplateOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    id = "/6bUUGjjNSwg0_bs" # str | 
+    json_api_export_template_in_document = JsonApiExportTemplateInDocument(
+        data=JsonApiExportTemplateIn(
+            attributes=JsonApiExportTemplateInAttributes(
+                dashboard_slides_template=JsonApiExportTemplateInAttributesDashboardSlidesTemplate(
+                    applied_on=["PDF","PPTX"],
+                    content_slide=ContentSlideTemplate(
+                        description_field="{{dashboardFilters}}",
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                    ),
+                    cover_slide=CoverSlideTemplate(
+                        background_image=True,
+                        description_field="Exported at: {{exportedAt}}",
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                    ),
+                    intro_slide=IntroSlideTemplate(
+                        background_image=True,
+                        description_field='''About:
+{{dashboardDescription}}
+
+{{dashboardFilters}}''',
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        title_field="Introduction",
+                    ),
+                    section_slide=SectionSlideTemplate(
+                        background_image=True,
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                    ),
+                ),
+                name="name_example",
+                widget_slides_template=JsonApiExportTemplateInAttributesWidgetSlidesTemplate(
+                    applied_on=["PDF","PPTX"],
+                    content_slide=ContentSlideTemplate(
+                        description_field="{{dashboardFilters}}",
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                    ),
+                ),
+            ),
+            id="id1",
+            type="exportTemplate",
+        ),
+    ) # JsonApiExportTemplateInDocument | 
+    filter = "filter=name==someString;dashboardSlidesTemplate==DashboardSlidesTemplateValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # PUT Export Template entity
+        api_response = api_instance.update_entity_export_templates(id, json_api_export_template_in_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->update_entity_export_templates: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # PUT Export Template entity
+        api_response = api_instance.update_entity_export_templates(id, json_api_export_template_in_document, filter=filter)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->update_entity_export_templates: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+ **json_api_export_template_in_document** | [**JsonApiExportTemplateInDocument**](JsonApiExportTemplateInDocument.md)|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+[**JsonApiExportTemplateOutDocument**](JsonApiExportTemplateOutDocument.md)
 
 ### Authorization
 
@@ -16124,6 +16833,9 @@ with gooddata_api_client.ApiClient() as api_client:
                 oauth_custom_auth_attributes={
                     "key": "key_example",
                 },
+                oauth_custom_scopes=[
+                    "oauth_custom_scopes_example",
+                ],
                 oauth_issuer_id="myOidcProvider",
                 oauth_issuer_location="oauth_issuer_location_example",
                 oauth_subject_id_claim="oid",

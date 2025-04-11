@@ -81,6 +81,7 @@ with gooddata_api_client.ApiClient() as api_client:
         ),
         execution_settings=ExecutionSettings(
             data_sampling_percentage=0,
+            timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
         ),
         file_name="result",
         format="CSV",

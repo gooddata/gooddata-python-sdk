@@ -67,6 +67,12 @@ class SlidesExportRequest(ModelNormal):
     }
 
     validations = {
+        ('template_id',): {
+            'max_length': 255,
+        },
+        ('visualization_ids',): {
+            'max_items': 1,
+        },
         ('widget_ids',): {
             'max_items': 1,
         },
@@ -95,10 +101,12 @@ class SlidesExportRequest(ModelNormal):
         """
         lazy_import()
         return {
-            'dashboard_id': (str,),  # noqa: E501
             'file_name': (str,),  # noqa: E501
             'format': (str,),  # noqa: E501
+            'dashboard_id': (str,),  # noqa: E501
             'metadata': (JsonNode,),  # noqa: E501
+            'template_id': (str, none_type,),  # noqa: E501
+            'visualization_ids': ([str],),  # noqa: E501
             'widget_ids': ([str],),  # noqa: E501
         }
 
@@ -108,10 +116,12 @@ class SlidesExportRequest(ModelNormal):
 
 
     attribute_map = {
-        'dashboard_id': 'dashboardId',  # noqa: E501
         'file_name': 'fileName',  # noqa: E501
         'format': 'format',  # noqa: E501
+        'dashboard_id': 'dashboardId',  # noqa: E501
         'metadata': 'metadata',  # noqa: E501
+        'template_id': 'templateId',  # noqa: E501
+        'visualization_ids': 'visualizationIds',  # noqa: E501
         'widget_ids': 'widgetIds',  # noqa: E501
     }
 
@@ -122,11 +132,10 @@ class SlidesExportRequest(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, dashboard_id, file_name, format, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, file_name, format, *args, **kwargs):  # noqa: E501
         """SlidesExportRequest - a model defined in OpenAPI
 
         Args:
-            dashboard_id (str): Dashboard identifier
             file_name (str): File name to be used for retrieving the pdf document.
             format (str): Requested resulting file type.
 
@@ -161,7 +170,10 @@ class SlidesExportRequest(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            dashboard_id (str): Dashboard identifier. [optional]  # noqa: E501
             metadata (JsonNode): [optional]  # noqa: E501
+            template_id (str, none_type): Export template identifier.. [optional]  # noqa: E501
+            visualization_ids ([str]): List of visualization ids to be exported. Note that only one visualization is currently supported.. [optional]  # noqa: E501
             widget_ids ([str]): List of widget identifiers to be exported. Note that only one widget is currently supported.. [optional]  # noqa: E501
         """
 
@@ -194,7 +206,6 @@ class SlidesExportRequest(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.dashboard_id = dashboard_id
         self.file_name = file_name
         self.format = format
         for var_name, var_value in kwargs.items():
@@ -217,11 +228,10 @@ class SlidesExportRequest(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, dashboard_id, file_name, format, *args, **kwargs):  # noqa: E501
+    def __init__(self, file_name, format, *args, **kwargs):  # noqa: E501
         """SlidesExportRequest - a model defined in OpenAPI
 
         Args:
-            dashboard_id (str): Dashboard identifier
             file_name (str): File name to be used for retrieving the pdf document.
             format (str): Requested resulting file type.
 
@@ -256,7 +266,10 @@ class SlidesExportRequest(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            dashboard_id (str): Dashboard identifier. [optional]  # noqa: E501
             metadata (JsonNode): [optional]  # noqa: E501
+            template_id (str, none_type): Export template identifier.. [optional]  # noqa: E501
+            visualization_ids ([str]): List of visualization ids to be exported. Note that only one visualization is currently supported.. [optional]  # noqa: E501
             widget_ids ([str]): List of widget identifiers to be exported. Note that only one widget is currently supported.. [optional]  # noqa: E501
         """
 
@@ -287,7 +300,6 @@ class SlidesExportRequest(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.dashboard_id = dashboard_id
         self.file_name = file_name
         self.format = format
         for var_name, var_value in kwargs.items():

@@ -304,6 +304,9 @@ with gooddata_api_client.ApiClient() as api_client:
                 oauth_custom_auth_attributes={
                     "key": "key_example",
                 },
+                oauth_custom_scopes=[
+                    "oauth_custom_scopes_example",
+                ],
                 oauth_issuer_id="myOidcProvider",
                 oauth_issuer_location="oauth_issuer_location_example",
                 oauth_subject_id_claim="oid",
@@ -499,6 +502,9 @@ with gooddata_api_client.ApiClient() as api_client:
                 oauth_custom_auth_attributes={
                     "key": "key_example",
                 },
+                oauth_custom_scopes=[
+                    "oauth_custom_scopes_example",
+                ],
                 oauth_issuer_id="myOidcProvider",
                 oauth_issuer_location="oauth_issuer_location_example",
                 oauth_subject_id_claim="oid",

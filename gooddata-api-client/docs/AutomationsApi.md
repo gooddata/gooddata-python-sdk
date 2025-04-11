@@ -87,7 +87,15 @@ with gooddata_api_client.ApiClient() as api_client:
                         email="email_example",
                     ),
                 ],
-                metadata={},
+                metadata=JsonApiAutomationInAttributesMetadata(
+                    visible_filters=[
+                        VisibleFilter(
+                            local_identifier="local_identifier_example",
+                            title="title_example",
+                        ),
+                    ],
+                    widget="widget_example",
+                ),
                 schedule=JsonApiAutomationInAttributesSchedule(
                     cron="0 */30 9-17 ? * MON-FRI",
                     first_run=dateutil_parser('2025-01-01T12:00:00Z'),
@@ -650,7 +658,15 @@ with gooddata_api_client.ApiClient() as api_client:
                         email="email_example",
                     ),
                 ],
-                metadata={},
+                metadata=JsonApiAutomationInAttributesMetadata(
+                    visible_filters=[
+                        VisibleFilter(
+                            local_identifier="local_identifier_example",
+                            title="title_example",
+                        ),
+                    ],
+                    widget="widget_example",
+                ),
                 schedule=JsonApiAutomationInAttributesSchedule(
                     cron="0 */30 9-17 ? * MON-FRI",
                     first_run=dateutil_parser('2025-01-01T12:00:00Z'),
@@ -889,7 +905,15 @@ with gooddata_api_client.ApiClient() as api_client:
                 ),
             ],
             id="/6bUUGjjNSwg0_bs",
-            metadata=JsonNode(),
+            metadata=AutomationMetadata(
+                visible_filters=[
+                    VisibleFilter(
+                        local_identifier="local_identifier_example",
+                        title="title_example",
+                    ),
+                ],
+                widget="widget_example",
+            ),
             modified_at="2023-07-20 12:30",
             modified_by=DeclarativeUserIdentifier(
                 id="employee123",
@@ -1054,7 +1078,15 @@ with gooddata_api_client.ApiClient() as api_client:
                     email="email_example",
                 ),
             ],
-            metadata=JsonNode(),
+            metadata=AutomationMetadata(
+                visible_filters=[
+                    VisibleFilter(
+                        local_identifier="local_identifier_example",
+                        title="title_example",
+                    ),
+                ],
+                widget="widget_example",
+            ),
             notification_channel=DeclarativeNotificationChannelIdentifier(
                 id="webhook123",
                 type="notificationChannel",
@@ -1302,7 +1334,15 @@ with gooddata_api_client.ApiClient() as api_client:
                         email="email_example",
                     ),
                 ],
-                metadata={},
+                metadata=JsonApiAutomationInAttributesMetadata(
+                    visible_filters=[
+                        VisibleFilter(
+                            local_identifier="local_identifier_example",
+                            title="title_example",
+                        ),
+                    ],
+                    widget="widget_example",
+                ),
                 schedule=JsonApiAutomationInAttributesSchedule(
                     cron="0 */30 9-17 ? * MON-FRI",
                     first_run=dateutil_parser('2025-01-01T12:00:00Z'),
