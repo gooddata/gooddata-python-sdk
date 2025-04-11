@@ -80,6 +80,7 @@ class ResolvedSetting(ModelNormal):
             'DATE_FILTER_CONFIG': "DATE_FILTER_CONFIG",
             'JIT_PROVISIONING': "JIT_PROVISIONING",
             'DASHBOARD_FILTERS_APPLY_MODE': "DASHBOARD_FILTERS_APPLY_MODE",
+            'ENABLE_SLIDES_EXPORT': "ENABLE_SLIDES_EXPORT",
         },
     }
 

@@ -22,6 +22,7 @@ from gooddata_api_client.model_utils import (  # noqa: F401
     none_type,
     validate_and_convert_types
 )
+from gooddata_api_client.model.afm_cancel_tokens import AfmCancelTokens
 from gooddata_api_client.model.afm_execution import AfmExecution
 from gooddata_api_client.model.afm_execution_response import AfmExecutionResponse
 from gooddata_api_client.model.afm_valid_descendants_query import AfmValidDescendantsQuery
@@ -54,6 +55,7 @@ from gooddata_api_client.model.export_response import ExportResponse
 from gooddata_api_client.model.forecast_request import ForecastRequest
 from gooddata_api_client.model.forecast_result import ForecastResult
 from gooddata_api_client.model.generate_ldm_request import GenerateLdmRequest
+from gooddata_api_client.model.get_slides_export202_response_inner import GetSlidesExport202ResponseInner
 from gooddata_api_client.model.hierarchy_object_identification import HierarchyObjectIdentification
 from gooddata_api_client.model.identifier_duplications import IdentifierDuplications
 from gooddata_api_client.model.key_drivers_request import KeyDriversRequest
@@ -593,6 +595,69 @@ class ActionsApi(object):
                     'application/json'
                 ],
                 'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.cancel_executions_endpoint = _Endpoint(
+            settings={
+                'response_type': (AfmCancelTokens,),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/execution/afm/cancel',
+                'operation_id': 'cancel_executions',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'afm_cancel_tokens',
+                ],
+                'required': [
+                    'workspace_id',
+                    'afm_cancel_tokens',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                    'workspace_id',
+                ]
+            },
+            root_map={
+                'validations': {
+                    ('workspace_id',): {
+
+                        'regex': {
+                            'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+                        },
+                    },
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'afm_cancel_tokens':
+                        (AfmCancelTokens,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'afm_cancel_tokens': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [
+                    'application/json'
+                ]
             },
             api_client=api_client
         )
@@ -3619,6 +3684,7 @@ class ActionsApi(object):
                     'offset',
                     'limit',
                     'excluded_total_dimensions',
+                    'x_gdc_cancel_token',
                 ],
                 'required': [
                     'workspace_id',
@@ -3654,6 +3720,8 @@ class ActionsApi(object):
                         ([int],),
                     'excluded_total_dimensions':
                         ([str],),
+                    'x_gdc_cancel_token':
+                        (str,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
@@ -3661,6 +3729,7 @@ class ActionsApi(object):
                     'offset': 'offset',
                     'limit': 'limit',
                     'excluded_total_dimensions': 'excludedTotalDimensions',
+                    'x_gdc_cancel_token': 'X-GDC-CANCEL-TOKEN',
                 },
                 'location_map': {
                     'workspace_id': 'path',
@@ -3668,6 +3737,7 @@ class ActionsApi(object):
                     'offset': 'query',
                     'limit': 'query',
                     'excluded_total_dimensions': 'query',
+                    'x_gdc_cancel_token': 'header',
                 },
                 'collection_format_map': {
                     'offset': 'csv',
@@ -5182,6 +5252,93 @@ class ActionsApi(object):
         kwargs['dashboard_id'] = \
             dashboard_id
         return self.available_assignees_endpoint.call_with_http_info(**kwargs)
+
+    def cancel_executions(
+        self,
+        workspace_id,
+        afm_cancel_tokens,
+        **kwargs
+    ):
+        """Applies all the given cancel tokens.  # noqa: E501
+
+        Each cancel token corresponds to one unique execution request for the same result id. If all cancel tokens for the same result id are applied, the execution for this result id is canceled.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.cancel_executions(workspace_id, afm_cancel_tokens, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str): Workspace identifier
+            afm_cancel_tokens (AfmCancelTokens):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            AfmCancelTokens
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['afm_cancel_tokens'] = \
+            afm_cancel_tokens
+        return self.cancel_executions_endpoint.call_with_http_info(**kwargs)
 
     def check_entity_overrides(
         self,
@@ -9660,6 +9817,7 @@ class ActionsApi(object):
             offset ([int]): Request page with these offsets. Format is offset=1,2,3,... - one offset for each dimensions in ResultSpec from originating AFM.. [optional] if omitted the server will use the default value of []
             limit ([int]): Return only this number of items. Format is limit=1,2,3,... - one limit for each dimensions in ResultSpec from originating AFM.. [optional] if omitted the server will use the default value of []
             excluded_total_dimensions ([str]): Identifiers of the dimensions where grand total data should not be returned for this request. A grand total will not be returned if all of its totalDimensions are in excludedTotalDimensions.. [optional] if omitted the server will use the default value of []
+            x_gdc_cancel_token (str): [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object

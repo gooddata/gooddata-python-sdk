@@ -82,6 +82,7 @@ class ApiEntitlement(ModelNormal):
             'UNLIMITEDDAILYALERTACTIONS': "UnlimitedDailyAlertActions",
             'SCHEDULEDACTIONMINIMUMRECURRENCEMINUTES': "ScheduledActionMinimumRecurrenceMinutes",
             'FEDERATEDIDENTITYMANAGEMENT': "FederatedIdentityManagement",
+            'AUDITLOGGING': "AuditLogging",
         },
     }
 

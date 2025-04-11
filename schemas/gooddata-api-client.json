@@ -188,7 +188,7 @@
             "uniqueItems": true
           },
           "metadata": {
-            "$ref": "#/components/schemas/JsonNode"
+            "$ref": "#/components/schemas/AutomationMetadata"
           },
           "notificationChannel": {
             "$ref": "#/components/schemas/DeclarativeNotificationChannelIdentifier"
@@ -231,6 +231,22 @@
             "uniqueItems": true
           }
         },
+        "type": "object"
+      },
+      "AfmCancelTokens": {
+        "description": "Any information related to cancellation.",
+        "properties": {
+          "tokenIds": {
+            "description": "Token ids to be used in the cancellation.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "tokenIds"
+        ],
         "type": "object"
       },
       "AfmExecution": {
@@ -752,7 +768,8 @@
               "DailyAlertActionCount",
               "UnlimitedDailyAlertActions",
               "ScheduledActionMinimumRecurrenceMinutes",
-              "FederatedIdentityManagement"
+              "FederatedIdentityManagement",
+              "AuditLogging"
             ],
             "type": "string"
           },
@@ -1143,6 +1160,23 @@
         "required": [
           "email"
         ],
+        "type": "object"
+      },
+      "AutomationMetadata": {
+        "description": "Additional information for the automation.",
+        "maxLength": 15000,
+        "nullable": true,
+        "properties": {
+          "visibleFilters": {
+            "items": {
+              "$ref": "#/components/schemas/VisibleFilter"
+            },
+            "type": "array"
+          },
+          "widget": {
+            "type": "string"
+          }
+        },
         "type": "object"
       },
       "AutomationNotification": {
@@ -1770,6 +1804,47 @@
         ],
         "type": "object"
       },
+      "ContentSlideTemplate": {
+        "description": "Settings for content slide.",
+        "nullable": true,
+        "properties": {
+          "descriptionField": {
+            "example": "{{dashboardFilters}}",
+            "nullable": true,
+            "type": "string"
+          },
+          "footer": {
+            "$ref": "#/components/schemas/RunningSection"
+          },
+          "header": {
+            "$ref": "#/components/schemas/RunningSection"
+          }
+        },
+        "type": "object"
+      },
+      "CoverSlideTemplate": {
+        "description": "Settings for cover slide.",
+        "nullable": true,
+        "properties": {
+          "backgroundImage": {
+            "default": true,
+            "description": "Show background image on the slide.",
+            "type": "boolean"
+          },
+          "descriptionField": {
+            "example": "Exported at: {{exportedAt}}",
+            "nullable": true,
+            "type": "string"
+          },
+          "footer": {
+            "$ref": "#/components/schemas/RunningSection"
+          },
+          "header": {
+            "$ref": "#/components/schemas/RunningSection"
+          }
+        },
+        "type": "object"
+      },
       "CreatedVisualization": {
         "description": "List of created visualization objects",
         "properties": {
@@ -1977,6 +2052,44 @@
         },
         "required": [
           "permissions"
+        ],
+        "type": "object"
+      },
+      "DashboardSlidesTemplate": {
+        "description": "Template for dashboard slides export.\nAvailable variables: {{currentPageNumber}}, {{dashboardDateFilters}}, {{dashboardDescription}}, {{dashboardFilters}}, {{dashboardId}}, {{dashboardName}}, {{dashboardTags}}, {{dashboardUrl}}, {{exportedAt}}, {{exportedBy}}, {{logo}}, {{totalPages}}, {{workspaceId}}, {{workspaceName}}",
+        "nullable": true,
+        "properties": {
+          "appliedOn": {
+            "description": "Export types this template applies to.",
+            "example": [
+              "PDF",
+              "PPTX"
+            ],
+            "items": {
+              "enum": [
+                "PDF",
+                "PPTX"
+              ],
+              "type": "string"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "contentSlide": {
+            "$ref": "#/components/schemas/ContentSlideTemplate"
+          },
+          "coverSlide": {
+            "$ref": "#/components/schemas/CoverSlideTemplate"
+          },
+          "introSlide": {
+            "$ref": "#/components/schemas/IntroSlideTemplate"
+          },
+          "sectionSlide": {
+            "$ref": "#/components/schemas/SectionSlideTemplate"
+          }
+        },
+        "required": [
+          "appliedOn"
         ],
         "type": "object"
       },
@@ -2748,7 +2861,7 @@
             "type": "string"
           },
           "metadata": {
-            "$ref": "#/components/schemas/JsonNode"
+            "$ref": "#/components/schemas/AutomationMetadata"
           },
           "modifiedAt": {
             "description": "Time of the last entity modification.",
@@ -3472,6 +3585,49 @@
         ],
         "type": "object"
       },
+      "DeclarativeExportTemplate": {
+        "description": "A declarative form of a particular export template.",
+        "properties": {
+          "dashboardSlidesTemplate": {
+            "$ref": "#/components/schemas/DashboardSlidesTemplate"
+          },
+          "id": {
+            "description": "Identifier of an export template",
+            "example": "default-export-template",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of an export template.",
+            "example": "My default export template",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "widgetSlidesTemplate": {
+            "$ref": "#/components/schemas/WidgetSlidesTemplate"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ],
+        "type": "object"
+      },
+      "DeclarativeExportTemplates": {
+        "description": "Export templates.",
+        "properties": {
+          "exportTemplates": {
+            "items": {
+              "$ref": "#/components/schemas/DeclarativeExportTemplate"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "exportTemplates"
+        ],
+        "type": "object"
+      },
       "DeclarativeFact": {
         "description": "A dataset fact.",
         "properties": {
@@ -4020,6 +4176,12 @@
             },
             "type": "array"
           },
+          "exportTemplates": {
+            "items": {
+              "$ref": "#/components/schemas/DeclarativeExportTemplate"
+            },
+            "type": "array"
+          },
           "identityProviders": {
             "items": {
               "$ref": "#/components/schemas/DeclarativeIdentityProvider"
@@ -4146,6 +4308,15 @@
             "description": "Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.",
             "maxLength": 10000,
             "type": "object"
+          },
+          "oauthCustomScopes": {
+            "description": "List of additional OAuth scopes which may be required by other providers (e.g. Snowflake)",
+            "items": {
+              "maxLength": 255,
+              "type": "string"
+            },
+            "nullable": true,
+            "type": "array"
           },
           "oauthIssuerId": {
             "description": "Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.",
@@ -4399,7 +4570,8 @@
               "SEPARATORS",
               "DATE_FILTER_CONFIG",
               "JIT_PROVISIONING",
-              "DASHBOARD_FILTERS_APPLY_MODE"
+              "DASHBOARD_FILTERS_APPLY_MODE",
+              "ENABLE_SLIDES_EXPORT"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -5718,7 +5890,8 @@
                 "DailyAlertActionCount",
                 "UnlimitedDailyAlertActions",
                 "ScheduledActionMinimumRecurrenceMinutes",
-                "FederatedIdentityManagement"
+                "FederatedIdentityManagement",
+                "AuditLogging"
               ],
               "type": "string"
             },
@@ -5958,6 +6131,11 @@
             "maximum": 100,
             "minimum": 0,
             "type": "number"
+          },
+          "timestamp": {
+            "description": "Specifies the timestamp of the execution from which relative filters are resolved. If not set, the current time is used.",
+            "format": "date-time",
+            "type": "string"
           }
         },
         "type": "object"
@@ -6682,6 +6860,34 @@
         "required": [
           "inline"
         ],
+        "type": "object"
+      },
+      "IntroSlideTemplate": {
+        "description": "Settings for intro slide.",
+        "nullable": true,
+        "properties": {
+          "backgroundImage": {
+            "default": true,
+            "description": "Show background image on the slide.",
+            "type": "boolean"
+          },
+          "descriptionField": {
+            "example": "About:\n{{dashboardDescription}}\n\n{{dashboardFilters}}",
+            "nullable": true,
+            "type": "string"
+          },
+          "footer": {
+            "$ref": "#/components/schemas/RunningSection"
+          },
+          "header": {
+            "$ref": "#/components/schemas/RunningSection"
+          },
+          "titleField": {
+            "example": "Introduction",
+            "nullable": true,
+            "type": "string"
+          }
+        },
         "type": "object"
       },
       "JsonApiAnalyticalDashboardIn": {
@@ -8107,6 +8313,17 @@
                 "description": "Additional information for the automation.",
                 "maxLength": 15000,
                 "nullable": true,
+                "properties": {
+                  "visibleFilters": {
+                    "items": {
+                      "$ref": "#/components/schemas/VisibleFilter"
+                    },
+                    "type": "array"
+                  },
+                  "widget": {
+                    "type": "string"
+                  }
+                },
                 "type": "object"
               },
               "schedule": {
@@ -8354,6 +8571,17 @@
                 "description": "Additional information for the automation.",
                 "maxLength": 15000,
                 "nullable": true,
+                "properties": {
+                  "visibleFilters": {
+                    "items": {
+                      "$ref": "#/components/schemas/VisibleFilter"
+                    },
+                    "type": "array"
+                  },
+                  "widget": {
+                    "type": "string"
+                  }
+                },
                 "type": "object"
               },
               "modifiedAt": {
@@ -8705,6 +8933,17 @@
                 "description": "Additional information for the automation.",
                 "maxLength": 15000,
                 "nullable": true,
+                "properties": {
+                  "visibleFilters": {
+                    "items": {
+                      "$ref": "#/components/schemas/VisibleFilter"
+                    },
+                    "type": "array"
+                  },
+                  "widget": {
+                    "type": "string"
+                  }
+                },
                 "type": "object"
               },
               "schedule": {
@@ -10398,7 +10637,8 @@
                   "USERNAME_PASSWORD",
                   "TOKEN",
                   "KEY_PAIR",
-                  "CLIENT_SECRET"
+                  "CLIENT_SECRET",
+                  "ACCESS_TOKEN"
                 ],
                 "nullable": true,
                 "type": "string"
@@ -11805,6 +12045,506 @@
           "$ref": "#/components/schemas/JsonApiExportDefinitionLinkage"
         },
         "type": "array"
+      },
+      "JsonApiExportTemplateIn": {
+        "description": "JSON:API representation of exportTemplate entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "dashboardSlidesTemplate": {
+                "description": "Template for dashboard slides export.\nAvailable variables: {{currentPageNumber}}, {{dashboardDateFilters}}, {{dashboardDescription}}, {{dashboardFilters}}, {{dashboardId}}, {{dashboardName}}, {{dashboardTags}}, {{dashboardUrl}}, {{exportedAt}}, {{exportedBy}}, {{logo}}, {{totalPages}}, {{workspaceId}}, {{workspaceName}}",
+                "nullable": true,
+                "properties": {
+                  "appliedOn": {
+                    "description": "Export types this template applies to.",
+                    "example": [
+                      "PDF",
+                      "PPTX"
+                    ],
+                    "items": {
+                      "enum": [
+                        "PDF",
+                        "PPTX"
+                      ],
+                      "type": "string"
+                    },
+                    "minItems": 1,
+                    "type": "array"
+                  },
+                  "contentSlide": {
+                    "$ref": "#/components/schemas/ContentSlideTemplate"
+                  },
+                  "coverSlide": {
+                    "$ref": "#/components/schemas/CoverSlideTemplate"
+                  },
+                  "introSlide": {
+                    "$ref": "#/components/schemas/IntroSlideTemplate"
+                  },
+                  "sectionSlide": {
+                    "$ref": "#/components/schemas/SectionSlideTemplate"
+                  }
+                },
+                "required": [
+                  "appliedOn"
+                ],
+                "type": "object"
+              },
+              "name": {
+                "description": "User-facing name of the Slides template.",
+                "maxLength": 255,
+                "type": "string"
+              },
+              "widgetSlidesTemplate": {
+                "description": "Template for widget slides export.\nAvailable variables: {{currentPageNumber}}, {{dashboardDateFilters}}, {{dashboardDescription}}, {{dashboardFilters}}, {{dashboardId}}, {{dashboardName}}, {{dashboardTags}}, {{dashboardUrl}}, {{exportedAt}}, {{exportedBy}}, {{logo}}, {{totalPages}}, {{workspaceId}}, {{workspaceName}}",
+                "nullable": true,
+                "properties": {
+                  "appliedOn": {
+                    "description": "Export types this template applies to.",
+                    "example": [
+                      "PDF",
+                      "PPTX"
+                    ],
+                    "items": {
+                      "enum": [
+                        "PDF",
+                        "PPTX"
+                      ],
+                      "type": "string"
+                    },
+                    "minItems": 1,
+                    "type": "array"
+                  },
+                  "contentSlide": {
+                    "$ref": "#/components/schemas/ContentSlideTemplate"
+                  }
+                },
+                "required": [
+                  "appliedOn"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "name"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "exportTemplate"
+            ],
+            "example": "exportTemplate",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiExportTemplateInDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiExportTemplateIn"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiExportTemplateOut": {
+        "description": "JSON:API representation of exportTemplate entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "dashboardSlidesTemplate": {
+                "description": "Template for dashboard slides export.\nAvailable variables: {{currentPageNumber}}, {{dashboardDateFilters}}, {{dashboardDescription}}, {{dashboardFilters}}, {{dashboardId}}, {{dashboardName}}, {{dashboardTags}}, {{dashboardUrl}}, {{exportedAt}}, {{exportedBy}}, {{logo}}, {{totalPages}}, {{workspaceId}}, {{workspaceName}}",
+                "nullable": true,
+                "properties": {
+                  "appliedOn": {
+                    "description": "Export types this template applies to.",
+                    "example": [
+                      "PDF",
+                      "PPTX"
+                    ],
+                    "items": {
+                      "enum": [
+                        "PDF",
+                        "PPTX"
+                      ],
+                      "type": "string"
+                    },
+                    "minItems": 1,
+                    "type": "array"
+                  },
+                  "contentSlide": {
+                    "$ref": "#/components/schemas/ContentSlideTemplate"
+                  },
+                  "coverSlide": {
+                    "$ref": "#/components/schemas/CoverSlideTemplate"
+                  },
+                  "introSlide": {
+                    "$ref": "#/components/schemas/IntroSlideTemplate"
+                  },
+                  "sectionSlide": {
+                    "$ref": "#/components/schemas/SectionSlideTemplate"
+                  }
+                },
+                "required": [
+                  "appliedOn"
+                ],
+                "type": "object"
+              },
+              "name": {
+                "description": "User-facing name of the Slides template.",
+                "maxLength": 255,
+                "type": "string"
+              },
+              "widgetSlidesTemplate": {
+                "description": "Template for widget slides export.\nAvailable variables: {{currentPageNumber}}, {{dashboardDateFilters}}, {{dashboardDescription}}, {{dashboardFilters}}, {{dashboardId}}, {{dashboardName}}, {{dashboardTags}}, {{dashboardUrl}}, {{exportedAt}}, {{exportedBy}}, {{logo}}, {{totalPages}}, {{workspaceId}}, {{workspaceName}}",
+                "nullable": true,
+                "properties": {
+                  "appliedOn": {
+                    "description": "Export types this template applies to.",
+                    "example": [
+                      "PDF",
+                      "PPTX"
+                    ],
+                    "items": {
+                      "enum": [
+                        "PDF",
+                        "PPTX"
+                      ],
+                      "type": "string"
+                    },
+                    "minItems": 1,
+                    "type": "array"
+                  },
+                  "contentSlide": {
+                    "$ref": "#/components/schemas/ContentSlideTemplate"
+                  }
+                },
+                "required": [
+                  "appliedOn"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "name"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "exportTemplate"
+            ],
+            "example": "exportTemplate",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiExportTemplateOutDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiExportTemplateOut"
+          },
+          "links": {
+            "$ref": "#/components/schemas/ObjectLinks"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiExportTemplateOutList": {
+        "description": "A JSON:API document with a list of resources",
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/JsonApiExportTemplateOutWithLinks"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "links": {
+            "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiExportTemplateOutWithLinks": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiExportTemplateOut"
+          },
+          {
+            "$ref": "#/components/schemas/ObjectLinksContainer"
+          }
+        ]
+      },
+      "JsonApiExportTemplatePatch": {
+        "description": "JSON:API representation of patching exportTemplate entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "dashboardSlidesTemplate": {
+                "description": "Template for dashboard slides export.\nAvailable variables: {{currentPageNumber}}, {{dashboardDateFilters}}, {{dashboardDescription}}, {{dashboardFilters}}, {{dashboardId}}, {{dashboardName}}, {{dashboardTags}}, {{dashboardUrl}}, {{exportedAt}}, {{exportedBy}}, {{logo}}, {{totalPages}}, {{workspaceId}}, {{workspaceName}}",
+                "nullable": true,
+                "properties": {
+                  "appliedOn": {
+                    "description": "Export types this template applies to.",
+                    "example": [
+                      "PDF",
+                      "PPTX"
+                    ],
+                    "items": {
+                      "enum": [
+                        "PDF",
+                        "PPTX"
+                      ],
+                      "type": "string"
+                    },
+                    "minItems": 1,
+                    "type": "array"
+                  },
+                  "contentSlide": {
+                    "$ref": "#/components/schemas/ContentSlideTemplate"
+                  },
+                  "coverSlide": {
+                    "$ref": "#/components/schemas/CoverSlideTemplate"
+                  },
+                  "introSlide": {
+                    "$ref": "#/components/schemas/IntroSlideTemplate"
+                  },
+                  "sectionSlide": {
+                    "$ref": "#/components/schemas/SectionSlideTemplate"
+                  }
+                },
+                "required": [
+                  "appliedOn"
+                ],
+                "type": "object"
+              },
+              "name": {
+                "description": "User-facing name of the Slides template.",
+                "maxLength": 255,
+                "type": "string"
+              },
+              "widgetSlidesTemplate": {
+                "description": "Template for widget slides export.\nAvailable variables: {{currentPageNumber}}, {{dashboardDateFilters}}, {{dashboardDescription}}, {{dashboardFilters}}, {{dashboardId}}, {{dashboardName}}, {{dashboardTags}}, {{dashboardUrl}}, {{exportedAt}}, {{exportedBy}}, {{logo}}, {{totalPages}}, {{workspaceId}}, {{workspaceName}}",
+                "nullable": true,
+                "properties": {
+                  "appliedOn": {
+                    "description": "Export types this template applies to.",
+                    "example": [
+                      "PDF",
+                      "PPTX"
+                    ],
+                    "items": {
+                      "enum": [
+                        "PDF",
+                        "PPTX"
+                      ],
+                      "type": "string"
+                    },
+                    "minItems": 1,
+                    "type": "array"
+                  },
+                  "contentSlide": {
+                    "$ref": "#/components/schemas/ContentSlideTemplate"
+                  }
+                },
+                "required": [
+                  "appliedOn"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "exportTemplate"
+            ],
+            "example": "exportTemplate",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiExportTemplatePatchDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiExportTemplatePatch"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiExportTemplatePostOptionalId": {
+        "description": "JSON:API representation of exportTemplate entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "dashboardSlidesTemplate": {
+                "description": "Template for dashboard slides export.\nAvailable variables: {{currentPageNumber}}, {{dashboardDateFilters}}, {{dashboardDescription}}, {{dashboardFilters}}, {{dashboardId}}, {{dashboardName}}, {{dashboardTags}}, {{dashboardUrl}}, {{exportedAt}}, {{exportedBy}}, {{logo}}, {{totalPages}}, {{workspaceId}}, {{workspaceName}}",
+                "nullable": true,
+                "properties": {
+                  "appliedOn": {
+                    "description": "Export types this template applies to.",
+                    "example": [
+                      "PDF",
+                      "PPTX"
+                    ],
+                    "items": {
+                      "enum": [
+                        "PDF",
+                        "PPTX"
+                      ],
+                      "type": "string"
+                    },
+                    "minItems": 1,
+                    "type": "array"
+                  },
+                  "contentSlide": {
+                    "$ref": "#/components/schemas/ContentSlideTemplate"
+                  },
+                  "coverSlide": {
+                    "$ref": "#/components/schemas/CoverSlideTemplate"
+                  },
+                  "introSlide": {
+                    "$ref": "#/components/schemas/IntroSlideTemplate"
+                  },
+                  "sectionSlide": {
+                    "$ref": "#/components/schemas/SectionSlideTemplate"
+                  }
+                },
+                "required": [
+                  "appliedOn"
+                ],
+                "type": "object"
+              },
+              "name": {
+                "description": "User-facing name of the Slides template.",
+                "maxLength": 255,
+                "type": "string"
+              },
+              "widgetSlidesTemplate": {
+                "description": "Template for widget slides export.\nAvailable variables: {{currentPageNumber}}, {{dashboardDateFilters}}, {{dashboardDescription}}, {{dashboardFilters}}, {{dashboardId}}, {{dashboardName}}, {{dashboardTags}}, {{dashboardUrl}}, {{exportedAt}}, {{exportedBy}}, {{logo}}, {{totalPages}}, {{workspaceId}}, {{workspaceName}}",
+                "nullable": true,
+                "properties": {
+                  "appliedOn": {
+                    "description": "Export types this template applies to.",
+                    "example": [
+                      "PDF",
+                      "PPTX"
+                    ],
+                    "items": {
+                      "enum": [
+                        "PDF",
+                        "PPTX"
+                      ],
+                      "type": "string"
+                    },
+                    "minItems": 1,
+                    "type": "array"
+                  },
+                  "contentSlide": {
+                    "$ref": "#/components/schemas/ContentSlideTemplate"
+                  }
+                },
+                "required": [
+                  "appliedOn"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "name"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "exportTemplate"
+            ],
+            "example": "exportTemplate",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiExportTemplatePostOptionalIdDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiExportTemplatePostOptionalId"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
       },
       "JsonApiFactLinkage": {
         "description": "The \\\"type\\\" and \\\"id\\\" to non-empty members.",
@@ -14856,6 +15596,15 @@
                 "maxLength": 10000,
                 "type": "object"
               },
+              "oauthCustomScopes": {
+                "description": "List of additional OAuth scopes which may be required by other providers (e.g. Snowflake)",
+                "items": {
+                  "maxLength": 255,
+                  "type": "string"
+                },
+                "nullable": true,
+                "type": "array"
+              },
               "oauthIssuerId": {
                 "description": "Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.",
                 "example": "myOidcProvider",
@@ -14971,6 +15720,15 @@
                 "description": "Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.",
                 "maxLength": 10000,
                 "type": "object"
+              },
+              "oauthCustomScopes": {
+                "description": "List of additional OAuth scopes which may be required by other providers (e.g. Snowflake)",
+                "items": {
+                  "maxLength": 255,
+                  "type": "string"
+                },
+                "nullable": true,
+                "type": "array"
               },
               "oauthIssuerId": {
                 "description": "Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.",
@@ -15139,6 +15897,15 @@
                 "maxLength": 10000,
                 "type": "object"
               },
+              "oauthCustomScopes": {
+                "description": "List of additional OAuth scopes which may be required by other providers (e.g. Snowflake)",
+                "items": {
+                  "maxLength": 255,
+                  "type": "string"
+                },
+                "nullable": true,
+                "type": "array"
+              },
               "oauthIssuerId": {
                 "description": "Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.",
                 "example": "myOidcProvider",
@@ -15220,7 +15987,8 @@
                   "SEPARATORS",
                   "DATE_FILTER_CONFIG",
                   "JIT_PROVISIONING",
-                  "DASHBOARD_FILTERS_APPLY_MODE"
+                  "DASHBOARD_FILTERS_APPLY_MODE",
+                  "ENABLE_SLIDES_EXPORT"
                 ],
                 "type": "string"
               }
@@ -15289,7 +16057,8 @@
                   "SEPARATORS",
                   "DATE_FILTER_CONFIG",
                   "JIT_PROVISIONING",
-                  "DASHBOARD_FILTERS_APPLY_MODE"
+                  "DASHBOARD_FILTERS_APPLY_MODE",
+                  "ENABLE_SLIDES_EXPORT"
                 ],
                 "type": "string"
               }
@@ -15398,7 +16167,8 @@
                   "SEPARATORS",
                   "DATE_FILTER_CONFIG",
                   "JIT_PROVISIONING",
-                  "DASHBOARD_FILTERS_APPLY_MODE"
+                  "DASHBOARD_FILTERS_APPLY_MODE",
+                  "ENABLE_SLIDES_EXPORT"
                 ],
                 "type": "string"
               }
@@ -16873,7 +17643,8 @@
                   "SEPARATORS",
                   "DATE_FILTER_CONFIG",
                   "JIT_PROVISIONING",
-                  "DASHBOARD_FILTERS_APPLY_MODE"
+                  "DASHBOARD_FILTERS_APPLY_MODE",
+                  "ENABLE_SLIDES_EXPORT"
                 ],
                 "type": "string"
               }
@@ -16942,7 +17713,8 @@
                   "SEPARATORS",
                   "DATE_FILTER_CONFIG",
                   "JIT_PROVISIONING",
-                  "DASHBOARD_FILTERS_APPLY_MODE"
+                  "DASHBOARD_FILTERS_APPLY_MODE",
+                  "ENABLE_SLIDES_EXPORT"
                 ],
                 "type": "string"
               }
@@ -18688,7 +19460,8 @@
                   "SEPARATORS",
                   "DATE_FILTER_CONFIG",
                   "JIT_PROVISIONING",
-                  "DASHBOARD_FILTERS_APPLY_MODE"
+                  "DASHBOARD_FILTERS_APPLY_MODE",
+                  "ENABLE_SLIDES_EXPORT"
                 ],
                 "type": "string"
               }
@@ -18757,7 +19530,8 @@
                   "SEPARATORS",
                   "DATE_FILTER_CONFIG",
                   "JIT_PROVISIONING",
-                  "DASHBOARD_FILTERS_APPLY_MODE"
+                  "DASHBOARD_FILTERS_APPLY_MODE",
+                  "ENABLE_SLIDES_EXPORT"
                 ],
                 "type": "string"
               }
@@ -18892,7 +19666,8 @@
                   "SEPARATORS",
                   "DATE_FILTER_CONFIG",
                   "JIT_PROVISIONING",
-                  "DASHBOARD_FILTERS_APPLY_MODE"
+                  "DASHBOARD_FILTERS_APPLY_MODE",
+                  "ENABLE_SLIDES_EXPORT"
                 ],
                 "type": "string"
               }
@@ -18961,7 +19736,8 @@
                   "SEPARATORS",
                   "DATE_FILTER_CONFIG",
                   "JIT_PROVISIONING",
-                  "DASHBOARD_FILTERS_APPLY_MODE"
+                  "DASHBOARD_FILTERS_APPLY_MODE",
+                  "ENABLE_SLIDES_EXPORT"
                 ],
                 "type": "string"
               }
@@ -20484,7 +21260,8 @@
               "SEPARATORS",
               "DATE_FILTER_CONFIG",
               "JIT_PROVISIONING",
-              "DASHBOARD_FILTERS_APPLY_MODE"
+              "DASHBOARD_FILTERS_APPLY_MODE",
+              "ENABLE_SLIDES_EXPORT"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -20691,6 +21468,23 @@
         "required": [
           "type"
         ],
+        "type": "object"
+      },
+      "RunningSection": {
+        "description": "Footer section of the slide",
+        "nullable": true,
+        "properties": {
+          "left": {
+            "description": "Either {{logo}} variable or custom text with combination of other variables.",
+            "nullable": true,
+            "type": "string"
+          },
+          "right": {
+            "description": "Either {{logo}} variable or custom text with combination of other variables.",
+            "nullable": true,
+            "type": "string"
+          }
+        },
         "type": "object"
       },
       "ScanRequest": {
@@ -21000,6 +21794,24 @@
         ],
         "type": "object"
       },
+      "SectionSlideTemplate": {
+        "description": "Settings for section slide.",
+        "nullable": true,
+        "properties": {
+          "backgroundImage": {
+            "default": true,
+            "description": "Show background image on the slide.",
+            "type": "boolean"
+          },
+          "footer": {
+            "$ref": "#/components/schemas/RunningSection"
+          },
+          "header": {
+            "$ref": "#/components/schemas/RunningSection"
+          }
+        },
+        "type": "object"
+      },
       "ServerSentEventChatResult": {
         "type": "object"
       },
@@ -21146,17 +21958,32 @@
           "metadata": {
             "$ref": "#/components/schemas/JsonNode"
           },
+          "templateId": {
+            "description": "Export template identifier.",
+            "maxLength": 255,
+            "nullable": true,
+            "type": "string"
+          },
+          "visualizationIds": {
+            "description": "List of visualization ids to be exported. Note that only one visualization is currently supported.",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 1,
+            "type": "array",
+            "uniqueItems": true
+          },
           "widgetIds": {
             "description": "List of widget identifiers to be exported. Note that only one widget is currently supported.",
             "items": {
               "type": "string"
             },
             "maxItems": 1,
-            "type": "array"
+            "type": "array",
+            "uniqueItems": true
           }
         },
         "required": [
-          "dashboardId",
           "fileName",
           "format"
         ],
@@ -22320,6 +23147,17 @@
         ],
         "type": "object"
       },
+      "VisibleFilter": {
+        "properties": {
+          "localIdentifier": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "VisualExportRequest": {
         "description": "Export request object describing the export properties and metadata for dashboard PDF exports.",
         "properties": {
@@ -22518,6 +23356,35 @@
         "required": [
           "email",
           "id"
+        ],
+        "type": "object"
+      },
+      "WidgetSlidesTemplate": {
+        "description": "Template for widget slides export.\nAvailable variables: {{currentPageNumber}}, {{dashboardDateFilters}}, {{dashboardDescription}}, {{dashboardFilters}}, {{dashboardId}}, {{dashboardName}}, {{dashboardTags}}, {{dashboardUrl}}, {{exportedAt}}, {{exportedBy}}, {{logo}}, {{totalPages}}, {{workspaceId}}, {{workspaceName}}",
+        "nullable": true,
+        "properties": {
+          "appliedOn": {
+            "description": "Export types this template applies to.",
+            "example": [
+              "PDF",
+              "PPTX"
+            ],
+            "items": {
+              "enum": [
+                "PDF",
+                "PPTX"
+              ],
+              "type": "string"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "contentSlide": {
+            "$ref": "#/components/schemas/ContentSlideTemplate"
+          }
+        },
+        "required": [
+          "appliedOn"
         ],
         "type": "object"
       },
@@ -24880,6 +25747,56 @@
         }
       }
     },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/afm/cancel": {
+      "post": {
+        "description": "Each cancel token corresponds to one unique execution request for the same result id. If all cancel tokens for the same result id are applied, the execution for this result id is canceled.",
+        "operationId": "cancelExecutions",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AfmCancelTokens"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AfmCancelTokens"
+                }
+              }
+            },
+            "description": "Status of the cancelling operation."
+          }
+        },
+        "summary": "Applies all the given cancel tokens.",
+        "tags": [
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to view a report or label elements.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
+      }
+    },
     "/api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidDescendants": {
       "post": {
         "description": "(BETA) Returns map of lists of attributes that can be used as descendants of the given attributes.",
@@ -25008,11 +25925,13 @@
             }
           },
           {
+            "deprecated": true,
             "example": "2020-06-03T10:15:30+01:00",
             "in": "header",
             "name": "timestamp",
             "required": false,
             "schema": {
+              "description": "Timestamp for the execution. Deprecated, use `settings.timestamp` in the request body.",
               "format": "timestamp",
               "type": "string"
             }
@@ -25037,7 +25956,16 @@
                 }
               }
             },
-            "description": "AFM Execution response with links to the result and server-enhanced dimensions from the original request."
+            "description": "AFM Execution response with links to the result and server-enhanced dimensions from the original request.",
+            "headers": {
+              "X-GDC-CANCEL-TOKEN": {
+                "description": "A token that can be used to cancel this execution",
+                "schema": {
+                  "type": "string"
+                },
+                "style": "simple"
+              }
+            }
           }
         },
         "summary": "Executes analytical request and returns link to the result",
@@ -25127,6 +26055,14 @@
               "type": "array"
             },
             "style": "form"
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-CANCEL-TOKEN",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -26036,7 +26972,7 @@
         },
         "summary": "(EXPERIMENTAL) Create slides export request",
         "tags": [
-          "Slideshow export",
+          "Slides export",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -26091,14 +27027,80 @@
             "content": {
               "application/pdf": {
                 "schema": {
-                  "format": "binary",
-                  "type": "string"
+                  "items": {
+                    "properties": {
+                      "char": {
+                        "type": "string"
+                      },
+                      "direct": {
+                        "type": "boolean"
+                      },
+                      "double": {
+                        "format": "double",
+                        "type": "number"
+                      },
+                      "float": {
+                        "format": "float",
+                        "type": "number"
+                      },
+                      "int": {
+                        "format": "int32",
+                        "type": "integer"
+                      },
+                      "long": {
+                        "format": "int64",
+                        "type": "integer"
+                      },
+                      "readOnly": {
+                        "type": "boolean"
+                      },
+                      "short": {
+                        "format": "int32",
+                        "type": "integer"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "type": "array"
                 }
               },
               "application/vnd.openxmlformats-officedocument.presentationml.presentation": {
                 "schema": {
-                  "format": "binary",
-                  "type": "string"
+                  "items": {
+                    "properties": {
+                      "char": {
+                        "type": "string"
+                      },
+                      "direct": {
+                        "type": "boolean"
+                      },
+                      "double": {
+                        "format": "double",
+                        "type": "number"
+                      },
+                      "float": {
+                        "format": "float",
+                        "type": "number"
+                      },
+                      "int": {
+                        "format": "int32",
+                        "type": "integer"
+                      },
+                      "long": {
+                        "format": "int64",
+                        "type": "integer"
+                      },
+                      "readOnly": {
+                        "type": "boolean"
+                      },
+                      "short": {
+                        "format": "int32",
+                        "type": "integer"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "type": "array"
                 }
               }
             },
@@ -26107,7 +27109,7 @@
         },
         "summary": "(EXPERIMENTAL) Retrieve exported files",
         "tags": [
-          "Slideshow export",
+          "Slides export",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -26150,7 +27152,7 @@
         },
         "summary": "(EXPERIMENTAL) Retrieve metadata context",
         "tags": [
-          "Slideshow export",
+          "Slides export",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -28513,6 +29515,251 @@
         "summary": "Get Entitlement",
         "tags": [
           "Entitlement",
+          "entities",
+          "organization-model-controller"
+        ]
+      }
+    },
+    "/api/v1/entities/exportTemplates": {
+      "get": {
+        "operationId": "getAllEntities@ExportTemplates",
+        "parameters": [
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=name==someString;dashboardSlidesTemplate==DashboardSlidesTemplateValue",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/size"
+          },
+          {
+            "$ref": "#/components/parameters/sort"
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=page,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "page",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiExportTemplateOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "GET all Export Template entities",
+        "tags": [
+          "entities",
+          "organization-model-controller"
+        ]
+      },
+      "post": {
+        "operationId": "createEntity@ExportTemplates",
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiExportTemplatePostOptionalIdDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiExportTemplateOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Post Export Template entities",
+        "tags": [
+          "entities",
+          "organization-model-controller"
+        ]
+      }
+    },
+    "/api/v1/entities/exportTemplates/{id}": {
+      "delete": {
+        "operationId": "deleteEntity@ExportTemplates",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPathParameter"
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=name==someString;dashboardSlidesTemplate==DashboardSlidesTemplateValue",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "$ref": "#/components/responses/Deleted"
+          }
+        },
+        "summary": "Delete Export Template entity",
+        "tags": [
+          "entities",
+          "organization-model-controller"
+        ]
+      },
+      "get": {
+        "operationId": "getEntity@ExportTemplates",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPathParameter"
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=name==someString;dashboardSlidesTemplate==DashboardSlidesTemplateValue",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiExportTemplateOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "GET Export Template entity",
+        "tags": [
+          "entities",
+          "organization-model-controller"
+        ]
+      },
+      "patch": {
+        "operationId": "patchEntity@ExportTemplates",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPathParameter"
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=name==someString;dashboardSlidesTemplate==DashboardSlidesTemplateValue",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiExportTemplatePatchDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiExportTemplateOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Patch Export Template entity",
+        "tags": [
+          "entities",
+          "organization-model-controller"
+        ]
+      },
+      "put": {
+        "operationId": "updateEntity@ExportTemplates",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPathParameter"
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=name==someString;dashboardSlidesTemplate==DashboardSlidesTemplateValue",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiExportTemplateInDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiExportTemplateOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "PUT Export Template entity",
+        "tags": [
           "entities",
           "organization-model-controller"
         ]
@@ -40418,6 +41665,65 @@
         ],
         "x-gdc-security-info": {
           "description": "Permissions to modify the user data filters.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
+    "/api/v1/layout/exportTemplates": {
+      "get": {
+        "description": "Gets complete layout of export templates.",
+        "operationId": "getExportTemplatesLayout",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeclarativeExportTemplates"
+                }
+              }
+            },
+            "description": "Retrieved layout of all export templates."
+          }
+        },
+        "summary": "Get all export templates layout",
+        "tags": [
+          "layout",
+          "Notification Channels"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permission required to get export templates layout.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      },
+      "put": {
+        "description": "Sets export templates in organization.",
+        "operationId": "setExportTemplates",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeclarativeExportTemplates"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "All export templates set."
+          }
+        },
+        "summary": "Set all export templates",
+        "tags": [
+          "layout",
+          "Notification Channels"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permission required to set export templates layout.",
           "permissions": [
             "MANAGE"
           ]

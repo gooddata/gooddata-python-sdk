@@ -498,6 +498,11 @@
             "maximum": 100,
             "minimum": 0,
             "type": "number"
+          },
+          "timestamp": {
+            "description": "Specifies the timestamp of the execution from which relative filters are resolved. If not set, the current time is used.",
+            "format": "date-time",
+            "type": "string"
           }
         },
         "type": "object"
@@ -1249,17 +1254,32 @@
           "metadata": {
             "$ref": "#/components/schemas/JsonNode"
           },
+          "templateId": {
+            "description": "Export template identifier.",
+            "maxLength": 255,
+            "nullable": true,
+            "type": "string"
+          },
+          "visualizationIds": {
+            "description": "List of visualization ids to be exported. Note that only one visualization is currently supported.",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 1,
+            "type": "array",
+            "uniqueItems": true
+          },
           "widgetIds": {
             "description": "List of widget identifiers to be exported. Note that only one widget is currently supported.",
             "items": {
               "type": "string"
             },
             "maxItems": 1,
-            "type": "array"
+            "type": "array",
+            "uniqueItems": true
           }
         },
         "required": [
-          "dashboardId",
           "fileName",
           "format"
         ],
@@ -1568,7 +1588,7 @@
         },
         "summary": "(EXPERIMENTAL) Create slides export request",
         "tags": [
-          "Slideshow export",
+          "Slides export",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -1623,14 +1643,80 @@
             "content": {
               "application/pdf": {
                 "schema": {
-                  "format": "binary",
-                  "type": "string"
+                  "items": {
+                    "properties": {
+                      "char": {
+                        "type": "string"
+                      },
+                      "direct": {
+                        "type": "boolean"
+                      },
+                      "double": {
+                        "format": "double",
+                        "type": "number"
+                      },
+                      "float": {
+                        "format": "float",
+                        "type": "number"
+                      },
+                      "int": {
+                        "format": "int32",
+                        "type": "integer"
+                      },
+                      "long": {
+                        "format": "int64",
+                        "type": "integer"
+                      },
+                      "readOnly": {
+                        "type": "boolean"
+                      },
+                      "short": {
+                        "format": "int32",
+                        "type": "integer"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "type": "array"
                 }
               },
               "application/vnd.openxmlformats-officedocument.presentationml.presentation": {
                 "schema": {
-                  "format": "binary",
-                  "type": "string"
+                  "items": {
+                    "properties": {
+                      "char": {
+                        "type": "string"
+                      },
+                      "direct": {
+                        "type": "boolean"
+                      },
+                      "double": {
+                        "format": "double",
+                        "type": "number"
+                      },
+                      "float": {
+                        "format": "float",
+                        "type": "number"
+                      },
+                      "int": {
+                        "format": "int32",
+                        "type": "integer"
+                      },
+                      "long": {
+                        "format": "int64",
+                        "type": "integer"
+                      },
+                      "readOnly": {
+                        "type": "boolean"
+                      },
+                      "short": {
+                        "format": "int32",
+                        "type": "integer"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "type": "array"
                 }
               }
             },
@@ -1639,7 +1725,7 @@
         },
         "summary": "(EXPERIMENTAL) Retrieve exported files",
         "tags": [
-          "Slideshow export",
+          "Slides export",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -1682,7 +1768,7 @@
         },
         "summary": "(EXPERIMENTAL) Retrieve metadata context",
         "tags": [
-          "Slideshow export",
+          "Slides export",
           "actions"
         ],
         "x-gdc-security-info": {

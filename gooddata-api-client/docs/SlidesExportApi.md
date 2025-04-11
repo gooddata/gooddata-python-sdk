@@ -1,12 +1,12 @@
-# gooddata_api_client.SlideshowExportApi
+# gooddata_api_client.SlidesExportApi
 
 All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**create_slides_export**](SlideshowExportApi.md#create_slides_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/slides | (EXPERIMENTAL) Create slides export request
-[**get_slides_export**](SlideshowExportApi.md#get_slides_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/slides/{exportId} | (EXPERIMENTAL) Retrieve exported files
-[**get_slides_export_metadata**](SlideshowExportApi.md#get_slides_export_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/slides/{exportId}/metadata | (EXPERIMENTAL) Retrieve metadata context
+[**create_slides_export**](SlidesExportApi.md#create_slides_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/slides | (EXPERIMENTAL) Create slides export request
+[**get_slides_export**](SlidesExportApi.md#get_slides_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/slides/{exportId} | (EXPERIMENTAL) Retrieve exported files
+[**get_slides_export_metadata**](SlidesExportApi.md#get_slides_export_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/slides/{exportId}/metadata | (EXPERIMENTAL) Retrieve metadata context
 
 
 # **create_slides_export**
@@ -22,7 +22,7 @@ Note: This API is an experimental and is going to change. Please, use it accordi
 ```python
 import time
 import gooddata_api_client
-from gooddata_api_client.api import slideshow_export_api
+from gooddata_api_client.api import slides_export_api
 from gooddata_api_client.model.export_response import ExportResponse
 from gooddata_api_client.model.slides_export_request import SlidesExportRequest
 from pprint import pprint
@@ -36,13 +36,17 @@ configuration = gooddata_api_client.Configuration(
 # Enter a context with an instance of the API client
 with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
-    api_instance = slideshow_export_api.SlideshowExportApi(api_client)
+    api_instance = slides_export_api.SlidesExportApi(api_client)
     workspace_id = "workspaceId_example" # str | 
     slides_export_request = SlidesExportRequest(
         dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
         file_name="filename",
         format="PDF",
         metadata=JsonNode(),
+        template_id="template_id_example",
+        visualization_ids=[
+            "visualization_ids_example",
+        ],
         widget_ids=[
             "widget_ids_example",
         ],
@@ -54,7 +58,7 @@ with gooddata_api_client.ApiClient() as api_client:
         api_response = api_instance.create_slides_export(workspace_id, slides_export_request)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
-        print("Exception when calling SlideshowExportApi->create_slides_export: %s\n" % e)
+        print("Exception when calling SlidesExportApi->create_slides_export: %s\n" % e)
 ```
 
 
@@ -100,7 +104,8 @@ Note: This API is an experimental and is going to change. Please, use it accordi
 ```python
 import time
 import gooddata_api_client
-from gooddata_api_client.api import slideshow_export_api
+from gooddata_api_client.api import slides_export_api
+from gooddata_api_client.model.get_slides_export202_response_inner import GetSlidesExport202ResponseInner
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -112,7 +117,7 @@ configuration = gooddata_api_client.Configuration(
 # Enter a context with an instance of the API client
 with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
-    api_instance = slideshow_export_api.SlideshowExportApi(api_client)
+    api_instance = slides_export_api.SlidesExportApi(api_client)
     workspace_id = "workspaceId_example" # str | 
     export_id = "exportId_example" # str | 
 
@@ -121,7 +126,7 @@ with gooddata_api_client.ApiClient() as api_client:
         # (EXPERIMENTAL) Retrieve exported files
         api_instance.get_slides_export(workspace_id, export_id)
     except gooddata_api_client.ApiException as e:
-        print("Exception when calling SlideshowExportApi->get_slides_export: %s\n" % e)
+        print("Exception when calling SlidesExportApi->get_slides_export: %s\n" % e)
 ```
 
 
@@ -168,7 +173,7 @@ Note: This API is an experimental and is going to change. Please, use it accordi
 ```python
 import time
 import gooddata_api_client
-from gooddata_api_client.api import slideshow_export_api
+from gooddata_api_client.api import slides_export_api
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -180,7 +185,7 @@ configuration = gooddata_api_client.Configuration(
 # Enter a context with an instance of the API client
 with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
-    api_instance = slideshow_export_api.SlideshowExportApi(api_client)
+    api_instance = slides_export_api.SlidesExportApi(api_client)
     workspace_id = "workspaceId_example" # str | 
     export_id = "exportId_example" # str | 
 
@@ -189,7 +194,7 @@ with gooddata_api_client.ApiClient() as api_client:
         # (EXPERIMENTAL) Retrieve metadata context
         api_instance.get_slides_export_metadata(workspace_id, export_id)
     except gooddata_api_client.ApiException as e:
-        print("Exception when calling SlideshowExportApi->get_slides_export_metadata: %s\n" % e)
+        print("Exception when calling SlidesExportApi->get_slides_export_metadata: %s\n" % e)
 ```
 
 
