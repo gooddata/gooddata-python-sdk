@@ -1225,7 +1225,8 @@
           }
         },
         "required": [
-          "cron"
+          "cron",
+          "timezone"
         ],
         "type": "object"
       },
@@ -8353,7 +8354,8 @@
                   }
                 },
                 "required": [
-                  "cron"
+                  "cron",
+                  "timezone"
                 ],
                 "type": "object"
               },
@@ -8615,7 +8617,8 @@
                   }
                 },
                 "required": [
-                  "cron"
+                  "cron",
+                  "timezone"
                 ],
                 "type": "object"
               },
@@ -8973,7 +8976,8 @@
                   }
                 },
                 "required": [
-                  "cron"
+                  "cron",
+                  "timezone"
                 ],
                 "type": "object"
               },
