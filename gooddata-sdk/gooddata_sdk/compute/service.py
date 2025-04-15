@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import logging
 
+from gooddata_api_client.model.afm_cancel_tokens import AfmCancelTokens
 from gooddata_api_client.model.chat_history_request import ChatHistoryRequest
 from gooddata_api_client.model.chat_history_result import ChatHistoryResult
 from gooddata_api_client.model.chat_request import ChatRequest
@@ -41,6 +42,7 @@ class ComputeService:
             workspace_id=workspace_id,
             exec_def=exec_def,
             response=response,
+            cancel_token=response.headers.get("X-GDC-CANCEL-TOKEN") if exec_def.is_cancellable else None,
         )
 
     def retrieve_result_cache_metadata(self, workspace_id: str, result_id: str) -> ResultCacheMetadata:
@@ -107,3 +109,24 @@ class ComputeService:
         """
         chat_history_request = ChatHistoryRequest(reset=True)
         self._actions_api.ai_chat_history(workspace_id, chat_history_request, _check_return_type=False)
+
+    def cancel_executions(self, executions: list[Execution]) -> None:
+        """
+        Try to cancel given executions using the cancel api endpoint.
+
+        *Note that this is currently a noop, we will be enabling this functionality soon.*
+
+        Args:
+            executions: list of executions to send for cancellation
+        """
+        workspace_to_tokens: dict[str, set[str]] = {}
+
+        for execution in executions:
+            if not workspace_to_tokens[execution.workspace_id]:
+                workspace_to_tokens[execution.workspace_id] = set()
+
+            if execution.cancel_token:
+                workspace_to_tokens[execution.workspace_id].add(execution.cancel_token)
+
+        for workspace_id, token_ids in workspace_to_tokens.items():
+            self._actions_api.cancel_executions(workspace_id, AfmCancelTokens(list(token_ids)))
