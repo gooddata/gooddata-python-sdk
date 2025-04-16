@@ -42,7 +42,9 @@ class ComputeService:
             workspace_id=workspace_id,
             exec_def=exec_def,
             response=response,
-            cancel_token=response.headers.get("X-GDC-CANCEL-TOKEN") if exec_def.is_cancellable else None,
+            cancel_token=response.headers.get("X-GDC-CANCEL-TOKEN")
+            if exec_def.is_cancellable or self._api_client.executions_cancellable
+            else None,
         )
 
     def retrieve_result_cache_metadata(self, workspace_id: str, result_id: str) -> ResultCacheMetadata:

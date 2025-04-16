@@ -24,6 +24,7 @@ class GoodDataApiClient:
         token: str,
         custom_headers: Optional[dict[str, str]] = None,
         extra_user_agent: Optional[str] = None,
+        executions_cancellable: bool = False,
     ) -> None:
         """Take url, token for connecting to GoodData.CN.
 
@@ -32,6 +33,11 @@ class GoodDataApiClient:
 
         `extra_user_agent` is optional string to be added to default http User-Agent
         header. This takes precedence over custom_headers setting.
+
+        `executions_cancellable` is a flag that sets all executions computed through this client as cancellable.
+        In case a request for a result is interrupted, the GD server will try to free resources like killing sql queries
+        related to the given execution.
+        *This feature does not work yet, it will be rolled out soon.*
         """
         self._hostname = host
         self._token = token
@@ -57,6 +63,7 @@ class GoodDataApiClient:
         self._layout_api = apis.LayoutApi(self._api_client)
         self._actions_api = apis.ActionsApi(self._api_client)
         self._user_management_api = apis.UserManagementApi(self._api_client)
+        self._executions_cancellable = executions_cancellable
 
     def _do_post_request(
         self,
@@ -138,3 +145,7 @@ class GoodDataApiClient:
     @property
     def user_management_api(self) -> apis.UserManagementApi:
         return self._user_management_api
+
+    @property
+    def executions_cancellable(self) -> bool:
+        return self._executions_cancellable
