@@ -5,31 +5,7 @@ weight: 90
 superheading: "catalog_workspace_content."
 ---
 
-
-
-``get_dependent_entities_graph(workspace_id: str)``
-
-Gets the dependent entities graph for a given workspace.
-
-There are dependencies among all catalog objects, the chain is the following:
-
-`fact/attribute/label → dataset → metric → visualization → dashboard`
-
-Some steps can be skipped, e.g. `fact → visualization`
-
-We do not support `table → dataset` dependency yet.
-
-{{% parameters-block  title="Parameters" %}}
-{{< parameter p_name="workspace_id" p_type="string" >}}
-Workspace identification string e.g. "demo"
-{{< /parameter >}}
-{{% /parameters-block %}}
-
-{{% parameters-block title="Returns"%}}
-{{< parameter p_type="CatalogDependentEntitiesResponse" >}}
-Dependent entities graph containing nodes and edges.
-{{< /parameter >}}
-{{% /parameters-block %}}
+{{< api-ref "sdk.CatalogWorkspaceContentService.get_dependent_entities_graph" >}}
 
 ## Example
 
