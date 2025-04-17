@@ -46,6 +46,8 @@ class GoodDataSdk:
         host_: str,
         token_: str,
         extra_user_agent_: Optional[str] = None,
+        *,
+        executions_cancellable: bool = False,
         **custom_headers_: Optional[str],
     ) -> GoodDataSdk:
         """
@@ -56,7 +58,13 @@ class GoodDataSdk:
         This is preferred way of creating GoodDataSdk, when no tweaks are needed.
         """
         filtered_headers = {key: value for key, value in custom_headers_.items() if value is not None}
-        client = GoodDataApiClient(host_, token_, custom_headers=filtered_headers, extra_user_agent=extra_user_agent_)
+        client = GoodDataApiClient(
+            host_,
+            token_,
+            custom_headers=filtered_headers,
+            extra_user_agent=extra_user_agent_,
+            executions_cancellable=executions_cancellable,
+        )
         return cls(client)
 
     def __init__(self, client: GoodDataApiClient) -> None:
