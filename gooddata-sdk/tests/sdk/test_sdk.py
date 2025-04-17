@@ -79,3 +79,35 @@ def test_non_existing_token(setenvvar):
 def test_corrupted_config():
     with pytest.raises(ValueError):
         GoodDataSdk.create_from_profile(profiles_path=CORRUPTED_PROFILES)
+
+
+def test_new_options(setenvvar):
+    sdk1 = GoodDataSdk.create("host", "token", "agent_foo", header1="header1", header2="header2")
+    assert sdk1._client._hostname == "host"
+    assert sdk1._client._token == "token"
+    assert sdk1._client._api_client.user_agent[-9:] == "agent_foo"
+    assert sdk1._client._custom_headers == {"header1": "header1", "header2": "header2"}
+    assert not sdk1._client.executions_cancellable
+
+    sdk2 = GoodDataSdk.create(
+        "host", "token", "agent_foo", header1="header1", executions_cancellable=True, header2="header2"
+    )
+    assert sdk1._client._hostname == sdk2._client._hostname
+    assert sdk1._client._token == sdk2._client._token
+    assert sdk1._client._api_client.user_agent == sdk2._client._api_client.user_agent
+    assert sdk1._client._custom_headers == sdk2._client._custom_headers
+    assert sdk2._client.executions_cancellable
+
+    sdk3 = GoodDataSdk.create(
+        "host", "token", "agent_foo", executions_cancellable=True, header1="header1", header2="header2"
+    )
+    assert sdk1._client._api_client.user_agent == sdk3._client._api_client.user_agent
+    assert sdk1._client._custom_headers == sdk3._client._custom_headers
+    assert sdk3._client.executions_cancellable
+
+    sdk4 = GoodDataSdk.create(
+        "host", "token", "agent_foo", header1="header1", header2="header2", executions_cancellable=True
+    )
+    assert sdk1._client._api_client.user_agent == sdk4._client._api_client.user_agent
+    assert sdk1._client._custom_headers == sdk4._client._custom_headers
+    assert sdk4._client.executions_cancellable
