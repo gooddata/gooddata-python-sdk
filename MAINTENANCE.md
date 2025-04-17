@@ -2,17 +2,16 @@
 
 ## How to release
 * manually run [Bump version & trigger release](.github/workflows/bump-version.yaml) workflow
-* after the previous workflow finishes, dispatch the GitHub workflow `netlify-deploy` on the `master` branch (takes ~15 minutes)
-  * The styling of the documentation is taken from the `master` branch. For more details see [./scripts/generate.sh](scripts/generate.sh) and [netlify-deploy](.github/workflows/netlify-deploy.yaml) workflow.
+* after the previous workflow finishes, dispatch the GitHub workflow [Netlify Deploy](.github/workflows/netlify-deploy.yaml) on the `master` branch (takes ~15 minutes)
+  * The styling of the documentation is taken from the `master` branch. For more details see [generate.sh](scripts/generate.sh).
 * after the previous workflow finishes, push tag
   * the version should be the same as the one in [Bump version & trigger release](.github/workflows/bump-version.yaml) workflow log
   * checkout latest master branch and tag it `vX.Y.Z`
   * push the tag to the gooddata/gooddata-python-sdk repository (e.g. `git push <remote> vX.Y.Z`)
 
 
-### Releasing Alpha versions
-To publish current master as an alpha version, use `Release master as alpha` github workflow where you need to specify
-desired alpha version. **No validity checks are performed**.
+### How-to dev release
+To publish current master as a dev release version, use [Dev release from master](.github/workflows/dev-release.yaml) GitHub workflow.
 
 ### Errors that may appear
 
