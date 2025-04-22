@@ -35,14 +35,16 @@ class ComputeService:
             exec_def: execution definition - this prescribes what to calculate, how to place labels and metric values
          into dimensions
         """
-        response = self._actions_api.compute_report(workspace_id, exec_def.as_api_model(), _check_return_type=False)
+        response, _, headers = self._actions_api.compute_report(
+            workspace_id, exec_def.as_api_model(), _check_return_type=False, _return_http_data_only=False
+        )
 
         return Execution(
             api_client=self._api_client,
             workspace_id=workspace_id,
             exec_def=exec_def,
             response=response,
-            cancel_token=response.headers.get("X-GDC-CANCEL-TOKEN")
+            cancel_token=headers.get("X-Gdc-Cancel-Token")
             if exec_def.is_cancellable or self._api_client.executions_cancellable
             else None,
         )
@@ -112,23 +114,25 @@ class ComputeService:
         chat_history_request = ChatHistoryRequest(reset=True)
         self._actions_api.ai_chat_history(workspace_id, chat_history_request, _check_return_type=False)
 
-    def cancel_executions(self, executions: list[Execution]) -> None:
+    def cancel_executions(self, executions: list[tuple[str, str]]) -> None:
         """
         Try to cancel given executions using the cancel api endpoint.
+        Order of token applications is not guaranteed.
 
         *Note that this is currently a noop, we will be enabling this functionality soon.*
 
         Args:
-            executions: list of executions to send for cancellation
+            executions: list of tuples [workspace_id, cancel_token] to send for cancellation
         """
         workspace_to_tokens: dict[str, set[str]] = {}
 
         for execution in executions:
-            if not workspace_to_tokens[execution.workspace_id]:
-                workspace_to_tokens[execution.workspace_id] = set()
+            workspace_id, cancel_token = execution
 
-            if execution.cancel_token:
-                workspace_to_tokens[execution.workspace_id].add(execution.cancel_token)
+            if workspace_id not in workspace_to_tokens:
+                workspace_to_tokens[workspace_id] = set()
+
+            workspace_to_tokens[workspace_id].add(cancel_token)
 
         for workspace_id, token_ids in workspace_to_tokens.items():
             self._actions_api.cancel_executions(workspace_id, AfmCancelTokens(list(token_ids)))
