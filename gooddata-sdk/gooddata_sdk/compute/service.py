@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import logging
 
+from gooddata_api_client import ApiException
 from gooddata_api_client.model.afm_cancel_tokens import AfmCancelTokens
 from gooddata_api_client.model.chat_history_request import ChatHistoryRequest
 from gooddata_api_client.model.chat_history_result import ChatHistoryResult
@@ -114,7 +115,7 @@ class ComputeService:
         chat_history_request = ChatHistoryRequest(reset=True)
         self._actions_api.ai_chat_history(workspace_id, chat_history_request, _check_return_type=False)
 
-    def cancel_executions(self, executions: list[tuple[str, str]]) -> None:
+    def cancel_executions(self, executions: dict[str, dict[str, str]]) -> None:
         """
         Try to cancel given executions using the cancel api endpoint.
         Order of token applications is not guaranteed.
@@ -122,17 +123,12 @@ class ComputeService:
         *Note that this is currently a noop, we will be enabling this functionality soon.*
 
         Args:
-            executions: list of tuples [workspace_id, cancel_token] to send for cancellation
+            executions: maps workspace_id |-> result_id_to_cancel_token_pairs
         """
-        workspace_to_tokens: dict[str, set[str]] = {}
-
-        for execution in executions:
-            workspace_id, cancel_token = execution
-
-            if workspace_id not in workspace_to_tokens:
-                workspace_to_tokens[workspace_id] = set()
-
-            workspace_to_tokens[workspace_id].add(cancel_token)
-
-        for workspace_id, token_ids in workspace_to_tokens.items():
-            self._actions_api.cancel_executions(workspace_id, AfmCancelTokens(list(token_ids)))
+        try:
+            for workspace_id, cancel_tokens in executions.items():
+                self._actions_api.cancel_executions(
+                    workspace_id, AfmCancelTokens(result_id_to_cancel_token_pairs=cancel_tokens)
+                )
+        except ApiException as e:
+            print("Exception when calling ActionsApi->cancel_executions: %s\n", e)
