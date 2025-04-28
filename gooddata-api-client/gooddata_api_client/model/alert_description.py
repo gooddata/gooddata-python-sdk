@@ -99,7 +99,6 @@ class AlertDescription(ModelNormal):
             'attribute': (str,),  # noqa: E501
             'current_values': ([AlertEvaluationRow],),  # noqa: E501
             'error_message': (str,),  # noqa: E501
-            'filter_count': (int,),  # noqa: E501
             'formatted_threshold': (str,),  # noqa: E501
             'lower_threshold': (float,),  # noqa: E501
             'remaining_alert_evaluation_count': (int,),  # noqa: E501
@@ -107,6 +106,7 @@ class AlertDescription(ModelNormal):
             'threshold': (float,),  # noqa: E501
             'total_value_count': (int,),  # noqa: E501
             'trace_id': (str,),  # noqa: E501
+            'triggered_at': (datetime,),  # noqa: E501
             'triggered_count': (int,),  # noqa: E501
             'upper_threshold': (float,),  # noqa: E501
         }
@@ -122,7 +122,6 @@ class AlertDescription(ModelNormal):
         'attribute': 'attribute',  # noqa: E501
         'current_values': 'currentValues',  # noqa: E501
         'error_message': 'errorMessage',  # noqa: E501
-        'filter_count': 'filterCount',  # noqa: E501
         'formatted_threshold': 'formattedThreshold',  # noqa: E501
         'lower_threshold': 'lowerThreshold',  # noqa: E501
         'remaining_alert_evaluation_count': 'remainingAlertEvaluationCount',  # noqa: E501
@@ -130,6 +129,7 @@ class AlertDescription(ModelNormal):
         'threshold': 'threshold',  # noqa: E501
         'total_value_count': 'totalValueCount',  # noqa: E501
         'trace_id': 'traceId',  # noqa: E501
+        'triggered_at': 'triggeredAt',  # noqa: E501
         'triggered_count': 'triggeredCount',  # noqa: E501
         'upper_threshold': 'upperThreshold',  # noqa: E501
     }
@@ -182,7 +182,6 @@ class AlertDescription(ModelNormal):
             attribute (str): [optional]  # noqa: E501
             current_values ([AlertEvaluationRow]): [optional]  # noqa: E501
             error_message (str): [optional]  # noqa: E501
-            filter_count (int): [optional]  # noqa: E501
             formatted_threshold (str): [optional]  # noqa: E501
             lower_threshold (float): [optional]  # noqa: E501
             remaining_alert_evaluation_count (int): [optional]  # noqa: E501
@@ -190,6 +189,7 @@ class AlertDescription(ModelNormal):
             threshold (float): [optional]  # noqa: E501
             total_value_count (int): [optional]  # noqa: E501
             trace_id (str): [optional]  # noqa: E501
+            triggered_at (datetime): [optional]  # noqa: E501
             triggered_count (int): [optional]  # noqa: E501
             upper_threshold (float): [optional]  # noqa: E501
         """
@@ -286,7 +286,6 @@ class AlertDescription(ModelNormal):
             attribute (str): [optional]  # noqa: E501
             current_values ([AlertEvaluationRow]): [optional]  # noqa: E501
             error_message (str): [optional]  # noqa: E501
-            filter_count (int): [optional]  # noqa: E501
             formatted_threshold (str): [optional]  # noqa: E501
             lower_threshold (float): [optional]  # noqa: E501
             remaining_alert_evaluation_count (int): [optional]  # noqa: E501
@@ -294,6 +293,7 @@ class AlertDescription(ModelNormal):
             threshold (float): [optional]  # noqa: E501
             total_value_count (int): [optional]  # noqa: E501
             trace_id (str): [optional]  # noqa: E501
+            triggered_at (datetime): [optional]  # noqa: E501
             triggered_count (int): [optional]  # noqa: E501
             upper_threshold (float): [optional]  # noqa: E501
         """

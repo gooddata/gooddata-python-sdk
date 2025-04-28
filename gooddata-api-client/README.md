@@ -1657,6 +1657,7 @@ Class | Method | HTTP request | Description
  - [NotificationChannelDestination](docs/NotificationChannelDestination.md)
  - [NotificationContent](docs/NotificationContent.md)
  - [NotificationData](docs/NotificationData.md)
+ - [NotificationFilter](docs/NotificationFilter.md)
  - [Notifications](docs/Notifications.md)
  - [NotificationsMeta](docs/NotificationsMeta.md)
  - [NotificationsMetaTotal](docs/NotificationsMetaTotal.md)

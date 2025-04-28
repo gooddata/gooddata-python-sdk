@@ -89,9 +89,9 @@ class AutomationSchedule(ModelNormal):
         """
         return {
             'cron': (str,),  # noqa: E501
+            'timezone': (str,),  # noqa: E501
             'cron_description': (str,),  # noqa: E501
             'first_run': (datetime,),  # noqa: E501
-            'timezone': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -101,9 +101,9 @@ class AutomationSchedule(ModelNormal):
 
     attribute_map = {
         'cron': 'cron',  # noqa: E501
+        'timezone': 'timezone',  # noqa: E501
         'cron_description': 'cronDescription',  # noqa: E501
         'first_run': 'firstRun',  # noqa: E501
-        'timezone': 'timezone',  # noqa: E501
     }
 
     read_only_vars = {
@@ -114,11 +114,12 @@ class AutomationSchedule(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, cron, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, cron, timezone, *args, **kwargs):  # noqa: E501
         """AutomationSchedule - a model defined in OpenAPI
 
         Args:
             cron (str): Cron expression defining the schedule of the automation. The format is SECOND MINUTE HOUR DAY-OF-MONTH MONTH DAY-OF-WEEK (YEAR). The example expression signifies an action every 30 minutes from 9:00 to 17:00 on workdays.
+            timezone (str): Timezone in which the schedule is defined.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -153,7 +154,6 @@ class AutomationSchedule(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             cron_description (str): Human-readable description of the cron expression.. [optional]  # noqa: E501
             first_run (datetime): Timestamp of the first scheduled action. If not provided default to the next scheduled time.. [optional]  # noqa: E501
-            timezone (str): Timezone in which the schedule is defined.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -186,6 +186,7 @@ class AutomationSchedule(ModelNormal):
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
         self.cron = cron
+        self.timezone = timezone
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -206,11 +207,12 @@ class AutomationSchedule(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, cron, *args, **kwargs):  # noqa: E501
+    def __init__(self, cron, timezone, *args, **kwargs):  # noqa: E501
         """AutomationSchedule - a model defined in OpenAPI
 
         Args:
             cron (str): Cron expression defining the schedule of the automation. The format is SECOND MINUTE HOUR DAY-OF-MONTH MONTH DAY-OF-WEEK (YEAR). The example expression signifies an action every 30 minutes from 9:00 to 17:00 on workdays.
+            timezone (str): Timezone in which the schedule is defined.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -245,7 +247,6 @@ class AutomationSchedule(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             cron_description (str): Human-readable description of the cron expression.. [optional]  # noqa: E501
             first_run (datetime): Timestamp of the first scheduled action. If not provided default to the next scheduled time.. [optional]  # noqa: E501
-            timezone (str): Timezone in which the schedule is defined.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -276,6 +277,7 @@ class AutomationSchedule(ModelNormal):
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
         self.cron = cron
+        self.timezone = timezone
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

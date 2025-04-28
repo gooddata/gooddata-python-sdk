@@ -791,6 +791,7 @@ docs/NotificationChannelDestination.md
 docs/NotificationChannelsApi.md
 docs/NotificationContent.md
 docs/NotificationData.md
+docs/NotificationFilter.md
 docs/Notifications.md
 docs/NotificationsMeta.md
 docs/NotificationsMetaTotal.md
@@ -1787,6 +1788,7 @@ gooddata_api_client/model/notification.py
 gooddata_api_client/model/notification_channel_destination.py
 gooddata_api_client/model/notification_content.py
 gooddata_api_client/model/notification_data.py
+gooddata_api_client/model/notification_filter.py
 gooddata_api_client/model/notifications.py
 gooddata_api_client/model/notifications_meta.py
 gooddata_api_client/model/notifications_meta_total.py

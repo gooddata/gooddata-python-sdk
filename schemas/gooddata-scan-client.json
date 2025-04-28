@@ -625,10 +625,10 @@
               "MYSQL",
               "MARIADB",
               "ORACLE",
-              "PINOT",
               "SINGLESTORE",
               "MOTHERDUCK",
-              "FLEXCONNECT"
+              "FLEXCONNECT",
+              "STARROCKS"
             ],
             "example": "POSTGRESQL",
             "type": "string"

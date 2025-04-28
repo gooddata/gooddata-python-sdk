@@ -595,7 +595,7 @@
       },
       "AutomationMetadata": {
         "description": "Additional information for the automation.",
-        "maxLength": 15000,
+        "maxLength": 250000,
         "nullable": true,
         "properties": {
           "visibleFilters": {
@@ -637,7 +637,8 @@
           }
         },
         "required": [
-          "cron"
+          "cron",
+          "timezone"
         ],
         "type": "object"
       },
@@ -1961,10 +1962,10 @@
               "MYSQL",
               "MARIADB",
               "ORACLE",
-              "PINOT",
               "SINGLESTORE",
               "MOTHERDUCK",
-              "FLEXCONNECT"
+              "FLEXCONNECT",
+              "STARROCKS"
             ],
             "example": "POSTGRESQL",
             "type": "string"
@@ -6268,7 +6269,7 @@
               },
               "metadata": {
                 "description": "Additional information for the automation.",
-                "maxLength": 15000,
+                "maxLength": 250000,
                 "nullable": true,
                 "properties": {
                   "visibleFilters": {
@@ -6310,7 +6311,8 @@
                   }
                 },
                 "required": [
-                  "cron"
+                  "cron",
+                  "timezone"
                 ],
                 "type": "object"
               },
@@ -6526,7 +6528,7 @@
               },
               "metadata": {
                 "description": "Additional information for the automation.",
-                "maxLength": 15000,
+                "maxLength": 250000,
                 "nullable": true,
                 "properties": {
                   "visibleFilters": {
@@ -6572,7 +6574,8 @@
                   }
                 },
                 "required": [
-                  "cron"
+                  "cron",
+                  "timezone"
                 ],
                 "type": "object"
               },
@@ -6888,7 +6891,7 @@
               },
               "metadata": {
                 "description": "Additional information for the automation.",
-                "maxLength": 15000,
+                "maxLength": 250000,
                 "nullable": true,
                 "properties": {
                   "visibleFilters": {
@@ -6930,7 +6933,8 @@
                   }
                 },
                 "required": [
-                  "cron"
+                  "cron",
+                  "timezone"
                 ],
                 "type": "object"
               },
@@ -8317,10 +8321,10 @@
                   "MYSQL",
                   "MARIADB",
                   "ORACLE",
-                  "PINOT",
                   "SINGLESTORE",
                   "MOTHERDUCK",
-                  "FLEXCONNECT"
+                  "FLEXCONNECT",
+                  "STARROCKS"
                 ],
                 "type": "string"
               }
@@ -8523,10 +8527,10 @@
                   "MYSQL",
                   "MARIADB",
                   "ORACLE",
-                  "PINOT",
                   "SINGLESTORE",
                   "MOTHERDUCK",
-                  "FLEXCONNECT"
+                  "FLEXCONNECT",
+                  "STARROCKS"
                 ],
                 "type": "string"
               },
@@ -8687,10 +8691,10 @@
                   "MYSQL",
                   "MARIADB",
                   "ORACLE",
-                  "PINOT",
                   "SINGLESTORE",
                   "MOTHERDUCK",
-                  "FLEXCONNECT"
+                  "FLEXCONNECT",
+                  "STARROCKS"
                 ],
                 "type": "string"
               },
@@ -8905,10 +8909,10 @@
                   "MYSQL",
                   "MARIADB",
                   "ORACLE",
-                  "PINOT",
                   "SINGLESTORE",
                   "MOTHERDUCK",
-                  "FLEXCONNECT"
+                  "FLEXCONNECT",
+                  "STARROCKS"
                 ],
                 "type": "string"
               },

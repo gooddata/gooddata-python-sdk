@@ -118,16 +118,17 @@
       "AfmCancelTokens": {
         "description": "Any information related to cancellation.",
         "properties": {
-          "tokenIds": {
-            "description": "Token ids to be used in the cancellation.",
-            "items": {
+          "resultIdToCancelTokenPairs": {
+            "additionalProperties": {
+              "description": "resultId to cancel token pairs",
               "type": "string"
             },
-            "type": "array"
+            "description": "resultId to cancel token pairs",
+            "type": "object"
           }
         },
         "required": [
-          "tokenIds"
+          "resultIdToCancelTokenPairs"
         ],
         "type": "object"
       },

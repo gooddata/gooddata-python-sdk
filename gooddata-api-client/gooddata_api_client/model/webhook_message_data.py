@@ -33,10 +33,12 @@ from gooddata_api_client.exceptions import ApiAttributeError
 def lazy_import():
     from gooddata_api_client.model.alert_description import AlertDescription
     from gooddata_api_client.model.export_result import ExportResult
+    from gooddata_api_client.model.notification_filter import NotificationFilter
     from gooddata_api_client.model.webhook_automation_info import WebhookAutomationInfo
     from gooddata_api_client.model.webhook_recipient import WebhookRecipient
     globals()['AlertDescription'] = AlertDescription
     globals()['ExportResult'] = ExportResult
+    globals()['NotificationFilter'] = NotificationFilter
     globals()['WebhookAutomationInfo'] = WebhookAutomationInfo
     globals()['WebhookRecipient'] = WebhookRecipient
 
@@ -97,6 +99,7 @@ class WebhookMessageData(ModelNormal):
             'automation': (WebhookAutomationInfo,),  # noqa: E501
             'alert': (AlertDescription,),  # noqa: E501
             'details': ({str: (str,)},),  # noqa: E501
+            'filters': ([NotificationFilter],),  # noqa: E501
             'recipients': ([WebhookRecipient],),  # noqa: E501
             'remaining_action_count': (int,),  # noqa: E501
             'tabular_exports': ([ExportResult],),  # noqa: E501
@@ -112,6 +115,7 @@ class WebhookMessageData(ModelNormal):
         'automation': 'automation',  # noqa: E501
         'alert': 'alert',  # noqa: E501
         'details': 'details',  # noqa: E501
+        'filters': 'filters',  # noqa: E501
         'recipients': 'recipients',  # noqa: E501
         'remaining_action_count': 'remainingActionCount',  # noqa: E501
         'tabular_exports': 'tabularExports',  # noqa: E501
@@ -164,6 +168,7 @@ class WebhookMessageData(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             alert (AlertDescription): [optional]  # noqa: E501
             details ({str: (str,)}): [optional]  # noqa: E501
+            filters ([NotificationFilter]): [optional]  # noqa: E501
             recipients ([WebhookRecipient]): [optional]  # noqa: E501
             remaining_action_count (int): [optional]  # noqa: E501
             tabular_exports ([ExportResult]): [optional]  # noqa: E501
@@ -259,6 +264,7 @@ class WebhookMessageData(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             alert (AlertDescription): [optional]  # noqa: E501
             details ({str: (str,)}): [optional]  # noqa: E501
+            filters ([NotificationFilter]): [optional]  # noqa: E501
             recipients ([WebhookRecipient]): [optional]  # noqa: E501
             remaining_action_count (int): [optional]  # noqa: E501
             tabular_exports ([ExportResult]): [optional]  # noqa: E501

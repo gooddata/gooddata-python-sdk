@@ -236,16 +236,17 @@
       "AfmCancelTokens": {
         "description": "Any information related to cancellation.",
         "properties": {
-          "tokenIds": {
-            "description": "Token ids to be used in the cancellation.",
-            "items": {
+          "resultIdToCancelTokenPairs": {
+            "additionalProperties": {
+              "description": "resultId to cancel token pairs",
               "type": "string"
             },
-            "type": "array"
+            "description": "resultId to cancel token pairs",
+            "type": "object"
           }
         },
         "required": [
-          "tokenIds"
+          "resultIdToCancelTokenPairs"
         ],
         "type": "object"
       },
@@ -623,10 +624,6 @@
           "errorMessage": {
             "type": "string"
           },
-          "filterCount": {
-            "format": "int32",
-            "type": "integer"
-          },
           "formattedThreshold": {
             "type": "string"
           },
@@ -659,6 +656,10 @@
             "type": "integer"
           },
           "traceId": {
+            "type": "string"
+          },
+          "triggeredAt": {
+            "format": "date-time",
             "type": "string"
           },
           "triggeredCount": {
@@ -1164,7 +1165,7 @@
       },
       "AutomationMetadata": {
         "description": "Additional information for the automation.",
-        "maxLength": 15000,
+        "maxLength": 250000,
         "nullable": true,
         "properties": {
           "visibleFilters": {
@@ -1225,7 +1226,8 @@
           }
         },
         "required": [
-          "cron"
+          "cron",
+          "timezone"
         ],
         "type": "object"
       },
@@ -3208,10 +3210,10 @@
               "MYSQL",
               "MARIADB",
               "ORACLE",
-              "PINOT",
               "SINGLESTORE",
               "MOTHERDUCK",
-              "FLEXCONNECT"
+              "FLEXCONNECT",
+              "STARROCKS"
             ],
             "example": "POSTGRESQL",
             "type": "string"
@@ -6191,6 +6193,10 @@
           },
           "traceId": {
             "type": "string"
+          },
+          "triggeredAt": {
+            "format": "date-time",
+            "type": "string"
           }
         },
         "required": [
@@ -8311,7 +8317,7 @@
               },
               "metadata": {
                 "description": "Additional information for the automation.",
-                "maxLength": 15000,
+                "maxLength": 250000,
                 "nullable": true,
                 "properties": {
                   "visibleFilters": {
@@ -8353,7 +8359,8 @@
                   }
                 },
                 "required": [
-                  "cron"
+                  "cron",
+                  "timezone"
                 ],
                 "type": "object"
               },
@@ -8569,7 +8576,7 @@
               },
               "metadata": {
                 "description": "Additional information for the automation.",
-                "maxLength": 15000,
+                "maxLength": 250000,
                 "nullable": true,
                 "properties": {
                   "visibleFilters": {
@@ -8615,7 +8622,8 @@
                   }
                 },
                 "required": [
-                  "cron"
+                  "cron",
+                  "timezone"
                 ],
                 "type": "object"
               },
@@ -8931,7 +8939,7 @@
               },
               "metadata": {
                 "description": "Additional information for the automation.",
-                "maxLength": 15000,
+                "maxLength": 250000,
                 "nullable": true,
                 "properties": {
                   "visibleFilters": {
@@ -8973,7 +8981,8 @@
                   }
                 },
                 "required": [
-                  "cron"
+                  "cron",
+                  "timezone"
                 ],
                 "type": "object"
               },
@@ -10360,10 +10369,10 @@
                   "MYSQL",
                   "MARIADB",
                   "ORACLE",
-                  "PINOT",
                   "SINGLESTORE",
                   "MOTHERDUCK",
-                  "FLEXCONNECT"
+                  "FLEXCONNECT",
+                  "STARROCKS"
                 ],
                 "type": "string"
               }
@@ -10566,10 +10575,10 @@
                   "MYSQL",
                   "MARIADB",
                   "ORACLE",
-                  "PINOT",
                   "SINGLESTORE",
                   "MOTHERDUCK",
-                  "FLEXCONNECT"
+                  "FLEXCONNECT",
+                  "STARROCKS"
                 ],
                 "type": "string"
               },
@@ -10730,10 +10739,10 @@
                   "MYSQL",
                   "MARIADB",
                   "ORACLE",
-                  "PINOT",
                   "SINGLESTORE",
                   "MOTHERDUCK",
-                  "FLEXCONNECT"
+                  "FLEXCONNECT",
+                  "STARROCKS"
                 ],
                 "type": "string"
               },
@@ -10948,10 +10957,10 @@
                   "MYSQL",
                   "MARIADB",
                   "ORACLE",
-                  "PINOT",
                   "SINGLESTORE",
                   "MOTHERDUCK",
-                  "FLEXCONNECT"
+                  "FLEXCONNECT",
+                  "STARROCKS"
                 ],
                 "type": "string"
               },
@@ -20325,6 +20334,21 @@
         ],
         "type": "object"
       },
+      "NotificationFilter": {
+        "properties": {
+          "filter": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "filter",
+          "title"
+        ],
+        "type": "object"
+      },
       "Notifications": {
         "properties": {
           "data": {
@@ -22471,10 +22495,10 @@
               "MYSQL",
               "MARIADB",
               "ORACLE",
-              "PINOT",
               "SINGLESTORE",
               "MOTHERDUCK",
-              "FLEXCONNECT"
+              "FLEXCONNECT",
+              "STARROCKS"
             ],
             "example": "POSTGRESQL",
             "type": "string"
@@ -23315,6 +23339,12 @@
               "type": "string"
             },
             "type": "object"
+          },
+          "filters": {
+            "items": {
+              "$ref": "#/components/schemas/NotificationFilter"
+            },
+            "type": "array"
           },
           "recipients": {
             "items": {
