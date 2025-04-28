@@ -1,0 +1,21 @@
+{
+    "id": "number_of_order_ids",
+    "title": "Number of Order IDs",
+    "visualizationType": "HEADLINE",
+    "metrics": [
+      {
+        "id": "order_id",
+        "type": "attribute",
+        "title": "Number of Order IDs",
+        "aggFunction": "COUNT"
+      }
+    ],
+    "dimensionality": [],
+    "filters": [],
+    "suggestions": [
+      {
+        "query": "Show the number of orders by year",
+        "label": "Show by Year"
+      }
+    ]
+}
