@@ -91,10 +91,6 @@
           "errorMessage": {
             "type": "string"
           },
-          "filterCount": {
-            "format": "int32",
-            "type": "integer"
-          },
           "formattedThreshold": {
             "type": "string"
           },
@@ -127,6 +123,10 @@
             "type": "integer"
           },
           "traceId": {
+            "type": "string"
+          },
+          "triggeredAt": {
+            "format": "date-time",
             "type": "string"
           },
           "triggeredCount": {
@@ -176,7 +176,7 @@
       },
       "AutomationMetadata": {
         "description": "Additional information for the automation.",
-        "maxLength": 15000,
+        "maxLength": 250000,
         "nullable": true,
         "properties": {
           "visibleFilters": {
@@ -407,6 +407,10 @@
           },
           "traceId": {
             "type": "string"
+          },
+          "triggeredAt": {
+            "format": "date-time",
+            "type": "string"
           }
         },
         "required": [
@@ -531,6 +535,21 @@
         },
         "required": [
           "type"
+        ],
+        "type": "object"
+      },
+      "NotificationFilter": {
+        "properties": {
+          "filter": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "filter",
+          "title"
         ],
         "type": "object"
       },
@@ -990,6 +1009,12 @@
               "type": "string"
             },
             "type": "object"
+          },
+          "filters": {
+            "items": {
+              "$ref": "#/components/schemas/NotificationFilter"
+            },
+            "type": "array"
           },
           "recipients": {
             "items": {

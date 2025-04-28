@@ -734,9 +734,9 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = actions_api.ActionsApi(api_client)
     workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
     afm_cancel_tokens = AfmCancelTokens(
-        token_ids=[
-            "token_ids_example",
-        ],
+        result_id_to_cancel_token_pairs={
+            "key": "key_example",
+        },
     ) # AfmCancelTokens | 
 
     # example passing only required values which don't have defaults set

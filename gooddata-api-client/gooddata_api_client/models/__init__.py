@@ -763,6 +763,7 @@ from gooddata_api_client.model.notification import Notification
 from gooddata_api_client.model.notification_channel_destination import NotificationChannelDestination
 from gooddata_api_client.model.notification_content import NotificationContent
 from gooddata_api_client.model.notification_data import NotificationData
+from gooddata_api_client.model.notification_filter import NotificationFilter
 from gooddata_api_client.model.notifications import Notifications
 from gooddata_api_client.model.notifications_meta import NotificationsMeta
 from gooddata_api_client.model.notifications_meta_total import NotificationsMetaTotal
