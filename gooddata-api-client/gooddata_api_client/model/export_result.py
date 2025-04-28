@@ -94,6 +94,7 @@ class ExportResult(ModelNormal):
             'error_message': (str,),  # noqa: E501
             'file_uri': (str,),  # noqa: E501
             'trace_id': (str,),  # noqa: E501
+            'triggered_at': (datetime,),  # noqa: E501
         }
 
     @cached_property
@@ -108,6 +109,7 @@ class ExportResult(ModelNormal):
         'error_message': 'errorMessage',  # noqa: E501
         'file_uri': 'fileUri',  # noqa: E501
         'trace_id': 'traceId',  # noqa: E501
+        'triggered_at': 'triggeredAt',  # noqa: E501
     }
 
     read_only_vars = {
@@ -159,6 +161,7 @@ class ExportResult(ModelNormal):
             error_message (str): [optional]  # noqa: E501
             file_uri (str): [optional]  # noqa: E501
             trace_id (str): [optional]  # noqa: E501
+            triggered_at (datetime): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -255,6 +258,7 @@ class ExportResult(ModelNormal):
             error_message (str): [optional]  # noqa: E501
             file_uri (str): [optional]  # noqa: E501
             trace_id (str): [optional]  # noqa: E501
+            triggered_at (datetime): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

@@ -82,7 +82,7 @@ class AfmCancelTokens(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'token_ids': ([str],),  # noqa: E501
+            'result_id_to_cancel_token_pairs': ({str: (str,)},),  # noqa: E501
         }
 
     @cached_property
@@ -91,7 +91,7 @@ class AfmCancelTokens(ModelNormal):
 
 
     attribute_map = {
-        'token_ids': 'tokenIds',  # noqa: E501
+        'result_id_to_cancel_token_pairs': 'resultIdToCancelTokenPairs',  # noqa: E501
     }
 
     read_only_vars = {
@@ -101,11 +101,11 @@ class AfmCancelTokens(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, token_ids, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, result_id_to_cancel_token_pairs, *args, **kwargs):  # noqa: E501
         """AfmCancelTokens - a model defined in OpenAPI
 
         Args:
-            token_ids ([str]): Token ids to be used in the cancellation.
+            result_id_to_cancel_token_pairs ({str: (str,)}): resultId to cancel token pairs
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -169,7 +169,7 @@ class AfmCancelTokens(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.token_ids = token_ids
+        self.result_id_to_cancel_token_pairs = result_id_to_cancel_token_pairs
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -190,11 +190,11 @@ class AfmCancelTokens(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, token_ids, *args, **kwargs):  # noqa: E501
+    def __init__(self, result_id_to_cancel_token_pairs, *args, **kwargs):  # noqa: E501
         """AfmCancelTokens - a model defined in OpenAPI
 
         Args:
-            token_ids ([str]): Token ids to be used in the cancellation.
+            result_id_to_cancel_token_pairs ({str: (str,)}): resultId to cancel token pairs
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -256,7 +256,7 @@ class AfmCancelTokens(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.token_ids = token_ids
+        self.result_id_to_cancel_token_pairs = result_id_to_cancel_token_pairs
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

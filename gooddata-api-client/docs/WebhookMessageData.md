@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 **automation** | [**WebhookAutomationInfo**](WebhookAutomationInfo.md) |  | 
 **alert** | [**AlertDescription**](AlertDescription.md) |  | [optional] 
 **details** | **{str: (str,)}** |  | [optional] 
+**filters** | [**[NotificationFilter]**](NotificationFilter.md) |  | [optional] 
 **recipients** | [**[WebhookRecipient]**](WebhookRecipient.md) |  | [optional] 
 **remaining_action_count** | **int** |  | [optional] 
 **tabular_exports** | [**[ExportResult]**](ExportResult.md) |  | [optional] 
