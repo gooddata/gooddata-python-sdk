@@ -1,0 +1,8 @@
+# (C) 2025 GoodData Corporation
+content:
+  format: '#,##0.0%'
+  maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
+    ALL OTHER)
+description: ''
+id: percent_revenue_in_category
+title: '% Revenue in Category'

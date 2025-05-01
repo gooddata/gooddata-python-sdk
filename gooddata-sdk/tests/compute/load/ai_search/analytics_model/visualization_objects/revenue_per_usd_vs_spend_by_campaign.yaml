@@ -1,0 +1,54 @@
+# (C) 2025 GoodData Corporation
+content:
+  buckets:
+    - items:
+        - measure:
+            definition:
+              measureDefinition:
+                filters: []
+                item:
+                  identifier:
+                    id: campaign_spend
+                    type: metric
+            localIdentifier: 13a50d811e474ac6808d8da7f4673b35
+            title: Campaign Spend
+      localIdentifier: measures
+    - items:
+        - measure:
+            definition:
+              measureDefinition:
+                filters: []
+                item:
+                  identifier:
+                    id: revenue_per_dollar_spent
+                    type: metric
+            localIdentifier: a0f15e82e6334280a44dbedc7d086e7c
+            title: Revenue per Dollar Spent
+      localIdentifier: secondary_measures
+    - items:
+        - attribute:
+            displayForm:
+              identifier:
+                id: campaign_name
+                type: label
+            localIdentifier: 1d9fa968bafb423eb29c938dfb1207ff
+      localIdentifier: attribute
+  filters:
+    - negativeAttributeFilter:
+        displayForm:
+          identifier:
+            id: campaign_name
+            type: label
+        notIn:
+          values: []
+  properties:
+    controls:
+      xaxis:
+        min: '0'
+      yaxis:
+        min: '0'
+  version: '2'
+  visualizationUrl: local:scatter
+description: ''
+id: revenue_per_usd_vs_spend_by_campaign
+title: Revenue per $ vs Spend by Campaign

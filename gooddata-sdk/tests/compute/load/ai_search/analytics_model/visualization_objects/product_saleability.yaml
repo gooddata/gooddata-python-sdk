@@ -1,0 +1,55 @@
+# (C) 2025 GoodData Corporation
+content:
+  buckets:
+    - items:
+        - measure:
+            alias: Number of Orders
+            definition:
+              measureDefinition:
+                filters: []
+                item:
+                  identifier:
+                    id: amount_of_orders
+                    type: metric
+            localIdentifier: aeb5d51a162d4b59aba3bd6ddebcc780
+            title: '# of Orders'
+      localIdentifier: measures
+    - items:
+        - measure:
+            definition:
+              measureDefinition:
+                filters: []
+                item:
+                  identifier:
+                    id: revenue
+                    type: metric
+            localIdentifier: 94b3edd3a73c4a48a4d13bbe9442cc98
+            title: Revenue
+      localIdentifier: secondary_measures
+    - items:
+        - attribute:
+            displayForm:
+              identifier:
+                id: product_name
+                type: label
+            localIdentifier: d2a991bdd123448eb2be73d79f1180c4
+      localIdentifier: attribute
+  filters:
+    - negativeAttributeFilter:
+        displayForm:
+          identifier:
+            id: product_name
+            type: label
+        notIn:
+          values: []
+  properties:
+    controls:
+      dataLabels:
+        visible: auto
+      grid:
+        enabled: true
+  version: '2'
+  visualizationUrl: local:scatter
+description: ''
+id: product_saleability
+title: Product Saleability
