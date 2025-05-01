@@ -1,0 +1,54 @@
+# (C) 2025 GoodData Corporation
+content:
+  buckets:
+    - items:
+        - measure:
+            definition:
+              measureDefinition:
+                filters: []
+                item:
+                  identifier:
+                    id: revenue
+                    type: metric
+            localIdentifier: 7df6c34387744d69b23ec92e1a5cf543
+            title: Revenue
+      localIdentifier: measures
+    - items:
+        - attribute:
+            displayForm:
+              identifier:
+                id: date.month
+                type: label
+            localIdentifier: 4bb4fc1986c546de9ad976e6ec23fed4
+      localIdentifier: trend
+    - items:
+        - attribute:
+            displayForm:
+              identifier:
+                id: products.category
+                type: label
+            localIdentifier: 34bddcb1cd024902a82396216b0fa9d8
+      localIdentifier: segment
+  filters:
+    - negativeAttributeFilter:
+        displayForm:
+          identifier:
+            id: products.category
+            type: label
+        notIn:
+          values: []
+    - relativeDateFilter:
+        dataSet:
+          identifier:
+            id: date
+            type: dataset
+        granularity: GDC.time.year
+  properties:
+    controls:
+      legend:
+        position: bottom
+  version: '2'
+  visualizationUrl: local:line
+description: ''
+id: revenue_by_category_trend
+title: Revenue by Category Trend

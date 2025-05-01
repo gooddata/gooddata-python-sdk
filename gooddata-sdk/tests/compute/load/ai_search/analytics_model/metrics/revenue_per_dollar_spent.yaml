@@ -1,0 +1,7 @@
+# (C) 2025 GoodData Corporation
+content:
+  format: $#,##0.0
+  maql: SELECT {metric/revenue} / {metric/campaign_spend}
+description: ''
+id: revenue_per_dollar_spent
+title: Revenue per Dollar Spent

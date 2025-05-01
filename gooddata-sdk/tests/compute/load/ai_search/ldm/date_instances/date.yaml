@@ -1,0 +1,15 @@
+# (C) 2025 GoodData Corporation
+description: ''
+granularities:
+  - DAY
+  - WEEK
+  - MONTH
+  - QUARTER
+  - YEAR
+granularitiesFormatting:
+  titleBase: ''
+  titlePattern: '%titleBase - %granularityTitle'
+id: date
+tags:
+  - Date
+title: Date

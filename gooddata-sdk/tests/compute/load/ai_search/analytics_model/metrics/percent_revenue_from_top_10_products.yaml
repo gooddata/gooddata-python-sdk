@@ -1,0 +1,8 @@
+# (C) 2025 GoodData Corporation
+content:
+  format: '#,##0.0%'
+  maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10} BY\
+    \ {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
+description: ''
+id: percent_revenue_from_top_10_products
+title: '% Revenue from Top 10 Products'

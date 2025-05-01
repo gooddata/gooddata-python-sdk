@@ -1,0 +1,7 @@
+# (C) 2025 GoodData Corporation
+content:
+  format: $#,##0
+  maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
+description: ''
+id: revenue_top_10
+title: Revenue / Top 10

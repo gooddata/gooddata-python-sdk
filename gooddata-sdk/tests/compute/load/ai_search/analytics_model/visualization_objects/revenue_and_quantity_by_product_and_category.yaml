@@ -1,0 +1,97 @@
+# (C) 2025 GoodData Corporation
+content:
+  buckets:
+    - items:
+        - measure:
+            alias: Items Sold
+            definition:
+              measureDefinition:
+                aggregation: sum
+                filters: []
+                item:
+                  identifier:
+                    id: quantity
+                    type: fact
+            format: '#,##0.00'
+            localIdentifier: 29486504dd0e4a36a18b0b2f792d3a46
+            title: Sum of Quantity
+        - measure:
+            definition:
+              measureDefinition:
+                aggregation: avg
+                filters: []
+                item:
+                  identifier:
+                    id: price
+                    type: fact
+            format: '#,##0.00'
+            localIdentifier: aa6391acccf1452f8011201aef9af492
+            title: Avg Price
+        - measure:
+            definition:
+              measureDefinition:
+                filters: []
+                item:
+                  identifier:
+                    id: percent_revenue_in_category
+                    type: metric
+            localIdentifier: 2cd39539d8da46c9883e63caa3ba7cc0
+            title: '% Revenue in Category'
+        - measure:
+            alias: Total Revenue
+            definition:
+              measureDefinition:
+                filters: []
+                item:
+                  identifier:
+                    id: revenue
+                    type: metric
+            localIdentifier: 9a0f08331c094c7facf2a0b4f418de0a
+            title: Revenue
+      localIdentifier: measures
+    - items:
+        - attribute:
+            displayForm:
+              identifier:
+                id: products.category
+                type: label
+            localIdentifier: 06bc6b3b9949466494e4f594c11f1bff
+        - attribute:
+            displayForm:
+              identifier:
+                id: product_name
+                type: label
+            localIdentifier: 192668bfb6a74e9ab7b5d1ce7cb68ea3
+      localIdentifier: attribute
+  filters:
+    - negativeAttributeFilter:
+        displayForm:
+          identifier:
+            id: customer_name
+            type: label
+        notIn:
+          values: []
+    - negativeAttributeFilter:
+        displayForm:
+          identifier:
+            id: product_name
+            type: label
+        notIn:
+          values: []
+    - negativeAttributeFilter:
+        displayForm:
+          identifier:
+            id: products.category
+            type: label
+        notIn:
+          values: []
+  properties:
+    sortItems:
+      - attributeSortItem:
+          attributeIdentifier: 06bc6b3b9949466494e4f594c11f1bff
+          direction: asc
+  version: '2'
+  visualizationUrl: local:table
+description: ''
+id: revenue_and_quantity_by_product_and_category
+title: Revenue and Quantity by Product and Category

@@ -1,0 +1,62 @@
+# (C) 2025 GoodData Corporation
+content:
+  buckets:
+    - items:
+        - measure:
+            definition:
+              measureDefinition:
+                filters: []
+                item:
+                  identifier:
+                    id: campaign_spend
+                    type: metric
+            localIdentifier: d319bcb2d8c04442a684e3b3cd063381
+            title: Campaign Spend
+      localIdentifier: measures
+    - items:
+        - attribute:
+            displayForm:
+              identifier:
+                id: campaign_channels.category
+                type: label
+            localIdentifier: 291c085e7df8420db84117ca49f59c49
+      localIdentifier: view
+    - items:
+        - attribute:
+            displayForm:
+              identifier:
+                id: campaign_name
+                type: label
+            localIdentifier: d9dd143d647d4d148405a60ec2cf59bc
+      localIdentifier: segment
+  filters:
+    - negativeAttributeFilter:
+        displayForm:
+          identifier:
+            id: type
+            type: label
+        notIn:
+          values: []
+    - negativeAttributeFilter:
+        displayForm:
+          identifier:
+            id: campaign_channels.category
+            type: label
+        notIn:
+          values: []
+    - negativeAttributeFilter:
+        displayForm:
+          identifier:
+            id: campaign_name
+            type: label
+        notIn:
+          values: []
+  properties:
+    controls:
+      legend:
+        position: bottom
+  version: '2'
+  visualizationUrl: local:treemap
+description: ''
+id: campaign_spend
+title: Campaign Spend

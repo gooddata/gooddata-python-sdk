@@ -1,0 +1,55 @@
+# (C) 2025 GoodData Corporation
+content:
+  buckets:
+    - items:
+        - measure:
+            definition:
+              measureDefinition:
+                filters: []
+                item:
+                  identifier:
+                    id: revenue_top_10
+                    type: metric
+            localIdentifier: 3f127ccfe57a40399e23f9ae2a4ad810
+            title: Revenue / Top 10
+      localIdentifier: measures
+    - items:
+        - attribute:
+            displayForm:
+              identifier:
+                id: customer_name
+                type: label
+            localIdentifier: f4e39e24f11e4827a191c30d65c89d2c
+      localIdentifier: view
+    - items:
+        - attribute:
+            displayForm:
+              identifier:
+                id: state
+                type: label
+            localIdentifier: bbccd430176d428caed54c99afc9589e
+      localIdentifier: stack
+  filters:
+    - negativeAttributeFilter:
+        displayForm:
+          identifier:
+            id: customer_name
+            type: label
+        notIn:
+          values: []
+    - negativeAttributeFilter:
+        displayForm:
+          identifier:
+            id: state
+            type: label
+        notIn:
+          values: []
+  properties:
+    controls:
+      legend:
+        position: bottom
+  version: '2'
+  visualizationUrl: local:bar
+description: ''
+id: top_10_customers
+title: Top 10 Customers

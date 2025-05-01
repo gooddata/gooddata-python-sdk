@@ -1,0 +1,50 @@
+# (C) 2025 GoodData Corporation
+content:
+  buckets:
+    - items:
+        - measure:
+            definition:
+              measureDefinition:
+                computeRatio: true
+                filters: []
+                item:
+                  identifier:
+                    id: revenue
+                    type: metric
+            localIdentifier: 162b857af49d45769bc12604a5c192b9
+            title: '% Revenue'
+      localIdentifier: measures
+    - items:
+        - attribute:
+            displayForm:
+              identifier:
+                id: products.category
+                type: label
+            localIdentifier: fe513cef1c6244a5ac21c5f49c56b108
+      localIdentifier: view
+  filters:
+    - negativeAttributeFilter:
+        displayForm:
+          identifier:
+            id: product_name
+            type: label
+        notIn:
+          values: []
+    - negativeAttributeFilter:
+        displayForm:
+          identifier:
+            id: products.category
+            type: label
+        notIn:
+          values: []
+  properties:
+    controls:
+      dataLabels:
+        visible: auto
+      legend:
+        position: bottom
+  version: '2'
+  visualizationUrl: local:donut
+description: ''
+id: product_categories_pie_chart
+title: Product Categories Pie Chart
