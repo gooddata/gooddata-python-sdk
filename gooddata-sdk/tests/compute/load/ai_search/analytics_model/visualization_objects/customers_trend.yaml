@@ -1,0 +1,74 @@
+# (C) 2025 GoodData Corporation
+content:
+  buckets:
+    - items:
+        - measure:
+            alias: Active Customers
+            definition:
+              measureDefinition:
+                computeRatio: false
+                filters: []
+                item:
+                  identifier:
+                    id: amount_of_active_customers
+                    type: metric
+            localIdentifier: 2ba0b87b59ca41a4b1530e81a5c1d081
+            title: '# of Active Customers'
+      localIdentifier: measures
+    - items:
+        - measure:
+            definition:
+              measureDefinition:
+                filters: []
+                item:
+                  identifier:
+                    id: revenue_per_customer
+                    type: metric
+            localIdentifier: ec0606894b9f4897b7beaf1550608928
+            title: Revenue per Customer
+      localIdentifier: secondary_measures
+    - items:
+        - attribute:
+            displayForm:
+              identifier:
+                id: date.month
+                type: label
+            localIdentifier: 0de7d7f08af7480aa636857a26be72b6
+      localIdentifier: view
+  filters:
+    - relativeDateFilter:
+        dataSet:
+          identifier:
+            id: date
+            type: dataset
+        from: -11
+        granularity: GDC.time.month
+        to: 0
+  properties:
+    controls:
+      colorMapping:
+        - color:
+            type: guid
+            value: '20'
+          id: 2ba0b87b59ca41a4b1530e81a5c1d081
+        - color:
+            type: guid
+            value: '4'
+          id: ec0606894b9f4897b7beaf1550608928
+      dualAxis: true
+      legend:
+        position: bottom
+      primaryChartType: column
+      secondaryChartType: line
+      secondary_yaxis:
+        measures:
+          - ec0606894b9f4897b7beaf1550608928
+      xaxis:
+        name:
+          visible: false
+        rotation: auto
+  version: '2'
+  visualizationUrl: local:combo2
+description: ''
+id: customers_trend
+title: Customers Trend

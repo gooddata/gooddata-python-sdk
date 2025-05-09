@@ -99,6 +99,10 @@ from gooddata_sdk.catalog.organization.entity_model.jwk import (
     CatalogJwkDocument,
     CatalogRsaSpecification,
 )
+from gooddata_sdk.catalog.organization.entity_model.llm_endpoint import (
+    CatalogLlmEndpoint,
+    CatalogLlmEndpointDocument,
+)
 from gooddata_sdk.catalog.organization.entity_model.organization import CatalogOrganization
 from gooddata_sdk.catalog.organization.entity_model.setting import CatalogOrganizationSetting
 from gooddata_sdk.catalog.organization.layout.export_template import (

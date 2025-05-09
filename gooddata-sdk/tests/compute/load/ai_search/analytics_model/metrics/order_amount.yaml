@@ -1,0 +1,7 @@
+# (C) 2025 GoodData Corporation
+content:
+  format: $#,##0
+  maql: SELECT SUM({fact/price}*{fact/quantity})
+description: ''
+id: order_amount
+title: Order Amount

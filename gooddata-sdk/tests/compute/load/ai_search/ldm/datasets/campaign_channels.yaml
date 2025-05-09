@@ -1,0 +1,67 @@
+# (C) 2025 GoodData Corporation
+attributes:
+  - description: Campaign channel id
+    id: campaign_channel_id
+    labels: []
+    sourceColumn: campaign_channel_id
+    sourceColumnDataType: STRING
+    tags:
+      - Campaign channels
+    title: Campaign channel id
+  - description: Category
+    id: campaign_channels.category
+    labels: []
+    sourceColumn: category
+    sourceColumnDataType: STRING
+    tags:
+      - Campaign channels
+    title: Category
+  - description: Type
+    id: type
+    labels: []
+    sourceColumn: type
+    sourceColumnDataType: STRING
+    tags:
+      - Campaign channels
+    title: Type
+dataSourceTableId:
+  dataSourceId: pg_local_docker-demo
+  id: campaign_channels
+  path:
+    - demo_6d9051d9069a8468
+    - campaign_channels
+  type: dataSource
+description: Campaign channels
+facts:
+  - description: Budget
+    id: budget
+    sourceColumn: budget
+    sourceColumnDataType: NUMERIC
+    tags:
+      - Campaign channels
+    title: Budget
+  - description: Spend
+    id: spend
+    sourceColumn: spend
+    sourceColumnDataType: NUMERIC
+    tags:
+      - Campaign channels
+    title: Spend
+grain:
+  - id: campaign_channel_id
+    type: attribute
+id: campaign_channels
+references:
+  - identifier:
+      id: campaigns
+      type: dataset
+    multivalue: false
+    sources:
+      - column: campaign_id
+        dataType: INT
+        target:
+          id: campaign_id
+          type: attribute
+tags:
+  - Campaign channels
+title: Campaign channels

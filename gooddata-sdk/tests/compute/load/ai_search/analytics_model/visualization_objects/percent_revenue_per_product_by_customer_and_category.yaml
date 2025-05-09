@@ -1,0 +1,77 @@
+# (C) 2025 GoodData Corporation
+content:
+  buckets:
+    - items:
+        - measure:
+            definition:
+              measureDefinition:
+                filters: []
+                item:
+                  identifier:
+                    id: percent_revenue_per_product
+                    type: metric
+            localIdentifier: 08d8346c1ce7438994b251991c0fbf65
+            title: '% Revenue per Product'
+        - measure:
+            definition:
+              measureDefinition:
+                filters: []
+                item:
+                  identifier:
+                    id: revenue
+                    type: metric
+            localIdentifier: b2350c06688b4da9b3833ebcce65527f
+            title: Revenue
+      localIdentifier: measures
+    - items:
+        - attribute:
+            displayForm:
+              identifier:
+                id: customer_name
+                type: label
+            localIdentifier: 7a4045fd00ac44579f52406df679435f
+        - attribute:
+            displayForm:
+              identifier:
+                id: products.category
+                type: label
+            localIdentifier: 6a003ffd14994237ba64c4a02c488429
+        - attribute:
+            displayForm:
+              identifier:
+                id: product_name
+                type: label
+            localIdentifier: 75ea396d0c8b48098e31dccf8b5801d3
+      localIdentifier: attribute
+  filters:
+    - negativeAttributeFilter:
+        displayForm:
+          identifier:
+            id: customer_name
+            type: label
+        notIn:
+          values: []
+    - negativeAttributeFilter:
+        displayForm:
+          identifier:
+            id: products.category
+            type: label
+        notIn:
+          values: []
+    - negativeAttributeFilter:
+        displayForm:
+          identifier:
+            id: product_name
+            type: label
+        notIn:
+          values: []
+  properties:
+    sortItems:
+      - attributeSortItem:
+          attributeIdentifier: 7a4045fd00ac44579f52406df679435f
+          direction: asc
+  version: '2'
+  visualizationUrl: local:table
+description: ''
+id: percent_revenue_per_product_by_customer_and_category
+title: '% Revenue per Product by Customer and Category'

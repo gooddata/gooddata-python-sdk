@@ -1,0 +1,55 @@
+# (C) 2025 GoodData Corporation
+content:
+  buckets:
+    - items:
+        - measure:
+            definition:
+              measureDefinition:
+                filters: []
+                item:
+                  identifier:
+                    id: revenue_top_10
+                    type: metric
+            localIdentifier: 77dc71bbac92412bac5f94284a5919df
+            title: Revenue / Top 10
+      localIdentifier: measures
+    - items:
+        - attribute:
+            displayForm:
+              identifier:
+                id: product_name
+                type: label
+            localIdentifier: 781952e728204dcf923142910cc22ae2
+      localIdentifier: view
+    - items:
+        - attribute:
+            displayForm:
+              identifier:
+                id: products.category
+                type: label
+            localIdentifier: fe513cef1c6244a5ac21c5f49c56b108
+      localIdentifier: stack
+  filters:
+    - negativeAttributeFilter:
+        displayForm:
+          identifier:
+            id: product_name
+            type: label
+        notIn:
+          values: []
+    - negativeAttributeFilter:
+        displayForm:
+          identifier:
+            id: products.category
+            type: label
+        notIn:
+          values: []
+  properties:
+    controls:
+      legend:
+        position: bottom
+  version: '2'
+  visualizationUrl: local:bar
+description: ''
+id: top_10_products
+title: Top 10 Products

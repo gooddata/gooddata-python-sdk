@@ -1,0 +1,35 @@
+# (C) 2025 GoodData Corporation
+attributes:
+  - description: Campaign id
+    id: campaign_id
+    labels: []
+    sourceColumn: campaign_id
+    sourceColumnDataType: INT
+    tags:
+      - Campaigns
+    title: Campaign id
+  - description: Campaign name
+    id: campaign_name
+    labels: []
+    sourceColumn: campaign_name
+    sourceColumnDataType: STRING
+    tags:
+      - Campaigns
+    title: Campaign name
+dataSourceTableId:
+  dataSourceId: pg_local_docker-demo
+  id: campaigns
+  path:
+    - demo_6d9051d9069a8468
+    - campaigns
+  type: dataSource
+description: Campaigns
+facts: []
+grain:
+  - id: campaign_id
+    type: attribute
+id: campaigns
+references: []
+tags:
+  - Campaigns
+title: Campaigns

@@ -1,0 +1,55 @@
+# (C) 2025 GoodData Corporation
+content:
+  buckets:
+    - items:
+        - measure:
+            definition:
+              measureDefinition:
+                filters: []
+                item:
+                  identifier:
+                    id: revenue
+                    type: metric
+            localIdentifier: 590d332ef686468b8878ae41b23341c6
+            title: Revenue
+      localIdentifier: measures
+    - items:
+        - attribute:
+            displayForm:
+              identifier:
+                id: products.category
+                type: label
+            localIdentifier: b166c71091864312a14c7ae8ff886ffe
+      localIdentifier: view
+    - items:
+        - attribute:
+            displayForm:
+              identifier:
+                id: product_name
+                type: label
+            localIdentifier: e920a50e0bbb49788df0aac53634c1cd
+      localIdentifier: segment
+  filters:
+    - negativeAttributeFilter:
+        displayForm:
+          identifier:
+            id: products.category
+            type: label
+        notIn:
+          values: []
+    - negativeAttributeFilter:
+        displayForm:
+          identifier:
+            id: product_name
+            type: label
+        notIn:
+          values: []
+  properties:
+    controls:
+      legend:
+        position: bottom
+  version: '2'
+  visualizationUrl: local:treemap
+description: ''
+id: product_breakdown
+title: Product Breakdown

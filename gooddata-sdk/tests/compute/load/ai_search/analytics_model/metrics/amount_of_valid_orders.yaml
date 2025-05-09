@@ -1,0 +1,8 @@
+# (C) 2025 GoodData Corporation
+content:
+  format: '#,##0.00'
+  maql: SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status} IN ("null",
+    "Returned", "Canceled"))
+description: ''
+id: amount_of_valid_orders
+title: '# of Valid Orders'
