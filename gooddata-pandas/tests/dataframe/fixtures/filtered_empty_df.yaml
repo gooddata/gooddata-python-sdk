@@ -191,6 +191,8 @@ interactions:
             - headerGroups:
                 - headers: []
           grandTotals: []
+          metadata:
+            dataSourceMessages: []
           paging:
             count:
               - 0

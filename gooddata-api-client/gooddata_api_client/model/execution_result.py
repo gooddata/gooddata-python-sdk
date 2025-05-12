@@ -33,9 +33,11 @@ from gooddata_api_client.exceptions import ApiAttributeError
 def lazy_import():
     from gooddata_api_client.model.dimension_header import DimensionHeader
     from gooddata_api_client.model.execution_result_grand_total import ExecutionResultGrandTotal
+    from gooddata_api_client.model.execution_result_metadata import ExecutionResultMetadata
     from gooddata_api_client.model.execution_result_paging import ExecutionResultPaging
     globals()['DimensionHeader'] = DimensionHeader
     globals()['ExecutionResultGrandTotal'] = ExecutionResultGrandTotal
+    globals()['ExecutionResultMetadata'] = ExecutionResultMetadata
     globals()['ExecutionResultPaging'] = ExecutionResultPaging
 
 
@@ -95,6 +97,7 @@ class ExecutionResult(ModelNormal):
             'data': ([{str: (bool, date, datetime, dict, float, int, list, str, none_type)}],),  # noqa: E501
             'dimension_headers': ([DimensionHeader],),  # noqa: E501
             'grand_totals': ([ExecutionResultGrandTotal],),  # noqa: E501
+            'metadata': (ExecutionResultMetadata,),  # noqa: E501
             'paging': (ExecutionResultPaging,),  # noqa: E501
         }
 
@@ -107,6 +110,7 @@ class ExecutionResult(ModelNormal):
         'data': 'data',  # noqa: E501
         'dimension_headers': 'dimensionHeaders',  # noqa: E501
         'grand_totals': 'grandTotals',  # noqa: E501
+        'metadata': 'metadata',  # noqa: E501
         'paging': 'paging',  # noqa: E501
     }
 
@@ -117,13 +121,14 @@ class ExecutionResult(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, data, dimension_headers, grand_totals, paging, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, data, dimension_headers, grand_totals, metadata, paging, *args, **kwargs):  # noqa: E501
         """ExecutionResult - a model defined in OpenAPI
 
         Args:
             data ([{str: (bool, date, datetime, dict, float, int, list, str, none_type)}]): A multi-dimensional array of computed results. The most common one being a 2-dimensional array. The arrays can be composed of Double or null values.
             dimension_headers ([DimensionHeader]): An array containing dimension headers. The size of the array corresponds to the number of dimensions. Their order corresponds to the dimension order in the execution result spec.
             grand_totals ([ExecutionResultGrandTotal]):
+            metadata (ExecutionResultMetadata):
             paging (ExecutionResultPaging):
 
         Keyword Args:
@@ -191,6 +196,7 @@ class ExecutionResult(ModelNormal):
         self.data = data
         self.dimension_headers = dimension_headers
         self.grand_totals = grand_totals
+        self.metadata = metadata
         self.paging = paging
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
@@ -212,13 +218,14 @@ class ExecutionResult(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, data, dimension_headers, grand_totals, paging, *args, **kwargs):  # noqa: E501
+    def __init__(self, data, dimension_headers, grand_totals, metadata, paging, *args, **kwargs):  # noqa: E501
         """ExecutionResult - a model defined in OpenAPI
 
         Args:
             data ([{str: (bool, date, datetime, dict, float, int, list, str, none_type)}]): A multi-dimensional array of computed results. The most common one being a 2-dimensional array. The arrays can be composed of Double or null values.
             dimension_headers ([DimensionHeader]): An array containing dimension headers. The size of the array corresponds to the number of dimensions. Their order corresponds to the dimension order in the execution result spec.
             grand_totals ([ExecutionResultGrandTotal]):
+            metadata (ExecutionResultMetadata):
             paging (ExecutionResultPaging):
 
         Keyword Args:
@@ -284,6 +291,7 @@ class ExecutionResult(ModelNormal):
         self.data = data
         self.dimension_headers = dimension_headers
         self.grand_totals = grand_totals
+        self.metadata = metadata
         self.paging = paging
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

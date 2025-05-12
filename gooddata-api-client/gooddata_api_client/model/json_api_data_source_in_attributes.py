@@ -84,6 +84,7 @@ class JsonApiDataSourceInAttributes(ModelNormal):
             'MOTHERDUCK': "MOTHERDUCK",
             'FLEXCONNECT': "FLEXCONNECT",
             'STARROCKS': "STARROCKS",
+            'ATHENA': "ATHENA",
         },
         ('cache_strategy',): {
             'None': None,

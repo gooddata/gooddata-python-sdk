@@ -229,8 +229,10 @@ docs/EntityIdentifier.md
 docs/ExecutionLinks.md
 docs/ExecutionResponse.md
 docs/ExecutionResult.md
+docs/ExecutionResultDataSourceMessage.md
 docs/ExecutionResultGrandTotal.md
 docs/ExecutionResultHeader.md
+docs/ExecutionResultMetadata.md
 docs/ExecutionResultPaging.md
 docs/ExecutionSettings.md
 docs/ExportDefinitionsApi.md
@@ -1242,8 +1244,10 @@ gooddata_api_client/model/entity_identifier.py
 gooddata_api_client/model/execution_links.py
 gooddata_api_client/model/execution_response.py
 gooddata_api_client/model/execution_result.py
+gooddata_api_client/model/execution_result_data_source_message.py
 gooddata_api_client/model/execution_result_grand_total.py
 gooddata_api_client/model/execution_result_header.py
+gooddata_api_client/model/execution_result_metadata.py
 gooddata_api_client/model/execution_result_paging.py
 gooddata_api_client/model/execution_settings.py
 gooddata_api_client/model/export_request.py

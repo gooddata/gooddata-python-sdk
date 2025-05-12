@@ -107,9 +107,9 @@ class DeclarativeWorkspaceDataFilter(ModelNormal):
             'column_name': (str,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'title': (str,),  # noqa: E501
+            'workspace': (WorkspaceIdentifier,),  # noqa: E501
             'workspace_data_filter_settings': ([DeclarativeWorkspaceDataFilterSetting],),  # noqa: E501
             'description': (str,),  # noqa: E501
-            'workspace': (WorkspaceIdentifier,),  # noqa: E501
         }
 
     @cached_property
@@ -121,9 +121,9 @@ class DeclarativeWorkspaceDataFilter(ModelNormal):
         'column_name': 'columnName',  # noqa: E501
         'id': 'id',  # noqa: E501
         'title': 'title',  # noqa: E501
+        'workspace': 'workspace',  # noqa: E501
         'workspace_data_filter_settings': 'workspaceDataFilterSettings',  # noqa: E501
         'description': 'description',  # noqa: E501
-        'workspace': 'workspace',  # noqa: E501
     }
 
     read_only_vars = {
@@ -133,13 +133,14 @@ class DeclarativeWorkspaceDataFilter(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, column_name, id, title, workspace_data_filter_settings, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, column_name, id, title, workspace, workspace_data_filter_settings, *args, **kwargs):  # noqa: E501
         """DeclarativeWorkspaceDataFilter - a model defined in OpenAPI
 
         Args:
             column_name (str): Workspace Data Filters column name. Data are filtered using this physical column.
             id (str): Workspace Data Filters ID. This ID is further used to refer to this instance.
             title (str): Workspace Data Filters title.
+            workspace (WorkspaceIdentifier):
             workspace_data_filter_settings ([DeclarativeWorkspaceDataFilterSetting]): Filter settings specifying values of filters valid for the workspace.
 
         Keyword Args:
@@ -174,7 +175,6 @@ class DeclarativeWorkspaceDataFilter(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             description (str): Workspace Data Filters description.. [optional]  # noqa: E501
-            workspace (WorkspaceIdentifier): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -209,6 +209,7 @@ class DeclarativeWorkspaceDataFilter(ModelNormal):
         self.column_name = column_name
         self.id = id
         self.title = title
+        self.workspace = workspace
         self.workspace_data_filter_settings = workspace_data_filter_settings
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
@@ -230,13 +231,14 @@ class DeclarativeWorkspaceDataFilter(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, column_name, id, title, workspace_data_filter_settings, *args, **kwargs):  # noqa: E501
+    def __init__(self, column_name, id, title, workspace, workspace_data_filter_settings, *args, **kwargs):  # noqa: E501
         """DeclarativeWorkspaceDataFilter - a model defined in OpenAPI
 
         Args:
             column_name (str): Workspace Data Filters column name. Data are filtered using this physical column.
             id (str): Workspace Data Filters ID. This ID is further used to refer to this instance.
             title (str): Workspace Data Filters title.
+            workspace (WorkspaceIdentifier):
             workspace_data_filter_settings ([DeclarativeWorkspaceDataFilterSetting]): Filter settings specifying values of filters valid for the workspace.
 
         Keyword Args:
@@ -271,7 +273,6 @@ class DeclarativeWorkspaceDataFilter(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             description (str): Workspace Data Filters description.. [optional]  # noqa: E501
-            workspace (WorkspaceIdentifier): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -304,6 +305,7 @@ class DeclarativeWorkspaceDataFilter(ModelNormal):
         self.column_name = column_name
         self.id = id
         self.title = title
+        self.workspace = workspace
         self.workspace_data_filter_settings = workspace_data_filter_settings
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

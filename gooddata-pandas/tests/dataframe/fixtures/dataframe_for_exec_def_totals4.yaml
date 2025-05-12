@@ -2906,6 +2906,8 @@ interactions:
                             function: MAX
               totalDimensions:
                 - dim_0
+          metadata:
+            dataSourceMessages: []
           paging:
             count:
               - 96
@@ -5622,6 +5624,8 @@ interactions:
                             function: MAX
               totalDimensions:
                 - dim_0
+          metadata:
+            dataSourceMessages: []
           paging:
             count:
               - 96
