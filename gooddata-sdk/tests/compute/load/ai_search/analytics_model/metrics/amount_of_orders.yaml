@@ -1,0 +1,7 @@
+# (C) 2025 GoodData Corporation
+content:
+  format: '#,##0'
+  maql: SELECT COUNT({attribute/order_id})
+description: ''
+id: amount_of_orders
+title: '# of Orders'

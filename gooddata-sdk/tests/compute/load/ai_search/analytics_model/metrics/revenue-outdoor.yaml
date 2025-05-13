@@ -1,0 +1,7 @@
+# (C) 2025 GoodData Corporation
+content:
+  format: $#,##0
+  maql: SELECT {metric/revenue} WHERE {label/products.category} IN ("Outdoor")
+description: ''
+id: revenue-outdoor
+title: Revenue (Outdoor)

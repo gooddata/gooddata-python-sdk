@@ -1,0 +1,66 @@
+# (C) 2025 GoodData Corporation
+content:
+  buckets:
+    - items:
+        - measure:
+            definition:
+              measureDefinition:
+                computeRatio: false
+                filters: []
+                item:
+                  identifier:
+                    id: revenue
+                    type: metric
+            localIdentifier: 60c854969a9c4c278ab596d99c222e92
+            title: Revenue
+      localIdentifier: measures
+    - items:
+        - measure:
+            alias: Number of Orders
+            definition:
+              measureDefinition:
+                computeRatio: false
+                filters: []
+                item:
+                  identifier:
+                    id: amount_of_orders
+                    type: metric
+            localIdentifier: c2fa7ef48cc54af99f8c280eb451e051
+            title: '# of Orders'
+      localIdentifier: secondary_measures
+    - items:
+        - attribute:
+            displayForm:
+              identifier:
+                id: date.month
+                type: label
+            localIdentifier: 413ac374b65648fa96826ca01d47bdda
+      localIdentifier: view
+  filters:
+    - relativeDateFilter:
+        dataSet:
+          identifier:
+            id: date
+            type: dataset
+        from: -3
+        granularity: GDC.time.quarter
+        to: 0
+  properties:
+    controls:
+      dualAxis: true
+      legend:
+        position: bottom
+      primaryChartType: column
+      secondaryChartType: line
+      secondary_yaxis:
+        measures:
+          - c2fa7ef48cc54af99f8c280eb451e051
+      xaxis:
+        name:
+          visible: false
+        rotation: auto
+  version: '2'
+  visualizationUrl: local:combo2
+description: ''
+id: revenue_trend
+title: Revenue Trend

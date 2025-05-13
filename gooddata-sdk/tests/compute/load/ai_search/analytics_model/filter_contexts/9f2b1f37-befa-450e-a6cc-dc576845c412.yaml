@@ -1,0 +1,12 @@
+# (C) 2025 GoodData Corporation
+content:
+  filters:
+    - dateFilter:
+        from: '0'
+        granularity: GDC.time.year
+        to: '0'
+        type: relative
+  version: '2'
+description: ''
+id: 9f2b1f37-befa-450e-a6cc-dc576845c412
+title: filterContext

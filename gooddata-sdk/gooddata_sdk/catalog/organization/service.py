@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import functools
-from typing import Optional
+from typing import Any, Optional
 
 from gooddata_api_client.exceptions import NotFoundException
 from gooddata_api_client.model.declarative_export_templates import DeclarativeExportTemplates
@@ -20,6 +20,12 @@ from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.organization.entity_model.directive import CatalogCspDirective
 from gooddata_sdk.catalog.organization.entity_model.identity_provider import CatalogIdentityProvider
 from gooddata_sdk.catalog.organization.entity_model.jwk import CatalogJwk, CatalogJwkDocument
+from gooddata_sdk.catalog.organization.entity_model.llm_endpoint import (
+    CatalogLlmEndpoint,
+    CatalogLlmEndpointDocument,
+    CatalogLlmEndpointPatch,
+    CatalogLlmEndpointPatchDocument,
+)
 from gooddata_sdk.catalog.organization.entity_model.organization import CatalogOrganizationDocument
 from gooddata_sdk.catalog.organization.entity_model.setting import CatalogOrganizationSetting
 from gooddata_sdk.catalog.organization.layout.identity_provider import CatalogDeclarativeIdentityProvider
@@ -509,6 +515,162 @@ class CatalogOrganizationService(CatalogServiceBase):
             CatalogExportTemplate.from_dict(export_template, camel_case=False)
             for export_template in export_templates["data"]
         ]
+
+    def get_llm_endpoint(self, id: str) -> CatalogLlmEndpoint:
+        """
+        Get LLM endpoint by ID.
+
+        Args:
+            id: LLM endpoint identifier
+
+        Returns:
+            CatalogLlmEndpoint: Retrieved LLM endpoint
+        """
+        response = self._entities_api.get_entity_llm_endpoints(id, _check_return_type=False)
+        return CatalogLlmEndpoint.from_api(response.data)
+
+    def list_llm_endpoints(
+        self,
+        filter: Optional[str] = None,
+        page: Optional[int] = None,
+        size: Optional[int] = None,
+        sort: Optional[list[str]] = None,
+        meta_include: Optional[list[str]] = None,
+    ) -> list[CatalogLlmEndpoint]:
+        """
+        List all LLM endpoints.
+
+        Args:
+            filter: Optional filter string
+            page: Zero-based page index (0..N)
+            size: The size of the page to be returned
+            sort: Sorting criteria in the format: property,(asc|desc). Multiple sort criteria are supported.
+            meta_include: Include Meta objects
+
+        Returns:
+            list[CatalogLlmEndpoint]: List of LLM endpoints
+
+        Note:
+            Default values for optional parameters are documented in the LLM endpoints of the GoodData API.
+        """
+        kwargs: dict[str, Any] = {}
+        if filter is not None:
+            kwargs["filter"] = filter
+        if page is not None:
+            kwargs["page"] = page
+        if size is not None:
+            kwargs["size"] = size
+        if sort is not None:
+            kwargs["sort"] = sort
+        if meta_include is not None:
+            kwargs["meta_include"] = meta_include
+        kwargs["_check_return_type"] = False
+
+        response = self._entities_api.get_all_entities_llm_endpoints(**kwargs)
+        return [CatalogLlmEndpoint.from_api(endpoint) for endpoint in response.data]
+
+    def create_llm_endpoint(
+        self,
+        id: str,
+        title: str,
+        token: str,
+        description: Optional[str] = None,
+        provider: Optional[str] = None,
+        base_url: Optional[str] = None,
+        llm_organization: Optional[str] = None,
+        llm_model: Optional[str] = None,
+        workspace_ids: Optional[list[str]] = None,
+    ) -> CatalogLlmEndpoint:
+        """
+        Create a new LLM endpoint.
+
+        Args:
+            id: Identifier of the LLM endpoint
+            title: User-facing title of the LLM Provider
+            token: The token to use to connect to the LLM provider
+            description: Optional user-facing description of the LLM endpoint
+            provider: Optional LLM provider name (e.g., "openai")
+            base_url: Optional base URL for custom LLM endpoint
+            llm_organization: Optional LLM organization identifier
+            llm_model: Optional LLM default model override
+            workspace_ids: Optional list of workspace IDs for which LLM endpoint is valid.
+                If empty, it is valid for all workspaces.
+
+        Returns:
+            CatalogLlmEndpoint: Created LLM endpoint
+        """
+        llm_endpoint = CatalogLlmEndpoint.init(
+            id=id,
+            title=title,
+            token=token,
+            description=description,
+            provider=provider,
+            base_url=base_url,
+            llm_organization=llm_organization,
+            llm_model=llm_model,
+            workspace_ids=workspace_ids,
+        )
+        llm_endpoint_document = CatalogLlmEndpointDocument(data=llm_endpoint)
+        response = self._entities_api.create_entity_llm_endpoints(
+            json_api_llm_endpoint_in_document=llm_endpoint_document.to_api(), _check_return_type=False
+        )
+        return CatalogLlmEndpoint.from_api(response.data)
+
+    def update_llm_endpoint(
+        self,
+        id: str,
+        title: Optional[str] = None,
+        token: Optional[str] = None,
+        description: Optional[str] = None,
+        provider: Optional[str] = None,
+        base_url: Optional[str] = None,
+        llm_organization: Optional[str] = None,
+        llm_model: Optional[str] = None,
+        workspace_ids: Optional[list[str]] = None,
+    ) -> CatalogLlmEndpoint:
+        """
+        Update an existing LLM endpoint.
+
+        Args:
+            id: Identifier of the LLM endpoint
+            title: User-facing title of the LLM Provider
+            token: The token to use to connect to the LLM provider. If not provided, the existing token will be preserved.
+            description: User-facing description of the LLM endpoint
+            provider: LLM provider name (e.g., "openai")
+            base_url: Base URL for custom LLM endpoint
+            llm_organization: LLM organization identifier
+            llm_model: LLM default model override
+            workspace_ids: List of workspace IDs for which LLM endpoint is valid.
+                If empty, it is valid for all workspaces.
+
+        Returns:
+            CatalogLlmEndpoint: Updated LLM endpoint
+        """
+        llm_endpoint_patch = CatalogLlmEndpointPatch.init(
+            id=id,
+            title=title,
+            token=token,
+            description=description,
+            provider=provider,
+            base_url=base_url,
+            llm_organization=llm_organization,
+            llm_model=llm_model,
+            workspace_ids=workspace_ids,
+        )
+        llm_endpoint_patch_document = CatalogLlmEndpointPatchDocument(data=llm_endpoint_patch)
+        response = self._entities_api.patch_entity_llm_endpoints(
+            id, llm_endpoint_patch_document.to_api(), _check_return_type=False
+        )
+        return CatalogLlmEndpoint.from_api(response.data)
+
+    def delete_llm_endpoint(self, id: str) -> None:
+        """
+        Delete an LLM endpoint.
+
+        Args:
+            id: LLM endpoint identifier
+        """
+        self._entities_api.delete_entity_llm_endpoints(id, _check_return_type=False)
 
     # Layout APIs
 

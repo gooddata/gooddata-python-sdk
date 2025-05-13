@@ -1,0 +1,43 @@
+# (C) 2025 GoodData Corporation
+attributes:
+  - description: Product id
+    id: product_id
+    labels: []
+    sourceColumn: product_id
+    sourceColumnDataType: INT
+    tags:
+      - Products
+    title: Product id
+  - description: Product name
+    id: product_name
+    labels: []
+    sourceColumn: product_name
+    sourceColumnDataType: STRING
+    tags:
+      - Products
+    title: Product name
+  - description: Category
+    id: products.category
+    labels: []
+    sourceColumn: category
+    sourceColumnDataType: STRING
+    tags:
+      - Products
+    title: Category
+dataSourceTableId:
+  dataSourceId: pg_local_docker-demo
+  id: products
+  path:
+    - demo_6d9051d9069a8468
+    - products
+  type: dataSource
+description: Products
+facts: []
+grain:
+  - id: product_id
+    type: attribute
+id: products
+references: []
+tags:
+  - Products
+title: Products

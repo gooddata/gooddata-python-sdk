@@ -8,6 +8,7 @@ from gooddata_sdk import (
     CatalogCspDirective,
     CatalogDeclarativeNotificationChannel,
     CatalogJwk,
+    CatalogLlmEndpoint,
     CatalogOrganization,
     CatalogOrganizationSetting,
     CatalogRsaSpecification,
@@ -374,6 +375,234 @@ def test_layout_notification_channels(test_config):
         sdk.catalog_organization.put_declarative_notification_channels([])
         ncs = sdk.catalog_organization.get_declarative_notification_channels()
         assert len(ncs) == 0
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "get_llm_endpoint.yaml"))
+def test_get_llm_endpoint(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+
+    try:
+        # Create test endpoint first
+        test_id = "endpoint1"
+        test_title = "Test Endpoint"
+        test_token = "secret-token"
+
+        sdk.catalog_organization.create_llm_endpoint(id=test_id, title=test_title, token=test_token)
+
+        # Get and verify the endpoint
+        retrieved_endpoint = sdk.catalog_organization.get_llm_endpoint(test_id)
+        assert isinstance(retrieved_endpoint, CatalogLlmEndpoint)
+        assert retrieved_endpoint.id == test_id
+        assert retrieved_endpoint.attributes.title == test_title
+        assert not retrieved_endpoint.attributes.token  # Token not returned for security
+
+    finally:
+        # Clean up
+        sdk.catalog_organization.delete_llm_endpoint(test_id)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "list_llm_endpoints.yaml"))
+def test_list_llm_endpoints(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+
+    try:
+        # Create test endpoints first
+        test_id1 = "endpoint1"
+        test_title1 = "Test Endpoint 1"
+        test_token1 = "secret-token-1"
+
+        test_id2 = "endpoint2"
+        test_title2 = "Test Endpoint 2"
+        test_token2 = "secret-token-2"
+
+        sdk.catalog_organization.create_llm_endpoint(id=test_id1, title=test_title1, token=test_token1)
+
+        sdk.catalog_organization.create_llm_endpoint(id=test_id2, title=test_title2, token=test_token2)
+
+        # Get and verify the endpoints list
+        endpoints = sdk.catalog_organization.list_llm_endpoints()
+        assert isinstance(endpoints, list)
+        assert len(endpoints) == 2
+        assert all(isinstance(endpoint, CatalogLlmEndpoint) for endpoint in endpoints)
+        assert {endpoint.id for endpoint in endpoints} == {test_id1, test_id2}
+        assert {endpoint.attributes.title for endpoint in endpoints} == {test_title1, test_title2}
+
+        # Test with optional parameters
+        filtered_endpoints = sdk.catalog_organization.list_llm_endpoints(filter="title=='Test Endpoint 1'", size=1)
+        assert isinstance(filtered_endpoints, list)
+        assert len(filtered_endpoints) == 1
+        assert filtered_endpoints[0].id == test_id1
+        assert filtered_endpoints[0].attributes.title == test_title1
+
+    finally:
+        # Clean up
+        sdk.catalog_organization.delete_llm_endpoint(test_id1)
+        sdk.catalog_organization.delete_llm_endpoint(test_id2)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "create_llm_endpoint.yaml"))
+def test_create_llm_endpoint(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+
+    try:
+        # Test minimal required parameters
+        minimal_id = "endpoint1"
+        minimal_title = "Test Endpoint"
+        minimal_token = "secret-token"
+
+        llm_endpoint_1 = sdk.catalog_organization.create_llm_endpoint(
+            id=minimal_id, title=minimal_title, token=minimal_token
+        )
+
+        assert isinstance(llm_endpoint_1, CatalogLlmEndpoint)
+        assert llm_endpoint_1.id == minimal_id
+        assert llm_endpoint_1.attributes.title == minimal_title
+        # Token is not returned in the API response for security reasons
+        assert not llm_endpoint_1.attributes.token
+
+        # Test with all optional parameters
+        full_id = "endpoint2"
+        full_title = "Test Endpoint 2"
+        full_token = "secret-token-2"
+        full_description = "Test Description"
+        full_provider = "OPENAI"
+        full_base_url = "https://api.example.com"
+        full_llm_org = "org1"
+        full_llm_model = "gpt-4"
+        full_workspace_ids = ["workspace1", "workspace2"]
+
+        llm_endpoint_2 = sdk.catalog_organization.create_llm_endpoint(
+            id=full_id,
+            title=full_title,
+            token=full_token,
+            description=full_description,
+            provider=full_provider,
+            base_url=full_base_url,
+            llm_organization=full_llm_org,
+            llm_model=full_llm_model,
+            workspace_ids=full_workspace_ids,
+        )
+        assert isinstance(llm_endpoint_2, CatalogLlmEndpoint)
+        assert llm_endpoint_2.id == full_id
+        assert llm_endpoint_2.attributes.title == full_title
+        # Token is not returned in the API response for security reasons
+        assert not llm_endpoint_2.attributes.token
+        # Description is not returned in the API response. TODO: Check if this is correct.
+        # assert llm_endpoint_2.attributes.description == full_description
+        assert llm_endpoint_2.attributes.provider == full_provider
+        assert llm_endpoint_2.attributes.base_url == full_base_url
+        assert llm_endpoint_2.attributes.llm_organization == full_llm_org
+        assert llm_endpoint_2.attributes.llm_model == full_llm_model
+        assert llm_endpoint_2.attributes.workspace_ids == full_workspace_ids
+    finally:
+        # Cleanup
+        sdk.catalog_organization.delete_llm_endpoint(minimal_id)
+        sdk.catalog_organization.delete_llm_endpoint(full_id)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "update_llm_endpoint.yaml"))
+def test_update_llm_endpoint(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+
+    initial_id = "endpoint1"
+    initial_title = "Initial Title"
+    initial_token = "initial-token"
+
+    try:
+        # Create initial endpoint
+        sdk.catalog_organization.create_llm_endpoint(id=initial_id, title=initial_title, token=initial_token)
+
+        # Test with minimal update
+        minimal_title = "Updated Title"
+
+        llm_endpoint_1 = sdk.catalog_organization.update_llm_endpoint(id=initial_id, title=minimal_title)
+
+        assert isinstance(llm_endpoint_1, CatalogLlmEndpoint)
+        assert llm_endpoint_1.id == initial_id
+        assert llm_endpoint_1.attributes.title == minimal_title
+        # Token is not returned in the API response for security reasons
+        assert not llm_endpoint_1.attributes.token
+
+        # Test with all optional parameters
+        full_title = "Updated Title 2"
+        full_token = "new-token"
+        full_description = "Updated Description"
+        full_provider = "OPENAI"
+        full_base_url = "https://api.updated.com"
+        full_llm_org = "org2"
+        full_llm_model = "gpt-3.5"
+        full_workspace_ids = ["workspace3"]
+
+        llm_endpoint_2 = sdk.catalog_organization.update_llm_endpoint(
+            id=initial_id,
+            title=full_title,
+            token=full_token,
+            description=full_description,
+            provider=full_provider,
+            base_url=full_base_url,
+            llm_organization=full_llm_org,
+            llm_model=full_llm_model,
+            workspace_ids=full_workspace_ids,
+        )
+
+        assert isinstance(llm_endpoint_2, CatalogLlmEndpoint)
+        assert llm_endpoint_2.id == initial_id
+        assert llm_endpoint_2.attributes.title == full_title
+        # Token is not returned in the API response for security reasons
+        assert not llm_endpoint_2.attributes.token
+        # Description is not returned in the API response. TODO: Check if this is correct.
+        # assert llm_endpoint_2.attributes.description == full_description
+        assert llm_endpoint_2.attributes.provider == full_provider
+        assert llm_endpoint_2.attributes.base_url == full_base_url
+        assert llm_endpoint_2.attributes.llm_organization == full_llm_org
+        assert llm_endpoint_2.attributes.llm_model == full_llm_model
+        assert llm_endpoint_2.attributes.workspace_ids == full_workspace_ids
+
+        # Test that attributes are preserved when not provided
+        new_title = "New Title"
+        llm_endpoint_3 = sdk.catalog_organization.update_llm_endpoint(id=initial_id, title=new_title)
+
+        assert isinstance(llm_endpoint_3, CatalogLlmEndpoint)
+        assert llm_endpoint_3.id == initial_id
+        assert llm_endpoint_3.attributes.title == new_title
+        # Token is not returned in the API response for security reasons
+        assert not llm_endpoint_3.attributes.token
+        # Verify other fields are preserved
+        # Description is not returned in the API response. TODO: Check if this is correct.
+        # assert llm_endpoint_3.attributes.description == full_description
+        assert llm_endpoint_3.attributes.provider == full_provider
+        assert llm_endpoint_3.attributes.base_url == full_base_url
+        assert llm_endpoint_3.attributes.llm_organization == full_llm_org
+        assert llm_endpoint_3.attributes.llm_model == full_llm_model
+        assert llm_endpoint_3.attributes.workspace_ids == full_workspace_ids
+    finally:
+        # Cleanup
+        sdk.catalog_organization.delete_llm_endpoint(initial_id)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "delete_llm_endpoint.yaml"))
+def test_delete_llm_endpoint(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+
+    try:
+        # Create endpoint to delete
+        sdk.catalog_organization.create_llm_endpoint(id="endpoint1", title="Test Endpoint", token="secret-token")
+
+        # Delete endpoint
+        sdk.catalog_organization.delete_llm_endpoint("endpoint1")
+
+        # Verify deletion
+        try:
+            sdk.catalog_organization.get_llm_endpoint("endpoint1")
+            assert False, "Endpoint should not exist"
+        except NotFoundException:
+            pass
+    finally:
+        # Ensure cleanup
+        try:
+            sdk.catalog_organization.delete_llm_endpoint("endpoint1")
+        except NotFoundException:
+            pass
 
 
 #

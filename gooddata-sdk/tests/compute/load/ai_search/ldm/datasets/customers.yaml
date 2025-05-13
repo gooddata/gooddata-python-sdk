@@ -1,0 +1,58 @@
+# (C) 2025 GoodData Corporation
+attributes:
+  - description: Customer id
+    id: customer_id
+    labels: []
+    sourceColumn: customer_id
+    sourceColumnDataType: INT
+    tags:
+      - Customers
+    title: Customer id
+  - description: Customer name
+    id: customer_name
+    labels: []
+    sourceColumn: customer_name
+    sourceColumnDataType: STRING
+    tags:
+      - Customers
+    title: Customer name
+  - description: Region
+    id: region
+    labels: []
+    sourceColumn: region
+    sourceColumnDataType: STRING
+    tags:
+      - Customers
+    title: Region
+  - description: State
+    id: state
+    labels:
+      - description: Location
+        id: geo__state__location
+        sourceColumn: geo__state__location
+        sourceColumnDataType: STRING
+        tags:
+          - Customers
+        title: Location
+    sourceColumn: state
+    sourceColumnDataType: STRING
+    tags:
+      - Customers
+    title: State
+dataSourceTableId:
+  dataSourceId: pg_local_docker-demo
+  id: customers
+  path:
+    - demo_6d9051d9069a8468
+    - customers
+  type: dataSource
+description: Customers
+facts: []
+grain:
+  - id: customer_id
+    type: attribute
+id: customers
+references: []
+tags:
+  - Customers
+title: Customers
