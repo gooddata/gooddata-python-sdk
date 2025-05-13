@@ -462,6 +462,8 @@ interactions:
                         labelValue: Clothing
                         primaryLabelValue: Clothing
           grandTotals: []
+          metadata:
+            dataSourceMessages: []
           paging:
             count:
               - 1

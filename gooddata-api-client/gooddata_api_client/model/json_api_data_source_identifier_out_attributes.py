@@ -80,6 +80,7 @@ class JsonApiDataSourceIdentifierOutAttributes(ModelNormal):
             'MOTHERDUCK': "MOTHERDUCK",
             'FLEXCONNECT': "FLEXCONNECT",
             'STARROCKS': "STARROCKS",
+            'ATHENA': "ATHENA",
         },
     }
 

@@ -1652,6 +1652,8 @@ interactions:
                     - measureHeader:
                         measureIndex: 1
           grandTotals: []
+          metadata:
+            dataSourceMessages: []
           paging:
             count:
               - 1
@@ -2944,6 +2946,8 @@ interactions:
                     - measureHeader:
                         measureIndex: 1
           grandTotals: []
+          metadata:
+            dataSourceMessages: []
           paging:
             count:
               - 1
@@ -4236,6 +4240,8 @@ interactions:
                     - measureHeader:
                         measureIndex: 1
           grandTotals: []
+          metadata:
+            dataSourceMessages: []
           paging:
             count:
               - 1
@@ -5096,6 +5102,8 @@ interactions:
                     - measureHeader:
                         measureIndex: 1
           grandTotals: []
+          metadata:
+            dataSourceMessages: []
           paging:
             count:
               - 1
@@ -6575,6 +6583,8 @@ interactions:
                     - measureHeader:
                         measureIndex: 1
           grandTotals: []
+          metadata:
+            dataSourceMessages: []
           paging:
             count:
               - 1
@@ -7867,6 +7877,8 @@ interactions:
                     - measureHeader:
                         measureIndex: 1
           grandTotals: []
+          metadata:
+            dataSourceMessages: []
           paging:
             count:
               - 1
@@ -9159,6 +9171,8 @@ interactions:
                     - measureHeader:
                         measureIndex: 1
           grandTotals: []
+          metadata:
+            dataSourceMessages: []
           paging:
             count:
               - 1
@@ -10019,6 +10033,8 @@ interactions:
                     - measureHeader:
                         measureIndex: 1
           grandTotals: []
+          metadata:
+            dataSourceMessages: []
           paging:
             count:
               - 1

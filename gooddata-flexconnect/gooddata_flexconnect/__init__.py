@@ -1,5 +1,10 @@
 # (C) 2024 GoodData Corporation
 
+from gooddata_flexconnect.function.data_source_messages import (
+    DataSourceMessage,
+    add_data_source_messages_metadata,
+    with_data_source_messages,
+)
 from gooddata_flexconnect.function.execution_context import (
     ExecutionContext,
     ExecutionContextAbsoluteDateFilter,

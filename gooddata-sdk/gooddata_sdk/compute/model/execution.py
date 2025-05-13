@@ -225,6 +225,7 @@ class ExecutionResult:
         self._headers: list[models.DimensionHeader] = result["dimension_headers"]
         self._grand_totals: list[models.ExecutionResultGrandTotal] = result["grand_totals"]
         self._paging: models.ExecutionResultPaging = result["paging"]
+        self._metadata: models.ExecutionResultMetadata = result["metadata"]
 
     @property
     def data(self) -> list[Any]:
@@ -253,6 +254,10 @@ class ExecutionResult:
     @property
     def paging_offset(self) -> list[int]:
         return self._paging["offset"]
+
+    @property
+    def metadata(self) -> models.ExecutionResultMetadata:
+        return self._metadata
 
     def is_complete(self, dim: int = 0) -> bool:
         return self.paging_offset[dim] + self.paging_count[dim] >= self.paging_total[dim]

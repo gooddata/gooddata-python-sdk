@@ -84,6 +84,7 @@ class JsonApiDataSourceOutAttributes(ModelNormal):
             'MOTHERDUCK': "MOTHERDUCK",
             'FLEXCONNECT': "FLEXCONNECT",
             'STARROCKS': "STARROCKS",
+            'ATHENA': "ATHENA",
         },
         ('authentication_type',): {
             'None': None,

@@ -227,6 +227,8 @@ interactions:
                     - measureHeader:
                         measureIndex: 0
           grandTotals: []
+          metadata:
+            dataSourceMessages: []
           paging:
             count:
               - 2

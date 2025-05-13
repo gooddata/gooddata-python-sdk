@@ -5261,7 +5261,7 @@ class ActionsApi(object):
     ):
         """Applies all the given cancel tokens.  # noqa: E501
 
-        Each cancel token corresponds to one unique execution request for the same result id. If all cancel tokens for the same result id are applied, the execution for this result id is canceled.  # noqa: E501
+        Each cancel token corresponds to one unique execution request for the same result id. If all cancel tokens for the same result id are applied, the execution for this result id is cancelled.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 

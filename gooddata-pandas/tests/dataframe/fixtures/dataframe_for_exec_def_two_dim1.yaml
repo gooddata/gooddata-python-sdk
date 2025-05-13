@@ -1164,6 +1164,8 @@ interactions:
                     - measureHeader:
                         measureIndex: 1
           grandTotals: []
+          metadata:
+            dataSourceMessages: []
           paging:
             count:
               - 48
@@ -2155,6 +2157,8 @@ interactions:
                     - measureHeader:
                         measureIndex: 1
           grandTotals: []
+          metadata:
+            dataSourceMessages: []
           paging:
             count:
               - 48
@@ -3146,6 +3150,8 @@ interactions:
                     - measureHeader:
                         measureIndex: 1
           grandTotals: []
+          metadata:
+            dataSourceMessages: []
           paging:
             count:
               - 48

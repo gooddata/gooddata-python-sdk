@@ -86,6 +86,7 @@ class DeclarativeDataSource(ModelNormal):
             'MOTHERDUCK': "MOTHERDUCK",
             'FLEXCONNECT': "FLEXCONNECT",
             'STARROCKS': "STARROCKS",
+            'ATHENA': "ATHENA",
         },
         ('cache_strategy',): {
             'ALWAYS': "ALWAYS",
