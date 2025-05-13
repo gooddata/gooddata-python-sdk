@@ -2514,6 +2514,8 @@ interactions:
                         labelValue: Outdoor
                         primaryLabelValue: Outdoor
           grandTotals: []
+          metadata:
+            dataSourceMessages: []
           paging:
             count:
               - 2

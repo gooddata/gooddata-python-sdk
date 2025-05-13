@@ -558,6 +558,8 @@ interactions:
                         labelValue: Home
                         primaryLabelValue: Home
           grandTotals: []
+          metadata:
+            dataSourceMessages: []
           paging:
             count:
               - 2

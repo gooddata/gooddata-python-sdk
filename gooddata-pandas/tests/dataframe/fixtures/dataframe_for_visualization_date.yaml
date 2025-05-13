@@ -635,6 +635,8 @@ interactions:
                         labelValue: 2024-12
                         primaryLabelValue: 2024-12
           grandTotals: []
+          metadata:
+            dataSourceMessages: []
           paging:
             count:
               - 2

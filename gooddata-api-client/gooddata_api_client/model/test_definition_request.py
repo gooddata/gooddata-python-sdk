@@ -84,6 +84,7 @@ class TestDefinitionRequest(ModelNormal):
             'MOTHERDUCK': "MOTHERDUCK",
             'FLEXCONNECT': "FLEXCONNECT",
             'STARROCKS': "STARROCKS",
+            'ATHENA': "ATHENA",
         },
     }
 

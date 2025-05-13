@@ -382,6 +382,8 @@ interactions:
                         labelValue: West
                         primaryLabelValue: West
           grandTotals: []
+          metadata:
+            dataSourceMessages: []
           paging:
             count:
               - 2

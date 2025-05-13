@@ -420,6 +420,8 @@ interactions:
                         labelValue: Midwest
                         primaryLabelValue: Midwest
           grandTotals: []
+          metadata:
+            dataSourceMessages: []
           paging:
             count:
               - 1

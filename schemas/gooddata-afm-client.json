@@ -1652,6 +1652,9 @@
             },
             "type": "array"
           },
+          "metadata": {
+            "$ref": "#/components/schemas/ExecutionResultMetadata"
+          },
           "paging": {
             "$ref": "#/components/schemas/ExecutionResultPaging"
           }
@@ -1660,7 +1663,35 @@
           "data",
           "dimensionHeaders",
           "grandTotals",
+          "metadata",
           "paging"
+        ],
+        "type": "object"
+      },
+      "ExecutionResultDataSourceMessage": {
+        "description": "A piece of extra information related to the results (e.g. debug information, warnings, etc.).",
+        "properties": {
+          "correlationId": {
+            "description": "Id correlating different pieces of supplementary info together.",
+            "type": "string"
+          },
+          "data": {
+            "description": "Data of this particular supplementary info item: a free-form JSON specific to the particular supplementary info item type.",
+            "type": "object"
+          },
+          "source": {
+            "description": "Information about what part of the system created this piece of supplementary info.",
+            "type": "string"
+          },
+          "type": {
+            "description": "Type of the supplementary info instance. There are currently no well-known values for this, but there might be some in the future.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "correlationId",
+          "source",
+          "type"
         ],
         "type": "object"
       },
@@ -1719,6 +1750,22 @@
           {
             "$ref": "#/components/schemas/TotalExecutionResultHeader"
           }
+        ],
+        "type": "object"
+      },
+      "ExecutionResultMetadata": {
+        "description": "Additional metadata for the particular execution result.",
+        "properties": {
+          "dataSourceMessages": {
+            "description": "Additional information sent by the underlying data source.",
+            "items": {
+              "$ref": "#/components/schemas/ExecutionResultDataSourceMessage"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "dataSourceMessages"
         ],
         "type": "object"
       },
@@ -3475,7 +3522,7 @@
     },
     "/api/v1/actions/workspaces/{workspaceId}/execution/afm/cancel": {
       "post": {
-        "description": "Each cancel token corresponds to one unique execution request for the same result id. If all cancel tokens for the same result id are applied, the execution for this result id is canceled.",
+        "description": "Each cancel token corresponds to one unique execution request for the same result id. If all cancel tokens for the same result id are applied, the execution for this result id is cancelled.",
         "operationId": "cancelExecutions",
         "parameters": [
           {
@@ -3508,7 +3555,7 @@
                 }
               }
             },
-            "description": "Status of the cancelling operation."
+            "description": "Status of the cancellation operation."
           }
         },
         "summary": "Applies all the given cancel tokens.",

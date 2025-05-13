@@ -628,7 +628,8 @@
               "SINGLESTORE",
               "MOTHERDUCK",
               "FLEXCONNECT",
-              "STARROCKS"
+              "STARROCKS",
+              "ATHENA"
             ],
             "example": "POSTGRESQL",
             "type": "string"

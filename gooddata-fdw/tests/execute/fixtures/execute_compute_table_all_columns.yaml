@@ -454,6 +454,8 @@ interactions:
                     - measureHeader:
                         measureIndex: 3
           grandTotals: []
+          metadata:
+            dataSourceMessages: []
           paging:
             count:
               - 18
