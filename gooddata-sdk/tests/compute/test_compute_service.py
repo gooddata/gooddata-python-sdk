@@ -39,7 +39,7 @@ def _setup_test_workspace(sdk: GoodDataSdk, test_workspace_id: str, path: Path) 
 def test_search_ai(test_config):
     """Test AI search with minimal required parameters."""
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-    path = _current_dir / "load" / "ai_search"
+    path = _current_dir / "load" / "ai"
     test_workspace_id = test_config["workspace_test"]
 
     try:
@@ -55,7 +55,7 @@ def test_search_ai(test_config):
 def test_search_ai_full_params(test_config):
     """Test AI search with all available parameters."""
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-    path = _current_dir / "load" / "ai_search"
+    path = _current_dir / "load" / "ai"
     test_workspace_id = test_config["workspace_test"]
 
     try:
@@ -78,4 +78,85 @@ def test_search_ai_full_params(test_config):
         assert len(result.results) <= 2
     finally:
         # Clean up workspace and all related content
+        sdk.catalog_workspace.delete_workspace(test_workspace_id)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "ai_chat.yaml"))
+def test_ai_chat(test_config):
+    """Test AI chat with minimal required parameters."""
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    path = _current_dir / "load" / "ai"
+    test_workspace_id = test_config["workspace_test"]
+
+    try:
+        _setup_test_workspace(sdk, test_workspace_id, path)
+        response = sdk.compute.ai_chat(test_workspace_id, "Create a visualization for total revenue")
+        assert hasattr(response, "routing")
+        assert hasattr(response, "created_visualizations")
+        assert hasattr(response, "chat_history_interaction_id")
+        assert response.chat_history_interaction_id is not None
+    finally:
+        # Clean up workspace and all related content
+        sdk.compute.reset_ai_chat_history(test_workspace_id)
+        sdk.catalog_workspace.delete_workspace(test_workspace_id)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "get_ai_chat_history.yaml"))
+def test_get_ai_chat_history(test_config):
+    """Test get AI chat history."""
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    path = _current_dir / "load" / "ai"
+    test_workspace_id = test_config["workspace_test"]
+
+    try:
+        _setup_test_workspace(sdk, test_workspace_id, path)
+        first_question = "Create a visualization for total revenue"
+        second_question = "Switch to a table"
+        sdk.compute.ai_chat(test_workspace_id, first_question)
+        sdk.compute.ai_chat(test_workspace_id, second_question)
+        response = sdk.compute.get_ai_chat_history(test_workspace_id)
+        assert hasattr(response, "interactions")
+        assert len(response.interactions) == 2
+        assert response.interactions[0]["question"] == first_question
+        assert response.interactions[1]["question"] == second_question
+
+    finally:
+        sdk.compute.reset_ai_chat_history(test_workspace_id)
+        sdk.catalog_workspace.delete_workspace(test_workspace_id)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "set_ai_chat_history_feedback.yaml"))
+def test_set_ai_chat_history_feedback(test_config):
+    """Test set AI chat history feedback."""
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    path = _current_dir / "load" / "ai"
+    test_workspace_id = test_config["workspace_test"]
+
+    try:
+        _setup_test_workspace(sdk, test_workspace_id, path)
+        chat_response = sdk.compute.ai_chat(test_workspace_id, "Create a visualization for total revenue")
+        sdk.compute.set_ai_chat_history_feedback(
+            test_workspace_id, "POSITIVE", chat_response.chat_history_interaction_id
+        )
+        response = sdk.compute.get_ai_chat_history(test_workspace_id)
+        assert response.interactions[0]["userFeedback"] == "POSITIVE"
+    finally:
+        sdk.compute.reset_ai_chat_history(test_workspace_id)
+        sdk.catalog_workspace.delete_workspace(test_workspace_id)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "reset_ai_chat_history.yaml"))
+def test_reset_ai_chat_history(test_config):
+    """Test reset AI chat history."""
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    path = _current_dir / "load" / "ai"
+    test_workspace_id = test_config["workspace_test"]
+
+    try:
+        _setup_test_workspace(sdk, test_workspace_id, path)
+        sdk.compute.ai_chat(test_workspace_id, "Create a visualization for total revenue")
+        sdk.compute.reset_ai_chat_history(test_workspace_id)
+        response = sdk.compute.get_ai_chat_history(test_workspace_id)
+        assert len(response.interactions) == 0
+    finally:
         sdk.catalog_workspace.delete_workspace(test_workspace_id)
