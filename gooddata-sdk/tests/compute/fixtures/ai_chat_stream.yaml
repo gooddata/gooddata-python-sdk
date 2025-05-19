@@ -1,0 +1,2132 @@
+# (C) 2025 GoodData Corporation
+version: 1
+interactions:
+  - request:
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/workspaces/demo_testing?include=workspaces
+      body: null
+      headers:
+        Accept:
+          - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+    response:
+      status:
+        code: 404
+        message: Not Found
+      headers:
+        Cache-Control:
+          - max-age=5, private
+        Content-Length:
+          - '172'
+        Content-Type:
+          - application/problem+json
+        DATE: &id001
+          - PLACEHOLDER
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
+        Referrer-Policy:
+          - same-origin
+        Vary:
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      body:
+        string:
+          detail: The requested endpoint does not exist or you do not have permission
+            to access it.
+          status: 404
+          title: Not Found
+          traceId: e0f3c567c6d83bfb605ff1ba26b91b07
+  - request:
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/workspaces/demo_testing?include=workspaces
+      body: null
+      headers:
+        Accept:
+          - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+    response:
+      status:
+        code: 404
+        message: Not Found
+      headers:
+        Cache-Control:
+          - max-age=5, private
+        Content-Length:
+          - '172'
+        Content-Type:
+          - application/problem+json
+        DATE: *id001
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
+        Referrer-Policy:
+          - same-origin
+        Vary:
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      body:
+        string:
+          detail: The requested endpoint does not exist or you do not have permission
+            to access it.
+          status: 404
+          title: Not Found
+          traceId: 8200434510eb7b8742392f2a9316c454
+  - request:
+      method: POST
+      uri: http://localhost:3000/api/v1/entities/workspaces
+      body:
+        data:
+          id: demo_testing
+          type: workspace
+          attributes:
+            name: demo_testing
+      headers:
+        Accept:
+          - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
+        Content-Type:
+          - application/vnd.gooddata.api+json
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+    response:
+      status:
+        code: 201
+        message: Created
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Length:
+          - '167'
+        Content-Type:
+          - application/vnd.gooddata.api+json
+        DATE: *id001
+        Expires:
+          - '0'
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - same-origin
+        Vary:
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      body:
+        string:
+          data:
+            id: demo_testing
+            type: workspace
+            attributes:
+              name: demo_testing
+          links:
+            self: http://localhost:3000/api/v1/entities/workspaces/demo_testing
+  - request:
+      method: PUT
+      uri: http://localhost:3000/api/v1/layout/workspaces/demo_testing/logicalModel
+      body:
+        ldm:
+          datasets:
+            - grain:
+                - id: campaign_channel_id
+                  type: attribute
+              id: campaign_channels
+              references:
+                - identifier:
+                    id: campaigns
+                    type: dataset
+                  multivalue: false
+                  sources:
+                    - column: campaign_id
+                      target:
+                        id: campaign_id
+                        type: attribute
+                      dataType: INT
+              title: Campaign channels
+              description: Campaign channels
+              attributes:
+                - id: campaign_channel_id
+                  labels: []
+                  sourceColumn: campaign_channel_id
+                  title: Campaign channel id
+                  sourceColumnDataType: STRING
+                  description: Campaign channel id
+                  tags:
+                    - Campaign channels
+                - id: campaign_channels.category
+                  labels: []
+                  sourceColumn: category
+                  title: Category
+                  sourceColumnDataType: STRING
+                  description: Category
+                  tags:
+                    - Campaign channels
+                - id: type
+                  labels: []
+                  sourceColumn: type
+                  title: Type
+                  sourceColumnDataType: STRING
+                  description: Type
+                  tags:
+                    - Campaign channels
+              facts:
+                - id: budget
+                  sourceColumn: budget
+                  title: Budget
+                  sourceColumnDataType: NUMERIC
+                  description: Budget
+                  tags:
+                    - Campaign channels
+                - id: spend
+                  sourceColumn: spend
+                  title: Spend
+                  sourceColumnDataType: NUMERIC
+                  description: Spend
+                  tags:
+                    - Campaign channels
+              dataSourceTableId:
+                dataSourceId: pg_local_docker-demo
+                id: campaign_channels
+                type: dataSource
+                path:
+                  - demo_6d9051d9069a8468
+                  - campaign_channels
+              tags:
+                - Campaign channels
+            - grain:
+                - id: campaign_id
+                  type: attribute
+              id: campaigns
+              references: []
+              title: Campaigns
+              description: Campaigns
+              attributes:
+                - id: campaign_id
+                  labels: []
+                  sourceColumn: campaign_id
+                  title: Campaign id
+                  sourceColumnDataType: INT
+                  description: Campaign id
+                  tags:
+                    - Campaigns
+                - id: campaign_name
+                  labels: []
+                  sourceColumn: campaign_name
+                  title: Campaign name
+                  sourceColumnDataType: STRING
+                  description: Campaign name
+                  tags:
+                    - Campaigns
+              facts: []
+              dataSourceTableId:
+                dataSourceId: pg_local_docker-demo
+                id: campaigns
+                type: dataSource
+                path:
+                  - demo_6d9051d9069a8468
+                  - campaigns
+              tags:
+                - Campaigns
+            - grain:
+                - id: customer_id
+                  type: attribute
+              id: customers
+              references: []
+              title: Customers
+              description: Customers
+              attributes:
+                - id: customer_id
+                  labels: []
+                  sourceColumn: customer_id
+                  title: Customer id
+                  sourceColumnDataType: INT
+                  description: Customer id
+                  tags:
+                    - Customers
+                - id: customer_name
+                  labels: []
+                  sourceColumn: customer_name
+                  title: Customer name
+                  sourceColumnDataType: STRING
+                  description: Customer name
+                  tags:
+                    - Customers
+                - id: region
+                  labels: []
+                  sourceColumn: region
+                  title: Region
+                  sourceColumnDataType: STRING
+                  description: Region
+                  tags:
+                    - Customers
+                - id: state
+                  labels:
+                    - id: geo__state__location
+                      sourceColumn: geo__state__location
+                      title: Location
+                      sourceColumnDataType: STRING
+                      description: Location
+                      tags:
+                        - Customers
+                  sourceColumn: state
+                  title: State
+                  sourceColumnDataType: STRING
+                  description: State
+                  tags:
+                    - Customers
+              facts: []
+              dataSourceTableId:
+                dataSourceId: pg_local_docker-demo
+                id: customers
+                type: dataSource
+                path:
+                  - demo_6d9051d9069a8468
+                  - customers
+              tags:
+                - Customers
+            - grain:
+                - id: order_line_id
+                  type: attribute
+              id: order_lines
+              references:
+                - identifier:
+                    id: campaigns
+                    type: dataset
+                  multivalue: false
+                  sources:
+                    - column: campaign_id
+                      target:
+                        id: campaign_id
+                        type: attribute
+                      dataType: INT
+                - identifier:
+                    id: customers
+                    type: dataset
+                  multivalue: false
+                  sources:
+                    - column: customer_id
+                      target:
+                        id: customer_id
+                        type: attribute
+                      dataType: INT
+                - identifier:
+                    id: date
+                    type: dataset
+                  multivalue: false
+                  sources:
+                    - column: date
+                      target:
+                        id: date
+                        type: date
+                      dataType: DATE
+                - identifier:
+                    id: products
+                    type: dataset
+                  multivalue: false
+                  sources:
+                    - column: product_id
+                      target:
+                        id: product_id
+                        type: attribute
+                      dataType: INT
+              title: Order lines
+              description: Order lines
+              attributes:
+                - id: order_id
+                  labels: []
+                  sourceColumn: order_id
+                  title: Order id
+                  sourceColumnDataType: STRING
+                  description: Order id
+                  tags:
+                    - Order lines
+                - id: order_line_id
+                  labels: []
+                  sourceColumn: order_line_id
+                  title: Order line id
+                  sourceColumnDataType: STRING
+                  description: Order line id
+                  tags:
+                    - Order lines
+                - id: order_status
+                  labels: []
+                  sourceColumn: order_status
+                  title: Order status
+                  sourceColumnDataType: STRING
+                  description: Order status
+                  tags:
+                    - Order lines
+              facts:
+                - id: price
+                  sourceColumn: price
+                  title: Price
+                  sourceColumnDataType: NUMERIC
+                  description: Price
+                  tags:
+                    - Order lines
+                - id: quantity
+                  sourceColumn: quantity
+                  title: Quantity
+                  sourceColumnDataType: NUMERIC
+                  description: Quantity
+                  tags:
+                    - Order lines
+              dataSourceTableId:
+                dataSourceId: pg_local_docker-demo
+                id: order_lines
+                type: dataSource
+                path:
+                  - demo_6d9051d9069a8468
+                  - order_lines
+              tags:
+                - Order lines
+              workspaceDataFilterColumns:
+                - dataType: STRING
+                  name: wdf__region
+                - dataType: STRING
+                  name: wdf__state
+            - grain:
+                - id: product_id
+                  type: attribute
+              id: products
+              references: []
+              title: Products
+              description: Products
+              attributes:
+                - id: product_id
+                  labels: []
+                  sourceColumn: product_id
+                  title: Product id
+                  sourceColumnDataType: INT
+                  description: Product id
+                  tags:
+                    - Products
+                - id: product_name
+                  labels: []
+                  sourceColumn: product_name
+                  title: Product name
+                  sourceColumnDataType: STRING
+                  description: Product name
+                  tags:
+                    - Products
+                - id: products.category
+                  labels: []
+                  sourceColumn: category
+                  title: Category
+                  sourceColumnDataType: STRING
+                  description: Category
+                  tags:
+                    - Products
+              facts: []
+              dataSourceTableId:
+                dataSourceId: pg_local_docker-demo
+                id: products
+                type: dataSource
+                path:
+                  - demo_6d9051d9069a8468
+                  - products
+              tags:
+                - Products
+          dateInstances:
+            - granularities:
+                - DAY
+                - WEEK
+                - MONTH
+                - QUARTER
+                - YEAR
+              granularitiesFormatting:
+                titleBase: ''
+                titlePattern: '%titleBase - %granularityTitle'
+              id: date
+              title: Date
+              description: ''
+              tags:
+                - Date
+      headers:
+        Accept-Encoding:
+          - br, gzip, deflate
+        Content-Type:
+          - application/json
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+    response:
+      status:
+        code: 204
+        message: No Content
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        DATE: *id001
+        Expires:
+          - '0'
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - same-origin
+        Vary:
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      body:
+        string: ''
+  - request:
+      method: PUT
+      uri: http://localhost:3000/api/v1/layout/workspaces/demo_testing/analyticsModel
+      body:
+        analytics:
+          analyticalDashboards:
+            - content:
+                filterContextRef:
+                  identifier:
+                    id: 4717b786-2c2e-4596-adb5-4f8b0ab0e19a
+                    type: filterContext
+                layout:
+                  sections:
+                    - header:
+                        description: All in one description
+                        title: All in one title
+                      items:
+                        - size:
+                            xl:
+                              gridWidth: 6
+                          type: IDashboardLayoutItem
+                          widget:
+                            dateDataSet:
+                              identifier:
+                                id: date
+                                type: dataset
+                            description: ''
+                            drills: []
+                            ignoreDashboardFilters: []
+                            insight:
+                              identifier:
+                                id: top_10_customers
+                                type: visualizationObject
+                            localIdentifier: 2c7400ac-5f63-46f8-aa12-a2debe13fd14
+                            properties: {}
+                            title: Top 10 Customers
+                            type: insight
+                        - size:
+                            xl:
+                              gridWidth: 6
+                          type: IDashboardLayoutItem
+                          widget:
+                            dateDataSet:
+                              identifier:
+                                id: date
+                                type: dataset
+                            description: ''
+                            drills: []
+                            ignoreDashboardFilters: []
+                            insight:
+                              identifier:
+                                id: revenue_by_product
+                                type: visualizationObject
+                            localIdentifier: a50daab7-fb78-45eb-a2b4-d5cc8cbd89e9
+                            properties: {}
+                            title: Revenue by Product
+                            type: insight
+                        - size:
+                            xl:
+                              gridWidth: 6
+                          type: IDashboardLayoutItem
+                          widget:
+                            dateDataSet:
+                              identifier:
+                                id: date
+                                type: dataset
+                            description: ''
+                            drills: []
+                            ignoreDashboardFilters: []
+                            insight:
+                              identifier:
+                                id: revenue_by_category_trend
+                                type: visualizationObject
+                            localIdentifier: efccc783-5896-4eb6-890f-2e51ece3f159
+                            properties: {}
+                            title: Revenue by Category Trend
+                            type: insight
+                        - size:
+                            xl:
+                              gridWidth: 6
+                          type: IDashboardLayoutItem
+                          widget:
+                            dateDataSet:
+                              identifier:
+                                id: date
+                                type: dataset
+                            description: ''
+                            drills: []
+                            ignoreDashboardFilters: []
+                            insight:
+                              identifier:
+                                id: product_saleability
+                                type: visualizationObject
+                            localIdentifier: d738d85f-e935-4e2c-b8b4-a8b456f55079
+                            properties: {}
+                            title: Product Saleability
+                            type: insight
+                        - size:
+                            xl:
+                              gridWidth: 6
+                          type: IDashboardLayoutItem
+                          widget:
+                            dateDataSet:
+                              identifier:
+                                id: date
+                                type: dataset
+                            description: ''
+                            drills: []
+                            ignoreDashboardFilters: []
+                            insight:
+                              identifier:
+                                id: product_categories_pie_chart
+                                type: visualizationObject
+                            localIdentifier: 8c194c85-bad6-42da-b4e3-08d270278316
+                            properties: {}
+                            title: Product Categories Pie Chart
+                            type: insight
+                        - size:
+                            xl:
+                              gridWidth: 6
+                          type: IDashboardLayoutItem
+                          widget:
+                            dateDataSet:
+                              identifier:
+                                id: date
+                                type: dataset
+                            description: ''
+                            drills: []
+                            ignoreDashboardFilters: []
+                            insight:
+                              identifier:
+                                id: percentage_of_customers_by_region
+                                type: visualizationObject
+                            localIdentifier: 2c3307b2-581f-4bab-9252-6b5279565b24
+                            properties: {}
+                            title: Percentage of Customers by Region
+                            type: insight
+                        - size:
+                            xl:
+                              gridWidth: 6
+                          type: IDashboardLayoutItem
+                          widget:
+                            dateDataSet:
+                              identifier:
+                                id: date
+                                type: dataset
+                            description: ''
+                            drills: []
+                            ignoreDashboardFilters: []
+                            insight:
+                              identifier:
+                                id: customers_trend
+                                type: visualizationObject
+                            localIdentifier: 87505bb0-d954-4add-811d-f4e75e431660
+                            properties: {}
+                            title: Customers Trend
+                            type: insight
+                        - size:
+                            xl:
+                              gridWidth: 6
+                          type: IDashboardLayoutItem
+                          widget:
+                            description: ''
+                            drills: []
+                            ignoreDashboardFilters: []
+                            insight:
+                              identifier:
+                                id: campaign_spend
+                                type: visualizationObject
+                            localIdentifier: 0cb01f6a-6ea6-4c22-bb12-ded00a9eac66
+                            properties: {}
+                            title: Campaign Spend
+                            type: insight
+                        - size:
+                            xl:
+                              gridWidth: 12
+                          type: IDashboardLayoutItem
+                          widget:
+                            dateDataSet:
+                              identifier:
+                                id: date
+                                type: dataset
+                            description: ''
+                            drills: []
+                            ignoreDashboardFilters: []
+                            insight:
+                              identifier:
+                                id: percent_revenue_per_product_by_customer_and_category
+                                type: visualizationObject
+                            localIdentifier: 2213d6e4-6df7-458e-806d-f02bae5ce66a
+                            properties: {}
+                            title: '% Revenue per Product by Customer and Category'
+                            type: insight
+                      type: IDashboardLayoutSection
+                  type: IDashboardLayout
+                version: '2'
+              id: b2f2d436-9831-4fe0-81df-8c59fd33242b
+              title: All visualizations 1 with custom filter
+              description: ''
+          analyticalDashboardExtensions: []
+          attributeHierarchies: []
+          dashboardPlugins: []
+          filterContexts:
+            - content:
+                filters:
+                  - attributeFilter:
+                      attributeElements:
+                        uris:
+                          - Biolid
+                          - ChalkTalk
+                          - Compglass
+                          - Elentrix
+                      displayForm:
+                        identifier:
+                          id: product_name
+                          type: label
+                      filterElementsBy: []
+                      localIdentifier: 6b94bbb585d44c79967867719e524fae
+                      negativeSelection: false
+                      selectionMode: multi
+                version: '2'
+              id: 4717b786-2c2e-4596-adb5-4f8b0ab0e19a
+              title: filterContext
+              description: ''
+            - content:
+                filters:
+                  - dateFilter:
+                      from: '0'
+                      granularity: GDC.time.year
+                      to: '0'
+                      type: relative
+                version: '2'
+              id: 9f2b1f37-befa-450e-a6cc-dc576845c412
+              title: filterContext
+              description: ''
+          metrics:
+            - content:
+                format: '#,##0'
+                maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
+              id: amount_of_active_customers
+              title: '# of Active Customers'
+              description: ''
+            - content:
+                format: '#,##0'
+                maql: SELECT COUNT({attribute/order_id})
+              id: amount_of_orders
+              title: '# of Orders'
+              description: ''
+            - content:
+                format: '#,##0'
+                maql: 'SELECT {metric/amount_of_active_customers} WHERE (SELECT {metric/revenue}
+                  BY {attribute/customer_id}) >  10000 '
+              id: amount_of_top_customers
+              title: '# of Top Customers'
+              description: ''
+            - content:
+                format: '#,##0.00'
+                maql: SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status}
+                  IN ("null", "Returned", "Canceled"))
+              id: amount_of_valid_orders
+              title: '# of Valid Orders'
+              description: ''
+            - content:
+                format: $#,##0
+                maql: SELECT SUM({fact/spend})
+              id: campaign_spend
+              title: Campaign Spend
+              description: ''
+            - content:
+                format: $#,##0
+                maql: SELECT SUM({fact/price}*{fact/quantity})
+              id: order_amount
+              title: Order Amount
+              description: ''
+            - content:
+                format: '#,##0.0%'
+                maql: SELECT {metric/revenue} / {metric/total_revenue}
+              id: percent_revenue
+              title: '% Revenue'
+              description: ''
+            - content:
+                format: '#,##0.0%'
+                maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
+                  \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
+              id: percent_revenue_from_top_10_customers
+              title: '% Revenue from Top 10 Customers'
+              description: ''
+            - content:
+                format: '#,##0.0%'
+                maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
+                  \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
+              id: percent_revenue_from_top_10_percent_customers
+              title: '% Revenue from Top 10% Customers'
+              description: ''
+            - content:
+                format: '#,##0.0%'
+                maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
+                  \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
+              id: percent_revenue_from_top_10_percent_products
+              title: '% Revenue from Top 10% Products'
+              description: ''
+            - content:
+                format: '#,##0.0%'
+                maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
+                  \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
+              id: percent_revenue_from_top_10_products
+              title: '% Revenue from Top 10 Products'
+              description: ''
+            - content:
+                format: '#,##0.0%'
+                maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
+                  ALL OTHER)
+              id: percent_revenue_in_category
+              title: '% Revenue in Category'
+              description: ''
+            - content:
+                format: '#,##0.0%'
+                maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL {attribute/product_id})
+              id: percent_revenue_per_product
+              title: '% Revenue per Product'
+              description: ''
+            - content:
+                format: $#,##0
+                maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
+                  IN ("null", "Returned", "Canceled"))
+              id: revenue
+              title: Revenue
+              description: ''
+            - content:
+                format: $#,##0
+                maql: SELECT {metric/revenue} WHERE {label/products.category} IN ("Clothing")
+              id: revenue-clothing
+              title: Revenue (Clothing)
+              description: ''
+            - content:
+                format: $#,##0
+                maql: SELECT {metric/revenue} WHERE {label/products.category} IN (
+                  "Electronics")
+              id: revenue-electronic
+              title: Revenue (Electronic)
+              description: ''
+            - content:
+                format: $#,##0
+                maql: SELECT {metric/revenue} WHERE {label/products.category} IN ("Home")
+              id: revenue-home
+              title: Revenue (Home)
+              description: ''
+            - content:
+                format: $#,##0
+                maql: SELECT {metric/revenue} WHERE {label/products.category} IN ("Outdoor")
+              id: revenue-outdoor
+              title: Revenue (Outdoor)
+              description: ''
+            - content:
+                format: $#,##0.0
+                maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
+              id: revenue_per_customer
+              title: Revenue per Customer
+              description: ''
+            - content:
+                format: $#,##0.0
+                maql: SELECT {metric/revenue} / {metric/campaign_spend}
+              id: revenue_per_dollar_spent
+              title: Revenue per Dollar Spent
+              description: ''
+            - content:
+                format: $#,##0
+                maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
+              id: revenue_top_10
+              title: Revenue / Top 10
+              description: ''
+            - content:
+                format: $#,##0
+                maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
+              id: revenue_top_10_percent
+              title: Revenue / Top 10%
+              description: ''
+            - content:
+                format: $#,##0
+                maql: SELECT {metric/revenue} BY ALL OTHER
+              id: total_revenue
+              title: Total Revenue
+              description: ''
+            - content:
+                format: $#,##0
+                maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
+              id: total_revenue-no_filters
+              title: Total Revenue (No Filters)
+              description: ''
+          visualizationObjects:
+            - content:
+                buckets:
+                  - items:
+                      - measure:
+                          definition:
+                            measureDefinition:
+                              filters: []
+                              item:
+                                identifier:
+                                  id: campaign_spend
+                                  type: metric
+                          localIdentifier: d319bcb2d8c04442a684e3b3cd063381
+                          title: Campaign Spend
+                    localIdentifier: measures
+                  - items:
+                      - attribute:
+                          displayForm:
+                            identifier:
+                              id: campaign_channels.category
+                              type: label
+                          localIdentifier: 291c085e7df8420db84117ca49f59c49
+                    localIdentifier: view
+                  - items:
+                      - attribute:
+                          displayForm:
+                            identifier:
+                              id: campaign_name
+                              type: label
+                          localIdentifier: d9dd143d647d4d148405a60ec2cf59bc
+                    localIdentifier: segment
+                filters:
+                  - negativeAttributeFilter:
+                      displayForm:
+                        identifier:
+                          id: type
+                          type: label
+                      notIn:
+                        values: []
+                  - negativeAttributeFilter:
+                      displayForm:
+                        identifier:
+                          id: campaign_channels.category
+                          type: label
+                      notIn:
+                        values: []
+                  - negativeAttributeFilter:
+                      displayForm:
+                        identifier:
+                          id: campaign_name
+                          type: label
+                      notIn:
+                        values: []
+                properties:
+                  controls:
+                    legend:
+                      position: bottom
+                version: '2'
+                visualizationUrl: local:treemap
+              id: campaign_spend
+              title: Campaign Spend
+              description: ''
+            - content:
+                buckets:
+                  - items:
+                      - measure:
+                          alias: Active Customers
+                          definition:
+                            measureDefinition:
+                              computeRatio: false
+                              filters: []
+                              item:
+                                identifier:
+                                  id: amount_of_active_customers
+                                  type: metric
+                          localIdentifier: 2ba0b87b59ca41a4b1530e81a5c1d081
+                          title: '# of Active Customers'
+                    localIdentifier: measures
+                  - items:
+                      - measure:
+                          definition:
+                            measureDefinition:
+                              filters: []
+                              item:
+                                identifier:
+                                  id: revenue_per_customer
+                                  type: metric
+                          localIdentifier: ec0606894b9f4897b7beaf1550608928
+                          title: Revenue per Customer
+                    localIdentifier: secondary_measures
+                  - items:
+                      - attribute:
+                          displayForm:
+                            identifier:
+                              id: date.month
+                              type: label
+                          localIdentifier: 0de7d7f08af7480aa636857a26be72b6
+                    localIdentifier: view
+                filters:
+                  - relativeDateFilter:
+                      dataSet:
+                        identifier:
+                          id: date
+                          type: dataset
+                      from: -11
+                      granularity: GDC.time.month
+                      to: 0
+                properties:
+                  controls:
+                    colorMapping:
+                      - color:
+                          type: guid
+                          value: '20'
+                        id: 2ba0b87b59ca41a4b1530e81a5c1d081
+                      - color:
+                          type: guid
+                          value: '4'
+                        id: ec0606894b9f4897b7beaf1550608928
+                    dualAxis: true
+                    legend:
+                      position: bottom
+                    primaryChartType: column
+                    secondaryChartType: line
+                    secondary_yaxis:
+                      measures:
+                        - ec0606894b9f4897b7beaf1550608928
+                    xaxis:
+                      name:
+                        visible: false
+                      rotation: auto
+                version: '2'
+                visualizationUrl: local:combo2
+              id: customers_trend
+              title: Customers Trend
+              description: ''
+            - content:
+                buckets:
+                  - items:
+                      - measure:
+                          definition:
+                            measureDefinition:
+                              filters: []
+                              item:
+                                identifier:
+                                  id: percent_revenue_per_product
+                                  type: metric
+                          localIdentifier: 08d8346c1ce7438994b251991c0fbf65
+                          title: '% Revenue per Product'
+                      - measure:
+                          definition:
+                            measureDefinition:
+                              filters: []
+                              item:
+                                identifier:
+                                  id: revenue
+                                  type: metric
+                          localIdentifier: b2350c06688b4da9b3833ebcce65527f
+                          title: Revenue
+                    localIdentifier: measures
+                  - items:
+                      - attribute:
+                          displayForm:
+                            identifier:
+                              id: customer_name
+                              type: label
+                          localIdentifier: 7a4045fd00ac44579f52406df679435f
+                      - attribute:
+                          displayForm:
+                            identifier:
+                              id: products.category
+                              type: label
+                          localIdentifier: 6a003ffd14994237ba64c4a02c488429
+                      - attribute:
+                          displayForm:
+                            identifier:
+                              id: product_name
+                              type: label
+                          localIdentifier: 75ea396d0c8b48098e31dccf8b5801d3
+                    localIdentifier: attribute
+                filters:
+                  - negativeAttributeFilter:
+                      displayForm:
+                        identifier:
+                          id: customer_name
+                          type: label
+                      notIn:
+                        values: []
+                  - negativeAttributeFilter:
+                      displayForm:
+                        identifier:
+                          id: products.category
+                          type: label
+                      notIn:
+                        values: []
+                  - negativeAttributeFilter:
+                      displayForm:
+                        identifier:
+                          id: product_name
+                          type: label
+                      notIn:
+                        values: []
+                properties:
+                  sortItems:
+                    - attributeSortItem:
+                        attributeIdentifier: 7a4045fd00ac44579f52406df679435f
+                        direction: asc
+                version: '2'
+                visualizationUrl: local:table
+              id: percent_revenue_per_product_by_customer_and_category
+              title: '% Revenue per Product by Customer and Category'
+              description: ''
+            - content:
+                buckets:
+                  - items:
+                      - measure:
+                          definition:
+                            measureDefinition:
+                              filters: []
+                              item:
+                                identifier:
+                                  id: amount_of_active_customers
+                                  type: metric
+                          localIdentifier: 1a14cdc1293c46e89a2e25d3e741d235
+                          title: '# of Active Customers'
+                    localIdentifier: measures
+                  - items:
+                      - attribute:
+                          displayForm:
+                            identifier:
+                              id: date.month
+                              type: label
+                          localIdentifier: c1feca1864244ec2ace7a9b9d7fda231
+                    localIdentifier: view
+                  - items:
+                      - attribute:
+                          displayForm:
+                            identifier:
+                              id: region
+                              type: label
+                          localIdentifier: 530cddbd7ca04d039e73462d81ed44d5
+                    localIdentifier: stack
+                filters:
+                  - negativeAttributeFilter:
+                      displayForm:
+                        identifier:
+                          id: region
+                          type: label
+                      notIn:
+                        values: []
+                  - relativeDateFilter:
+                      dataSet:
+                        identifier:
+                          id: date
+                          type: dataset
+                      from: -11
+                      granularity: GDC.time.month
+                      to: 0
+                properties:
+                  controls:
+                    legend:
+                      position: bottom
+                    stackMeasuresToPercent: true
+                version: '2'
+                visualizationUrl: local:area
+              id: percentage_of_customers_by_region
+              title: Percentage of Customers by Region
+              description: ''
+            - content:
+                buckets:
+                  - items:
+                      - measure:
+                          definition:
+                            measureDefinition:
+                              filters: []
+                              item:
+                                identifier:
+                                  id: revenue
+                                  type: metric
+                          localIdentifier: 590d332ef686468b8878ae41b23341c6
+                          title: Revenue
+                    localIdentifier: measures
+                  - items:
+                      - attribute:
+                          displayForm:
+                            identifier:
+                              id: products.category
+                              type: label
+                          localIdentifier: b166c71091864312a14c7ae8ff886ffe
+                    localIdentifier: view
+                  - items:
+                      - attribute:
+                          displayForm:
+                            identifier:
+                              id: product_name
+                              type: label
+                          localIdentifier: e920a50e0bbb49788df0aac53634c1cd
+                    localIdentifier: segment
+                filters:
+                  - negativeAttributeFilter:
+                      displayForm:
+                        identifier:
+                          id: products.category
+                          type: label
+                      notIn:
+                        values: []
+                  - negativeAttributeFilter:
+                      displayForm:
+                        identifier:
+                          id: product_name
+                          type: label
+                      notIn:
+                        values: []
+                properties:
+                  controls:
+                    legend:
+                      position: bottom
+                version: '2'
+                visualizationUrl: local:treemap
+              id: product_breakdown
+              title: Product Breakdown
+              description: ''
+            - content:
+                buckets:
+                  - items:
+                      - measure:
+                          definition:
+                            measureDefinition:
+                              computeRatio: true
+                              filters: []
+                              item:
+                                identifier:
+                                  id: revenue
+                                  type: metric
+                          localIdentifier: 162b857af49d45769bc12604a5c192b9
+                          title: '% Revenue'
+                    localIdentifier: measures
+                  - items:
+                      - attribute:
+                          displayForm:
+                            identifier:
+                              id: products.category
+                              type: label
+                          localIdentifier: fe513cef1c6244a5ac21c5f49c56b108
+                    localIdentifier: view
+                filters:
+                  - negativeAttributeFilter:
+                      displayForm:
+                        identifier:
+                          id: product_name
+                          type: label
+                      notIn:
+                        values: []
+                  - negativeAttributeFilter:
+                      displayForm:
+                        identifier:
+                          id: products.category
+                          type: label
+                      notIn:
+                        values: []
+                properties:
+                  controls:
+                    dataLabels:
+                      visible: auto
+                    legend:
+                      position: bottom
+                version: '2'
+                visualizationUrl: local:donut
+              id: product_categories_pie_chart
+              title: Product Categories Pie Chart
+              description: ''
+            - content:
+                buckets:
+                  - items:
+                      - measure:
+                          alias: Previous Period
+                          definition:
+                            popMeasureDefinition:
+                              measureIdentifier: c82e025fa2db4afea9a600a424591dbe
+                              popAttribute:
+                                identifier:
+                                  id: date.year
+                                  type: label
+                          localIdentifier: c82e025fa2db4afea9a600a424591dbe_pop
+                      - measure:
+                          alias: This Period
+                          definition:
+                            measureDefinition:
+                              filters: []
+                              item:
+                                identifier:
+                                  id: revenue
+                                  type: metric
+                          localIdentifier: c82e025fa2db4afea9a600a424591dbe
+                          title: Revenue
+                    localIdentifier: measures
+                  - items:
+                      - attribute:
+                          displayForm:
+                            identifier:
+                              id: products.category
+                              type: label
+                          localIdentifier: c804ef5ba7944a5a9f360c86a9e95e9a
+                    localIdentifier: view
+                filters:
+                  - negativeAttributeFilter:
+                      displayForm:
+                        identifier:
+                          id: product_name
+                          type: label
+                      notIn:
+                        values: []
+                  - relativeDateFilter:
+                      dataSet:
+                        identifier:
+                          id: date
+                          type: dataset
+                      from: -11
+                      granularity: GDC.time.month
+                      to: 0
+                  - negativeAttributeFilter:
+                      displayForm:
+                        identifier:
+                          id: products.category
+                          type: label
+                      notIn:
+                        values: []
+                properties:
+                  controls:
+                    legend:
+                      position: bottom
+                    stackMeasures: false
+                    xaxis:
+                      name:
+                        visible: false
+                    yaxis:
+                      name:
+                        visible: false
+                version: '2'
+                visualizationUrl: local:column
+              id: product_revenue_comparison-over_previous_period
+              title: Product Revenue Comparison (over previous period)
+              description: ''
+            - content:
+                buckets:
+                  - items:
+                      - measure:
+                          alias: Number of Orders
+                          definition:
+                            measureDefinition:
+                              filters: []
+                              item:
+                                identifier:
+                                  id: amount_of_orders
+                                  type: metric
+                          localIdentifier: aeb5d51a162d4b59aba3bd6ddebcc780
+                          title: '# of Orders'
+                    localIdentifier: measures
+                  - items:
+                      - measure:
+                          definition:
+                            measureDefinition:
+                              filters: []
+                              item:
+                                identifier:
+                                  id: revenue
+                                  type: metric
+                          localIdentifier: 94b3edd3a73c4a48a4d13bbe9442cc98
+                          title: Revenue
+                    localIdentifier: secondary_measures
+                  - items:
+                      - attribute:
+                          displayForm:
+                            identifier:
+                              id: product_name
+                              type: label
+                          localIdentifier: d2a991bdd123448eb2be73d79f1180c4
+                    localIdentifier: attribute
+                filters:
+                  - negativeAttributeFilter:
+                      displayForm:
+                        identifier:
+                          id: product_name
+                          type: label
+                      notIn:
+                        values: []
+                properties:
+                  controls:
+                    dataLabels:
+                      visible: auto
+                    grid:
+                      enabled: true
+                version: '2'
+                visualizationUrl: local:scatter
+              id: product_saleability
+              title: Product Saleability
+              description: ''
+            - content:
+                buckets:
+                  - items:
+                      - measure:
+                          alias: Items Sold
+                          definition:
+                            measureDefinition:
+                              aggregation: sum
+                              filters: []
+                              item:
+                                identifier:
+                                  id: quantity
+                                  type: fact
+                          format: '#,##0.00'
+                          localIdentifier: 29486504dd0e4a36a18b0b2f792d3a46
+                          title: Sum of Quantity
+                      - measure:
+                          definition:
+                            measureDefinition:
+                              aggregation: avg
+                              filters: []
+                              item:
+                                identifier:
+                                  id: price
+                                  type: fact
+                          format: '#,##0.00'
+                          localIdentifier: aa6391acccf1452f8011201aef9af492
+                          title: Avg Price
+                      - measure:
+                          definition:
+                            measureDefinition:
+                              filters: []
+                              item:
+                                identifier:
+                                  id: percent_revenue_in_category
+                                  type: metric
+                          localIdentifier: 2cd39539d8da46c9883e63caa3ba7cc0
+                          title: '% Revenue in Category'
+                      - measure:
+                          alias: Total Revenue
+                          definition:
+                            measureDefinition:
+                              filters: []
+                              item:
+                                identifier:
+                                  id: revenue
+                                  type: metric
+                          localIdentifier: 9a0f08331c094c7facf2a0b4f418de0a
+                          title: Revenue
+                    localIdentifier: measures
+                  - items:
+                      - attribute:
+                          displayForm:
+                            identifier:
+                              id: products.category
+                              type: label
+                          localIdentifier: 06bc6b3b9949466494e4f594c11f1bff
+                      - attribute:
+                          displayForm:
+                            identifier:
+                              id: product_name
+                              type: label
+                          localIdentifier: 192668bfb6a74e9ab7b5d1ce7cb68ea3
+                    localIdentifier: attribute
+                filters:
+                  - negativeAttributeFilter:
+                      displayForm:
+                        identifier:
+                          id: customer_name
+                          type: label
+                      notIn:
+                        values: []
+                  - negativeAttributeFilter:
+                      displayForm:
+                        identifier:
+                          id: product_name
+                          type: label
+                      notIn:
+                        values: []
+                  - negativeAttributeFilter:
+                      displayForm:
+                        identifier:
+                          id: products.category
+                          type: label
+                      notIn:
+                        values: []
+                properties:
+                  sortItems:
+                    - attributeSortItem:
+                        attributeIdentifier: 06bc6b3b9949466494e4f594c11f1bff
+                        direction: asc
+                version: '2'
+                visualizationUrl: local:table
+              id: revenue_and_quantity_by_product_and_category
+              title: Revenue and Quantity by Product and Category
+              description: ''
+            - content:
+                buckets:
+                  - items:
+                      - measure:
+                          definition:
+                            measureDefinition:
+                              filters: []
+                              item:
+                                identifier:
+                                  id: revenue
+                                  type: metric
+                          localIdentifier: 7df6c34387744d69b23ec92e1a5cf543
+                          title: Revenue
+                    localIdentifier: measures
+                  - items:
+                      - attribute:
+                          displayForm:
+                            identifier:
+                              id: date.month
+                              type: label
+                          localIdentifier: 4bb4fc1986c546de9ad976e6ec23fed4
+                    localIdentifier: trend
+                  - items:
+                      - attribute:
+                          displayForm:
+                            identifier:
+                              id: products.category
+                              type: label
+                          localIdentifier: 34bddcb1cd024902a82396216b0fa9d8
+                    localIdentifier: segment
+                filters:
+                  - negativeAttributeFilter:
+                      displayForm:
+                        identifier:
+                          id: products.category
+                          type: label
+                      notIn:
+                        values: []
+                  - relativeDateFilter:
+                      dataSet:
+                        identifier:
+                          id: date
+                          type: dataset
+                      granularity: GDC.time.year
+                properties:
+                  controls:
+                    legend:
+                      position: bottom
+                version: '2'
+                visualizationUrl: local:line
+              id: revenue_by_category_trend
+              title: Revenue by Category Trend
+              description: ''
+            - content:
+                buckets:
+                  - items:
+                      - measure:
+                          definition:
+                            measureDefinition:
+                              filters: []
+                              item:
+                                identifier:
+                                  id: revenue
+                                  type: metric
+                          localIdentifier: 4ae3401bdbba4938afe983df4ba04e1c
+                          title: Revenue
+                    localIdentifier: measures
+                  - items:
+                      - attribute:
+                          displayForm:
+                            identifier:
+                              id: product_name
+                              type: label
+                          localIdentifier: 1c8ba72dbfc84ddd913bf81dc355c427
+                    localIdentifier: view
+                filters:
+                  - negativeAttributeFilter:
+                      displayForm:
+                        identifier:
+                          id: product_name
+                          type: label
+                      notIn:
+                        values: []
+                properties: {}
+                version: '2'
+                visualizationUrl: local:bar
+              id: revenue_by_product
+              title: Revenue by Product
+              description: ''
+            - content:
+                buckets:
+                  - items:
+                      - measure:
+                          definition:
+                            measureDefinition:
+                              filters: []
+                              item:
+                                identifier:
+                                  id: campaign_spend
+                                  type: metric
+                          localIdentifier: 13a50d811e474ac6808d8da7f4673b35
+                          title: Campaign Spend
+                    localIdentifier: measures
+                  - items:
+                      - measure:
+                          definition:
+                            measureDefinition:
+                              filters: []
+                              item:
+                                identifier:
+                                  id: revenue_per_dollar_spent
+                                  type: metric
+                          localIdentifier: a0f15e82e6334280a44dbedc7d086e7c
+                          title: Revenue per Dollar Spent
+                    localIdentifier: secondary_measures
+                  - items:
+                      - attribute:
+                          displayForm:
+                            identifier:
+                              id: campaign_name
+                              type: label
+                          localIdentifier: 1d9fa968bafb423eb29c938dfb1207ff
+                    localIdentifier: attribute
+                filters:
+                  - negativeAttributeFilter:
+                      displayForm:
+                        identifier:
+                          id: campaign_name
+                          type: label
+                      notIn:
+                        values: []
+                properties:
+                  controls:
+                    xaxis:
+                      min: '0'
+                    yaxis:
+                      min: '0'
+                version: '2'
+                visualizationUrl: local:scatter
+              id: revenue_per_usd_vs_spend_by_campaign
+              title: Revenue per $ vs Spend by Campaign
+              description: ''
+            - content:
+                buckets:
+                  - items:
+                      - measure:
+                          definition:
+                            measureDefinition:
+                              computeRatio: false
+                              filters: []
+                              item:
+                                identifier:
+                                  id: revenue
+                                  type: metric
+                          localIdentifier: 60c854969a9c4c278ab596d99c222e92
+                          title: Revenue
+                    localIdentifier: measures
+                  - items:
+                      - measure:
+                          alias: Number of Orders
+                          definition:
+                            measureDefinition:
+                              computeRatio: false
+                              filters: []
+                              item:
+                                identifier:
+                                  id: amount_of_orders
+                                  type: metric
+                          localIdentifier: c2fa7ef48cc54af99f8c280eb451e051
+                          title: '# of Orders'
+                    localIdentifier: secondary_measures
+                  - items:
+                      - attribute:
+                          displayForm:
+                            identifier:
+                              id: date.month
+                              type: label
+                          localIdentifier: 413ac374b65648fa96826ca01d47bdda
+                    localIdentifier: view
+                filters:
+                  - relativeDateFilter:
+                      dataSet:
+                        identifier:
+                          id: date
+                          type: dataset
+                      from: -3
+                      granularity: GDC.time.quarter
+                      to: 0
+                properties:
+                  controls:
+                    dualAxis: true
+                    legend:
+                      position: bottom
+                    primaryChartType: column
+                    secondaryChartType: line
+                    secondary_yaxis:
+                      measures:
+                        - c2fa7ef48cc54af99f8c280eb451e051
+                    xaxis:
+                      name:
+                        visible: false
+                      rotation: auto
+                version: '2'
+                visualizationUrl: local:combo2
+              id: revenue_trend
+              title: Revenue Trend
+              description: ''
+            - content:
+                buckets:
+                  - items:
+                      - measure:
+                          definition:
+                            measureDefinition:
+                              filters: []
+                              item:
+                                identifier:
+                                  id: revenue_top_10
+                                  type: metric
+                          localIdentifier: 3f127ccfe57a40399e23f9ae2a4ad810
+                          title: Revenue / Top 10
+                    localIdentifier: measures
+                  - items:
+                      - attribute:
+                          displayForm:
+                            identifier:
+                              id: customer_name
+                              type: label
+                          localIdentifier: f4e39e24f11e4827a191c30d65c89d2c
+                    localIdentifier: view
+                  - items:
+                      - attribute:
+                          displayForm:
+                            identifier:
+                              id: state
+                              type: label
+                          localIdentifier: bbccd430176d428caed54c99afc9589e
+                    localIdentifier: stack
+                filters:
+                  - negativeAttributeFilter:
+                      displayForm:
+                        identifier:
+                          id: customer_name
+                          type: label
+                      notIn:
+                        values: []
+                  - negativeAttributeFilter:
+                      displayForm:
+                        identifier:
+                          id: state
+                          type: label
+                      notIn:
+                        values: []
+                properties:
+                  controls:
+                    legend:
+                      position: bottom
+                version: '2'
+                visualizationUrl: local:bar
+              id: top_10_customers
+              title: Top 10 Customers
+              description: ''
+            - content:
+                buckets:
+                  - items:
+                      - measure:
+                          definition:
+                            measureDefinition:
+                              filters: []
+                              item:
+                                identifier:
+                                  id: revenue_top_10
+                                  type: metric
+                          localIdentifier: 77dc71bbac92412bac5f94284a5919df
+                          title: Revenue / Top 10
+                    localIdentifier: measures
+                  - items:
+                      - attribute:
+                          displayForm:
+                            identifier:
+                              id: product_name
+                              type: label
+                          localIdentifier: 781952e728204dcf923142910cc22ae2
+                    localIdentifier: view
+                  - items:
+                      - attribute:
+                          displayForm:
+                            identifier:
+                              id: products.category
+                              type: label
+                          localIdentifier: fe513cef1c6244a5ac21c5f49c56b108
+                    localIdentifier: stack
+                filters:
+                  - negativeAttributeFilter:
+                      displayForm:
+                        identifier:
+                          id: product_name
+                          type: label
+                      notIn:
+                        values: []
+                  - negativeAttributeFilter:
+                      displayForm:
+                        identifier:
+                          id: products.category
+                          type: label
+                      notIn:
+                        values: []
+                properties:
+                  controls:
+                    legend:
+                      position: bottom
+                version: '2'
+                visualizationUrl: local:bar
+              id: top_10_products
+              title: Top 10 Products
+              description: ''
+          exportDefinitions: []
+      headers:
+        Accept-Encoding:
+          - br, gzip, deflate
+        Content-Type:
+          - application/json
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+    response:
+      status:
+        code: 204
+        message: No Content
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        DATE: *id001
+        Expires:
+          - '0'
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - same-origin
+        Vary:
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      body:
+        string: ''
+  - request:
+      method: POST
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo_testing/ai/chatStream
+      body:
+        question: What is the total revenue for the year 2024?
+      headers:
+        Accept:
+          - text/event-stream
+        Accept-Encoding:
+          - br, gzip, deflate
+        Content-Type:
+          - application/json
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+    response:
+      status:
+        code: 200
+        message: OK
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Type:
+          - text/event-stream
+        DATE: *id001
+        Expires:
+          - '0'
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - same-origin
+        Transfer-Encoding:
+          - chunked
+        Vary:
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      body:
+        string: 'event:chat-message
+
+          data:{"routing":{"useCase":"CREATE_VISUALIZATION","reasoning":"Calculating
+          the total revenue for the year 2024..."},"chatHistoryInteractionId":"7d653bfe25904113aedc4097fe3c130c"}
+
+
+          event:chat-message
+
+          data:{"createdVisualizations":{"objects":[{"id":"total_revenue_for_the_year_2024","title":"Total
+          Revenue for the Year 2024","visualizationType":"HEADLINE","metrics":[{"id":"total_revenue","type":"metric","title":"Total
+          Revenue"}],"dimensionality":[],"filters":[{"using":"date","from":"2024-01-01
+          00:00","to":"2024-12-31 23:59"}],"suggestions":[{"query":"Switch to a bar
+          chart to compare monthly revenue in 2024","label":"Switch to a bar chart"},{"query":"Add
+          a comparison with 2023 revenue","label":"Compare with 2023"}]}],"reasoning":"\n\n\n\n\n  Here
+          is a headline showing the Total Revenue for the Year 2024.\n\n- Metrics:
+          Total Revenue\n- Attributes: None\n- Filter: date from 2024-01-01 00:00
+          to 2024-12-31 23:59\n\n"},"chatHistoryInteractionId":"7d653bfe25904113aedc4097fe3c130c"}
+
+
+          '
+  - request:
+      method: POST
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo_testing/ai/chatHistory
+      body:
+        reset: true
+      headers:
+        Accept:
+          - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
+        Content-Type:
+          - application/json
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+    response:
+      status:
+        code: 200
+        message: OK
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Length:
+          - '51'
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - same-origin
+        Vary:
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      body:
+        string:
+          interactions: []
+          threadId: demo_testing.admin
+  - request:
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/workspaces?include=workspaces&page=0&size=500
+      body: null
+      headers:
+        Accept:
+          - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+    response:
+      status:
+        code: 200
+        message: OK
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Length:
+          - '1412'
+        Content-Type:
+          - application/vnd.gooddata.api+json
+        DATE: *id001
+        Expires:
+          - '0'
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - same-origin
+        Vary:
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      body:
+        string:
+          data:
+            - id: demo
+              type: workspace
+              attributes:
+                name: Demo
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo
+            - id: demo_west
+              type: workspace
+              attributes:
+                name: Demo West
+              relationships:
+                parent:
+                  data:
+                    id: demo
+                    type: workspace
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo_west
+            - id: demo_west_california
+              type: workspace
+              attributes:
+                name: Demo West California
+              relationships:
+                parent:
+                  data:
+                    id: demo_west
+                    type: workspace
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo_west_california
+            - id: trial
+              type: workspace
+              attributes:
+                name: Trial
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/trial
+            - id: demo_testing
+              type: workspace
+              attributes:
+                name: demo_testing
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo_testing
+          included:
+            - id: demo
+              type: workspace
+              attributes:
+                name: Demo
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo
+            - id: demo_west
+              type: workspace
+              attributes:
+                name: Demo West
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo_west
+          links:
+            self: http://localhost:3000/api/v1/entities/workspaces?include=workspaces&page=0&size=500
+            next: http://localhost:3000/api/v1/entities/workspaces?include=workspaces&page=1&size=500
+  - request:
+      method: DELETE
+      uri: http://localhost:3000/api/v1/entities/workspaces/demo_testing
+      body: null
+      headers:
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+    response:
+      status:
+        code: 204
+        message: No Content
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        DATE: *id001
+        Expires:
+          - '0'
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - same-origin
+        Vary:
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      body:
+        string: ''
