@@ -160,3 +160,25 @@ def test_reset_ai_chat_history(test_config):
         assert len(response.interactions) == 0
     finally:
         sdk.catalog_workspace.delete_workspace(test_workspace_id)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "ai_chat_stream.yaml"))
+def test_ai_chat_stream(test_config):
+    """Test AI chat stream.
+
+    vcrpy is not able to record streaming responses properly, so we don't have a proper test for this.
+    """
+    path = _current_dir / "load" / "ai"
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    test_workspace_id = test_config["workspace_test"]
+
+    question = "What is the total revenue for the year 2024?"
+    try:
+        _setup_test_workspace(sdk, test_workspace_id, path)
+        buffer = {}
+        for chunk in sdk.compute.ai_chat_stream(test_workspace_id, question):
+            buffer = {**buffer, **chunk}
+        assert buffer is not None
+    finally:
+        sdk.compute.reset_ai_chat_history(test_workspace_id)
+        sdk.catalog_workspace.delete_workspace(test_workspace_id)

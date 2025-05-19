@@ -1,7 +1,9 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
+import json
 import logging
+from collections.abc import Iterator
 from typing import Any, Optional
 
 from gooddata_api_client import ApiException
@@ -89,11 +91,47 @@ class ComputeService:
             workspace_id: workspace identifier
             question: question to ask AI
         Returns:
-            str: Chat response
+            ChatResult: Chat response
         """
         chat_request = ChatRequest(question=question)
         response = self._actions_api.ai_chat(workspace_id, chat_request, _check_return_type=False)
         return response
+
+    def _parse_sse_events(self, raw: str) -> Iterator[Any]:
+        """Helper to parse SSE events and yield JSON from data lines."""
+        events = raw.split("\n\n")
+        for event in events:
+            for line in event.split("\n"):
+                if line.startswith("data:"):
+                    try:
+                        yield json.loads(line[5:].strip())
+                    except json.JSONDecodeError:
+                        continue
+
+    def ai_chat_stream(self, workspace_id: str, question: str) -> Iterator[Any]:
+        """
+        Chat Stream with AI in GoodData workspace.
+
+        Args:
+            workspace_id: workspace identifier
+            question: question to ask AI
+        Returns:
+            Iterator[Any]: Yields parsed JSON objects from each SSE event's data field
+        """
+        chat_request = ChatRequest(question=question)
+        response = self._actions_api.ai_chat_stream(
+            workspace_id, chat_request, _check_return_type=False, _preload_content=False
+        )
+        buffer = ""
+        try:
+            for chunk in response.stream(decode_content=True):
+                if chunk:
+                    buffer += chunk.decode("utf-8")
+                    *events, buffer = buffer.split("\n\n")
+                    for event in events:
+                        yield from self._parse_sse_events(event)
+        finally:
+            response.release_conn()
 
     def get_ai_chat_history(
         self,
