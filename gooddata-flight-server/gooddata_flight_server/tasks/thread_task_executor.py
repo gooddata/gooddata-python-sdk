@@ -565,6 +565,14 @@ class ThreadTaskExecutor(TaskExecutor, _TaskExecutionCallbacks):
         execution.start()
         self._metrics.queue_size.set(self._queue_size)
 
+    def get_task_submitted_timestamp(self, task_id: str) -> Optional[float]:
+        with self._task_lock:
+            execution = self._executions.get(task_id)
+
+        if execution is not None:
+            return execution.stats.created
+        return None
+
     def wait_for_result(self, task_id: str, timeout: Optional[float] = None) -> Optional[TaskExecutionResult]:
         with self._task_lock:
             execution = self._executions.get(task_id)

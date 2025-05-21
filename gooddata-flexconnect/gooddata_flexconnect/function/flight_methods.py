@@ -1,4 +1,5 @@
 #  (C) 2024 GoodData Corporation
+import time
 from collections.abc import Generator
 from typing import Optional
 
@@ -12,7 +13,6 @@ from gooddata_flight_server import (
     FlightServerMethods,
     ServerContext,
     TaskExecutionResult,
-    TaskWaitTimeoutError,
     flight_server_methods,
 )
 
@@ -23,11 +23,26 @@ from gooddata_flexconnect.function.function_task import FlexConnectFunctionTask
 _LOGGER = structlog.get_logger("gooddata_flexconnect.rpc")
 
 
+def _prepare_poll_error(task_id: str) -> pyarrow.flight.FlightError:
+    return ErrorInfo.poll(
+        flight_info=None,
+        cancel_descriptor=pyarrow.flight.FlightDescriptor.for_command(f"c:{task_id}".encode()),
+        retry_descriptor=pyarrow.flight.FlightDescriptor.for_command(f"r:{task_id}".encode()),
+    )
+
+
 class _FlexConnectServerMethods(FlightServerMethods):
-    def __init__(self, ctx: ServerContext, registry: FlexConnectFunctionRegistry, call_deadline_ms: float) -> None:
+    def __init__(
+        self,
+        ctx: ServerContext,
+        registry: FlexConnectFunctionRegistry,
+        call_deadline_ms: float,
+        poll_interval_ms: float,
+    ) -> None:
         self._ctx = ctx
         self._registry = registry
         self._call_deadline = call_deadline_ms / 1000
+        self._poll_interval = poll_interval_ms / 1000
 
     @staticmethod
     def _create_descriptor(fun_name: str, metadata: Optional[dict]) -> pyarrow.flight.FlightDescriptor:
@@ -140,39 +155,53 @@ class _FlexConnectServerMethods(FlightServerMethods):
         descriptor: pyarrow.flight.FlightDescriptor,
     ) -> pyarrow.flight.FlightInfo:
         structlog.contextvars.bind_contextvars(peer=context.peer())
-        task: Optional[FlexConnectFunctionTask] = None
+
+        # first, check if the descriptor is a cancel descriptor
+        if descriptor.command is None or not len(descriptor.command):
+            raise ErrorInfo.bad_argument(
+                "Incorrect FlexConnect function invocation. Flight descriptor must contain command "
+                "with the invocation payload."
+            )
+
+        task_id: str
+        fun_name: Optional[str] = None
+
+        if descriptor.command.startswith(b"c:"):
+            # cancel descriptor: just cancel the given task and raise cancellation exception
+            task_id = descriptor.command[2:].decode()
+            self._ctx.task_executor.cancel(task_id)
+            raise ErrorInfo.for_reason(
+                ErrorCode.COMMAND_CANCELLED, "FlexConnect function invocation was cancelled."
+            ).to_cancelled_error()
+        elif descriptor.command.startswith(b"r:"):
+            # retry descriptor: extract the task_id, do not submit it again and do one polling iteration
+            task_id = descriptor.command[2:].decode()
+            # for retries, we also need to check the call deadline for the whole call duration
+            task_timestamp = self._ctx.task_executor.get_task_submitted_timestamp(task_id)
+            if task_timestamp is not None and time.perf_counter() - task_timestamp > self._call_deadline:
+                self._ctx.task_executor.cancel(task_id)
+                raise ErrorInfo.for_reason(
+                    ErrorCode.TIMEOUT, f"GetFlightInfo timed out while waiting for task {task_id}."
+                ).to_timeout_error()
+        else:
+            # basic first-time submit: submit the task and do one polling iteration.
+            # do not check call deadline to give it a chance to wait for the result at least once
+            try:
+                task = self._prepare_task(context, descriptor)
+                self._ctx.task_executor.submit(task)
+                task_id = task.task_id
+                fun_name = task.fun_name
+            except Exception:
+                _LOGGER.error("flexconnect_fun_submit_failed", exc_info=True)
+                raise
 
         try:
-            task = self._prepare_task(context, descriptor)
-            self._ctx.task_executor.submit(task)
-
-            try:
-                # XXX: this should be enhanced to implement polling
-                task_result = self._ctx.task_executor.wait_for_result(task.task_id, self._call_deadline)
-            except TaskWaitTimeoutError:
-                cancelled = self._ctx.task_executor.cancel(task.task_id)
-                _LOGGER.warning(
-                    "flexconnect_fun_call_timeout", task_id=task.task_id, fun=task.fun_name, cancelled=cancelled
-                )
-
-                raise ErrorInfo.for_reason(
-                    ErrorCode.TIMEOUT, f"GetFlightInfo timed out while waiting for task {task.task_id}."
-                ).to_timeout_error()
-
-            # if this bombs then there must be something really wrong because the task
-            # was clearly submitted and code was waiting for its completion. this invariant
-            # should not happen in this particular code path. The None return value may
-            # be applicable one day when polling is in use and a request comes to check whether
-            # particular task id finished
-            assert task_result is not None
-
+            task_result = self._ctx.task_executor.wait_for_result(task_id, timeout=self._poll_interval)
             return self._prepare_flight_info(task_result)
+        except TimeoutError:
+            raise _prepare_poll_error(task_id)
         except Exception:
-            if task is not None:
-                _LOGGER.error("get_flight_info_failed", task_id=task.task_id, fun=task.fun_name, exc_info=True)
-            else:
-                _LOGGER.error("flexconnect_fun_submit_failed", exc_info=True)
-
+            _LOGGER.error("get_flight_info_failed", task_id=task_id, fun=fun_name, exc_info=True)
             raise
 
     def do_get(
@@ -201,7 +230,9 @@ class _FlexConnectServerMethods(FlightServerMethods):
 _FLEX_CONNECT_CONFIG_SECTION = "flexconnect"
 _FLEX_CONNECT_FUNCTION_LIST = "functions"
 _FLEX_CONNECT_CALL_DEADLINE_MS = "call_deadline_ms"
+_FLEX_CONNECT_POLLING_INTERVAL_MS = "polling_interval_ms"
 _DEFAULT_FLEX_CONNECT_CALL_DEADLINE_MS = 180_000
+_DEFAULT_FLEX_CONNECT_POLLING_INTERVAL_MS = 2000
 
 
 def _read_call_deadline_ms(ctx: ServerContext) -> int:
@@ -223,6 +254,24 @@ def _read_call_deadline_ms(ctx: ServerContext) -> int:
         )
 
 
+def _read_polling_interval_ms(ctx: ServerContext) -> int:
+    polling_interval = ctx.settings.get(f"{_FLEX_CONNECT_CONFIG_SECTION}.{_FLEX_CONNECT_POLLING_INTERVAL_MS}")
+    if polling_interval is None:
+        return _DEFAULT_FLEX_CONNECT_POLLING_INTERVAL_MS
+
+    try:
+        polling_interval = int(polling_interval)
+        if polling_interval <= 0:
+            raise ValueError()
+        return polling_interval
+    except ValueError:
+        raise ValueError(
+            f"Value of {_FLEX_CONNECT_CONFIG_SECTION}.{_FLEX_CONNECT_POLLING_INTERVAL_MS} must "
+            f"be a positive number - duration, in milliseconds, that FlexConnect function "
+            f"waits for the result during one polling iteration."
+        )
+
+
 @flight_server_methods
 def create_flexconnect_flight_methods(ctx: ServerContext) -> FlightServerMethods:
     """
@@ -236,8 +285,9 @@ def create_flexconnect_flight_methods(ctx: ServerContext) -> FlightServerMethods
     """
     modules = list(ctx.settings.get(f"{_FLEX_CONNECT_CONFIG_SECTION}.{_FLEX_CONNECT_FUNCTION_LIST}") or [])
     call_deadline_ms = _read_call_deadline_ms(ctx)
+    polling_interval_ms = _read_polling_interval_ms(ctx)
 
     _LOGGER.info("flexconnect_init", modules=modules)
     registry = FlexConnectFunctionRegistry().load(ctx, modules)
 
-    return _FlexConnectServerMethods(ctx, registry, call_deadline_ms)
+    return _FlexConnectServerMethods(ctx, registry, call_deadline_ms, polling_interval_ms)
