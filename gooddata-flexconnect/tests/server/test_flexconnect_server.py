@@ -1,8 +1,9 @@
 #  (C) 2024 GoodData Corporation
+
 import orjson
 import pyarrow.flight
 import pytest
-from gooddata_flight_server import ErrorCode
+from gooddata_flight_server import ErrorCode, ErrorInfo, RetryInfo
 
 from tests.assert_error_info import assert_error_code
 from tests.server.conftest import flexconnect_server
@@ -89,6 +90,43 @@ def test_basic_function_tls(tls_ca_cert):
         assert data.column_names == ["col1", "col2", "col3"]
 
 
+def test_function_with_polling():
+    """
+    Flight RPC implementation that invokes FlexConnect can return a polling info.
+
+    This way, the client can poll for results that take longer to complete.
+    """
+    with flexconnect_server(["tests.server.funs.fun4"]) as s:
+        c = pyarrow.flight.FlightClient(s.location)
+        descriptor = pyarrow.flight.FlightDescriptor.for_command(
+            orjson.dumps(
+                {
+                    "functionName": "PollableFun",
+                    "parameters": {"test1": 1, "test2": 2, "test3": 3},
+                }
+            )
+        )
+
+        # the function is set to sleep a bit longer than the polling interval,
+        # so the first iteration returns retry info in the exception
+        with pytest.raises(pyarrow.flight.FlightTimedOutError) as e:
+            c.get_flight_info(descriptor)
+
+        assert e.value is not None
+        assert_error_code(ErrorCode.POLL, e.value)
+
+        error_info = ErrorInfo.from_bytes(e.value.extra_info)
+        retry_info = RetryInfo.from_bytes(error_info.body)
+
+        # use the retry info to poll again for the result,
+        # now it should be ready and returned normally
+        info = c.get_flight_info(retry_info.retry_descriptor)
+        data: pyarrow.Table = c.do_get(info.endpoints[0].ticket).read_all()
+
+        assert len(data) == 3
+        assert data.column_names == ["col1", "col2", "col3"]
+
+
 def test_function_with_call_deadline():
     """
     Flight RPC implementation that invokes FlexConnect can be setup with
@@ -115,4 +153,54 @@ def test_function_with_call_deadline():
         with pytest.raises(pyarrow.flight.FlightTimedOutError) as e:
             c.get_flight_info(descriptor)
 
+        assert e.value is not None
+        assert_error_code(ErrorCode.POLL, e.value)
+
+        error_info = ErrorInfo.from_bytes(e.value.extra_info)
+        retry_info = RetryInfo.from_bytes(error_info.body)
+
+        # poll twice to reach the call deadline
+        with pytest.raises(pyarrow.flight.FlightTimedOutError) as e:
+            c.get_flight_info(retry_info.retry_descriptor)
+
+        assert e.value is not None
+        assert_error_code(ErrorCode.POLL, e.value)
+
+        error_info = ErrorInfo.from_bytes(e.value.extra_info)
+        retry_info = RetryInfo.from_bytes(error_info.body)
+
+        with pytest.raises(pyarrow.flight.FlightTimedOutError) as e:
+            c.get_flight_info(retry_info.retry_descriptor)
+
+        # and then ensure the timeout error is returned
         assert_error_code(ErrorCode.TIMEOUT, e.value)
+
+
+def test_function_with_cancelation():
+    """
+    Run a long-running function and cancel it after one poll iteration.
+    """
+    with flexconnect_server(["tests.server.funs.fun3"]) as s:
+        c = pyarrow.flight.FlightClient(s.location)
+        descriptor = pyarrow.flight.FlightDescriptor.for_command(
+            orjson.dumps(
+                {
+                    "functionName": "LongRunningFun",
+                    "parameters": {"test1": 1, "test2": 2, "test3": 3},
+                }
+            )
+        )
+
+        with pytest.raises(pyarrow.flight.FlightTimedOutError) as e:
+            c.get_flight_info(descriptor)
+
+        assert e.value is not None
+        assert_error_code(ErrorCode.POLL, e.value)
+
+        error_info = ErrorInfo.from_bytes(e.value.extra_info)
+        retry_info = RetryInfo.from_bytes(error_info.body)
+
+        with pytest.raises(pyarrow.flight.FlightCancelledError) as e:
+            c.get_flight_info(retry_info.cancel_descriptor)
+
+        assert e.value is not None
