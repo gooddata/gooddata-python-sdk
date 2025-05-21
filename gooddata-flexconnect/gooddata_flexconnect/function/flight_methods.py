@@ -17,6 +17,12 @@ from gooddata_flight_server import (
 )
 
 from gooddata_flexconnect.function.function import FlexConnectFunction
+from gooddata_flexconnect.function.function_invocation import (
+    CancelInvocation,
+    RetryInvocation,
+    SubmitInvocation,
+    extract_invocation_from_descriptor,
+)
 from gooddata_flexconnect.function.function_registry import FlexConnectFunctionRegistry
 from gooddata_flexconnect.function.function_task import FlexConnectFunctionTask
 
@@ -67,48 +73,20 @@ class _FlexConnectServerMethods(FlightServerMethods):
             total_records=-1,
         )
 
-    def _extract_invocation_payload(
-        self, descriptor: pyarrow.flight.FlightDescriptor
-    ) -> tuple[str, dict, Optional[tuple[str, ...]]]:
-        if descriptor.command is None or not len(descriptor.command):
-            raise ErrorInfo.bad_argument(
-                "Incorrect FlexConnect function invocation. Flight descriptor must contain command "
-                "with the invocation payload."
-            )
-
-        try:
-            payload = orjson.loads(descriptor.command)
-        except Exception:
-            raise ErrorInfo.bad_argument(
-                "Incorrect FlexConnect function invocation. The invocation payload is not a valid JSON."
-            )
-
-        fun = payload.get("functionName")
-        if fun is None or not len(fun):
-            raise ErrorInfo.bad_argument(
-                "Incorrect FlexConnect function invocation. The invocation payload does not specify 'functionName'."
-            )
-
-        parameters = payload.get("parameters") or {}
-        columns = parameters.get("columns")
-
-        return fun, parameters, columns
-
     def _prepare_task(
         self,
         context: pyarrow.flight.ServerCallContext,
-        descriptor: pyarrow.flight.FlightDescriptor,
+        submit_invocation: SubmitInvocation,
     ) -> FlexConnectFunctionTask:
-        fun_name, parameters, columns = self._extract_invocation_payload(descriptor)
         headers = self.call_info_middleware(context).headers
-        fun = self._registry.create_function(fun_name)
+        fun = self._registry.create_function(submit_invocation.function_name)
 
         return FlexConnectFunctionTask(
             fun=fun,
-            parameters=parameters,
-            columns=columns,
+            parameters=submit_invocation.parameters,
+            columns=submit_invocation.columns,
             headers=headers,
-            cmd=descriptor.command,
+            cmd=submit_invocation.command,
         )
 
     def _prepare_flight_info(self, task_result: TaskExecutionResult) -> pyarrow.flight.FlightInfo:
@@ -156,26 +134,19 @@ class _FlexConnectServerMethods(FlightServerMethods):
     ) -> pyarrow.flight.FlightInfo:
         structlog.contextvars.bind_contextvars(peer=context.peer())
 
-        # first, check if the descriptor is a cancel descriptor
-        if descriptor.command is None or not len(descriptor.command):
-            raise ErrorInfo.bad_argument(
-                "Incorrect FlexConnect function invocation. Flight descriptor must contain command "
-                "with the invocation payload."
-            )
-
         task_id: str
         fun_name: Optional[str] = None
+        invocation = extract_invocation_from_descriptor(descriptor)
 
-        if descriptor.command.startswith(b"c:"):
-            # cancel descriptor: just cancel the given task and raise cancellation exception
-            task_id = descriptor.command[2:].decode()
-            self._ctx.task_executor.cancel(task_id)
+        if isinstance(invocation, CancelInvocation):
+            # cancel the given task and raise cancellation exception
+            self._ctx.task_executor.cancel(invocation.task_id)
             raise ErrorInfo.for_reason(
                 ErrorCode.COMMAND_CANCELLED, "FlexConnect function invocation was cancelled."
             ).to_cancelled_error()
-        elif descriptor.command.startswith(b"r:"):
+        elif isinstance(invocation, RetryInvocation):
             # retry descriptor: extract the task_id, do not submit it again and do one polling iteration
-            task_id = descriptor.command[2:].decode()
+            task_id = invocation.task_id
             # for retries, we also need to check the call deadline for the whole call duration
             task_timestamp = self._ctx.task_executor.get_task_submitted_timestamp(task_id)
             if task_timestamp is not None and time.perf_counter() - task_timestamp > self._call_deadline:
@@ -183,17 +154,20 @@ class _FlexConnectServerMethods(FlightServerMethods):
                 raise ErrorInfo.for_reason(
                     ErrorCode.TIMEOUT, f"GetFlightInfo timed out while waiting for task {task_id}."
                 ).to_timeout_error()
-        else:
+        elif isinstance(invocation, SubmitInvocation):
             # basic first-time submit: submit the task and do one polling iteration.
             # do not check call deadline to give it a chance to wait for the result at least once
             try:
-                task = self._prepare_task(context, descriptor)
+                task = self._prepare_task(context, invocation)
                 self._ctx.task_executor.submit(task)
                 task_id = task.task_id
                 fun_name = task.fun_name
             except Exception:
                 _LOGGER.error("flexconnect_fun_submit_failed", exc_info=True)
                 raise
+        else:
+            # can be replaced by assert_never when we are on 3.11
+            raise AssertionError
 
         try:
             task_result = self._ctx.task_executor.wait_for_result(task_id, timeout=self._poll_interval)
