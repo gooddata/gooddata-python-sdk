@@ -89,14 +89,21 @@ class _FlexConnectServerMethods(FlightServerMethods):
             cmd=submit_invocation.command,
         )
 
-    def _prepare_flight_info(self, task_result: TaskExecutionResult) -> pyarrow.flight.FlightInfo:
+    def _prepare_flight_info(
+        self, task_id: str, task_result: Optional[TaskExecutionResult]
+    ) -> pyarrow.flight.FlightInfo:
+        if task_result is None:
+            raise ErrorInfo.for_reason(
+                ErrorCode.BAD_ARGUMENT, f"Task with id '{task_id}' does not exist."
+            ).to_user_error()
+
         if task_result.error is not None:
             raise task_result.error.as_flight_error()
 
         if task_result.cancelled:
             raise ErrorInfo.for_reason(
                 ErrorCode.COMMAND_CANCELLED,
-                f"FlexConnect function invocation was cancelled. Invocation task was: '{task_result.task_id}'.",
+                f"FlexConnect function invocation was cancelled. Invocation task was: '{task_id}'.",
             ).to_server_error()
 
         result = task_result.result
@@ -107,7 +114,7 @@ class _FlexConnectServerMethods(FlightServerMethods):
             descriptor=pyarrow.flight.FlightDescriptor.for_command(task_result.cmd),
             endpoints=[
                 pyarrow.flight.FlightEndpoint(
-                    ticket=pyarrow.flight.Ticket(ticket=orjson.dumps({"task_id": task_result.task_id})),
+                    ticket=pyarrow.flight.Ticket(ticket=orjson.dumps({"task_id": task_id})),
                     locations=[self._ctx.location],
                 )
             ],
@@ -140,20 +147,16 @@ class _FlexConnectServerMethods(FlightServerMethods):
 
         if isinstance(invocation, CancelInvocation):
             # cancel the given task and raise cancellation exception
-            self._ctx.task_executor.cancel(invocation.task_id)
+            if self._ctx.task_executor.cancel(invocation.task_id):
+                raise ErrorInfo.for_reason(
+                    ErrorCode.COMMAND_CANCELLED, "FlexConnect function invocation was cancelled."
+                ).to_cancelled_error()
             raise ErrorInfo.for_reason(
-                ErrorCode.COMMAND_CANCELLED, "FlexConnect function invocation was cancelled."
+                ErrorCode.COMMAND_CANCEL_NOT_POSSIBLE, "FlexConnect function invocation could not be cancelled."
             ).to_cancelled_error()
         elif isinstance(invocation, RetryInvocation):
             # retry descriptor: extract the task_id, do not submit it again and do one polling iteration
             task_id = invocation.task_id
-            # for retries, we also need to check the call deadline for the whole call duration
-            task_timestamp = self._ctx.task_executor.get_task_submitted_timestamp(task_id)
-            if task_timestamp is not None and time.perf_counter() - task_timestamp > self._call_deadline:
-                self._ctx.task_executor.cancel(task_id)
-                raise ErrorInfo.for_reason(
-                    ErrorCode.TIMEOUT, f"GetFlightInfo timed out while waiting for task {task_id}."
-                ).to_timeout_error()
         elif isinstance(invocation, SubmitInvocation):
             # basic first-time submit: submit the task and do one polling iteration.
             # do not check call deadline to give it a chance to wait for the result at least once
@@ -171,8 +174,18 @@ class _FlexConnectServerMethods(FlightServerMethods):
 
         try:
             task_result = self._ctx.task_executor.wait_for_result(task_id, timeout=self._poll_interval)
-            return self._prepare_flight_info(task_result)
+            return self._prepare_flight_info(task_id, task_result)
         except TimeoutError:
+            # first, check the call deadline for the whole call duration
+            task_timestamp = self._ctx.task_executor.get_task_submitted_timestamp(task_id)
+            if task_timestamp is not None and time.perf_counter() - task_timestamp > self._call_deadline:
+                self._ctx.task_executor.cancel(task_id)
+                raise ErrorInfo.for_reason(
+                    ErrorCode.TIMEOUT, f"GetFlightInfo timed out while waiting for task {task_id}."
+                ).to_timeout_error()
+
+            # if the result is not ready, and we still have time, indicate to the client
+            # how to poll for the results
             raise _prepare_poll_error(task_id)
         except Exception:
             _LOGGER.error("get_flight_info_failed", task_id=task_id, fun=fun_name, exc_info=True)

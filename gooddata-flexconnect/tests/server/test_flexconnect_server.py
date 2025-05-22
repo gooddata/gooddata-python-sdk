@@ -10,6 +10,10 @@ from tests.server.conftest import flexconnect_server
 
 
 def test_basic_function():
+    """
+    This function should return immediately when called, no polling necessary.
+    :return:
+    """
     with flexconnect_server(["tests.server.funs.fun1"]) as s:
         c = pyarrow.flight.FlightClient(s.location)
         fun_infos = list(c.list_flights())
@@ -126,6 +130,13 @@ def test_function_with_polling():
         assert len(data) == 3
         assert data.column_names == ["col1", "col2", "col3"]
 
+        # also check that trying to cancel already completed task results in cancelled with correct code
+        with pytest.raises(pyarrow.flight.FlightCancelledError) as e:
+            c.get_flight_info(retry_info.cancel_descriptor)
+
+        assert e.value is not None
+        assert_error_code(ErrorCode.COMMAND_CANCELLED, e.value)
+
 
 def test_function_with_call_deadline():
     """
@@ -150,6 +161,7 @@ def test_function_with_call_deadline():
             )
         )
 
+        # the initial submit returns polling info
         with pytest.raises(pyarrow.flight.FlightTimedOutError) as e:
             c.get_flight_info(descriptor)
 
@@ -159,24 +171,21 @@ def test_function_with_call_deadline():
         error_info = ErrorInfo.from_bytes(e.value.extra_info)
         retry_info = RetryInfo.from_bytes(error_info.body)
 
-        # poll twice to reach the call deadline
+        # the next poll still returns polling info
         with pytest.raises(pyarrow.flight.FlightTimedOutError) as e:
             c.get_flight_info(retry_info.retry_descriptor)
 
         assert e.value is not None
         assert_error_code(ErrorCode.POLL, e.value)
 
-        error_info = ErrorInfo.from_bytes(e.value.extra_info)
-        retry_info = RetryInfo.from_bytes(error_info.body)
-
+        # the third one reaches the deadline so the Timeout code is returned instead
         with pytest.raises(pyarrow.flight.FlightTimedOutError) as e:
             c.get_flight_info(retry_info.retry_descriptor)
 
-        # and then ensure the timeout error is returned
         assert_error_code(ErrorCode.TIMEOUT, e.value)
 
 
-def test_function_with_cancelation():
+def test_function_with_cancellation():
     """
     Run a long-running function and cancel it after one poll iteration.
     """
@@ -191,6 +200,7 @@ def test_function_with_cancelation():
             )
         )
 
+        # the initial submit returns polling info
         with pytest.raises(pyarrow.flight.FlightTimedOutError) as e:
             c.get_flight_info(descriptor)
 
@@ -200,7 +210,16 @@ def test_function_with_cancelation():
         error_info = ErrorInfo.from_bytes(e.value.extra_info)
         retry_info = RetryInfo.from_bytes(error_info.body)
 
+        # use the poll info to cancel the task
         with pytest.raises(pyarrow.flight.FlightCancelledError) as e:
             c.get_flight_info(retry_info.cancel_descriptor)
 
         assert e.value is not None
+        assert_error_code(ErrorCode.COMMAND_CANCELLED, e.value)
+
+        # even multiple cancellations return the same error
+        with pytest.raises(pyarrow.flight.FlightCancelledError) as e:
+            c.get_flight_info(retry_info.cancel_descriptor)
+
+        assert e.value is not None
+        assert_error_code(ErrorCode.COMMAND_CANCELLED, e.value)
