@@ -27,7 +27,7 @@ class _LongRunningFun(FlexConnectFunction):
     ) -> ArrowData:
         # sleep is intentionally setup to be longer than the deadline for
         # the function invocation (see conftest.py // flexconnect_server fixture)
-        time.sleep(1.5)
+        time.sleep(2)
 
         return pyarrow.table(
             data={

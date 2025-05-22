@@ -80,7 +80,7 @@ def flexconnect_server(
     funs = f"[{funs}]"
 
     os.environ["GOODDATA_FLIGHT_FLEXCONNECT__FUNCTIONS"] = funs
-    os.environ["GOODDATA_FLIGHT_FLEXCONNECT__CALL_DEADLINE_MS"] = "1000"
+    os.environ["GOODDATA_FLIGHT_FLEXCONNECT__CALL_DEADLINE_MS"] = "1200"
     os.environ["GOODDATA_FLIGHT_FLEXCONNECT__POLLING_INTERVAL_MS"] = "500"
 
     with server(create_flexconnect_flight_methods, tls, mtls) as s:

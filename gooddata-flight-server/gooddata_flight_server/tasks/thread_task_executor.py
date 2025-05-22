@@ -605,8 +605,8 @@ class ThreadTaskExecutor(TaskExecutor, _TaskExecutionCallbacks):
             return True
 
         if execution is None:
-            # the task was not and is not running - cancel not possible
-            return False
+            # the task was not and is not running - cancel not necessary
+            return True
 
         return execution.cancel()
 
