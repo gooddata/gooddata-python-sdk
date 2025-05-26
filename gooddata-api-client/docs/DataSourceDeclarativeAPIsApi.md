@@ -101,6 +101,7 @@ with gooddata_api_client.ApiClient() as api_client:
     declarative_data_sources = DeclarativeDataSources(
         data_sources=[
             DeclarativeDataSource(
+                authentication_type="USERNAME_PASSWORD",
                 cache_strategy="ALWAYS",
                 client_id="client1234",
                 client_secret="client_secret_example",

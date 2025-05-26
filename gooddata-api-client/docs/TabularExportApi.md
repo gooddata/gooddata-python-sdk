@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 
 # **create_dashboard_export_request**
-> ExportResponse create_dashboard_export_request(workspace_id, dashboard_id)
+> ExportResponse create_dashboard_export_request(workspace_id, dashboard_id, dashboard_tabular_export_request)
 
 (EXPERIMENTAL) Create dashboard tabular export request
 
@@ -24,6 +24,7 @@ import time
 import gooddata_api_client
 from gooddata_api_client.api import tabular_export_api
 from gooddata_api_client.model.export_response import ExportResponse
+from gooddata_api_client.model.dashboard_tabular_export_request import DashboardTabularExportRequest
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -38,11 +39,18 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = tabular_export_api.TabularExportApi(api_client)
     workspace_id = "workspaceId_example" # str | 
     dashboard_id = "dashboardId_example" # str | 
+    dashboard_tabular_export_request = DashboardTabularExportRequest(
+        dashboard_filters_override=[
+            DashboardTabularExportRequestDashboardFiltersOverrideInner(None),
+        ],
+        file_name="result",
+        format="XLSX",
+    ) # DashboardTabularExportRequest | 
 
     # example passing only required values which don't have defaults set
     try:
         # (EXPERIMENTAL) Create dashboard tabular export request
-        api_response = api_instance.create_dashboard_export_request(workspace_id, dashboard_id)
+        api_response = api_instance.create_dashboard_export_request(workspace_id, dashboard_id, dashboard_tabular_export_request)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling TabularExportApi->create_dashboard_export_request: %s\n" % e)
@@ -55,6 +63,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
  **dashboard_id** | **str**|  |
+ **dashboard_tabular_export_request** | [**DashboardTabularExportRequest**](DashboardTabularExportRequest.md)|  |
 
 ### Return type
 
@@ -66,7 +75,7 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
+ - **Content-Type**: application/json
  - **Accept**: application/json
 
 

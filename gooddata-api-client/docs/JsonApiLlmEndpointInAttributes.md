@@ -11,7 +11,6 @@ Name | Type | Description | Notes
 **llm_model** | **str** | LLM Model. We provide a default model for each provider, but you can override it here. | [optional] 
 **llm_organization** | **str, none_type** | Organization in LLM provider. | [optional] 
 **provider** | **str** | LLM Provider. | [optional]  if omitted the server will use the default value of "OPENAI"
-**workspace_ids** | **[str]** | List of workspace IDs for which LLM endpoint is valid. If empty, it is valid for all workspaces. | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

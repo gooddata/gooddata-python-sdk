@@ -213,6 +213,9 @@ Class | Method | HTTP request | Description
 *IdentityProvidersApi* | [**patch_entity_identity_providers**](docs/IdentityProvidersApi.md#patch_entity_identity_providers) | **PATCH** /api/v1/entities/identityProviders/{id} | Patch Identity Provider
 *IdentityProvidersApi* | [**set_identity_providers**](docs/IdentityProvidersApi.md#set_identity_providers) | **PUT** /api/v1/layout/identityProviders | Set all identity providers
 *IdentityProvidersApi* | [**update_entity_identity_providers**](docs/IdentityProvidersApi.md#update_entity_identity_providers) | **PUT** /api/v1/entities/identityProviders/{id} | Put Identity Provider
+*ImageExportApi* | [**create_image_export**](docs/ImageExportApi.md#create_image_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/image | (EXPERIMENTAL) Create image export request
+*ImageExportApi* | [**get_image_export**](docs/ImageExportApi.md#get_image_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/image/{exportId} | (EXPERIMENTAL) Retrieve exported files
+*ImageExportApi* | [**get_image_export_metadata**](docs/ImageExportApi.md#get_image_export_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/image/{exportId}/metadata | (EXPERIMENTAL) Retrieve metadata context
 *InvalidateCacheApi* | [**register_upload_notification**](docs/InvalidateCacheApi.md#register_upload_notification) | **POST** /api/v1/actions/dataSources/{dataSourceId}/uploadNotification | Register an upload notification
 *JWKSApi* | [**create_entity_jwks**](docs/JWKSApi.md#create_entity_jwks) | **POST** /api/v1/entities/jwks | Post Jwks
 *JWKSApi* | [**delete_entity_jwks**](docs/JWKSApi.md#delete_entity_jwks) | **DELETE** /api/v1/entities/jwks/{id} | Delete Jwk
@@ -302,6 +305,7 @@ Class | Method | HTTP request | Description
 *SmartFunctionsApi* | [**ai_chat**](docs/SmartFunctionsApi.md#ai_chat) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/chat | (BETA) Chat with AI
 *SmartFunctionsApi* | [**ai_chat_history**](docs/SmartFunctionsApi.md#ai_chat_history) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/chatHistory | (BETA) Get Chat History
 *SmartFunctionsApi* | [**ai_chat_stream**](docs/SmartFunctionsApi.md#ai_chat_stream) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/chatStream | (BETA) Chat with AI
+*SmartFunctionsApi* | [**ai_chat_usage**](docs/SmartFunctionsApi.md#ai_chat_usage) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/chatUsage | Get Chat Usage
 *SmartFunctionsApi* | [**ai_search**](docs/SmartFunctionsApi.md#ai_search) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/search | (BETA) Semantic Search in Metadata
 *SmartFunctionsApi* | [**anomaly_detection**](docs/SmartFunctionsApi.md#anomaly_detection) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/{resultId} | (EXPERIMENTAL) Smart functions - Anomaly Detection
 *SmartFunctionsApi* | [**anomaly_detection_result**](docs/SmartFunctionsApi.md#anomaly_detection_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/result/{resultId} | (EXPERIMENTAL) Smart functions - Anomaly Detection Result
@@ -398,6 +402,7 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**ai_chat**](docs/ActionsApi.md#ai_chat) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/chat | (BETA) Chat with AI
 *ActionsApi* | [**ai_chat_history**](docs/ActionsApi.md#ai_chat_history) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/chatHistory | (BETA) Get Chat History
 *ActionsApi* | [**ai_chat_stream**](docs/ActionsApi.md#ai_chat_stream) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/chatStream | (BETA) Chat with AI
+*ActionsApi* | [**ai_chat_usage**](docs/ActionsApi.md#ai_chat_usage) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/chatUsage | Get Chat Usage
 *ActionsApi* | [**ai_search**](docs/ActionsApi.md#ai_search) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/search | (BETA) Semantic Search in Metadata
 *ActionsApi* | [**all_platform_usage**](docs/ActionsApi.md#all_platform_usage) | **GET** /api/v1/actions/collectUsage | Info about the platform usage.
 *ActionsApi* | [**anomaly_detection**](docs/ActionsApi.md#anomaly_detection) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/{resultId} | (EXPERIMENTAL) Smart functions - Anomaly Detection
@@ -414,6 +419,7 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**compute_valid_descendants**](docs/ActionsApi.md#compute_valid_descendants) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidDescendants | (BETA) Valid descendants
 *ActionsApi* | [**compute_valid_objects**](docs/ActionsApi.md#compute_valid_objects) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidObjects | Valid objects
 *ActionsApi* | [**create_dashboard_export_request**](docs/ActionsApi.md#create_dashboard_export_request) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/export/tabular | (EXPERIMENTAL) Create dashboard tabular export request
+*ActionsApi* | [**create_image_export**](docs/ActionsApi.md#create_image_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/image | (EXPERIMENTAL) Create image export request
 *ActionsApi* | [**create_pdf_export**](docs/ActionsApi.md#create_pdf_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/visual | Create visual - pdf export request
 *ActionsApi* | [**create_raw_export**](docs/ActionsApi.md#create_raw_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/raw | (EXPERIMENTAL) Create raw export request
 *ActionsApi* | [**create_slides_export**](docs/ActionsApi.md#create_slides_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/slides | (EXPERIMENTAL) Create slides export request
@@ -427,6 +433,8 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**get_dependent_entities_graph**](docs/ActionsApi.md#get_dependent_entities_graph) | **GET** /api/v1/actions/workspaces/{workspaceId}/dependentEntitiesGraph | Computes the dependent entities graph
 *ActionsApi* | [**get_dependent_entities_graph_from_entry_points**](docs/ActionsApi.md#get_dependent_entities_graph_from_entry_points) | **POST** /api/v1/actions/workspaces/{workspaceId}/dependentEntitiesGraph | Computes the dependent entities graph from given entry points
 *ActionsApi* | [**get_exported_file**](docs/ActionsApi.md#get_exported_file) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId} | Retrieve exported files
+*ActionsApi* | [**get_image_export**](docs/ActionsApi.md#get_image_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/image/{exportId} | (EXPERIMENTAL) Retrieve exported files
+*ActionsApi* | [**get_image_export_metadata**](docs/ActionsApi.md#get_image_export_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/image/{exportId}/metadata | (EXPERIMENTAL) Retrieve metadata context
 *ActionsApi* | [**get_metadata**](docs/ActionsApi.md#get_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId}/metadata | Retrieve metadata context
 *ActionsApi* | [**get_notifications**](docs/ActionsApi.md#get_notifications) | **GET** /api/v1/actions/notifications | Get latest notifications.
 *ActionsApi* | [**get_raw_export**](docs/ActionsApi.md#get_raw_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/raw/{exportId} | (EXPERIMENTAL) Retrieve exported files
@@ -943,7 +951,9 @@ Class | Method | HTTP request | Description
  - [AssigneeRule](docs/AssigneeRule.md)
  - [AttributeExecutionResultHeader](docs/AttributeExecutionResultHeader.md)
  - [AttributeFilter](docs/AttributeFilter.md)
+ - [AttributeFilterByDate](docs/AttributeFilterByDate.md)
  - [AttributeFilterElements](docs/AttributeFilterElements.md)
+ - [AttributeFilterParent](docs/AttributeFilterParent.md)
  - [AttributeFormat](docs/AttributeFormat.md)
  - [AttributeHeader](docs/AttributeHeader.md)
  - [AttributeHeaderAttributeHeader](docs/AttributeHeaderAttributeHeader.md)
@@ -956,6 +966,7 @@ Class | Method | HTTP request | Description
  - [AutomationAlert](docs/AutomationAlert.md)
  - [AutomationAlertCondition](docs/AutomationAlertCondition.md)
  - [AutomationExternalRecipient](docs/AutomationExternalRecipient.md)
+ - [AutomationImageExport](docs/AutomationImageExport.md)
  - [AutomationMetadata](docs/AutomationMetadata.md)
  - [AutomationNotification](docs/AutomationNotification.md)
  - [AutomationNotificationAllOf](docs/AutomationNotificationAllOf.md)
@@ -968,6 +979,7 @@ Class | Method | HTTP request | Description
  - [ChatHistoryResult](docs/ChatHistoryResult.md)
  - [ChatRequest](docs/ChatRequest.md)
  - [ChatResult](docs/ChatResult.md)
+ - [ChatUsageResponse](docs/ChatUsageResponse.md)
  - [ClusteringRequest](docs/ClusteringRequest.md)
  - [ClusteringResult](docs/ClusteringResult.md)
  - [ColumnLocation](docs/ColumnLocation.md)
@@ -990,9 +1002,18 @@ Class | Method | HTTP request | Description
  - [CustomLabel](docs/CustomLabel.md)
  - [CustomMetric](docs/CustomMetric.md)
  - [CustomOverride](docs/CustomOverride.md)
+ - [DashboardAttributeFilter](docs/DashboardAttributeFilter.md)
+ - [DashboardAttributeFilterAttributeFilter](docs/DashboardAttributeFilterAttributeFilter.md)
+ - [DashboardAttributeFilterAttributeFilterAllOf](docs/DashboardAttributeFilterAttributeFilterAllOf.md)
+ - [DashboardDateFilter](docs/DashboardDateFilter.md)
+ - [DashboardDateFilterDateFilter](docs/DashboardDateFilterDateFilter.md)
+ - [DashboardDateFilterDateFilterAllOf](docs/DashboardDateFilterDateFilterAllOf.md)
+ - [DashboardFilter](docs/DashboardFilter.md)
  - [DashboardPermissions](docs/DashboardPermissions.md)
  - [DashboardPermissionsAssignment](docs/DashboardPermissionsAssignment.md)
  - [DashboardSlidesTemplate](docs/DashboardSlidesTemplate.md)
+ - [DashboardTabularExportRequest](docs/DashboardTabularExportRequest.md)
+ - [DashboardTabularExportRequestDashboardFiltersOverrideInner](docs/DashboardTabularExportRequestDashboardFiltersOverrideInner.md)
  - [DataColumnLocator](docs/DataColumnLocator.md)
  - [DataColumnLocators](docs/DataColumnLocators.md)
  - [DataSourceParameter](docs/DataSourceParameter.md)
@@ -1132,7 +1153,7 @@ Class | Method | HTTP request | Description
  - [FrequencyBucket](docs/FrequencyBucket.md)
  - [FrequencyProperties](docs/FrequencyProperties.md)
  - [GenerateLdmRequest](docs/GenerateLdmRequest.md)
- - [GetSlidesExport202ResponseInner](docs/GetSlidesExport202ResponseInner.md)
+ - [GetImageExport202ResponseInner](docs/GetImageExport202ResponseInner.md)
  - [GrainIdentifier](docs/GrainIdentifier.md)
  - [GrantedPermission](docs/GrantedPermission.md)
  - [GranularitiesFormatting](docs/GranularitiesFormatting.md)
@@ -1142,6 +1163,7 @@ Class | Method | HTTP request | Description
  - [HistogramBucket](docs/HistogramBucket.md)
  - [HistogramProperties](docs/HistogramProperties.md)
  - [IdentifierDuplications](docs/IdentifierDuplications.md)
+ - [ImageExportRequest](docs/ImageExportRequest.md)
  - [InPlatform](docs/InPlatform.md)
  - [InPlatformAllOf](docs/InPlatformAllOf.md)
  - [InlineFilterDefinition](docs/InlineFilterDefinition.md)
@@ -1219,6 +1241,7 @@ Class | Method | HTTP request | Description
  - [JsonApiAutomationInAttributes](docs/JsonApiAutomationInAttributes.md)
  - [JsonApiAutomationInAttributesAlert](docs/JsonApiAutomationInAttributesAlert.md)
  - [JsonApiAutomationInAttributesExternalRecipientsInner](docs/JsonApiAutomationInAttributesExternalRecipientsInner.md)
+ - [JsonApiAutomationInAttributesImageExportsInner](docs/JsonApiAutomationInAttributesImageExportsInner.md)
  - [JsonApiAutomationInAttributesMetadata](docs/JsonApiAutomationInAttributesMetadata.md)
  - [JsonApiAutomationInAttributesSchedule](docs/JsonApiAutomationInAttributesSchedule.md)
  - [JsonApiAutomationInAttributesTabularExportsInner](docs/JsonApiAutomationInAttributesTabularExportsInner.md)
@@ -1647,6 +1670,7 @@ Class | Method | HTTP request | Description
  - [MeasureGroupHeaders](docs/MeasureGroupHeaders.md)
  - [MeasureHeader](docs/MeasureHeader.md)
  - [MeasureItem](docs/MeasureItem.md)
+ - [MeasureItemDefinition](docs/MeasureItemDefinition.md)
  - [MeasureResultHeader](docs/MeasureResultHeader.md)
  - [MeasureValueFilter](docs/MeasureValueFilter.md)
  - [Metric](docs/Metric.md)
@@ -1666,6 +1690,7 @@ Class | Method | HTTP request | Description
  - [ObjectLinks](docs/ObjectLinks.md)
  - [ObjectLinksContainer](docs/ObjectLinksContainer.md)
  - [OrganizationPermissionAssignment](docs/OrganizationPermissionAssignment.md)
+ - [Over](docs/Over.md)
  - [PageMetadata](docs/PageMetadata.md)
  - [Paging](docs/Paging.md)
  - [Parameter](docs/Parameter.md)

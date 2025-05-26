@@ -926,6 +926,25 @@
         },
         "type": "object"
       },
+      "ChatUsageResponse": {
+        "properties": {
+          "interactionCount": {
+            "description": "Number of interactions in the time window",
+            "format": "int32",
+            "type": "integer"
+          },
+          "timeWindowHours": {
+            "description": "Time window in hours",
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "interactionCount",
+          "timeWindowHours"
+        ],
+        "type": "object"
+      },
       "ClusteringRequest": {
         "properties": {
           "numberOfClusters": {
@@ -3469,6 +3488,41 @@
           }
         },
         "summary": "(BETA) Chat with AI",
+        "tags": [
+          "Smart Functions",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/chatUsage": {
+      "get": {
+        "description": "Returns usage statistics of chat for a user in a workspace.",
+        "operationId": "aiChatUsage",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatUsageResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Get Chat Usage",
         "tags": [
           "Smart Functions",
           "actions"

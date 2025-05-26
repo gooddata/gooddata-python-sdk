@@ -39,6 +39,7 @@ from gooddata_api_client.api.filter_views_api import FilterViewsApi
 from gooddata_api_client.api.generate_logical_data_model_api import GenerateLogicalDataModelApi
 from gooddata_api_client.api.hierarchy_api import HierarchyApi
 from gooddata_api_client.api.identity_providers_api import IdentityProvidersApi
+from gooddata_api_client.api.image_export_api import ImageExportApi
 from gooddata_api_client.api.invalidate_cache_api import InvalidateCacheApi
 from gooddata_api_client.api.jwks_api import JWKSApi
 from gooddata_api_client.api.ldm_declarative_apis_api import LDMDeclarativeAPIsApi

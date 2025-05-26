@@ -87,9 +87,23 @@ with gooddata_api_client.ApiClient() as api_client:
                         email="email_example",
                     ),
                 ],
+                image_exports=[
+                    JsonApiAutomationInAttributesImageExportsInner(
+                        request_payload=ImageExportRequest(
+                            dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                            file_name="filename",
+                            format="PNG",
+                            metadata=JsonNode(),
+                            widget_ids=[
+                                "widget_ids_example",
+                            ],
+                        ),
+                    ),
+                ],
                 metadata=JsonApiAutomationInAttributesMetadata(
                     visible_filters=[
                         VisibleFilter(
+                            is_all_time_date_filter=False,
                             local_identifier="local_identifier_example",
                             title="title_example",
                         ),
@@ -658,9 +672,23 @@ with gooddata_api_client.ApiClient() as api_client:
                         email="email_example",
                     ),
                 ],
+                image_exports=[
+                    JsonApiAutomationInAttributesImageExportsInner(
+                        request_payload=ImageExportRequest(
+                            dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                            file_name="filename",
+                            format="PNG",
+                            metadata=JsonNode(),
+                            widget_ids=[
+                                "widget_ids_example",
+                            ],
+                        ),
+                    ),
+                ],
                 metadata=JsonApiAutomationInAttributesMetadata(
                     visible_filters=[
                         VisibleFilter(
+                            is_all_time_date_filter=False,
                             local_identifier="local_identifier_example",
                             title="title_example",
                         ),
@@ -905,9 +933,23 @@ with gooddata_api_client.ApiClient() as api_client:
                 ),
             ],
             id="/6bUUGjjNSwg0_bs",
+            image_exports=[
+                AutomationImageExport(
+                    request_payload=ImageExportRequest(
+                        dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                        file_name="filename",
+                        format="PNG",
+                        metadata=JsonNode(),
+                        widget_ids=[
+                            "widget_ids_example",
+                        ],
+                    ),
+                ),
+            ],
             metadata=AutomationMetadata(
                 visible_filters=[
                     VisibleFilter(
+                        is_all_time_date_filter=False,
                         local_identifier="local_identifier_example",
                         title="title_example",
                     ),
@@ -1065,6 +1107,39 @@ with gooddata_api_client.ApiClient() as api_client:
     workspace_id = "workspaceId_example" # str | 
     trigger_automation_request = TriggerAutomationRequest(
         automation=AdHocAutomation(
+            alert=AutomationAlert(
+                condition=AutomationAlertCondition(None),
+                execution=AlertAfm(
+                    attributes=[
+                        AttributeItem(
+                            label=AfmObjectIdentifierLabel(
+                                identifier=AfmObjectIdentifierLabelIdentifier(
+                                    id="sample_item.price",
+                                    type="label",
+                                ),
+                            ),
+                            local_identifier="attribute_1",
+                            show_all_values=False,
+                        ),
+                    ],
+                    aux_measures=[
+                        MeasureItem(
+                            definition=MeasureDefinition(),
+                            local_identifier="metric_1",
+                        ),
+                    ],
+                    filters=[
+                        FilterDefinition(),
+                    ],
+                    measures=[
+                        MeasureItem(
+                            definition=MeasureDefinition(),
+                            local_identifier="metric_1",
+                        ),
+                    ],
+                ),
+                trigger="ALWAYS",
+            ),
             analytical_dashboard=DeclarativeAnalyticalDashboardIdentifier(
                 id="dashboard123",
                 type="analyticalDashboard",
@@ -1078,9 +1153,23 @@ with gooddata_api_client.ApiClient() as api_client:
                     email="email_example",
                 ),
             ],
+            image_exports=[
+                AutomationImageExport(
+                    request_payload=ImageExportRequest(
+                        dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                        file_name="filename",
+                        format="PNG",
+                        metadata=JsonNode(),
+                        widget_ids=[
+                            "widget_ids_example",
+                        ],
+                    ),
+                ),
+            ],
             metadata=AutomationMetadata(
                 visible_filters=[
                     VisibleFilter(
+                        is_all_time_date_filter=False,
                         local_identifier="local_identifier_example",
                         title="title_example",
                     ),
@@ -1334,9 +1423,23 @@ with gooddata_api_client.ApiClient() as api_client:
                         email="email_example",
                     ),
                 ],
+                image_exports=[
+                    JsonApiAutomationInAttributesImageExportsInner(
+                        request_payload=ImageExportRequest(
+                            dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                            file_name="filename",
+                            format="PNG",
+                            metadata=JsonNode(),
+                            widget_ids=[
+                                "widget_ids_example",
+                            ],
+                        ),
+                    ),
+                ],
                 metadata=JsonApiAutomationInAttributesMetadata(
                     visible_filters=[
                         VisibleFilter(
+                            is_all_time_date_filter=False,
                             local_identifier="local_identifier_example",
                             title="title_example",
                         ),

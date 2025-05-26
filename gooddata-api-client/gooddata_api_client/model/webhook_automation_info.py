@@ -85,6 +85,7 @@ class WebhookAutomationInfo(ModelNormal):
             'dashboard_url': (str,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'is_custom_dashboard_url': (bool,),  # noqa: E501
+            'dashboard_title': (str,),  # noqa: E501
             'title': (str,),  # noqa: E501
         }
 
@@ -97,6 +98,7 @@ class WebhookAutomationInfo(ModelNormal):
         'dashboard_url': 'dashboardURL',  # noqa: E501
         'id': 'id',  # noqa: E501
         'is_custom_dashboard_url': 'isCustomDashboardURL',  # noqa: E501
+        'dashboard_title': 'dashboardTitle',  # noqa: E501
         'title': 'title',  # noqa: E501
     }
 
@@ -146,6 +148,7 @@ class WebhookAutomationInfo(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            dashboard_title (str): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
         """
 
@@ -240,6 +243,7 @@ class WebhookAutomationInfo(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            dashboard_title (str): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
         """
 

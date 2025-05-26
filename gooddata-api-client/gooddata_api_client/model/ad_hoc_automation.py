@@ -31,14 +31,18 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.automation_alert import AutomationAlert
     from gooddata_api_client.model.automation_external_recipient import AutomationExternalRecipient
+    from gooddata_api_client.model.automation_image_export import AutomationImageExport
     from gooddata_api_client.model.automation_metadata import AutomationMetadata
     from gooddata_api_client.model.automation_tabular_export import AutomationTabularExport
     from gooddata_api_client.model.automation_visual_export import AutomationVisualExport
     from gooddata_api_client.model.declarative_analytical_dashboard_identifier import DeclarativeAnalyticalDashboardIdentifier
     from gooddata_api_client.model.declarative_notification_channel_identifier import DeclarativeNotificationChannelIdentifier
     from gooddata_api_client.model.declarative_user_identifier import DeclarativeUserIdentifier
+    globals()['AutomationAlert'] = AutomationAlert
     globals()['AutomationExternalRecipient'] = AutomationExternalRecipient
+    globals()['AutomationImageExport'] = AutomationImageExport
     globals()['AutomationMetadata'] = AutomationMetadata
     globals()['AutomationTabularExport'] = AutomationTabularExport
     globals()['AutomationVisualExport'] = AutomationVisualExport
@@ -82,6 +86,8 @@ class AdHocAutomation(ModelNormal):
         },
         ('external_recipients',): {
         },
+        ('image_exports',): {
+        },
         ('recipients',): {
         },
         ('tabular_exports',): {
@@ -118,10 +124,12 @@ class AdHocAutomation(ModelNormal):
         """
         lazy_import()
         return {
+            'alert': (AutomationAlert,),  # noqa: E501
             'analytical_dashboard': (DeclarativeAnalyticalDashboardIdentifier,),  # noqa: E501
             'description': (str,),  # noqa: E501
             'details': ({str: (str,)},),  # noqa: E501
             'external_recipients': ([AutomationExternalRecipient],),  # noqa: E501
+            'image_exports': ([AutomationImageExport],),  # noqa: E501
             'metadata': (AutomationMetadata,),  # noqa: E501
             'notification_channel': (DeclarativeNotificationChannelIdentifier,),  # noqa: E501
             'recipients': ([DeclarativeUserIdentifier],),  # noqa: E501
@@ -137,10 +145,12 @@ class AdHocAutomation(ModelNormal):
 
 
     attribute_map = {
+        'alert': 'alert',  # noqa: E501
         'analytical_dashboard': 'analyticalDashboard',  # noqa: E501
         'description': 'description',  # noqa: E501
         'details': 'details',  # noqa: E501
         'external_recipients': 'externalRecipients',  # noqa: E501
+        'image_exports': 'imageExports',  # noqa: E501
         'metadata': 'metadata',  # noqa: E501
         'notification_channel': 'notificationChannel',  # noqa: E501
         'recipients': 'recipients',  # noqa: E501
@@ -191,10 +201,12 @@ class AdHocAutomation(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            alert (AutomationAlert): [optional]  # noqa: E501
             analytical_dashboard (DeclarativeAnalyticalDashboardIdentifier): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             details ({str: (str,)}): Additional details to be included in the automated message.. [optional]  # noqa: E501
             external_recipients ([AutomationExternalRecipient]): External recipients of the automation action results.. [optional]  # noqa: E501
+            image_exports ([AutomationImageExport]): [optional]  # noqa: E501
             metadata (AutomationMetadata): [optional]  # noqa: E501
             notification_channel (DeclarativeNotificationChannelIdentifier): [optional]  # noqa: E501
             recipients ([DeclarativeUserIdentifier]): [optional]  # noqa: E501
@@ -287,10 +299,12 @@ class AdHocAutomation(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            alert (AutomationAlert): [optional]  # noqa: E501
             analytical_dashboard (DeclarativeAnalyticalDashboardIdentifier): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             details ({str: (str,)}): Additional details to be included in the automated message.. [optional]  # noqa: E501
             external_recipients ([AutomationExternalRecipient]): External recipients of the automation action results.. [optional]  # noqa: E501
+            image_exports ([AutomationImageExport]): [optional]  # noqa: E501
             metadata (AutomationMetadata): [optional]  # noqa: E501
             notification_channel (DeclarativeNotificationChannelIdentifier): [optional]  # noqa: E501
             recipients ([DeclarativeUserIdentifier]): [optional]  # noqa: E501
