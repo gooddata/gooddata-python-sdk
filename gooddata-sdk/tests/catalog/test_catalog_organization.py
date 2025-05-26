@@ -469,7 +469,6 @@ def test_create_llm_endpoint(test_config):
         full_base_url = "https://api.example.com"
         full_llm_org = "org1"
         full_llm_model = "gpt-4"
-        full_workspace_ids = ["workspace1", "workspace2"]
 
         llm_endpoint_2 = sdk.catalog_organization.create_llm_endpoint(
             id=full_id,
@@ -480,7 +479,6 @@ def test_create_llm_endpoint(test_config):
             base_url=full_base_url,
             llm_organization=full_llm_org,
             llm_model=full_llm_model,
-            workspace_ids=full_workspace_ids,
         )
         assert isinstance(llm_endpoint_2, CatalogLlmEndpoint)
         assert llm_endpoint_2.id == full_id
@@ -493,7 +491,6 @@ def test_create_llm_endpoint(test_config):
         assert llm_endpoint_2.attributes.base_url == full_base_url
         assert llm_endpoint_2.attributes.llm_organization == full_llm_org
         assert llm_endpoint_2.attributes.llm_model == full_llm_model
-        assert llm_endpoint_2.attributes.workspace_ids == full_workspace_ids
     finally:
         # Cleanup
         sdk.catalog_organization.delete_llm_endpoint(minimal_id)
@@ -531,7 +528,6 @@ def test_update_llm_endpoint(test_config):
         full_base_url = "https://api.updated.com"
         full_llm_org = "org2"
         full_llm_model = "gpt-3.5"
-        full_workspace_ids = ["workspace3"]
 
         llm_endpoint_2 = sdk.catalog_organization.update_llm_endpoint(
             id=initial_id,
@@ -542,7 +538,6 @@ def test_update_llm_endpoint(test_config):
             base_url=full_base_url,
             llm_organization=full_llm_org,
             llm_model=full_llm_model,
-            workspace_ids=full_workspace_ids,
         )
 
         assert isinstance(llm_endpoint_2, CatalogLlmEndpoint)
@@ -556,7 +551,6 @@ def test_update_llm_endpoint(test_config):
         assert llm_endpoint_2.attributes.base_url == full_base_url
         assert llm_endpoint_2.attributes.llm_organization == full_llm_org
         assert llm_endpoint_2.attributes.llm_model == full_llm_model
-        assert llm_endpoint_2.attributes.workspace_ids == full_workspace_ids
 
         # Test that attributes are preserved when not provided
         new_title = "New Title"
@@ -574,7 +568,6 @@ def test_update_llm_endpoint(test_config):
         assert llm_endpoint_3.attributes.base_url == full_base_url
         assert llm_endpoint_3.attributes.llm_organization == full_llm_org
         assert llm_endpoint_3.attributes.llm_model == full_llm_model
-        assert llm_endpoint_3.attributes.workspace_ids == full_workspace_ids
     finally:
         # Cleanup
         sdk.catalog_organization.delete_llm_endpoint(initial_id)

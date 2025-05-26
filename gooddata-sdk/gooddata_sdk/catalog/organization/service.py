@@ -579,7 +579,6 @@ class CatalogOrganizationService(CatalogServiceBase):
         base_url: Optional[str] = None,
         llm_organization: Optional[str] = None,
         llm_model: Optional[str] = None,
-        workspace_ids: Optional[list[str]] = None,
     ) -> CatalogLlmEndpoint:
         """
         Create a new LLM endpoint.
@@ -593,8 +592,6 @@ class CatalogOrganizationService(CatalogServiceBase):
             base_url: Optional base URL for custom LLM endpoint
             llm_organization: Optional LLM organization identifier
             llm_model: Optional LLM default model override
-            workspace_ids: Optional list of workspace IDs for which LLM endpoint is valid.
-                If empty, it is valid for all workspaces.
 
         Returns:
             CatalogLlmEndpoint: Created LLM endpoint
@@ -608,7 +605,6 @@ class CatalogOrganizationService(CatalogServiceBase):
             base_url=base_url,
             llm_organization=llm_organization,
             llm_model=llm_model,
-            workspace_ids=workspace_ids,
         )
         llm_endpoint_document = CatalogLlmEndpointDocument(data=llm_endpoint)
         response = self._entities_api.create_entity_llm_endpoints(
@@ -626,7 +622,6 @@ class CatalogOrganizationService(CatalogServiceBase):
         base_url: Optional[str] = None,
         llm_organization: Optional[str] = None,
         llm_model: Optional[str] = None,
-        workspace_ids: Optional[list[str]] = None,
     ) -> CatalogLlmEndpoint:
         """
         Update an existing LLM endpoint.
@@ -640,8 +635,6 @@ class CatalogOrganizationService(CatalogServiceBase):
             base_url: Base URL for custom LLM endpoint
             llm_organization: LLM organization identifier
             llm_model: LLM default model override
-            workspace_ids: List of workspace IDs for which LLM endpoint is valid.
-                If empty, it is valid for all workspaces.
 
         Returns:
             CatalogLlmEndpoint: Updated LLM endpoint
@@ -655,7 +648,6 @@ class CatalogOrganizationService(CatalogServiceBase):
             base_url=base_url,
             llm_organization=llm_organization,
             llm_model=llm_model,
-            workspace_ids=workspace_ids,
         )
         llm_endpoint_patch_document = CatalogLlmEndpointPatchDocument(data=llm_endpoint_patch)
         response = self._entities_api.patch_entity_llm_endpoints(
