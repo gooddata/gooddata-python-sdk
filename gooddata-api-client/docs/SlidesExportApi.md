@@ -87,7 +87,7 @@ No authorization required
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**201** | Raw export request created successfully. |  -  |
+**201** | Slides export request created successfully. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -105,7 +105,7 @@ Note: This API is an experimental and is going to change. Please, use it accordi
 import time
 import gooddata_api_client
 from gooddata_api_client.api import slides_export_api
-from gooddata_api_client.model.get_slides_export202_response_inner import GetSlidesExport202ResponseInner
+from gooddata_api_client.model.get_image_export202_response_inner import GetImageExport202ResponseInner
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.

@@ -64,6 +64,7 @@ class DeclarativeSetting(ModelNormal):
             'TIMEZONE': "TIMEZONE",
             'ACTIVE_THEME': "ACTIVE_THEME",
             'ACTIVE_COLOR_PALETTE': "ACTIVE_COLOR_PALETTE",
+            'ACTIVE_LLM_ENDPOINT': "ACTIVE_LLM_ENDPOINT",
             'WHITE_LABELING': "WHITE_LABELING",
             'LOCALE': "LOCALE",
             'METADATA_LOCALE': "METADATA_LOCALE",
@@ -81,6 +82,7 @@ class DeclarativeSetting(ModelNormal):
             'JIT_PROVISIONING': "JIT_PROVISIONING",
             'DASHBOARD_FILTERS_APPLY_MODE': "DASHBOARD_FILTERS_APPLY_MODE",
             'ENABLE_SLIDES_EXPORT': "ENABLE_SLIDES_EXPORT",
+            'AI_RATE_LIMIT': "AI_RATE_LIMIT",
         },
     }
 

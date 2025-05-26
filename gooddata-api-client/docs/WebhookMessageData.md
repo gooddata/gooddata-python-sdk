@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **alert** | [**AlertDescription**](AlertDescription.md) |  | [optional] 
 **details** | **{str: (str,)}** |  | [optional] 
 **filters** | [**[NotificationFilter]**](NotificationFilter.md) |  | [optional] 
+**image_exports** | [**[ExportResult]**](ExportResult.md) |  | [optional] 
 **recipients** | [**[WebhookRecipient]**](WebhookRecipient.md) |  | [optional] 
 **remaining_action_count** | **int** |  | [optional] 
 **tabular_exports** | [**[ExportResult]**](ExportResult.md) |  | [optional] 

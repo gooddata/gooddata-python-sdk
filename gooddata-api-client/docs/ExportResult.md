@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **file_name** | **str** |  | 
 **status** | **str** |  | 
 **error_message** | **str** |  | [optional] 
+**expires_at** | **datetime** |  | [optional] 
 **file_uri** | **str** |  | [optional] 
 **trace_id** | **str** |  | [optional] 
 **triggered_at** | **datetime** |  | [optional] 

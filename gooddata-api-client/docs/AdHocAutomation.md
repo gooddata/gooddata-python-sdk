@@ -4,10 +4,12 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**alert** | [**AutomationAlert**](AutomationAlert.md) |  | [optional] 
 **analytical_dashboard** | [**DeclarativeAnalyticalDashboardIdentifier**](DeclarativeAnalyticalDashboardIdentifier.md) |  | [optional] 
 **description** | **str** |  | [optional] 
 **details** | **{str: (str,)}** | Additional details to be included in the automated message. | [optional] 
 **external_recipients** | [**[AutomationExternalRecipient]**](AutomationExternalRecipient.md) | External recipients of the automation action results. | [optional] 
+**image_exports** | [**[AutomationImageExport]**](AutomationImageExport.md) |  | [optional] 
 **metadata** | [**AutomationMetadata**](AutomationMetadata.md) |  | [optional] 
 **notification_channel** | [**DeclarativeNotificationChannelIdentifier**](DeclarativeNotificationChannelIdentifier.md) |  | [optional] 
 **recipients** | [**[DeclarativeUserIdentifier]**](DeclarativeUserIdentifier.md) |  | [optional] 

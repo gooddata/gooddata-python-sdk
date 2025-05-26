@@ -92,6 +92,7 @@ class ExportResult(ModelNormal):
             'file_name': (str,),  # noqa: E501
             'status': (str,),  # noqa: E501
             'error_message': (str,),  # noqa: E501
+            'expires_at': (datetime,),  # noqa: E501
             'file_uri': (str,),  # noqa: E501
             'trace_id': (str,),  # noqa: E501
             'triggered_at': (datetime,),  # noqa: E501
@@ -107,6 +108,7 @@ class ExportResult(ModelNormal):
         'file_name': 'fileName',  # noqa: E501
         'status': 'status',  # noqa: E501
         'error_message': 'errorMessage',  # noqa: E501
+        'expires_at': 'expiresAt',  # noqa: E501
         'file_uri': 'fileUri',  # noqa: E501
         'trace_id': 'traceId',  # noqa: E501
         'triggered_at': 'triggeredAt',  # noqa: E501
@@ -159,6 +161,7 @@ class ExportResult(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             error_message (str): [optional]  # noqa: E501
+            expires_at (datetime): [optional]  # noqa: E501
             file_uri (str): [optional]  # noqa: E501
             trace_id (str): [optional]  # noqa: E501
             triggered_at (datetime): [optional]  # noqa: E501
@@ -256,6 +259,7 @@ class ExportResult(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             error_message (str): [optional]  # noqa: E501
+            expires_at (datetime): [optional]  # noqa: E501
             file_uri (str): [optional]  # noqa: E501
             trace_id (str): [optional]  # noqa: E501
             triggered_at (datetime): [optional]  # noqa: E501

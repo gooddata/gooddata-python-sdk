@@ -45,7 +45,9 @@ docs/AssigneeIdentifier.md
 docs/AssigneeRule.md
 docs/AttributeExecutionResultHeader.md
 docs/AttributeFilter.md
+docs/AttributeFilterByDate.md
 docs/AttributeFilterElements.md
+docs/AttributeFilterParent.md
 docs/AttributeFormat.md
 docs/AttributeHeader.md
 docs/AttributeHeaderAttributeHeader.md
@@ -60,6 +62,7 @@ docs/AttributesApi.md
 docs/AutomationAlert.md
 docs/AutomationAlertCondition.md
 docs/AutomationExternalRecipient.md
+docs/AutomationImageExport.md
 docs/AutomationMetadata.md
 docs/AutomationNotification.md
 docs/AutomationNotificationAllOf.md
@@ -75,6 +78,7 @@ docs/ChatHistoryRequest.md
 docs/ChatHistoryResult.md
 docs/ChatRequest.md
 docs/ChatResult.md
+docs/ChatUsageResponse.md
 docs/ClusteringRequest.md
 docs/ClusteringResult.md
 docs/ColumnLocation.md
@@ -100,9 +104,18 @@ docs/CreatedVisualizations.md
 docs/CustomLabel.md
 docs/CustomMetric.md
 docs/CustomOverride.md
+docs/DashboardAttributeFilter.md
+docs/DashboardAttributeFilterAttributeFilter.md
+docs/DashboardAttributeFilterAttributeFilterAllOf.md
+docs/DashboardDateFilter.md
+docs/DashboardDateFilterDateFilter.md
+docs/DashboardDateFilterDateFilterAllOf.md
+docs/DashboardFilter.md
 docs/DashboardPermissions.md
 docs/DashboardPermissionsAssignment.md
 docs/DashboardSlidesTemplate.md
+docs/DashboardTabularExportRequest.md
+docs/DashboardTabularExportRequestDashboardFiltersOverrideInner.md
 docs/DashboardsApi.md
 docs/DataColumnLocator.md
 docs/DataColumnLocators.md
@@ -254,7 +267,7 @@ docs/FrequencyBucket.md
 docs/FrequencyProperties.md
 docs/GenerateLdmRequest.md
 docs/GenerateLogicalDataModelApi.md
-docs/GetSlidesExport202ResponseInner.md
+docs/GetImageExport202ResponseInner.md
 docs/GrainIdentifier.md
 docs/GrantedPermission.md
 docs/GranularitiesFormatting.md
@@ -266,6 +279,8 @@ docs/HistogramBucket.md
 docs/HistogramProperties.md
 docs/IdentifierDuplications.md
 docs/IdentityProvidersApi.md
+docs/ImageExportApi.md
+docs/ImageExportRequest.md
 docs/InPlatform.md
 docs/InPlatformAllOf.md
 docs/InlineFilterDefinition.md
@@ -345,6 +360,7 @@ docs/JsonApiAutomationIn.md
 docs/JsonApiAutomationInAttributes.md
 docs/JsonApiAutomationInAttributesAlert.md
 docs/JsonApiAutomationInAttributesExternalRecipientsInner.md
+docs/JsonApiAutomationInAttributesImageExportsInner.md
 docs/JsonApiAutomationInAttributesMetadata.md
 docs/JsonApiAutomationInAttributesSchedule.md
 docs/JsonApiAutomationInAttributesTabularExportsInner.md
@@ -778,6 +794,7 @@ docs/MeasureExecutionResultHeader.md
 docs/MeasureGroupHeaders.md
 docs/MeasureHeader.md
 docs/MeasureItem.md
+docs/MeasureItemDefinition.md
 docs/MeasureResultHeader.md
 docs/MeasureValueFilter.md
 docs/MetadataSyncApi.md
@@ -805,6 +822,7 @@ docs/OrganizationDeclarativeAPIsApi.md
 docs/OrganizationEntityAPIsApi.md
 docs/OrganizationModelControllerApi.md
 docs/OrganizationPermissionAssignment.md
+docs/Over.md
 docs/PageMetadata.md
 docs/Paging.md
 docs/Parameter.md
@@ -989,6 +1007,7 @@ gooddata_api_client/api/filter_views_api.py
 gooddata_api_client/api/generate_logical_data_model_api.py
 gooddata_api_client/api/hierarchy_api.py
 gooddata_api_client/api/identity_providers_api.py
+gooddata_api_client/api/image_export_api.py
 gooddata_api_client/api/invalidate_cache_api.py
 gooddata_api_client/api/jwks_api.py
 gooddata_api_client/api/labels_api.py
@@ -1076,7 +1095,9 @@ gooddata_api_client/model/assignee_identifier.py
 gooddata_api_client/model/assignee_rule.py
 gooddata_api_client/model/attribute_execution_result_header.py
 gooddata_api_client/model/attribute_filter.py
+gooddata_api_client/model/attribute_filter_by_date.py
 gooddata_api_client/model/attribute_filter_elements.py
+gooddata_api_client/model/attribute_filter_parent.py
 gooddata_api_client/model/attribute_format.py
 gooddata_api_client/model/attribute_header.py
 gooddata_api_client/model/attribute_header_attribute_header.py
@@ -1089,6 +1110,7 @@ gooddata_api_client/model/attribute_result_header.py
 gooddata_api_client/model/automation_alert.py
 gooddata_api_client/model/automation_alert_condition.py
 gooddata_api_client/model/automation_external_recipient.py
+gooddata_api_client/model/automation_image_export.py
 gooddata_api_client/model/automation_metadata.py
 gooddata_api_client/model/automation_notification.py
 gooddata_api_client/model/automation_notification_all_of.py
@@ -1101,6 +1123,7 @@ gooddata_api_client/model/chat_history_request.py
 gooddata_api_client/model/chat_history_result.py
 gooddata_api_client/model/chat_request.py
 gooddata_api_client/model/chat_result.py
+gooddata_api_client/model/chat_usage_response.py
 gooddata_api_client/model/clustering_request.py
 gooddata_api_client/model/clustering_result.py
 gooddata_api_client/model/column_location.py
@@ -1123,9 +1146,18 @@ gooddata_api_client/model/created_visualizations.py
 gooddata_api_client/model/custom_label.py
 gooddata_api_client/model/custom_metric.py
 gooddata_api_client/model/custom_override.py
+gooddata_api_client/model/dashboard_attribute_filter.py
+gooddata_api_client/model/dashboard_attribute_filter_attribute_filter.py
+gooddata_api_client/model/dashboard_attribute_filter_attribute_filter_all_of.py
+gooddata_api_client/model/dashboard_date_filter.py
+gooddata_api_client/model/dashboard_date_filter_date_filter.py
+gooddata_api_client/model/dashboard_date_filter_date_filter_all_of.py
+gooddata_api_client/model/dashboard_filter.py
 gooddata_api_client/model/dashboard_permissions.py
 gooddata_api_client/model/dashboard_permissions_assignment.py
 gooddata_api_client/model/dashboard_slides_template.py
+gooddata_api_client/model/dashboard_tabular_export_request.py
+gooddata_api_client/model/dashboard_tabular_export_request_dashboard_filters_override_inner.py
 gooddata_api_client/model/data_column_locator.py
 gooddata_api_client/model/data_column_locators.py
 gooddata_api_client/model/data_source_parameter.py
@@ -1265,7 +1297,7 @@ gooddata_api_client/model/frequency.py
 gooddata_api_client/model/frequency_bucket.py
 gooddata_api_client/model/frequency_properties.py
 gooddata_api_client/model/generate_ldm_request.py
-gooddata_api_client/model/get_slides_export202_response_inner.py
+gooddata_api_client/model/get_image_export202_response_inner.py
 gooddata_api_client/model/grain_identifier.py
 gooddata_api_client/model/granted_permission.py
 gooddata_api_client/model/granularities_formatting.py
@@ -1275,6 +1307,7 @@ gooddata_api_client/model/histogram.py
 gooddata_api_client/model/histogram_bucket.py
 gooddata_api_client/model/histogram_properties.py
 gooddata_api_client/model/identifier_duplications.py
+gooddata_api_client/model/image_export_request.py
 gooddata_api_client/model/in_platform.py
 gooddata_api_client/model/in_platform_all_of.py
 gooddata_api_client/model/inline_filter_definition.py
@@ -1352,6 +1385,7 @@ gooddata_api_client/model/json_api_automation_in.py
 gooddata_api_client/model/json_api_automation_in_attributes.py
 gooddata_api_client/model/json_api_automation_in_attributes_alert.py
 gooddata_api_client/model/json_api_automation_in_attributes_external_recipients_inner.py
+gooddata_api_client/model/json_api_automation_in_attributes_image_exports_inner.py
 gooddata_api_client/model/json_api_automation_in_attributes_metadata.py
 gooddata_api_client/model/json_api_automation_in_attributes_schedule.py
 gooddata_api_client/model/json_api_automation_in_attributes_tabular_exports_inner.py
@@ -1780,6 +1814,7 @@ gooddata_api_client/model/measure_execution_result_header.py
 gooddata_api_client/model/measure_group_headers.py
 gooddata_api_client/model/measure_header.py
 gooddata_api_client/model/measure_item.py
+gooddata_api_client/model/measure_item_definition.py
 gooddata_api_client/model/measure_result_header.py
 gooddata_api_client/model/measure_value_filter.py
 gooddata_api_client/model/metric.py
@@ -1799,6 +1834,7 @@ gooddata_api_client/model/notifications_meta_total.py
 gooddata_api_client/model/object_links.py
 gooddata_api_client/model/object_links_container.py
 gooddata_api_client/model/organization_permission_assignment.py
+gooddata_api_client/model/over.py
 gooddata_api_client/model/page_metadata.py
 gooddata_api_client/model/paging.py
 gooddata_api_client/model/parameter.py
