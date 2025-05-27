@@ -53,42 +53,51 @@ class SubmitInvocation:
     """
 
 
-def extract_invocation_from_descriptor(
+def extract_submit_invocation_from_descriptor(descriptor: pyarrow.flight.FlightDescriptor) -> SubmitInvocation:
+    """
+    Given a flight descriptor, extract the invocation information from it.
+    Do not allow the polling-related variants.
+    """
+    try:
+        payload = orjson.loads(descriptor.command)
+    except Exception:
+        raise ErrorInfo.bad_argument(
+            "Incorrect FlexConnect function invocation. The invocation payload is not a valid JSON."
+        )
+
+    function_name = payload.get("functionName")
+    if function_name is None or not len(function_name):
+        raise ErrorInfo.bad_argument(
+            "Incorrect FlexConnect function invocation. The invocation payload does not specify 'functionName'."
+        )
+
+    parameters = payload.get("parameters") or {}
+    columns = parameters.get("columns")
+
+    return SubmitInvocation(
+        function_name=function_name, parameters=parameters, columns=columns, command=descriptor.command
+    )
+
+
+def extract_pollable_invocation_from_descriptor(
     descriptor: pyarrow.flight.FlightDescriptor,
 ) -> Union[RetryInvocation, CancelInvocation, SubmitInvocation]:
     """
     Given a flight descriptor, extract the invocation information from it.
+    Allow also the polling-related variants.
     """
-
     if descriptor.command is None or not len(descriptor.command):
         raise ErrorInfo.bad_argument(
             "Incorrect FlexConnect function invocation. Flight descriptor must contain command "
             "with the invocation payload."
         )
 
+    # we are in the polling-enabled realm: try parsing the retry and cancel descriptors first
     if descriptor.command.startswith(b"c:"):
         task_id = descriptor.command[2:].decode()
         return CancelInvocation(task_id)
     elif descriptor.command.startswith(b"r:"):
         task_id = descriptor.command[2:].decode()
         return RetryInvocation(task_id)
-    else:
-        try:
-            payload = orjson.loads(descriptor.command)
-        except Exception:
-            raise ErrorInfo.bad_argument(
-                "Incorrect FlexConnect function invocation. The invocation payload is not a valid JSON."
-            )
 
-        function_name = payload.get("functionName")
-        if function_name is None or not len(function_name):
-            raise ErrorInfo.bad_argument(
-                "Incorrect FlexConnect function invocation. The invocation payload does not specify 'functionName'."
-            )
-
-        parameters = payload.get("parameters") or {}
-        columns = parameters.get("columns")
-
-        return SubmitInvocation(
-            function_name=function_name, parameters=parameters, columns=columns, command=descriptor.command
-        )
+    return extract_submit_invocation_from_descriptor(descriptor)

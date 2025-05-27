@@ -13,6 +13,7 @@ from gooddata_flight_server import (
     FlightServerMethods,
     ServerContext,
     TaskExecutionResult,
+    TaskWaitTimeoutError,
     flight_server_methods,
 )
 
@@ -21,12 +22,19 @@ from gooddata_flexconnect.function.function_invocation import (
     CancelInvocation,
     RetryInvocation,
     SubmitInvocation,
-    extract_invocation_from_descriptor,
+    extract_pollable_invocation_from_descriptor,
+    extract_submit_invocation_from_descriptor,
 )
 from gooddata_flexconnect.function.function_registry import FlexConnectFunctionRegistry
 from gooddata_flexconnect.function.function_task import FlexConnectFunctionTask
 
 _LOGGER = structlog.get_logger("gooddata_flexconnect.rpc")
+
+POLLING_HEADER_NAME = "x-quiver-pollable"
+"""
+If this header is present on the get flight info call, the polling extension will be used.
+Otherwise the basic do get will be used.
+"""
 
 
 def _prepare_poll_error(task_id: str) -> pyarrow.flight.FlightError:
@@ -122,28 +130,69 @@ class _FlexConnectServerMethods(FlightServerMethods):
             total_bytes=-1,
         )
 
-    ###################################################################
-    # Implementation of Flight RPC methods
-    ###################################################################
-
-    def list_flights(
-        self, context: pyarrow.flight.ServerCallContext, criteria: bytes
-    ) -> Generator[pyarrow.flight.FlightInfo, None, None]:
-        structlog.contextvars.bind_contextvars(peer=context.peer())
-        _LOGGER.info("list_flights", available_funs=self._registry.function_names)
-
-        return (self._create_fun_info(fun) for fun in self._registry.functions.values())
-
-    def get_flight_info(
+    def _get_flight_info_no_polling(
         self,
         context: pyarrow.flight.ServerCallContext,
         descriptor: pyarrow.flight.FlightDescriptor,
     ) -> pyarrow.flight.FlightInfo:
+        """
+        Basic DoGetInfo flow with no polling extension.
+        This conforms to the mainline Arrow Flight RPC specification.
+        """
         structlog.contextvars.bind_contextvars(peer=context.peer())
+        invocation = extract_submit_invocation_from_descriptor(descriptor)
+
+        task: Optional[FlexConnectFunctionTask] = None
+
+        try:
+            task = self._prepare_task(context, invocation)
+            self._ctx.task_executor.submit(task)
+
+            try:
+                task_result = self._ctx.task_executor.wait_for_result(task.task_id, self._call_deadline)
+            except TaskWaitTimeoutError:
+                cancelled = self._ctx.task_executor.cancel(task.task_id)
+                _LOGGER.warning(
+                    "flexconnect_fun_call_timeout", task_id=task.task_id, fun=task.fun_name, cancelled=cancelled
+                )
+
+                raise ErrorInfo.for_reason(
+                    ErrorCode.TIMEOUT, f"GetFlightInfo timed out while waiting for task {task.task_id}."
+                ).to_timeout_error()
+
+            # if this bombs then there must be something really wrong because the task
+            # was clearly submitted and code was waiting for its completion. this invariant
+            # should not happen in this particular code path. The None return value may
+            # be applicable one day when polling is in use and a request comes to check whether
+            # particular task id finished
+            assert task_result is not None
+
+            return self._prepare_flight_info(task_id=task.task_id, task_result=task_result)
+        except Exception:
+            if task is not None:
+                _LOGGER.error(
+                    "get_flight_info_failed", task_id=task.task_id, fun=task.fun_name, exc_info=True, polling=False
+                )
+            else:
+                _LOGGER.error("flexconnect_fun_submit_failed", exc_info=True, polling=False)
+            raise
+
+    def _get_flight_info_polling(
+        self,
+        context: pyarrow.flight.ServerCallContext,
+        descriptor: pyarrow.flight.FlightDescriptor,
+    ) -> pyarrow.flight.FlightInfo:
+        """
+        DoGetInfo flow with polling extension.
+        This extends the mainline Arrow Flight RPC specification with polling capabilities using the RetryInfo
+        encoded into the FlightTimedOutError.extra_info.
+        Ideally, we would use the mainline PollFlightInfo, but that has yet to be implemented in the PyArrow library.
+        """
+        structlog.contextvars.bind_contextvars(peer=context.peer())
+        invocation = extract_pollable_invocation_from_descriptor(descriptor)
 
         task_id: str
         fun_name: Optional[str] = None
-        invocation = extract_invocation_from_descriptor(descriptor)
 
         if isinstance(invocation, CancelInvocation):
             # cancel the given task and raise cancellation exception
@@ -166,7 +215,7 @@ class _FlexConnectServerMethods(FlightServerMethods):
                 task_id = task.task_id
                 fun_name = task.fun_name
             except Exception:
-                _LOGGER.error("flexconnect_fun_submit_failed", exc_info=True)
+                _LOGGER.error("flexconnect_fun_submit_failed", exc_info=True, polling=True)
                 raise
         else:
             # can be replaced by assert_never when we are on 3.11
@@ -188,8 +237,35 @@ class _FlexConnectServerMethods(FlightServerMethods):
             # how to poll for the results
             raise _prepare_poll_error(task_id)
         except Exception:
-            _LOGGER.error("get_flight_info_failed", task_id=task_id, fun=fun_name, exc_info=True)
+            _LOGGER.error("get_flight_info_failed", task_id=task_id, fun=fun_name, exc_info=True, polling=True)
             raise
+
+    ###################################################################
+    # Implementation of Flight RPC methods
+    ###################################################################
+
+    def list_flights(
+        self, context: pyarrow.flight.ServerCallContext, criteria: bytes
+    ) -> Generator[pyarrow.flight.FlightInfo, None, None]:
+        structlog.contextvars.bind_contextvars(peer=context.peer())
+        _LOGGER.info("list_flights", available_funs=self._registry.function_names)
+
+        return (self._create_fun_info(fun) for fun in self._registry.functions.values())
+
+    def get_flight_info(
+        self,
+        context: pyarrow.flight.ServerCallContext,
+        descriptor: pyarrow.flight.FlightDescriptor,
+    ) -> pyarrow.flight.FlightInfo:
+        structlog.contextvars.bind_contextvars(peer=context.peer())
+
+        headers = self.call_info_middleware(context).headers
+        allow_polling = headers.get(POLLING_HEADER_NAME) is not None
+
+        if allow_polling:
+            return self._get_flight_info_polling(context, descriptor)
+        else:
+            return self._get_flight_info_no_polling(context, descriptor)
 
     def do_get(
         self,
