@@ -183,6 +183,21 @@ class DataFrameFactory:
 
         return self.for_items(columns, filter_by=filter_by, auto_index=auto_index)
 
+    def for_created_visualization(
+        self, created_visualizations_response: dict
+    ) -> tuple[pandas.DataFrame, DataFrameMetadata]:
+        """
+        Creates a data frame using a created visualization.
+
+        Args:
+            created_visualizations_response (dict): Created visualization response.
+
+        Returns:
+            pandas.DataFrame: A DataFrame instance.
+        """
+        execution_definition = self._sdk.compute.build_exec_def_from_chat_result(created_visualizations_response)
+        return self.for_exec_def(exec_def=execution_definition)
+
     def result_cache_metadata_for_exec_result_id(self, result_id: str) -> ResultCacheMetadata:
         """
         Retrieves result cache metadata for given :result_id:
