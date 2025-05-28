@@ -182,3 +182,24 @@ def test_ai_chat_stream(test_config):
     finally:
         sdk.compute.reset_ai_chat_history(test_workspace_id)
         sdk.catalog_workspace.delete_workspace(test_workspace_id)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "build_exec_def_from_chat_result.yaml"))
+def test_build_exec_def_from_chat_result(test_config):
+    """Test build execution definition from chat result."""
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    path = _current_dir / "load" / "ai"
+    test_workspace_id = test_config["workspace_test"]
+
+    try:
+        _setup_test_workspace(sdk, test_workspace_id, path)
+        response = sdk.compute.ai_chat(test_workspace_id, "What is the total revenue for the year 2024?")
+        execution_definition = sdk.compute.build_exec_def_from_chat_result(response)
+        assert execution_definition is not None
+
+        execution = sdk.compute.for_exec_def(test_workspace_id, execution_definition)
+        assert execution.result_id is not None
+
+    finally:
+        sdk.compute.reset_ai_chat_history(test_workspace_id)
+        sdk.catalog_workspace.delete_workspace(test_workspace_id)
