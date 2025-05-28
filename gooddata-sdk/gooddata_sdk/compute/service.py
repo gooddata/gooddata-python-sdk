@@ -100,9 +100,9 @@ class ComputeService:
             ExecutionDefinition: Execution definition built from chat result visualization
         """
         vis_object = chat_result.created_visualizations["objects"][0]
-        metrics_def = vis_object.get("metrics") or []
-        filters_def = vis_object.get("filters") or []
-        dimensionality_def = vis_object.get("dimensionality") or []
+        metrics_def = vis_object.get("metrics", [])
+        filters_def = vis_object.get("filters", [])
+        dimensionality_def = vis_object.get("dimensionality", [])
 
         metrics = [VisualizationToSdkConverter.convert_metric(m) for m in metrics_def]
         filters = [VisualizationToSdkConverter.convert_filter(f) for f in filters_def]

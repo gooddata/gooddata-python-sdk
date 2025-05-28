@@ -38,6 +38,10 @@ def _setup_test_workspace(sdk: GoodDataSdk, test_workspace_id: str, path: Path) 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_created_visualization.yaml"))
 def test_dataframe_for_created_visualization(test_config):
+    # To recreate the cassette, a complete local GoodData environment with gen_ai service is required.
+    # The gen_ai service cannot be included in the already available single docker image due to size constraints.
+    # Since in such cases we are interacting with an LLM, the results are not 100% deterministic.
+
     # Get SDK instance and create test workspace
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     gdf = DataFrameFactory(sdk, test_config["workspace_test"])
