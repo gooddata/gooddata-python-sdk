@@ -31,7 +31,7 @@ class VisualizationToSdkConverter:
             Attribute: An SDK Attribute object with local_id and label set
         """
         local_id = attr_dict["id"]
-        label = attr_dict["title"]
+        label = attr_dict["id"]
         return Attribute(local_id=local_id, label=label)
 
     @staticmethod

@@ -50,7 +50,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 85c696d39f778b59e3021bc8655c417c
+          traceId: 3078ca62b33d7fd01dc11b5be19dc230
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/entities/workspaces/demo_testing?include=workspaces
@@ -99,7 +99,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 03937b37e651ec6d97d5d94df689ba7e
+          traceId: df2b4b72297902bf4813ef4961090443
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces
@@ -1864,7 +1864,7 @@ interactions:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo_testing/ai/chat
       body:
-        question: What is the total revenue for the year 2024?
+        question: Display the revenue by product
       headers:
         Accept:
           - application/json
@@ -1884,7 +1884,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '856'
+          - '775'
         Content-Type:
           - application/json
         DATE: *id001
@@ -1916,70 +1916,67 @@ interactions:
             reasoning: Creating a new visualization ...
           createdVisualizations:
             objects:
-              - id: total_revenue_for_2024
-                title: Total Revenue for 2024
-                visualizationType: HEADLINE
+              - id: revenue_by_product
+                title: Revenue by Product
+                visualizationType: COLUMN
                 metrics:
-                  - id: total_revenue
+                  - id: revenue
                     type: metric
-                    title: Total Revenue
-                dimensionality: []
-                filters:
-                  - using: date.year
-                    include:
-                      - '2024'
+                    title: Revenue
+                dimensionality:
+                  - id: product_name
+                    type: attribute
+                    title: Product name
+                filters: []
                 suggestions:
-                  - query: Slice by 'Date - Month/Year' to see monthly revenue distribution
-                      for 2024
-                    label: Slice by month/year
-                  - query: Slice by 'Date - Quarter/Year' to see quarterly revenue
-                      distribution for 2024
-                    label: Slice by quarter/year
+                  - query: Slice by 'Category'
+                    label: Slice by Category
+                  - query: Switch to a table view for detailed comparison
+                    label: Switch to Table View
             reasoning: '
 
 
 
 
 
-              Here is a headline showing the Total Revenue for 2024.
+              Here is a column chart showing the Revenue by Product grouped by Product
+              name.
 
-              - Metrics: Total Revenue
+              - Metrics: Revenue
 
-              - Attributes: None
+              - Attributes: Product name
 
-              - Filter: Include Date. Year: 2024
+              - Filter: None
 
 
               '
-          chatHistoryInteractionId: bc57ccb7ee8f4eec8eed2da588fdb9c3
+          chatHistoryInteractionId: bc34b41ff5d04e5eb658e0dffc0a3fd8
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo_testing/execution/afm/execute
       body:
         execution:
-          attributes: []
-          filters:
-            - positiveAttributeFilter:
-                in:
-                  values:
-                    - '2024'
-                label:
-                  identifier:
-                    id: date.year
-                    type: label
+          attributes:
+            - label:
+                identifier:
+                  id: product_name
+                  type: label
+              localIdentifier: product_name
+          filters: []
           measures:
             - definition:
                 measure:
                   item:
                     identifier:
-                      id: total_revenue
+                      id: revenue
                       type: metric
                   computeRatio: false
                   filters: []
-              localIdentifier: total_revenue
+              localIdentifier: revenue
         resultSpec:
           dimensions:
-            - itemIdentifiers: []
+            - itemIdentifiers:
+                - product_name
               localIdentifier: dim_0
             - itemIdentifiers:
                 - measureGroup
@@ -2003,7 +2000,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '358'
+          - '646'
         Content-Type:
           - application/json
         DATE: *id001
@@ -2026,7 +2023,7 @@ interactions:
         X-Frame-Options:
           - SAMEORIGIN
         X-Gdc-Cancel-Token:
-          - 9dc6944c-e0f2-45e6-afc3-0b2276c397e1
+          - 00d8589a-ac36-4003-91b7-4d7740c479ca
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - 1; mode=block
@@ -2034,16 +2031,31 @@ interactions:
         string:
           executionResponse:
             dimensions:
-              - headers: []
+              - headers:
+                  - attributeHeader:
+                      localIdentifier: product_name
+                      label:
+                        id: product_name
+                        type: label
+                      labelName: Product name
+                      attribute:
+                        id: product_name
+                        type: attribute
+                      attributeName: Product name
+                      granularity: null
+                      primaryLabel:
+                        id: product_name
+                        type: label
+                      valueType: TEXT
                 localIdentifier: dim_0
               - headers:
                   - measureGroupHeaders:
-                      - localIdentifier: total_revenue
+                      - localIdentifier: revenue
                         format: $#,##0
-                        name: Total Revenue
+                        name: Revenue
                 localIdentifier: dim_1
             links:
-              executionResult: fb332d669c2540bc879f8591143bc142be634d42:5799a5b2a3489935b1e062ecdac565402623417d73ae07b4fe00c467bbfcb017
+              executionResult: 3686f03e3a854572d385962cdf522802010cfa49:8795bd272ad09519a4d36263aad7dc9b1d9ed3cebc1e874adcbd8618d419e005
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo_testing/ai/chatHistory
@@ -2146,18 +2158,6 @@ interactions:
       body:
         string:
           data:
-            - id: demo
-              type: workspace
-              attributes:
-                name: Demo
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo
-            - id: demo_testing
-              type: workspace
-              attributes:
-                name: demo_testing
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo_testing
             - id: demo_west
               type: workspace
               attributes:
@@ -2180,6 +2180,18 @@ interactions:
                     type: workspace
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo_west_california
+            - id: demo
+              type: workspace
+              attributes:
+                name: Demo
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo
+            - id: demo_testing
+              type: workspace
+              attributes:
+                name: demo_testing
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo_testing
           included:
             - id: demo
               type: workspace

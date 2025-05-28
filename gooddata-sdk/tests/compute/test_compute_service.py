@@ -193,7 +193,7 @@ def test_build_exec_def_from_chat_result(test_config):
 
     try:
         _setup_test_workspace(sdk, test_workspace_id, path)
-        response = sdk.compute.ai_chat(test_workspace_id, "What is the total revenue for the year 2024?")
+        response = sdk.compute.ai_chat(test_workspace_id, "Display the revenue by product")
         execution_definition = sdk.compute.build_exec_def_from_chat_result(response)
         assert execution_definition is not None
 
