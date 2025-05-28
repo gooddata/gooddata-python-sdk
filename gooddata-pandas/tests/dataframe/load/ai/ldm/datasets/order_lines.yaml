@@ -1,0 +1,108 @@
+# (C) 2025 GoodData Corporation
+attributes:
+  - description: Order id
+    id: order_id
+    labels: []
+    sourceColumn: order_id
+    sourceColumnDataType: STRING
+    tags:
+      - Order lines
+    title: Order id
+  - description: Order line id
+    id: order_line_id
+    labels: []
+    sourceColumn: order_line_id
+    sourceColumnDataType: STRING
+    tags:
+      - Order lines
+    title: Order line id
+  - description: Order status
+    id: order_status
+    labels: []
+    sourceColumn: order_status
+    sourceColumnDataType: STRING
+    tags:
+      - Order lines
+    title: Order status
+dataSourceTableId:
+  dataSourceId: pg_local_docker-demo
+  id: order_lines
+  path:
+    - demo_6d9051d9069a8468
+    - order_lines
+  type: dataSource
+description: Order lines
+facts:
+  - description: Price
+    id: price
+    sourceColumn: price
+    sourceColumnDataType: NUMERIC
+    tags:
+      - Order lines
+    title: Price
+  - description: Quantity
+    id: quantity
+    sourceColumn: quantity
+    sourceColumnDataType: NUMERIC
+    tags:
+      - Order lines
+    title: Quantity
+grain:
+  - id: order_line_id
+    type: attribute
+id: order_lines
+references:
+  - identifier:
+      id: campaigns
+      type: dataset
+    multivalue: false
+    sources:
+      - column: campaign_id
+        dataType: INT
+        target:
+          id: campaign_id
+          type: attribute
+  - identifier:
+      id: customers
+      type: dataset
+    multivalue: false
+    sources:
+      - column: customer_id
+        dataType: INT
+        target:
+          id: customer_id
+          type: attribute
+  - identifier:
+      id: date
+      type: dataset
+    multivalue: false
+    sources:
+      - column: date
+        dataType: DATE
+        target:
+          id: date
+          type: date
+  - identifier:
+      id: products
+      type: dataset
+    multivalue: false
+    sources:
+      - column: product_id
+        dataType: INT
+        target:
+          id: product_id
+          type: attribute
+tags:
+  - Order lines
+title: Order lines
+workspaceDataFilterColumns:
+  - dataType: STRING
+    name: wdf__region
+  - dataType: STRING
+    name: wdf__state
+workspaceDataFilterReferences:
+  - filterColumn: wdf__region
+    filterColumnDataType: STRING
+    filterId:
+      id: wdf__region
+      type: workspaceDataFilter

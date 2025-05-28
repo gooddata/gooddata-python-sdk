@@ -1,0 +1,7 @@
+# (C) 2025 GoodData Corporation
+content:
+  format: '#,##0'
+  maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
+description: ''
+id: amount_of_active_customers
+title: '# of Active Customers'

@@ -1,0 +1,8 @@
+# (C) 2025 GoodData Corporation
+content:
+  format: '#,##0'
+  maql: 'SELECT {metric/amount_of_active_customers} WHERE (SELECT {metric/revenue}
+    BY {attribute/customer_id}) >  10000 '
+description: ''
+id: amount_of_top_customers
+title: '# of Top Customers'

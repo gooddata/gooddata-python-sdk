@@ -1,0 +1,8 @@
+# (C) 2025 GoodData Corporation
+content:
+  format: $#,##0
+  maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status} IN ("null", "Returned",
+    "Canceled"))
+description: ''
+id: revenue
+title: Revenue
