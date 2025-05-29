@@ -270,8 +270,6 @@ class ComputeService:
         Try to cancel given executions using the cancel api endpoint.
         Order of token applications is not guaranteed.
 
-        *Note that this is currently a noop, we will be enabling this functionality soon.*
-
         Args:
             executions: maps workspace_id |-> result_id_to_cancel_token_pairs
         """
