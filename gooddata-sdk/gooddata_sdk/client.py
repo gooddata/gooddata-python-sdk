@@ -37,7 +37,6 @@ class GoodDataApiClient:
         `executions_cancellable` is a flag that sets all executions computed through this client as cancellable.
         In case a request for a result is interrupted, the GD server will try to free resources like killing sql queries
         related to the given execution.
-        *This feature does not work yet, it will be rolled out soon.*
         """
         self._hostname = host
         self._token = token
