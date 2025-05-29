@@ -8,6 +8,7 @@ from attr.setters import frozen as frozen_attr
 from attrs import define, field
 from gooddata_api_client import models
 from gooddata_api_client.model.afm import AFM
+from gooddata_api_client.model.afm_cancel_tokens import AfmCancelTokens
 from gooddata_api_client.model.result_spec import ResultSpec
 
 from gooddata_sdk.client import GoodDataApiClient
@@ -365,6 +366,16 @@ class BareExecutionResponse:
             )
         return ExecutionResult(execution_result)
 
+    def cancel(self) -> None:
+        """
+        Cancels the execution backing this execution result.
+        """
+        if self.cancel_token is not None:
+            self._api_client.actions_api.cancel_executions(
+                self._workspace_id,
+                AfmCancelTokens({self.result_id: self.cancel_token}),
+            )
+
     def __str__(self) -> str:
         return self.__repr__()
 
@@ -441,6 +452,12 @@ class Execution:
 
     def read_result(self, limit: Union[int, list[int]], offset: Union[None, int, list[int]] = None) -> ExecutionResult:
         return self.bare_exec_response.read_result(limit, offset)
+
+    def cancel(self) -> None:
+        """
+        Cancels the execution.
+        """
+        self.bare_exec_response.cancel()
 
     def __str__(self) -> str:
         return self.__repr__()

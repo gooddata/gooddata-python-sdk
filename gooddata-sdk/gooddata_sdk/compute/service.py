@@ -16,7 +16,13 @@ from gooddata_api_client.model.search_request import SearchRequest
 from gooddata_api_client.model.search_result import SearchResult
 
 from gooddata_sdk.client import GoodDataApiClient
-from gooddata_sdk.compute.model.execution import Execution, ExecutionDefinition, ResultCacheMetadata
+from gooddata_sdk.compute.model.execution import (
+    Execution,
+    ExecutionDefinition,
+    ResultCacheMetadata,
+    TableDimension,
+)
+from gooddata_sdk.compute.visualization_to_sdk_converter import VisualizationToSdkConverter
 
 logger = logging.getLogger(__name__)
 
@@ -61,8 +67,8 @@ class ComputeService:
         Gets execution result's metadata from GoodData.CN workspace for given execution result ID.
 
         Args:
-            workspace_id: workspace identifier
-            result_id: execution result ID
+            workspace_id (str): workspace identifier
+            result_id (str): execution result ID
         Returns:
             ResultCacheMetadata: execution result's metadata
         """
@@ -83,13 +89,39 @@ class ComputeService:
             )
         return ResultCacheMetadata(result_cache_metadata=result_cache_metadata)
 
+    def build_exec_def_from_chat_result(self, chat_result: ChatResult) -> ExecutionDefinition:
+        """
+        Build execution definition from chat result.
+
+        Args:
+            chat_result: ChatResult object containing visualization details from AI chat response
+
+        Returns:
+            ExecutionDefinition: Execution definition built from chat result visualization
+        """
+        vis_object = chat_result.created_visualizations["objects"][0]
+        metrics_def = vis_object.get("metrics", [])
+        filters_def = vis_object.get("filters", [])
+        dimensionality_def = vis_object.get("dimensionality", [])
+
+        metrics = [VisualizationToSdkConverter.convert_metric(m) for m in metrics_def]
+        filters = [VisualizationToSdkConverter.convert_filter(f) for f in filters_def]
+        attributes = [VisualizationToSdkConverter.convert_attribute(d) for d in dimensionality_def]
+        dimensions = [
+            TableDimension(item_ids=[a.local_id for a in attributes]),
+            TableDimension(item_ids=["measureGroup"]),
+        ]
+
+        exec_def = ExecutionDefinition(dimensions=dimensions, metrics=metrics, filters=filters, attributes=attributes)
+        return exec_def
+
     def ai_chat(self, workspace_id: str, question: str) -> ChatResult:
         """
         Chat with AI in GoodData workspace.
 
         Args:
-            workspace_id: workspace identifier
-            question: question to ask AI
+            workspace_id (str): workspace identifier
+            question (str): question for the AI
         Returns:
             ChatResult: Chat response
         """
@@ -113,8 +145,8 @@ class ComputeService:
         Chat Stream with AI in GoodData workspace.
 
         Args:
-            workspace_id: workspace identifier
-            question: question to ask AI
+            workspace_id (str): workspace identifier
+            question (str): question for the AI
         Returns:
             Iterator[Any]: Yields parsed JSON objects from each SSE event's data field
         """
@@ -143,9 +175,9 @@ class ComputeService:
         Get chat history with AI in GoodData workspace.
 
         Args:
-            workspace_id: workspace identifier
-            chat_history_interaction_id: collect history starting from this interaction id. If None, complete chat history is returned.
-            thread_id_suffix: suffix to identify a specific chat thread. If provided, chat_history_interaction_id is ignored.
+            workspace_id (str): workspace identifier
+            chat_history_interaction_id (str): collect history starting from this interaction id. If None, complete chat history is returned. Defaults to "".
+            thread_id_suffix (str): suffix to identify a specific chat thread. If provided, chat_history_interaction_id is ignored. Defaults to "".
         Returns:
             ChatHistoryResult: Chat history response containing interactions and other metadata
         """
@@ -160,7 +192,7 @@ class ComputeService:
         Reset chat history with AI in GoodData workspace.
 
         Args:
-            workspace_id: workspace identifier
+            workspace_id (str): workspace identifier
         """
         chat_history_request = ChatHistoryRequest(reset=True)
         self._actions_api.ai_chat_history(workspace_id, chat_history_request, _check_return_type=False)
@@ -176,10 +208,10 @@ class ComputeService:
         Provide feedback for a specific chat history interaction.
 
         Args:
-            workspace_id: workspace identifier
-            user_feedback: feedback to provide ("POSITIVE", "NEGATIVE" or "NONE")
-            chat_history_interaction_id: interaction id to provide feedback for
-            thread_id_suffix: suffix to identify a specific chat thread
+            workspace_id (str): workspace identifier
+            user_feedback (str): feedback to provide ("POSITIVE", "NEGATIVE" or "NONE").
+            chat_history_interaction_id (str): interaction id to provide feedback for.
+            thread_id_suffix (str): suffix to identify a specific chat thread. Defaults to "".
         """
         chat_history_request = ChatHistoryRequest(
             user_feedback=user_feedback,
@@ -203,14 +235,14 @@ class ComputeService:
         Search for metadata objects using similarity search.
 
         Args:
-            workspace_id: workspace identifier
-            question: keyword/sentence input for search
-            deep_search: turn on deep search - if true, content of complex objects will be searched as well
-            limit: maximum number of results to return
-            object_types: list of object types to search for. Enum items: "attribute", "metric", "fact",
-                "label", "date", "dataset", "visualization" and "dashboard"
-            relevant_score_threshold: minimum relevance score threshold for results
-            title_to_descriptor_ratio: ratio of title score to descriptor score
+            workspace_id (str): workspace identifier
+            question (str): keyword/sentence input for search
+            deep_search (bool): turn on deep search - if true, content of complex objects will be searched as well
+            limit (Optional[int]): maximum number of results to return. Defaults to None.
+            object_types (Optional[list[str]]): list of object types to search for. Enum items: "attribute", "metric", "fact",
+                "label", "date", "dataset", "visualization" and "dashboard". Defaults to None.
+            relevant_score_threshold (Optional[float]): minimum relevance score threshold for results. Defaults to None.
+            title_to_descriptor_ratio (Optional[float]): ratio of title score to descriptor score. Defaults to None.
 
         Returns:
             SearchResult: Search results
@@ -263,8 +295,8 @@ class ComputeService:
         metadata synchronization becomes automatic.
 
         Args:
-            workspace_id: Workspace identifier
-            async_req: If True, execute request asynchronously. Default is False.
+            workspace_id (str): Workspace identifier
+            async_req (bool): If True, execute request asynchronously. Defaults to False.
 
         Returns:
             None

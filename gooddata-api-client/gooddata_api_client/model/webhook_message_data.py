@@ -100,6 +100,7 @@ class WebhookMessageData(ModelNormal):
             'alert': (AlertDescription,),  # noqa: E501
             'details': ({str: (str,)},),  # noqa: E501
             'filters': ([NotificationFilter],),  # noqa: E501
+            'image_exports': ([ExportResult],),  # noqa: E501
             'recipients': ([WebhookRecipient],),  # noqa: E501
             'remaining_action_count': (int,),  # noqa: E501
             'tabular_exports': ([ExportResult],),  # noqa: E501
@@ -116,6 +117,7 @@ class WebhookMessageData(ModelNormal):
         'alert': 'alert',  # noqa: E501
         'details': 'details',  # noqa: E501
         'filters': 'filters',  # noqa: E501
+        'image_exports': 'imageExports',  # noqa: E501
         'recipients': 'recipients',  # noqa: E501
         'remaining_action_count': 'remainingActionCount',  # noqa: E501
         'tabular_exports': 'tabularExports',  # noqa: E501
@@ -169,6 +171,7 @@ class WebhookMessageData(ModelNormal):
             alert (AlertDescription): [optional]  # noqa: E501
             details ({str: (str,)}): [optional]  # noqa: E501
             filters ([NotificationFilter]): [optional]  # noqa: E501
+            image_exports ([ExportResult]): [optional]  # noqa: E501
             recipients ([WebhookRecipient]): [optional]  # noqa: E501
             remaining_action_count (int): [optional]  # noqa: E501
             tabular_exports ([ExportResult]): [optional]  # noqa: E501
@@ -265,6 +268,7 @@ class WebhookMessageData(ModelNormal):
             alert (AlertDescription): [optional]  # noqa: E501
             details ({str: (str,)}): [optional]  # noqa: E501
             filters ([NotificationFilter]): [optional]  # noqa: E501
+            image_exports ([ExportResult]): [optional]  # noqa: E501
             recipients ([WebhookRecipient]): [optional]  # noqa: E501
             remaining_action_count (int): [optional]  # noqa: E501
             tabular_exports ([ExportResult]): [optional]  # noqa: E501

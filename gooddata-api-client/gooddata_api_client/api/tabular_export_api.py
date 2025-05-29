@@ -22,6 +22,7 @@ from gooddata_api_client.model_utils import (  # noqa: F401
     none_type,
     validate_and_convert_types
 )
+from gooddata_api_client.model.dashboard_tabular_export_request import DashboardTabularExportRequest
 from gooddata_api_client.model.export_response import ExportResponse
 from gooddata_api_client.model.tabular_export_request import TabularExportRequest
 
@@ -50,10 +51,12 @@ class TabularExportApi(object):
                 'all': [
                     'workspace_id',
                     'dashboard_id',
+                    'dashboard_tabular_export_request',
                 ],
                 'required': [
                     'workspace_id',
                     'dashboard_id',
+                    'dashboard_tabular_export_request',
                 ],
                 'nullable': [
                 ],
@@ -72,6 +75,8 @@ class TabularExportApi(object):
                         (str,),
                     'dashboard_id':
                         (str,),
+                    'dashboard_tabular_export_request':
+                        (DashboardTabularExportRequest,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
@@ -80,6 +85,7 @@ class TabularExportApi(object):
                 'location_map': {
                     'workspace_id': 'path',
                     'dashboard_id': 'path',
+                    'dashboard_tabular_export_request': 'body',
                 },
                 'collection_format_map': {
                 }
@@ -88,7 +94,9 @@ class TabularExportApi(object):
                 'accept': [
                     'application/json'
                 ],
-                'content_type': [],
+                'content_type': [
+                    'application/json'
+                ]
             },
             api_client=api_client
         )
@@ -211,6 +219,7 @@ class TabularExportApi(object):
         self,
         workspace_id,
         dashboard_id,
+        dashboard_tabular_export_request,
         **kwargs
     ):
         """(EXPERIMENTAL) Create dashboard tabular export request  # noqa: E501
@@ -219,12 +228,13 @@ class TabularExportApi(object):
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.create_dashboard_export_request(workspace_id, dashboard_id, async_req=True)
+        >>> thread = api.create_dashboard_export_request(workspace_id, dashboard_id, dashboard_tabular_export_request, async_req=True)
         >>> result = thread.get()
 
         Args:
             workspace_id (str):
             dashboard_id (str):
+            dashboard_tabular_export_request (DashboardTabularExportRequest):
 
         Keyword Args:
             _return_http_data_only (bool): response data without head status
@@ -292,6 +302,8 @@ class TabularExportApi(object):
             workspace_id
         kwargs['dashboard_id'] = \
             dashboard_id
+        kwargs['dashboard_tabular_export_request'] = \
+            dashboard_tabular_export_request
         return self.create_dashboard_export_request_endpoint.call_with_http_info(**kwargs)
 
     def create_tabular_export(

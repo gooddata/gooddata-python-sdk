@@ -311,6 +311,9 @@
         ],
         "type": "object"
       },
+      "AttributeElements": {
+        "type": "object"
+      },
       "AttributeFilter": {
         "description": "Abstract filter definition type attributes",
         "oneOf": [
@@ -320,6 +323,21 @@
           {
             "$ref": "#/components/schemas/PositiveAttributeFilter"
           }
+        ],
+        "type": "object"
+      },
+      "AttributeFilterByDate": {
+        "properties": {
+          "filterLocalIdentifier": {
+            "type": "string"
+          },
+          "isCommonDate": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "filterLocalIdentifier",
+          "isCommonDate"
         ],
         "type": "object"
       },
@@ -342,6 +360,21 @@
         },
         "required": [
           "values"
+        ],
+        "type": "object"
+      },
+      "AttributeFilterParent": {
+        "properties": {
+          "filterLocalIdentifier": {
+            "type": "string"
+          },
+          "over": {
+            "$ref": "#/components/schemas/Over"
+          }
+        },
+        "required": [
+          "filterLocalIdentifier",
+          "over"
         ],
         "type": "object"
       },
@@ -475,6 +508,186 @@
         },
         "type": "object"
       },
+      "DashboardAttributeFilter": {
+        "properties": {
+          "attributeFilter": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DashboardFilter"
+              },
+              {
+                "properties": {
+                  "attributeElements": {
+                    "$ref": "#/components/schemas/AttributeElements"
+                  },
+                  "displayForm": {
+                    "type": "string"
+                  },
+                  "filterElementsBy": {
+                    "items": {
+                      "$ref": "#/components/schemas/AttributeFilterParent"
+                    },
+                    "type": "array"
+                  },
+                  "filterElementsByDate": {
+                    "items": {
+                      "$ref": "#/components/schemas/AttributeFilterByDate"
+                    },
+                    "type": "array"
+                  },
+                  "negativeSelection": {
+                    "type": "boolean"
+                  },
+                  "selectionMode": {
+                    "enum": [
+                      "single",
+                      "multi"
+                    ],
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "validateElementsBy": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  }
+                },
+                "type": "object"
+              }
+            ],
+            "required": [
+              "attributeElements",
+              "displayForm",
+              "negativeSelection"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "attributeFilter"
+        ],
+        "type": "object"
+      },
+      "DashboardDateFilter": {
+        "properties": {
+          "dateFilter": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DashboardFilter"
+              },
+              {
+                "properties": {
+                  "attribute": {
+                    "type": "string"
+                  },
+                  "dataSet": {
+                    "type": "string"
+                  },
+                  "from": {
+                    "type": "string"
+                  },
+                  "granularity": {
+                    "enum": [
+                      "ALL_TIME_GRANULARITY",
+                      "GDC.time.year",
+                      "GDC.time.week_us",
+                      "GDC.time.week_in_year",
+                      "GDC.time.week_in_quarter",
+                      "GDC.time.week",
+                      "GDC.time.euweek_in_year",
+                      "GDC.time.euweek_in_quarter",
+                      "GDC.time.quarter",
+                      "GDC.time.quarter_in_year",
+                      "GDC.time.month",
+                      "GDC.time.month_in_quarter",
+                      "GDC.time.month_in_year",
+                      "GDC.time.day_in_year",
+                      "GDC.time.day_in_quarter",
+                      "GDC.time.day_in_month",
+                      "GDC.time.day_in_week",
+                      "GDC.time.day_in_euweek",
+                      "GDC.time.date",
+                      "GDC.time.hour",
+                      "GDC.time.hour_in_day",
+                      "GDC.time.minute",
+                      "GDC.time.minute_in_hour"
+                    ],
+                    "type": "string"
+                  },
+                  "to": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "enum": [
+                      "relative",
+                      "absolute"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            ],
+            "required": [
+              "granularity",
+              "type"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "dateFilter"
+        ],
+        "type": "object"
+      },
+      "DashboardFilter": {
+        "properties": {
+          "localIdentifier": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "DashboardTabularExportRequest": {
+        "description": "Export request object describing the export properties for dashboard tabular exports.",
+        "properties": {
+          "dashboardFiltersOverride": {
+            "description": "List of filters that will be used instead of the default dashboard filters.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/DashboardAttributeFilter"
+                },
+                {
+                  "$ref": "#/components/schemas/DashboardDateFilter"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "fileName": {
+            "description": "Filename of downloaded file without extension.",
+            "example": "result",
+            "type": "string"
+          },
+          "format": {
+            "description": "Requested tabular export type.",
+            "enum": [
+              "XLSX"
+            ],
+            "example": "XLSX",
+            "type": "string"
+          }
+        },
+        "required": [
+          "fileName",
+          "format"
+        ],
+        "type": "object"
+      },
       "DateFilter": {
         "description": "Abstract filter definition type for dates.",
         "oneOf": [
@@ -557,6 +770,47 @@
           {
             "$ref": "#/components/schemas/AttributeFilter"
           }
+        ],
+        "type": "object"
+      },
+      "ImageExportRequest": {
+        "description": "Export request object describing the export properties and metadata for image exports.",
+        "properties": {
+          "dashboardId": {
+            "description": "Dashboard identifier",
+            "example": "761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+            "type": "string"
+          },
+          "fileName": {
+            "description": "File name to be used for retrieving the image document.",
+            "example": "filename",
+            "type": "string"
+          },
+          "format": {
+            "description": "Requested resulting file type.",
+            "enum": [
+              "PNG"
+            ],
+            "example": "PNG",
+            "type": "string"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "widgetIds": {
+            "description": "List of widget identifiers to be exported. Note that only one widget is currently supported.",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 1,
+            "type": "array",
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "dashboardId",
+          "fileName",
+          "format"
         ],
         "type": "object"
       },
@@ -691,6 +945,20 @@
         },
         "required": [
           "negativeAttributeFilter"
+        ],
+        "type": "object"
+      },
+      "Over": {
+        "properties": {
+          "attributes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "attributes"
         ],
         "type": "object"
       },
@@ -1398,6 +1666,16 @@
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DashboardTabularExportRequest"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "201": {
             "content": {
@@ -1419,6 +1697,195 @@
           "description": "Permissions required to execute tabular export.",
           "permissions": [
             "EXPORT_TABULAR"
+          ]
+        }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/export/image": {
+      "post": {
+        "description": "Note: This API is an experimental and is going to change. Please, use it accordingly. An image export job will be created based on the export request and put to queue to be executed. The result of the operation will be an exportResult identifier that will be assembled by the client into a url that can be polled.",
+        "operationId": "createImageExport",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImageExportRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExportResponse"
+                }
+              }
+            },
+            "description": "Image export request created successfully."
+          }
+        },
+        "summary": "(EXPERIMENTAL) Create image export request",
+        "tags": [
+          "Image export",
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to execute image export.",
+          "permissions": [
+            "EXPORT_PDF"
+          ]
+        }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/export/image/{exportId}": {
+      "get": {
+        "description": "Note: This API is an experimental and is going to change. Please, use it accordingly. After clients creates a POST export request, the processing of it will start shortly asynchronously. To retrieve the result, client has to check periodically for the result on this endpoint. In case the result isn't ready yet, the service returns 202. If the result is ready, it returns 200 and octet stream of the result file with provided filename.",
+        "operationId": "getImageExport",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "exportId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "image/png": {}
+            },
+            "description": "Binary export result.",
+            "headers": {
+              "Content-Disposition": {
+                "schema": {
+                  "example": "attachment; filename='result.png'",
+                  "pattern": "attachment; filename='[^']+'",
+                  "type": "string"
+                },
+                "style": "simple"
+              }
+            }
+          },
+          "202": {
+            "content": {
+              "image/png": {
+                "schema": {
+                  "items": {
+                    "properties": {
+                      "char": {
+                        "type": "string"
+                      },
+                      "direct": {
+                        "type": "boolean"
+                      },
+                      "double": {
+                        "format": "double",
+                        "type": "number"
+                      },
+                      "float": {
+                        "format": "float",
+                        "type": "number"
+                      },
+                      "int": {
+                        "format": "int32",
+                        "type": "integer"
+                      },
+                      "long": {
+                        "format": "int64",
+                        "type": "integer"
+                      },
+                      "readOnly": {
+                        "type": "boolean"
+                      },
+                      "short": {
+                        "format": "int32",
+                        "type": "integer"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Request is accepted, provided exportId exists, but export is not yet ready."
+          }
+        },
+        "summary": "(EXPERIMENTAL) Retrieve exported files",
+        "tags": [
+          "Image export",
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Minimal permission required to use this endpoint.",
+          "permissions": [
+            "EXPORT_PDF"
+          ]
+        }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/export/image/{exportId}/metadata": {
+      "get": {
+        "description": "Note: This API is an experimental and is going to change. Please, use it accordingly. This endpoint serves as a cache for user-defined metadata of the export for the front end UI to retrieve it, if one was created using the POST ../export/image endpoint. The metadata structure is not verified.",
+        "operationId": "getImageExportMetadata",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "exportId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {}
+            },
+            "description": "Json metadata representation"
+          }
+        },
+        "summary": "(EXPERIMENTAL) Retrieve metadata context",
+        "tags": [
+          "Image export",
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Minimal permission required to use this endpoint.",
+          "permissions": [
+            "EXPORT_PDF"
           ]
         }
       }
@@ -1583,7 +2050,7 @@
                 }
               }
             },
-            "description": "Raw export request created successfully."
+            "description": "Slides export request created successfully."
           }
         },
         "summary": "(EXPERIMENTAL) Create slides export request",

@@ -82,6 +82,7 @@ class VisibleFilter(ModelNormal):
                 and the value is attribute type.
         """
         return {
+            'is_all_time_date_filter': (bool,),  # noqa: E501
             'local_identifier': (str,),  # noqa: E501
             'title': (str,),  # noqa: E501
         }
@@ -92,6 +93,7 @@ class VisibleFilter(ModelNormal):
 
 
     attribute_map = {
+        'is_all_time_date_filter': 'isAllTimeDateFilter',  # noqa: E501
         'local_identifier': 'localIdentifier',  # noqa: E501
         'title': 'title',  # noqa: E501
     }
@@ -137,6 +139,7 @@ class VisibleFilter(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            is_all_time_date_filter (bool): Indicates if the filter is an all-time date filter. Such a filter is not included in report computation, so there is no filter with the same 'localIdentifier' to be found. In such cases, this flag is used to inform the server to not search for the filter in the definitions and include it anyways.. [optional] if omitted the server will use the default value of False  # noqa: E501
             local_identifier (str): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
         """
@@ -224,6 +227,7 @@ class VisibleFilter(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            is_all_time_date_filter (bool): Indicates if the filter is an all-time date filter. Such a filter is not included in report computation, so there is no filter with the same 'localIdentifier' to be found. In such cases, this flag is used to inform the server to not search for the filter in the definitions and include it anyways.. [optional] if omitted the server will use the default value of False  # noqa: E501
             local_identifier (str): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
         """

@@ -593,6 +593,17 @@
         ],
         "type": "object"
       },
+      "AutomationImageExport": {
+        "properties": {
+          "requestPayload": {
+            "$ref": "#/components/schemas/ImageExportRequest"
+          }
+        },
+        "required": [
+          "requestPayload"
+        ],
+        "type": "object"
+      },
       "AutomationMetadata": {
         "description": "Additional information for the automation.",
         "maxLength": 250000,
@@ -1613,6 +1624,13 @@
             "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
+          "imageExports": {
+            "items": {
+              "$ref": "#/components/schemas/AutomationImageExport"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
           "metadata": {
             "$ref": "#/components/schemas/AutomationMetadata"
           },
@@ -1861,6 +1879,18 @@
       "DeclarativeDataSource": {
         "description": "A data source and its properties.",
         "properties": {
+          "authenticationType": {
+            "description": "Type of authentication used to connect to the database.",
+            "enum": [
+              "USERNAME_PASSWORD",
+              "TOKEN",
+              "KEY_PAIR",
+              "CLIENT_SECRET",
+              "ACCESS_TOKEN"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
           "cacheStrategy": {
             "description": "Determines how the results coming from a particular datasource should be cached.\n- ALWAYS: The results from the datasource should be cached normally (the default).\n- NEVER: The results from the datasource should never be cached.",
             "enum": [
@@ -3310,6 +3340,7 @@
               "TIMEZONE",
               "ACTIVE_THEME",
               "ACTIVE_COLOR_PALETTE",
+              "ACTIVE_LLM_ENDPOINT",
               "WHITE_LABELING",
               "LOCALE",
               "METADATA_LOCALE",
@@ -3326,7 +3357,8 @@
               "DATE_FILTER_CONFIG",
               "JIT_PROVISIONING",
               "DASHBOARD_FILTERS_APPLY_MODE",
-              "ENABLE_SLIDES_EXPORT"
+              "ENABLE_SLIDES_EXPORT",
+              "AI_RATE_LIMIT"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -4752,6 +4784,47 @@
           "id",
           "origins",
           "type"
+        ],
+        "type": "object"
+      },
+      "ImageExportRequest": {
+        "description": "Export request object describing the export properties and metadata for image exports.",
+        "properties": {
+          "dashboardId": {
+            "description": "Dashboard identifier",
+            "example": "761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+            "type": "string"
+          },
+          "fileName": {
+            "description": "File name to be used for retrieving the image document.",
+            "example": "filename",
+            "type": "string"
+          },
+          "format": {
+            "description": "Requested resulting file type.",
+            "enum": [
+              "PNG"
+            ],
+            "example": "PNG",
+            "type": "string"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "widgetIds": {
+            "description": "List of widget identifiers to be exported. Note that only one widget is currently supported.",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 1,
+            "type": "array",
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "dashboardId",
+          "fileName",
+          "format"
         ],
         "type": "object"
       },
@@ -6271,6 +6344,20 @@
                 },
                 "type": "array"
               },
+              "imageExports": {
+                "items": {
+                  "properties": {
+                    "requestPayload": {
+                      "$ref": "#/components/schemas/ImageExportRequest"
+                    }
+                  },
+                  "required": [
+                    "requestPayload"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
               "metadata": {
                 "description": "Additional information for the automation.",
                 "maxLength": 250000,
@@ -6525,6 +6612,20 @@
                   },
                   "required": [
                     "email"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "imageExports": {
+                "items": {
+                  "properties": {
+                    "requestPayload": {
+                      "$ref": "#/components/schemas/ImageExportRequest"
+                    }
+                  },
+                  "required": [
+                    "requestPayload"
                   ],
                   "type": "object"
                 },
@@ -6888,6 +6989,20 @@
                   },
                   "required": [
                     "email"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "imageExports": {
+                "items": {
+                  "properties": {
+                    "requestPayload": {
+                      "$ref": "#/components/schemas/ImageExportRequest"
+                    }
+                  },
+                  "required": [
+                    "requestPayload"
                   ],
                   "type": "object"
                 },
@@ -12247,18 +12362,6 @@
                 "description": "The token to use to connect to the LLM provider.",
                 "maxLength": 10000,
                 "type": "string"
-              },
-              "workspaceIds": {
-                "description": "List of workspace IDs for which LLM endpoint is valid. If empty, it is valid for all workspaces.",
-                "example": [
-                  "demo",
-                  "trial"
-                ],
-                "items": {
-                  "maxLength": 255,
-                  "type": "string"
-                },
-                "type": "array"
               }
             },
             "required": [
@@ -12339,18 +12442,6 @@
                 "description": "User-facing title of the LLM Provider.",
                 "maxLength": 255,
                 "type": "string"
-              },
-              "workspaceIds": {
-                "description": "List of workspace IDs for which LLM endpoint is valid. If empty, it is valid for all workspaces.",
-                "example": [
-                  "demo",
-                  "trial"
-                ],
-                "items": {
-                  "maxLength": 255,
-                  "type": "string"
-                },
-                "type": "array"
               }
             },
             "required": [
@@ -12475,18 +12566,6 @@
                 "description": "The token to use to connect to the LLM provider.",
                 "maxLength": 10000,
                 "type": "string"
-              },
-              "workspaceIds": {
-                "description": "List of workspace IDs for which LLM endpoint is valid. If empty, it is valid for all workspaces.",
-                "example": [
-                  "demo",
-                  "trial"
-                ],
-                "items": {
-                  "maxLength": 255,
-                  "type": "string"
-                },
-                "type": "array"
               }
             },
             "type": "object"
@@ -13941,6 +14020,7 @@
                   "TIMEZONE",
                   "ACTIVE_THEME",
                   "ACTIVE_COLOR_PALETTE",
+                  "ACTIVE_LLM_ENDPOINT",
                   "WHITE_LABELING",
                   "LOCALE",
                   "METADATA_LOCALE",
@@ -13957,7 +14037,8 @@
                   "DATE_FILTER_CONFIG",
                   "JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
-                  "ENABLE_SLIDES_EXPORT"
+                  "ENABLE_SLIDES_EXPORT",
+                  "AI_RATE_LIMIT"
                 ],
                 "type": "string"
               }
@@ -14011,6 +14092,7 @@
                   "TIMEZONE",
                   "ACTIVE_THEME",
                   "ACTIVE_COLOR_PALETTE",
+                  "ACTIVE_LLM_ENDPOINT",
                   "WHITE_LABELING",
                   "LOCALE",
                   "METADATA_LOCALE",
@@ -14027,7 +14109,8 @@
                   "DATE_FILTER_CONFIG",
                   "JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
-                  "ENABLE_SLIDES_EXPORT"
+                  "ENABLE_SLIDES_EXPORT",
+                  "AI_RATE_LIMIT"
                 ],
                 "type": "string"
               }
@@ -14121,6 +14204,7 @@
                   "TIMEZONE",
                   "ACTIVE_THEME",
                   "ACTIVE_COLOR_PALETTE",
+                  "ACTIVE_LLM_ENDPOINT",
                   "WHITE_LABELING",
                   "LOCALE",
                   "METADATA_LOCALE",
@@ -14137,7 +14221,8 @@
                   "DATE_FILTER_CONFIG",
                   "JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
-                  "ENABLE_SLIDES_EXPORT"
+                  "ENABLE_SLIDES_EXPORT",
+                  "AI_RATE_LIMIT"
                 ],
                 "type": "string"
               }
@@ -15597,6 +15682,7 @@
                   "TIMEZONE",
                   "ACTIVE_THEME",
                   "ACTIVE_COLOR_PALETTE",
+                  "ACTIVE_LLM_ENDPOINT",
                   "WHITE_LABELING",
                   "LOCALE",
                   "METADATA_LOCALE",
@@ -15613,7 +15699,8 @@
                   "DATE_FILTER_CONFIG",
                   "JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
-                  "ENABLE_SLIDES_EXPORT"
+                  "ENABLE_SLIDES_EXPORT",
+                  "AI_RATE_LIMIT"
                 ],
                 "type": "string"
               }
@@ -15667,6 +15754,7 @@
                   "TIMEZONE",
                   "ACTIVE_THEME",
                   "ACTIVE_COLOR_PALETTE",
+                  "ACTIVE_LLM_ENDPOINT",
                   "WHITE_LABELING",
                   "LOCALE",
                   "METADATA_LOCALE",
@@ -15683,7 +15771,8 @@
                   "DATE_FILTER_CONFIG",
                   "JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
-                  "ENABLE_SLIDES_EXPORT"
+                  "ENABLE_SLIDES_EXPORT",
+                  "AI_RATE_LIMIT"
                 ],
                 "type": "string"
               }
@@ -17415,6 +17504,7 @@
                   "TIMEZONE",
                   "ACTIVE_THEME",
                   "ACTIVE_COLOR_PALETTE",
+                  "ACTIVE_LLM_ENDPOINT",
                   "WHITE_LABELING",
                   "LOCALE",
                   "METADATA_LOCALE",
@@ -17431,7 +17521,8 @@
                   "DATE_FILTER_CONFIG",
                   "JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
-                  "ENABLE_SLIDES_EXPORT"
+                  "ENABLE_SLIDES_EXPORT",
+                  "AI_RATE_LIMIT"
                 ],
                 "type": "string"
               }
@@ -17485,6 +17576,7 @@
                   "TIMEZONE",
                   "ACTIVE_THEME",
                   "ACTIVE_COLOR_PALETTE",
+                  "ACTIVE_LLM_ENDPOINT",
                   "WHITE_LABELING",
                   "LOCALE",
                   "METADATA_LOCALE",
@@ -17501,7 +17593,8 @@
                   "DATE_FILTER_CONFIG",
                   "JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
-                  "ENABLE_SLIDES_EXPORT"
+                  "ENABLE_SLIDES_EXPORT",
+                  "AI_RATE_LIMIT"
                 ],
                 "type": "string"
               }
@@ -17621,6 +17714,7 @@
                   "TIMEZONE",
                   "ACTIVE_THEME",
                   "ACTIVE_COLOR_PALETTE",
+                  "ACTIVE_LLM_ENDPOINT",
                   "WHITE_LABELING",
                   "LOCALE",
                   "METADATA_LOCALE",
@@ -17637,7 +17731,8 @@
                   "DATE_FILTER_CONFIG",
                   "JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
-                  "ENABLE_SLIDES_EXPORT"
+                  "ENABLE_SLIDES_EXPORT",
+                  "AI_RATE_LIMIT"
                 ],
                 "type": "string"
               }
@@ -17691,6 +17786,7 @@
                   "TIMEZONE",
                   "ACTIVE_THEME",
                   "ACTIVE_COLOR_PALETTE",
+                  "ACTIVE_LLM_ENDPOINT",
                   "WHITE_LABELING",
                   "LOCALE",
                   "METADATA_LOCALE",
@@ -17707,7 +17803,8 @@
                   "DATE_FILTER_CONFIG",
                   "JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
-                  "ENABLE_SLIDES_EXPORT"
+                  "ENABLE_SLIDES_EXPORT",
+                  "AI_RATE_LIMIT"
                 ],
                 "type": "string"
               }
@@ -18774,6 +18871,7 @@
               "TIMEZONE",
               "ACTIVE_THEME",
               "ACTIVE_COLOR_PALETTE",
+              "ACTIVE_LLM_ENDPOINT",
               "WHITE_LABELING",
               "LOCALE",
               "METADATA_LOCALE",
@@ -18790,7 +18888,8 @@
               "DATE_FILTER_CONFIG",
               "JIT_PROVISIONING",
               "DASHBOARD_FILTERS_APPLY_MODE",
-              "ENABLE_SLIDES_EXPORT"
+              "ENABLE_SLIDES_EXPORT",
+              "AI_RATE_LIMIT"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -19585,6 +19684,11 @@
       },
       "VisibleFilter": {
         "properties": {
+          "isAllTimeDateFilter": {
+            "default": false,
+            "description": "Indicates if the filter is an all-time date filter. Such a filter is not included in report computation, so there is no filter with the same 'localIdentifier' to be found. In such cases, this flag is used to inform the server to not search for the filter in the definitions and include it anyways.",
+            "type": "boolean"
+          },
           "localIdentifier": {
             "type": "string"
           },

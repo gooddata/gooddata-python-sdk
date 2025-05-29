@@ -1,0 +1,57 @@
+# (C) 2025 GoodData Corporation
+content:
+  buckets:
+    - items:
+        - measure:
+            definition:
+              measureDefinition:
+                filters: []
+                item:
+                  identifier:
+                    id: amount_of_active_customers
+                    type: metric
+            localIdentifier: 1a14cdc1293c46e89a2e25d3e741d235
+            title: '# of Active Customers'
+      localIdentifier: measures
+    - items:
+        - attribute:
+            displayForm:
+              identifier:
+                id: date.month
+                type: label
+            localIdentifier: c1feca1864244ec2ace7a9b9d7fda231
+      localIdentifier: view
+    - items:
+        - attribute:
+            displayForm:
+              identifier:
+                id: region
+                type: label
+            localIdentifier: 530cddbd7ca04d039e73462d81ed44d5
+      localIdentifier: stack
+  filters:
+    - negativeAttributeFilter:
+        displayForm:
+          identifier:
+            id: region
+            type: label
+        notIn:
+          values: []
+    - relativeDateFilter:
+        dataSet:
+          identifier:
+            id: date
+            type: dataset
+        from: -11
+        granularity: GDC.time.month
+        to: 0
+  properties:
+    controls:
+      legend:
+        position: bottom
+      stackMeasuresToPercent: true
+  version: '2'
+  visualizationUrl: local:area
+description: ''
+id: percentage_of_customers_by_region
+title: Percentage of Customers by Region

@@ -1,0 +1,194 @@
+# (C) 2025 GoodData Corporation
+content:
+  filterContextRef:
+    identifier:
+      id: 4717b786-2c2e-4596-adb5-4f8b0ab0e19a
+      type: filterContext
+  layout:
+    sections:
+      - header:
+          description: All in one description
+          title: All in one title
+        items:
+          - size:
+              xl:
+                gridWidth: 6
+            type: IDashboardLayoutItem
+            widget:
+              dateDataSet:
+                identifier:
+                  id: date
+                  type: dataset
+              description: ''
+              drills: []
+              ignoreDashboardFilters: []
+              insight:
+                identifier:
+                  id: top_10_customers
+                  type: visualizationObject
+              localIdentifier: 2c7400ac-5f63-46f8-aa12-a2debe13fd14
+              properties: {}
+              title: Top 10 Customers
+              type: insight
+          - size:
+              xl:
+                gridWidth: 6
+            type: IDashboardLayoutItem
+            widget:
+              dateDataSet:
+                identifier:
+                  id: date
+                  type: dataset
+              description: ''
+              drills: []
+              ignoreDashboardFilters: []
+              insight:
+                identifier:
+                  id: revenue_by_product
+                  type: visualizationObject
+              localIdentifier: a50daab7-fb78-45eb-a2b4-d5cc8cbd89e9
+              properties: {}
+              title: Revenue by Product
+              type: insight
+          - size:
+              xl:
+                gridWidth: 6
+            type: IDashboardLayoutItem
+            widget:
+              dateDataSet:
+                identifier:
+                  id: date
+                  type: dataset
+              description: ''
+              drills: []
+              ignoreDashboardFilters: []
+              insight:
+                identifier:
+                  id: revenue_by_category_trend
+                  type: visualizationObject
+              localIdentifier: efccc783-5896-4eb6-890f-2e51ece3f159
+              properties: {}
+              title: Revenue by Category Trend
+              type: insight
+          - size:
+              xl:
+                gridWidth: 6
+            type: IDashboardLayoutItem
+            widget:
+              dateDataSet:
+                identifier:
+                  id: date
+                  type: dataset
+              description: ''
+              drills: []
+              ignoreDashboardFilters: []
+              insight:
+                identifier:
+                  id: product_saleability
+                  type: visualizationObject
+              localIdentifier: d738d85f-e935-4e2c-b8b4-a8b456f55079
+              properties: {}
+              title: Product Saleability
+              type: insight
+          - size:
+              xl:
+                gridWidth: 6
+            type: IDashboardLayoutItem
+            widget:
+              dateDataSet:
+                identifier:
+                  id: date
+                  type: dataset
+              description: ''
+              drills: []
+              ignoreDashboardFilters: []
+              insight:
+                identifier:
+                  id: product_categories_pie_chart
+                  type: visualizationObject
+              localIdentifier: 8c194c85-bad6-42da-b4e3-08d270278316
+              properties: {}
+              title: Product Categories Pie Chart
+              type: insight
+          - size:
+              xl:
+                gridWidth: 6
+            type: IDashboardLayoutItem
+            widget:
+              dateDataSet:
+                identifier:
+                  id: date
+                  type: dataset
+              description: ''
+              drills: []
+              ignoreDashboardFilters: []
+              insight:
+                identifier:
+                  id: percentage_of_customers_by_region
+                  type: visualizationObject
+              localIdentifier: 2c3307b2-581f-4bab-9252-6b5279565b24
+              properties: {}
+              title: Percentage of Customers by Region
+              type: insight
+          - size:
+              xl:
+                gridWidth: 6
+            type: IDashboardLayoutItem
+            widget:
+              dateDataSet:
+                identifier:
+                  id: date
+                  type: dataset
+              description: ''
+              drills: []
+              ignoreDashboardFilters: []
+              insight:
+                identifier:
+                  id: customers_trend
+                  type: visualizationObject
+              localIdentifier: 87505bb0-d954-4add-811d-f4e75e431660
+              properties: {}
+              title: Customers Trend
+              type: insight
+          - size:
+              xl:
+                gridWidth: 6
+            type: IDashboardLayoutItem
+            widget:
+              description: ''
+              drills: []
+              ignoreDashboardFilters: []
+              insight:
+                identifier:
+                  id: campaign_spend
+                  type: visualizationObject
+              localIdentifier: 0cb01f6a-6ea6-4c22-bb12-ded00a9eac66
+              properties: {}
+              title: Campaign Spend
+              type: insight
+          - size:
+              xl:
+                gridWidth: 12
+            type: IDashboardLayoutItem
+            widget:
+              dateDataSet:
+                identifier:
+                  id: date
+                  type: dataset
+              description: ''
+              drills: []
+              ignoreDashboardFilters: []
+              insight:
+                identifier:
+                  id: percent_revenue_per_product_by_customer_and_category
+                  type: visualizationObject
+              localIdentifier: 2213d6e4-6df7-458e-806d-f02bae5ce66a
+              properties: {}
+              title: '% Revenue per Product by Customer and Category'
+              type: insight
+        type: IDashboardLayoutSection
+    type: IDashboardLayout
+  version: '2'
+description: ''
+id: b2f2d436-9831-4fe0-81df-8c59fd33242b
+title: All visualizations 1 with custom filter

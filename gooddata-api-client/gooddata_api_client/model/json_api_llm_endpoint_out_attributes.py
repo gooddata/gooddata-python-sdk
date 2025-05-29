@@ -106,7 +106,6 @@ class JsonApiLlmEndpointOutAttributes(ModelNormal):
             'llm_model': (str,),  # noqa: E501
             'llm_organization': (str, none_type,),  # noqa: E501
             'provider': (str,),  # noqa: E501
-            'workspace_ids': ([str],),  # noqa: E501
         }
 
     @cached_property
@@ -121,7 +120,6 @@ class JsonApiLlmEndpointOutAttributes(ModelNormal):
         'llm_model': 'llmModel',  # noqa: E501
         'llm_organization': 'llmOrganization',  # noqa: E501
         'provider': 'provider',  # noqa: E501
-        'workspace_ids': 'workspaceIds',  # noqa: E501
     }
 
     read_only_vars = {
@@ -173,7 +171,6 @@ class JsonApiLlmEndpointOutAttributes(ModelNormal):
             llm_model (str): LLM Model. We provide a default model for each provider, but you can override it here.. [optional]  # noqa: E501
             llm_organization (str, none_type): Organization in LLM provider.. [optional]  # noqa: E501
             provider (str): LLM Provider.. [optional] if omitted the server will use the default value of "OPENAI"  # noqa: E501
-            workspace_ids ([str]): List of workspace IDs for which LLM endpoint is valid. If empty, it is valid for all workspaces.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -268,7 +265,6 @@ class JsonApiLlmEndpointOutAttributes(ModelNormal):
             llm_model (str): LLM Model. We provide a default model for each provider, but you can override it here.. [optional]  # noqa: E501
             llm_organization (str, none_type): Organization in LLM provider.. [optional]  # noqa: E501
             provider (str): LLM Provider.. [optional] if omitted the server will use the default value of "OPENAI"  # noqa: E501
-            workspace_ids ([str]): List of workspace IDs for which LLM endpoint is valid. If empty, it is valid for all workspaces.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

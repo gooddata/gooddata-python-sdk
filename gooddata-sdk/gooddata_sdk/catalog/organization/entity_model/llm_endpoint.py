@@ -53,7 +53,6 @@ class CatalogLlmEndpoint(Base):
         base_url: Optional[str] = None,
         llm_organization: Optional[str] = None,
         llm_model: Optional[str] = None,
-        workspace_ids: Optional[list[str]] = None,
     ) -> CatalogLlmEndpoint:
         return cls(
             id=id,
@@ -65,7 +64,6 @@ class CatalogLlmEndpoint(Base):
                 base_url=base_url,
                 llm_organization=llm_organization,
                 llm_model=llm_model,
-                workspace_ids=workspace_ids,
             ),
         )
 
@@ -80,7 +78,6 @@ class CatalogLlmEndpoint(Base):
             base_url=safeget(ea, ["baseUrl"]),
             llm_organization=safeget(ea, ["llmOrganization"]),
             llm_model=safeget(ea, ["llmModel"]),
-            workspace_ids=safeget(ea, ["workspaceIds"]),
         )
         return cls(
             id=entity["id"],
@@ -108,7 +105,6 @@ class CatalogLlmEndpointPatch(Base):
         base_url: Optional[str] = None,
         llm_organization: Optional[str] = None,
         llm_model: Optional[str] = None,
-        workspace_ids: Optional[list[str]] = None,
     ) -> CatalogLlmEndpointPatch:
         return cls(
             id=id,
@@ -120,7 +116,6 @@ class CatalogLlmEndpointPatch(Base):
                 base_url=base_url,
                 llm_organization=llm_organization,
                 llm_model=llm_model,
-                workspace_ids=workspace_ids,
             ),
         )
 
@@ -134,7 +129,6 @@ class CatalogLlmEndpointAttributes(Base):
     base_url: Optional[str] = None
     llm_organization: Optional[str] = None
     llm_model: Optional[str] = None
-    workspace_ids: Optional[list[str]] = None
 
     @staticmethod
     def client_class() -> type[JsonApiLlmEndpointInAttributes]:
@@ -150,7 +144,6 @@ class CatalogLlmEndpointPatchAttributes(Base):
     base_url: Optional[str] = None
     llm_organization: Optional[str] = None
     llm_model: Optional[str] = None
-    workspace_ids: Optional[list[str]] = None
 
     @staticmethod
     def client_class() -> type[JsonApiLlmEndpointPatchAttributes]:

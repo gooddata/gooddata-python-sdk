@@ -1518,6 +1518,7 @@ with gooddata_api_client.ApiClient() as api_client:
     declarative_data_sources = DeclarativeDataSources(
         data_sources=[
             DeclarativeDataSource(
+                authentication_type="USERNAME_PASSWORD",
                 cache_strategy="ALWAYS",
                 client_id="client1234",
                 client_secret="client_secret_example",
@@ -2528,9 +2529,23 @@ with gooddata_api_client.ApiClient() as api_client:
                 ),
             ],
             id="/6bUUGjjNSwg0_bs",
+            image_exports=[
+                AutomationImageExport(
+                    request_payload=ImageExportRequest(
+                        dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                        file_name="filename",
+                        format="PNG",
+                        metadata=JsonNode(),
+                        widget_ids=[
+                            "widget_ids_example",
+                        ],
+                    ),
+                ),
+            ],
             metadata=AutomationMetadata(
                 visible_filters=[
                     VisibleFilter(
+                        is_all_time_date_filter=False,
                         local_identifier="local_identifier_example",
                         title="title_example",
                     ),
@@ -3351,6 +3366,7 @@ with gooddata_api_client.ApiClient() as api_client:
     declarative_organization = DeclarativeOrganization(
         data_sources=[
             DeclarativeDataSource(
+                authentication_type="USERNAME_PASSWORD",
                 cache_strategy="ALWAYS",
                 client_id="client1234",
                 client_secret="client_secret_example",
@@ -3690,9 +3706,23 @@ with gooddata_api_client.ApiClient() as api_client:
                             ),
                         ],
                         id="/6bUUGjjNSwg0_bs",
+                        image_exports=[
+                            AutomationImageExport(
+                                request_payload=ImageExportRequest(
+                                    dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                                    file_name="filename",
+                                    format="PNG",
+                                    metadata=JsonNode(),
+                                    widget_ids=[
+                                        "widget_ids_example",
+                                    ],
+                                ),
+                            ),
+                        ],
                         metadata=AutomationMetadata(
                             visible_filters=[
                                 VisibleFilter(
+                                    is_all_time_date_filter=False,
                                     local_identifier="local_identifier_example",
                                     title="title_example",
                                 ),
@@ -4788,9 +4818,23 @@ with gooddata_api_client.ApiClient() as api_client:
                             ),
                         ],
                         id="/6bUUGjjNSwg0_bs",
+                        image_exports=[
+                            AutomationImageExport(
+                                request_payload=ImageExportRequest(
+                                    dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                                    file_name="filename",
+                                    format="PNG",
+                                    metadata=JsonNode(),
+                                    widget_ids=[
+                                        "widget_ids_example",
+                                    ],
+                                ),
+                            ),
+                        ],
                         metadata=AutomationMetadata(
                             visible_filters=[
                                 VisibleFilter(
+                                    is_all_time_date_filter=False,
                                     local_identifier="local_identifier_example",
                                     title="title_example",
                                 ),

@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **description** | **str** |  | [optional] 
 **details** | **bool, date, datetime, dict, float, int, list, str, none_type** | Additional details to be included in the automated message. | [optional] 
 **external_recipients** | [**[JsonApiAutomationInAttributesExternalRecipientsInner]**](JsonApiAutomationInAttributesExternalRecipientsInner.md) | External recipients of the automation action results. | [optional] 
+**image_exports** | [**[JsonApiAutomationInAttributesImageExportsInner]**](JsonApiAutomationInAttributesImageExportsInner.md) |  | [optional] 
 **metadata** | [**JsonApiAutomationInAttributesMetadata**](JsonApiAutomationInAttributesMetadata.md) |  | [optional] 
 **schedule** | [**JsonApiAutomationInAttributesSchedule**](JsonApiAutomationInAttributesSchedule.md) |  | [optional] 
 **state** | **str** | Current state of the automation. | [optional] 

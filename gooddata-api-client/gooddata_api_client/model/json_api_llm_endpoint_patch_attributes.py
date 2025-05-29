@@ -110,7 +110,6 @@ class JsonApiLlmEndpointPatchAttributes(ModelNormal):
             'provider': (str,),  # noqa: E501
             'title': (str,),  # noqa: E501
             'token': (str,),  # noqa: E501
-            'workspace_ids': ([str],),  # noqa: E501
         }
 
     @cached_property
@@ -126,7 +125,6 @@ class JsonApiLlmEndpointPatchAttributes(ModelNormal):
         'provider': 'provider',  # noqa: E501
         'title': 'title',  # noqa: E501
         'token': 'token',  # noqa: E501
-        'workspace_ids': 'workspaceIds',  # noqa: E501
     }
 
     read_only_vars = {
@@ -177,7 +175,6 @@ class JsonApiLlmEndpointPatchAttributes(ModelNormal):
             provider (str): LLM Provider.. [optional] if omitted the server will use the default value of "OPENAI"  # noqa: E501
             title (str): User-facing title of the LLM Provider.. [optional]  # noqa: E501
             token (str): The token to use to connect to the LLM provider.. [optional]  # noqa: E501
-            workspace_ids ([str]): List of workspace IDs for which LLM endpoint is valid. If empty, it is valid for all workspaces.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -270,7 +267,6 @@ class JsonApiLlmEndpointPatchAttributes(ModelNormal):
             provider (str): LLM Provider.. [optional] if omitted the server will use the default value of "OPENAI"  # noqa: E501
             title (str): User-facing title of the LLM Provider.. [optional]  # noqa: E501
             token (str): The token to use to connect to the LLM provider.. [optional]  # noqa: E501
-            workspace_ids ([str]): List of workspace IDs for which LLM endpoint is valid. If empty, it is valid for all workspaces.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
