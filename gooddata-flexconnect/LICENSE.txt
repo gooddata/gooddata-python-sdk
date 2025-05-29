@@ -1,1 +1,1 @@
-../OSS LICENSES/LICENSE (gooddata-flexfun).txt
+../OSS LICENSES/LICENSE (gooddata-flexconnect).txt
