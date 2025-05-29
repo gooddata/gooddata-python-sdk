@@ -16,7 +16,13 @@ from gooddata_api_client.model.search_request import SearchRequest
 from gooddata_api_client.model.search_result import SearchResult
 
 from gooddata_sdk.client import GoodDataApiClient
-from gooddata_sdk.compute.model.execution import Execution, ExecutionDefinition, ResultCacheMetadata
+from gooddata_sdk.compute.model.execution import (
+    Execution,
+    ExecutionDefinition,
+    ResultCacheMetadata,
+    TableDimension,
+)
+from gooddata_sdk.compute.visualization_to_sdk_converter import VisualizationToSdkConverter
 
 logger = logging.getLogger(__name__)
 
@@ -82,6 +88,32 @@ class ComputeService:
                 ),
             )
         return ResultCacheMetadata(result_cache_metadata=result_cache_metadata)
+
+    def build_exec_def_from_chat_result(self, chat_result: ChatResult) -> ExecutionDefinition:
+        """
+        Build execution definition from chat result.
+
+        Args:
+            chat_result: ChatResult object containing visualization details from AI chat response
+
+        Returns:
+            ExecutionDefinition: Execution definition built from chat result visualization
+        """
+        vis_object = chat_result.created_visualizations["objects"][0]
+        metrics_def = vis_object.get("metrics", [])
+        filters_def = vis_object.get("filters", [])
+        dimensionality_def = vis_object.get("dimensionality", [])
+
+        metrics = [VisualizationToSdkConverter.convert_metric(m) for m in metrics_def]
+        filters = [VisualizationToSdkConverter.convert_filter(f) for f in filters_def]
+        attributes = [VisualizationToSdkConverter.convert_attribute(d) for d in dimensionality_def]
+        dimensions = [
+            TableDimension(item_ids=[a.local_id for a in attributes]),
+            TableDimension(item_ids=["measureGroup"]),
+        ]
+
+        exec_def = ExecutionDefinition(dimensions=dimensions, metrics=metrics, filters=filters, attributes=attributes)
+        return exec_def
 
     def ai_chat(self, workspace_id: str, question: str) -> ChatResult:
         """

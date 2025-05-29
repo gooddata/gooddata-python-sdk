@@ -2,4 +2,5 @@
 host: "http://localhost:3000"
 token: "YWRtaW46Ym9vdHN0cmFwOmFkbWluMTIz"
 workspace: "demo"
+workspace_test: "demo_testing"
 header_host: localhost

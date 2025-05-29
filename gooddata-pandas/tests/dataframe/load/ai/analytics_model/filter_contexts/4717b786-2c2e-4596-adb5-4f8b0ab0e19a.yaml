@@ -1,0 +1,22 @@
+# (C) 2025 GoodData Corporation
+content:
+  filters:
+    - attributeFilter:
+        attributeElements:
+          uris:
+            - Biolid
+            - ChalkTalk
+            - Compglass
+            - Elentrix
+        displayForm:
+          identifier:
+            id: product_name
+            type: label
+        filterElementsBy: []
+        localIdentifier: 6b94bbb585d44c79967867719e524fae
+        negativeSelection: false
+        selectionMode: multi
+  version: '2'
+description: ''
+id: 4717b786-2c2e-4596-adb5-4f8b0ab0e19a
+title: filterContext
