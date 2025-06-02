@@ -9,8 +9,8 @@ from gooddata_flight_server import ArrowData
 _DATA: Optional[pyarrow.Table] = None
 
 
-class _LongRunningFun(FlexConnectFunction):
-    Name = "LongRunningFun"
+class _PollableFun(FlexConnectFunction):
+    Name = "PollableFun"
     Schema = pyarrow.schema(
         fields=[
             pyarrow.field("col1", pyarrow.int64()),
@@ -25,9 +25,9 @@ class _LongRunningFun(FlexConnectFunction):
         columns: tuple[str, ...],
         headers: dict[str, list[str]],
     ) -> ArrowData:
-        # sleep is intentionally setup to be longer than the deadline for
-        # the function invocation (see conftest.py // flexconnect_server fixture)
-        time.sleep(2)
+        # sleep is intentionally setup to be longer than one polling interval
+        # (see conftest.py // flexconnect_server fixture)
+        time.sleep(0.7)
 
         return pyarrow.table(
             data={

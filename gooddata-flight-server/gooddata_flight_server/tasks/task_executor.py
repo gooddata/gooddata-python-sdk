@@ -55,6 +55,15 @@ class TaskExecutor(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
+    def get_task_submitted_timestamp(self, task_id: str) -> Optional[float]:
+        """
+        Returns the timestamp of when the task with the given id was submitted.
+        :param task_id: task id to get the timestamp for
+        :return: Timestamp in seconds since epoch of when the task was submitted or None if there is no such task
+        """
+        raise NotImplementedError
+
+    @abc.abstractmethod
     def wait_for_result(self, task_id: str, timeout: Optional[float] = None) -> Optional[TaskExecutionResult]:
         """
         Wait for the task with the provided task id to finish.
