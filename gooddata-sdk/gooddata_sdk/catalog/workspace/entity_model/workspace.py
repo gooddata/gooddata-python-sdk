@@ -21,12 +21,21 @@ class CatalogWorkspace(Base):
     id: str = attr.field(init=False, default=attr.Factory(lambda self: self.workspace_id, takes_self=True))
     name: str
     parent_id: Optional[str] = attr.field(default=None)
+    description: Optional[str] = attr.field(default=None)
 
     @classmethod
     def from_api(cls, entity: dict[str, Any]) -> CatalogWorkspace:
         ea = entity["attributes"]
         er = entity.get("relationships")
-        return cls(workspace_id=entity["id"], name=ea["name"], parent_id=safeget(er, ["parent", "data", "id"]))
+        return cls(
+            workspace_id=entity["id"],
+            name=ea["name"],
+            parent_id=safeget(
+                er,
+                ["parent", "data", "id"],
+            ),
+            description=ea.get("description"),
+        )
 
     def to_api(self) -> JsonApiWorkspaceInDocument:
         kwargs = dict()
@@ -36,12 +45,13 @@ class CatalogWorkspace(Base):
                     data=JsonApiWorkspaceToOneLinkage(id=self.parent_id, type="workspace")
                 )
             )
+        attributes_dict = {"name": self.name}
+        if self.description:
+            attributes_dict["description"] = self.description
         return JsonApiWorkspaceInDocument(
             data=JsonApiWorkspaceIn(
                 id=self.id,
-                attributes=JsonApiWorkspaceInAttributes(
-                    name=self.name,
-                ),
+                attributes=JsonApiWorkspaceInAttributes(**attributes_dict),
                 **kwargs,
             )
         )

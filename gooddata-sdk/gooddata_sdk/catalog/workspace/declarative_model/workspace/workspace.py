@@ -79,6 +79,7 @@ class CatalogDeclarativeWorkspaceModel(Base):
 class CatalogDeclarativeWorkspace(Base):
     id: str
     name: str
+    description: Optional[str] = None
     model: Optional[CatalogDeclarativeWorkspaceModel] = None
     parent: Optional[CatalogWorkspaceIdentifier] = None
     permissions: list[CatalogDeclarativeSingleWorkspacePermission] = attr.field(factory=list)
