@@ -17,6 +17,10 @@ See [Manage Permissions](https://www.gooddata.com/docs/cloud/manage-deployment/m
 * [load_declarative_users_user_groups](./load_declarative_users_user_groups/)
 * [load_and_put_declarative_users_user_groups](./load_and_put_declarative_users_user_groups/)
 
+### Permission management
+* [assign_permissions_bulk](./assign_permissions_bulk)
+* [revoke_permissions_bulk](./revoke_permissions_bulk)
+
 ## Example
 List, create and delete users and user groups:
 

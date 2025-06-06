@@ -374,12 +374,41 @@ class CatalogUserService(CatalogServiceBase):
     # User management use case APIs
 
     def get_user_permissions(self, user_id: str) -> CatalogPermissionAssignments:
+        """Get permission assignments for a user.
+
+        Args:
+            user_id (str):
+                User identification string.
+                E.g. "demo.user"
+
+        Returns:
+            CatalogPermissionAssignments
+        """
         return CatalogPermissionAssignments.from_api(self._user_management_api.list_permissions_for_user(user_id))
 
     def manage_user_permissions(self, user_id: str, permission_assignments: CatalogPermissionAssignments) -> None:
+        """Set permission assignments for a user.
+
+        Args:
+            user_id (str):
+                User identification string.
+                E.g. "demo.user"
+            permission_assignments (CatalogPermissionAssignments):
+                Object containing permission assignments for workspaces and data sources.
+        """
         self._user_management_api.manage_permissions_for_user(user_id, permission_assignments.to_api())
 
     def get_user_group_permissions(self, user_group_id: str) -> CatalogPermissionAssignments:
+        """Get permission assignments for a user group.
+
+        Args:
+            user_group_id (str):
+                User group identification string.
+                E.g. "demo.users"
+
+        Returns:
+            CatalogPermissionAssignments
+        """
         return CatalogPermissionAssignments.from_api(
             self._user_management_api.list_permissions_for_user_group(user_group_id)
         )
@@ -387,12 +416,39 @@ class CatalogUserService(CatalogServiceBase):
     def manage_user_group_permissions(
         self, user_group_id: str, permission_assignments: CatalogPermissionAssignments
     ) -> None:
+        """Set permission assignments for a user group.
+
+        Args:
+            user_group_id (str):
+                User group identification string.
+                E.g. "demo.users"
+            permission_assignments (CatalogPermissionAssignments):
+                Object containing permission assignments for workspaces and data sources.
+        """
         self._user_management_api.manage_permissions_for_user_group(user_group_id, permission_assignments.to_api())
 
     def assign_permissions_bulk(self, permissions_assignment: CatalogPermissionsAssignment) -> None:
+        """Assign permissions in bulk to a users or user groups.
+
+        Args:
+            permissions_assignment (CatalogPermissionsAssignment):
+                Object containing permission assignments for workspaces and data sources to be assigned.
+
+        Returns:
+            None
+        """
         self._user_management_api.assign_permissions(permissions_assignment.to_api())
 
     def revoke_permissions_bulk(self, permissions_assignment: CatalogPermissionsAssignment) -> None:
+        """Revoke permissions in bulk to a users or user groups.
+
+        Args:
+            permissions_assignment (CatalogPermissionsAssignment):
+                Object containing permission assignments for workspaces and data sources to be revoked.
+
+        Returns:
+            None
+        """
         self._user_management_api.revoke_permissions(permissions_assignment.to_api())
 
     def list_user_api_tokens(self, user_id: str) -> list[CatalogApiToken]:

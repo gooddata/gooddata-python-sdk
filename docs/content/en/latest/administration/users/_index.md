@@ -30,6 +30,10 @@ See [Manage Users and UserGroups](https://www.gooddata.com/docs/cloud/manage-dep
 * [load_declarative_users](./load_declarative_users/)
 * [load_and_put_declarative_users](./load_and_put_declarative_users/)
 
+### Permission management
+* [get_user_permissions](./get_user_permissions)
+* [manage_user_permissions](./manage_user_permissions)
+
 
 ## Example
 
