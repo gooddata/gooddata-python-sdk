@@ -61,6 +61,13 @@ Example of the credential file:
 data_sources:
   demo-test-ds: "demopass"
   demo-bigquery-ds: "~/home/secrets.json"
+  demo-snowflake-password-ds: "snowflakepass"
+  demo-snowflake-key-pair-ds:
+    private_key: |
+      -----BEGIN PRIVATE KEY-----
+      ... (private key content)
+      -----END PRIVATE KEY-----
+    private_key_passphrase: "passphrase" # Optional
 ```
 
 The result is identical.

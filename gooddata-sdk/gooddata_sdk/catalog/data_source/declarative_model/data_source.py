@@ -19,6 +19,9 @@ from gooddata_sdk.utils import create_directory, get_ds_credentials, read_layout
 
 BIGQUERY_TYPE = "BIGQUERY"
 DATABRICKS_TYPE = "DATABRICKS"
+SNOWFLAKE_TYPE = "SNOWFLAKE"
+PRIVATE_KEY = "private_key"
+PRIVATE_KEY_PASSPHRASE = "private_key_passphrase"
 LAYOUT_DATA_SOURCES_DIR = "data_sources"
 
 
@@ -30,25 +33,45 @@ class CatalogDeclarativeDataSources(Base):
         data_sources = []
         client_class = self.client_class()
         for data_source in self.data_sources:
-            if data_source.id in credentials:
+            data_source_credentials = credentials.get(data_source.id)
+            if data_source_credentials is None:
+                data_sources.append(data_source.to_api())
+            else:
                 if data_source.type == BIGQUERY_TYPE:
-                    token = TokenCredentialsFromFile.token_from_file(credentials[data_source.id])
+                    token = TokenCredentialsFromFile.token_from_file(data_source_credentials)
                     data_sources.append(data_source.to_api(token=token))
                 elif data_source.type == DATABRICKS_TYPE:
                     if data_source.client_id and data_source.client_id.strip():
-                        client_secret = ClientSecretCredentialsFromFile.client_secret_from_file(
-                            credentials[data_source.id]
-                        )
+                        client_secret = ClientSecretCredentialsFromFile.client_secret_from_file(data_source_credentials)
                         data_sources.append(data_source.to_api(client_secret=client_secret))
                     else:
                         token = TokenCredentialsFromFile.token_from_file(
-                            file_path=credentials[data_source.id], base64_encode=False
+                            file_path=data_source_credentials, base64_encode=False
                         )
                         data_sources.append(data_source.to_api(token=token))
+                elif data_source.type == SNOWFLAKE_TYPE:
+                    if isinstance(data_source_credentials, str):
+                        data_sources.append(data_source.to_api(password=data_source_credentials))
+                    elif isinstance(data_source_credentials, dict):
+                        private_key = data_source_credentials.get(PRIVATE_KEY)
+                        private_key_passphrase = data_source_credentials.get(PRIVATE_KEY_PASSPHRASE)
+                        if private_key is None:
+                            raise ValueError(
+                                f"Credentials for data source {data_source.id} should contain {PRIVATE_KEY} but it is missing."
+                            )
+                        else:
+                            data_sources.append(
+                                data_source.to_api(
+                                    private_key=private_key, private_key_passphrase=private_key_passphrase
+                                )
+                            )
+                    else:
+                        raise ValueError(
+                            f"Credentials for data source {data_source.id} should be a string or a dictionary, "
+                            f"but got {type(data_source_credentials)}."
+                        )
                 else:
-                    data_sources.append(data_source.to_api(password=credentials[data_source.id]))
-            else:
-                data_sources.append(data_source.to_api())
+                    data_sources.append(data_source.to_api(password=data_source_credentials))
         return client_class(data_sources=data_sources)
 
     def _inject_credentials_legacy(self, credentials: dict[str, Any]) -> DeclarativeDataSources:
@@ -117,6 +140,7 @@ class CatalogDeclarativeDataSource(Base):
     decoded_parameters: Optional[list[CatalogParameter]] = None
     permissions: list[CatalogDeclarativeDataSourcePermission] = attr.field(factory=list)
     client_id: Optional[str] = None
+    authentication_type: Optional[str] = None
 
     def to_test_request(
         self,
