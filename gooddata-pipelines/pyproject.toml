@@ -1,0 +1,38 @@
+# (C) 2025 GoodData Corporation
+[project]
+name = "gooddata-pipelines"
+version = "0.1.0"
+description = ""
+authors = [{ name = "GoodData", email = "support@gooddata.com" }]
+license = { text = "BSD" }
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "pydantic (==2.11.3)",
+    "requests (==2.32.3)",
+    "types-requests (==2.32.0.20250602)",
+    "gooddata-sdk (==1.43.0)",
+]
+
+[tool.poetry]
+packages = [{ include = "gooddata_pipelines" }]
+
+[tool.mypy]
+disallow_untyped_defs = true
+warn_redundant_casts = true
+strict_equality = true
+no_implicit_optional = true
+
+[tool.ruff]
+exclude = [".venv"]
+line-length = 80
+
+[tool.poetry.group.dev.dependencies]
+pytest = "8.3.5"
+pytest-mock = "3.14.0"
+ruff = "0.11.2"
+mypy = "^1.16.0"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
