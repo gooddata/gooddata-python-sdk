@@ -1,10 +1,10 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
 
-from typing import Optional, Union
+from typing import Callable, Optional, Union
 
 import pandas
-from gooddata_sdk import Attribute, Filter, GoodDataSdk, ObjId, SimpleMetric
+from gooddata_sdk import Attribute, Execution, Filter, GoodDataSdk, ObjId, SimpleMetric
 
 from gooddata_pandas.data_access import compute_and_extract
 from gooddata_pandas.utils import IndexDef, LabelItemDef, make_pandas_index
@@ -28,6 +28,7 @@ class SeriesFactory:
         index_by: IndexDef,
         data_by: Union[SimpleMetric, str, ObjId, Attribute],
         filter_by: Optional[Union[Filter, list[Filter]]] = None,
+        on_execution_submitted: Optional[Callable[[Execution], None]] = None,
     ) -> pandas.Series:
         """Creates pandas Series from data points calculated from a single `data_by`.
 
@@ -61,6 +62,9 @@ class SeriesFactory:
             - object identifier: ``ObjId(id='some_label_id', type='<type>')``
             - Attribute or Metric depending on type of filter
 
+            on_execution_submitted (Optional[Callable[[Execution], None]]): Callback to call when the execution was
+                submitted to the backend.
+
         Returns:
             pandas.Series: pandas series instance
         """
@@ -71,6 +75,7 @@ class SeriesFactory:
             index_by=index_by,
             columns={"_series": data_by},
             filter_by=filter_by,
+            on_execution_submitted=on_execution_submitted,
         )
 
         _idx = make_pandas_index(index)
@@ -82,6 +87,7 @@ class SeriesFactory:
         data_by: Union[SimpleMetric, str, ObjId, Attribute],
         granularity: Optional[Union[list[LabelItemDef], IndexDef]] = None,
         filter_by: Optional[Union[Filter, list[Filter]]] = None,
+        on_execution_submitted: Optional[Callable[[Execution], None]] = None,
     ) -> pandas.Series:
         """
         Creates a pandas.Series from data points calculated from a single `data_by` without constructing an index.
@@ -108,6 +114,8 @@ class SeriesFactory:
                     - ObjId: ObjId(id='some_label_id', type='<type>')
                     - Attribute or Metric depending on the type of filter
                 Defaults to None.
+            on_execution_submitted (Optional[Callable[[Execution], None]]): Callback to call when the execution was
+                submitted to the backend.
 
         Returns:
             pandas.Series: The resulting pandas Series instance.
@@ -124,6 +132,7 @@ class SeriesFactory:
             index_by=_index,
             columns={"_series": data_by},
             filter_by=filter_by,
+            on_execution_submitted=on_execution_submitted,
         )
 
         return pandas.Series(data=data["_series"])

@@ -1,14 +1,14 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
 
-from typing import Any, Optional, Union
+from typing import Any, Callable, Optional, Union
 
 from gooddata_sdk import (
     Attribute,
     AttributeFilter,
     CatalogAttribute,
+    Execution,
     ExecutionDefinition,
-    ExecutionResponse,
     Filter,
     GoodDataSdk,
     Metric,
@@ -257,7 +257,7 @@ def _compute(
     columns: ColumnsDef,
     index_by: Optional[IndexDef] = None,
     filter_by: Optional[Union[Filter, list[Filter]]] = None,
-) -> tuple[ExecutionResponse, dict[str, int], dict[str, int], dict[str, int]]:
+) -> tuple[Execution, dict[str, int], dict[str, int], dict[str, int]]:
     """
     Internal function that computes an execution-by-convention to retrieve data for a data frame with the provided
     columns, optionally indexed by the index_by label and optionally filtered.
@@ -271,7 +271,7 @@ def _compute(
 
     Returns:
         tuple: A tuple containing the following elements:
-        - ExecutionResponse: The execution response.
+        - Execution: The execution response.
         - dict[str, int]: A mapping of pandas column names to attribute dimension indices.
         - dict[str, int]: A mapping of pandas column names to metric dimension indices.
         - dict[str, int]: A mapping of pandas index names to attribute dimension indices.
@@ -299,20 +299,20 @@ _RESULT_PAGE_LEN = 1000
 #
 
 
-def _extract_for_metrics_only(response: ExecutionResponse, cols: list, col_to_metric_idx: dict) -> dict:
+def _extract_for_metrics_only(execution: Execution, cols: list, col_to_metric_idx: dict) -> dict:
     """
     Internal function that extracts data for metrics-only columns when there are no attribute columns.
 
     Args:
-        response (ExecutionResponse): The execution response to extract data from.
+        execution (Execution): The execution response to extract data from.
         cols (list): A list of column names.
         col_to_metric_idx (dict): A mapping of pandas column names to metric dimension indices.
 
     Returns:
         dict: A dictionary containing the extracted data.
     """
-    exec_def = response.exec_def
-    result = response.read_result(len(exec_def.metrics))
+    exec_def = execution.exec_def
+    result = execution.read_result(len(exec_def.metrics))
     if len(result.data) == 0:
         return {col: [] for col in cols}
 
@@ -345,7 +345,7 @@ def _typed_result(attributes: list[CatalogAttribute], attribute: Attribute, resu
 
 
 def _extract_from_attributes_and_maybe_metrics(
-    response: ExecutionResponse,
+    execution: Execution,
     attributes: list[CatalogAttribute],
     cols: list[str],
     col_to_attr_idx: dict[str, int],
@@ -357,7 +357,7 @@ def _extract_from_attributes_and_maybe_metrics(
     optionally metrics columns.
 
     Args:
-        response (ExecutionResponse): The execution response to extract data from.
+        execution (Execution): The execution response to extract data from.
         attributes (list[CatalogAttribute]): The catalog of attributes.
         cols (list[str]): A list of column names.
         col_to_attr_idx (dict[str, int]): A mapping of pandas column names to attribute dimension indices.
@@ -370,11 +370,11 @@ def _extract_from_attributes_and_maybe_metrics(
         - dict: A dictionary containing the extracted data.
         - dict: A dictionary containing the extracted index data.
     """
-    exec_def = response.exec_def
+    exec_def = execution.exec_def
     offset = [0 for _ in exec_def.dimensions]
     limit = [len(exec_def.metrics), _RESULT_PAGE_LEN] if exec_def.has_metrics() else [_RESULT_PAGE_LEN]
     attribute_dim = 1 if exec_def.has_metrics() else 0
-    result = response.read_result(limit=limit, offset=offset)
+    result = execution.read_result(limit=limit, offset=offset)
     safe_index_to_attr_idx = index_to_attr_idx if index_to_attr_idx is not None else dict()
 
     # mappings from column name to Attribute
@@ -401,7 +401,7 @@ def _extract_from_attributes_and_maybe_metrics(
             break
 
         offset[attribute_dim] = result.next_page_start(attribute_dim)
-        result = response.read_result(limit=limit, offset=offset)
+        result = execution.read_result(limit=limit, offset=offset)
 
     return data, index
 
@@ -412,6 +412,7 @@ def compute_and_extract(
     columns: ColumnsDef,
     index_by: Optional[IndexDef] = None,
     filter_by: Optional[Union[Filter, list[Filter]]] = None,
+    on_execution_submitted: Optional[Callable[[Execution], None]] = None,
 ) -> tuple[dict, dict]:
     """
     Convenience function that computes and extracts data from the execution response.
@@ -422,14 +423,16 @@ def compute_and_extract(
         columns (ColumnsDef): The columns definition.
         index_by (Optional[IndexDef]): The index definition, if any.
         filter_by (Optional[Union[Filter, list[Filter]]]): A filter or a list of filters, if any.
+        on_execution_submitted (Optional[Callable[[Execution], None]]): Callback to call when the execution was
+            submitted to the backend.
 
     Returns:
         tuple: A tuple containing the following dictionaries:
         - dict: A dictionary with data for each column in `columns`.
         - dict: A dictionary with data for constructing index(es) for each index in index_by.
 
-    Note: For convenience it is possible to pass just single index. in that case the index dict will contain exactly
-    one key of '0' (just get first value from dict when consuming the result).
+    Note: For convenience, it is possible to pass just a single index. In that case, the index dict will contain exactly
+    one key of '0' (just get the first value from dict when consuming the result).
     """
     result = _compute(
         sdk=sdk,
@@ -439,17 +442,20 @@ def compute_and_extract(
         filter_by=filter_by,
     )
 
-    response, col_to_attr_idx, col_to_metric_idx, index_to_attr_idx = result
+    execution, col_to_attr_idx, col_to_metric_idx, index_to_attr_idx = result
 
-    exec_def = response.exec_def
+    if on_execution_submitted is not None:
+        on_execution_submitted(execution)
+
+    exec_def = execution.exec_def
     cols = list(columns.keys())
 
     if not exec_def.has_attributes():
-        return _extract_for_metrics_only(response, cols, col_to_metric_idx), dict()
+        return _extract_for_metrics_only(execution, cols, col_to_metric_idx), dict()
     else:
         attributes = get_catalog_attributes_for_extract(sdk, workspace_id, exec_def.attributes)
         return _extract_from_attributes_and_maybe_metrics(
-            response,
+            execution,
             attributes,
             cols,
             col_to_attr_idx,
