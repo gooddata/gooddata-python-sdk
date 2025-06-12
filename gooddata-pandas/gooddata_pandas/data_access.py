@@ -9,7 +9,6 @@ from gooddata_sdk import (
     CatalogAttribute,
     Execution,
     ExecutionDefinition,
-    ExecutionResponse,
     Filter,
     GoodDataSdk,
     Metric,
@@ -258,7 +257,7 @@ def _compute(
     columns: ColumnsDef,
     index_by: Optional[IndexDef] = None,
     filter_by: Optional[Union[Filter, list[Filter]]] = None,
-) -> tuple[ExecutionResponse, dict[str, int], dict[str, int], dict[str, int]]:
+) -> tuple[Execution, dict[str, int], dict[str, int], dict[str, int]]:
     """
     Internal function that computes an execution-by-convention to retrieve data for a data frame with the provided
     columns, optionally indexed by the index_by label and optionally filtered.
@@ -272,7 +271,7 @@ def _compute(
 
     Returns:
         tuple: A tuple containing the following elements:
-        - ExecutionResponse: The execution response.
+        - Execution: The execution response.
         - dict[str, int]: A mapping of pandas column names to attribute dimension indices.
         - dict[str, int]: A mapping of pandas column names to metric dimension indices.
         - dict[str, int]: A mapping of pandas index names to attribute dimension indices.
@@ -300,12 +299,12 @@ _RESULT_PAGE_LEN = 1000
 #
 
 
-def _extract_for_metrics_only(response: ExecutionResponse, cols: list, col_to_metric_idx: dict) -> dict:
+def _extract_for_metrics_only(response: Execution, cols: list, col_to_metric_idx: dict) -> dict:
     """
     Internal function that extracts data for metrics-only columns when there are no attribute columns.
 
     Args:
-        response (ExecutionResponse): The execution response to extract data from.
+        response (Execution): The execution response to extract data from.
         cols (list): A list of column names.
         col_to_metric_idx (dict): A mapping of pandas column names to metric dimension indices.
 
@@ -346,7 +345,7 @@ def _typed_result(attributes: list[CatalogAttribute], attribute: Attribute, resu
 
 
 def _extract_from_attributes_and_maybe_metrics(
-    response: ExecutionResponse,
+    response: Execution,
     attributes: list[CatalogAttribute],
     cols: list[str],
     col_to_attr_idx: dict[str, int],
@@ -358,7 +357,7 @@ def _extract_from_attributes_and_maybe_metrics(
     optionally metrics columns.
 
     Args:
-        response (ExecutionResponse): The execution response to extract data from.
+        response (Execution): The execution response to extract data from.
         attributes (list[CatalogAttribute]): The catalog of attributes.
         cols (list[str]): A list of column names.
         col_to_attr_idx (dict[str, int]): A mapping of pandas column names to attribute dimension indices.
