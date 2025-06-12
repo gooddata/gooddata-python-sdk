@@ -1,13 +1,14 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
 
-from typing import Optional, Union
+from typing import Callable, Optional, Union
 
 import pandas
 from gooddata_api_client import models
 from gooddata_sdk import (
     Attribute,
     BareExecutionResponse,
+    Execution,
     ExecutionDefinition,
     Filter,
     GoodDataSdk,
@@ -68,19 +69,25 @@ class DataFrameFactory:
         self._workspace_id = workspace_id
 
     def indexed(
-        self, index_by: IndexDef, columns: ColumnsDef, filter_by: Optional[Union[Filter, list[Filter]]] = None
+        self,
+        index_by: IndexDef,
+        columns: ColumnsDef,
+        filter_by: Optional[Union[Filter, list[Filter]]] = None,
+        on_execution_submitted: Optional[Callable[[Execution], None]] = None,
     ) -> pandas.DataFrame:
         """
         Creates a data frame indexed by values of the label. The data frame columns will be created from either
         metrics or other label values.
 
-        Note that depending on composition of the labels, the DataFrame's index may or may not be unique.
+        Note that depending on the composition of the labels, the DataFrame's index may or may not be unique.
 
         Args:
             index_by (IndexDef): One or more labels to index by.
             columns (ColumnsDef): Dictionary mapping column name to its definition.
             filter_by (Optional[Union[Filter, list[Filter]]]):
                 Optional filters to apply during computation on the server.
+            on_execution_submitted (Optional[Callable[[Execution], None]]): Callback to call when the execution was
+                submitted to the backend.
 
         Returns:
             pandas.DataFrame: A DataFrame instance.
@@ -91,6 +98,7 @@ class DataFrameFactory:
             columns=columns,
             index_by=index_by,
             filter_by=filter_by,
+            on_execution_submitted=on_execution_submitted,
         )
 
         _idx = make_pandas_index(index)
@@ -98,7 +106,10 @@ class DataFrameFactory:
         return pandas.DataFrame(data=data, index=_idx)
 
     def not_indexed(
-        self, columns: ColumnsDef, filter_by: Optional[Union[Filter, list[Filter]]] = None
+        self,
+        columns: ColumnsDef,
+        filter_by: Optional[Union[Filter, list[Filter]]] = None,
+        on_execution_submitted: Optional[Callable[[Execution], None]] = None,
     ) -> pandas.DataFrame:
         """
         Creates a data frame with columns created from metrics and or labels.
@@ -107,21 +118,33 @@ class DataFrameFactory:
             columns (ColumnsDef): Dictionary mapping column name to its definition.
             filter_by (Optional[Union[Filter, list[Filter]]]): Optionally specify filters to apply during
                 computation on the server.
+            on_execution_submitted (Optional[Callable[[Execution], None]]): Callback to call when the execution was
+                submitted to the backend.
 
         Returns:
             pandas.DataFrame: A DataFrame instance.
         """
 
-        data, _ = compute_and_extract(self._sdk, self._workspace_id, columns=columns, filter_by=filter_by)
+        data, _ = compute_and_extract(
+            self._sdk,
+            self._workspace_id,
+            columns=columns,
+            filter_by=filter_by,
+            on_execution_submitted=on_execution_submitted,
+        )
 
         return pandas.DataFrame(data=data)
 
     def for_items(
-        self, items: ColumnsDef, filter_by: Optional[Union[Filter, list[Filter]]] = None, auto_index: bool = True
+        self,
+        items: ColumnsDef,
+        filter_by: Optional[Union[Filter, list[Filter]]] = None,
+        auto_index: bool = True,
+        on_execution_submitted: Optional[Callable[[Execution], None]] = None,
     ) -> pandas.DataFrame:
         """
         Creates a data frame for named items. This is a convenience method that will create DataFrame with or
-        without index based on the context of the items that you pass.
+        without an index based on the context of the items that you pass.
 
         Args:
             items (ColumnsDef): Dictionary mapping item name to its definition.
@@ -129,6 +152,8 @@ class DataFrameFactory:
                 on the server.
             auto_index (bool): Default True. Enables creation of DataFrame with index depending on the contents
                 of the items.
+            on_execution_submitted (Optional[Callable[[Execution], None]]): Callback to call when the execution was
+                submitted to the backend.
 
         Returns:
             pandas.DataFrame: A DataFrame instance.
@@ -157,9 +182,15 @@ class DataFrameFactory:
             index_by=resolved_attr_cols,
             columns=resolved_measure_cols,
             filter_by=filter_by,
+            on_execution_submitted=on_execution_submitted,
         )
 
-    def for_visualization(self, visualization_id: str, auto_index: bool = True) -> pandas.DataFrame:
+    def for_visualization(
+        self,
+        visualization_id: str,
+        auto_index: bool = True,
+        on_execution_submitted: Optional[Callable[[Execution], None]] = None,
+    ) -> pandas.DataFrame:
         """
         Creates a data frame with columns based on the content of the visualization with the provided identifier.
 
@@ -167,6 +198,8 @@ class DataFrameFactory:
             visualization_id (str): Visualization identifier.
             auto_index (bool): Default True. Enables creation of DataFrame with index depending on the contents
                 of the visualization.
+            on_execution_submitted (Optional[Callable[[Execution], None]]): Callback to call when the execution was
+                submitted to the backend.
 
         Returns:
             pandas.DataFrame: A DataFrame instance.
@@ -181,22 +214,31 @@ class DataFrameFactory:
             **{naming.col_name_for_metric(m): m.as_computable() for m in visualization.metrics},
         }
 
-        return self.for_items(columns, filter_by=filter_by, auto_index=auto_index)
+        return self.for_items(
+            columns, filter_by=filter_by, auto_index=auto_index, on_execution_submitted=on_execution_submitted
+        )
 
     def for_created_visualization(
-        self, created_visualizations_response: dict
+        self,
+        created_visualizations_response: dict,
+        on_execution_submitted: Optional[Callable[[Execution], None]] = None,
     ) -> tuple[pandas.DataFrame, DataFrameMetadata]:
         """
         Creates a data frame using a created visualization.
 
         Args:
             created_visualizations_response (dict): Created visualization response.
+            on_execution_submitted (Optional[Callable[[Execution], None]]): Callback to call when the execution was
+                submitted to the backend.
 
         Returns:
             pandas.DataFrame: A DataFrame instance.
         """
         execution_definition = self._sdk.compute.build_exec_def_from_chat_result(created_visualizations_response)
-        return self.for_exec_def(exec_def=execution_definition)
+        return self.for_exec_def(
+            exec_def=execution_definition,
+            on_execution_submitted=on_execution_submitted,
+        )
 
     def result_cache_metadata_for_exec_result_id(self, result_id: str) -> ResultCacheMetadata:
         """
@@ -217,6 +259,7 @@ class DataFrameFactory:
         result_size_dimensions_limits: ResultSizeDimensions = (),
         result_size_bytes_limit: Optional[int] = None,
         page_size: int = _DEFAULT_PAGE_SIZE,
+        on_execution_submitted: Optional[Callable[[Execution], None]] = None,
     ) -> tuple[pandas.DataFrame, DataFrameMetadata]:
         """
         Creates a data frame using an execution definition.
@@ -247,6 +290,8 @@ class DataFrameFactory:
             result_size_dimensions_limits (ResultSizeDimensions): A tuple containing maximum size of result dimensions.
             result_size_bytes_limit (Optional[int]): Maximum size of result in bytes.
             page_size (int): Number of records per page.
+            on_execution_submitted (Optional[Callable[[Execution], None]]): Callback to call when the execution was
+                submitted to the backend.
 
         Returns:
             Tuple[pandas.DataFrame, DataFrameMetadata]: Tuple holding DataFrame and DataFrame metadata.
@@ -256,6 +301,9 @@ class DataFrameFactory:
 
         execution = self._sdk.compute.for_exec_def(workspace_id=self._workspace_id, exec_def=exec_def)
         result_cache_metadata = self.result_cache_metadata_for_exec_result_id(execution.result_id)
+
+        if on_execution_submitted is not None:
+            on_execution_submitted(execution)
 
         return convert_execution_response_to_dataframe(
             execution_response=execution.bare_exec_response,
@@ -302,7 +350,7 @@ class DataFrameFactory:
             label_overrides (Optional[LabelOverrides]): Label overrides for metrics and attributes.
             result_cache_metadata (Optional[ResultCacheMetadata]): Cache metadata for the execution result.
             result_size_dimensions_limits (ResultSizeDimensions): A tuple containing maximum size of result dimensions.
-            result_size_bytes_limit (Optional[int]): Maximum size of result in bytes.
+            result_size_bytes_limit (Optional[int]): Maximum size of the result in bytes.
             use_local_ids_in_headers (bool): Use local identifier in headers.
             use_primary_labels_in_attributes (bool): Use primary labels in attributes.
             page_size (int): Number of records per page.

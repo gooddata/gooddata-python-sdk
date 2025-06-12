@@ -1,12 +1,13 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
 
-from typing import Any, Optional, Union
+from typing import Any, Callable, Optional, Union
 
 from gooddata_sdk import (
     Attribute,
     AttributeFilter,
     CatalogAttribute,
+    Execution,
     ExecutionDefinition,
     ExecutionResponse,
     Filter,
@@ -412,6 +413,7 @@ def compute_and_extract(
     columns: ColumnsDef,
     index_by: Optional[IndexDef] = None,
     filter_by: Optional[Union[Filter, list[Filter]]] = None,
+    on_execution_submitted: Optional[Callable[[Execution], None]] = None,
 ) -> tuple[dict, dict]:
     """
     Convenience function that computes and extracts data from the execution response.
@@ -422,14 +424,16 @@ def compute_and_extract(
         columns (ColumnsDef): The columns definition.
         index_by (Optional[IndexDef]): The index definition, if any.
         filter_by (Optional[Union[Filter, list[Filter]]]): A filter or a list of filters, if any.
+        on_execution_submitted (Optional[Callable[[Execution], None]]): Callback to call when the execution was
+            submitted to the backend.
 
     Returns:
         tuple: A tuple containing the following dictionaries:
         - dict: A dictionary with data for each column in `columns`.
         - dict: A dictionary with data for constructing index(es) for each index in index_by.
 
-    Note: For convenience it is possible to pass just single index. in that case the index dict will contain exactly
-    one key of '0' (just get first value from dict when consuming the result).
+    Note: For convenience, it is possible to pass just a single index. In that case, the index dict will contain exactly
+    one key of '0' (just get the first value from dict when consuming the result).
     """
     result = _compute(
         sdk=sdk,
@@ -440,6 +444,9 @@ def compute_and_extract(
     )
 
     response, col_to_attr_idx, col_to_metric_idx, index_to_attr_idx = result
+
+    if on_execution_submitted is not None:
+        on_execution_submitted(response)
 
     exec_def = response.exec_def
     cols = list(columns.keys())
