@@ -32,11 +32,11 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.json_api_analytical_dashboard_out_list_meta import JsonApiAnalyticalDashboardOutListMeta
-    from gooddata_api_client.model.json_api_dataset_out_with_links import JsonApiDatasetOutWithLinks
+    from gooddata_api_client.model.json_api_fact_out_includes import JsonApiFactOutIncludes
     from gooddata_api_client.model.json_api_fact_out_with_links import JsonApiFactOutWithLinks
     from gooddata_api_client.model.list_links import ListLinks
     globals()['JsonApiAnalyticalDashboardOutListMeta'] = JsonApiAnalyticalDashboardOutListMeta
-    globals()['JsonApiDatasetOutWithLinks'] = JsonApiDatasetOutWithLinks
+    globals()['JsonApiFactOutIncludes'] = JsonApiFactOutIncludes
     globals()['JsonApiFactOutWithLinks'] = JsonApiFactOutWithLinks
     globals()['ListLinks'] = ListLinks
 
@@ -99,7 +99,7 @@ class JsonApiFactOutList(ModelNormal):
         lazy_import()
         return {
             'data': ([JsonApiFactOutWithLinks],),  # noqa: E501
-            'included': ([JsonApiDatasetOutWithLinks],),  # noqa: E501
+            'included': ([JsonApiFactOutIncludes],),  # noqa: E501
             'links': (ListLinks,),  # noqa: E501
             'meta': (JsonApiAnalyticalDashboardOutListMeta,),  # noqa: E501
         }
@@ -160,7 +160,7 @@ class JsonApiFactOutList(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            included ([JsonApiDatasetOutWithLinks]): Included resources. [optional]  # noqa: E501
+            included ([JsonApiFactOutIncludes]): Included resources. [optional]  # noqa: E501
             links (ListLinks): [optional]  # noqa: E501
             meta (JsonApiAnalyticalDashboardOutListMeta): [optional]  # noqa: E501
         """
@@ -252,7 +252,7 @@ class JsonApiFactOutList(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            included ([JsonApiDatasetOutWithLinks]): Included resources. [optional]  # noqa: E501
+            included ([JsonApiFactOutIncludes]): Included resources. [optional]  # noqa: E501
             links (ListLinks): [optional]  # noqa: E501
             meta (JsonApiAnalyticalDashboardOutListMeta): [optional]  # noqa: E501
         """

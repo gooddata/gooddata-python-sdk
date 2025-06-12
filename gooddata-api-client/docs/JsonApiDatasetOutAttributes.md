@@ -10,6 +10,7 @@ Name | Type | Description | Notes
 **data_source_table_path** | **[str]** | Path to database table. | [optional] 
 **description** | **str** |  | [optional] 
 **grain** | [**[JsonApiDatasetOutAttributesGrainInner]**](JsonApiDatasetOutAttributesGrainInner.md) |  | [optional] 
+**precedence** | **int** |  | [optional] 
 **reference_properties** | [**[JsonApiDatasetOutAttributesReferencePropertiesInner]**](JsonApiDatasetOutAttributesReferencePropertiesInner.md) |  | [optional] 
 **sql** | [**JsonApiDatasetOutAttributesSql**](JsonApiDatasetOutAttributesSql.md) |  | [optional] 
 **tags** | **[str]** |  | [optional] 

@@ -205,6 +205,10 @@ with gooddata_api_client.ApiClient() as api_client:
     chat_history_request = ChatHistoryRequest(
         chat_history_interaction_id="chat_history_interaction_id_example",
         reset=True,
+        saved_visualization=SavedVisualization(
+            created_visualization_id="created_visualization_id_example",
+            saved_visualization_id="saved_visualization_id_example",
+        ),
         thread_id_suffix="thread_id_suffix_example",
         user_feedback="POSITIVE",
     ) # ChatHistoryRequest | 
@@ -1707,10 +1711,17 @@ with gooddata_api_client.ApiClient() as api_client:
     dashboard_id = "dashboardId_example" # str | 
     dashboard_tabular_export_request = DashboardTabularExportRequest(
         dashboard_filters_override=[
-            DashboardTabularExportRequestDashboardFiltersOverrideInner(None),
+            DashboardFilter(),
         ],
         file_name="result",
         format="XLSX",
+        settings=DashboardExportSettings(
+            export_info=True,
+            merge_headers=True,
+        ),
+        widget_ids=[
+            "widget_ids_example",
+        ],
     ) # DashboardTabularExportRequest | 
 
     # example passing only required values which don't have defaults set
@@ -2154,6 +2165,7 @@ with gooddata_api_client.ApiClient() as api_client:
         metadata=JsonNode(),
         related_dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
         settings=Settings(
+            export_info=True,
             merge_headers=True,
             pdf_page_size="a4 landscape",
             pdf_table_style=[
@@ -6038,10 +6050,80 @@ with gooddata_api_client.ApiClient() as api_client:
                 id="webhook123",
                 type="notificationChannel",
             ),
+            raw_exports=[
+                AutomationRawExport(
+                    request_payload=RawExportRequest(
+                        custom_override=RawCustomOverride(
+                            labels={
+                                "key": RawCustomLabel(
+                                    title="title_example",
+                                ),
+                            },
+                            metrics={
+                                "key": RawCustomMetric(
+                                    title="title_example",
+                                ),
+                            },
+                        ),
+                        execution=AFM(
+                            attributes=[
+                                AttributeItem(
+                                    label=AfmObjectIdentifierLabel(
+                                        identifier=AfmObjectIdentifierLabelIdentifier(
+                                            id="sample_item.price",
+                                            type="label",
+                                        ),
+                                    ),
+                                    local_identifier="attribute_1",
+                                    show_all_values=False,
+                                ),
+                            ],
+                            aux_measures=[
+                                MeasureItem(
+                                    definition=MeasureDefinition(),
+                                    local_identifier="metric_1",
+                                ),
+                            ],
+                            filters=[
+                                FilterDefinition(),
+                            ],
+                            measures=[
+                                MeasureItem(
+                                    definition=MeasureDefinition(),
+                                    local_identifier="metric_1",
+                                ),
+                            ],
+                        ),
+                        execution_settings=ExecutionSettings(
+                            data_sampling_percentage=0,
+                            timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                        ),
+                        file_name="result",
+                        format="CSV",
+                    ),
+                ),
+            ],
             recipients=[
                 DeclarativeUserIdentifier(
                     id="employee123",
                     type="user",
+                ),
+            ],
+            slides_exports=[
+                AutomationSlidesExport(
+                    request_payload=SlidesExportRequest(
+                        dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                        file_name="filename",
+                        format="PDF",
+                        metadata=JsonNode(),
+                        template_id="template_id_example",
+                        visualization_ids=[
+                            "visualization_ids_example",
+                        ],
+                        widget_ids=[
+                            "widget_ids_example",
+                        ],
+                    ),
                 ),
             ],
             tabular_exports=[
@@ -6066,6 +6148,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         metadata=JsonNode(),
                         related_dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
                         settings=Settings(
+                            export_info=True,
                             merge_headers=True,
                             pdf_page_size="a4 landscape",
                             pdf_table_style=[

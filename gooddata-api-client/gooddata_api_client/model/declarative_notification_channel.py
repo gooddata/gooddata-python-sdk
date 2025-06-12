@@ -89,11 +89,17 @@ class DeclarativeNotificationChannel(ModelNormal):
                 'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
             },
         },
+        ('custom_dashboard_url',): {
+            'max_length': 255,
+        },
         ('description',): {
             'max_length': 10000,
         },
         ('name',): {
             'max_length': 255,
+        },
+        ('notification_source',): {
+            'max_length': 10000,
         },
     }
 
@@ -129,6 +135,7 @@ class DeclarativeNotificationChannel(ModelNormal):
             'destination_type': (str, none_type,),  # noqa: E501
             'in_platform_notification': (str,),  # noqa: E501
             'name': (str,),  # noqa: E501
+            'notification_source': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -146,6 +153,7 @@ class DeclarativeNotificationChannel(ModelNormal):
         'destination_type': 'destinationType',  # noqa: E501
         'in_platform_notification': 'inPlatformNotification',  # noqa: E501
         'name': 'name',  # noqa: E501
+        'notification_source': 'notificationSource',  # noqa: E501
     }
 
     read_only_vars = {
@@ -194,13 +202,14 @@ class DeclarativeNotificationChannel(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             allowed_recipients (str): Allowed recipients of notifications from this channel. CREATOR - only the creator INTERNAL - all users within the organization EXTERNAL - all recipients including those outside the organization . [optional] if omitted the server will use the default value of "INTERNAL"  # noqa: E501
-            custom_dashboard_url (str): Custom dashboard url that is going to be used in the notification. If not specified it is going to be deduced based on the context. Allowed placeholders are {workspaceId}, {dashboardId}.. [optional]  # noqa: E501
+            custom_dashboard_url (str): Custom dashboard url that is going to be used in the notification. If not specified it is going to be deduced based on the context. Allowed placeholders are: {workspaceId} {dashboardId} {automationId} {asOfDate} . [optional]  # noqa: E501
             dashboard_link_visibility (str): Dashboard link visibility in notifications. HIDDEN - the link will not be included INTERNAL_ONLY - only internal users will see the link ALL - all users will see the link . [optional] if omitted the server will use the default value of "INTERNAL_ONLY"  # noqa: E501
             description (str): Description of a notification channel.. [optional]  # noqa: E501
             destination (DeclarativeNotificationChannelDestination): [optional]  # noqa: E501
             destination_type (str, none_type): [optional]  # noqa: E501
             in_platform_notification (str): In-platform notifications configuration. No effect if the destination type is IN_PLATFORM. DISABLED - in-platform notifications are not sent ENABLED - in-platform notifications are sent in addition to the regular notifications . [optional] if omitted the server will use the default value of "DISABLED"  # noqa: E501
             name (str): Name of a notification channel.. [optional]  # noqa: E501
+            notification_source (str): Human-readable description of the source of the notification. If specified, this propertywill be included in the notifications to this channel.Allowed placeholders are: {{workspaceId}} {{workspaceName}} {{workspaceDescription}} {{dashboardId}} {{dashboardName}} {{dashboardDescription}} . [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -291,13 +300,14 @@ class DeclarativeNotificationChannel(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             allowed_recipients (str): Allowed recipients of notifications from this channel. CREATOR - only the creator INTERNAL - all users within the organization EXTERNAL - all recipients including those outside the organization . [optional] if omitted the server will use the default value of "INTERNAL"  # noqa: E501
-            custom_dashboard_url (str): Custom dashboard url that is going to be used in the notification. If not specified it is going to be deduced based on the context. Allowed placeholders are {workspaceId}, {dashboardId}.. [optional]  # noqa: E501
+            custom_dashboard_url (str): Custom dashboard url that is going to be used in the notification. If not specified it is going to be deduced based on the context. Allowed placeholders are: {workspaceId} {dashboardId} {automationId} {asOfDate} . [optional]  # noqa: E501
             dashboard_link_visibility (str): Dashboard link visibility in notifications. HIDDEN - the link will not be included INTERNAL_ONLY - only internal users will see the link ALL - all users will see the link . [optional] if omitted the server will use the default value of "INTERNAL_ONLY"  # noqa: E501
             description (str): Description of a notification channel.. [optional]  # noqa: E501
             destination (DeclarativeNotificationChannelDestination): [optional]  # noqa: E501
             destination_type (str, none_type): [optional]  # noqa: E501
             in_platform_notification (str): In-platform notifications configuration. No effect if the destination type is IN_PLATFORM. DISABLED - in-platform notifications are not sent ENABLED - in-platform notifications are sent in addition to the regular notifications . [optional] if omitted the server will use the default value of "DISABLED"  # noqa: E501
             name (str): Name of a notification channel.. [optional]  # noqa: E501
+            notification_source (str): Human-readable description of the source of the notification. If specified, this propertywill be included in the notifications to this channel.Allowed placeholders are: {{workspaceId}} {{workspaceName}} {{workspaceDescription}} {{dashboardId}} {{dashboardName}} {{dashboardDescription}} . [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

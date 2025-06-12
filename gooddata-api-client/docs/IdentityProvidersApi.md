@@ -49,7 +49,15 @@ with gooddata_api_client.ApiClient() as api_client:
                 identifiers=["gooddata.com"],
                 oauth_client_id="oauth_client_id_example",
                 oauth_client_secret="oauth_client_secret_example",
+                oauth_custom_auth_attributes={
+                    "key": "key_example",
+                },
+                oauth_custom_scopes=[
+                    "oauth_custom_scopes_example",
+                ],
+                oauth_issuer_id="myOidcProvider",
                 oauth_issuer_location="oauth_issuer_location_example",
+                oauth_subject_id_claim="oid",
                 saml_metadata="saml_metadata_example",
             ),
             id="id1",
@@ -421,7 +429,15 @@ with gooddata_api_client.ApiClient() as api_client:
                 identifiers=["gooddata.com"],
                 oauth_client_id="oauth_client_id_example",
                 oauth_client_secret="oauth_client_secret_example",
+                oauth_custom_auth_attributes={
+                    "key": "key_example",
+                },
+                oauth_custom_scopes=[
+                    "oauth_custom_scopes_example",
+                ],
+                oauth_issuer_id="myOidcProvider",
                 oauth_issuer_location="oauth_issuer_location_example",
+                oauth_subject_id_claim="oid",
                 saml_metadata="saml_metadata_example",
             ),
             id="id1",
@@ -515,7 +531,15 @@ with gooddata_api_client.ApiClient() as api_client:
             identifiers=["gooddata.com"],
             oauth_client_id="oauth_client_id_example",
             oauth_client_secret="oauth_client_secret_example",
+            oauth_custom_auth_attributes={
+                "key": "key_example",
+            },
+            oauth_custom_scopes=[
+                "oauth_custom_scopes_example",
+            ],
+            oauth_issuer_id="myOidcProvider",
             oauth_issuer_location="oauth_issuer_location_example",
+            oauth_subject_id_claim="oid",
             saml_metadata="saml_metadata_example",
         ),
     ] # [DeclarativeIdentityProvider] | 
@@ -593,7 +617,15 @@ with gooddata_api_client.ApiClient() as api_client:
                 identifiers=["gooddata.com"],
                 oauth_client_id="oauth_client_id_example",
                 oauth_client_secret="oauth_client_secret_example",
+                oauth_custom_auth_attributes={
+                    "key": "key_example",
+                },
+                oauth_custom_scopes=[
+                    "oauth_custom_scopes_example",
+                ],
+                oauth_issuer_id="myOidcProvider",
                 oauth_issuer_location="oauth_issuer_location_example",
+                oauth_subject_id_claim="oid",
                 saml_metadata="saml_metadata_example",
             ),
             id="id1",

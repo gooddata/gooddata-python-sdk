@@ -64,7 +64,15 @@ class JsonApiIdentityProviderOutAttributes(ModelNormal):
         ('oauth_client_id',): {
             'max_length': 255,
         },
+        ('oauth_custom_auth_attributes',): {
+        },
+        ('oauth_issuer_id',): {
+            'max_length': 255,
+        },
         ('oauth_issuer_location',): {
+            'max_length': 255,
+        },
+        ('oauth_subject_id_claim',): {
             'max_length': 255,
         },
     }
@@ -93,7 +101,11 @@ class JsonApiIdentityProviderOutAttributes(ModelNormal):
             'identifiers': ([str],),  # noqa: E501
             'custom_claim_mapping': ({str: (str,)},),  # noqa: E501
             'oauth_client_id': (str,),  # noqa: E501
+            'oauth_custom_auth_attributes': ({str: (str,)},),  # noqa: E501
+            'oauth_custom_scopes': ([str], none_type,),  # noqa: E501
+            'oauth_issuer_id': (str,),  # noqa: E501
             'oauth_issuer_location': (str,),  # noqa: E501
+            'oauth_subject_id_claim': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -105,7 +117,11 @@ class JsonApiIdentityProviderOutAttributes(ModelNormal):
         'identifiers': 'identifiers',  # noqa: E501
         'custom_claim_mapping': 'customClaimMapping',  # noqa: E501
         'oauth_client_id': 'oauthClientId',  # noqa: E501
+        'oauth_custom_auth_attributes': 'oauthCustomAuthAttributes',  # noqa: E501
+        'oauth_custom_scopes': 'oauthCustomScopes',  # noqa: E501
+        'oauth_issuer_id': 'oauthIssuerId',  # noqa: E501
         'oauth_issuer_location': 'oauthIssuerLocation',  # noqa: E501
+        'oauth_subject_id_claim': 'oauthSubjectIdClaim',  # noqa: E501
     }
 
     read_only_vars = {
@@ -154,7 +170,11 @@ class JsonApiIdentityProviderOutAttributes(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             custom_claim_mapping ({str: (str,)}): Map of custom claim overrides. To be used when your Idp does not provide default claims (sub, email, name, given_name, family_name). Define the key pair for the claim you wish to override, where the key is the default name of the attribute and the value is your custom name for the given attribute.. [optional]  # noqa: E501
             oauth_client_id (str): The OAuth client id of your OIDC provider. This field is mandatory for OIDC IdP.. [optional]  # noqa: E501
+            oauth_custom_auth_attributes ({str: (str,)}): Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.. [optional]  # noqa: E501
+            oauth_custom_scopes ([str], none_type): List of additional OAuth scopes which may be required by other providers (e.g. Snowflake). [optional]  # noqa: E501
+            oauth_issuer_id (str): Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.. [optional]  # noqa: E501
             oauth_issuer_location (str): The location of your OIDC provider. This field is mandatory for OIDC IdP.. [optional]  # noqa: E501
+            oauth_subject_id_claim (str): Any string identifying the claim in ID token, that should be used for user identification. The default value is 'sub'.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -246,7 +266,11 @@ class JsonApiIdentityProviderOutAttributes(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             custom_claim_mapping ({str: (str,)}): Map of custom claim overrides. To be used when your Idp does not provide default claims (sub, email, name, given_name, family_name). Define the key pair for the claim you wish to override, where the key is the default name of the attribute and the value is your custom name for the given attribute.. [optional]  # noqa: E501
             oauth_client_id (str): The OAuth client id of your OIDC provider. This field is mandatory for OIDC IdP.. [optional]  # noqa: E501
+            oauth_custom_auth_attributes ({str: (str,)}): Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.. [optional]  # noqa: E501
+            oauth_custom_scopes ([str], none_type): List of additional OAuth scopes which may be required by other providers (e.g. Snowflake). [optional]  # noqa: E501
+            oauth_issuer_id (str): Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.. [optional]  # noqa: E501
             oauth_issuer_location (str): The location of your OIDC provider. This field is mandatory for OIDC IdP.. [optional]  # noqa: E501
+            oauth_subject_id_claim (str): Any string identifying the claim in ID token, that should be used for user identification. The default value is 'sub'.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

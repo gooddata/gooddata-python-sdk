@@ -31,11 +31,11 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.afm_filters_inner import AFMFiltersInner
     from gooddata_api_client.model.attribute_item import AttributeItem
-    from gooddata_api_client.model.filter_definition import FilterDefinition
     from gooddata_api_client.model.measure_item import MeasureItem
+    globals()['AFMFiltersInner'] = AFMFiltersInner
     globals()['AttributeItem'] = AttributeItem
-    globals()['FilterDefinition'] = FilterDefinition
     globals()['MeasureItem'] = MeasureItem
 
 
@@ -93,7 +93,7 @@ class AFM(ModelNormal):
         lazy_import()
         return {
             'attributes': ([AttributeItem],),  # noqa: E501
-            'filters': ([FilterDefinition],),  # noqa: E501
+            'filters': ([AFMFiltersInner],),  # noqa: E501
             'measures': ([MeasureItem],),  # noqa: E501
             'aux_measures': ([MeasureItem],),  # noqa: E501
         }
@@ -122,7 +122,7 @@ class AFM(ModelNormal):
 
         Args:
             attributes ([AttributeItem]): Attributes to be used in the computation.
-            filters ([FilterDefinition]): Various filter types to filter the execution result.
+            filters ([AFMFiltersInner]): Various filter types to filter the execution result.
             measures ([MeasureItem]): Metrics to be computed.
 
         Keyword Args:
@@ -216,7 +216,7 @@ class AFM(ModelNormal):
 
         Args:
             attributes ([AttributeItem]): Attributes to be used in the computation.
-            filters ([FilterDefinition]): Various filter types to filter the execution result.
+            filters ([AFMFiltersInner]): Various filter types to filter the execution result.
             measures ([MeasureItem]): Metrics to be computed.
 
         Keyword Args:
