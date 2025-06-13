@@ -754,9 +754,12 @@ class CatalogWorkspaceService(CatalogServiceBase):
                 # Hack: translate titles in free-form, which is not processed intentionally by this SDK
                 for section in dashboard.content["layout"]["sections"]:
                     for item in section["items"]:
-                        title = item["widget"].get("title")
-                        description = item["widget"].get("description")
+                        widget = item["widget"]
+                        title = widget.get("title")
+                        description = widget.get("description")
                         self.add_title_description(to_translate, title, description)
+                        if widget.get("type") == "richText" and "content" in widget:
+                            to_translate.add(widget["content"])
                     if "header" in section:
                         title = section["header"].get("title")
                         description = section["header"].get("description")
