@@ -464,7 +464,6 @@ def test_create_llm_endpoint(test_config):
         full_id = "endpoint2"
         full_title = "Test Endpoint 2"
         full_token = "secret-token-2"
-        full_description = "Test Description"
         full_provider = "OPENAI"
         full_base_url = "https://api.example.com"
         full_llm_org = "org1"
@@ -474,7 +473,6 @@ def test_create_llm_endpoint(test_config):
             id=full_id,
             title=full_title,
             token=full_token,
-            description=full_description,
             provider=full_provider,
             base_url=full_base_url,
             llm_organization=full_llm_org,
@@ -485,8 +483,6 @@ def test_create_llm_endpoint(test_config):
         assert llm_endpoint_2.attributes.title == full_title
         # Token is not returned in the API response for security reasons
         assert not llm_endpoint_2.attributes.token
-        # Description is not returned in the API response. TODO: Check if this is correct.
-        # assert llm_endpoint_2.attributes.description == full_description
         assert llm_endpoint_2.attributes.provider == full_provider
         assert llm_endpoint_2.attributes.base_url == full_base_url
         assert llm_endpoint_2.attributes.llm_organization == full_llm_org
@@ -523,7 +519,6 @@ def test_update_llm_endpoint(test_config):
         # Test with all optional parameters
         full_title = "Updated Title 2"
         full_token = "new-token"
-        full_description = "Updated Description"
         full_provider = "OPENAI"
         full_base_url = "https://api.updated.com"
         full_llm_org = "org2"
@@ -533,7 +528,6 @@ def test_update_llm_endpoint(test_config):
             id=initial_id,
             title=full_title,
             token=full_token,
-            description=full_description,
             provider=full_provider,
             base_url=full_base_url,
             llm_organization=full_llm_org,
@@ -545,8 +539,6 @@ def test_update_llm_endpoint(test_config):
         assert llm_endpoint_2.attributes.title == full_title
         # Token is not returned in the API response for security reasons
         assert not llm_endpoint_2.attributes.token
-        # Description is not returned in the API response. TODO: Check if this is correct.
-        # assert llm_endpoint_2.attributes.description == full_description
         assert llm_endpoint_2.attributes.provider == full_provider
         assert llm_endpoint_2.attributes.base_url == full_base_url
         assert llm_endpoint_2.attributes.llm_organization == full_llm_org
@@ -562,8 +554,6 @@ def test_update_llm_endpoint(test_config):
         # Token is not returned in the API response for security reasons
         assert not llm_endpoint_3.attributes.token
         # Verify other fields are preserved
-        # Description is not returned in the API response. TODO: Check if this is correct.
-        # assert llm_endpoint_3.attributes.description == full_description
         assert llm_endpoint_3.attributes.provider == full_provider
         assert llm_endpoint_3.attributes.base_url == full_base_url
         assert llm_endpoint_3.attributes.llm_organization == full_llm_org

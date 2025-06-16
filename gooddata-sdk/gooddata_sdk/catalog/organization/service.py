@@ -574,7 +574,6 @@ class CatalogOrganizationService(CatalogServiceBase):
         id: str,
         title: str,
         token: str,
-        description: Optional[str] = None,
         provider: Optional[str] = None,
         base_url: Optional[str] = None,
         llm_organization: Optional[str] = None,
@@ -587,7 +586,6 @@ class CatalogOrganizationService(CatalogServiceBase):
             id: Identifier of the LLM endpoint
             title: User-facing title of the LLM Provider
             token: The token to use to connect to the LLM provider
-            description: Optional user-facing description of the LLM endpoint
             provider: Optional LLM provider name (e.g., "openai")
             base_url: Optional base URL for custom LLM endpoint
             llm_organization: Optional LLM organization identifier
@@ -600,7 +598,6 @@ class CatalogOrganizationService(CatalogServiceBase):
             id=id,
             title=title,
             token=token,
-            description=description,
             provider=provider,
             base_url=base_url,
             llm_organization=llm_organization,
@@ -617,7 +614,6 @@ class CatalogOrganizationService(CatalogServiceBase):
         id: str,
         title: Optional[str] = None,
         token: Optional[str] = None,
-        description: Optional[str] = None,
         provider: Optional[str] = None,
         base_url: Optional[str] = None,
         llm_organization: Optional[str] = None,
@@ -630,7 +626,6 @@ class CatalogOrganizationService(CatalogServiceBase):
             id: Identifier of the LLM endpoint
             title: User-facing title of the LLM Provider
             token: The token to use to connect to the LLM provider. If not provided, the existing token will be preserved.
-            description: User-facing description of the LLM endpoint
             provider: LLM provider name (e.g., "openai")
             base_url: Base URL for custom LLM endpoint
             llm_organization: LLM organization identifier
@@ -643,7 +638,6 @@ class CatalogOrganizationService(CatalogServiceBase):
             id=id,
             title=title,
             token=token,
-            description=description,
             provider=provider,
             base_url=base_url,
             llm_organization=llm_organization,

@@ -48,7 +48,6 @@ class CatalogLlmEndpoint(Base):
         id: str,
         title: str,
         token: str,
-        description: Optional[str] = None,
         provider: Optional[str] = None,
         base_url: Optional[str] = None,
         llm_organization: Optional[str] = None,
@@ -59,7 +58,6 @@ class CatalogLlmEndpoint(Base):
             attributes=CatalogLlmEndpointAttributes(
                 title=title,
                 token=token,
-                description=description,
                 provider=provider,
                 base_url=base_url,
                 llm_organization=llm_organization,
@@ -73,7 +71,6 @@ class CatalogLlmEndpoint(Base):
         attr = CatalogLlmEndpointAttributes(
             title=safeget(ea, ["title"]),
             token="",  # Token is not returned for security reasons
-            description=safeget(ea, ["description"]),
             provider=safeget(ea, ["provider"]),
             base_url=safeget(ea, ["baseUrl"]),
             llm_organization=safeget(ea, ["llmOrganization"]),
@@ -100,7 +97,6 @@ class CatalogLlmEndpointPatch(Base):
         id: str,
         title: Optional[str] = None,
         token: Optional[str] = None,
-        description: Optional[str] = None,
         provider: Optional[str] = None,
         base_url: Optional[str] = None,
         llm_organization: Optional[str] = None,
@@ -111,7 +107,6 @@ class CatalogLlmEndpointPatch(Base):
             attributes=CatalogLlmEndpointPatchAttributes(
                 title=title,
                 token=token,
-                description=description,
                 provider=provider,
                 base_url=base_url,
                 llm_organization=llm_organization,
@@ -124,7 +119,6 @@ class CatalogLlmEndpointPatch(Base):
 class CatalogLlmEndpointAttributes(Base):
     title: str
     token: str
-    description: Optional[str] = None
     provider: Optional[str] = None
     base_url: Optional[str] = None
     llm_organization: Optional[str] = None
@@ -139,7 +133,6 @@ class CatalogLlmEndpointAttributes(Base):
 class CatalogLlmEndpointPatchAttributes(Base):
     title: Optional[str] = None
     token: Optional[str] = None
-    description: Optional[str] = None
     provider: Optional[str] = None
     base_url: Optional[str] = None
     llm_organization: Optional[str] = None

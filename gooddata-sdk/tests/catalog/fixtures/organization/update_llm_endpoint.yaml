@@ -139,7 +139,6 @@ interactions:
           attributes:
             title: Updated Title 2
             token: new-token
-            description: Updated Description
             provider: OPENAI
             baseUrl: https://api.updated.com
             llmOrganization: org2
