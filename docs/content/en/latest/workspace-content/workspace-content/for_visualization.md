@@ -5,26 +5,7 @@ weight: 10
 superheading: "tables."
 ---
 
-
-
-``for_visualization(workspace_id: str, visualization: Visualization)``
-
-Get data as an ExecutionTable from the given visualization.
-
-{{% parameters-block title="Parameters" %}}
-{{< parameter p_name="workspace_id" p_type="string" >}}
-Workspace identification string e.g. "demo"
-{{< /parameter >}}
-{{< parameter p_name="visualization" p_type="Visualization" >}}
-Visualization object, representing a visualization.
-{{< /parameter >}}
-{{% /parameters-block %}}
-
-{{% parameters-block title="Returns"%}}
-{{< parameter p_type="ExecutionTable" >}}
-Visualization data wrapper object.
-{{< /parameter >}}
-{{% /parameters-block %}}
+{{< api-ref "dataframe.DataFrameFactory.for_visualization" >}}
 
 ## Example
 
