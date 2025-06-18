@@ -89,12 +89,16 @@ class ComputeService:
             )
         return ResultCacheMetadata(result_cache_metadata=result_cache_metadata)
 
-    def build_exec_def_from_chat_result(self, chat_result: ChatResult) -> ExecutionDefinition:
+    def build_exec_def_from_chat_result(
+        self, chat_result: ChatResult, is_cancellable: bool = False
+    ) -> ExecutionDefinition:
         """
         Build execution definition from chat result.
 
         Args:
             chat_result: ChatResult object containing visualization details from AI chat response
+            is_cancellable (bool, optional): Whether the execution of this definition should be cancelled when
+                the connection is cancelled.
 
         Returns:
             ExecutionDefinition: Execution definition built from chat result visualization
@@ -112,8 +116,13 @@ class ComputeService:
             TableDimension(item_ids=["measureGroup"]),
         ]
 
-        exec_def = ExecutionDefinition(dimensions=dimensions, metrics=metrics, filters=filters, attributes=attributes)
-        return exec_def
+        return ExecutionDefinition(
+            dimensions=dimensions,
+            metrics=metrics,
+            filters=filters,
+            attributes=attributes,
+            is_cancellable=is_cancellable,
+        )
 
     def ai_chat(self, workspace_id: str, question: str) -> ChatResult:
         """

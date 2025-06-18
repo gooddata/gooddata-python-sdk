@@ -74,6 +74,7 @@ class DataFrameFactory:
         columns: ColumnsDef,
         filter_by: Optional[Union[Filter, list[Filter]]] = None,
         on_execution_submitted: Optional[Callable[[Execution], None]] = None,
+        is_cancellable: bool = False,
     ) -> pandas.DataFrame:
         """
         Creates a data frame indexed by values of the label. The data frame columns will be created from either
@@ -88,6 +89,7 @@ class DataFrameFactory:
                 Optional filters to apply during computation on the server.
             on_execution_submitted (Optional[Callable[[Execution], None]]): Callback to call when the execution was
                 submitted to the backend.
+            is_cancellable (bool, optional): Whether the execution should be cancelled when the connection is cancelled.
 
         Returns:
             pandas.DataFrame: A DataFrame instance.
@@ -99,6 +101,7 @@ class DataFrameFactory:
             index_by=index_by,
             filter_by=filter_by,
             on_execution_submitted=on_execution_submitted,
+            is_cancellable=is_cancellable,
         )
 
         _idx = make_pandas_index(index)
@@ -110,6 +113,7 @@ class DataFrameFactory:
         columns: ColumnsDef,
         filter_by: Optional[Union[Filter, list[Filter]]] = None,
         on_execution_submitted: Optional[Callable[[Execution], None]] = None,
+        is_cancellable: bool = False,
     ) -> pandas.DataFrame:
         """
         Creates a data frame with columns created from metrics and or labels.
@@ -120,6 +124,7 @@ class DataFrameFactory:
                 computation on the server.
             on_execution_submitted (Optional[Callable[[Execution], None]]): Callback to call when the execution was
                 submitted to the backend.
+            is_cancellable (bool, optional): Whether the execution should be cancelled when the connection is cancelled.
 
         Returns:
             pandas.DataFrame: A DataFrame instance.
@@ -131,6 +136,7 @@ class DataFrameFactory:
             columns=columns,
             filter_by=filter_by,
             on_execution_submitted=on_execution_submitted,
+            is_cancellable=is_cancellable,
         )
 
         return pandas.DataFrame(data=data)
@@ -141,6 +147,7 @@ class DataFrameFactory:
         filter_by: Optional[Union[Filter, list[Filter]]] = None,
         auto_index: bool = True,
         on_execution_submitted: Optional[Callable[[Execution], None]] = None,
+        is_cancellable: bool = False,
     ) -> pandas.DataFrame:
         """
         Creates a data frame for named items. This is a convenience method that will create DataFrame with or
@@ -154,6 +161,7 @@ class DataFrameFactory:
                 of the items.
             on_execution_submitted (Optional[Callable[[Execution], None]]): Callback to call when the execution was
                 submitted to the backend.
+            is_cancellable (bool, optional): Whether the execution should be cancelled when the connection is cancelled.
 
         Returns:
             pandas.DataFrame: A DataFrame instance.
@@ -183,6 +191,7 @@ class DataFrameFactory:
             columns=resolved_measure_cols,
             filter_by=filter_by,
             on_execution_submitted=on_execution_submitted,
+            is_cancellable=is_cancellable,
         )
 
     def for_visualization(
@@ -190,6 +199,7 @@ class DataFrameFactory:
         visualization_id: str,
         auto_index: bool = True,
         on_execution_submitted: Optional[Callable[[Execution], None]] = None,
+        is_cancellable: bool = False,
     ) -> pandas.DataFrame:
         """
         Creates a data frame with columns based on the content of the visualization with the provided identifier.
@@ -200,6 +210,7 @@ class DataFrameFactory:
                 of the visualization.
             on_execution_submitted (Optional[Callable[[Execution], None]]): Callback to call when the execution was
                 submitted to the backend.
+            is_cancellable (bool, optional): Whether the execution should be cancelled when the connection is cancelled.
 
         Returns:
             pandas.DataFrame: A DataFrame instance.
@@ -215,13 +226,18 @@ class DataFrameFactory:
         }
 
         return self.for_items(
-            columns, filter_by=filter_by, auto_index=auto_index, on_execution_submitted=on_execution_submitted
+            columns,
+            filter_by=filter_by,
+            auto_index=auto_index,
+            on_execution_submitted=on_execution_submitted,
+            is_cancellable=is_cancellable,
         )
 
     def for_created_visualization(
         self,
         created_visualizations_response: dict,
         on_execution_submitted: Optional[Callable[[Execution], None]] = None,
+        is_cancellable: bool = False,
     ) -> tuple[pandas.DataFrame, DataFrameMetadata]:
         """
         Creates a data frame using a created visualization.
@@ -230,11 +246,14 @@ class DataFrameFactory:
             created_visualizations_response (dict): Created visualization response.
             on_execution_submitted (Optional[Callable[[Execution], None]]): Callback to call when the execution was
                 submitted to the backend.
+            is_cancellable (bool, optional): Whether the execution should be cancelled when the connection is cancelled.
 
         Returns:
             pandas.DataFrame: A DataFrame instance.
         """
-        execution_definition = self._sdk.compute.build_exec_def_from_chat_result(created_visualizations_response)
+        execution_definition = self._sdk.compute.build_exec_def_from_chat_result(
+            created_visualizations_response, is_cancellable=is_cancellable
+        )
         return self.for_exec_def(
             exec_def=execution_definition,
             on_execution_submitted=on_execution_submitted,

@@ -33,7 +33,7 @@ from gooddata_pandas.utils import (
 class ExecutionDefinitionBuilder:
     _DEFAULT_INDEX_NAME: str = "0"
 
-    def __init__(self, columns: ColumnsDef, index_by: Optional[IndexDef] = None) -> None:
+    def __init__(self, columns: ColumnsDef, index_by: Optional[IndexDef] = None, is_cancellable: bool = False) -> None:
         """
         Initializes the ExecutionDefinitionBuilder instance with columns and an
         optional index_by definition. Processes the given columns and index_by
@@ -42,6 +42,8 @@ class ExecutionDefinitionBuilder:
         Args:
             columns (ColumnsDef): Input columns to process and build internal mappings.
             index_by (Optional[IndexDef], optional): Index definition to process. Defaults to None.
+            is_cancellable (Optional[bool]): Whether the execution of this definition should be cancelled when
+                the connection is cancelled.
 
         """
         self._attributes: list[Attribute] = []
@@ -49,6 +51,7 @@ class ExecutionDefinitionBuilder:
         self._col_to_attr_idx: dict[str, int] = dict()
         self._index_to_attr_idx: dict[str, int] = dict()
         self._col_to_metric_idx: dict[str, int] = dict()
+        self._is_cancellable = is_cancellable
 
         self._process_columns(columns)
         self._process_index(index_by)
@@ -248,6 +251,7 @@ class ExecutionDefinitionBuilder:
             metrics=self._metrics,
             filters=filters,
             dimensions=dimensions,
+            is_cancellable=self._is_cancellable,
         )
 
 
@@ -257,6 +261,7 @@ def _compute(
     columns: ColumnsDef,
     index_by: Optional[IndexDef] = None,
     filter_by: Optional[Union[Filter, list[Filter]]] = None,
+    is_cancellable: bool = False,
 ) -> tuple[Execution, dict[str, int], dict[str, int], dict[str, int]]:
     """
     Internal function that computes an execution-by-convention to retrieve data for a data frame with the provided
@@ -268,6 +273,8 @@ def _compute(
         columns (ColumnsDef): The columns definition.
         index_by (Optional[IndexDef]): The index definition, if any.
         filter_by (Optional[Union[Filter, list[Filter]]]): A filter or a list of filters, if any.
+        is_cancellable (bool, optional): Whether the execution of this definition should be cancelled when
+            the connection is cancelled.
 
     Returns:
         tuple: A tuple containing the following elements:
@@ -277,7 +284,7 @@ def _compute(
         - dict[str, int]: A mapping of pandas index names to attribute dimension indices.
     """
 
-    builder = ExecutionDefinitionBuilder(columns, index_by)
+    builder = ExecutionDefinitionBuilder(columns, index_by, is_cancellable=is_cancellable)
     exec_def = builder.build_execution_definition(filter_by)
 
     return (
@@ -413,6 +420,7 @@ def compute_and_extract(
     index_by: Optional[IndexDef] = None,
     filter_by: Optional[Union[Filter, list[Filter]]] = None,
     on_execution_submitted: Optional[Callable[[Execution], None]] = None,
+    is_cancellable: bool = False,
 ) -> tuple[dict, dict]:
     """
     Convenience function that computes and extracts data from the execution response.
@@ -425,6 +433,8 @@ def compute_and_extract(
         filter_by (Optional[Union[Filter, list[Filter]]]): A filter or a list of filters, if any.
         on_execution_submitted (Optional[Callable[[Execution], None]]): Callback to call when the execution was
             submitted to the backend.
+        is_cancellable (bool, optional): Whether the execution of this definition should be cancelled when
+            the connection is cancelled.
 
     Returns:
         tuple: A tuple containing the following dictionaries:
@@ -440,6 +450,7 @@ def compute_and_extract(
         index_by=index_by,
         columns=columns,
         filter_by=filter_by,
+        is_cancellable=is_cancellable,
     )
 
     execution, col_to_attr_idx, col_to_metric_idx, index_to_attr_idx = result
