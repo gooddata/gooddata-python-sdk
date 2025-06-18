@@ -156,6 +156,9 @@ def signature_data(sig: inspect.Signature) -> SignatureData:
     sig_params_data = []
 
     for param in sig.parameters.values():
+        # Skip self parameter in methods
+        if param.name == "self":
+            continue
         annotation = param.annotation
         if annotation == inspect.Parameter.empty:
             annotation = None
