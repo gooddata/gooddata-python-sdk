@@ -52,7 +52,7 @@
 {{ else }}
 <i> None </i>
 {{ end }}
-{{ else if (ne $objData.signature.return_type "None") }}
+{{ else if (gt (len $objData.signature.params) 0) }}
 <table class="gd-docs-parameters-block">
     <thead>
     <tr>
