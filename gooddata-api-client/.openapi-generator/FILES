@@ -1,6 +1,7 @@
 .gitignore
 README.md
 docs/AFM.md
+docs/AFMFiltersInner.md
 docs/AIApi.md
 docs/APITokensApi.md
 docs/AbsoluteDateFilter.md
@@ -43,6 +44,9 @@ docs/ArithmeticMeasureDefinition.md
 docs/ArithmeticMeasureDefinitionArithmeticMeasure.md
 docs/AssigneeIdentifier.md
 docs/AssigneeRule.md
+docs/AttributeElements.md
+docs/AttributeElementsByRef.md
+docs/AttributeElementsByValue.md
 docs/AttributeExecutionResultHeader.md
 docs/AttributeFilter.md
 docs/AttributeFilterByDate.md
@@ -66,7 +70,9 @@ docs/AutomationImageExport.md
 docs/AutomationMetadata.md
 docs/AutomationNotification.md
 docs/AutomationNotificationAllOf.md
+docs/AutomationRawExport.md
 docs/AutomationSchedule.md
+docs/AutomationSlidesExport.md
 docs/AutomationTabularExport.md
 docs/AutomationVisualExport.md
 docs/AutomationsApi.md
@@ -106,16 +112,15 @@ docs/CustomMetric.md
 docs/CustomOverride.md
 docs/DashboardAttributeFilter.md
 docs/DashboardAttributeFilterAttributeFilter.md
-docs/DashboardAttributeFilterAttributeFilterAllOf.md
 docs/DashboardDateFilter.md
 docs/DashboardDateFilterDateFilter.md
-docs/DashboardDateFilterDateFilterAllOf.md
+docs/DashboardDateFilterDateFilterFrom.md
+docs/DashboardExportSettings.md
 docs/DashboardFilter.md
 docs/DashboardPermissions.md
 docs/DashboardPermissionsAssignment.md
 docs/DashboardSlidesTemplate.md
 docs/DashboardTabularExportRequest.md
-docs/DashboardTabularExportRequestDashboardFiltersOverrideInner.md
 docs/DashboardsApi.md
 docs/DataColumnLocator.md
 docs/DataColumnLocators.md
@@ -135,6 +140,7 @@ docs/DateAbsoluteFilterAllOf.md
 docs/DateFilter.md
 docs/DateRelativeFilter.md
 docs/DateRelativeFilterAllOf.md
+docs/DateValue.md
 docs/DeclarativeAnalyticalDashboard.md
 docs/DeclarativeAnalyticalDashboardExtension.md
 docs/DeclarativeAnalyticalDashboardIdentifier.md
@@ -171,6 +177,7 @@ docs/DeclarativeFact.md
 docs/DeclarativeFilterContext.md
 docs/DeclarativeFilterView.md
 docs/DeclarativeIdentityProvider.md
+docs/DeclarativeIdentityProviderIdentifier.md
 docs/DeclarativeJwk.md
 docs/DeclarativeJwkSpecification.md
 docs/DeclarativeLabel.md
@@ -189,6 +196,7 @@ docs/DeclarativeReferenceSource.md
 docs/DeclarativeRsaSpecification.md
 docs/DeclarativeSetting.md
 docs/DeclarativeSingleWorkspacePermission.md
+docs/DeclarativeSourceFactReference.md
 docs/DeclarativeTable.md
 docs/DeclarativeTables.md
 docs/DeclarativeTheme.md
@@ -252,6 +260,7 @@ docs/ExportDefinitionsApi.md
 docs/ExportRequest.md
 docs/ExportResponse.md
 docs/ExportResult.md
+docs/FactIdentifier.md
 docs/FactsApi.md
 docs/File.md
 docs/Filter.md
@@ -278,6 +287,8 @@ docs/Histogram.md
 docs/HistogramBucket.md
 docs/HistogramProperties.md
 docs/IdentifierDuplications.md
+docs/IdentifierRef.md
+docs/IdentifierRefIdentifier.md
 docs/IdentityProvidersApi.md
 docs/ImageExportApi.md
 docs/ImageExportRequest.md
@@ -362,7 +373,9 @@ docs/JsonApiAutomationInAttributesAlert.md
 docs/JsonApiAutomationInAttributesExternalRecipientsInner.md
 docs/JsonApiAutomationInAttributesImageExportsInner.md
 docs/JsonApiAutomationInAttributesMetadata.md
+docs/JsonApiAutomationInAttributesRawExportsInner.md
 docs/JsonApiAutomationInAttributesSchedule.md
+docs/JsonApiAutomationInAttributesSlidesExportsInner.md
 docs/JsonApiAutomationInAttributesTabularExportsInner.md
 docs/JsonApiAutomationInAttributesVisualExportsInner.md
 docs/JsonApiAutomationInDocument.md
@@ -514,10 +527,13 @@ docs/JsonApiFactLinkage.md
 docs/JsonApiFactOut.md
 docs/JsonApiFactOutAttributes.md
 docs/JsonApiFactOutDocument.md
+docs/JsonApiFactOutIncludes.md
 docs/JsonApiFactOutList.md
 docs/JsonApiFactOutRelationships.md
+docs/JsonApiFactOutRelationshipsSourceFact.md
 docs/JsonApiFactOutWithLinks.md
 docs/JsonApiFactToManyLinkage.md
+docs/JsonApiFactToOneLinkage.md
 docs/JsonApiFilterContextIn.md
 docs/JsonApiFilterContextInDocument.md
 docs/JsonApiFilterContextLinkage.md
@@ -548,6 +564,7 @@ docs/JsonApiFilterViewPatchDocument.md
 docs/JsonApiIdentityProviderIn.md
 docs/JsonApiIdentityProviderInAttributes.md
 docs/JsonApiIdentityProviderInDocument.md
+docs/JsonApiIdentityProviderLinkage.md
 docs/JsonApiIdentityProviderOut.md
 docs/JsonApiIdentityProviderOutAttributes.md
 docs/JsonApiIdentityProviderOutDocument.md
@@ -556,6 +573,7 @@ docs/JsonApiIdentityProviderOutWithLinks.md
 docs/JsonApiIdentityProviderPatch.md
 docs/JsonApiIdentityProviderPatchAttributes.md
 docs/JsonApiIdentityProviderPatchDocument.md
+docs/JsonApiIdentityProviderToOneLinkage.md
 docs/JsonApiJwkIn.md
 docs/JsonApiJwkInAttributes.md
 docs/JsonApiJwkInAttributesContent.md
@@ -605,6 +623,11 @@ docs/JsonApiMetricPatchDocument.md
 docs/JsonApiMetricPostOptionalId.md
 docs/JsonApiMetricPostOptionalIdDocument.md
 docs/JsonApiMetricToManyLinkage.md
+docs/JsonApiNotificationChannelIdentifierOut.md
+docs/JsonApiNotificationChannelIdentifierOutAttributes.md
+docs/JsonApiNotificationChannelIdentifierOutDocument.md
+docs/JsonApiNotificationChannelIdentifierOutList.md
+docs/JsonApiNotificationChannelIdentifierOutWithLinks.md
 docs/JsonApiNotificationChannelIn.md
 docs/JsonApiNotificationChannelInAttributes.md
 docs/JsonApiNotificationChannelInAttributesDestination.md
@@ -623,6 +646,8 @@ docs/JsonApiNotificationChannelToOneLinkage.md
 docs/JsonApiOrganizationIn.md
 docs/JsonApiOrganizationInAttributes.md
 docs/JsonApiOrganizationInDocument.md
+docs/JsonApiOrganizationInRelationships.md
+docs/JsonApiOrganizationInRelationshipsIdentityProvider.md
 docs/JsonApiOrganizationOut.md
 docs/JsonApiOrganizationOutAttributes.md
 docs/JsonApiOrganizationOutAttributesCacheSettings.md
@@ -876,6 +901,7 @@ docs/RouteResult.md
 docs/RsaSpecification.md
 docs/RulePermission.md
 docs/RunningSection.md
+docs/SavedVisualization.md
 docs/ScanRequest.md
 docs/ScanResultPdm.md
 docs/ScanSqlRequest.md
@@ -1064,6 +1090,7 @@ gooddata_api_client/model/afm.py
 gooddata_api_client/model/afm_cancel_tokens.py
 gooddata_api_client/model/afm_execution.py
 gooddata_api_client/model/afm_execution_response.py
+gooddata_api_client/model/afm_filters_inner.py
 gooddata_api_client/model/afm_identifier.py
 gooddata_api_client/model/afm_local_identifier.py
 gooddata_api_client/model/afm_object_identifier.py
@@ -1093,6 +1120,9 @@ gooddata_api_client/model/arithmetic_measure_definition.py
 gooddata_api_client/model/arithmetic_measure_definition_arithmetic_measure.py
 gooddata_api_client/model/assignee_identifier.py
 gooddata_api_client/model/assignee_rule.py
+gooddata_api_client/model/attribute_elements.py
+gooddata_api_client/model/attribute_elements_by_ref.py
+gooddata_api_client/model/attribute_elements_by_value.py
 gooddata_api_client/model/attribute_execution_result_header.py
 gooddata_api_client/model/attribute_filter.py
 gooddata_api_client/model/attribute_filter_by_date.py
@@ -1114,7 +1144,9 @@ gooddata_api_client/model/automation_image_export.py
 gooddata_api_client/model/automation_metadata.py
 gooddata_api_client/model/automation_notification.py
 gooddata_api_client/model/automation_notification_all_of.py
+gooddata_api_client/model/automation_raw_export.py
 gooddata_api_client/model/automation_schedule.py
+gooddata_api_client/model/automation_slides_export.py
 gooddata_api_client/model/automation_tabular_export.py
 gooddata_api_client/model/automation_visual_export.py
 gooddata_api_client/model/available_assignees.py
@@ -1148,16 +1180,15 @@ gooddata_api_client/model/custom_metric.py
 gooddata_api_client/model/custom_override.py
 gooddata_api_client/model/dashboard_attribute_filter.py
 gooddata_api_client/model/dashboard_attribute_filter_attribute_filter.py
-gooddata_api_client/model/dashboard_attribute_filter_attribute_filter_all_of.py
 gooddata_api_client/model/dashboard_date_filter.py
 gooddata_api_client/model/dashboard_date_filter_date_filter.py
-gooddata_api_client/model/dashboard_date_filter_date_filter_all_of.py
+gooddata_api_client/model/dashboard_date_filter_date_filter_from.py
+gooddata_api_client/model/dashboard_export_settings.py
 gooddata_api_client/model/dashboard_filter.py
 gooddata_api_client/model/dashboard_permissions.py
 gooddata_api_client/model/dashboard_permissions_assignment.py
 gooddata_api_client/model/dashboard_slides_template.py
 gooddata_api_client/model/dashboard_tabular_export_request.py
-gooddata_api_client/model/dashboard_tabular_export_request_dashboard_filters_override_inner.py
 gooddata_api_client/model/data_column_locator.py
 gooddata_api_client/model/data_column_locators.py
 gooddata_api_client/model/data_source_parameter.py
@@ -1172,6 +1203,7 @@ gooddata_api_client/model/date_absolute_filter_all_of.py
 gooddata_api_client/model/date_filter.py
 gooddata_api_client/model/date_relative_filter.py
 gooddata_api_client/model/date_relative_filter_all_of.py
+gooddata_api_client/model/date_value.py
 gooddata_api_client/model/declarative_analytical_dashboard.py
 gooddata_api_client/model/declarative_analytical_dashboard_extension.py
 gooddata_api_client/model/declarative_analytical_dashboard_identifier.py
@@ -1208,6 +1240,7 @@ gooddata_api_client/model/declarative_fact.py
 gooddata_api_client/model/declarative_filter_context.py
 gooddata_api_client/model/declarative_filter_view.py
 gooddata_api_client/model/declarative_identity_provider.py
+gooddata_api_client/model/declarative_identity_provider_identifier.py
 gooddata_api_client/model/declarative_jwk.py
 gooddata_api_client/model/declarative_jwk_specification.py
 gooddata_api_client/model/declarative_label.py
@@ -1226,6 +1259,7 @@ gooddata_api_client/model/declarative_reference_source.py
 gooddata_api_client/model/declarative_rsa_specification.py
 gooddata_api_client/model/declarative_setting.py
 gooddata_api_client/model/declarative_single_workspace_permission.py
+gooddata_api_client/model/declarative_source_fact_reference.py
 gooddata_api_client/model/declarative_table.py
 gooddata_api_client/model/declarative_tables.py
 gooddata_api_client/model/declarative_theme.py
@@ -1285,6 +1319,7 @@ gooddata_api_client/model/execution_settings.py
 gooddata_api_client/model/export_request.py
 gooddata_api_client/model/export_response.py
 gooddata_api_client/model/export_result.py
+gooddata_api_client/model/fact_identifier.py
 gooddata_api_client/model/file.py
 gooddata_api_client/model/filter.py
 gooddata_api_client/model/filter_by.py
@@ -1307,6 +1342,8 @@ gooddata_api_client/model/histogram.py
 gooddata_api_client/model/histogram_bucket.py
 gooddata_api_client/model/histogram_properties.py
 gooddata_api_client/model/identifier_duplications.py
+gooddata_api_client/model/identifier_ref.py
+gooddata_api_client/model/identifier_ref_identifier.py
 gooddata_api_client/model/image_export_request.py
 gooddata_api_client/model/in_platform.py
 gooddata_api_client/model/in_platform_all_of.py
@@ -1387,7 +1424,9 @@ gooddata_api_client/model/json_api_automation_in_attributes_alert.py
 gooddata_api_client/model/json_api_automation_in_attributes_external_recipients_inner.py
 gooddata_api_client/model/json_api_automation_in_attributes_image_exports_inner.py
 gooddata_api_client/model/json_api_automation_in_attributes_metadata.py
+gooddata_api_client/model/json_api_automation_in_attributes_raw_exports_inner.py
 gooddata_api_client/model/json_api_automation_in_attributes_schedule.py
+gooddata_api_client/model/json_api_automation_in_attributes_slides_exports_inner.py
 gooddata_api_client/model/json_api_automation_in_attributes_tabular_exports_inner.py
 gooddata_api_client/model/json_api_automation_in_attributes_visual_exports_inner.py
 gooddata_api_client/model/json_api_automation_in_document.py
@@ -1539,10 +1578,13 @@ gooddata_api_client/model/json_api_fact_linkage.py
 gooddata_api_client/model/json_api_fact_out.py
 gooddata_api_client/model/json_api_fact_out_attributes.py
 gooddata_api_client/model/json_api_fact_out_document.py
+gooddata_api_client/model/json_api_fact_out_includes.py
 gooddata_api_client/model/json_api_fact_out_list.py
 gooddata_api_client/model/json_api_fact_out_relationships.py
+gooddata_api_client/model/json_api_fact_out_relationships_source_fact.py
 gooddata_api_client/model/json_api_fact_out_with_links.py
 gooddata_api_client/model/json_api_fact_to_many_linkage.py
+gooddata_api_client/model/json_api_fact_to_one_linkage.py
 gooddata_api_client/model/json_api_filter_context_in.py
 gooddata_api_client/model/json_api_filter_context_in_document.py
 gooddata_api_client/model/json_api_filter_context_linkage.py
@@ -1573,6 +1615,7 @@ gooddata_api_client/model/json_api_filter_view_patch_document.py
 gooddata_api_client/model/json_api_identity_provider_in.py
 gooddata_api_client/model/json_api_identity_provider_in_attributes.py
 gooddata_api_client/model/json_api_identity_provider_in_document.py
+gooddata_api_client/model/json_api_identity_provider_linkage.py
 gooddata_api_client/model/json_api_identity_provider_out.py
 gooddata_api_client/model/json_api_identity_provider_out_attributes.py
 gooddata_api_client/model/json_api_identity_provider_out_document.py
@@ -1581,6 +1624,7 @@ gooddata_api_client/model/json_api_identity_provider_out_with_links.py
 gooddata_api_client/model/json_api_identity_provider_patch.py
 gooddata_api_client/model/json_api_identity_provider_patch_attributes.py
 gooddata_api_client/model/json_api_identity_provider_patch_document.py
+gooddata_api_client/model/json_api_identity_provider_to_one_linkage.py
 gooddata_api_client/model/json_api_jwk_in.py
 gooddata_api_client/model/json_api_jwk_in_attributes.py
 gooddata_api_client/model/json_api_jwk_in_attributes_content.py
@@ -1630,6 +1674,11 @@ gooddata_api_client/model/json_api_metric_patch_document.py
 gooddata_api_client/model/json_api_metric_post_optional_id.py
 gooddata_api_client/model/json_api_metric_post_optional_id_document.py
 gooddata_api_client/model/json_api_metric_to_many_linkage.py
+gooddata_api_client/model/json_api_notification_channel_identifier_out.py
+gooddata_api_client/model/json_api_notification_channel_identifier_out_attributes.py
+gooddata_api_client/model/json_api_notification_channel_identifier_out_document.py
+gooddata_api_client/model/json_api_notification_channel_identifier_out_list.py
+gooddata_api_client/model/json_api_notification_channel_identifier_out_with_links.py
 gooddata_api_client/model/json_api_notification_channel_in.py
 gooddata_api_client/model/json_api_notification_channel_in_attributes.py
 gooddata_api_client/model/json_api_notification_channel_in_attributes_destination.py
@@ -1648,6 +1697,8 @@ gooddata_api_client/model/json_api_notification_channel_to_one_linkage.py
 gooddata_api_client/model/json_api_organization_in.py
 gooddata_api_client/model/json_api_organization_in_attributes.py
 gooddata_api_client/model/json_api_organization_in_document.py
+gooddata_api_client/model/json_api_organization_in_relationships.py
+gooddata_api_client/model/json_api_organization_in_relationships_identity_provider.py
 gooddata_api_client/model/json_api_organization_out.py
 gooddata_api_client/model/json_api_organization_out_attributes.py
 gooddata_api_client/model/json_api_organization_out_attributes_cache_settings.py
@@ -1884,6 +1935,7 @@ gooddata_api_client/model/route_result.py
 gooddata_api_client/model/rsa_specification.py
 gooddata_api_client/model/rule_permission.py
 gooddata_api_client/model/running_section.py
+gooddata_api_client/model/saved_visualization.py
 gooddata_api_client/model/scan_request.py
 gooddata_api_client/model/scan_result_pdm.py
 gooddata_api_client/model/scan_sql_request.py

@@ -75,7 +75,6 @@ interactions:
           attributes:
             title: Test Endpoint 2
             token: secret-token-2
-            description: Test Description
             provider: OPENAI
             baseUrl: https://api.example.com
             llmOrganization: org1

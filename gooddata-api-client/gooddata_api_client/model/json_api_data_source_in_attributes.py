@@ -80,6 +80,7 @@ class JsonApiDataSourceInAttributes(ModelNormal):
             'MYSQL': "MYSQL",
             'MARIADB': "MARIADB",
             'ORACLE': "ORACLE",
+            'PINOT': "PINOT",
             'SINGLESTORE': "SINGLESTORE",
             'MOTHERDUCK': "MOTHERDUCK",
             'FLEXCONNECT': "FLEXCONNECT",

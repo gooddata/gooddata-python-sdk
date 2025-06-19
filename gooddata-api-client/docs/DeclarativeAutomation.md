@@ -18,8 +18,10 @@ Name | Type | Description | Notes
 **modified_at** | **str, none_type** | Time of the last entity modification. | [optional] 
 **modified_by** | [**DeclarativeUserIdentifier**](DeclarativeUserIdentifier.md) |  | [optional] 
 **notification_channel** | [**DeclarativeNotificationChannelIdentifier**](DeclarativeNotificationChannelIdentifier.md) |  | [optional] 
+**raw_exports** | [**[AutomationRawExport]**](AutomationRawExport.md) |  | [optional] 
 **recipients** | [**[DeclarativeUserIdentifier]**](DeclarativeUserIdentifier.md) |  | [optional] 
 **schedule** | [**AutomationSchedule**](AutomationSchedule.md) |  | [optional] 
+**slides_exports** | [**[AutomationSlidesExport]**](AutomationSlidesExport.md) |  | [optional] 
 **state** | **str** | Current state of the automation. | [optional]  if omitted the server will use the default value of "ACTIVE"
 **tabular_exports** | [**[AutomationTabularExport]**](AutomationTabularExport.md) |  | [optional] 
 **tags** | **[str]** |  | [optional] 

@@ -65,9 +65,6 @@ class JsonApiLlmEndpointPatchAttributes(ModelNormal):
         ('base_url',): {
             'max_length': 255,
         },
-        ('description',): {
-            'max_length': 10000,
-        },
         ('llm_model',): {
             'max_length': 255,
         },
@@ -104,7 +101,6 @@ class JsonApiLlmEndpointPatchAttributes(ModelNormal):
         """
         return {
             'base_url': (str, none_type,),  # noqa: E501
-            'description': (str, none_type,),  # noqa: E501
             'llm_model': (str,),  # noqa: E501
             'llm_organization': (str, none_type,),  # noqa: E501
             'provider': (str,),  # noqa: E501
@@ -119,7 +115,6 @@ class JsonApiLlmEndpointPatchAttributes(ModelNormal):
 
     attribute_map = {
         'base_url': 'baseUrl',  # noqa: E501
-        'description': 'description',  # noqa: E501
         'llm_model': 'llmModel',  # noqa: E501
         'llm_organization': 'llmOrganization',  # noqa: E501
         'provider': 'provider',  # noqa: E501
@@ -169,7 +164,6 @@ class JsonApiLlmEndpointPatchAttributes(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             base_url (str, none_type): Custom LLM endpoint.. [optional]  # noqa: E501
-            description (str, none_type): User-facing description of the LLM Provider.. [optional]  # noqa: E501
             llm_model (str): LLM Model. We provide a default model for each provider, but you can override it here.. [optional]  # noqa: E501
             llm_organization (str, none_type): Organization in LLM provider.. [optional]  # noqa: E501
             provider (str): LLM Provider.. [optional] if omitted the server will use the default value of "OPENAI"  # noqa: E501
@@ -261,7 +255,6 @@ class JsonApiLlmEndpointPatchAttributes(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             base_url (str, none_type): Custom LLM endpoint.. [optional]  # noqa: E501
-            description (str, none_type): User-facing description of the LLM Provider.. [optional]  # noqa: E501
             llm_model (str): LLM Model. We provide a default model for each provider, but you can override it here.. [optional]  # noqa: E501
             llm_organization (str, none_type): Organization in LLM provider.. [optional]  # noqa: E501
             provider (str): LLM Provider.. [optional] if omitted the server will use the default value of "OPENAI"  # noqa: E501

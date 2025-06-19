@@ -31,12 +31,14 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_user_group_in_attributes import JsonApiUserGroupInAttributes
+    from gooddata_api_client.model.json_api_identity_provider_out_attributes import JsonApiIdentityProviderOutAttributes
+    from gooddata_api_client.model.json_api_identity_provider_out_with_links import JsonApiIdentityProviderOutWithLinks
     from gooddata_api_client.model.json_api_user_group_in_relationships import JsonApiUserGroupInRelationships
     from gooddata_api_client.model.json_api_user_group_out_with_links import JsonApiUserGroupOutWithLinks
     from gooddata_api_client.model.json_api_user_out_with_links import JsonApiUserOutWithLinks
     from gooddata_api_client.model.object_links import ObjectLinks
-    globals()['JsonApiUserGroupInAttributes'] = JsonApiUserGroupInAttributes
+    globals()['JsonApiIdentityProviderOutAttributes'] = JsonApiIdentityProviderOutAttributes
+    globals()['JsonApiIdentityProviderOutWithLinks'] = JsonApiIdentityProviderOutWithLinks
     globals()['JsonApiUserGroupInRelationships'] = JsonApiUserGroupInRelationships
     globals()['JsonApiUserGroupOutWithLinks'] = JsonApiUserGroupOutWithLinks
     globals()['JsonApiUserOutWithLinks'] = JsonApiUserOutWithLinks
@@ -69,7 +71,7 @@ class JsonApiOrganizationOutIncludes(ModelComposed):
 
     allowed_values = {
         ('type',): {
-            'USERGROUP': "userGroup",
+            'IDENTITYPROVIDER': "identityProvider",
         },
     }
 
@@ -104,9 +106,9 @@ class JsonApiOrganizationOutIncludes(ModelComposed):
         """
         lazy_import()
         return {
-            'attributes': (JsonApiUserGroupInAttributes,),  # noqa: E501
             'relationships': (JsonApiUserGroupInRelationships,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
+            'attributes': (JsonApiIdentityProviderOutAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
         }
@@ -117,9 +119,9 @@ class JsonApiOrganizationOutIncludes(ModelComposed):
 
 
     attribute_map = {
-        'attributes': 'attributes',  # noqa: E501
         'relationships': 'relationships',  # noqa: E501
         'links': 'links',  # noqa: E501
+        'attributes': 'attributes',  # noqa: E501
         'id': 'id',  # noqa: E501
         'type': 'type',  # noqa: E501
     }
@@ -163,11 +165,11 @@ class JsonApiOrganizationOutIncludes(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiUserGroupInAttributes): [optional]  # noqa: E501
             relationships (JsonApiUserGroupInRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
+            attributes (JsonApiIdentityProviderOutAttributes): [optional]  # noqa: E501
             id (str): API identifier of an object. [optional]  # noqa: E501
-            type (str): Object type. [optional] if omitted the server will use the default value of "userGroup"  # noqa: E501
+            type (str): Object type. [optional] if omitted the server will use the default value of "identityProvider"  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -271,11 +273,11 @@ class JsonApiOrganizationOutIncludes(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiUserGroupInAttributes): [optional]  # noqa: E501
             relationships (JsonApiUserGroupInRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
+            attributes (JsonApiIdentityProviderOutAttributes): [optional]  # noqa: E501
             id (str): API identifier of an object. [optional]  # noqa: E501
-            type (str): Object type. [optional] if omitted the server will use the default value of "userGroup"  # noqa: E501
+            type (str): Object type. [optional] if omitted the server will use the default value of "identityProvider"  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -347,6 +349,7 @@ class JsonApiOrganizationOutIncludes(ModelComposed):
           'allOf': [
           ],
           'oneOf': [
+              JsonApiIdentityProviderOutWithLinks,
               JsonApiUserGroupOutWithLinks,
               JsonApiUserOutWithLinks,
           ],

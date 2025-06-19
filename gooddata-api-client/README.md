@@ -561,6 +561,7 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**get_all_entities_labels**](docs/EntitiesApi.md#get_all_entities_labels) | **GET** /api/v1/entities/workspaces/{workspaceId}/labels | Get all Labels
 *EntitiesApi* | [**get_all_entities_llm_endpoints**](docs/EntitiesApi.md#get_all_entities_llm_endpoints) | **GET** /api/v1/entities/llmEndpoints | Get all LLM endpoint entities
 *EntitiesApi* | [**get_all_entities_metrics**](docs/EntitiesApi.md#get_all_entities_metrics) | **GET** /api/v1/entities/workspaces/{workspaceId}/metrics | Get all Metrics
+*EntitiesApi* | [**get_all_entities_notification_channel_identifiers**](docs/EntitiesApi.md#get_all_entities_notification_channel_identifiers) | **GET** /api/v1/entities/notificationChannelIdentifiers | 
 *EntitiesApi* | [**get_all_entities_notification_channels**](docs/EntitiesApi.md#get_all_entities_notification_channels) | **GET** /api/v1/entities/notificationChannels | Get all Notification Channel entities
 *EntitiesApi* | [**get_all_entities_organization_settings**](docs/EntitiesApi.md#get_all_entities_organization_settings) | **GET** /api/v1/entities/organizationSettings | Get Organization entities
 *EntitiesApi* | [**get_all_entities_themes**](docs/EntitiesApi.md#get_all_entities_themes) | **GET** /api/v1/entities/themes | Get all Theming entities
@@ -600,6 +601,7 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**get_entity_labels**](docs/EntitiesApi.md#get_entity_labels) | **GET** /api/v1/entities/workspaces/{workspaceId}/labels/{objectId} | Get a Label
 *EntitiesApi* | [**get_entity_llm_endpoints**](docs/EntitiesApi.md#get_entity_llm_endpoints) | **GET** /api/v1/entities/llmEndpoints/{id} | Get LLM endpoint entity
 *EntitiesApi* | [**get_entity_metrics**](docs/EntitiesApi.md#get_entity_metrics) | **GET** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | Get a Metric
+*EntitiesApi* | [**get_entity_notification_channel_identifiers**](docs/EntitiesApi.md#get_entity_notification_channel_identifiers) | **GET** /api/v1/entities/notificationChannelIdentifiers/{id} | 
 *EntitiesApi* | [**get_entity_notification_channels**](docs/EntitiesApi.md#get_entity_notification_channels) | **GET** /api/v1/entities/notificationChannels/{id} | Get Notification Channel entity
 *EntitiesApi* | [**get_entity_organization_settings**](docs/EntitiesApi.md#get_entity_organization_settings) | **GET** /api/v1/entities/organizationSettings/{id} | Get Organization entity
 *EntitiesApi* | [**get_entity_organizations**](docs/EntitiesApi.md#get_entity_organizations) | **GET** /api/v1/entities/admin/organizations/{id} | Get Organizations
@@ -757,6 +759,7 @@ Class | Method | HTTP request | Description
 *OrganizationModelControllerApi* | [**get_all_entities_identity_providers**](docs/OrganizationModelControllerApi.md#get_all_entities_identity_providers) | **GET** /api/v1/entities/identityProviders | Get all Identity Providers
 *OrganizationModelControllerApi* | [**get_all_entities_jwks**](docs/OrganizationModelControllerApi.md#get_all_entities_jwks) | **GET** /api/v1/entities/jwks | Get all Jwks
 *OrganizationModelControllerApi* | [**get_all_entities_llm_endpoints**](docs/OrganizationModelControllerApi.md#get_all_entities_llm_endpoints) | **GET** /api/v1/entities/llmEndpoints | Get all LLM endpoint entities
+*OrganizationModelControllerApi* | [**get_all_entities_notification_channel_identifiers**](docs/OrganizationModelControllerApi.md#get_all_entities_notification_channel_identifiers) | **GET** /api/v1/entities/notificationChannelIdentifiers | 
 *OrganizationModelControllerApi* | [**get_all_entities_notification_channels**](docs/OrganizationModelControllerApi.md#get_all_entities_notification_channels) | **GET** /api/v1/entities/notificationChannels | Get all Notification Channel entities
 *OrganizationModelControllerApi* | [**get_all_entities_organization_settings**](docs/OrganizationModelControllerApi.md#get_all_entities_organization_settings) | **GET** /api/v1/entities/organizationSettings | Get Organization entities
 *OrganizationModelControllerApi* | [**get_all_entities_themes**](docs/OrganizationModelControllerApi.md#get_all_entities_themes) | **GET** /api/v1/entities/themes | Get all Theming entities
@@ -773,6 +776,7 @@ Class | Method | HTTP request | Description
 *OrganizationModelControllerApi* | [**get_entity_identity_providers**](docs/OrganizationModelControllerApi.md#get_entity_identity_providers) | **GET** /api/v1/entities/identityProviders/{id} | Get Identity Provider
 *OrganizationModelControllerApi* | [**get_entity_jwks**](docs/OrganizationModelControllerApi.md#get_entity_jwks) | **GET** /api/v1/entities/jwks/{id} | Get Jwk
 *OrganizationModelControllerApi* | [**get_entity_llm_endpoints**](docs/OrganizationModelControllerApi.md#get_entity_llm_endpoints) | **GET** /api/v1/entities/llmEndpoints/{id} | Get LLM endpoint entity
+*OrganizationModelControllerApi* | [**get_entity_notification_channel_identifiers**](docs/OrganizationModelControllerApi.md#get_entity_notification_channel_identifiers) | **GET** /api/v1/entities/notificationChannelIdentifiers/{id} | 
 *OrganizationModelControllerApi* | [**get_entity_notification_channels**](docs/OrganizationModelControllerApi.md#get_entity_notification_channels) | **GET** /api/v1/entities/notificationChannels/{id} | Get Notification Channel entity
 *OrganizationModelControllerApi* | [**get_entity_organization_settings**](docs/OrganizationModelControllerApi.md#get_entity_organization_settings) | **GET** /api/v1/entities/organizationSettings/{id} | Get Organization entity
 *OrganizationModelControllerApi* | [**get_entity_themes**](docs/OrganizationModelControllerApi.md#get_entity_themes) | **GET** /api/v1/entities/themes/{id} | Get Theming
@@ -912,6 +916,7 @@ Class | Method | HTTP request | Description
 ## Documentation For Models
 
  - [AFM](docs/AFM.md)
+ - [AFMFiltersInner](docs/AFMFiltersInner.md)
  - [AbsoluteDateFilter](docs/AbsoluteDateFilter.md)
  - [AbsoluteDateFilterAbsoluteDateFilter](docs/AbsoluteDateFilterAbsoluteDateFilter.md)
  - [AbstractMeasureValueFilter](docs/AbstractMeasureValueFilter.md)
@@ -949,6 +954,9 @@ Class | Method | HTTP request | Description
  - [ArithmeticMeasureDefinitionArithmeticMeasure](docs/ArithmeticMeasureDefinitionArithmeticMeasure.md)
  - [AssigneeIdentifier](docs/AssigneeIdentifier.md)
  - [AssigneeRule](docs/AssigneeRule.md)
+ - [AttributeElements](docs/AttributeElements.md)
+ - [AttributeElementsByRef](docs/AttributeElementsByRef.md)
+ - [AttributeElementsByValue](docs/AttributeElementsByValue.md)
  - [AttributeExecutionResultHeader](docs/AttributeExecutionResultHeader.md)
  - [AttributeFilter](docs/AttributeFilter.md)
  - [AttributeFilterByDate](docs/AttributeFilterByDate.md)
@@ -970,7 +978,9 @@ Class | Method | HTTP request | Description
  - [AutomationMetadata](docs/AutomationMetadata.md)
  - [AutomationNotification](docs/AutomationNotification.md)
  - [AutomationNotificationAllOf](docs/AutomationNotificationAllOf.md)
+ - [AutomationRawExport](docs/AutomationRawExport.md)
  - [AutomationSchedule](docs/AutomationSchedule.md)
+ - [AutomationSlidesExport](docs/AutomationSlidesExport.md)
  - [AutomationTabularExport](docs/AutomationTabularExport.md)
  - [AutomationVisualExport](docs/AutomationVisualExport.md)
  - [AvailableAssignees](docs/AvailableAssignees.md)
@@ -1004,16 +1014,15 @@ Class | Method | HTTP request | Description
  - [CustomOverride](docs/CustomOverride.md)
  - [DashboardAttributeFilter](docs/DashboardAttributeFilter.md)
  - [DashboardAttributeFilterAttributeFilter](docs/DashboardAttributeFilterAttributeFilter.md)
- - [DashboardAttributeFilterAttributeFilterAllOf](docs/DashboardAttributeFilterAttributeFilterAllOf.md)
  - [DashboardDateFilter](docs/DashboardDateFilter.md)
  - [DashboardDateFilterDateFilter](docs/DashboardDateFilterDateFilter.md)
- - [DashboardDateFilterDateFilterAllOf](docs/DashboardDateFilterDateFilterAllOf.md)
+ - [DashboardDateFilterDateFilterFrom](docs/DashboardDateFilterDateFilterFrom.md)
+ - [DashboardExportSettings](docs/DashboardExportSettings.md)
  - [DashboardFilter](docs/DashboardFilter.md)
  - [DashboardPermissions](docs/DashboardPermissions.md)
  - [DashboardPermissionsAssignment](docs/DashboardPermissionsAssignment.md)
  - [DashboardSlidesTemplate](docs/DashboardSlidesTemplate.md)
  - [DashboardTabularExportRequest](docs/DashboardTabularExportRequest.md)
- - [DashboardTabularExportRequestDashboardFiltersOverrideInner](docs/DashboardTabularExportRequestDashboardFiltersOverrideInner.md)
  - [DataColumnLocator](docs/DataColumnLocator.md)
  - [DataColumnLocators](docs/DataColumnLocators.md)
  - [DataSourceParameter](docs/DataSourceParameter.md)
@@ -1028,6 +1037,7 @@ Class | Method | HTTP request | Description
  - [DateFilter](docs/DateFilter.md)
  - [DateRelativeFilter](docs/DateRelativeFilter.md)
  - [DateRelativeFilterAllOf](docs/DateRelativeFilterAllOf.md)
+ - [DateValue](docs/DateValue.md)
  - [DeclarativeAnalyticalDashboard](docs/DeclarativeAnalyticalDashboard.md)
  - [DeclarativeAnalyticalDashboardExtension](docs/DeclarativeAnalyticalDashboardExtension.md)
  - [DeclarativeAnalyticalDashboardIdentifier](docs/DeclarativeAnalyticalDashboardIdentifier.md)
@@ -1064,6 +1074,7 @@ Class | Method | HTTP request | Description
  - [DeclarativeFilterContext](docs/DeclarativeFilterContext.md)
  - [DeclarativeFilterView](docs/DeclarativeFilterView.md)
  - [DeclarativeIdentityProvider](docs/DeclarativeIdentityProvider.md)
+ - [DeclarativeIdentityProviderIdentifier](docs/DeclarativeIdentityProviderIdentifier.md)
  - [DeclarativeJwk](docs/DeclarativeJwk.md)
  - [DeclarativeJwkSpecification](docs/DeclarativeJwkSpecification.md)
  - [DeclarativeLabel](docs/DeclarativeLabel.md)
@@ -1082,6 +1093,7 @@ Class | Method | HTTP request | Description
  - [DeclarativeRsaSpecification](docs/DeclarativeRsaSpecification.md)
  - [DeclarativeSetting](docs/DeclarativeSetting.md)
  - [DeclarativeSingleWorkspacePermission](docs/DeclarativeSingleWorkspacePermission.md)
+ - [DeclarativeSourceFactReference](docs/DeclarativeSourceFactReference.md)
  - [DeclarativeTable](docs/DeclarativeTable.md)
  - [DeclarativeTables](docs/DeclarativeTables.md)
  - [DeclarativeTheme](docs/DeclarativeTheme.md)
@@ -1141,6 +1153,7 @@ Class | Method | HTTP request | Description
  - [ExportRequest](docs/ExportRequest.md)
  - [ExportResponse](docs/ExportResponse.md)
  - [ExportResult](docs/ExportResult.md)
+ - [FactIdentifier](docs/FactIdentifier.md)
  - [File](docs/File.md)
  - [Filter](docs/Filter.md)
  - [FilterBy](docs/FilterBy.md)
@@ -1163,6 +1176,8 @@ Class | Method | HTTP request | Description
  - [HistogramBucket](docs/HistogramBucket.md)
  - [HistogramProperties](docs/HistogramProperties.md)
  - [IdentifierDuplications](docs/IdentifierDuplications.md)
+ - [IdentifierRef](docs/IdentifierRef.md)
+ - [IdentifierRefIdentifier](docs/IdentifierRefIdentifier.md)
  - [ImageExportRequest](docs/ImageExportRequest.md)
  - [InPlatform](docs/InPlatform.md)
  - [InPlatformAllOf](docs/InPlatformAllOf.md)
@@ -1243,7 +1258,9 @@ Class | Method | HTTP request | Description
  - [JsonApiAutomationInAttributesExternalRecipientsInner](docs/JsonApiAutomationInAttributesExternalRecipientsInner.md)
  - [JsonApiAutomationInAttributesImageExportsInner](docs/JsonApiAutomationInAttributesImageExportsInner.md)
  - [JsonApiAutomationInAttributesMetadata](docs/JsonApiAutomationInAttributesMetadata.md)
+ - [JsonApiAutomationInAttributesRawExportsInner](docs/JsonApiAutomationInAttributesRawExportsInner.md)
  - [JsonApiAutomationInAttributesSchedule](docs/JsonApiAutomationInAttributesSchedule.md)
+ - [JsonApiAutomationInAttributesSlidesExportsInner](docs/JsonApiAutomationInAttributesSlidesExportsInner.md)
  - [JsonApiAutomationInAttributesTabularExportsInner](docs/JsonApiAutomationInAttributesTabularExportsInner.md)
  - [JsonApiAutomationInAttributesVisualExportsInner](docs/JsonApiAutomationInAttributesVisualExportsInner.md)
  - [JsonApiAutomationInDocument](docs/JsonApiAutomationInDocument.md)
@@ -1395,10 +1412,13 @@ Class | Method | HTTP request | Description
  - [JsonApiFactOut](docs/JsonApiFactOut.md)
  - [JsonApiFactOutAttributes](docs/JsonApiFactOutAttributes.md)
  - [JsonApiFactOutDocument](docs/JsonApiFactOutDocument.md)
+ - [JsonApiFactOutIncludes](docs/JsonApiFactOutIncludes.md)
  - [JsonApiFactOutList](docs/JsonApiFactOutList.md)
  - [JsonApiFactOutRelationships](docs/JsonApiFactOutRelationships.md)
+ - [JsonApiFactOutRelationshipsSourceFact](docs/JsonApiFactOutRelationshipsSourceFact.md)
  - [JsonApiFactOutWithLinks](docs/JsonApiFactOutWithLinks.md)
  - [JsonApiFactToManyLinkage](docs/JsonApiFactToManyLinkage.md)
+ - [JsonApiFactToOneLinkage](docs/JsonApiFactToOneLinkage.md)
  - [JsonApiFilterContextIn](docs/JsonApiFilterContextIn.md)
  - [JsonApiFilterContextInDocument](docs/JsonApiFilterContextInDocument.md)
  - [JsonApiFilterContextLinkage](docs/JsonApiFilterContextLinkage.md)
@@ -1429,6 +1449,7 @@ Class | Method | HTTP request | Description
  - [JsonApiIdentityProviderIn](docs/JsonApiIdentityProviderIn.md)
  - [JsonApiIdentityProviderInAttributes](docs/JsonApiIdentityProviderInAttributes.md)
  - [JsonApiIdentityProviderInDocument](docs/JsonApiIdentityProviderInDocument.md)
+ - [JsonApiIdentityProviderLinkage](docs/JsonApiIdentityProviderLinkage.md)
  - [JsonApiIdentityProviderOut](docs/JsonApiIdentityProviderOut.md)
  - [JsonApiIdentityProviderOutAttributes](docs/JsonApiIdentityProviderOutAttributes.md)
  - [JsonApiIdentityProviderOutDocument](docs/JsonApiIdentityProviderOutDocument.md)
@@ -1437,6 +1458,7 @@ Class | Method | HTTP request | Description
  - [JsonApiIdentityProviderPatch](docs/JsonApiIdentityProviderPatch.md)
  - [JsonApiIdentityProviderPatchAttributes](docs/JsonApiIdentityProviderPatchAttributes.md)
  - [JsonApiIdentityProviderPatchDocument](docs/JsonApiIdentityProviderPatchDocument.md)
+ - [JsonApiIdentityProviderToOneLinkage](docs/JsonApiIdentityProviderToOneLinkage.md)
  - [JsonApiJwkIn](docs/JsonApiJwkIn.md)
  - [JsonApiJwkInAttributes](docs/JsonApiJwkInAttributes.md)
  - [JsonApiJwkInAttributesContent](docs/JsonApiJwkInAttributesContent.md)
@@ -1486,6 +1508,11 @@ Class | Method | HTTP request | Description
  - [JsonApiMetricPostOptionalId](docs/JsonApiMetricPostOptionalId.md)
  - [JsonApiMetricPostOptionalIdDocument](docs/JsonApiMetricPostOptionalIdDocument.md)
  - [JsonApiMetricToManyLinkage](docs/JsonApiMetricToManyLinkage.md)
+ - [JsonApiNotificationChannelIdentifierOut](docs/JsonApiNotificationChannelIdentifierOut.md)
+ - [JsonApiNotificationChannelIdentifierOutAttributes](docs/JsonApiNotificationChannelIdentifierOutAttributes.md)
+ - [JsonApiNotificationChannelIdentifierOutDocument](docs/JsonApiNotificationChannelIdentifierOutDocument.md)
+ - [JsonApiNotificationChannelIdentifierOutList](docs/JsonApiNotificationChannelIdentifierOutList.md)
+ - [JsonApiNotificationChannelIdentifierOutWithLinks](docs/JsonApiNotificationChannelIdentifierOutWithLinks.md)
  - [JsonApiNotificationChannelIn](docs/JsonApiNotificationChannelIn.md)
  - [JsonApiNotificationChannelInAttributes](docs/JsonApiNotificationChannelInAttributes.md)
  - [JsonApiNotificationChannelInAttributesDestination](docs/JsonApiNotificationChannelInAttributesDestination.md)
@@ -1504,6 +1531,8 @@ Class | Method | HTTP request | Description
  - [JsonApiOrganizationIn](docs/JsonApiOrganizationIn.md)
  - [JsonApiOrganizationInAttributes](docs/JsonApiOrganizationInAttributes.md)
  - [JsonApiOrganizationInDocument](docs/JsonApiOrganizationInDocument.md)
+ - [JsonApiOrganizationInRelationships](docs/JsonApiOrganizationInRelationships.md)
+ - [JsonApiOrganizationInRelationshipsIdentityProvider](docs/JsonApiOrganizationInRelationshipsIdentityProvider.md)
  - [JsonApiOrganizationOut](docs/JsonApiOrganizationOut.md)
  - [JsonApiOrganizationOutAttributes](docs/JsonApiOrganizationOutAttributes.md)
  - [JsonApiOrganizationOutAttributesCacheSettings](docs/JsonApiOrganizationOutAttributesCacheSettings.md)
@@ -1740,6 +1769,7 @@ Class | Method | HTTP request | Description
  - [RsaSpecification](docs/RsaSpecification.md)
  - [RulePermission](docs/RulePermission.md)
  - [RunningSection](docs/RunningSection.md)
+ - [SavedVisualization](docs/SavedVisualization.md)
  - [ScanRequest](docs/ScanRequest.md)
  - [ScanResultPdm](docs/ScanResultPdm.md)
  - [ScanSqlRequest](docs/ScanSqlRequest.md)

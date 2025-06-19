@@ -1,6 +1,55 @@
 {
   "components": {
     "schemas": {
+      "AFM": {
+        "description": "Top level executable entity. Combination of [A]ttributes, [F]ilters & [M]etrics.",
+        "properties": {
+          "attributes": {
+            "description": "Attributes to be used in the computation.",
+            "items": {
+              "$ref": "#/components/schemas/AttributeItem"
+            },
+            "type": "array"
+          },
+          "auxMeasures": {
+            "description": "Metrics to be referenced from other AFM objects (e.g. filters) but not included in the result.",
+            "items": {
+              "$ref": "#/components/schemas/MeasureItem"
+            },
+            "type": "array"
+          },
+          "filters": {
+            "description": "Various filter types to filter the execution result.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/AbstractMeasureValueFilter"
+                },
+                {
+                  "$ref": "#/components/schemas/FilterDefinitionForSimpleMeasure"
+                },
+                {
+                  "$ref": "#/components/schemas/InlineFilterDefinition"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "measures": {
+            "description": "Metrics to be computed.",
+            "items": {
+              "$ref": "#/components/schemas/MeasureItem"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "attributes",
+          "filters",
+          "measures"
+        ],
+        "type": "object"
+      },
       "AbsoluteDateFilter": {
         "description": "A datetime filter specifying exact from and to values.",
         "properties": {
@@ -96,9 +145,23 @@
           "notificationChannel": {
             "$ref": "#/components/schemas/DeclarativeNotificationChannelIdentifier"
           },
+          "rawExports": {
+            "items": {
+              "$ref": "#/components/schemas/AutomationRawExport"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
           "recipients": {
             "items": {
               "$ref": "#/components/schemas/DeclarativeUserIdentifier"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "slidesExports": {
+            "items": {
+              "$ref": "#/components/schemas/AutomationSlidesExport"
             },
             "type": "array",
             "uniqueItems": true
@@ -684,6 +747,28 @@
         ],
         "type": "object"
       },
+      "AutomationRawExport": {
+        "properties": {
+          "requestPayload": {
+            "$ref": "#/components/schemas/RawExportRequest"
+          }
+        },
+        "required": [
+          "requestPayload"
+        ],
+        "type": "object"
+      },
+      "AutomationSlidesExport": {
+        "properties": {
+          "requestPayload": {
+            "$ref": "#/components/schemas/SlidesExportRequest"
+          }
+        },
+        "required": [
+          "requestPayload"
+        ],
+        "type": "object"
+      },
       "AutomationTabularExport": {
         "properties": {
           "requestPayload": {
@@ -962,6 +1047,26 @@
         ],
         "type": "object"
       },
+      "ExecutionSettings": {
+        "description": "Various settings affecting the process of AFM execution or its result",
+        "properties": {
+          "dataSamplingPercentage": {
+            "description": "Specifies the percentage of rows from fact datasets to use during computation. This feature is available only for workspaces that use a Vertica Data Source without table views.",
+            "exclusiveMaximum": true,
+            "exclusiveMinimum": true,
+            "format": "float",
+            "maximum": 100,
+            "minimum": 0,
+            "type": "number"
+          },
+          "timestamp": {
+            "description": "Specifies the timestamp of the execution from which relative filters are resolved. If not set, the current time is used.",
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "ExportResult": {
         "properties": {
           "errorMessage": {
@@ -976,6 +1081,10 @@
           },
           "fileName": {
             "type": "string"
+          },
+          "fileSize": {
+            "format": "int64",
+            "type": "integer"
           },
           "fileUri": {
             "type": "string"
@@ -1076,6 +1185,7 @@
               "type": "string"
             },
             "maxItems": 1,
+            "minItems": 1,
             "type": "array",
             "uniqueItems": true
           }
@@ -1083,7 +1193,8 @@
         "required": [
           "dashboardId",
           "fileName",
-          "format"
+          "format",
+          "widgetIds"
         ],
         "type": "object"
       },
@@ -1769,6 +1880,87 @@
         ],
         "type": "object"
       },
+      "RawCustomLabel": {
+        "description": "Custom label object override.",
+        "properties": {
+          "title": {
+            "description": "Override value.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "title"
+        ],
+        "type": "object"
+      },
+      "RawCustomMetric": {
+        "description": "Custom metric object override.",
+        "properties": {
+          "title": {
+            "description": "Metric title override.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "title"
+        ],
+        "type": "object"
+      },
+      "RawCustomOverride": {
+        "description": "Custom cell value overrides (IDs will be replaced with specified values).",
+        "properties": {
+          "labels": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/RawCustomLabel"
+            },
+            "description": "Map of CustomLabels with keys used as placeholders in export result.",
+            "type": "object"
+          },
+          "metrics": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/RawCustomMetric"
+            },
+            "description": "Map of CustomMetrics with keys used as placeholders in export result.",
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "RawExportRequest": {
+        "description": "Export request object describing the export properties and overrides for raw exports.",
+        "properties": {
+          "customOverride": {
+            "$ref": "#/components/schemas/RawCustomOverride"
+          },
+          "execution": {
+            "$ref": "#/components/schemas/AFM"
+          },
+          "executionSettings": {
+            "$ref": "#/components/schemas/ExecutionSettings"
+          },
+          "fileName": {
+            "description": "Filename of downloaded file without extension.",
+            "example": "result",
+            "type": "string"
+          },
+          "format": {
+            "description": "Requested resulting file type.",
+            "enum": [
+              "ARROW_FILE",
+              "ARROW_STREAM",
+              "CSV"
+            ],
+            "example": "CSV",
+            "type": "string"
+          }
+        },
+        "required": [
+          "execution",
+          "fileName",
+          "format"
+        ],
+        "type": "object"
+      },
       "Relative": {
         "properties": {
           "measure": {
@@ -1871,6 +2063,12 @@
       "Settings": {
         "description": "Additional settings.",
         "properties": {
+          "exportInfo": {
+            "default": false,
+            "description": "Include export info sheet in the exported file. Works only with `visualizationObject`. (XLSX)",
+            "example": true,
+            "type": "boolean"
+          },
           "mergeHeaders": {
             "description": "Merge equal headers in neighbouring cells. (XLSX)",
             "example": true,
@@ -1962,6 +2160,62 @@
         },
         "required": [
           "measure"
+        ],
+        "type": "object"
+      },
+      "SlidesExportRequest": {
+        "description": "Export request object describing the export properties and metadata for slides exports.",
+        "properties": {
+          "dashboardId": {
+            "description": "Dashboard identifier",
+            "example": "761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+            "type": "string"
+          },
+          "fileName": {
+            "description": "File name to be used for retrieving the pdf document.",
+            "example": "filename",
+            "type": "string"
+          },
+          "format": {
+            "description": "Requested resulting file type.",
+            "enum": [
+              "PDF",
+              "PPTX"
+            ],
+            "example": "PDF",
+            "type": "string"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "templateId": {
+            "description": "Export template identifier.",
+            "maxLength": 255,
+            "nullable": true,
+            "type": "string"
+          },
+          "visualizationIds": {
+            "description": "List of visualization ids to be exported. Note that only one visualization is currently supported.",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 1,
+            "type": "array",
+            "uniqueItems": true
+          },
+          "widgetIds": {
+            "description": "List of widget identifiers to be exported. Note that only one widget is currently supported.",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 1,
+            "type": "array",
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "fileName",
+          "format"
         ],
         "type": "object"
       },
@@ -2314,6 +2568,15 @@
             },
             "type": "array"
           },
+          "notificationSource": {
+            "type": "string"
+          },
+          "rawExports": {
+            "items": {
+              "$ref": "#/components/schemas/ExportResult"
+            },
+            "type": "array"
+          },
           "recipients": {
             "items": {
               "$ref": "#/components/schemas/WebhookRecipient"
@@ -2323,6 +2586,12 @@
           "remainingActionCount": {
             "format": "int32",
             "type": "integer"
+          },
+          "slidesExports": {
+            "items": {
+              "$ref": "#/components/schemas/ExportResult"
+            },
+            "type": "array"
           },
           "tabularExports": {
             "items": {

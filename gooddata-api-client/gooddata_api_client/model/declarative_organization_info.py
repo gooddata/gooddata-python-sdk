@@ -33,11 +33,13 @@ from gooddata_api_client.exceptions import ApiAttributeError
 def lazy_import():
     from gooddata_api_client.model.declarative_color_palette import DeclarativeColorPalette
     from gooddata_api_client.model.declarative_csp_directive import DeclarativeCspDirective
+    from gooddata_api_client.model.declarative_identity_provider_identifier import DeclarativeIdentityProviderIdentifier
     from gooddata_api_client.model.declarative_organization_permission import DeclarativeOrganizationPermission
     from gooddata_api_client.model.declarative_setting import DeclarativeSetting
     from gooddata_api_client.model.declarative_theme import DeclarativeTheme
     globals()['DeclarativeColorPalette'] = DeclarativeColorPalette
     globals()['DeclarativeCspDirective'] = DeclarativeCspDirective
+    globals()['DeclarativeIdentityProviderIdentifier'] = DeclarativeIdentityProviderIdentifier
     globals()['DeclarativeOrganizationPermission'] = DeclarativeOrganizationPermission
     globals()['DeclarativeSetting'] = DeclarativeSetting
     globals()['DeclarativeTheme'] = DeclarativeTheme
@@ -138,6 +140,7 @@ class DeclarativeOrganizationInfo(ModelNormal):
             'csp_directives': ([DeclarativeCspDirective],),  # noqa: E501
             'early_access': (str,),  # noqa: E501
             'early_access_values': ([str],),  # noqa: E501
+            'identity_provider': (DeclarativeIdentityProviderIdentifier,),  # noqa: E501
             'oauth_client_id': (str,),  # noqa: E501
             'oauth_client_secret': (str,),  # noqa: E501
             'oauth_custom_auth_attributes': ({str: (str,)},),  # noqa: E501
@@ -164,6 +167,7 @@ class DeclarativeOrganizationInfo(ModelNormal):
         'csp_directives': 'cspDirectives',  # noqa: E501
         'early_access': 'earlyAccess',  # noqa: E501
         'early_access_values': 'earlyAccessValues',  # noqa: E501
+        'identity_provider': 'identityProvider',  # noqa: E501
         'oauth_client_id': 'oauthClientId',  # noqa: E501
         'oauth_client_secret': 'oauthClientSecret',  # noqa: E501
         'oauth_custom_auth_attributes': 'oauthCustomAuthAttributes',  # noqa: E501
@@ -227,6 +231,7 @@ class DeclarativeOrganizationInfo(ModelNormal):
             csp_directives ([DeclarativeCspDirective]): A list of CSP directives.. [optional]  # noqa: E501
             early_access (str): Early access defined on level Organization. [optional]  # noqa: E501
             early_access_values ([str]): Early access defined on level Organization. [optional]  # noqa: E501
+            identity_provider (DeclarativeIdentityProviderIdentifier): [optional]  # noqa: E501
             oauth_client_id (str): Identifier of the authentication provider. [optional]  # noqa: E501
             oauth_client_secret (str): Communication secret of the authentication provider (never returned back).. [optional]  # noqa: E501
             oauth_custom_auth_attributes ({str: (str,)}): Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.. [optional]  # noqa: E501
@@ -336,6 +341,7 @@ class DeclarativeOrganizationInfo(ModelNormal):
             csp_directives ([DeclarativeCspDirective]): A list of CSP directives.. [optional]  # noqa: E501
             early_access (str): Early access defined on level Organization. [optional]  # noqa: E501
             early_access_values ([str]): Early access defined on level Organization. [optional]  # noqa: E501
+            identity_provider (DeclarativeIdentityProviderIdentifier): [optional]  # noqa: E501
             oauth_client_id (str): Identifier of the authentication provider. [optional]  # noqa: E501
             oauth_client_secret (str): Communication secret of the authentication provider (never returned back).. [optional]  # noqa: E501
             oauth_custom_auth_attributes ({str: (str,)}): Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.. [optional]  # noqa: E501

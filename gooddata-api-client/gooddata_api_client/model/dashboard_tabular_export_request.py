@@ -31,8 +31,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.dashboard_tabular_export_request_dashboard_filters_override_inner import DashboardTabularExportRequestDashboardFiltersOverrideInner
-    globals()['DashboardTabularExportRequestDashboardFiltersOverrideInner'] = DashboardTabularExportRequestDashboardFiltersOverrideInner
+    from gooddata_api_client.model.dashboard_export_settings import DashboardExportSettings
+    from gooddata_api_client.model.dashboard_filter import DashboardFilter
+    globals()['DashboardExportSettings'] = DashboardExportSettings
+    globals()['DashboardFilter'] = DashboardFilter
 
 
 class DashboardTabularExportRequest(ModelNormal):
@@ -66,6 +68,9 @@ class DashboardTabularExportRequest(ModelNormal):
     }
 
     validations = {
+        ('widget_ids',): {
+            'max_items': 1,
+        },
     }
 
     @cached_property
@@ -93,7 +98,9 @@ class DashboardTabularExportRequest(ModelNormal):
         return {
             'file_name': (str,),  # noqa: E501
             'format': (str,),  # noqa: E501
-            'dashboard_filters_override': ([DashboardTabularExportRequestDashboardFiltersOverrideInner],),  # noqa: E501
+            'dashboard_filters_override': ([DashboardFilter],),  # noqa: E501
+            'settings': (DashboardExportSettings,),  # noqa: E501
+            'widget_ids': ([str],),  # noqa: E501
         }
 
     @cached_property
@@ -105,6 +112,8 @@ class DashboardTabularExportRequest(ModelNormal):
         'file_name': 'fileName',  # noqa: E501
         'format': 'format',  # noqa: E501
         'dashboard_filters_override': 'dashboardFiltersOverride',  # noqa: E501
+        'settings': 'settings',  # noqa: E501
+        'widget_ids': 'widgetIds',  # noqa: E501
     }
 
     read_only_vars = {
@@ -152,7 +161,9 @@ class DashboardTabularExportRequest(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            dashboard_filters_override ([DashboardTabularExportRequestDashboardFiltersOverrideInner]): List of filters that will be used instead of the default dashboard filters.. [optional]  # noqa: E501
+            dashboard_filters_override ([DashboardFilter]): List of filters that will be used instead of the default dashboard filters.. [optional]  # noqa: E501
+            settings (DashboardExportSettings): [optional]  # noqa: E501
+            widget_ids ([str]): List of widget identifiers to be exported. Note that only one widget is currently supported.. [optional]  # noqa: E501
         """
 
         format = kwargs.get('format', "XLSX")
@@ -245,7 +256,9 @@ class DashboardTabularExportRequest(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            dashboard_filters_override ([DashboardTabularExportRequestDashboardFiltersOverrideInner]): List of filters that will be used instead of the default dashboard filters.. [optional]  # noqa: E501
+            dashboard_filters_override ([DashboardFilter]): List of filters that will be used instead of the default dashboard filters.. [optional]  # noqa: E501
+            settings (DashboardExportSettings): [optional]  # noqa: E501
+            widget_ids ([str]): List of widget identifiers to be exported. Note that only one widget is currently supported.. [optional]  # noqa: E501
         """
 
         format = kwargs.get('format', "XLSX")

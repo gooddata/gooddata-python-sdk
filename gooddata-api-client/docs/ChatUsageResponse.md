@@ -5,6 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **interaction_count** | **int** | Number of interactions in the time window | 
+**interaction_limit** | **int** | Maximum number of interactions in the time window any user can do in the workspace | 
 **time_window_hours** | **int** | Time window in hours | 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 

@@ -5,6 +5,7 @@ Additional settings.
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**export_info** | **bool** | Include export info sheet in the exported file. Works only with &#x60;visualizationObject&#x60;. (XLSX) | [optional]  if omitted the server will use the default value of False
 **merge_headers** | **bool** | Merge equal headers in neighbouring cells. (XLSX) | [optional] 
 **pdf_page_size** | **str** | Page size and orientation. (PDF) | [optional] 
 **pdf_table_style** | [**[PdfTableStyle]**](PdfTableStyle.md) | Custom CSS styles for the table. (PDF, HTML) | [optional] 

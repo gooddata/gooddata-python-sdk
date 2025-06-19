@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **status** | **str** |  | 
 **error_message** | **str** |  | [optional] 
 **expires_at** | **datetime** |  | [optional] 
+**file_size** | **int** |  | [optional] 
 **file_uri** | **str** |  | [optional] 
 **trace_id** | **str** |  | [optional] 
 **triggered_at** | **datetime** |  | [optional] 

@@ -115,6 +115,7 @@ class JsonApiDatasetOutAttributes(ModelNormal):
             'data_source_table_path': ([str],),  # noqa: E501
             'description': (str,),  # noqa: E501
             'grain': ([JsonApiDatasetOutAttributesGrainInner],),  # noqa: E501
+            'precedence': (int,),  # noqa: E501
             'reference_properties': ([JsonApiDatasetOutAttributesReferencePropertiesInner],),  # noqa: E501
             'sql': (JsonApiDatasetOutAttributesSql,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
@@ -135,6 +136,7 @@ class JsonApiDatasetOutAttributes(ModelNormal):
         'data_source_table_path': 'dataSourceTablePath',  # noqa: E501
         'description': 'description',  # noqa: E501
         'grain': 'grain',  # noqa: E501
+        'precedence': 'precedence',  # noqa: E501
         'reference_properties': 'referenceProperties',  # noqa: E501
         'sql': 'sql',  # noqa: E501
         'tags': 'tags',  # noqa: E501
@@ -192,6 +194,7 @@ class JsonApiDatasetOutAttributes(ModelNormal):
             data_source_table_path ([str]): Path to database table.. [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             grain ([JsonApiDatasetOutAttributesGrainInner]): [optional]  # noqa: E501
+            precedence (int): [optional]  # noqa: E501
             reference_properties ([JsonApiDatasetOutAttributesReferencePropertiesInner]): [optional]  # noqa: E501
             sql (JsonApiDatasetOutAttributesSql): [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501
@@ -292,6 +295,7 @@ class JsonApiDatasetOutAttributes(ModelNormal):
             data_source_table_path ([str]): Path to database table.. [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             grain ([JsonApiDatasetOutAttributesGrainInner]): [optional]  # noqa: E501
+            precedence (int): [optional]  # noqa: E501
             reference_properties ([JsonApiDatasetOutAttributesReferencePropertiesInner]): [optional]  # noqa: E501
             sql (JsonApiDatasetOutAttributesSql): [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501

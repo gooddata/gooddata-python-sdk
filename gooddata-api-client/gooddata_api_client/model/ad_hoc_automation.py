@@ -35,6 +35,8 @@ def lazy_import():
     from gooddata_api_client.model.automation_external_recipient import AutomationExternalRecipient
     from gooddata_api_client.model.automation_image_export import AutomationImageExport
     from gooddata_api_client.model.automation_metadata import AutomationMetadata
+    from gooddata_api_client.model.automation_raw_export import AutomationRawExport
+    from gooddata_api_client.model.automation_slides_export import AutomationSlidesExport
     from gooddata_api_client.model.automation_tabular_export import AutomationTabularExport
     from gooddata_api_client.model.automation_visual_export import AutomationVisualExport
     from gooddata_api_client.model.declarative_analytical_dashboard_identifier import DeclarativeAnalyticalDashboardIdentifier
@@ -44,6 +46,8 @@ def lazy_import():
     globals()['AutomationExternalRecipient'] = AutomationExternalRecipient
     globals()['AutomationImageExport'] = AutomationImageExport
     globals()['AutomationMetadata'] = AutomationMetadata
+    globals()['AutomationRawExport'] = AutomationRawExport
+    globals()['AutomationSlidesExport'] = AutomationSlidesExport
     globals()['AutomationTabularExport'] = AutomationTabularExport
     globals()['AutomationVisualExport'] = AutomationVisualExport
     globals()['DeclarativeAnalyticalDashboardIdentifier'] = DeclarativeAnalyticalDashboardIdentifier
@@ -88,7 +92,11 @@ class AdHocAutomation(ModelNormal):
         },
         ('image_exports',): {
         },
+        ('raw_exports',): {
+        },
         ('recipients',): {
+        },
+        ('slides_exports',): {
         },
         ('tabular_exports',): {
         },
@@ -132,7 +140,9 @@ class AdHocAutomation(ModelNormal):
             'image_exports': ([AutomationImageExport],),  # noqa: E501
             'metadata': (AutomationMetadata,),  # noqa: E501
             'notification_channel': (DeclarativeNotificationChannelIdentifier,),  # noqa: E501
+            'raw_exports': ([AutomationRawExport],),  # noqa: E501
             'recipients': ([DeclarativeUserIdentifier],),  # noqa: E501
+            'slides_exports': ([AutomationSlidesExport],),  # noqa: E501
             'tabular_exports': ([AutomationTabularExport],),  # noqa: E501
             'tags': ([str],),  # noqa: E501
             'title': (str,),  # noqa: E501
@@ -153,7 +163,9 @@ class AdHocAutomation(ModelNormal):
         'image_exports': 'imageExports',  # noqa: E501
         'metadata': 'metadata',  # noqa: E501
         'notification_channel': 'notificationChannel',  # noqa: E501
+        'raw_exports': 'rawExports',  # noqa: E501
         'recipients': 'recipients',  # noqa: E501
+        'slides_exports': 'slidesExports',  # noqa: E501
         'tabular_exports': 'tabularExports',  # noqa: E501
         'tags': 'tags',  # noqa: E501
         'title': 'title',  # noqa: E501
@@ -209,7 +221,9 @@ class AdHocAutomation(ModelNormal):
             image_exports ([AutomationImageExport]): [optional]  # noqa: E501
             metadata (AutomationMetadata): [optional]  # noqa: E501
             notification_channel (DeclarativeNotificationChannelIdentifier): [optional]  # noqa: E501
+            raw_exports ([AutomationRawExport]): [optional]  # noqa: E501
             recipients ([DeclarativeUserIdentifier]): [optional]  # noqa: E501
+            slides_exports ([AutomationSlidesExport]): [optional]  # noqa: E501
             tabular_exports ([AutomationTabularExport]): [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
@@ -307,7 +321,9 @@ class AdHocAutomation(ModelNormal):
             image_exports ([AutomationImageExport]): [optional]  # noqa: E501
             metadata (AutomationMetadata): [optional]  # noqa: E501
             notification_channel (DeclarativeNotificationChannelIdentifier): [optional]  # noqa: E501
+            raw_exports ([AutomationRawExport]): [optional]  # noqa: E501
             recipients ([DeclarativeUserIdentifier]): [optional]  # noqa: E501
+            slides_exports ([AutomationSlidesExport]): [optional]  # noqa: E501
             tabular_exports ([AutomationTabularExport]): [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501

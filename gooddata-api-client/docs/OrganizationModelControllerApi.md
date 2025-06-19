@@ -39,6 +39,7 @@ Method | HTTP request | Description
 [**get_all_entities_identity_providers**](OrganizationModelControllerApi.md#get_all_entities_identity_providers) | **GET** /api/v1/entities/identityProviders | Get all Identity Providers
 [**get_all_entities_jwks**](OrganizationModelControllerApi.md#get_all_entities_jwks) | **GET** /api/v1/entities/jwks | Get all Jwks
 [**get_all_entities_llm_endpoints**](OrganizationModelControllerApi.md#get_all_entities_llm_endpoints) | **GET** /api/v1/entities/llmEndpoints | Get all LLM endpoint entities
+[**get_all_entities_notification_channel_identifiers**](OrganizationModelControllerApi.md#get_all_entities_notification_channel_identifiers) | **GET** /api/v1/entities/notificationChannelIdentifiers | 
 [**get_all_entities_notification_channels**](OrganizationModelControllerApi.md#get_all_entities_notification_channels) | **GET** /api/v1/entities/notificationChannels | Get all Notification Channel entities
 [**get_all_entities_organization_settings**](OrganizationModelControllerApi.md#get_all_entities_organization_settings) | **GET** /api/v1/entities/organizationSettings | Get Organization entities
 [**get_all_entities_themes**](OrganizationModelControllerApi.md#get_all_entities_themes) | **GET** /api/v1/entities/themes | Get all Theming entities
@@ -55,6 +56,7 @@ Method | HTTP request | Description
 [**get_entity_identity_providers**](OrganizationModelControllerApi.md#get_entity_identity_providers) | **GET** /api/v1/entities/identityProviders/{id} | Get Identity Provider
 [**get_entity_jwks**](OrganizationModelControllerApi.md#get_entity_jwks) | **GET** /api/v1/entities/jwks/{id} | Get Jwk
 [**get_entity_llm_endpoints**](OrganizationModelControllerApi.md#get_entity_llm_endpoints) | **GET** /api/v1/entities/llmEndpoints/{id} | Get LLM endpoint entity
+[**get_entity_notification_channel_identifiers**](OrganizationModelControllerApi.md#get_entity_notification_channel_identifiers) | **GET** /api/v1/entities/notificationChannelIdentifiers/{id} | 
 [**get_entity_notification_channels**](OrganizationModelControllerApi.md#get_entity_notification_channels) | **GET** /api/v1/entities/notificationChannels/{id} | Get Notification Channel entity
 [**get_entity_organization_settings**](OrganizationModelControllerApi.md#get_entity_organization_settings) | **GET** /api/v1/entities/organizationSettings/{id} | Get Organization entity
 [**get_entity_themes**](OrganizationModelControllerApi.md#get_entity_themes) | **GET** /api/v1/entities/themes/{id} | Get Theming
@@ -525,7 +527,15 @@ with gooddata_api_client.ApiClient() as api_client:
                 identifiers=["gooddata.com"],
                 oauth_client_id="oauth_client_id_example",
                 oauth_client_secret="oauth_client_secret_example",
+                oauth_custom_auth_attributes={
+                    "key": "key_example",
+                },
+                oauth_custom_scopes=[
+                    "oauth_custom_scopes_example",
+                ],
+                oauth_issuer_id="myOidcProvider",
                 oauth_issuer_location="oauth_issuer_location_example",
+                oauth_subject_id_claim="oid",
                 saml_metadata="saml_metadata_example",
             ),
             id="id1",
@@ -677,7 +687,6 @@ with gooddata_api_client.ApiClient() as api_client:
         data=JsonApiLlmEndpointIn(
             attributes=JsonApiLlmEndpointInAttributes(
                 base_url="base_url_example",
-                description="description_example",
                 llm_model="llm_model_example",
                 llm_organization="llm_organization_example",
                 provider="OPENAI",
@@ -763,6 +772,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 destination=JsonApiNotificationChannelInAttributesDestination(None),
                 in_platform_notification="DISABLED",
                 name="name_example",
+                notification_source="notification_source_example",
             ),
             id="id1",
             type="notificationChannel",
@@ -1738,7 +1748,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
     id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "filter=title==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=title==someString;provider==LLMProviderValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -2885,7 +2895,7 @@ configuration = gooddata_api_client.Configuration(
 with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    filter = "filter=title==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=title==someString;provider==LLMProviderValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
     size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
     sort = [
@@ -2919,6 +2929,83 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiLlmEndpointOutList**](JsonApiLlmEndpointOutList.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_all_entities_notification_channel_identifiers**
+> JsonApiNotificationChannelIdentifierOutList get_all_entities_notification_channel_identifiers()
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import organization_model_controller_api
+from gooddata_api_client.model.json_api_notification_channel_identifier_out_list import JsonApiNotificationChannelIdentifierOutList
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
+    filter = "filter=name==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
+    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
+    sort = [
+        "sort_example",
+    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = [
+        "metaInclude=page,all",
+    ] # [str] | Include Meta objects. (optional)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.get_all_entities_notification_channel_identifiers(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->get_all_entities_notification_channel_identifiers: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
+ **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
+ **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
+
+### Return type
+
+[**JsonApiNotificationChannelIdentifierOutList**](JsonApiNotificationChannelIdentifierOutList.md)
 
 ### Authorization
 
@@ -4154,7 +4241,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
     id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "filter=title==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=title==someString;provider==LLMProviderValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -4185,6 +4272,80 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiLlmEndpointOutDocument**](JsonApiLlmEndpointOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_entity_notification_channel_identifiers**
+> JsonApiNotificationChannelIdentifierOutDocument get_entity_notification_channel_identifiers(id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import organization_model_controller_api
+from gooddata_api_client.model.json_api_notification_channel_identifier_out_document import JsonApiNotificationChannelIdentifierOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
+    id = "/6bUUGjjNSwg0_bs" # str | 
+    filter = "filter=name==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.get_entity_notification_channel_identifiers(id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->get_entity_notification_channel_identifiers: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.get_entity_notification_channel_identifiers(id, filter=filter)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->get_entity_notification_channel_identifiers: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+[**JsonApiNotificationChannelIdentifierOutDocument**](JsonApiNotificationChannelIdentifierOutDocument.md)
 
 ### Authorization
 
@@ -5235,7 +5396,15 @@ with gooddata_api_client.ApiClient() as api_client:
                 identifiers=["gooddata.com"],
                 oauth_client_id="oauth_client_id_example",
                 oauth_client_secret="oauth_client_secret_example",
+                oauth_custom_auth_attributes={
+                    "key": "key_example",
+                },
+                oauth_custom_scopes=[
+                    "oauth_custom_scopes_example",
+                ],
+                oauth_issuer_id="myOidcProvider",
                 oauth_issuer_location="oauth_issuer_location_example",
+                oauth_subject_id_claim="oid",
                 saml_metadata="saml_metadata_example",
             ),
             id="id1",
@@ -5413,7 +5582,6 @@ with gooddata_api_client.ApiClient() as api_client:
         data=JsonApiLlmEndpointPatch(
             attributes=JsonApiLlmEndpointPatchAttributes(
                 base_url="base_url_example",
-                description="description_example",
                 llm_model="llm_model_example",
                 llm_organization="llm_organization_example",
                 provider="OPENAI",
@@ -5424,7 +5592,7 @@ with gooddata_api_client.ApiClient() as api_client:
             type="llmEndpoint",
         ),
     ) # JsonApiLlmEndpointPatchDocument | 
-    filter = "filter=title==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=title==someString;provider==LLMProviderValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -5512,6 +5680,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 destination=JsonApiNotificationChannelInAttributesDestination(None),
                 in_platform_notification="DISABLED",
                 name="name_example",
+                notification_source="notification_source_example",
             ),
             id="id1",
             type="notificationChannel",
@@ -6539,7 +6708,15 @@ with gooddata_api_client.ApiClient() as api_client:
                 identifiers=["gooddata.com"],
                 oauth_client_id="oauth_client_id_example",
                 oauth_client_secret="oauth_client_secret_example",
+                oauth_custom_auth_attributes={
+                    "key": "key_example",
+                },
+                oauth_custom_scopes=[
+                    "oauth_custom_scopes_example",
+                ],
+                oauth_issuer_id="myOidcProvider",
                 oauth_issuer_location="oauth_issuer_location_example",
+                oauth_subject_id_claim="oid",
                 saml_metadata="saml_metadata_example",
             ),
             id="id1",
@@ -6717,7 +6894,6 @@ with gooddata_api_client.ApiClient() as api_client:
         data=JsonApiLlmEndpointIn(
             attributes=JsonApiLlmEndpointInAttributes(
                 base_url="base_url_example",
-                description="description_example",
                 llm_model="llm_model_example",
                 llm_organization="llm_organization_example",
                 provider="OPENAI",
@@ -6728,7 +6904,7 @@ with gooddata_api_client.ApiClient() as api_client:
             type="llmEndpoint",
         ),
     ) # JsonApiLlmEndpointInDocument | 
-    filter = "filter=title==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=title==someString;provider==LLMProviderValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -6816,6 +6992,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 destination=JsonApiNotificationChannelInAttributesDestination(None),
                 in_platform_notification="DISABLED",
                 name="name_example",
+                notification_source="notification_source_example",
             ),
             id="id1",
             type="notificationChannel",

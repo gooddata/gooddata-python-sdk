@@ -625,6 +625,7 @@
               "MYSQL",
               "MARIADB",
               "ORACLE",
+              "PINOT",
               "SINGLESTORE",
               "MOTHERDUCK",
               "FLEXCONNECT",

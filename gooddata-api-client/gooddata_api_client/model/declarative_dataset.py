@@ -88,6 +88,9 @@ class DeclarativeDataset(ModelNormal):
         ('description',): {
             'max_length': 10000,
         },
+        ('precedence',): {
+            'inclusive_minimum': 0,
+        },
         ('tags',): {
         },
     }
@@ -123,6 +126,7 @@ class DeclarativeDataset(ModelNormal):
             'data_source_table_id': (DataSourceTableIdentifier,),  # noqa: E501
             'description': (str,),  # noqa: E501
             'facts': ([DeclarativeFact],),  # noqa: E501
+            'precedence': (int,),  # noqa: E501
             'sql': (DeclarativeDatasetSql,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
             'workspace_data_filter_columns': ([DeclarativeWorkspaceDataFilterColumn],),  # noqa: E501
@@ -143,6 +147,7 @@ class DeclarativeDataset(ModelNormal):
         'data_source_table_id': 'dataSourceTableId',  # noqa: E501
         'description': 'description',  # noqa: E501
         'facts': 'facts',  # noqa: E501
+        'precedence': 'precedence',  # noqa: E501
         'sql': 'sql',  # noqa: E501
         'tags': 'tags',  # noqa: E501
         'workspace_data_filter_columns': 'workspaceDataFilterColumns',  # noqa: E501
@@ -200,6 +205,7 @@ class DeclarativeDataset(ModelNormal):
             data_source_table_id (DataSourceTableIdentifier): [optional]  # noqa: E501
             description (str): A dataset description.. [optional]  # noqa: E501
             facts ([DeclarativeFact]): An array of facts.. [optional]  # noqa: E501
+            precedence (int): Precedence used in aggregate awareness.. [optional]  # noqa: E501
             sql (DeclarativeDatasetSql): [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
             workspace_data_filter_columns ([DeclarativeWorkspaceDataFilterColumn]): An array of columns which are available for match to implicit workspace data filters.. [optional]  # noqa: E501
@@ -303,6 +309,7 @@ class DeclarativeDataset(ModelNormal):
             data_source_table_id (DataSourceTableIdentifier): [optional]  # noqa: E501
             description (str): A dataset description.. [optional]  # noqa: E501
             facts ([DeclarativeFact]): An array of facts.. [optional]  # noqa: E501
+            precedence (int): Precedence used in aggregate awareness.. [optional]  # noqa: E501
             sql (DeclarativeDatasetSql): [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
             workspace_data_filter_columns ([DeclarativeWorkspaceDataFilterColumn]): An array of columns which are available for match to implicit workspace data filters.. [optional]  # noqa: E501

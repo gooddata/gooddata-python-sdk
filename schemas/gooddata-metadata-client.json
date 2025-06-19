@@ -46,6 +46,45 @@
       }
     },
     "schemas": {
+      "AFM": {
+        "description": "Top level executable entity. Combination of [A]ttributes, [F]ilters & [M]etrics.",
+        "properties": {
+          "attributes": {
+            "description": "Attributes to be used in the computation.",
+            "items": {
+              "$ref": "#/components/schemas/AttributeItem"
+            },
+            "type": "array"
+          },
+          "auxMeasures": {
+            "description": "Metrics to be referenced from other AFM objects (e.g. filters) but not included in the result.",
+            "items": {
+              "$ref": "#/components/schemas/MeasureItem"
+            },
+            "type": "array"
+          },
+          "filters": {
+            "description": "Various filter types to filter the execution result.",
+            "items": {
+              "$ref": "#/components/schemas/FilterDefinition"
+            },
+            "type": "array"
+          },
+          "measures": {
+            "description": "Metrics to be computed.",
+            "items": {
+              "$ref": "#/components/schemas/MeasureItem"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "attributes",
+          "filters",
+          "measures"
+        ],
+        "type": "object"
+      },
       "AbsoluteDateFilter": {
         "description": "A datetime filter specifying exact from and to values.",
         "properties": {
@@ -621,6 +660,17 @@
         },
         "type": "object"
       },
+      "AutomationRawExport": {
+        "properties": {
+          "requestPayload": {
+            "$ref": "#/components/schemas/RawExportRequest"
+          }
+        },
+        "required": [
+          "requestPayload"
+        ],
+        "type": "object"
+      },
       "AutomationSchedule": {
         "properties": {
           "cron": {
@@ -650,6 +700,17 @@
         "required": [
           "cron",
           "timezone"
+        ],
+        "type": "object"
+      },
+      "AutomationSlidesExport": {
+        "properties": {
+          "requestPayload": {
+            "$ref": "#/components/schemas/SlidesExportRequest"
+          }
+        },
+        "required": [
+          "requestPayload"
         ],
         "type": "object"
       },
@@ -1647,6 +1708,13 @@
           "notificationChannel": {
             "$ref": "#/components/schemas/DeclarativeNotificationChannelIdentifier"
           },
+          "rawExports": {
+            "items": {
+              "$ref": "#/components/schemas/AutomationRawExport"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
           "recipients": {
             "items": {
               "$ref": "#/components/schemas/DeclarativeUserIdentifier"
@@ -1656,6 +1724,13 @@
           },
           "schedule": {
             "$ref": "#/components/schemas/AutomationSchedule"
+          },
+          "slidesExports": {
+            "items": {
+              "$ref": "#/components/schemas/AutomationSlidesExport"
+            },
+            "type": "array",
+            "uniqueItems": true
           },
           "state": {
             "default": "ACTIVE",
@@ -1992,6 +2067,7 @@
               "MYSQL",
               "MARIADB",
               "ORACLE",
+              "PINOT",
               "SINGLESTORE",
               "MOTHERDUCK",
               "FLEXCONNECT",
@@ -2107,6 +2183,13 @@
             "example": "customers",
             "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
+          },
+          "precedence": {
+            "description": "Precedence used in aggregate awareness.",
+            "example": 0,
+            "format": "int32",
+            "minimum": 0,
+            "type": "integer"
           },
           "references": {
             "description": "An array of references.",
@@ -2449,6 +2532,9 @@
             "maxLength": 255,
             "type": "string"
           },
+          "sourceFactReference": {
+            "$ref": "#/components/schemas/DeclarativeSourceFactReference"
+          },
           "tags": {
             "description": "A list of tags.",
             "example": [
@@ -2606,8 +2692,39 @@
             "maxLength": 255,
             "type": "string"
           },
+          "oauthCustomAuthAttributes": {
+            "additionalProperties": {
+              "description": "Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.",
+              "maxLength": 10000,
+              "type": "string"
+            },
+            "description": "Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.",
+            "maxLength": 10000,
+            "type": "object"
+          },
+          "oauthCustomScopes": {
+            "description": "List of additional OAuth scopes which may be required by other providers (e.g. Snowflake)",
+            "items": {
+              "maxLength": 255,
+              "type": "string"
+            },
+            "nullable": true,
+            "type": "array"
+          },
+          "oauthIssuerId": {
+            "description": "Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.",
+            "example": "myOidcProvider",
+            "maxLength": 255,
+            "type": "string"
+          },
           "oauthIssuerLocation": {
             "description": "The location of your OIDC provider. This field is mandatory for OIDC IdP.",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "oauthSubjectIdClaim": {
+            "description": "Any string identifying the claim in ID token, that should be used for user identification. The default value is 'sub'.",
+            "example": "oid",
             "maxLength": 255,
             "type": "string"
           },
@@ -2620,6 +2737,30 @@
         "required": [
           "id",
           "identifiers"
+        ],
+        "type": "object"
+      },
+      "DeclarativeIdentityProviderIdentifier": {
+        "description": "An Identity Provider identifier.",
+        "properties": {
+          "id": {
+            "description": "Identifier of the identity provider.",
+            "example": "gooddata.com",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "A type.",
+            "enum": [
+              "identityProvider"
+            ],
+            "example": "identityProvider",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
         ],
         "type": "object"
       },
@@ -2840,7 +2981,8 @@
             "type": "string"
           },
           "customDashboardUrl": {
-            "description": "Custom dashboard url that is going to be used in the notification. If not specified it is going to be deduced based on the context. Allowed placeholders are {workspaceId}, {dashboardId}.",
+            "description": "Custom dashboard url that is going to be used in the notification. If not specified it is going to be deduced based on the context. Allowed placeholders are:\n{workspaceId}\n{dashboardId}\n{automationId}\n{asOfDate}\n",
+            "maxLength": 255,
             "type": "string"
           },
           "dashboardLinkVisibility": {
@@ -2905,6 +3047,11 @@
             "description": "Name of a notification channel.",
             "example": "channel",
             "maxLength": 255,
+            "type": "string"
+          },
+          "notificationSource": {
+            "description": "Human-readable description of the source of the notification. If specified, this propertywill be included in the notifications to this channel.Allowed placeholders are:\n{{workspaceId}}\n{{workspaceName}}\n{{workspaceDescription}}\n{{dashboardId}}\n{{dashboardName}}\n{{dashboardDescription}}\n",
+            "maxLength": 10000,
             "type": "string"
           }
         },
@@ -3067,6 +3214,9 @@
             "example": "Alpha corporation",
             "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
+          },
+          "identityProvider": {
+            "$ref": "#/components/schemas/DeclarativeIdentityProviderIdentifier"
           },
           "name": {
             "description": "Formal name of the organization.",
@@ -3356,9 +3506,12 @@
               "SEPARATORS",
               "DATE_FILTER_CONFIG",
               "JIT_PROVISIONING",
+              "JWT_JIT_PROVISIONING",
               "DASHBOARD_FILTERS_APPLY_MODE",
               "ENABLE_SLIDES_EXPORT",
-              "AI_RATE_LIMIT"
+              "AI_RATE_LIMIT",
+              "ATTACHMENT_SIZE_LIMIT",
+              "ATTACHMENT_LINK_TTL"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -3393,6 +3546,29 @@
         "required": [
           "assignee",
           "name"
+        ],
+        "type": "object"
+      },
+      "DeclarativeSourceFactReference": {
+        "description": "Aggregated awareness source fact reference.",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/FactIdentifier"
+          },
+          "operation": {
+            "description": "Aggregation operation.",
+            "enum": [
+              "SUM",
+              "MIN",
+              "MAX"
+            ],
+            "example": "SUM",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "operation"
         ],
         "type": "object"
       },
@@ -4406,6 +4582,26 @@
         ],
         "type": "object"
       },
+      "ExecutionSettings": {
+        "description": "Various settings affecting the process of AFM execution or its result",
+        "properties": {
+          "dataSamplingPercentage": {
+            "description": "Specifies the percentage of rows from fact datasets to use during computation. This feature is available only for workspaces that use a Vertica Data Source without table views.",
+            "exclusiveMaximum": true,
+            "exclusiveMinimum": true,
+            "format": "float",
+            "maximum": 100,
+            "minimum": 0,
+            "type": "number"
+          },
+          "timestamp": {
+            "description": "Specifies the timestamp of the execution from which relative filters are resolved. If not set, the current time is used.",
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "ExportRequest": {
         "description": "JSON content to be used as export request payload for /export/tabular and /export/visual endpoints. ",
         "example": [
@@ -4418,6 +4614,30 @@
           {
             "$ref": "#/components/schemas/TabularExportRequest"
           }
+        ],
+        "type": "object"
+      },
+      "FactIdentifier": {
+        "description": "A fact identifier.",
+        "properties": {
+          "id": {
+            "description": "Fact ID.",
+            "example": "fact_id",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "A type of the fact.",
+            "enum": [
+              "fact"
+            ],
+            "example": "fact",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
         ],
         "type": "object"
       },
@@ -4817,6 +5037,7 @@
               "type": "string"
             },
             "maxItems": 1,
+            "minItems": 1,
             "type": "array",
             "uniqueItems": true
           }
@@ -4824,7 +5045,8 @@
         "required": [
           "dashboardId",
           "fileName",
-          "format"
+          "format",
+          "widgetIds"
         ],
         "type": "object"
       },
@@ -6375,6 +6597,20 @@
                 },
                 "type": "object"
               },
+              "rawExports": {
+                "items": {
+                  "properties": {
+                    "requestPayload": {
+                      "$ref": "#/components/schemas/RawExportRequest"
+                    }
+                  },
+                  "required": [
+                    "requestPayload"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
               "schedule": {
                 "properties": {
                   "cron": {
@@ -6406,6 +6642,20 @@
                   "timezone"
                 ],
                 "type": "object"
+              },
+              "slidesExports": {
+                "items": {
+                  "properties": {
+                    "requestPayload": {
+                      "$ref": "#/components/schemas/SlidesExportRequest"
+                    }
+                  },
+                  "required": [
+                    "requestPayload"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
               },
               "state": {
                 "description": "Current state of the automation.",
@@ -6652,6 +6902,20 @@
                 "format": "date-time",
                 "type": "string"
               },
+              "rawExports": {
+                "items": {
+                  "properties": {
+                    "requestPayload": {
+                      "$ref": "#/components/schemas/RawExportRequest"
+                    }
+                  },
+                  "required": [
+                    "requestPayload"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
               "schedule": {
                 "properties": {
                   "cron": {
@@ -6683,6 +6947,20 @@
                   "timezone"
                 ],
                 "type": "object"
+              },
+              "slidesExports": {
+                "items": {
+                  "properties": {
+                    "requestPayload": {
+                      "$ref": "#/components/schemas/SlidesExportRequest"
+                    }
+                  },
+                  "required": [
+                    "requestPayload"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
               },
               "state": {
                 "description": "Current state of the automation.",
@@ -7025,6 +7303,20 @@
                 },
                 "type": "object"
               },
+              "rawExports": {
+                "items": {
+                  "properties": {
+                    "requestPayload": {
+                      "$ref": "#/components/schemas/RawExportRequest"
+                    }
+                  },
+                  "required": [
+                    "requestPayload"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
               "schedule": {
                 "properties": {
                   "cron": {
@@ -7056,6 +7348,20 @@
                   "timezone"
                 ],
                 "type": "object"
+              },
+              "slidesExports": {
+                "items": {
+                  "properties": {
+                    "requestPayload": {
+                      "$ref": "#/components/schemas/SlidesExportRequest"
+                    }
+                  },
+                  "required": [
+                    "requestPayload"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
               },
               "state": {
                 "description": "Current state of the automation.",
@@ -8440,6 +8746,7 @@
                   "MYSQL",
                   "MARIADB",
                   "ORACLE",
+                  "PINOT",
                   "SINGLESTORE",
                   "MOTHERDUCK",
                   "FLEXCONNECT",
@@ -8647,6 +8954,7 @@
                   "MYSQL",
                   "MARIADB",
                   "ORACLE",
+                  "PINOT",
                   "SINGLESTORE",
                   "MOTHERDUCK",
                   "FLEXCONNECT",
@@ -8812,6 +9120,7 @@
                   "MYSQL",
                   "MARIADB",
                   "ORACLE",
+                  "PINOT",
                   "SINGLESTORE",
                   "MOTHERDUCK",
                   "FLEXCONNECT",
@@ -9031,6 +9340,7 @@
                   "MYSQL",
                   "MARIADB",
                   "ORACLE",
+                  "PINOT",
                   "SINGLESTORE",
                   "MOTHERDUCK",
                   "FLEXCONNECT",
@@ -9155,6 +9465,10 @@
                   "type": "object"
                 },
                 "type": "array"
+              },
+              "precedence": {
+                "format": "int32",
+                "type": "integer"
               },
               "referenceProperties": {
                 "items": {
@@ -10661,6 +10975,14 @@
                 "maxLength": 10000,
                 "type": "string"
               },
+              "operation": {
+                "enum": [
+                  "SUM",
+                  "MIN",
+                  "MAX"
+                ],
+                "type": "string"
+              },
               "sourceColumn": {
                 "maxLength": 255,
                 "type": "string"
@@ -10734,6 +11056,17 @@
                   "data"
                 ],
                 "type": "object"
+              },
+              "sourceFact": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiFactToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
               }
             },
             "type": "object"
@@ -10761,7 +11094,7 @@
           "included": {
             "description": "Included resources",
             "items": {
-              "$ref": "#/components/schemas/JsonApiDatasetOutWithLinks"
+              "$ref": "#/components/schemas/JsonApiFactOutIncludes"
             },
             "type": "array",
             "uniqueItems": true
@@ -10774,6 +11107,16 @@
           "data"
         ],
         "type": "object"
+      },
+      "JsonApiFactOutIncludes": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiDatasetOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiFactOutWithLinks"
+          }
+        ]
       },
       "JsonApiFactOutList": {
         "description": "A JSON:API document with a list of resources",
@@ -10788,7 +11131,7 @@
           "included": {
             "description": "Included resources",
             "items": {
-              "$ref": "#/components/schemas/JsonApiDatasetOutWithLinks"
+              "$ref": "#/components/schemas/JsonApiFactOutIncludes"
             },
             "type": "array",
             "uniqueItems": true
@@ -10826,6 +11169,15 @@
           "$ref": "#/components/schemas/JsonApiFactLinkage"
         },
         "type": "array"
+      },
+      "JsonApiFactToOneLinkage": {
+        "description": "References to other resource objects in a to-one (\\\"relationship\\\"). Relationships can be specified by including a member in a resource's links object.",
+        "nullable": true,
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiFactLinkage"
+          }
+        ]
       },
       "JsonApiFilterContextIn": {
         "description": "JSON:API representation of filterContext entity.",
@@ -11656,8 +12008,37 @@
                 "maxLength": 255,
                 "type": "string"
               },
+              "oauthCustomAuthAttributes": {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "description": "Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.",
+                "maxLength": 10000,
+                "type": "object"
+              },
+              "oauthCustomScopes": {
+                "description": "List of additional OAuth scopes which may be required by other providers (e.g. Snowflake)",
+                "items": {
+                  "maxLength": 255,
+                  "type": "string"
+                },
+                "nullable": true,
+                "type": "array"
+              },
+              "oauthIssuerId": {
+                "description": "Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.",
+                "example": "myOidcProvider",
+                "maxLength": 255,
+                "type": "string"
+              },
               "oauthIssuerLocation": {
                 "description": "The location of your OIDC provider. This field is mandatory for OIDC IdP.",
+                "maxLength": 255,
+                "type": "string"
+              },
+              "oauthSubjectIdClaim": {
+                "description": "Any string identifying the claim in ID token, that should be used for user identification. The default value is 'sub'.",
+                "example": "oid",
                 "maxLength": 255,
                 "type": "string"
               },
@@ -11705,6 +12086,25 @@
         ],
         "type": "object"
       },
+      "JsonApiIdentityProviderLinkage": {
+        "description": "The \\\"type\\\" and \\\"id\\\" to non-empty members.",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "identityProvider"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
       "JsonApiIdentityProviderOut": {
         "description": "JSON:API representation of identityProvider entity.",
         "properties": {
@@ -11733,8 +12133,37 @@
                 "maxLength": 255,
                 "type": "string"
               },
+              "oauthCustomAuthAttributes": {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "description": "Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.",
+                "maxLength": 10000,
+                "type": "object"
+              },
+              "oauthCustomScopes": {
+                "description": "List of additional OAuth scopes which may be required by other providers (e.g. Snowflake)",
+                "items": {
+                  "maxLength": 255,
+                  "type": "string"
+                },
+                "nullable": true,
+                "type": "array"
+              },
+              "oauthIssuerId": {
+                "description": "Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.",
+                "example": "myOidcProvider",
+                "maxLength": 255,
+                "type": "string"
+              },
               "oauthIssuerLocation": {
                 "description": "The location of your OIDC provider. This field is mandatory for OIDC IdP.",
+                "maxLength": 255,
+                "type": "string"
+              },
+              "oauthSubjectIdClaim": {
+                "description": "Any string identifying the claim in ID token, that should be used for user identification. The default value is 'sub'.",
+                "example": "oid",
                 "maxLength": 255,
                 "type": "string"
               }
@@ -11850,8 +12279,37 @@
                 "maxLength": 255,
                 "type": "string"
               },
+              "oauthCustomAuthAttributes": {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "description": "Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.",
+                "maxLength": 10000,
+                "type": "object"
+              },
+              "oauthCustomScopes": {
+                "description": "List of additional OAuth scopes which may be required by other providers (e.g. Snowflake)",
+                "items": {
+                  "maxLength": 255,
+                  "type": "string"
+                },
+                "nullable": true,
+                "type": "array"
+              },
+              "oauthIssuerId": {
+                "description": "Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.",
+                "example": "myOidcProvider",
+                "maxLength": 255,
+                "type": "string"
+              },
               "oauthIssuerLocation": {
                 "description": "The location of your OIDC provider. This field is mandatory for OIDC IdP.",
+                "maxLength": 255,
+                "type": "string"
+              },
+              "oauthSubjectIdClaim": {
+                "description": "Any string identifying the claim in ID token, that should be used for user identification. The default value is 'sub'.",
+                "example": "oid",
                 "maxLength": 255,
                 "type": "string"
               },
@@ -11895,6 +12353,15 @@
           "data"
         ],
         "type": "object"
+      },
+      "JsonApiIdentityProviderToOneLinkage": {
+        "description": "References to other resource objects in a to-one (\\\"relationship\\\"). Relationships can be specified by including a member in a resource's links object.",
+        "nullable": true,
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiIdentityProviderLinkage"
+          }
+        ]
       },
       "JsonApiJwkIn": {
         "description": "JSON:API representation of jwk entity.",
@@ -12329,12 +12796,6 @@
                 "nullable": true,
                 "type": "string"
               },
-              "description": {
-                "description": "User-facing description of the LLM Provider.",
-                "maxLength": 10000,
-                "nullable": true,
-                "type": "string"
-              },
               "llmModel": {
                 "description": "LLM Model. We provide a default model for each provider, but you can override it here.",
                 "maxLength": 255,
@@ -12411,12 +12872,6 @@
               "baseUrl": {
                 "description": "Custom LLM endpoint.",
                 "maxLength": 255,
-                "nullable": true,
-                "type": "string"
-              },
-              "description": {
-                "description": "User-facing description of the LLM Provider.",
-                "maxLength": 10000,
                 "nullable": true,
                 "type": "string"
               },
@@ -12530,12 +12985,6 @@
               "baseUrl": {
                 "description": "Custom LLM endpoint.",
                 "maxLength": 255,
-                "nullable": true,
-                "type": "string"
-              },
-              "description": {
-                "description": "User-facing description of the LLM Provider.",
-                "maxLength": 10000,
                 "nullable": true,
                 "type": "string"
               },
@@ -13127,6 +13576,114 @@
         },
         "type": "array"
       },
+      "JsonApiNotificationChannelIdentifierOut": {
+        "description": "JSON:API representation of notificationChannelIdentifier entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "allowedRecipients": {
+                "description": "Allowed recipients of notifications from this channel.\nCREATOR - only the creator\nINTERNAL - all users within the organization\nEXTERNAL - all recipients including those outside the organization\n",
+                "enum": [
+                  "CREATOR",
+                  "INTERNAL",
+                  "EXTERNAL"
+                ],
+                "type": "string"
+              },
+              "description": {
+                "maxLength": 10000,
+                "nullable": true,
+                "type": "string"
+              },
+              "destinationType": {
+                "enum": [
+                  "WEBHOOK",
+                  "SMTP",
+                  "DEFAULT_SMTP",
+                  "IN_PLATFORM"
+                ],
+                "type": "string"
+              },
+              "name": {
+                "maxLength": 255,
+                "nullable": true,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "notificationChannelIdentifier"
+            ],
+            "example": "notificationChannelIdentifier",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiNotificationChannelIdentifierOutDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiNotificationChannelIdentifierOut"
+          },
+          "links": {
+            "$ref": "#/components/schemas/ObjectLinks"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiNotificationChannelIdentifierOutList": {
+        "description": "A JSON:API document with a list of resources",
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/JsonApiNotificationChannelIdentifierOutWithLinks"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "links": {
+            "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiNotificationChannelIdentifierOutWithLinks": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiNotificationChannelIdentifierOut"
+          },
+          {
+            "$ref": "#/components/schemas/ObjectLinksContainer"
+          }
+        ]
+      },
       "JsonApiNotificationChannelIn": {
         "description": "JSON:API representation of notificationChannel entity.",
         "properties": {
@@ -13142,7 +13699,8 @@
                 "type": "string"
               },
               "customDashboardUrl": {
-                "description": "Custom dashboard url that is going to be used in the notification. If not specified it is going to be deduced based on the context. Allowed placeholders are {workspaceId}, {dashboardId}.",
+                "description": "Custom dashboard url that is going to be used in the notification. If not specified it is going to be deduced based on the context. Allowed placeholders are:\n{workspaceId}\n{dashboardId}\n{automationId}\n{asOfDate}\n",
+                "maxLength": 255,
                 "type": "string"
               },
               "dashboardLinkVisibility": {
@@ -13187,6 +13745,11 @@
               "name": {
                 "maxLength": 255,
                 "nullable": true,
+                "type": "string"
+              },
+              "notificationSource": {
+                "description": "Human-readable description of the source of the notification. If specified, this propertywill be included in the notifications to this channel.Allowed placeholders are:\n{{workspaceId}}\n{{workspaceName}}\n{{workspaceDescription}}\n{{dashboardId}}\n{{dashboardName}}\n{{dashboardDescription}}\n",
+                "maxLength": 10000,
                 "type": "string"
               }
             },
@@ -13258,7 +13821,8 @@
                 "type": "string"
               },
               "customDashboardUrl": {
-                "description": "Custom dashboard url that is going to be used in the notification. If not specified it is going to be deduced based on the context. Allowed placeholders are {workspaceId}, {dashboardId}.",
+                "description": "Custom dashboard url that is going to be used in the notification. If not specified it is going to be deduced based on the context. Allowed placeholders are:\n{workspaceId}\n{dashboardId}\n{automationId}\n{asOfDate}\n",
+                "maxLength": 255,
                 "type": "string"
               },
               "dashboardLinkVisibility": {
@@ -13313,6 +13877,11 @@
               "name": {
                 "maxLength": 255,
                 "nullable": true,
+                "type": "string"
+              },
+              "notificationSource": {
+                "description": "Human-readable description of the source of the notification. If specified, this propertywill be included in the notifications to this channel.Allowed placeholders are:\n{{workspaceId}}\n{{workspaceName}}\n{{workspaceDescription}}\n{{dashboardId}}\n{{dashboardName}}\n{{dashboardDescription}}\n",
+                "maxLength": 10000,
                 "type": "string"
               }
             },
@@ -13405,7 +13974,8 @@
                 "type": "string"
               },
               "customDashboardUrl": {
-                "description": "Custom dashboard url that is going to be used in the notification. If not specified it is going to be deduced based on the context. Allowed placeholders are {workspaceId}, {dashboardId}.",
+                "description": "Custom dashboard url that is going to be used in the notification. If not specified it is going to be deduced based on the context. Allowed placeholders are:\n{workspaceId}\n{dashboardId}\n{automationId}\n{asOfDate}\n",
+                "maxLength": 255,
                 "type": "string"
               },
               "dashboardLinkVisibility": {
@@ -13450,6 +14020,11 @@
               "name": {
                 "maxLength": 255,
                 "nullable": true,
+                "type": "string"
+              },
+              "notificationSource": {
+                "description": "Human-readable description of the source of the notification. If specified, this propertywill be included in the notifications to this channel.Allowed placeholders are:\n{{workspaceId}}\n{{workspaceName}}\n{{workspaceDescription}}\n{{dashboardId}}\n{{dashboardName}}\n{{dashboardDescription}}\n",
+                "maxLength": 10000,
                 "type": "string"
               }
             },
@@ -13502,7 +14077,8 @@
                 "type": "string"
               },
               "customDashboardUrl": {
-                "description": "Custom dashboard url that is going to be used in the notification. If not specified it is going to be deduced based on the context. Allowed placeholders are {workspaceId}, {dashboardId}.",
+                "description": "Custom dashboard url that is going to be used in the notification. If not specified it is going to be deduced based on the context. Allowed placeholders are:\n{workspaceId}\n{dashboardId}\n{automationId}\n{asOfDate}\n",
+                "maxLength": 255,
                 "type": "string"
               },
               "dashboardLinkVisibility": {
@@ -13547,6 +14123,11 @@
               "name": {
                 "maxLength": 255,
                 "nullable": true,
+                "type": "string"
+              },
+              "notificationSource": {
+                "description": "Human-readable description of the source of the notification. If specified, this propertywill be included in the notifications to this channel.Allowed placeholders are:\n{{workspaceId}}\n{{workspaceName}}\n{{workspaceDescription}}\n{{dashboardId}}\n{{dashboardName}}\n{{dashboardDescription}}\n",
+                "maxLength": 10000,
                 "type": "string"
               }
             },
@@ -13677,6 +14258,22 @@
             "example": "id1",
             "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
+          },
+          "relationships": {
+            "properties": {
+              "identityProvider": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiIdentityProviderToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
           },
           "type": {
             "description": "Object type",
@@ -13842,6 +14439,17 @@
                   "data"
                 ],
                 "type": "object"
+              },
+              "identityProvider": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiIdentityProviderToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
               }
             },
             "type": "object"
@@ -13890,6 +14498,9 @@
           },
           {
             "$ref": "#/components/schemas/JsonApiUserGroupOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiIdentityProviderOutWithLinks"
           }
         ]
       },
@@ -13979,6 +14590,22 @@
             "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
+          "relationships": {
+            "properties": {
+              "identityProvider": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiIdentityProviderToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
           "type": {
             "description": "Object type",
             "enum": [
@@ -14036,9 +14663,12 @@
                   "SEPARATORS",
                   "DATE_FILTER_CONFIG",
                   "JIT_PROVISIONING",
+                  "JWT_JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
                   "ENABLE_SLIDES_EXPORT",
-                  "AI_RATE_LIMIT"
+                  "AI_RATE_LIMIT",
+                  "ATTACHMENT_SIZE_LIMIT",
+                  "ATTACHMENT_LINK_TTL"
                 ],
                 "type": "string"
               }
@@ -14108,9 +14738,12 @@
                   "SEPARATORS",
                   "DATE_FILTER_CONFIG",
                   "JIT_PROVISIONING",
+                  "JWT_JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
                   "ENABLE_SLIDES_EXPORT",
-                  "AI_RATE_LIMIT"
+                  "AI_RATE_LIMIT",
+                  "ATTACHMENT_SIZE_LIMIT",
+                  "ATTACHMENT_LINK_TTL"
                 ],
                 "type": "string"
               }
@@ -14220,9 +14853,12 @@
                   "SEPARATORS",
                   "DATE_FILTER_CONFIG",
                   "JIT_PROVISIONING",
+                  "JWT_JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
                   "ENABLE_SLIDES_EXPORT",
-                  "AI_RATE_LIMIT"
+                  "AI_RATE_LIMIT",
+                  "ATTACHMENT_SIZE_LIMIT",
+                  "ATTACHMENT_LINK_TTL"
                 ],
                 "type": "string"
               }
@@ -15698,9 +16334,12 @@
                   "SEPARATORS",
                   "DATE_FILTER_CONFIG",
                   "JIT_PROVISIONING",
+                  "JWT_JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
                   "ENABLE_SLIDES_EXPORT",
-                  "AI_RATE_LIMIT"
+                  "AI_RATE_LIMIT",
+                  "ATTACHMENT_SIZE_LIMIT",
+                  "ATTACHMENT_LINK_TTL"
                 ],
                 "type": "string"
               }
@@ -15770,9 +16409,12 @@
                   "SEPARATORS",
                   "DATE_FILTER_CONFIG",
                   "JIT_PROVISIONING",
+                  "JWT_JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
                   "ENABLE_SLIDES_EXPORT",
-                  "AI_RATE_LIMIT"
+                  "AI_RATE_LIMIT",
+                  "ATTACHMENT_SIZE_LIMIT",
+                  "ATTACHMENT_LINK_TTL"
                 ],
                 "type": "string"
               }
@@ -17520,9 +18162,12 @@
                   "SEPARATORS",
                   "DATE_FILTER_CONFIG",
                   "JIT_PROVISIONING",
+                  "JWT_JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
                   "ENABLE_SLIDES_EXPORT",
-                  "AI_RATE_LIMIT"
+                  "AI_RATE_LIMIT",
+                  "ATTACHMENT_SIZE_LIMIT",
+                  "ATTACHMENT_LINK_TTL"
                 ],
                 "type": "string"
               }
@@ -17592,9 +18237,12 @@
                   "SEPARATORS",
                   "DATE_FILTER_CONFIG",
                   "JIT_PROVISIONING",
+                  "JWT_JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
                   "ENABLE_SLIDES_EXPORT",
-                  "AI_RATE_LIMIT"
+                  "AI_RATE_LIMIT",
+                  "ATTACHMENT_SIZE_LIMIT",
+                  "ATTACHMENT_LINK_TTL"
                 ],
                 "type": "string"
               }
@@ -17730,9 +18378,12 @@
                   "SEPARATORS",
                   "DATE_FILTER_CONFIG",
                   "JIT_PROVISIONING",
+                  "JWT_JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
                   "ENABLE_SLIDES_EXPORT",
-                  "AI_RATE_LIMIT"
+                  "AI_RATE_LIMIT",
+                  "ATTACHMENT_SIZE_LIMIT",
+                  "ATTACHMENT_LINK_TTL"
                 ],
                 "type": "string"
               }
@@ -17802,9 +18453,12 @@
                   "SEPARATORS",
                   "DATE_FILTER_CONFIG",
                   "JIT_PROVISIONING",
+                  "JWT_JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
                   "ENABLE_SLIDES_EXPORT",
-                  "AI_RATE_LIMIT"
+                  "AI_RATE_LIMIT",
+                  "ATTACHMENT_SIZE_LIMIT",
+                  "ATTACHMENT_LINK_TTL"
                 ],
                 "type": "string"
               }
@@ -18685,6 +19339,87 @@
         ],
         "type": "object"
       },
+      "RawCustomLabel": {
+        "description": "Custom label object override.",
+        "properties": {
+          "title": {
+            "description": "Override value.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "title"
+        ],
+        "type": "object"
+      },
+      "RawCustomMetric": {
+        "description": "Custom metric object override.",
+        "properties": {
+          "title": {
+            "description": "Metric title override.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "title"
+        ],
+        "type": "object"
+      },
+      "RawCustomOverride": {
+        "description": "Custom cell value overrides (IDs will be replaced with specified values).",
+        "properties": {
+          "labels": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/RawCustomLabel"
+            },
+            "description": "Map of CustomLabels with keys used as placeholders in export result.",
+            "type": "object"
+          },
+          "metrics": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/RawCustomMetric"
+            },
+            "description": "Map of CustomMetrics with keys used as placeholders in export result.",
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "RawExportRequest": {
+        "description": "Export request object describing the export properties and overrides for raw exports.",
+        "properties": {
+          "customOverride": {
+            "$ref": "#/components/schemas/RawCustomOverride"
+          },
+          "execution": {
+            "$ref": "#/components/schemas/AFM"
+          },
+          "executionSettings": {
+            "$ref": "#/components/schemas/ExecutionSettings"
+          },
+          "fileName": {
+            "description": "Filename of downloaded file without extension.",
+            "example": "result",
+            "type": "string"
+          },
+          "format": {
+            "description": "Requested resulting file type.",
+            "enum": [
+              "ARROW_FILE",
+              "ARROW_STREAM",
+              "CSV"
+            ],
+            "example": "CSV",
+            "type": "string"
+          }
+        },
+        "required": [
+          "execution",
+          "fileName",
+          "format"
+        ],
+        "type": "object"
+      },
       "ReferenceIdentifier": {
         "description": "A reference identifier.",
         "properties": {
@@ -18887,9 +19622,12 @@
               "SEPARATORS",
               "DATE_FILTER_CONFIG",
               "JIT_PROVISIONING",
+              "JWT_JIT_PROVISIONING",
               "DASHBOARD_FILTERS_APPLY_MODE",
               "ENABLE_SLIDES_EXPORT",
-              "AI_RATE_LIMIT"
+              "AI_RATE_LIMIT",
+              "ATTACHMENT_SIZE_LIMIT",
+              "ATTACHMENT_LINK_TTL"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -19013,6 +19751,12 @@
       "Settings": {
         "description": "Additional settings.",
         "properties": {
+          "exportInfo": {
+            "default": false,
+            "description": "Include export info sheet in the exported file. Works only with `visualizationObject`. (XLSX)",
+            "example": true,
+            "type": "boolean"
+          },
           "mergeHeaders": {
             "description": "Merge equal headers in neighbouring cells. (XLSX)",
             "example": true,
@@ -19127,6 +19871,62 @@
           "name": "skeleton",
           "namespace": "urn:oasis:names:tc:xliff:document:2.0"
         }
+      },
+      "SlidesExportRequest": {
+        "description": "Export request object describing the export properties and metadata for slides exports.",
+        "properties": {
+          "dashboardId": {
+            "description": "Dashboard identifier",
+            "example": "761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+            "type": "string"
+          },
+          "fileName": {
+            "description": "File name to be used for retrieving the pdf document.",
+            "example": "filename",
+            "type": "string"
+          },
+          "format": {
+            "description": "Requested resulting file type.",
+            "enum": [
+              "PDF",
+              "PPTX"
+            ],
+            "example": "PDF",
+            "type": "string"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "templateId": {
+            "description": "Export template identifier.",
+            "maxLength": 255,
+            "nullable": true,
+            "type": "string"
+          },
+          "visualizationIds": {
+            "description": "List of visualization ids to be exported. Note that only one visualization is currently supported.",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 1,
+            "type": "array",
+            "uniqueItems": true
+          },
+          "widgetIds": {
+            "description": "List of widget identifiers to be exported. Note that only one widget is currently supported.",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 1,
+            "type": "array",
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "fileName",
+          "format"
+        ],
+        "type": "object"
       },
       "Smtp": {
         "allOf": [
@@ -21949,7 +22749,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=bootstrapUser,bootstrapUserGroup",
+            "example": "include=bootstrapUser,bootstrapUserGroup,identityProvider",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -21959,8 +22759,10 @@
                 "enum": [
                   "users",
                   "userGroups",
+                  "identityProviders",
                   "bootstrapUser",
                   "bootstrapUserGroup",
+                  "identityProvider",
                   "ALL"
                 ],
                 "type": "string"
@@ -22034,7 +22836,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=bootstrapUser,bootstrapUserGroup",
+            "example": "include=bootstrapUser,bootstrapUserGroup,identityProvider",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -22044,8 +22846,10 @@
                 "enum": [
                   "users",
                   "userGroups",
+                  "identityProviders",
                   "bootstrapUser",
                   "bootstrapUserGroup",
+                  "identityProvider",
                   "ALL"
                 ],
                 "type": "string"
@@ -22107,7 +22911,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=bootstrapUser,bootstrapUserGroup",
+            "example": "include=bootstrapUser,bootstrapUserGroup,identityProvider",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -22117,8 +22921,10 @@
                 "enum": [
                   "users",
                   "userGroups",
+                  "identityProviders",
                   "bootstrapUser",
                   "bootstrapUserGroup",
+                  "identityProvider",
                   "ALL"
                 ],
                 "type": "string"
@@ -24084,7 +24890,7 @@
         "parameters": [
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=title==someString;description==someString",
+            "example": "filter=title==someString;provider==LLMProviderValue",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -24183,7 +24989,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=title==someString;description==someString",
+            "example": "filter=title==someString;provider==LLMProviderValue",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -24210,7 +25016,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=title==someString;description==someString",
+            "example": "filter=title==someString;provider==LLMProviderValue",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -24245,7 +25051,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=title==someString;description==someString",
+            "example": "filter=title==someString;provider==LLMProviderValue",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -24290,7 +25096,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=title==someString;description==someString",
+            "example": "filter=title==someString;provider==LLMProviderValue",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -24323,6 +25129,104 @@
         "summary": "PUT LLM endpoint entity",
         "tags": [
           "LLM Endpoints",
+          "entities",
+          "organization-model-controller"
+        ]
+      }
+    },
+    "/api/v1/entities/notificationChannelIdentifiers": {
+      "get": {
+        "operationId": "getAllEntities@NotificationChannelIdentifiers",
+        "parameters": [
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=name==someString;description==someString",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/size"
+          },
+          {
+            "$ref": "#/components/parameters/sort"
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=page,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "page",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiNotificationChannelIdentifierOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "tags": [
+          "entities",
+          "organization-model-controller"
+        ]
+      }
+    },
+    "/api/v1/entities/notificationChannelIdentifiers/{id}": {
+      "get": {
+        "operationId": "getEntity@NotificationChannelIdentifiers",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPathParameter"
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=name==someString;description==someString",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiNotificationChannelIdentifierOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "tags": [
           "entities",
           "organization-model-controller"
         ]
@@ -30672,7 +31576,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=title==someString;description==someString;dataset.id==321",
+            "example": "filter=title==someString;description==someString;dataset.id==321;sourceFact.id==321",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -30681,7 +31585,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=dataset",
+            "example": "include=dataset,sourceFact",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -30690,7 +31594,9 @@
               "items": {
                 "enum": [
                   "datasets",
+                  "facts",
                   "dataset",
+                  "sourceFact",
                   "ALL"
                 ],
                 "type": "string"
@@ -30789,7 +31695,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=title==someString;description==someString;dataset.id==321",
+            "example": "filter=title==someString;description==someString;dataset.id==321;sourceFact.id==321",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -30798,7 +31704,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=dataset",
+            "example": "include=dataset,sourceFact",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -30807,7 +31713,9 @@
               "items": {
                 "enum": [
                   "datasets",
+                  "facts",
                   "dataset",
+                  "sourceFact",
                   "ALL"
                 ],
                 "type": "string"

@@ -32,8 +32,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.json_api_filter_view_in_relationships_user import JsonApiFilterViewInRelationshipsUser
+    from gooddata_api_client.model.json_api_organization_in_relationships_identity_provider import JsonApiOrganizationInRelationshipsIdentityProvider
     from gooddata_api_client.model.json_api_organization_out_relationships_bootstrap_user_group import JsonApiOrganizationOutRelationshipsBootstrapUserGroup
     globals()['JsonApiFilterViewInRelationshipsUser'] = JsonApiFilterViewInRelationshipsUser
+    globals()['JsonApiOrganizationInRelationshipsIdentityProvider'] = JsonApiOrganizationInRelationshipsIdentityProvider
     globals()['JsonApiOrganizationOutRelationshipsBootstrapUserGroup'] = JsonApiOrganizationOutRelationshipsBootstrapUserGroup
 
 
@@ -92,6 +94,7 @@ class JsonApiOrganizationOutRelationships(ModelNormal):
         return {
             'bootstrap_user': (JsonApiFilterViewInRelationshipsUser,),  # noqa: E501
             'bootstrap_user_group': (JsonApiOrganizationOutRelationshipsBootstrapUserGroup,),  # noqa: E501
+            'identity_provider': (JsonApiOrganizationInRelationshipsIdentityProvider,),  # noqa: E501
         }
 
     @cached_property
@@ -102,6 +105,7 @@ class JsonApiOrganizationOutRelationships(ModelNormal):
     attribute_map = {
         'bootstrap_user': 'bootstrapUser',  # noqa: E501
         'bootstrap_user_group': 'bootstrapUserGroup',  # noqa: E501
+        'identity_provider': 'identityProvider',  # noqa: E501
     }
 
     read_only_vars = {
@@ -147,6 +151,7 @@ class JsonApiOrganizationOutRelationships(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             bootstrap_user (JsonApiFilterViewInRelationshipsUser): [optional]  # noqa: E501
             bootstrap_user_group (JsonApiOrganizationOutRelationshipsBootstrapUserGroup): [optional]  # noqa: E501
+            identity_provider (JsonApiOrganizationInRelationshipsIdentityProvider): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -234,6 +239,7 @@ class JsonApiOrganizationOutRelationships(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             bootstrap_user (JsonApiFilterViewInRelationshipsUser): [optional]  # noqa: E501
             bootstrap_user_group (JsonApiOrganizationOutRelationshipsBootstrapUserGroup): [optional]  # noqa: E501
+            identity_provider (JsonApiOrganizationInRelationshipsIdentityProvider): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

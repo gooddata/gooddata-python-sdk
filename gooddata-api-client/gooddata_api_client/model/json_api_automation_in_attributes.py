@@ -35,14 +35,18 @@ def lazy_import():
     from gooddata_api_client.model.json_api_automation_in_attributes_external_recipients_inner import JsonApiAutomationInAttributesExternalRecipientsInner
     from gooddata_api_client.model.json_api_automation_in_attributes_image_exports_inner import JsonApiAutomationInAttributesImageExportsInner
     from gooddata_api_client.model.json_api_automation_in_attributes_metadata import JsonApiAutomationInAttributesMetadata
+    from gooddata_api_client.model.json_api_automation_in_attributes_raw_exports_inner import JsonApiAutomationInAttributesRawExportsInner
     from gooddata_api_client.model.json_api_automation_in_attributes_schedule import JsonApiAutomationInAttributesSchedule
+    from gooddata_api_client.model.json_api_automation_in_attributes_slides_exports_inner import JsonApiAutomationInAttributesSlidesExportsInner
     from gooddata_api_client.model.json_api_automation_in_attributes_tabular_exports_inner import JsonApiAutomationInAttributesTabularExportsInner
     from gooddata_api_client.model.json_api_automation_in_attributes_visual_exports_inner import JsonApiAutomationInAttributesVisualExportsInner
     globals()['JsonApiAutomationInAttributesAlert'] = JsonApiAutomationInAttributesAlert
     globals()['JsonApiAutomationInAttributesExternalRecipientsInner'] = JsonApiAutomationInAttributesExternalRecipientsInner
     globals()['JsonApiAutomationInAttributesImageExportsInner'] = JsonApiAutomationInAttributesImageExportsInner
     globals()['JsonApiAutomationInAttributesMetadata'] = JsonApiAutomationInAttributesMetadata
+    globals()['JsonApiAutomationInAttributesRawExportsInner'] = JsonApiAutomationInAttributesRawExportsInner
     globals()['JsonApiAutomationInAttributesSchedule'] = JsonApiAutomationInAttributesSchedule
+    globals()['JsonApiAutomationInAttributesSlidesExportsInner'] = JsonApiAutomationInAttributesSlidesExportsInner
     globals()['JsonApiAutomationInAttributesTabularExportsInner'] = JsonApiAutomationInAttributesTabularExportsInner
     globals()['JsonApiAutomationInAttributesVisualExportsInner'] = JsonApiAutomationInAttributesVisualExportsInner
 
@@ -120,7 +124,9 @@ class JsonApiAutomationInAttributes(ModelNormal):
             'external_recipients': ([JsonApiAutomationInAttributesExternalRecipientsInner],),  # noqa: E501
             'image_exports': ([JsonApiAutomationInAttributesImageExportsInner],),  # noqa: E501
             'metadata': (JsonApiAutomationInAttributesMetadata,),  # noqa: E501
+            'raw_exports': ([JsonApiAutomationInAttributesRawExportsInner],),  # noqa: E501
             'schedule': (JsonApiAutomationInAttributesSchedule,),  # noqa: E501
+            'slides_exports': ([JsonApiAutomationInAttributesSlidesExportsInner],),  # noqa: E501
             'state': (str,),  # noqa: E501
             'tabular_exports': ([JsonApiAutomationInAttributesTabularExportsInner],),  # noqa: E501
             'tags': ([str],),  # noqa: E501
@@ -141,7 +147,9 @@ class JsonApiAutomationInAttributes(ModelNormal):
         'external_recipients': 'externalRecipients',  # noqa: E501
         'image_exports': 'imageExports',  # noqa: E501
         'metadata': 'metadata',  # noqa: E501
+        'raw_exports': 'rawExports',  # noqa: E501
         'schedule': 'schedule',  # noqa: E501
+        'slides_exports': 'slidesExports',  # noqa: E501
         'state': 'state',  # noqa: E501
         'tabular_exports': 'tabularExports',  # noqa: E501
         'tags': 'tags',  # noqa: E501
@@ -197,7 +205,9 @@ class JsonApiAutomationInAttributes(ModelNormal):
             external_recipients ([JsonApiAutomationInAttributesExternalRecipientsInner]): External recipients of the automation action results.. [optional]  # noqa: E501
             image_exports ([JsonApiAutomationInAttributesImageExportsInner]): [optional]  # noqa: E501
             metadata (JsonApiAutomationInAttributesMetadata): [optional]  # noqa: E501
+            raw_exports ([JsonApiAutomationInAttributesRawExportsInner]): [optional]  # noqa: E501
             schedule (JsonApiAutomationInAttributesSchedule): [optional]  # noqa: E501
+            slides_exports ([JsonApiAutomationInAttributesSlidesExportsInner]): [optional]  # noqa: E501
             state (str): Current state of the automation.. [optional]  # noqa: E501
             tabular_exports ([JsonApiAutomationInAttributesTabularExportsInner]): [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501
@@ -295,7 +305,9 @@ class JsonApiAutomationInAttributes(ModelNormal):
             external_recipients ([JsonApiAutomationInAttributesExternalRecipientsInner]): External recipients of the automation action results.. [optional]  # noqa: E501
             image_exports ([JsonApiAutomationInAttributesImageExportsInner]): [optional]  # noqa: E501
             metadata (JsonApiAutomationInAttributesMetadata): [optional]  # noqa: E501
+            raw_exports ([JsonApiAutomationInAttributesRawExportsInner]): [optional]  # noqa: E501
             schedule (JsonApiAutomationInAttributesSchedule): [optional]  # noqa: E501
+            slides_exports ([JsonApiAutomationInAttributesSlidesExportsInner]): [optional]  # noqa: E501
             state (str): Current state of the automation.. [optional]  # noqa: E501
             tabular_exports ([JsonApiAutomationInAttributesTabularExportsInner]): [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501

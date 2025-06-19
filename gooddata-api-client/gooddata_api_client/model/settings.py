@@ -88,6 +88,7 @@ class Settings(ModelNormal):
         """
         lazy_import()
         return {
+            'export_info': (bool,),  # noqa: E501
             'merge_headers': (bool,),  # noqa: E501
             'pdf_page_size': (str,),  # noqa: E501
             'pdf_table_style': ([PdfTableStyle],),  # noqa: E501
@@ -102,6 +103,7 @@ class Settings(ModelNormal):
 
 
     attribute_map = {
+        'export_info': 'exportInfo',  # noqa: E501
         'merge_headers': 'mergeHeaders',  # noqa: E501
         'pdf_page_size': 'pdfPageSize',  # noqa: E501
         'pdf_table_style': 'pdfTableStyle',  # noqa: E501
@@ -151,6 +153,7 @@ class Settings(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            export_info (bool): Include export info sheet in the exported file. Works only with `visualizationObject`. (XLSX). [optional] if omitted the server will use the default value of False  # noqa: E501
             merge_headers (bool): Merge equal headers in neighbouring cells. (XLSX). [optional]  # noqa: E501
             pdf_page_size (str): Page size and orientation. (PDF). [optional]  # noqa: E501
             pdf_table_style ([PdfTableStyle]): Custom CSS styles for the table. (PDF, HTML). [optional]  # noqa: E501
@@ -242,6 +245,7 @@ class Settings(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            export_info (bool): Include export info sheet in the exported file. Works only with `visualizationObject`. (XLSX). [optional] if omitted the server will use the default value of False  # noqa: E501
             merge_headers (bool): Merge equal headers in neighbouring cells. (XLSX). [optional]  # noqa: E501
             pdf_page_size (str): Page size and orientation. (PDF). [optional]  # noqa: E501
             pdf_table_style ([PdfTableStyle]): Custom CSS styles for the table. (PDF, HTML). [optional]  # noqa: E501
