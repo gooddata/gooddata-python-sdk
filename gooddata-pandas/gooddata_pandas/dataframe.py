@@ -89,7 +89,7 @@ class DataFrameFactory:
                 Optional filters to apply during computation on the server.
             on_execution_submitted (Optional[Callable[[Execution], None]]): Callback to call when the execution was
                 submitted to the backend.
-            is_cancellable (bool, optional): Whether the execution should be cancelled when the connection is cancelled.
+            is_cancellable (bool, optional): Whether the execution should be cancelled when the connection is interrupted.
 
         Returns:
             pandas.DataFrame: A DataFrame instance.
@@ -124,7 +124,7 @@ class DataFrameFactory:
                 computation on the server.
             on_execution_submitted (Optional[Callable[[Execution], None]]): Callback to call when the execution was
                 submitted to the backend.
-            is_cancellable (bool, optional): Whether the execution should be cancelled when the connection is cancelled.
+            is_cancellable (bool, optional): Whether the execution should be cancelled when the connection is interrupted.
 
         Returns:
             pandas.DataFrame: A DataFrame instance.
@@ -161,7 +161,7 @@ class DataFrameFactory:
                 of the items.
             on_execution_submitted (Optional[Callable[[Execution], None]]): Callback to call when the execution was
                 submitted to the backend.
-            is_cancellable (bool, optional): Whether the execution should be cancelled when the connection is cancelled.
+            is_cancellable (bool, optional): Whether the execution should be cancelled when the connection is interrupted.
 
         Returns:
             pandas.DataFrame: A DataFrame instance.
@@ -210,7 +210,7 @@ class DataFrameFactory:
                 of the visualization.
             on_execution_submitted (Optional[Callable[[Execution], None]]): Callback to call when the execution was
                 submitted to the backend.
-            is_cancellable (bool, optional): Whether the execution should be cancelled when the connection is cancelled.
+            is_cancellable (bool, optional): Whether the execution should be cancelled when the connection is interrupted.
 
         Returns:
             pandas.DataFrame: A DataFrame instance.
@@ -246,7 +246,7 @@ class DataFrameFactory:
             created_visualizations_response (dict): Created visualization response.
             on_execution_submitted (Optional[Callable[[Execution], None]]): Callback to call when the execution was
                 submitted to the backend.
-            is_cancellable (bool, optional): Whether the execution should be cancelled when the connection is cancelled.
+            is_cancellable (bool, optional): Whether the execution should be cancelled when the connection is interrupted.
 
         Returns:
             pandas.DataFrame: A DataFrame instance.

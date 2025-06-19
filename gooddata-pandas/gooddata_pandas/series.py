@@ -66,7 +66,7 @@ class SeriesFactory:
             on_execution_submitted (Optional[Callable[[Execution], None]]): Callback to call when the execution was
                 submitted to the backend.
 
-            is_cancellable (bool, optional): Whether the execution should be cancelled when the connection is cancelled.
+            is_cancellable (bool, optional): Whether the execution should be cancelled when the connection is interrupted.
 
         Returns:
             pandas.Series: pandas series instance
@@ -121,7 +121,7 @@ class SeriesFactory:
                 Defaults to None.
             on_execution_submitted (Optional[Callable[[Execution], None]]): Callback to call when the execution was
                 submitted to the backend.
-            is_cancellable (bool, optional): Whether the execution should be cancelled when the connection is cancelled.
+            is_cancellable (bool, optional): Whether the execution should be cancelled when the connection is interrupted.
 
         Returns:
             pandas.Series: The resulting pandas Series instance.

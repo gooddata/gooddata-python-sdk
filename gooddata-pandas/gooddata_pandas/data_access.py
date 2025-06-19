@@ -43,7 +43,7 @@ class ExecutionDefinitionBuilder:
             columns (ColumnsDef): Input columns to process and build internal mappings.
             index_by (Optional[IndexDef], optional): Index definition to process. Defaults to None.
             is_cancellable (Optional[bool]): Whether the execution of this definition should be cancelled when
-                the connection is cancelled.
+                the connection is interrupted.
 
         """
         self._attributes: list[Attribute] = []
@@ -274,7 +274,7 @@ def _compute(
         index_by (Optional[IndexDef]): The index definition, if any.
         filter_by (Optional[Union[Filter, list[Filter]]]): A filter or a list of filters, if any.
         is_cancellable (bool, optional): Whether the execution of this definition should be cancelled when
-            the connection is cancelled.
+            the connection is interrupted.
 
     Returns:
         tuple: A tuple containing the following elements:
@@ -434,7 +434,7 @@ def compute_and_extract(
         on_execution_submitted (Optional[Callable[[Execution], None]]): Callback to call when the execution was
             submitted to the backend.
         is_cancellable (bool, optional): Whether the execution of this definition should be cancelled when
-            the connection is cancelled.
+            the connection is interrupted.
 
     Returns:
         tuple: A tuple containing the following dictionaries:

@@ -98,7 +98,7 @@ class ComputeService:
         Args:
             chat_result: ChatResult object containing visualization details from AI chat response
             is_cancellable (bool, optional): Whether the execution of this definition should be cancelled when
-                the connection is cancelled.
+                the connection is interrupted.
 
         Returns:
             ExecutionDefinition: Execution definition built from chat result visualization
