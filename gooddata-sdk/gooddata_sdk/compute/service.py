@@ -12,6 +12,7 @@ from gooddata_api_client.model.chat_history_request import ChatHistoryRequest
 from gooddata_api_client.model.chat_history_result import ChatHistoryResult
 from gooddata_api_client.model.chat_request import ChatRequest
 from gooddata_api_client.model.chat_result import ChatResult
+from gooddata_api_client.model.saved_visualization import SavedVisualization
 from gooddata_api_client.model.search_request import SearchRequest
 from gooddata_api_client.model.search_result import SearchResult
 
@@ -215,6 +216,36 @@ class ComputeService:
         """
         chat_history_request = ChatHistoryRequest(
             user_feedback=user_feedback,
+            chat_history_interaction_id=chat_history_interaction_id,
+            thread_id_suffix=thread_id_suffix,
+            reset=False,
+        )
+        self._actions_api.ai_chat_history(workspace_id, chat_history_request, _check_return_type=False)
+
+    def set_ai_chat_history_saved_visualization(
+        self,
+        workspace_id: str,
+        created_visualization_id: str,
+        saved_visualization_id: str,
+        chat_history_interaction_id: str,
+        thread_id_suffix: str = "",
+    ) -> None:
+        """
+        Set saved visualization for a specific chat history interaction.
+
+        Args:
+            workspace_id (str): workspace identifier
+            created_visualization_id (str): id of the created visualization
+            saved_visualization_id (str): id of the saved visualization
+            chat_history_interaction_id (str): interaction id to set saved visualization for.
+            thread_id_suffix (str): suffix to identify a specific chat thread. Defaults to "".
+        """
+        saved_visualization = SavedVisualization(
+            created_visualization_id=created_visualization_id,
+            saved_visualization_id=saved_visualization_id,
+        )
+        chat_history_request = ChatHistoryRequest(
+            saved_visualization=saved_visualization,
             chat_history_interaction_id=chat_history_interaction_id,
             thread_id_suffix=thread_id_suffix,
             reset=False,
