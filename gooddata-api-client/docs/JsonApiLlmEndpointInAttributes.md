@@ -7,7 +7,6 @@ Name | Type | Description | Notes
 **title** | **str** | User-facing title of the LLM Provider. | 
 **token** | **str** | The token to use to connect to the LLM provider. | 
 **base_url** | **str, none_type** | Custom LLM endpoint. | [optional] 
-**description** | **str, none_type** | User-facing description of the LLM Provider. | [optional] 
 **llm_model** | **str** | LLM Model. We provide a default model for each provider, but you can override it here. | [optional] 
 **llm_organization** | **str, none_type** | Organization in LLM provider. | [optional] 
 **provider** | **str** | LLM Provider. | [optional]  if omitted the server will use the default value of "OPENAI"

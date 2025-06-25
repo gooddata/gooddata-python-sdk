@@ -68,6 +68,7 @@ class ImageExportRequest(ModelNormal):
     validations = {
         ('widget_ids',): {
             'max_items': 1,
+            'min_items': 1,
         },
     }
 
@@ -97,8 +98,8 @@ class ImageExportRequest(ModelNormal):
             'dashboard_id': (str,),  # noqa: E501
             'file_name': (str,),  # noqa: E501
             'format': (str,),  # noqa: E501
-            'metadata': (JsonNode,),  # noqa: E501
             'widget_ids': ([str],),  # noqa: E501
+            'metadata': (JsonNode,),  # noqa: E501
         }
 
     @cached_property
@@ -110,8 +111,8 @@ class ImageExportRequest(ModelNormal):
         'dashboard_id': 'dashboardId',  # noqa: E501
         'file_name': 'fileName',  # noqa: E501
         'format': 'format',  # noqa: E501
-        'metadata': 'metadata',  # noqa: E501
         'widget_ids': 'widgetIds',  # noqa: E501
+        'metadata': 'metadata',  # noqa: E501
     }
 
     read_only_vars = {
@@ -121,12 +122,13 @@ class ImageExportRequest(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, dashboard_id, file_name, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, dashboard_id, file_name, widget_ids, *args, **kwargs):  # noqa: E501
         """ImageExportRequest - a model defined in OpenAPI
 
         Args:
             dashboard_id (str): Dashboard identifier
             file_name (str): File name to be used for retrieving the image document.
+            widget_ids ([str]): List of widget identifiers to be exported. Note that only one widget is currently supported.
 
         Keyword Args:
             format (str): Requested resulting file type.. defaults to "PNG", must be one of ["PNG", ]  # noqa: E501
@@ -161,7 +163,6 @@ class ImageExportRequest(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             metadata (JsonNode): [optional]  # noqa: E501
-            widget_ids ([str]): List of widget identifiers to be exported. Note that only one widget is currently supported.. [optional]  # noqa: E501
         """
 
         format = kwargs.get('format', "PNG")
@@ -197,6 +198,7 @@ class ImageExportRequest(ModelNormal):
         self.dashboard_id = dashboard_id
         self.file_name = file_name
         self.format = format
+        self.widget_ids = widget_ids
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -217,12 +219,13 @@ class ImageExportRequest(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, dashboard_id, file_name, *args, **kwargs):  # noqa: E501
+    def __init__(self, dashboard_id, file_name, widget_ids, *args, **kwargs):  # noqa: E501
         """ImageExportRequest - a model defined in OpenAPI
 
         Args:
             dashboard_id (str): Dashboard identifier
             file_name (str): File name to be used for retrieving the image document.
+            widget_ids ([str]): List of widget identifiers to be exported. Note that only one widget is currently supported.
 
         Keyword Args:
             format (str): Requested resulting file type.. defaults to "PNG", must be one of ["PNG", ]  # noqa: E501
@@ -257,7 +260,6 @@ class ImageExportRequest(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             metadata (JsonNode): [optional]  # noqa: E501
-            widget_ids ([str]): List of widget identifiers to be exported. Note that only one widget is currently supported.. [optional]  # noqa: E501
         """
 
         format = kwargs.get('format', "PNG")
@@ -291,6 +293,7 @@ class ImageExportRequest(ModelNormal):
         self.dashboard_id = dashboard_id
         self.file_name = file_name
         self.format = format
+        self.widget_ids = widget_ids
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

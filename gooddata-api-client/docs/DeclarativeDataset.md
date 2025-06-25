@@ -13,6 +13,7 @@ Name | Type | Description | Notes
 **data_source_table_id** | [**DataSourceTableIdentifier**](DataSourceTableIdentifier.md) |  | [optional] 
 **description** | **str** | A dataset description. | [optional] 
 **facts** | [**[DeclarativeFact]**](DeclarativeFact.md) | An array of facts. | [optional] 
+**precedence** | **int** | Precedence used in aggregate awareness. | [optional] 
 **sql** | [**DeclarativeDatasetSql**](DeclarativeDatasetSql.md) |  | [optional] 
 **tags** | **[str]** | A list of tags. | [optional] 
 **workspace_data_filter_columns** | [**[DeclarativeWorkspaceDataFilterColumn]**](DeclarativeWorkspaceDataFilterColumn.md) | An array of columns which are available for match to implicit workspace data filters. | [optional] 

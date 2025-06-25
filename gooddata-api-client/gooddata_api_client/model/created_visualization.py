@@ -109,6 +109,7 @@ class CreatedVisualization(ModelNormal):
             'suggestions': ([Suggestion],),  # noqa: E501
             'title': (str,),  # noqa: E501
             'visualization_type': (str,),  # noqa: E501
+            'saved_visualization_id': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -124,6 +125,7 @@ class CreatedVisualization(ModelNormal):
         'suggestions': 'suggestions',  # noqa: E501
         'title': 'title',  # noqa: E501
         'visualization_type': 'visualizationType',  # noqa: E501
+        'saved_visualization_id': 'savedVisualizationId',  # noqa: E501
     }
 
     read_only_vars = {
@@ -176,6 +178,7 @@ class CreatedVisualization(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            saved_visualization_id (str): Saved visualization ID.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -277,6 +280,7 @@ class CreatedVisualization(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            saved_visualization_id (str): Saved visualization ID.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

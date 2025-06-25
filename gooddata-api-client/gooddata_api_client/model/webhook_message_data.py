@@ -101,8 +101,11 @@ class WebhookMessageData(ModelNormal):
             'details': ({str: (str,)},),  # noqa: E501
             'filters': ([NotificationFilter],),  # noqa: E501
             'image_exports': ([ExportResult],),  # noqa: E501
+            'notification_source': (str,),  # noqa: E501
+            'raw_exports': ([ExportResult],),  # noqa: E501
             'recipients': ([WebhookRecipient],),  # noqa: E501
             'remaining_action_count': (int,),  # noqa: E501
+            'slides_exports': ([ExportResult],),  # noqa: E501
             'tabular_exports': ([ExportResult],),  # noqa: E501
             'visual_exports': ([ExportResult],),  # noqa: E501
         }
@@ -118,8 +121,11 @@ class WebhookMessageData(ModelNormal):
         'details': 'details',  # noqa: E501
         'filters': 'filters',  # noqa: E501
         'image_exports': 'imageExports',  # noqa: E501
+        'notification_source': 'notificationSource',  # noqa: E501
+        'raw_exports': 'rawExports',  # noqa: E501
         'recipients': 'recipients',  # noqa: E501
         'remaining_action_count': 'remainingActionCount',  # noqa: E501
+        'slides_exports': 'slidesExports',  # noqa: E501
         'tabular_exports': 'tabularExports',  # noqa: E501
         'visual_exports': 'visualExports',  # noqa: E501
     }
@@ -172,8 +178,11 @@ class WebhookMessageData(ModelNormal):
             details ({str: (str,)}): [optional]  # noqa: E501
             filters ([NotificationFilter]): [optional]  # noqa: E501
             image_exports ([ExportResult]): [optional]  # noqa: E501
+            notification_source (str): [optional]  # noqa: E501
+            raw_exports ([ExportResult]): [optional]  # noqa: E501
             recipients ([WebhookRecipient]): [optional]  # noqa: E501
             remaining_action_count (int): [optional]  # noqa: E501
+            slides_exports ([ExportResult]): [optional]  # noqa: E501
             tabular_exports ([ExportResult]): [optional]  # noqa: E501
             visual_exports ([ExportResult]): [optional]  # noqa: E501
         """
@@ -269,8 +278,11 @@ class WebhookMessageData(ModelNormal):
             details ({str: (str,)}): [optional]  # noqa: E501
             filters ([NotificationFilter]): [optional]  # noqa: E501
             image_exports ([ExportResult]): [optional]  # noqa: E501
+            notification_source (str): [optional]  # noqa: E501
+            raw_exports ([ExportResult]): [optional]  # noqa: E501
             recipients ([WebhookRecipient]): [optional]  # noqa: E501
             remaining_action_count (int): [optional]  # noqa: E501
+            slides_exports ([ExportResult]): [optional]  # noqa: E501
             tabular_exports ([ExportResult]): [optional]  # noqa: E501
             visual_exports ([ExportResult]): [optional]  # noqa: E501
         """

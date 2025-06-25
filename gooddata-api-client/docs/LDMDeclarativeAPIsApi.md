@@ -173,6 +173,13 @@ with gooddata_api_client.ApiClient() as api_client:
                             id="fact.customer_order_count",
                             source_column="customer_order_count",
                             source_column_data_type="NUMERIC",
+                            source_fact_reference=DeclarativeSourceFactReference(
+                                id=FactIdentifier(
+                                    id="fact_id",
+                                    type="fact",
+                                ),
+                                operation="SUM",
+                            ),
                             tags=["Customers"],
                             title="Customer order count",
                         ),
@@ -184,6 +191,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         ),
                     ],
                     id="customers",
+                    precedence=0,
                     references=[
                         DeclarativeReference(
                             identifier=ReferenceIdentifier(
