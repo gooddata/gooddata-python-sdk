@@ -83,6 +83,7 @@ class ChatUsageResponse(ModelNormal):
         """
         return {
             'interaction_count': (int,),  # noqa: E501
+            'interaction_limit': (int,),  # noqa: E501
             'time_window_hours': (int,),  # noqa: E501
         }
 
@@ -93,6 +94,7 @@ class ChatUsageResponse(ModelNormal):
 
     attribute_map = {
         'interaction_count': 'interactionCount',  # noqa: E501
+        'interaction_limit': 'interactionLimit',  # noqa: E501
         'time_window_hours': 'timeWindowHours',  # noqa: E501
     }
 
@@ -103,11 +105,12 @@ class ChatUsageResponse(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, interaction_count, time_window_hours, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, interaction_count, interaction_limit, time_window_hours, *args, **kwargs):  # noqa: E501
         """ChatUsageResponse - a model defined in OpenAPI
 
         Args:
             interaction_count (int): Number of interactions in the time window
+            interaction_limit (int): Maximum number of interactions in the time window any user can do in the workspace
             time_window_hours (int): Time window in hours
 
         Keyword Args:
@@ -173,6 +176,7 @@ class ChatUsageResponse(ModelNormal):
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
         self.interaction_count = interaction_count
+        self.interaction_limit = interaction_limit
         self.time_window_hours = time_window_hours
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
@@ -194,11 +198,12 @@ class ChatUsageResponse(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, interaction_count, time_window_hours, *args, **kwargs):  # noqa: E501
+    def __init__(self, interaction_count, interaction_limit, time_window_hours, *args, **kwargs):  # noqa: E501
         """ChatUsageResponse - a model defined in OpenAPI
 
         Args:
             interaction_count (int): Number of interactions in the time window
+            interaction_limit (int): Maximum number of interactions in the time window any user can do in the workspace
             time_window_hours (int): Time window in hours
 
         Keyword Args:
@@ -262,6 +267,7 @@ class ChatUsageResponse(ModelNormal):
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
         self.interaction_count = interaction_count
+        self.interaction_limit = interaction_limit
         self.time_window_hours = time_window_hours
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

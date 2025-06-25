@@ -32,7 +32,9 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.json_api_organization_in_attributes import JsonApiOrganizationInAttributes
+    from gooddata_api_client.model.json_api_organization_in_relationships import JsonApiOrganizationInRelationships
     globals()['JsonApiOrganizationInAttributes'] = JsonApiOrganizationInAttributes
+    globals()['JsonApiOrganizationInRelationships'] = JsonApiOrganizationInRelationships
 
 
 class JsonApiOrganizationPatch(ModelNormal):
@@ -99,6 +101,7 @@ class JsonApiOrganizationPatch(ModelNormal):
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
             'attributes': (JsonApiOrganizationInAttributes,),  # noqa: E501
+            'relationships': (JsonApiOrganizationInRelationships,),  # noqa: E501
         }
 
     @cached_property
@@ -110,6 +113,7 @@ class JsonApiOrganizationPatch(ModelNormal):
         'id': 'id',  # noqa: E501
         'type': 'type',  # noqa: E501
         'attributes': 'attributes',  # noqa: E501
+        'relationships': 'relationships',  # noqa: E501
     }
 
     read_only_vars = {
@@ -158,6 +162,7 @@ class JsonApiOrganizationPatch(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             attributes (JsonApiOrganizationInAttributes): [optional]  # noqa: E501
+            relationships (JsonApiOrganizationInRelationships): [optional]  # noqa: E501
         """
 
         type = kwargs.get('type', "organization")
@@ -251,6 +256,7 @@ class JsonApiOrganizationPatch(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             attributes (JsonApiOrganizationInAttributes): [optional]  # noqa: E501
+            relationships (JsonApiOrganizationInRelationships): [optional]  # noqa: E501
         """
 
         type = kwargs.get('type', "organization")

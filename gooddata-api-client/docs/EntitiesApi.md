@@ -85,6 +85,7 @@ Method | HTTP request | Description
 [**get_all_entities_labels**](EntitiesApi.md#get_all_entities_labels) | **GET** /api/v1/entities/workspaces/{workspaceId}/labels | Get all Labels
 [**get_all_entities_llm_endpoints**](EntitiesApi.md#get_all_entities_llm_endpoints) | **GET** /api/v1/entities/llmEndpoints | Get all LLM endpoint entities
 [**get_all_entities_metrics**](EntitiesApi.md#get_all_entities_metrics) | **GET** /api/v1/entities/workspaces/{workspaceId}/metrics | Get all Metrics
+[**get_all_entities_notification_channel_identifiers**](EntitiesApi.md#get_all_entities_notification_channel_identifiers) | **GET** /api/v1/entities/notificationChannelIdentifiers | 
 [**get_all_entities_notification_channels**](EntitiesApi.md#get_all_entities_notification_channels) | **GET** /api/v1/entities/notificationChannels | Get all Notification Channel entities
 [**get_all_entities_organization_settings**](EntitiesApi.md#get_all_entities_organization_settings) | **GET** /api/v1/entities/organizationSettings | Get Organization entities
 [**get_all_entities_themes**](EntitiesApi.md#get_all_entities_themes) | **GET** /api/v1/entities/themes | Get all Theming entities
@@ -124,6 +125,7 @@ Method | HTTP request | Description
 [**get_entity_labels**](EntitiesApi.md#get_entity_labels) | **GET** /api/v1/entities/workspaces/{workspaceId}/labels/{objectId} | Get a Label
 [**get_entity_llm_endpoints**](EntitiesApi.md#get_entity_llm_endpoints) | **GET** /api/v1/entities/llmEndpoints/{id} | Get LLM endpoint entity
 [**get_entity_metrics**](EntitiesApi.md#get_entity_metrics) | **GET** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | Get a Metric
+[**get_entity_notification_channel_identifiers**](EntitiesApi.md#get_entity_notification_channel_identifiers) | **GET** /api/v1/entities/notificationChannelIdentifiers/{id} | 
 [**get_entity_notification_channels**](EntitiesApi.md#get_entity_notification_channels) | **GET** /api/v1/entities/notificationChannels/{id} | Get Notification Channel entity
 [**get_entity_organization_settings**](EntitiesApi.md#get_entity_organization_settings) | **GET** /api/v1/entities/organizationSettings/{id} | Get Organization entity
 [**get_entity_organizations**](EntitiesApi.md#get_entity_organizations) | **GET** /api/v1/entities/admin/organizations/{id} | Get Organizations
@@ -565,11 +567,81 @@ with gooddata_api_client.ApiClient() as api_client:
                     ],
                     widget="widget_example",
                 ),
+                raw_exports=[
+                    JsonApiAutomationInAttributesRawExportsInner(
+                        request_payload=RawExportRequest(
+                            custom_override=RawCustomOverride(
+                                labels={
+                                    "key": RawCustomLabel(
+                                        title="title_example",
+                                    ),
+                                },
+                                metrics={
+                                    "key": RawCustomMetric(
+                                        title="title_example",
+                                    ),
+                                },
+                            ),
+                            execution=AFM(
+                                attributes=[
+                                    AttributeItem(
+                                        label=AfmObjectIdentifierLabel(
+                                            identifier=AfmObjectIdentifierLabelIdentifier(
+                                                id="sample_item.price",
+                                                type="label",
+                                            ),
+                                        ),
+                                        local_identifier="attribute_1",
+                                        show_all_values=False,
+                                    ),
+                                ],
+                                aux_measures=[
+                                    MeasureItem(
+                                        definition=MeasureDefinition(),
+                                        local_identifier="metric_1",
+                                    ),
+                                ],
+                                filters=[
+                                    FilterDefinition(),
+                                ],
+                                measures=[
+                                    MeasureItem(
+                                        definition=MeasureDefinition(),
+                                        local_identifier="metric_1",
+                                    ),
+                                ],
+                            ),
+                            execution_settings=ExecutionSettings(
+                                data_sampling_percentage=0,
+                                timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                            ),
+                            file_name="result",
+                            format="CSV",
+                        ),
+                    ),
+                ],
                 schedule=JsonApiAutomationInAttributesSchedule(
                     cron="0 */30 9-17 ? * MON-FRI",
                     first_run=dateutil_parser('2025-01-01T12:00:00Z'),
                     timezone="Europe/Prague",
                 ),
+                slides_exports=[
+                    JsonApiAutomationInAttributesSlidesExportsInner(
+                        request_payload=SlidesExportRequest(
+                            dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                            file_name="filename",
+                            format="PDF",
+                            metadata=JsonNode(),
+                            template_id="template_id_example",
+                            visualization_ids=[
+                                "visualization_ids_example",
+                            ],
+                            widget_ids=[
+                                "widget_ids_example",
+                            ],
+                        ),
+                    ),
+                ],
                 state="ACTIVE",
                 tabular_exports=[
                     JsonApiAutomationInAttributesTabularExportsInner(
@@ -593,6 +665,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             metadata=JsonNode(),
                             related_dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
                             settings=Settings(
+                                export_info=True,
                                 merge_headers=True,
                                 pdf_page_size="a4 landscape",
                                 pdf_table_style=[
@@ -1650,7 +1723,15 @@ with gooddata_api_client.ApiClient() as api_client:
                 identifiers=["gooddata.com"],
                 oauth_client_id="oauth_client_id_example",
                 oauth_client_secret="oauth_client_secret_example",
+                oauth_custom_auth_attributes={
+                    "key": "key_example",
+                },
+                oauth_custom_scopes=[
+                    "oauth_custom_scopes_example",
+                ],
+                oauth_issuer_id="myOidcProvider",
                 oauth_issuer_location="oauth_issuer_location_example",
+                oauth_subject_id_claim="oid",
                 saml_metadata="saml_metadata_example",
             ),
             id="id1",
@@ -1802,7 +1883,6 @@ with gooddata_api_client.ApiClient() as api_client:
         data=JsonApiLlmEndpointIn(
             attributes=JsonApiLlmEndpointInAttributes(
                 base_url="base_url_example",
-                description="description_example",
                 llm_model="llm_model_example",
                 llm_organization="llm_organization_example",
                 provider="OPENAI",
@@ -1990,6 +2070,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 destination=JsonApiNotificationChannelInAttributesDestination(None),
                 in_platform_notification="DISABLED",
                 name="name_example",
+                notification_source="notification_source_example",
             ),
             id="id1",
             type="notificationChannel",
@@ -4220,7 +4301,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = entities_api.EntitiesApi(api_client)
     id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "filter=title==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=title==someString;provider==LLMProviderValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -6588,9 +6669,9 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = entities_api.EntitiesApi(api_client)
     workspace_id = "workspaceId_example" # str | 
     origin = "ALL" # str |  (optional) if omitted the server will use the default value of "ALL"
-    filter = "filter=title==someString;description==someString;dataset.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=title==someString;description==someString;dataset.id==321;sourceFact.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     include = [
-        "include=dataset",
+        "include=dataset,sourceFact",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
     page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
     size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
@@ -7128,7 +7209,7 @@ configuration = gooddata_api_client.Configuration(
 with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = entities_api.EntitiesApi(api_client)
-    filter = "filter=title==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=title==someString;provider==LLMProviderValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
     size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
     sort = [
@@ -7258,6 +7339,83 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiMetricOutList**](JsonApiMetricOutList.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_all_entities_notification_channel_identifiers**
+> JsonApiNotificationChannelIdentifierOutList get_all_entities_notification_channel_identifiers()
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_notification_channel_identifier_out_list import JsonApiNotificationChannelIdentifierOutList
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    filter = "filter=name==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
+    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
+    sort = [
+        "sort_example",
+    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = [
+        "metaInclude=page,all",
+    ] # [str] | Include Meta objects. (optional)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.get_all_entities_notification_channel_identifiers(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_all_entities_notification_channel_identifiers: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
+ **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
+ **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
+
+### Return type
+
+[**JsonApiNotificationChannelIdentifierOutList**](JsonApiNotificationChannelIdentifierOutList.md)
 
 ### Authorization
 
@@ -9882,9 +10040,9 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = entities_api.EntitiesApi(api_client)
     workspace_id = "workspaceId_example" # str | 
     object_id = "objectId_example" # str | 
-    filter = "filter=title==someString;description==someString;dataset.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=title==someString;description==someString;dataset.id==321;sourceFact.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     include = [
-        "include=dataset",
+        "include=dataset,sourceFact",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
     meta_include = [
@@ -10383,7 +10541,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = entities_api.EntitiesApi(api_client)
     id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "filter=title==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=title==someString;provider==LLMProviderValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -10502,6 +10660,80 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiMetricOutDocument**](JsonApiMetricOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_entity_notification_channel_identifiers**
+> JsonApiNotificationChannelIdentifierOutDocument get_entity_notification_channel_identifiers(id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_notification_channel_identifier_out_document import JsonApiNotificationChannelIdentifierOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    id = "/6bUUGjjNSwg0_bs" # str | 
+    filter = "filter=name==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.get_entity_notification_channel_identifiers(id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_entity_notification_channel_identifiers: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.get_entity_notification_channel_identifiers(id, filter=filter)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_entity_notification_channel_identifiers: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+[**JsonApiNotificationChannelIdentifierOutDocument**](JsonApiNotificationChannelIdentifierOutDocument.md)
 
 ### Authorization
 
@@ -10701,7 +10933,7 @@ with gooddata_api_client.ApiClient() as api_client:
     id = "/6bUUGjjNSwg0_bs" # str | 
     filter = "filter=name==someString;hostname==someString;bootstrapUser.id==321;bootstrapUserGroup.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     include = [
-        "include=bootstrapUser,bootstrapUserGroup",
+        "include=bootstrapUser,bootstrapUserGroup,identityProvider",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
     meta_include = [
         "metaInclude=permissions,all",
@@ -12036,11 +12268,81 @@ with gooddata_api_client.ApiClient() as api_client:
                     ],
                     widget="widget_example",
                 ),
+                raw_exports=[
+                    JsonApiAutomationInAttributesRawExportsInner(
+                        request_payload=RawExportRequest(
+                            custom_override=RawCustomOverride(
+                                labels={
+                                    "key": RawCustomLabel(
+                                        title="title_example",
+                                    ),
+                                },
+                                metrics={
+                                    "key": RawCustomMetric(
+                                        title="title_example",
+                                    ),
+                                },
+                            ),
+                            execution=AFM(
+                                attributes=[
+                                    AttributeItem(
+                                        label=AfmObjectIdentifierLabel(
+                                            identifier=AfmObjectIdentifierLabelIdentifier(
+                                                id="sample_item.price",
+                                                type="label",
+                                            ),
+                                        ),
+                                        local_identifier="attribute_1",
+                                        show_all_values=False,
+                                    ),
+                                ],
+                                aux_measures=[
+                                    MeasureItem(
+                                        definition=MeasureDefinition(),
+                                        local_identifier="metric_1",
+                                    ),
+                                ],
+                                filters=[
+                                    FilterDefinition(),
+                                ],
+                                measures=[
+                                    MeasureItem(
+                                        definition=MeasureDefinition(),
+                                        local_identifier="metric_1",
+                                    ),
+                                ],
+                            ),
+                            execution_settings=ExecutionSettings(
+                                data_sampling_percentage=0,
+                                timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                            ),
+                            file_name="result",
+                            format="CSV",
+                        ),
+                    ),
+                ],
                 schedule=JsonApiAutomationInAttributesSchedule(
                     cron="0 */30 9-17 ? * MON-FRI",
                     first_run=dateutil_parser('2025-01-01T12:00:00Z'),
                     timezone="Europe/Prague",
                 ),
+                slides_exports=[
+                    JsonApiAutomationInAttributesSlidesExportsInner(
+                        request_payload=SlidesExportRequest(
+                            dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                            file_name="filename",
+                            format="PDF",
+                            metadata=JsonNode(),
+                            template_id="template_id_example",
+                            visualization_ids=[
+                                "visualization_ids_example",
+                            ],
+                            widget_ids=[
+                                "widget_ids_example",
+                            ],
+                        ),
+                    ),
+                ],
                 state="ACTIVE",
                 tabular_exports=[
                     JsonApiAutomationInAttributesTabularExportsInner(
@@ -12064,6 +12366,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             metadata=JsonNode(),
                             related_dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
                             settings=Settings(
+                                export_info=True,
                                 merge_headers=True,
                                 pdf_page_size="a4 landscape",
                                 pdf_table_style=[
@@ -13252,7 +13555,15 @@ with gooddata_api_client.ApiClient() as api_client:
                 identifiers=["gooddata.com"],
                 oauth_client_id="oauth_client_id_example",
                 oauth_client_secret="oauth_client_secret_example",
+                oauth_custom_auth_attributes={
+                    "key": "key_example",
+                },
+                oauth_custom_scopes=[
+                    "oauth_custom_scopes_example",
+                ],
+                oauth_issuer_id="myOidcProvider",
                 oauth_issuer_location="oauth_issuer_location_example",
+                oauth_subject_id_claim="oid",
                 saml_metadata="saml_metadata_example",
             ),
             id="id1",
@@ -13430,7 +13741,6 @@ with gooddata_api_client.ApiClient() as api_client:
         data=JsonApiLlmEndpointPatch(
             attributes=JsonApiLlmEndpointPatchAttributes(
                 base_url="base_url_example",
-                description="description_example",
                 llm_model="llm_model_example",
                 llm_organization="llm_organization_example",
                 provider="OPENAI",
@@ -13441,7 +13751,7 @@ with gooddata_api_client.ApiClient() as api_client:
             type="llmEndpoint",
         ),
     ) # JsonApiLlmEndpointPatchDocument | 
-    filter = "filter=title==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=title==someString;provider==LLMProviderValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -13631,6 +13941,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 destination=JsonApiNotificationChannelInAttributesDestination(None),
                 in_platform_notification="DISABLED",
                 name="name_example",
+                notification_source="notification_source_example",
             ),
             id="id1",
             type="notificationChannel",
@@ -13827,12 +14138,17 @@ with gooddata_api_client.ApiClient() as api_client:
                 oauth_subject_id_claim="oid",
             ),
             id="id1",
+            relationships=JsonApiOrganizationInRelationships(
+                identity_provider=JsonApiOrganizationInRelationshipsIdentityProvider(
+                    data=JsonApiIdentityProviderToOneLinkage(None),
+                ),
+            ),
             type="organization",
         ),
     ) # JsonApiOrganizationPatchDocument | 
     filter = "filter=name==someString;hostname==someString;bootstrapUser.id==321;bootstrapUserGroup.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     include = [
-        "include=bootstrapUser,bootstrapUserGroup",
+        "include=bootstrapUser,bootstrapUserGroup,identityProvider",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
 
     # example passing only required values which don't have defaults set
@@ -15089,11 +15405,81 @@ with gooddata_api_client.ApiClient() as api_client:
                     ],
                     widget="widget_example",
                 ),
+                raw_exports=[
+                    JsonApiAutomationInAttributesRawExportsInner(
+                        request_payload=RawExportRequest(
+                            custom_override=RawCustomOverride(
+                                labels={
+                                    "key": RawCustomLabel(
+                                        title="title_example",
+                                    ),
+                                },
+                                metrics={
+                                    "key": RawCustomMetric(
+                                        title="title_example",
+                                    ),
+                                },
+                            ),
+                            execution=AFM(
+                                attributes=[
+                                    AttributeItem(
+                                        label=AfmObjectIdentifierLabel(
+                                            identifier=AfmObjectIdentifierLabelIdentifier(
+                                                id="sample_item.price",
+                                                type="label",
+                                            ),
+                                        ),
+                                        local_identifier="attribute_1",
+                                        show_all_values=False,
+                                    ),
+                                ],
+                                aux_measures=[
+                                    MeasureItem(
+                                        definition=MeasureDefinition(),
+                                        local_identifier="metric_1",
+                                    ),
+                                ],
+                                filters=[
+                                    FilterDefinition(),
+                                ],
+                                measures=[
+                                    MeasureItem(
+                                        definition=MeasureDefinition(),
+                                        local_identifier="metric_1",
+                                    ),
+                                ],
+                            ),
+                            execution_settings=ExecutionSettings(
+                                data_sampling_percentage=0,
+                                timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                            ),
+                            file_name="result",
+                            format="CSV",
+                        ),
+                    ),
+                ],
                 schedule=JsonApiAutomationInAttributesSchedule(
                     cron="0 */30 9-17 ? * MON-FRI",
                     first_run=dateutil_parser('2025-01-01T12:00:00Z'),
                     timezone="Europe/Prague",
                 ),
+                slides_exports=[
+                    JsonApiAutomationInAttributesSlidesExportsInner(
+                        request_payload=SlidesExportRequest(
+                            dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                            file_name="filename",
+                            format="PDF",
+                            metadata=JsonNode(),
+                            template_id="template_id_example",
+                            visualization_ids=[
+                                "visualization_ids_example",
+                            ],
+                            widget_ids=[
+                                "widget_ids_example",
+                            ],
+                        ),
+                    ),
+                ],
                 state="ACTIVE",
                 tabular_exports=[
                     JsonApiAutomationInAttributesTabularExportsInner(
@@ -15117,6 +15503,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             metadata=JsonNode(),
                             related_dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
                             settings=Settings(
+                                export_info=True,
                                 merge_headers=True,
                                 pdf_page_size="a4 landscape",
                                 pdf_table_style=[
@@ -16305,7 +16692,15 @@ with gooddata_api_client.ApiClient() as api_client:
                 identifiers=["gooddata.com"],
                 oauth_client_id="oauth_client_id_example",
                 oauth_client_secret="oauth_client_secret_example",
+                oauth_custom_auth_attributes={
+                    "key": "key_example",
+                },
+                oauth_custom_scopes=[
+                    "oauth_custom_scopes_example",
+                ],
+                oauth_issuer_id="myOidcProvider",
                 oauth_issuer_location="oauth_issuer_location_example",
+                oauth_subject_id_claim="oid",
                 saml_metadata="saml_metadata_example",
             ),
             id="id1",
@@ -16483,7 +16878,6 @@ with gooddata_api_client.ApiClient() as api_client:
         data=JsonApiLlmEndpointIn(
             attributes=JsonApiLlmEndpointInAttributes(
                 base_url="base_url_example",
-                description="description_example",
                 llm_model="llm_model_example",
                 llm_organization="llm_organization_example",
                 provider="OPENAI",
@@ -16494,7 +16888,7 @@ with gooddata_api_client.ApiClient() as api_client:
             type="llmEndpoint",
         ),
     ) # JsonApiLlmEndpointInDocument | 
-    filter = "filter=title==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=title==someString;provider==LLMProviderValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -16684,6 +17078,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 destination=JsonApiNotificationChannelInAttributesDestination(None),
                 in_platform_notification="DISABLED",
                 name="name_example",
+                notification_source="notification_source_example",
             ),
             id="id1",
             type="notificationChannel",
@@ -16880,12 +17275,17 @@ with gooddata_api_client.ApiClient() as api_client:
                 oauth_subject_id_claim="oid",
             ),
             id="id1",
+            relationships=JsonApiOrganizationInRelationships(
+                identity_provider=JsonApiOrganizationInRelationshipsIdentityProvider(
+                    data=JsonApiIdentityProviderToOneLinkage(None),
+                ),
+            ),
             type="organization",
         ),
     ) # JsonApiOrganizationInDocument | 
     filter = "filter=name==someString;hostname==someString;bootstrapUser.id==321;bootstrapUserGroup.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     include = [
-        "include=bootstrapUser,bootstrapUserGroup",
+        "include=bootstrapUser,bootstrapUserGroup,identityProvider",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
 
     # example passing only required values which don't have defaults set

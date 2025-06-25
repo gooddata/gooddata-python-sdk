@@ -2122,6 +2122,13 @@ with gooddata_api_client.ApiClient() as api_client:
                             id="fact.customer_order_count",
                             source_column="customer_order_count",
                             source_column_data_type="NUMERIC",
+                            source_fact_reference=DeclarativeSourceFactReference(
+                                id=FactIdentifier(
+                                    id="fact_id",
+                                    type="fact",
+                                ),
+                                operation="SUM",
+                            ),
                             tags=["Customers"],
                             title="Customer order count",
                         ),
@@ -2133,6 +2140,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         ),
                     ],
                     id="customers",
+                    precedence=0,
                     references=[
                         DeclarativeReference(
                             identifier=ReferenceIdentifier(
@@ -2561,6 +2569,59 @@ with gooddata_api_client.ApiClient() as api_client:
                 id="webhook123",
                 type="notificationChannel",
             ),
+            raw_exports=[
+                AutomationRawExport(
+                    request_payload=RawExportRequest(
+                        custom_override=RawCustomOverride(
+                            labels={
+                                "key": RawCustomLabel(
+                                    title="title_example",
+                                ),
+                            },
+                            metrics={
+                                "key": RawCustomMetric(
+                                    title="title_example",
+                                ),
+                            },
+                        ),
+                        execution=AFM(
+                            attributes=[
+                                AttributeItem(
+                                    label=AfmObjectIdentifierLabel(
+                                        identifier=AfmObjectIdentifierLabelIdentifier(
+                                            id="sample_item.price",
+                                            type="label",
+                                        ),
+                                    ),
+                                    local_identifier="attribute_1",
+                                    show_all_values=False,
+                                ),
+                            ],
+                            aux_measures=[
+                                MeasureItem(
+                                    definition=MeasureDefinition(),
+                                    local_identifier="metric_1",
+                                ),
+                            ],
+                            filters=[
+                                FilterDefinition(),
+                            ],
+                            measures=[
+                                MeasureItem(
+                                    definition=MeasureDefinition(),
+                                    local_identifier="metric_1",
+                                ),
+                            ],
+                        ),
+                        execution_settings=ExecutionSettings(
+                            data_sampling_percentage=0,
+                            timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                        ),
+                        file_name="result",
+                        format="CSV",
+                    ),
+                ),
+            ],
             recipients=[
                 DeclarativeUserIdentifier(
                     id="employee123",
@@ -2572,6 +2633,23 @@ with gooddata_api_client.ApiClient() as api_client:
                 first_run=dateutil_parser('2025-01-01T12:00:00Z'),
                 timezone="Europe/Prague",
             ),
+            slides_exports=[
+                AutomationSlidesExport(
+                    request_payload=SlidesExportRequest(
+                        dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                        file_name="filename",
+                        format="PDF",
+                        metadata=JsonNode(),
+                        template_id="template_id_example",
+                        visualization_ids=[
+                            "visualization_ids_example",
+                        ],
+                        widget_ids=[
+                            "widget_ids_example",
+                        ],
+                    ),
+                ),
+            ],
             state="ACTIVE",
             tabular_exports=[
                 AutomationTabularExport(
@@ -2595,6 +2673,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         metadata=JsonNode(),
                         related_dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
                         settings=Settings(
+                            export_info=True,
                             merge_headers=True,
                             pdf_page_size="a4 landscape",
                             pdf_table_style=[
@@ -3014,7 +3093,15 @@ with gooddata_api_client.ApiClient() as api_client:
             identifiers=["gooddata.com"],
             oauth_client_id="oauth_client_id_example",
             oauth_client_secret="oauth_client_secret_example",
+            oauth_custom_auth_attributes={
+                "key": "key_example",
+            },
+            oauth_custom_scopes=[
+                "oauth_custom_scopes_example",
+            ],
+            oauth_issuer_id="myOidcProvider",
             oauth_issuer_location="oauth_issuer_location_example",
+            oauth_subject_id_claim="oid",
             saml_metadata="saml_metadata_example",
         ),
     ] # [DeclarativeIdentityProvider] | 
@@ -3143,6 +3230,13 @@ with gooddata_api_client.ApiClient() as api_client:
                             id="fact.customer_order_count",
                             source_column="customer_order_count",
                             source_column_data_type="NUMERIC",
+                            source_fact_reference=DeclarativeSourceFactReference(
+                                id=FactIdentifier(
+                                    id="fact_id",
+                                    type="fact",
+                                ),
+                                operation="SUM",
+                            ),
                             tags=["Customers"],
                             title="Customer order count",
                         ),
@@ -3154,6 +3248,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         ),
                     ],
                     id="customers",
+                    precedence=0,
                     references=[
                         DeclarativeReference(
                             identifier=ReferenceIdentifier(
@@ -3295,6 +3390,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 id="notification-channel-1",
                 in_platform_notification="DISABLED",
                 name="channel",
+                notification_source="notification_source_example",
             ),
         ],
     ) # DeclarativeNotificationChannels | 
@@ -3485,7 +3581,15 @@ with gooddata_api_client.ApiClient() as api_client:
                 identifiers=["gooddata.com"],
                 oauth_client_id="oauth_client_id_example",
                 oauth_client_secret="oauth_client_secret_example",
+                oauth_custom_auth_attributes={
+                    "key": "key_example",
+                },
+                oauth_custom_scopes=[
+                    "oauth_custom_scopes_example",
+                ],
+                oauth_issuer_id="myOidcProvider",
                 oauth_issuer_location="oauth_issuer_location_example",
+                oauth_subject_id_claim="oid",
                 saml_metadata="saml_metadata_example",
             ),
         ],
@@ -3505,6 +3609,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 id="notification-channel-1",
                 in_platform_notification="DISABLED",
                 name="channel",
+                notification_source="notification_source_example",
             ),
         ],
         organization=DeclarativeOrganizationInfo(
@@ -3532,6 +3637,10 @@ with gooddata_api_client.ApiClient() as api_client:
             ],
             hostname="alpha.com",
             id="Alpha corporation",
+            identity_provider=DeclarativeIdentityProviderIdentifier(
+                id="gooddata.com",
+                type="identityProvider",
+            ),
             name="Alpha corporation",
             oauth_client_id="oauth_client_id_example",
             oauth_client_secret="oauth_client_secret_example",
@@ -3738,6 +3847,59 @@ with gooddata_api_client.ApiClient() as api_client:
                             id="webhook123",
                             type="notificationChannel",
                         ),
+                        raw_exports=[
+                            AutomationRawExport(
+                                request_payload=RawExportRequest(
+                                    custom_override=RawCustomOverride(
+                                        labels={
+                                            "key": RawCustomLabel(
+                                                title="title_example",
+                                            ),
+                                        },
+                                        metrics={
+                                            "key": RawCustomMetric(
+                                                title="title_example",
+                                            ),
+                                        },
+                                    ),
+                                    execution=AFM(
+                                        attributes=[
+                                            AttributeItem(
+                                                label=AfmObjectIdentifierLabel(
+                                                    identifier=AfmObjectIdentifierLabelIdentifier(
+                                                        id="sample_item.price",
+                                                        type="label",
+                                                    ),
+                                                ),
+                                                local_identifier="attribute_1",
+                                                show_all_values=False,
+                                            ),
+                                        ],
+                                        aux_measures=[
+                                            MeasureItem(
+                                                definition=MeasureDefinition(),
+                                                local_identifier="metric_1",
+                                            ),
+                                        ],
+                                        filters=[
+                                            FilterDefinition(),
+                                        ],
+                                        measures=[
+                                            MeasureItem(
+                                                definition=MeasureDefinition(),
+                                                local_identifier="metric_1",
+                                            ),
+                                        ],
+                                    ),
+                                    execution_settings=ExecutionSettings(
+                                        data_sampling_percentage=0,
+                                        timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                                    ),
+                                    file_name="result",
+                                    format="CSV",
+                                ),
+                            ),
+                        ],
                         recipients=[
                             DeclarativeUserIdentifier(
                                 id="employee123",
@@ -3749,6 +3911,23 @@ with gooddata_api_client.ApiClient() as api_client:
                             first_run=dateutil_parser('2025-01-01T12:00:00Z'),
                             timezone="Europe/Prague",
                         ),
+                        slides_exports=[
+                            AutomationSlidesExport(
+                                request_payload=SlidesExportRequest(
+                                    dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                                    file_name="filename",
+                                    format="PDF",
+                                    metadata=JsonNode(),
+                                    template_id="template_id_example",
+                                    visualization_ids=[
+                                        "visualization_ids_example",
+                                    ],
+                                    widget_ids=[
+                                        "widget_ids_example",
+                                    ],
+                                ),
+                            ),
+                        ],
                         state="ACTIVE",
                         tabular_exports=[
                             AutomationTabularExport(
@@ -3772,6 +3951,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                     metadata=JsonNode(),
                                     related_dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
                                     settings=Settings(
+                                        export_info=True,
                                         merge_headers=True,
                                         pdf_page_size="a4 landscape",
                                         pdf_table_style=[
@@ -4055,6 +4235,13 @@ with gooddata_api_client.ApiClient() as api_client:
                                         id="fact.customer_order_count",
                                         source_column="customer_order_count",
                                         source_column_data_type="NUMERIC",
+                                        source_fact_reference=DeclarativeSourceFactReference(
+                                            id=FactIdentifier(
+                                                id="fact_id",
+                                                type="fact",
+                                            ),
+                                            operation="SUM",
+                                        ),
                                         tags=["Customers"],
                                         title="Customer order count",
                                     ),
@@ -4066,6 +4253,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                     ),
                                 ],
                                 id="customers",
+                                precedence=0,
                                 references=[
                                     DeclarativeReference(
                                         identifier=ReferenceIdentifier(
@@ -4850,6 +5038,59 @@ with gooddata_api_client.ApiClient() as api_client:
                             id="webhook123",
                             type="notificationChannel",
                         ),
+                        raw_exports=[
+                            AutomationRawExport(
+                                request_payload=RawExportRequest(
+                                    custom_override=RawCustomOverride(
+                                        labels={
+                                            "key": RawCustomLabel(
+                                                title="title_example",
+                                            ),
+                                        },
+                                        metrics={
+                                            "key": RawCustomMetric(
+                                                title="title_example",
+                                            ),
+                                        },
+                                    ),
+                                    execution=AFM(
+                                        attributes=[
+                                            AttributeItem(
+                                                label=AfmObjectIdentifierLabel(
+                                                    identifier=AfmObjectIdentifierLabelIdentifier(
+                                                        id="sample_item.price",
+                                                        type="label",
+                                                    ),
+                                                ),
+                                                local_identifier="attribute_1",
+                                                show_all_values=False,
+                                            ),
+                                        ],
+                                        aux_measures=[
+                                            MeasureItem(
+                                                definition=MeasureDefinition(),
+                                                local_identifier="metric_1",
+                                            ),
+                                        ],
+                                        filters=[
+                                            FilterDefinition(),
+                                        ],
+                                        measures=[
+                                            MeasureItem(
+                                                definition=MeasureDefinition(),
+                                                local_identifier="metric_1",
+                                            ),
+                                        ],
+                                    ),
+                                    execution_settings=ExecutionSettings(
+                                        data_sampling_percentage=0,
+                                        timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                                    ),
+                                    file_name="result",
+                                    format="CSV",
+                                ),
+                            ),
+                        ],
                         recipients=[
                             DeclarativeUserIdentifier(
                                 id="employee123",
@@ -4861,6 +5102,23 @@ with gooddata_api_client.ApiClient() as api_client:
                             first_run=dateutil_parser('2025-01-01T12:00:00Z'),
                             timezone="Europe/Prague",
                         ),
+                        slides_exports=[
+                            AutomationSlidesExport(
+                                request_payload=SlidesExportRequest(
+                                    dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                                    file_name="filename",
+                                    format="PDF",
+                                    metadata=JsonNode(),
+                                    template_id="template_id_example",
+                                    visualization_ids=[
+                                        "visualization_ids_example",
+                                    ],
+                                    widget_ids=[
+                                        "widget_ids_example",
+                                    ],
+                                ),
+                            ),
+                        ],
                         state="ACTIVE",
                         tabular_exports=[
                             AutomationTabularExport(
@@ -4884,6 +5142,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                     metadata=JsonNode(),
                                     related_dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
                                     settings=Settings(
+                                        export_info=True,
                                         merge_headers=True,
                                         pdf_page_size="a4 landscape",
                                         pdf_table_style=[
@@ -5167,6 +5426,13 @@ with gooddata_api_client.ApiClient() as api_client:
                                         id="fact.customer_order_count",
                                         source_column="customer_order_count",
                                         source_column_data_type="NUMERIC",
+                                        source_fact_reference=DeclarativeSourceFactReference(
+                                            id=FactIdentifier(
+                                                id="fact_id",
+                                                type="fact",
+                                            ),
+                                            operation="SUM",
+                                        ),
                                         tags=["Customers"],
                                         title="Customer order count",
                                     ),
@@ -5178,6 +5444,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                     ),
                                 ],
                                 id="customers",
+                                precedence=0,
                                 references=[
                                     DeclarativeReference(
                                         identifier=ReferenceIdentifier(

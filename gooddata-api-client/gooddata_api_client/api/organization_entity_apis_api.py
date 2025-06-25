@@ -339,8 +339,10 @@ class OrganizationEntityAPIsApi(object):
 
                         "USERS": "users",
                         "USERGROUPS": "userGroups",
+                        "IDENTITYPROVIDERS": "identityProviders",
                         "BOOTSTRAPUSER": "bootstrapUser",
                         "BOOTSTRAPUSERGROUP": "bootstrapUserGroup",
+                        "IDENTITYPROVIDER": "identityProvider",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -552,8 +554,10 @@ class OrganizationEntityAPIsApi(object):
 
                         "USERS": "users",
                         "USERGROUPS": "userGroups",
+                        "IDENTITYPROVIDERS": "identityProviders",
                         "BOOTSTRAPUSER": "bootstrapUser",
                         "BOOTSTRAPUSERGROUP": "bootstrapUserGroup",
+                        "IDENTITYPROVIDER": "identityProvider",
                         "ALL": "ALL"
                     },
                 },
@@ -703,8 +707,10 @@ class OrganizationEntityAPIsApi(object):
 
                         "USERS": "users",
                         "USERGROUPS": "userGroups",
+                        "IDENTITYPROVIDERS": "identityProviders",
                         "BOOTSTRAPUSER": "bootstrapUser",
                         "BOOTSTRAPUSERGROUP": "bootstrapUserGroup",
+                        "IDENTITYPROVIDER": "identityProvider",
                         "ALL": "ALL"
                     },
                 },

@@ -41,10 +41,17 @@ with gooddata_api_client.ApiClient() as api_client:
     dashboard_id = "dashboardId_example" # str | 
     dashboard_tabular_export_request = DashboardTabularExportRequest(
         dashboard_filters_override=[
-            DashboardTabularExportRequestDashboardFiltersOverrideInner(None),
+            DashboardFilter(),
         ],
         file_name="result",
         format="XLSX",
+        settings=DashboardExportSettings(
+            export_info=True,
+            merge_headers=True,
+        ),
+        widget_ids=[
+            "widget_ids_example",
+        ],
     ) # DashboardTabularExportRequest | 
 
     # example passing only required values which don't have defaults set
@@ -136,6 +143,7 @@ with gooddata_api_client.ApiClient() as api_client:
         metadata=JsonNode(),
         related_dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
         settings=Settings(
+            export_info=True,
             merge_headers=True,
             pdf_page_size="a4 landscape",
             pdf_table_style=[
