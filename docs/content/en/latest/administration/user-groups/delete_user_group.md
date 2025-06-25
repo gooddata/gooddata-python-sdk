@@ -6,20 +6,7 @@ no_list: true
 superheading: "catalog_user."
 ---
 
-
-
-``delete_user_group(user_group_id: str)``
-
-Deletes user group using user group id.
-
-{{% parameters-block  title="Parameters"%}}
-{{< parameter p_name="user_group_id" p_type="string" >}}
-User group identification string. e.g. "123"
-{{< /parameter >}}
-{{% /parameters-block %}}
-
-{{% parameters-block title="Returns" None="yes" %}}
-{{% /parameters-block %}}
+{{< api-ref "sdk.CatalogUserService.delete_user_group" >}}
 
 ## Example
 
