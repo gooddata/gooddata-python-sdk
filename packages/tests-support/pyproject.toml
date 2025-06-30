@@ -1,0 +1,17 @@
+# (C) 2025 GoodData Corporation
+[project]
+name = "tests-support"
+description = "Tests support for GoodData Python SDK"
+requires-python = ">=3.9.0"
+version = "1.0.0"
+dependencies = [
+    "pyyaml>=6.0",
+    "requests",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/tests_support"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

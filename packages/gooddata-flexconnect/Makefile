@@ -1,5 +1,5 @@
-# (C) 2024 GoodData Corporation
-include ../project_common.mk
+# (C) 2021 GoodData Corporation
+include ../../project_common.mk
 
 .PHONY: docs
 docs:

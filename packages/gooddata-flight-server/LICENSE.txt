@@ -1,1 +1,1 @@
-../OSS LICENSES/LICENSE (gooddata-flight-server).txt
+../../OSS LICENSES/LICENSE (gooddata-flight-server).txt
