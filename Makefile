@@ -20,7 +20,6 @@ all:
 dev:
 	uv sync --all-groups
 	.venv/bin/pre-commit install
-	source .venv/bin/activate
 
 .PHONY: lint
 lint:
