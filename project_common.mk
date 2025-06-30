@@ -25,16 +25,16 @@ all:
 
 .PHONY: format
 format:
-	(cd ..; .venv/bin/ruff format --check $(CURR_DIR_BASE_NAME))
+	(cd ...; .venv/bin/ruff format --check $(CURR_DIR_BASE_NAME))
 
 .PHONY: format-diff
 format-diff:
-	(cd ..; .venv/bin/ruff format --diff $(CURR_DIR_BASE_NAME))
+	(cd ...; .venv/bin/ruff format --diff $(CURR_DIR_BASE_NAME))
 
 .PHONY: format-fix
 format-fix:
-	(cd ..; .venv/bin/ruff format $(CURR_DIR_BASE_NAME))
-	(cd ..; .venv/bin/ruff check --fix $(CURR_DIR_BASE_NAME))
+	(cd ...; .venv/bin/ruff format $(CURR_DIR_BASE_NAME))
+	(cd ...; .venv/bin/ruff check --fix $(CURR_DIR_BASE_NAME))
 
 .PHONY: mypy
 mypy:
@@ -42,7 +42,7 @@ mypy:
 
 .PHONY: test
 test:
-	tox $(TOX_FLAGS) $(LOCAL_TEST_ENVS) $(LOCAL_ADD_ARGS)
+	tox -v $(TOX_FLAGS) $(LOCAL_TEST_ENVS) $(LOCAL_ADD_ARGS)
 
 .PHONY: test-ci
 test-ci:
