@@ -246,7 +246,9 @@ Class | Method | HTTP request | Description
 *MetricsApi* | [**update_entity_metrics**](docs/MetricsApi.md#update_entity_metrics) | **PUT** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | Put a Metric
 *NotificationChannelsApi* | [**create_entity_notification_channels**](docs/NotificationChannelsApi.md#create_entity_notification_channels) | **POST** /api/v1/entities/notificationChannels | Post Notification Channel entities
 *NotificationChannelsApi* | [**delete_entity_notification_channels**](docs/NotificationChannelsApi.md#delete_entity_notification_channels) | **DELETE** /api/v1/entities/notificationChannels/{id} | Delete Notification Channel entity
+*NotificationChannelsApi* | [**get_all_entities_notification_channel_identifiers**](docs/NotificationChannelsApi.md#get_all_entities_notification_channel_identifiers) | **GET** /api/v1/entities/notificationChannelIdentifiers | 
 *NotificationChannelsApi* | [**get_all_entities_notification_channels**](docs/NotificationChannelsApi.md#get_all_entities_notification_channels) | **GET** /api/v1/entities/notificationChannels | Get all Notification Channel entities
+*NotificationChannelsApi* | [**get_entity_notification_channel_identifiers**](docs/NotificationChannelsApi.md#get_entity_notification_channel_identifiers) | **GET** /api/v1/entities/notificationChannelIdentifiers/{id} | 
 *NotificationChannelsApi* | [**get_entity_notification_channels**](docs/NotificationChannelsApi.md#get_entity_notification_channels) | **GET** /api/v1/entities/notificationChannels/{id} | Get Notification Channel entity
 *NotificationChannelsApi* | [**get_export_templates_layout**](docs/NotificationChannelsApi.md#get_export_templates_layout) | **GET** /api/v1/layout/exportTemplates | Get all export templates layout
 *NotificationChannelsApi* | [**get_notification_channels_layout**](docs/NotificationChannelsApi.md#get_notification_channels_layout) | **GET** /api/v1/layout/notificationChannels | Get all notification channels layout
@@ -260,6 +262,7 @@ Class | Method | HTTP request | Description
 *NotificationChannelsApi* | [**test_notification_channel**](docs/NotificationChannelsApi.md#test_notification_channel) | **POST** /api/v1/actions/notificationChannels/test | Test notification channel.
 *NotificationChannelsApi* | [**update_entity_notification_channels**](docs/NotificationChannelsApi.md#update_entity_notification_channels) | **PUT** /api/v1/entities/notificationChannels/{id} | Put Notification Channel entity
 *OptionsApi* | [**get_all_options**](docs/OptionsApi.md#get_all_options) | **GET** /api/v1/options | Links for all configuration options
+*OrganizationApi* | [**switch_active_identity_provider**](docs/OrganizationApi.md#switch_active_identity_provider) | **POST** /api/v1/actions/organization/switchActiveIdentityProvider | Switch Active Identity Provider
 *OrganizationDeclarativeAPIsApi* | [**get_organization_layout**](docs/OrganizationDeclarativeAPIsApi.md#get_organization_layout) | **GET** /api/v1/layout/organization | Get organization layout
 *OrganizationDeclarativeAPIsApi* | [**set_organization_layout**](docs/OrganizationDeclarativeAPIsApi.md#set_organization_layout) | **PUT** /api/v1/layout/organization | Set organization layout
 *OrganizationEntityAPIsApi* | [**create_entity_organization_settings**](docs/OrganizationEntityAPIsApi.md#create_entity_organization_settings) | **POST** /api/v1/entities/organizationSettings | Post Organization Setting entities
@@ -469,6 +472,7 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**scan_data_source**](docs/ActionsApi.md#scan_data_source) | **POST** /api/v1/actions/dataSources/{dataSourceId}/scan | Scan a database to get a physical data model (PDM)
 *ActionsApi* | [**scan_sql**](docs/ActionsApi.md#scan_sql) | **POST** /api/v1/actions/dataSources/{dataSourceId}/scanSql | Collect metadata about SQL query
 *ActionsApi* | [**set_translations**](docs/ActionsApi.md#set_translations) | **POST** /api/v1/actions/workspaces/{workspaceId}/translations/set | Set translations for entities.
+*ActionsApi* | [**switch_active_identity_provider**](docs/ActionsApi.md#switch_active_identity_provider) | **POST** /api/v1/actions/organization/switchActiveIdentityProvider | Switch Active Identity Provider
 *ActionsApi* | [**test_data_source**](docs/ActionsApi.md#test_data_source) | **POST** /api/v1/actions/dataSources/{dataSourceId}/test | Test data source connection by data source id
 *ActionsApi* | [**test_data_source_definition**](docs/ActionsApi.md#test_data_source_definition) | **POST** /api/v1/actions/dataSource/test | Test connection by data source definition
 *ActionsApi* | [**test_existing_notification_channel**](docs/ActionsApi.md#test_existing_notification_channel) | **POST** /api/v1/actions/notificationChannels/{notificationChannelId}/test | Test existing notification channel.
@@ -973,6 +977,7 @@ Class | Method | HTTP request | Description
  - [AttributeResultHeader](docs/AttributeResultHeader.md)
  - [AutomationAlert](docs/AutomationAlert.md)
  - [AutomationAlertCondition](docs/AutomationAlertCondition.md)
+ - [AutomationDashboardTabularExport](docs/AutomationDashboardTabularExport.md)
  - [AutomationExternalRecipient](docs/AutomationExternalRecipient.md)
  - [AutomationImageExport](docs/AutomationImageExport.md)
  - [AutomationMetadata](docs/AutomationMetadata.md)
@@ -1023,6 +1028,7 @@ Class | Method | HTTP request | Description
  - [DashboardPermissionsAssignment](docs/DashboardPermissionsAssignment.md)
  - [DashboardSlidesTemplate](docs/DashboardSlidesTemplate.md)
  - [DashboardTabularExportRequest](docs/DashboardTabularExportRequest.md)
+ - [DashboardTabularExportRequestV2](docs/DashboardTabularExportRequestV2.md)
  - [DataColumnLocator](docs/DataColumnLocator.md)
  - [DataColumnLocators](docs/DataColumnLocators.md)
  - [DataSourceParameter](docs/DataSourceParameter.md)
@@ -1255,6 +1261,7 @@ Class | Method | HTTP request | Description
  - [JsonApiAutomationIn](docs/JsonApiAutomationIn.md)
  - [JsonApiAutomationInAttributes](docs/JsonApiAutomationInAttributes.md)
  - [JsonApiAutomationInAttributesAlert](docs/JsonApiAutomationInAttributesAlert.md)
+ - [JsonApiAutomationInAttributesDashboardTabularExportsInner](docs/JsonApiAutomationInAttributesDashboardTabularExportsInner.md)
  - [JsonApiAutomationInAttributesExternalRecipientsInner](docs/JsonApiAutomationInAttributesExternalRecipientsInner.md)
  - [JsonApiAutomationInAttributesImageExportsInner](docs/JsonApiAutomationInAttributesImageExportsInner.md)
  - [JsonApiAutomationInAttributesMetadata](docs/JsonApiAutomationInAttributesMetadata.md)
@@ -1456,7 +1463,6 @@ Class | Method | HTTP request | Description
  - [JsonApiIdentityProviderOutList](docs/JsonApiIdentityProviderOutList.md)
  - [JsonApiIdentityProviderOutWithLinks](docs/JsonApiIdentityProviderOutWithLinks.md)
  - [JsonApiIdentityProviderPatch](docs/JsonApiIdentityProviderPatch.md)
- - [JsonApiIdentityProviderPatchAttributes](docs/JsonApiIdentityProviderPatchAttributes.md)
  - [JsonApiIdentityProviderPatchDocument](docs/JsonApiIdentityProviderPatchDocument.md)
  - [JsonApiIdentityProviderToOneLinkage](docs/JsonApiIdentityProviderToOneLinkage.md)
  - [JsonApiJwkIn](docs/JsonApiJwkIn.md)
@@ -1798,6 +1804,7 @@ Class | Method | HTTP request | Description
  - [SqlQuery](docs/SqlQuery.md)
  - [SqlQueryAllOf](docs/SqlQueryAllOf.md)
  - [Suggestion](docs/Suggestion.md)
+ - [SwitchIdentityProviderRequest](docs/SwitchIdentityProviderRequest.md)
  - [Table](docs/Table.md)
  - [TableAllOf](docs/TableAllOf.md)
  - [TableOverride](docs/TableOverride.md)

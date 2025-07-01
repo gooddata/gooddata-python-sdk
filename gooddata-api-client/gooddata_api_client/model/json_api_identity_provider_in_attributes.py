@@ -56,6 +56,11 @@ class JsonApiIdentityProviderInAttributes(ModelNormal):
     """
 
     allowed_values = {
+        ('idp_type',): {
+            'MANAGED_IDP': "MANAGED_IDP",
+            'FIM_IDP': "FIM_IDP",
+            'CUSTOM_IDP': "CUSTOM_IDP",
+        },
     }
 
     validations = {
@@ -104,8 +109,9 @@ class JsonApiIdentityProviderInAttributes(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'identifiers': ([str],),  # noqa: E501
             'custom_claim_mapping': ({str: (str,)},),  # noqa: E501
+            'identifiers': ([str],),  # noqa: E501
+            'idp_type': (str,),  # noqa: E501
             'oauth_client_id': (str,),  # noqa: E501
             'oauth_client_secret': (str,),  # noqa: E501
             'oauth_custom_auth_attributes': ({str: (str,)},),  # noqa: E501
@@ -122,8 +128,9 @@ class JsonApiIdentityProviderInAttributes(ModelNormal):
 
 
     attribute_map = {
-        'identifiers': 'identifiers',  # noqa: E501
         'custom_claim_mapping': 'customClaimMapping',  # noqa: E501
+        'identifiers': 'identifiers',  # noqa: E501
+        'idp_type': 'idpType',  # noqa: E501
         'oauth_client_id': 'oauthClientId',  # noqa: E501
         'oauth_client_secret': 'oauthClientSecret',  # noqa: E501
         'oauth_custom_auth_attributes': 'oauthCustomAuthAttributes',  # noqa: E501
@@ -141,11 +148,8 @@ class JsonApiIdentityProviderInAttributes(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, identifiers, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, *args, **kwargs):  # noqa: E501
         """JsonApiIdentityProviderInAttributes - a model defined in OpenAPI
-
-        Args:
-            identifiers ([str]): List of identifiers for this IdP, where an identifier is a domain name. Users with email addresses belonging to these domains will be authenticated by this IdP. In multiple provider setup, this field is mandatory.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -179,6 +183,8 @@ class JsonApiIdentityProviderInAttributes(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             custom_claim_mapping ({str: (str,)}): Map of custom claim overrides. To be used when your Idp does not provide default claims (sub, email, name, given_name, family_name). Define the key pair for the claim you wish to override, where the key is the default name of the attribute and the value is your custom name for the given attribute.. [optional]  # noqa: E501
+            identifiers ([str]): List of identifiers for this IdP, where an identifier is a domain name. Users with email addresses belonging to these domains will be authenticated by this IdP.. [optional]  # noqa: E501
+            idp_type (str): Type of IdP for management purposes. MANAGED_IDP represents a GoodData managed IdP used in single OIDC setup, which is protected from altering/deletion. FIM_IDP represents a GoodData managed IdP used in federated identity management setup, which is protected from altering/deletion. CUSTOM_IDP represents customer's own IdP, protected from deletion if currently used by org for authentication, deletable otherwise.. [optional]  # noqa: E501
             oauth_client_id (str): The OAuth client id of your OIDC provider. This field is mandatory for OIDC IdP.. [optional]  # noqa: E501
             oauth_client_secret (str): The OAuth client secret of your OIDC provider. This field is mandatory for OIDC IdP.. [optional]  # noqa: E501
             oauth_custom_auth_attributes ({str: (str,)}): Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.. [optional]  # noqa: E501
@@ -218,7 +224,6 @@ class JsonApiIdentityProviderInAttributes(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.identifiers = identifiers
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -239,11 +244,8 @@ class JsonApiIdentityProviderInAttributes(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, identifiers, *args, **kwargs):  # noqa: E501
+    def __init__(self, *args, **kwargs):  # noqa: E501
         """JsonApiIdentityProviderInAttributes - a model defined in OpenAPI
-
-        Args:
-            identifiers ([str]): List of identifiers for this IdP, where an identifier is a domain name. Users with email addresses belonging to these domains will be authenticated by this IdP. In multiple provider setup, this field is mandatory.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -277,6 +279,8 @@ class JsonApiIdentityProviderInAttributes(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             custom_claim_mapping ({str: (str,)}): Map of custom claim overrides. To be used when your Idp does not provide default claims (sub, email, name, given_name, family_name). Define the key pair for the claim you wish to override, where the key is the default name of the attribute and the value is your custom name for the given attribute.. [optional]  # noqa: E501
+            identifiers ([str]): List of identifiers for this IdP, where an identifier is a domain name. Users with email addresses belonging to these domains will be authenticated by this IdP.. [optional]  # noqa: E501
+            idp_type (str): Type of IdP for management purposes. MANAGED_IDP represents a GoodData managed IdP used in single OIDC setup, which is protected from altering/deletion. FIM_IDP represents a GoodData managed IdP used in federated identity management setup, which is protected from altering/deletion. CUSTOM_IDP represents customer's own IdP, protected from deletion if currently used by org for authentication, deletable otherwise.. [optional]  # noqa: E501
             oauth_client_id (str): The OAuth client id of your OIDC provider. This field is mandatory for OIDC IdP.. [optional]  # noqa: E501
             oauth_client_secret (str): The OAuth client secret of your OIDC provider. This field is mandatory for OIDC IdP.. [optional]  # noqa: E501
             oauth_custom_auth_attributes ({str: (str,)}): Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.. [optional]  # noqa: E501
@@ -314,7 +318,6 @@ class JsonApiIdentityProviderInAttributes(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.identifiers = identifiers
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

@@ -32,6 +32,7 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.automation_alert import AutomationAlert
+    from gooddata_api_client.model.automation_dashboard_tabular_export import AutomationDashboardTabularExport
     from gooddata_api_client.model.automation_external_recipient import AutomationExternalRecipient
     from gooddata_api_client.model.automation_image_export import AutomationImageExport
     from gooddata_api_client.model.automation_metadata import AutomationMetadata
@@ -43,6 +44,7 @@ def lazy_import():
     from gooddata_api_client.model.declarative_notification_channel_identifier import DeclarativeNotificationChannelIdentifier
     from gooddata_api_client.model.declarative_user_identifier import DeclarativeUserIdentifier
     globals()['AutomationAlert'] = AutomationAlert
+    globals()['AutomationDashboardTabularExport'] = AutomationDashboardTabularExport
     globals()['AutomationExternalRecipient'] = AutomationExternalRecipient
     globals()['AutomationImageExport'] = AutomationImageExport
     globals()['AutomationMetadata'] = AutomationMetadata
@@ -83,6 +85,8 @@ class AdHocAutomation(ModelNormal):
     }
 
     validations = {
+        ('dashboard_tabular_exports',): {
+        },
         ('description',): {
             'max_length': 255,
         },
@@ -134,6 +138,7 @@ class AdHocAutomation(ModelNormal):
         return {
             'alert': (AutomationAlert,),  # noqa: E501
             'analytical_dashboard': (DeclarativeAnalyticalDashboardIdentifier,),  # noqa: E501
+            'dashboard_tabular_exports': ([AutomationDashboardTabularExport],),  # noqa: E501
             'description': (str,),  # noqa: E501
             'details': ({str: (str,)},),  # noqa: E501
             'external_recipients': ([AutomationExternalRecipient],),  # noqa: E501
@@ -157,6 +162,7 @@ class AdHocAutomation(ModelNormal):
     attribute_map = {
         'alert': 'alert',  # noqa: E501
         'analytical_dashboard': 'analyticalDashboard',  # noqa: E501
+        'dashboard_tabular_exports': 'dashboardTabularExports',  # noqa: E501
         'description': 'description',  # noqa: E501
         'details': 'details',  # noqa: E501
         'external_recipients': 'externalRecipients',  # noqa: E501
@@ -215,6 +221,7 @@ class AdHocAutomation(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             alert (AutomationAlert): [optional]  # noqa: E501
             analytical_dashboard (DeclarativeAnalyticalDashboardIdentifier): [optional]  # noqa: E501
+            dashboard_tabular_exports ([AutomationDashboardTabularExport]): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             details ({str: (str,)}): Additional details to be included in the automated message.. [optional]  # noqa: E501
             external_recipients ([AutomationExternalRecipient]): External recipients of the automation action results.. [optional]  # noqa: E501
@@ -315,6 +322,7 @@ class AdHocAutomation(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             alert (AutomationAlert): [optional]  # noqa: E501
             analytical_dashboard (DeclarativeAnalyticalDashboardIdentifier): [optional]  # noqa: E501
+            dashboard_tabular_exports ([AutomationDashboardTabularExport]): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             details ({str: (str,)}): Additional details to be included in the automated message.. [optional]  # noqa: E501
             external_recipients ([AutomationExternalRecipient]): External recipients of the automation action results.. [optional]  # noqa: E501

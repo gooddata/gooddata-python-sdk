@@ -537,6 +537,25 @@ with gooddata_api_client.ApiClient() as api_client:
                     trigger="ALWAYS",
                 ),
                 are_relations_valid=True,
+                dashboard_tabular_exports=[
+                    JsonApiAutomationInAttributesDashboardTabularExportsInner(
+                        request_payload=DashboardTabularExportRequestV2(
+                            dashboard_filters_override=[
+                                DashboardFilter(),
+                            ],
+                            dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                            file_name="result",
+                            format="XLSX",
+                            settings=DashboardExportSettings(
+                                export_info=True,
+                                merge_headers=True,
+                            ),
+                            widget_ids=[
+                                "widget_ids_example",
+                            ],
+                        ),
+                    ),
+                ],
                 description="description_example",
                 details=None,
                 external_recipients=[
@@ -1721,6 +1740,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     "key": "key_example",
                 },
                 identifiers=["gooddata.com"],
+                idp_type="MANAGED_IDP",
                 oauth_client_id="oauth_client_id_example",
                 oauth_client_secret="oauth_client_secret_example",
                 oauth_custom_auth_attributes={
@@ -12238,6 +12258,25 @@ with gooddata_api_client.ApiClient() as api_client:
                     trigger="ALWAYS",
                 ),
                 are_relations_valid=True,
+                dashboard_tabular_exports=[
+                    JsonApiAutomationInAttributesDashboardTabularExportsInner(
+                        request_payload=DashboardTabularExportRequestV2(
+                            dashboard_filters_override=[
+                                DashboardFilter(),
+                            ],
+                            dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                            file_name="result",
+                            format="XLSX",
+                            settings=DashboardExportSettings(
+                                export_info=True,
+                                merge_headers=True,
+                            ),
+                            widget_ids=[
+                                "widget_ids_example",
+                            ],
+                        ),
+                    ),
+                ],
                 description="description_example",
                 details=None,
                 external_recipients=[
@@ -13548,11 +13587,12 @@ with gooddata_api_client.ApiClient() as api_client:
     id = "/6bUUGjjNSwg0_bs" # str | 
     json_api_identity_provider_patch_document = JsonApiIdentityProviderPatchDocument(
         data=JsonApiIdentityProviderPatch(
-            attributes=JsonApiIdentityProviderPatchAttributes(
+            attributes=JsonApiIdentityProviderInAttributes(
                 custom_claim_mapping={
                     "key": "key_example",
                 },
                 identifiers=["gooddata.com"],
+                idp_type="MANAGED_IDP",
                 oauth_client_id="oauth_client_id_example",
                 oauth_client_secret="oauth_client_secret_example",
                 oauth_custom_auth_attributes={
@@ -15375,6 +15415,25 @@ with gooddata_api_client.ApiClient() as api_client:
                     trigger="ALWAYS",
                 ),
                 are_relations_valid=True,
+                dashboard_tabular_exports=[
+                    JsonApiAutomationInAttributesDashboardTabularExportsInner(
+                        request_payload=DashboardTabularExportRequestV2(
+                            dashboard_filters_override=[
+                                DashboardFilter(),
+                            ],
+                            dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                            file_name="result",
+                            format="XLSX",
+                            settings=DashboardExportSettings(
+                                export_info=True,
+                                merge_headers=True,
+                            ),
+                            widget_ids=[
+                                "widget_ids_example",
+                            ],
+                        ),
+                    ),
+                ],
                 description="description_example",
                 details=None,
                 external_recipients=[
@@ -16690,6 +16749,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     "key": "key_example",
                 },
                 identifiers=["gooddata.com"],
+                idp_type="MANAGED_IDP",
                 oauth_client_id="oauth_client_id_example",
                 oauth_client_secret="oauth_client_secret_example",
                 oauth_custom_auth_attributes={

@@ -924,6 +924,8 @@
           "widgetIds": {
             "description": "List of widget identifiers to be exported. Note that only one widget is currently supported.",
             "items": {
+              "maxLength": 255,
+              "minLength": 1,
               "type": "string"
             },
             "maxItems": 1,
@@ -1663,6 +1665,8 @@
           "visualizationIds": {
             "description": "List of visualization ids to be exported. Note that only one visualization is currently supported.",
             "items": {
+              "maxLength": 255,
+              "minLength": 1,
               "type": "string"
             },
             "maxItems": 1,
@@ -1672,6 +1676,8 @@
           "widgetIds": {
             "description": "List of widget identifiers to be exported. Note that only one widget is currently supported.",
             "items": {
+              "maxLength": 255,
+              "minLength": 1,
               "type": "string"
             },
             "maxItems": 1,
