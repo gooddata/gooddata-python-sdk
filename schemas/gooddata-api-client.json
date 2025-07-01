@@ -179,6 +179,13 @@
           "analyticalDashboard": {
             "$ref": "#/components/schemas/DeclarativeAnalyticalDashboardIdentifier"
           },
+          "dashboardTabularExports": {
+            "items": {
+              "$ref": "#/components/schemas/AutomationDashboardTabularExport"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
           "description": {
             "maxLength": 255,
             "type": "string"
@@ -1255,6 +1262,17 @@
         "required": [
           "condition",
           "execution"
+        ],
+        "type": "object"
+      },
+      "AutomationDashboardTabularExport": {
+        "properties": {
+          "requestPayload": {
+            "$ref": "#/components/schemas/DashboardTabularExportRequestV2"
+          }
+        },
+        "required": [
+          "requestPayload"
         ],
         "type": "object"
       },
@@ -2480,6 +2498,54 @@
         ],
         "type": "object"
       },
+      "DashboardTabularExportRequestV2": {
+        "description": "Export request object describing the export properties for dashboard tabular exports (v2 with dashboardId).",
+        "properties": {
+          "dashboardFiltersOverride": {
+            "description": "List of filters that will be used instead of the default dashboard filters.",
+            "items": {
+              "$ref": "#/components/schemas/DashboardFilter"
+            },
+            "type": "array"
+          },
+          "dashboardId": {
+            "description": "Dashboard identifier",
+            "example": "761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+            "type": "string"
+          },
+          "fileName": {
+            "description": "Filename of downloaded file without extension.",
+            "example": "result",
+            "type": "string"
+          },
+          "format": {
+            "description": "Requested tabular export type.",
+            "enum": [
+              "XLSX"
+            ],
+            "example": "XLSX",
+            "type": "string"
+          },
+          "settings": {
+            "$ref": "#/components/schemas/DashboardExportSettings"
+          },
+          "widgetIds": {
+            "description": "List of widget identifiers to be exported. Note that only one widget is currently supported.",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 1,
+            "type": "array",
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "dashboardId",
+          "fileName",
+          "format"
+        ],
+        "type": "object"
+      },
       "DataColumnLocator": {
         "description": "Mapping from dimension items (either 'localIdentifier' from 'AttributeItem', or \"measureGroup\") to their respective values. This effectively specifies the path (location) of the data column used for sorting. Therefore values for all dimension items must be specified.",
         "example": {
@@ -3224,6 +3290,13 @@
           },
           "createdBy": {
             "$ref": "#/components/schemas/DeclarativeUserIdentifier"
+          },
+          "dashboardTabularExports": {
+            "items": {
+              "$ref": "#/components/schemas/AutomationDashboardTabularExport"
+            },
+            "type": "array",
+            "uniqueItems": true
           },
           "description": {
             "maxLength": 255,
@@ -4243,16 +4316,25 @@
             "type": "string"
           },
           "identifiers": {
-            "description": "List of identifiers for this IdP, where an identifier is a domain name. Users with email addresses belonging to these domains will be authenticated by this IdP. In multiple provider setup, this field is mandatory.",
+            "description": "List of identifiers for this IdP, where an identifier is a domain name. Users with email addresses belonging to these domains will be authenticated by this IdP.",
             "example": [
               "gooddata.com"
             ],
             "items": {
-              "description": "List of identifiers for this IdP, where an identifier is a domain name. Users with email addresses belonging to these domains will be authenticated by this IdP. In multiple provider setup, this field is mandatory.",
+              "description": "List of identifiers for this IdP, where an identifier is a domain name. Users with email addresses belonging to these domains will be authenticated by this IdP.",
               "example": "[\"gooddata.com\"]",
               "type": "string"
             },
             "type": "array"
+          },
+          "idpType": {
+            "description": "Type of IdP for management purposes. MANAGED_IDP represents a GoodData managed IdP used in single OIDC setup, which is protected from altering/deletion. FIM_IDP represents a GoodData managed IdP used in federated identity management setup, which is protected from altering/deletion. CUSTOM_IDP represents customer's own IdP, protected from deletion if currently used by org for authentication, deletable otherwise.",
+            "enum": [
+              "MANAGED_IDP",
+              "FIM_IDP",
+              "CUSTOM_IDP"
+            ],
+            "type": "string"
           },
           "oauthClientId": {
             "description": "The OAuth client id of your OIDC provider. This field is mandatory for OIDC IdP.",
@@ -4307,8 +4389,7 @@
           }
         },
         "required": [
-          "id",
-          "identifiers"
+          "id"
         ],
         "type": "object"
       },
@@ -5124,9 +5205,6 @@
       "DeclarativeSourceFactReference": {
         "description": "Aggregated awareness source fact reference.",
         "properties": {
-          "id": {
-            "$ref": "#/components/schemas/FactIdentifier"
-          },
           "operation": {
             "description": "Aggregation operation.",
             "enum": [
@@ -5136,11 +5214,14 @@
             ],
             "example": "SUM",
             "type": "string"
+          },
+          "reference": {
+            "$ref": "#/components/schemas/FactIdentifier"
           }
         },
         "required": [
-          "id",
-          "operation"
+          "operation",
+          "reference"
         ],
         "type": "object"
       },
@@ -7473,6 +7554,8 @@
           "widgetIds": {
             "description": "List of widget identifiers to be exported. Note that only one widget is currently supported.",
             "items": {
+              "maxLength": 255,
+              "minLength": 1,
               "type": "string"
             },
             "maxItems": 1,
@@ -8989,6 +9072,20 @@
               "areRelationsValid": {
                 "type": "boolean"
               },
+              "dashboardTabularExports": {
+                "items": {
+                  "properties": {
+                    "requestPayload": {
+                      "$ref": "#/components/schemas/DashboardTabularExportRequestV2"
+                    }
+                  },
+                  "required": [
+                    "requestPayload"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
               "description": {
                 "maxLength": 10000,
                 "type": "string"
@@ -9289,6 +9386,20 @@
               "createdAt": {
                 "format": "date-time",
                 "type": "string"
+              },
+              "dashboardTabularExports": {
+                "items": {
+                  "properties": {
+                    "requestPayload": {
+                      "$ref": "#/components/schemas/DashboardTabularExportRequestV2"
+                    }
+                  },
+                  "required": [
+                    "requestPayload"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
               },
               "description": {
                 "maxLength": 10000,
@@ -9694,6 +9805,20 @@
               },
               "areRelationsValid": {
                 "type": "boolean"
+              },
+              "dashboardTabularExports": {
+                "items": {
+                  "properties": {
+                    "requestPayload": {
+                      "$ref": "#/components/schemas/DashboardTabularExportRequestV2"
+                    }
+                  },
+                  "required": [
+                    "requestPayload"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
               },
               "description": {
                 "maxLength": 10000,
@@ -14437,7 +14562,7 @@
                 "type": "object"
               },
               "identifiers": {
-                "description": "List of identifiers for this IdP, where an identifier is a domain name. Users with email addresses belonging to these domains will be authenticated by this IdP. In multiple provider setup, this field is mandatory.",
+                "description": "List of identifiers for this IdP, where an identifier is a domain name. Users with email addresses belonging to these domains will be authenticated by this IdP.",
                 "example": [
                   "gooddata.com"
                 ],
@@ -14445,6 +14570,15 @@
                   "type": "string"
                 },
                 "type": "array"
+              },
+              "idpType": {
+                "description": "Type of IdP for management purposes. MANAGED_IDP represents a GoodData managed IdP used in single OIDC setup, which is protected from altering/deletion. FIM_IDP represents a GoodData managed IdP used in federated identity management setup, which is protected from altering/deletion. CUSTOM_IDP represents customer's own IdP, protected from deletion if currently used by org for authentication, deletable otherwise.",
+                "enum": [
+                  "MANAGED_IDP",
+                  "FIM_IDP",
+                  "CUSTOM_IDP"
+                ],
+                "type": "string"
               },
               "oauthClientId": {
                 "description": "The OAuth client id of your OIDC provider. This field is mandatory for OIDC IdP.",
@@ -14496,9 +14630,6 @@
                 "type": "string"
               }
             },
-            "required": [
-              "identifiers"
-            ],
             "type": "object"
           },
           "id": {
@@ -14517,7 +14648,6 @@
           }
         },
         "required": [
-          "attributes",
           "id",
           "type"
         ],
@@ -14567,7 +14697,7 @@
                 "type": "object"
               },
               "identifiers": {
-                "description": "List of identifiers for this IdP, where an identifier is a domain name. Users with email addresses belonging to these domains will be authenticated by this IdP. In multiple provider setup, this field is mandatory.",
+                "description": "List of identifiers for this IdP, where an identifier is a domain name. Users with email addresses belonging to these domains will be authenticated by this IdP.",
                 "example": [
                   "gooddata.com"
                 ],
@@ -14575,6 +14705,15 @@
                   "type": "string"
                 },
                 "type": "array"
+              },
+              "idpType": {
+                "description": "Type of IdP for management purposes. MANAGED_IDP represents a GoodData managed IdP used in single OIDC setup, which is protected from altering/deletion. FIM_IDP represents a GoodData managed IdP used in federated identity management setup, which is protected from altering/deletion. CUSTOM_IDP represents customer's own IdP, protected from deletion if currently used by org for authentication, deletable otherwise.",
+                "enum": [
+                  "MANAGED_IDP",
+                  "FIM_IDP",
+                  "CUSTOM_IDP"
+                ],
+                "type": "string"
               },
               "oauthClientId": {
                 "description": "The OAuth client id of your OIDC provider. This field is mandatory for OIDC IdP.",
@@ -14616,9 +14755,6 @@
                 "type": "string"
               }
             },
-            "required": [
-              "identifiers"
-            ],
             "type": "object"
           },
           "id": {
@@ -14637,7 +14773,6 @@
           }
         },
         "required": [
-          "attributes",
           "id",
           "type"
         ],
@@ -14708,7 +14843,7 @@
                 "type": "object"
               },
               "identifiers": {
-                "description": "List of identifiers for this IdP, where an identifier is a domain name. Users with email addresses belonging to these domains will be authenticated by this IdP. In multiple provider setup, this field is mandatory.",
+                "description": "List of identifiers for this IdP, where an identifier is a domain name. Users with email addresses belonging to these domains will be authenticated by this IdP.",
                 "example": [
                   "gooddata.com"
                 ],
@@ -14716,6 +14851,15 @@
                   "type": "string"
                 },
                 "type": "array"
+              },
+              "idpType": {
+                "description": "Type of IdP for management purposes. MANAGED_IDP represents a GoodData managed IdP used in single OIDC setup, which is protected from altering/deletion. FIM_IDP represents a GoodData managed IdP used in federated identity management setup, which is protected from altering/deletion. CUSTOM_IDP represents customer's own IdP, protected from deletion if currently used by org for authentication, deletable otherwise.",
+                "enum": [
+                  "MANAGED_IDP",
+                  "FIM_IDP",
+                  "CUSTOM_IDP"
+                ],
+                "type": "string"
               },
               "oauthClientId": {
                 "description": "The OAuth client id of your OIDC provider. This field is mandatory for OIDC IdP.",
@@ -14785,7 +14929,6 @@
           }
         },
         "required": [
-          "attributes",
           "id",
           "type"
         ],
@@ -15258,7 +15401,8 @@
               "provider": {
                 "description": "LLM Provider.",
                 "enum": [
-                  "OPENAI"
+                  "OPENAI",
+                  "AZURE_OPENAI"
                 ],
                 "type": "string"
               },
@@ -15337,7 +15481,8 @@
               "provider": {
                 "description": "LLM Provider.",
                 "enum": [
-                  "OPENAI"
+                  "OPENAI",
+                  "AZURE_OPENAI"
                 ],
                 "type": "string"
               },
@@ -15450,7 +15595,8 @@
               "provider": {
                 "description": "LLM Provider.",
                 "enum": [
-                  "OPENAI"
+                  "OPENAI",
+                  "AZURE_OPENAI"
                 ],
                 "type": "string"
               },
@@ -23214,6 +23360,8 @@
           "visualizationIds": {
             "description": "List of visualization ids to be exported. Note that only one visualization is currently supported.",
             "items": {
+              "maxLength": 255,
+              "minLength": 1,
               "type": "string"
             },
             "maxItems": 1,
@@ -23223,6 +23371,8 @@
           "widgetIds": {
             "description": "List of widget identifiers to be exported. Note that only one widget is currently supported.",
             "items": {
+              "maxLength": 255,
+              "minLength": 1,
               "type": "string"
             },
             "maxItems": 1,
@@ -23528,6 +23678,19 @@
         ],
         "type": "object"
       },
+      "SwitchIdentityProviderRequest": {
+        "properties": {
+          "idpId": {
+            "description": "Identity provider ID to set as active for the organization.",
+            "example": "my-idp-123",
+            "type": "string"
+          }
+        },
+        "required": [
+          "idpId"
+        ],
+        "type": "object"
+      },
       "Table": {
         "allOf": [
           {
@@ -23762,6 +23925,16 @@
                 "$ref": "#/components/schemas/Webhook"
               }
             ]
+          },
+          "externalRecipients": {
+            "description": "External recipients of the test result.",
+            "items": {
+              "$ref": "#/components/schemas/AutomationExternalRecipient"
+            },
+            "maxItems": 1,
+            "nullable": true,
+            "type": "array",
+            "uniqueItems": true
           }
         },
         "required": [
@@ -24544,6 +24717,7 @@
             "$ref": "#/components/schemas/WebhookMessageData"
           },
           "timestamp": {
+            "format": "date-time",
             "type": "string"
           },
           "type": {
@@ -24568,6 +24742,12 @@
           },
           "automation": {
             "$ref": "#/components/schemas/WebhookAutomationInfo"
+          },
+          "dashboardTabularExports": {
+            "items": {
+              "$ref": "#/components/schemas/ExportResult"
+            },
+            "type": "array"
           },
           "details": {
             "additionalProperties": {
@@ -25802,6 +25982,32 @@
         "tags": [
           "AI",
           "Metadata Sync",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/organization/switchActiveIdentityProvider": {
+      "post": {
+        "description": "Switch the active identity provider for the organization. Requires MANAGE permission on the organization.",
+        "operationId": "switchActiveIdentityProvider",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SwitchIdentityProviderRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "summary": "Switch Active Identity Provider",
+        "tags": [
+          "Organization",
           "actions"
         ]
       }
@@ -32157,6 +32363,7 @@
           }
         },
         "tags": [
+          "Notification Channels",
           "entities",
           "organization-model-controller"
         ]
@@ -32192,6 +32399,7 @@
           }
         },
         "tags": [
+          "Notification Channels",
           "entities",
           "organization-model-controller"
         ]

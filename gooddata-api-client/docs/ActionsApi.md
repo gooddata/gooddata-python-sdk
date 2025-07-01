@@ -74,6 +74,7 @@ Method | HTTP request | Description
 [**scan_data_source**](ActionsApi.md#scan_data_source) | **POST** /api/v1/actions/dataSources/{dataSourceId}/scan | Scan a database to get a physical data model (PDM)
 [**scan_sql**](ActionsApi.md#scan_sql) | **POST** /api/v1/actions/dataSources/{dataSourceId}/scanSql | Collect metadata about SQL query
 [**set_translations**](ActionsApi.md#set_translations) | **POST** /api/v1/actions/workspaces/{workspaceId}/translations/set | Set translations for entities.
+[**switch_active_identity_provider**](ActionsApi.md#switch_active_identity_provider) | **POST** /api/v1/actions/organization/switchActiveIdentityProvider | Switch Active Identity Provider
 [**test_data_source**](ActionsApi.md#test_data_source) | **POST** /api/v1/actions/dataSources/{dataSourceId}/test | Test data source connection by data source id
 [**test_data_source_definition**](ActionsApi.md#test_data_source_definition) | **POST** /api/v1/actions/dataSource/test | Test connection by data source definition
 [**test_existing_notification_channel**](ActionsApi.md#test_existing_notification_channel) | **POST** /api/v1/actions/notificationChannels/{notificationChannelId}/test | Test existing notification channel.
@@ -5625,6 +5626,74 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **switch_active_identity_provider**
+> switch_active_identity_provider(switch_identity_provider_request)
+
+Switch Active Identity Provider
+
+Switch the active identity provider for the organization. Requires MANAGE permission on the organization.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.switch_identity_provider_request import SwitchIdentityProviderRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    switch_identity_provider_request = SwitchIdentityProviderRequest(
+        idp_id="my-idp-123",
+    ) # SwitchIdentityProviderRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Switch Active Identity Provider
+        api_instance.switch_active_identity_provider(switch_identity_provider_request)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->switch_active_identity_provider: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **switch_identity_provider_request** | [**SwitchIdentityProviderRequest**](SwitchIdentityProviderRequest.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **test_data_source**
 > TestResponse test_data_source(data_source_id, test_request)
 
@@ -5827,6 +5896,11 @@ with gooddata_api_client.ApiClient() as api_client:
     notification_channel_id = "notificationChannelId_example" # str | 
     test_destination_request = TestDestinationRequest(
         destination=DeclarativeNotificationChannelDestination(None),
+        external_recipients=[
+            AutomationExternalRecipient(
+                email="email_example",
+            ),
+        ],
     ) # TestDestinationRequest |  (optional)
 
     # example passing only required values which don't have defaults set
@@ -5907,6 +5981,11 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = actions_api.ActionsApi(api_client)
     test_destination_request = TestDestinationRequest(
         destination=DeclarativeNotificationChannelDestination(None),
+        external_recipients=[
+            AutomationExternalRecipient(
+                email="email_example",
+            ),
+        ],
     ) # TestDestinationRequest | 
 
     # example passing only required values which don't have defaults set
@@ -6014,6 +6093,25 @@ with gooddata_api_client.ApiClient() as api_client:
                 id="dashboard123",
                 type="analyticalDashboard",
             ),
+            dashboard_tabular_exports=[
+                AutomationDashboardTabularExport(
+                    request_payload=DashboardTabularExportRequestV2(
+                        dashboard_filters_override=[
+                            DashboardFilter(),
+                        ],
+                        dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                        file_name="result",
+                        format="XLSX",
+                        settings=DashboardExportSettings(
+                            export_info=True,
+                            merge_headers=True,
+                        ),
+                        widget_ids=[
+                            "widget_ids_example",
+                        ],
+                    ),
+                ),
+            ],
             description="description_example",
             details={
                 "key": "key_example",

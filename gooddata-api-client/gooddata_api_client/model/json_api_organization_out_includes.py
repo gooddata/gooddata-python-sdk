@@ -106,9 +106,9 @@ class JsonApiOrganizationOutIncludes(ModelComposed):
         """
         lazy_import()
         return {
+            'attributes': (JsonApiIdentityProviderOutAttributes,),  # noqa: E501
             'relationships': (JsonApiUserGroupInRelationships,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
-            'attributes': (JsonApiIdentityProviderOutAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
         }
@@ -119,9 +119,9 @@ class JsonApiOrganizationOutIncludes(ModelComposed):
 
 
     attribute_map = {
+        'attributes': 'attributes',  # noqa: E501
         'relationships': 'relationships',  # noqa: E501
         'links': 'links',  # noqa: E501
-        'attributes': 'attributes',  # noqa: E501
         'id': 'id',  # noqa: E501
         'type': 'type',  # noqa: E501
     }
@@ -165,9 +165,9 @@ class JsonApiOrganizationOutIncludes(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            attributes (JsonApiIdentityProviderOutAttributes): [optional]  # noqa: E501
             relationships (JsonApiUserGroupInRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
-            attributes (JsonApiIdentityProviderOutAttributes): [optional]  # noqa: E501
             id (str): API identifier of an object. [optional]  # noqa: E501
             type (str): Object type. [optional] if omitted the server will use the default value of "identityProvider"  # noqa: E501
         """
@@ -273,9 +273,9 @@ class JsonApiOrganizationOutIncludes(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            attributes (JsonApiIdentityProviderOutAttributes): [optional]  # noqa: E501
             relationships (JsonApiUserGroupInRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
-            attributes (JsonApiIdentityProviderOutAttributes): [optional]  # noqa: E501
             id (str): API identifier of an object. [optional]  # noqa: E501
             type (str): Object type. [optional] if omitted the server will use the default value of "identityProvider"  # noqa: E501
         """

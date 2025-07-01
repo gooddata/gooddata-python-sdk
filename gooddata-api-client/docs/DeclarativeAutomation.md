@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **analytical_dashboard** | [**DeclarativeAnalyticalDashboardIdentifier**](DeclarativeAnalyticalDashboardIdentifier.md) |  | [optional] 
 **created_at** | **str, none_type** | Time of the entity creation. | [optional] 
 **created_by** | [**DeclarativeUserIdentifier**](DeclarativeUserIdentifier.md) |  | [optional] 
+**dashboard_tabular_exports** | [**[AutomationDashboardTabularExport]**](AutomationDashboardTabularExport.md) |  | [optional] 
 **description** | **str** |  | [optional] 
 **details** | **{str: (str,)}** | TODO | [optional] 
 **export_definitions** | [**[DeclarativeExportDefinitionIdentifier]**](DeclarativeExportDefinitionIdentifier.md) |  | [optional] 

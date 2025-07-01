@@ -32,6 +32,7 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.json_api_automation_in_attributes_alert import JsonApiAutomationInAttributesAlert
+    from gooddata_api_client.model.json_api_automation_in_attributes_dashboard_tabular_exports_inner import JsonApiAutomationInAttributesDashboardTabularExportsInner
     from gooddata_api_client.model.json_api_automation_in_attributes_external_recipients_inner import JsonApiAutomationInAttributesExternalRecipientsInner
     from gooddata_api_client.model.json_api_automation_in_attributes_image_exports_inner import JsonApiAutomationInAttributesImageExportsInner
     from gooddata_api_client.model.json_api_automation_in_attributes_metadata import JsonApiAutomationInAttributesMetadata
@@ -41,6 +42,7 @@ def lazy_import():
     from gooddata_api_client.model.json_api_automation_in_attributes_tabular_exports_inner import JsonApiAutomationInAttributesTabularExportsInner
     from gooddata_api_client.model.json_api_automation_in_attributes_visual_exports_inner import JsonApiAutomationInAttributesVisualExportsInner
     globals()['JsonApiAutomationInAttributesAlert'] = JsonApiAutomationInAttributesAlert
+    globals()['JsonApiAutomationInAttributesDashboardTabularExportsInner'] = JsonApiAutomationInAttributesDashboardTabularExportsInner
     globals()['JsonApiAutomationInAttributesExternalRecipientsInner'] = JsonApiAutomationInAttributesExternalRecipientsInner
     globals()['JsonApiAutomationInAttributesImageExportsInner'] = JsonApiAutomationInAttributesImageExportsInner
     globals()['JsonApiAutomationInAttributesMetadata'] = JsonApiAutomationInAttributesMetadata
@@ -119,6 +121,7 @@ class JsonApiAutomationInAttributes(ModelNormal):
         return {
             'alert': (JsonApiAutomationInAttributesAlert,),  # noqa: E501
             'are_relations_valid': (bool,),  # noqa: E501
+            'dashboard_tabular_exports': ([JsonApiAutomationInAttributesDashboardTabularExportsInner],),  # noqa: E501
             'description': (str,),  # noqa: E501
             'details': (bool, date, datetime, dict, float, int, list, str, none_type,),  # noqa: E501
             'external_recipients': ([JsonApiAutomationInAttributesExternalRecipientsInner],),  # noqa: E501
@@ -142,6 +145,7 @@ class JsonApiAutomationInAttributes(ModelNormal):
     attribute_map = {
         'alert': 'alert',  # noqa: E501
         'are_relations_valid': 'areRelationsValid',  # noqa: E501
+        'dashboard_tabular_exports': 'dashboardTabularExports',  # noqa: E501
         'description': 'description',  # noqa: E501
         'details': 'details',  # noqa: E501
         'external_recipients': 'externalRecipients',  # noqa: E501
@@ -200,6 +204,7 @@ class JsonApiAutomationInAttributes(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             alert (JsonApiAutomationInAttributesAlert): [optional]  # noqa: E501
             are_relations_valid (bool): [optional]  # noqa: E501
+            dashboard_tabular_exports ([JsonApiAutomationInAttributesDashboardTabularExportsInner]): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             details (bool, date, datetime, dict, float, int, list, str, none_type): Additional details to be included in the automated message.. [optional]  # noqa: E501
             external_recipients ([JsonApiAutomationInAttributesExternalRecipientsInner]): External recipients of the automation action results.. [optional]  # noqa: E501
@@ -300,6 +305,7 @@ class JsonApiAutomationInAttributes(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             alert (JsonApiAutomationInAttributesAlert): [optional]  # noqa: E501
             are_relations_valid (bool): [optional]  # noqa: E501
+            dashboard_tabular_exports ([JsonApiAutomationInAttributesDashboardTabularExportsInner]): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             details (bool, date, datetime, dict, float, int, list, str, none_type): Additional details to be included in the automated message.. [optional]  # noqa: E501
             external_recipients ([JsonApiAutomationInAttributesExternalRecipientsInner]): External recipients of the automation action results.. [optional]  # noqa: E501

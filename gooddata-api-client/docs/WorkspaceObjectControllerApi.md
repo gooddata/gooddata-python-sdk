@@ -360,6 +360,25 @@ with gooddata_api_client.ApiClient() as api_client:
                     trigger="ALWAYS",
                 ),
                 are_relations_valid=True,
+                dashboard_tabular_exports=[
+                    JsonApiAutomationInAttributesDashboardTabularExportsInner(
+                        request_payload=DashboardTabularExportRequestV2(
+                            dashboard_filters_override=[
+                                DashboardFilter(),
+                            ],
+                            dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                            file_name="result",
+                            format="XLSX",
+                            settings=DashboardExportSettings(
+                                export_info=True,
+                                merge_headers=True,
+                            ),
+                            widget_ids=[
+                                "widget_ids_example",
+                            ],
+                        ),
+                    ),
+                ],
                 description="description_example",
                 details=None,
                 external_recipients=[
@@ -6321,6 +6340,25 @@ with gooddata_api_client.ApiClient() as api_client:
                     trigger="ALWAYS",
                 ),
                 are_relations_valid=True,
+                dashboard_tabular_exports=[
+                    JsonApiAutomationInAttributesDashboardTabularExportsInner(
+                        request_payload=DashboardTabularExportRequestV2(
+                            dashboard_filters_override=[
+                                DashboardFilter(),
+                            ],
+                            dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                            file_name="result",
+                            format="XLSX",
+                            settings=DashboardExportSettings(
+                                export_info=True,
+                                merge_headers=True,
+                            ),
+                            widget_ids=[
+                                "widget_ids_example",
+                            ],
+                        ),
+                    ),
+                ],
                 description="description_example",
                 details=None,
                 external_recipients=[
@@ -7943,6 +7981,25 @@ with gooddata_api_client.ApiClient() as api_client:
                     trigger="ALWAYS",
                 ),
                 are_relations_valid=True,
+                dashboard_tabular_exports=[
+                    JsonApiAutomationInAttributesDashboardTabularExportsInner(
+                        request_payload=DashboardTabularExportRequestV2(
+                            dashboard_filters_override=[
+                                DashboardFilter(),
+                            ],
+                            dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                            file_name="result",
+                            format="XLSX",
+                            settings=DashboardExportSettings(
+                                export_info=True,
+                                merge_headers=True,
+                            ),
+                            widget_ids=[
+                                "widget_ids_example",
+                            ],
+                        ),
+                    ),
+                ],
                 description="description_example",
                 details=None,
                 external_recipients=[

@@ -384,11 +384,11 @@ with gooddata_api_client.ApiClient() as api_client:
                             source_column="customer_order_count",
                             source_column_data_type="NUMERIC",
                             source_fact_reference=DeclarativeSourceFactReference(
-                                id=FactIdentifier(
+                                operation="SUM",
+                                reference=FactIdentifier(
                                     id="fact_id",
                                     type="fact",
                                 ),
-                                operation="SUM",
                             ),
                             tags=["Customers"],
                             title="Customer order count",
@@ -603,6 +603,25 @@ with gooddata_api_client.ApiClient() as api_client:
                             id="employee123",
                             type="user",
                         ),
+                        dashboard_tabular_exports=[
+                            AutomationDashboardTabularExport(
+                                request_payload=DashboardTabularExportRequestV2(
+                                    dashboard_filters_override=[
+                                        DashboardFilter(),
+                                    ],
+                                    dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                                    file_name="result",
+                                    format="XLSX",
+                                    settings=DashboardExportSettings(
+                                        export_info=True,
+                                        merge_headers=True,
+                                    ),
+                                    widget_ids=[
+                                        "widget_ids_example",
+                                    ],
+                                ),
+                            ),
+                        ],
                         description="description_example",
                         details={
                             "key": "key_example",
@@ -1040,11 +1059,11 @@ with gooddata_api_client.ApiClient() as api_client:
                                         source_column="customer_order_count",
                                         source_column_data_type="NUMERIC",
                                         source_fact_reference=DeclarativeSourceFactReference(
-                                            id=FactIdentifier(
+                                            operation="SUM",
+                                            reference=FactIdentifier(
                                                 id="fact_id",
                                                 type="fact",
                                             ),
-                                            operation="SUM",
                                         ),
                                         tags=["Customers"],
                                         title="Customer order count",

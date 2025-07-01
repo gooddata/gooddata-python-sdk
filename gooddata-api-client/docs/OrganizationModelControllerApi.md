@@ -525,6 +525,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     "key": "key_example",
                 },
                 identifiers=["gooddata.com"],
+                idp_type="MANAGED_IDP",
                 oauth_client_id="oauth_client_id_example",
                 oauth_client_secret="oauth_client_secret_example",
                 oauth_custom_auth_attributes={
@@ -5389,11 +5390,12 @@ with gooddata_api_client.ApiClient() as api_client:
     id = "/6bUUGjjNSwg0_bs" # str | 
     json_api_identity_provider_patch_document = JsonApiIdentityProviderPatchDocument(
         data=JsonApiIdentityProviderPatch(
-            attributes=JsonApiIdentityProviderPatchAttributes(
+            attributes=JsonApiIdentityProviderInAttributes(
                 custom_claim_mapping={
                     "key": "key_example",
                 },
                 identifiers=["gooddata.com"],
+                idp_type="MANAGED_IDP",
                 oauth_client_id="oauth_client_id_example",
                 oauth_client_secret="oauth_client_secret_example",
                 oauth_custom_auth_attributes={
@@ -6706,6 +6708,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     "key": "key_example",
                 },
                 identifiers=["gooddata.com"],
+                idp_type="MANAGED_IDP",
                 oauth_client_id="oauth_client_id_example",
                 oauth_client_secret="oauth_client_secret_example",
                 oauth_custom_auth_attributes={

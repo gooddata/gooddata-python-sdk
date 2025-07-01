@@ -93,7 +93,7 @@ class WebhookMessage(ModelNormal):
         lazy_import()
         return {
             'data': (WebhookMessageData,),  # noqa: E501
-            'timestamp': (str,),  # noqa: E501
+            'timestamp': (datetime,),  # noqa: E501
             'type': (str,),  # noqa: E501
         }
 
@@ -120,7 +120,7 @@ class WebhookMessage(ModelNormal):
 
         Args:
             data (WebhookMessageData):
-            timestamp (str):
+            timestamp (datetime):
             type (str):
 
         Keyword Args:
@@ -213,7 +213,7 @@ class WebhookMessage(ModelNormal):
 
         Args:
             data (WebhookMessageData):
-            timestamp (str):
+            timestamp (datetime):
             type (str):
 
         Keyword Args:

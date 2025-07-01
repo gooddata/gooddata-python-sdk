@@ -528,6 +528,49 @@
         ],
         "type": "object"
       },
+      "AttributeElements": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/AttributeElementsByRef"
+          },
+          {
+            "$ref": "#/components/schemas/AttributeElementsByValue"
+          }
+        ],
+        "type": "object"
+      },
+      "AttributeElementsByRef": {
+        "properties": {
+          "uris": {
+            "description": "List of attribute elements by reference",
+            "items": {
+              "nullable": true,
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "uris"
+        ],
+        "type": "object"
+      },
+      "AttributeElementsByValue": {
+        "properties": {
+          "values": {
+            "description": "List of attribute elements by value",
+            "items": {
+              "nullable": true,
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "values"
+        ],
+        "type": "object"
+      },
       "AttributeFilter": {
         "description": "Abstract filter definition type attributes",
         "oneOf": [
@@ -537,6 +580,21 @@
           {
             "$ref": "#/components/schemas/PositiveAttributeFilter"
           }
+        ],
+        "type": "object"
+      },
+      "AttributeFilterByDate": {
+        "properties": {
+          "filterLocalIdentifier": {
+            "type": "string"
+          },
+          "isCommonDate": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "filterLocalIdentifier",
+          "isCommonDate"
         ],
         "type": "object"
       },
@@ -559,6 +617,21 @@
         },
         "required": [
           "values"
+        ],
+        "type": "object"
+      },
+      "AttributeFilterParent": {
+        "properties": {
+          "filterLocalIdentifier": {
+            "type": "string"
+          },
+          "over": {
+            "$ref": "#/components/schemas/Over"
+          }
+        },
+        "required": [
+          "filterLocalIdentifier",
+          "over"
         ],
         "type": "object"
       },
@@ -616,6 +689,17 @@
         "required": [
           "condition",
           "execution"
+        ],
+        "type": "object"
+      },
+      "AutomationDashboardTabularExport": {
+        "properties": {
+          "requestPayload": {
+            "$ref": "#/components/schemas/DashboardTabularExportRequestV2"
+          }
+        },
+        "required": [
+          "requestPayload"
         ],
         "type": "object"
       },
@@ -986,6 +1070,176 @@
         },
         "type": "object"
       },
+      "DashboardAttributeFilter": {
+        "properties": {
+          "attributeFilter": {
+            "properties": {
+              "attributeElements": {
+                "$ref": "#/components/schemas/AttributeElements"
+              },
+              "displayForm": {
+                "$ref": "#/components/schemas/IdentifierRef"
+              },
+              "filterElementsBy": {
+                "items": {
+                  "$ref": "#/components/schemas/AttributeFilterParent"
+                },
+                "type": "array"
+              },
+              "filterElementsByDate": {
+                "items": {
+                  "$ref": "#/components/schemas/AttributeFilterByDate"
+                },
+                "type": "array"
+              },
+              "localIdentifier": {
+                "type": "string"
+              },
+              "negativeSelection": {
+                "type": "boolean"
+              },
+              "selectionMode": {
+                "enum": [
+                  "single",
+                  "multi"
+                ],
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "validateElementsBy": {
+                "items": {
+                  "$ref": "#/components/schemas/IdentifierRef"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "attributeElements",
+              "displayForm",
+              "negativeSelection"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "attributeFilter"
+        ],
+        "type": "object"
+      },
+      "DashboardDateFilter": {
+        "properties": {
+          "dateFilter": {
+            "properties": {
+              "attribute": {
+                "$ref": "#/components/schemas/IdentifierRef"
+              },
+              "dataSet": {
+                "$ref": "#/components/schemas/IdentifierRef"
+              },
+              "from": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "format": "int32",
+                    "type": "integer"
+                  }
+                ]
+              },
+              "granularity": {
+                "enum": [
+                  "ALL_TIME_GRANULARITY",
+                  "GDC.time.year",
+                  "GDC.time.week_us",
+                  "GDC.time.week_in_year",
+                  "GDC.time.week_in_quarter",
+                  "GDC.time.week",
+                  "GDC.time.euweek_in_year",
+                  "GDC.time.euweek_in_quarter",
+                  "GDC.time.quarter",
+                  "GDC.time.quarter_in_year",
+                  "GDC.time.month",
+                  "GDC.time.month_in_quarter",
+                  "GDC.time.month_in_year",
+                  "GDC.time.day_in_year",
+                  "GDC.time.day_in_quarter",
+                  "GDC.time.day_in_month",
+                  "GDC.time.day_in_week",
+                  "GDC.time.day_in_euweek",
+                  "GDC.time.date",
+                  "GDC.time.hour",
+                  "GDC.time.hour_in_day",
+                  "GDC.time.minute",
+                  "GDC.time.minute_in_hour"
+                ],
+                "type": "string"
+              },
+              "localIdentifier": {
+                "type": "string"
+              },
+              "to": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "format": "int32",
+                    "type": "integer"
+                  }
+                ]
+              },
+              "type": {
+                "enum": [
+                  "relative",
+                  "absolute"
+                ],
+                "type": "string"
+              }
+            },
+            "required": [
+              "granularity",
+              "type"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "dateFilter"
+        ],
+        "type": "object"
+      },
+      "DashboardExportSettings": {
+        "description": "Additional settings.",
+        "properties": {
+          "exportInfo": {
+            "default": false,
+            "description": "If true, the export will contain the information about the exported date and dashboard filters.",
+            "example": true,
+            "type": "boolean"
+          },
+          "mergeHeaders": {
+            "default": false,
+            "description": "Merge equal headers in neighbouring cells. Used for [XLSX] format only.",
+            "example": true,
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "DashboardFilter": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/DashboardAttributeFilter"
+          },
+          {
+            "$ref": "#/components/schemas/DashboardDateFilter"
+          }
+        ],
+        "type": "object"
+      },
       "DashboardPermissions": {
         "properties": {
           "rules": {
@@ -1072,6 +1326,54 @@
         },
         "required": [
           "appliedOn"
+        ],
+        "type": "object"
+      },
+      "DashboardTabularExportRequestV2": {
+        "description": "Export request object describing the export properties for dashboard tabular exports (v2 with dashboardId).",
+        "properties": {
+          "dashboardFiltersOverride": {
+            "description": "List of filters that will be used instead of the default dashboard filters.",
+            "items": {
+              "$ref": "#/components/schemas/DashboardFilter"
+            },
+            "type": "array"
+          },
+          "dashboardId": {
+            "description": "Dashboard identifier",
+            "example": "761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+            "type": "string"
+          },
+          "fileName": {
+            "description": "Filename of downloaded file without extension.",
+            "example": "result",
+            "type": "string"
+          },
+          "format": {
+            "description": "Requested tabular export type.",
+            "enum": [
+              "XLSX"
+            ],
+            "example": "XLSX",
+            "type": "string"
+          },
+          "settings": {
+            "$ref": "#/components/schemas/DashboardExportSettings"
+          },
+          "widgetIds": {
+            "description": "List of widget identifiers to be exported. Note that only one widget is currently supported.",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 1,
+            "type": "array",
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "dashboardId",
+          "fileName",
+          "format"
         ],
         "type": "object"
       },
@@ -1217,6 +1519,17 @@
           {
             "$ref": "#/components/schemas/RelativeDateFilter"
           }
+        ],
+        "type": "object"
+      },
+      "DateValue": {
+        "properties": {
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value"
         ],
         "type": "object"
       },
@@ -1651,6 +1964,13 @@
           },
           "createdBy": {
             "$ref": "#/components/schemas/DeclarativeUserIdentifier"
+          },
+          "dashboardTabularExports": {
+            "items": {
+              "$ref": "#/components/schemas/AutomationDashboardTabularExport"
+            },
+            "type": "array",
+            "uniqueItems": true
           },
           "description": {
             "maxLength": 255,
@@ -2671,16 +2991,25 @@
             "type": "string"
           },
           "identifiers": {
-            "description": "List of identifiers for this IdP, where an identifier is a domain name. Users with email addresses belonging to these domains will be authenticated by this IdP. In multiple provider setup, this field is mandatory.",
+            "description": "List of identifiers for this IdP, where an identifier is a domain name. Users with email addresses belonging to these domains will be authenticated by this IdP.",
             "example": [
               "gooddata.com"
             ],
             "items": {
-              "description": "List of identifiers for this IdP, where an identifier is a domain name. Users with email addresses belonging to these domains will be authenticated by this IdP. In multiple provider setup, this field is mandatory.",
+              "description": "List of identifiers for this IdP, where an identifier is a domain name. Users with email addresses belonging to these domains will be authenticated by this IdP.",
               "example": "[\"gooddata.com\"]",
               "type": "string"
             },
             "type": "array"
+          },
+          "idpType": {
+            "description": "Type of IdP for management purposes. MANAGED_IDP represents a GoodData managed IdP used in single OIDC setup, which is protected from altering/deletion. FIM_IDP represents a GoodData managed IdP used in federated identity management setup, which is protected from altering/deletion. CUSTOM_IDP represents customer's own IdP, protected from deletion if currently used by org for authentication, deletable otherwise.",
+            "enum": [
+              "MANAGED_IDP",
+              "FIM_IDP",
+              "CUSTOM_IDP"
+            ],
+            "type": "string"
           },
           "oauthClientId": {
             "description": "The OAuth client id of your OIDC provider. This field is mandatory for OIDC IdP.",
@@ -2735,8 +3064,7 @@
           }
         },
         "required": [
-          "id",
-          "identifiers"
+          "id"
         ],
         "type": "object"
       },
@@ -3552,9 +3880,6 @@
       "DeclarativeSourceFactReference": {
         "description": "Aggregated awareness source fact reference.",
         "properties": {
-          "id": {
-            "$ref": "#/components/schemas/FactIdentifier"
-          },
           "operation": {
             "description": "Aggregation operation.",
             "enum": [
@@ -3564,11 +3889,14 @@
             ],
             "example": "SUM",
             "type": "string"
+          },
+          "reference": {
+            "$ref": "#/components/schemas/FactIdentifier"
           }
         },
         "required": [
-          "id",
-          "operation"
+          "operation",
+          "reference"
         ],
         "type": "object"
       },
@@ -5007,6 +5335,47 @@
         ],
         "type": "object"
       },
+      "IdentifierRef": {
+        "properties": {
+          "identifier": {
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "type": {
+                "enum": [
+                  "analyticalDashboard",
+                  "attribute",
+                  "attributeHierarchy",
+                  "dashboardPlugin",
+                  "dataset",
+                  "fact",
+                  "label",
+                  "metric",
+                  "userDataFilter",
+                  "exportDefinition",
+                  "automation",
+                  "prompt",
+                  "visualizationObject",
+                  "filterContext",
+                  "workspaceSettings",
+                  "customApplicationSetting",
+                  "workspaceDataFilter",
+                  "workspaceDataFilterSetting",
+                  "filterView"
+                ],
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "type"
+            ],
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
       "ImageExportRequest": {
         "description": "Export request object describing the export properties and metadata for image exports.",
         "properties": {
@@ -5034,6 +5403,8 @@
           "widgetIds": {
             "description": "List of widget identifiers to be exported. Note that only one widget is currently supported.",
             "items": {
+              "maxLength": 255,
+              "minLength": 1,
               "type": "string"
             },
             "maxItems": 1,
@@ -6541,6 +6912,20 @@
               "areRelationsValid": {
                 "type": "boolean"
               },
+              "dashboardTabularExports": {
+                "items": {
+                  "properties": {
+                    "requestPayload": {
+                      "$ref": "#/components/schemas/DashboardTabularExportRequestV2"
+                    }
+                  },
+                  "required": [
+                    "requestPayload"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
               "description": {
                 "maxLength": 10000,
                 "type": "string"
@@ -6841,6 +7226,20 @@
               "createdAt": {
                 "format": "date-time",
                 "type": "string"
+              },
+              "dashboardTabularExports": {
+                "items": {
+                  "properties": {
+                    "requestPayload": {
+                      "$ref": "#/components/schemas/DashboardTabularExportRequestV2"
+                    }
+                  },
+                  "required": [
+                    "requestPayload"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
               },
               "description": {
                 "maxLength": 10000,
@@ -7246,6 +7645,20 @@
               },
               "areRelationsValid": {
                 "type": "boolean"
+              },
+              "dashboardTabularExports": {
+                "items": {
+                  "properties": {
+                    "requestPayload": {
+                      "$ref": "#/components/schemas/DashboardTabularExportRequestV2"
+                    }
+                  },
+                  "required": [
+                    "requestPayload"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
               },
               "description": {
                 "maxLength": 10000,
@@ -11989,7 +12402,7 @@
                 "type": "object"
               },
               "identifiers": {
-                "description": "List of identifiers for this IdP, where an identifier is a domain name. Users with email addresses belonging to these domains will be authenticated by this IdP. In multiple provider setup, this field is mandatory.",
+                "description": "List of identifiers for this IdP, where an identifier is a domain name. Users with email addresses belonging to these domains will be authenticated by this IdP.",
                 "example": [
                   "gooddata.com"
                 ],
@@ -11997,6 +12410,15 @@
                   "type": "string"
                 },
                 "type": "array"
+              },
+              "idpType": {
+                "description": "Type of IdP for management purposes. MANAGED_IDP represents a GoodData managed IdP used in single OIDC setup, which is protected from altering/deletion. FIM_IDP represents a GoodData managed IdP used in federated identity management setup, which is protected from altering/deletion. CUSTOM_IDP represents customer's own IdP, protected from deletion if currently used by org for authentication, deletable otherwise.",
+                "enum": [
+                  "MANAGED_IDP",
+                  "FIM_IDP",
+                  "CUSTOM_IDP"
+                ],
+                "type": "string"
               },
               "oauthClientId": {
                 "description": "The OAuth client id of your OIDC provider. This field is mandatory for OIDC IdP.",
@@ -12048,9 +12470,6 @@
                 "type": "string"
               }
             },
-            "required": [
-              "identifiers"
-            ],
             "type": "object"
           },
           "id": {
@@ -12069,7 +12488,6 @@
           }
         },
         "required": [
-          "attributes",
           "id",
           "type"
         ],
@@ -12119,7 +12537,7 @@
                 "type": "object"
               },
               "identifiers": {
-                "description": "List of identifiers for this IdP, where an identifier is a domain name. Users with email addresses belonging to these domains will be authenticated by this IdP. In multiple provider setup, this field is mandatory.",
+                "description": "List of identifiers for this IdP, where an identifier is a domain name. Users with email addresses belonging to these domains will be authenticated by this IdP.",
                 "example": [
                   "gooddata.com"
                 ],
@@ -12127,6 +12545,15 @@
                   "type": "string"
                 },
                 "type": "array"
+              },
+              "idpType": {
+                "description": "Type of IdP for management purposes. MANAGED_IDP represents a GoodData managed IdP used in single OIDC setup, which is protected from altering/deletion. FIM_IDP represents a GoodData managed IdP used in federated identity management setup, which is protected from altering/deletion. CUSTOM_IDP represents customer's own IdP, protected from deletion if currently used by org for authentication, deletable otherwise.",
+                "enum": [
+                  "MANAGED_IDP",
+                  "FIM_IDP",
+                  "CUSTOM_IDP"
+                ],
+                "type": "string"
               },
               "oauthClientId": {
                 "description": "The OAuth client id of your OIDC provider. This field is mandatory for OIDC IdP.",
@@ -12168,9 +12595,6 @@
                 "type": "string"
               }
             },
-            "required": [
-              "identifiers"
-            ],
             "type": "object"
           },
           "id": {
@@ -12189,7 +12613,6 @@
           }
         },
         "required": [
-          "attributes",
           "id",
           "type"
         ],
@@ -12260,7 +12683,7 @@
                 "type": "object"
               },
               "identifiers": {
-                "description": "List of identifiers for this IdP, where an identifier is a domain name. Users with email addresses belonging to these domains will be authenticated by this IdP. In multiple provider setup, this field is mandatory.",
+                "description": "List of identifiers for this IdP, where an identifier is a domain name. Users with email addresses belonging to these domains will be authenticated by this IdP.",
                 "example": [
                   "gooddata.com"
                 ],
@@ -12268,6 +12691,15 @@
                   "type": "string"
                 },
                 "type": "array"
+              },
+              "idpType": {
+                "description": "Type of IdP for management purposes. MANAGED_IDP represents a GoodData managed IdP used in single OIDC setup, which is protected from altering/deletion. FIM_IDP represents a GoodData managed IdP used in federated identity management setup, which is protected from altering/deletion. CUSTOM_IDP represents customer's own IdP, protected from deletion if currently used by org for authentication, deletable otherwise.",
+                "enum": [
+                  "MANAGED_IDP",
+                  "FIM_IDP",
+                  "CUSTOM_IDP"
+                ],
+                "type": "string"
               },
               "oauthClientId": {
                 "description": "The OAuth client id of your OIDC provider. This field is mandatory for OIDC IdP.",
@@ -12337,7 +12769,6 @@
           }
         },
         "required": [
-          "attributes",
           "id",
           "type"
         ],
@@ -12810,7 +13241,8 @@
               "provider": {
                 "description": "LLM Provider.",
                 "enum": [
-                  "OPENAI"
+                  "OPENAI",
+                  "AZURE_OPENAI"
                 ],
                 "type": "string"
               },
@@ -12889,7 +13321,8 @@
               "provider": {
                 "description": "LLM Provider.",
                 "enum": [
-                  "OPENAI"
+                  "OPENAI",
+                  "AZURE_OPENAI"
                 ],
                 "type": "string"
               },
@@ -13002,7 +13435,8 @@
               "provider": {
                 "description": "LLM Provider.",
                 "enum": [
-                  "OPENAI"
+                  "OPENAI",
+                  "AZURE_OPENAI"
                 ],
                 "type": "string"
               },
@@ -18807,6 +19241,20 @@
         ],
         "type": "object"
       },
+      "Over": {
+        "properties": {
+          "attributes": {
+            "items": {
+              "$ref": "#/components/schemas/IdentifierRef"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "attributes"
+        ],
+        "type": "object"
+      },
       "PageMetadata": {
         "properties": {
           "number": {
@@ -19906,6 +20354,8 @@
           "visualizationIds": {
             "description": "List of visualization ids to be exported. Note that only one visualization is currently supported.",
             "items": {
+              "maxLength": 255,
+              "minLength": 1,
               "type": "string"
             },
             "maxItems": 1,
@@ -19915,6 +20365,8 @@
           "widgetIds": {
             "description": "List of widget identifiers to be exported. Note that only one widget is currently supported.",
             "items": {
+              "maxLength": 255,
+              "minLength": 1,
               "type": "string"
             },
             "maxItems": 1,
@@ -20010,6 +20462,19 @@
         "required": [
           "dataType",
           "name"
+        ],
+        "type": "object"
+      },
+      "SwitchIdentityProviderRequest": {
+        "properties": {
+          "idpId": {
+            "description": "Identity provider ID to set as active for the organization.",
+            "example": "my-idp-123",
+            "type": "string"
+          }
+        },
+        "required": [
+          "idpId"
         ],
         "type": "object"
       },
@@ -21077,6 +21542,32 @@
         "tags": [
           "AI",
           "Metadata Sync",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/organization/switchActiveIdentityProvider": {
+      "post": {
+        "description": "Switch the active identity provider for the organization. Requires MANAGE permission on the organization.",
+        "operationId": "switchActiveIdentityProvider",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SwitchIdentityProviderRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "summary": "Switch Active Identity Provider",
+        "tags": [
+          "Organization",
           "actions"
         ]
       }
@@ -25192,6 +25683,7 @@
           }
         },
         "tags": [
+          "Notification Channels",
           "entities",
           "organization-model-controller"
         ]
@@ -25227,6 +25719,7 @@
           }
         },
         "tags": [
+          "Notification Channels",
           "entities",
           "organization-model-controller"
         ]
