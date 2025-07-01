@@ -14,6 +14,7 @@ from gooddata_api_client.model.json_api_export_template_post_optional_id_documen
 )
 from gooddata_api_client.model.json_api_identity_provider_in_document import JsonApiIdentityProviderInDocument
 from gooddata_api_client.model.json_api_organization_setting_in_document import JsonApiOrganizationSettingInDocument
+from gooddata_api_client.model.switch_identity_provider_request import SwitchIdentityProviderRequest
 
 from gooddata_sdk import CatalogDeclarativeExportTemplate, CatalogExportTemplate
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
@@ -747,3 +748,28 @@ class CatalogOrganizationService(CatalogServiceBase):
         self._layout_api.set_export_templates(
             declarative_export_templates=DeclarativeExportTemplates(export_templates=api_export_templates)
         )
+
+    def switch_active_identity_provider(self, identity_provider_id: str) -> None:
+        """Switch the active identity provider for the organization.
+
+        Args:
+            identity_provider_id (str):
+                Identity provider identification string e.g. "auth0"
+
+        Returns:
+            None
+
+        Raises:
+            ValueError:
+                Identity provider does not exist or operation failed.
+        """
+        try:
+            request = SwitchIdentityProviderRequest(idp_id=identity_provider_id)
+            self._actions_api.switch_active_identity_provider(request, _check_return_type=False)
+
+        except NotFoundException:
+            raise ValueError(
+                f"Cannot switch to identity provider {identity_provider_id}. This identity provider does not exist."
+            )
+        except Exception as e:
+            raise ValueError(f"Error switching active identity provider: {str(e)}")

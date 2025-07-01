@@ -17,6 +17,11 @@ class CatalogDeclarativeIdentityProvider(Base):
     oauth_client_secret: Optional[str] = None
     oauth_issuer_location: Optional[str] = None
     saml_metadata: Optional[str] = None
+    idp_type: Optional[str] = None
+    oauth_issuer_id: Optional[str] = None
+    oauth_subject_id_claim: Optional[str] = None
+    oauth_custom_auth_attributes: Optional[dict[str, str]] = None
+    oauth_custom_scopes: Optional[list[str]] = None
 
     @staticmethod
     def client_class() -> builtins.type[DeclarativeIdentityProvider]:
