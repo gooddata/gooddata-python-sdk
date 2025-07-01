@@ -98,6 +98,7 @@ class WebhookMessageData(ModelNormal):
         return {
             'automation': (WebhookAutomationInfo,),  # noqa: E501
             'alert': (AlertDescription,),  # noqa: E501
+            'dashboard_tabular_exports': ([ExportResult],),  # noqa: E501
             'details': ({str: (str,)},),  # noqa: E501
             'filters': ([NotificationFilter],),  # noqa: E501
             'image_exports': ([ExportResult],),  # noqa: E501
@@ -118,6 +119,7 @@ class WebhookMessageData(ModelNormal):
     attribute_map = {
         'automation': 'automation',  # noqa: E501
         'alert': 'alert',  # noqa: E501
+        'dashboard_tabular_exports': 'dashboardTabularExports',  # noqa: E501
         'details': 'details',  # noqa: E501
         'filters': 'filters',  # noqa: E501
         'image_exports': 'imageExports',  # noqa: E501
@@ -175,6 +177,7 @@ class WebhookMessageData(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             alert (AlertDescription): [optional]  # noqa: E501
+            dashboard_tabular_exports ([ExportResult]): [optional]  # noqa: E501
             details ({str: (str,)}): [optional]  # noqa: E501
             filters ([NotificationFilter]): [optional]  # noqa: E501
             image_exports ([ExportResult]): [optional]  # noqa: E501
@@ -275,6 +278,7 @@ class WebhookMessageData(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             alert (AlertDescription): [optional]  # noqa: E501
+            dashboard_tabular_exports ([ExportResult]): [optional]  # noqa: E501
             details ({str: (str,)}): [optional]  # noqa: E501
             filters ([NotificationFilter]): [optional]  # noqa: E501
             image_exports ([ExportResult]): [optional]  # noqa: E501

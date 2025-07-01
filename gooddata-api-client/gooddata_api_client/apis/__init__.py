@@ -50,6 +50,7 @@ from gooddata_api_client.api.metadata_sync_api import MetadataSyncApi
 from gooddata_api_client.api.metrics_api import MetricsApi
 from gooddata_api_client.api.notification_channels_api import NotificationChannelsApi
 from gooddata_api_client.api.options_api import OptionsApi
+from gooddata_api_client.api.organization_api import OrganizationApi
 from gooddata_api_client.api.organization_declarative_apis_api import OrganizationDeclarativeAPIsApi
 from gooddata_api_client.api.organization_entity_apis_api import OrganizationEntityAPIsApi
 from gooddata_api_client.api.permissions_api import PermissionsApi

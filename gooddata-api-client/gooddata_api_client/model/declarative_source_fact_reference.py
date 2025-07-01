@@ -93,8 +93,8 @@ class DeclarativeSourceFactReference(ModelNormal):
         """
         lazy_import()
         return {
-            'id': (FactIdentifier,),  # noqa: E501
             'operation': (str,),  # noqa: E501
+            'reference': (FactIdentifier,),  # noqa: E501
         }
 
     @cached_property
@@ -103,8 +103,8 @@ class DeclarativeSourceFactReference(ModelNormal):
 
 
     attribute_map = {
-        'id': 'id',  # noqa: E501
         'operation': 'operation',  # noqa: E501
+        'reference': 'reference',  # noqa: E501
     }
 
     read_only_vars = {
@@ -114,12 +114,12 @@ class DeclarativeSourceFactReference(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, id, operation, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, operation, reference, *args, **kwargs):  # noqa: E501
         """DeclarativeSourceFactReference - a model defined in OpenAPI
 
         Args:
-            id (FactIdentifier):
             operation (str): Aggregation operation.
+            reference (FactIdentifier):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -183,8 +183,8 @@ class DeclarativeSourceFactReference(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.id = id
         self.operation = operation
+        self.reference = reference
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -205,12 +205,12 @@ class DeclarativeSourceFactReference(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, id, operation, *args, **kwargs):  # noqa: E501
+    def __init__(self, operation, reference, *args, **kwargs):  # noqa: E501
         """DeclarativeSourceFactReference - a model defined in OpenAPI
 
         Args:
-            id (FactIdentifier):
             operation (str): Aggregation operation.
+            reference (FactIdentifier):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -272,8 +272,8 @@ class DeclarativeSourceFactReference(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.id = id
         self.operation = operation
+        self.reference = reference
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

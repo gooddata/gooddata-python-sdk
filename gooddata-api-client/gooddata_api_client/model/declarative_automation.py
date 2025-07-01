@@ -32,6 +32,7 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.automation_alert import AutomationAlert
+    from gooddata_api_client.model.automation_dashboard_tabular_export import AutomationDashboardTabularExport
     from gooddata_api_client.model.automation_external_recipient import AutomationExternalRecipient
     from gooddata_api_client.model.automation_image_export import AutomationImageExport
     from gooddata_api_client.model.automation_metadata import AutomationMetadata
@@ -45,6 +46,7 @@ def lazy_import():
     from gooddata_api_client.model.declarative_notification_channel_identifier import DeclarativeNotificationChannelIdentifier
     from gooddata_api_client.model.declarative_user_identifier import DeclarativeUserIdentifier
     globals()['AutomationAlert'] = AutomationAlert
+    globals()['AutomationDashboardTabularExport'] = AutomationDashboardTabularExport
     globals()['AutomationExternalRecipient'] = AutomationExternalRecipient
     globals()['AutomationImageExport'] = AutomationImageExport
     globals()['AutomationMetadata'] = AutomationMetadata
@@ -100,6 +102,8 @@ class DeclarativeAutomation(ModelNormal):
             'regex': {
                 'pattern': r'[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}',  # noqa: E501
             },
+        },
+        ('dashboard_tabular_exports',): {
         },
         ('description',): {
             'max_length': 255,
@@ -162,6 +166,7 @@ class DeclarativeAutomation(ModelNormal):
             'analytical_dashboard': (DeclarativeAnalyticalDashboardIdentifier,),  # noqa: E501
             'created_at': (str, none_type,),  # noqa: E501
             'created_by': (DeclarativeUserIdentifier,),  # noqa: E501
+            'dashboard_tabular_exports': ([AutomationDashboardTabularExport],),  # noqa: E501
             'description': (str,),  # noqa: E501
             'details': ({str: (str,)},),  # noqa: E501
             'export_definitions': ([DeclarativeExportDefinitionIdentifier],),  # noqa: E501
@@ -193,6 +198,7 @@ class DeclarativeAutomation(ModelNormal):
         'analytical_dashboard': 'analyticalDashboard',  # noqa: E501
         'created_at': 'createdAt',  # noqa: E501
         'created_by': 'createdBy',  # noqa: E501
+        'dashboard_tabular_exports': 'dashboardTabularExports',  # noqa: E501
         'description': 'description',  # noqa: E501
         'details': 'details',  # noqa: E501
         'export_definitions': 'exportDefinitions',  # noqa: E501
@@ -261,6 +267,7 @@ class DeclarativeAutomation(ModelNormal):
             analytical_dashboard (DeclarativeAnalyticalDashboardIdentifier): [optional]  # noqa: E501
             created_at (str, none_type): Time of the entity creation.. [optional]  # noqa: E501
             created_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
+            dashboard_tabular_exports ([AutomationDashboardTabularExport]): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             details ({str: (str,)}): TODO. [optional]  # noqa: E501
             export_definitions ([DeclarativeExportDefinitionIdentifier]): [optional]  # noqa: E501
@@ -372,6 +379,7 @@ class DeclarativeAutomation(ModelNormal):
             analytical_dashboard (DeclarativeAnalyticalDashboardIdentifier): [optional]  # noqa: E501
             created_at (str, none_type): Time of the entity creation.. [optional]  # noqa: E501
             created_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
+            dashboard_tabular_exports ([AutomationDashboardTabularExport]): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             details ({str: (str,)}): TODO. [optional]  # noqa: E501
             export_definitions ([DeclarativeExportDefinitionIdentifier]): [optional]  # noqa: E501

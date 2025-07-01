@@ -58,6 +58,7 @@ class JsonApiLlmEndpointOutAttributes(ModelNormal):
     allowed_values = {
         ('provider',): {
             'OPENAI': "OPENAI",
+            'AZURE_OPENAI': "AZURE_OPENAI",
         },
     }
 
@@ -164,7 +165,7 @@ class JsonApiLlmEndpointOutAttributes(ModelNormal):
             base_url (str, none_type): Custom LLM endpoint.. [optional]  # noqa: E501
             llm_model (str): LLM Model. We provide a default model for each provider, but you can override it here.. [optional]  # noqa: E501
             llm_organization (str, none_type): Organization in LLM provider.. [optional]  # noqa: E501
-            provider (str): LLM Provider.. [optional] if omitted the server will use the default value of "OPENAI"  # noqa: E501
+            provider (str): LLM Provider.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -257,7 +258,7 @@ class JsonApiLlmEndpointOutAttributes(ModelNormal):
             base_url (str, none_type): Custom LLM endpoint.. [optional]  # noqa: E501
             llm_model (str): LLM Model. We provide a default model for each provider, but you can override it here.. [optional]  # noqa: E501
             llm_organization (str, none_type): Organization in LLM provider.. [optional]  # noqa: E501
-            provider (str): LLM Provider.. [optional] if omitted the server will use the default value of "OPENAI"  # noqa: E501
+            provider (str): LLM Provider.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

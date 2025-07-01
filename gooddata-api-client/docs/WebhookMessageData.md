@@ -6,6 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **automation** | [**WebhookAutomationInfo**](WebhookAutomationInfo.md) |  | 
 **alert** | [**AlertDescription**](AlertDescription.md) |  | [optional] 
+**dashboard_tabular_exports** | [**[ExportResult]**](ExportResult.md) |  | [optional] 
 **details** | **{str: (str,)}** |  | [optional] 
 **filters** | [**[NotificationFilter]**](NotificationFilter.md) |  | [optional] 
 **image_exports** | [**[ExportResult]**](ExportResult.md) |  | [optional] 

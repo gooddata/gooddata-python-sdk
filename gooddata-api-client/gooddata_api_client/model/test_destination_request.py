@@ -31,7 +31,9 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.automation_external_recipient import AutomationExternalRecipient
     from gooddata_api_client.model.declarative_notification_channel_destination import DeclarativeNotificationChannelDestination
+    globals()['AutomationExternalRecipient'] = AutomationExternalRecipient
     globals()['DeclarativeNotificationChannelDestination'] = DeclarativeNotificationChannelDestination
 
 
@@ -63,6 +65,9 @@ class TestDestinationRequest(ModelNormal):
     }
 
     validations = {
+        ('external_recipients',): {
+            'max_items': 1,
+        },
     }
 
     @cached_property
@@ -89,6 +94,7 @@ class TestDestinationRequest(ModelNormal):
         lazy_import()
         return {
             'destination': (DeclarativeNotificationChannelDestination,),  # noqa: E501
+            'external_recipients': ([AutomationExternalRecipient], none_type,),  # noqa: E501
         }
 
     @cached_property
@@ -98,6 +104,7 @@ class TestDestinationRequest(ModelNormal):
 
     attribute_map = {
         'destination': 'destination',  # noqa: E501
+        'external_recipients': 'externalRecipients',  # noqa: E501
     }
 
     read_only_vars = {
@@ -144,6 +151,7 @@ class TestDestinationRequest(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            external_recipients ([AutomationExternalRecipient], none_type): External recipients of the test result.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -233,6 +241,7 @@ class TestDestinationRequest(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            external_recipients ([AutomationExternalRecipient], none_type): External recipients of the test result.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
