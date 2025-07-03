@@ -2,6 +2,7 @@
 
 """Module for utilities used in GoodData Pipelines provisioning."""
 
+from pydantic import BaseModel
 from requests import Response
 
 
@@ -70,3 +71,9 @@ class SplitMixin:
             return []
 
         return [value.strip() for value in string_value.split(delimiter)]
+
+
+class EntityGroupIds(BaseModel):
+    ids_in_both_systems: set[str]
+    ids_to_delete: set[str]
+    ids_to_create: set[str]

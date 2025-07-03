@@ -216,17 +216,22 @@ class APIMethods:
         endpoint = f"/entities/workspaces/{workspace_id}/workspaceDataFilters"
         return self._post(endpoint, data, self.headers)
 
-    def _get(self, endpoint: str) -> requests.Response:
+    def _get(
+        self, endpoint: str, headers: dict[str, str] | None = None
+    ) -> requests.Response:
         """Sends a GET request to the server.
 
         Args:
             endpoint (str): The API endpoint to send the GET request to.
+            headers (dict[str, str] | None): Headers to include in the request.
+                If no headers are provided, the default headers will be used.
         Returns:
             requests.Response: The response from the server.
         """
         url = self._get_url(endpoint)
+        request_headers = headers if headers else self.headers
 
-        return requests.get(url, headers=self.headers, timeout=TIMEOUT)
+        return requests.get(url, headers=request_headers, timeout=TIMEOUT)
 
     def _post(
         self,
@@ -239,7 +244,8 @@ class APIMethods:
         Args:
             endpoint (str): The API endpoint to send the POST request to.
             data (Any): The JSON data to send in the request body.
-            headers (dict | None): Optional headers to include in the request.
+            headers (dict | None): Headers to include in the request.
+                If no headers are provided, the default headers will be used.
         Returns:
             requests.Response: The response from the server.
         """
@@ -262,7 +268,8 @@ class APIMethods:
         Args:
             endpoint (str): The API endpoint to send the PUT request to.
             data (Any): The JSON data to send in the request body.
-            headers (dict | None): Optional headers to include in the request.
+            headers (dict | None): Headers to include in the request.
+                If no headers are provided, the default headers will be used.
         Returns:
             requests.Response: The response from the server.
         """

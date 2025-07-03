@@ -16,15 +16,18 @@ from gooddata_sdk.catalog.workspace.entity_model.user_data_filter import (
 )
 
 from gooddata_pipelines.provisioning.entities.user_data_filters.models.udf_models import (
-    UserDataFilter,
+    UserDataFilterFullLoad,
     UserDataFilterGroup,
+    UserDataFilterIncrementalLoad,
     WorkspaceUserDataFilters,
 )
 from gooddata_pipelines.provisioning.provisioning import Provisioning
 from gooddata_pipelines.provisioning.utils.exceptions import ContextException
 
 
-class UserDataFilterProvisioner(Provisioning[UserDataFilter]):
+class UserDataFilterProvisioner(
+    Provisioning[UserDataFilterFullLoad, UserDataFilterIncrementalLoad]
+):
     """Provisioning class for user data filters in GoodData workspaces.
 
     This class handles the creation, update, and deletion of user data filters
@@ -42,7 +45,8 @@ class UserDataFilterProvisioner(Provisioning[UserDataFilter]):
     ```
     """
 
-    source_group: list[UserDataFilter]
+    source_group_full: list[UserDataFilterFullLoad]
+    source_group_incremental: list[UserDataFilterIncrementalLoad]
     ldm_column_name: str = ""
     maql_column_name: str = ""
 
@@ -64,7 +68,7 @@ class UserDataFilterProvisioner(Provisioning[UserDataFilter]):
 
     @staticmethod
     def _group_db_user_data_filters_by_ws_id(
-        user_data_filters: list[UserDataFilter],
+        user_data_filters: list[UserDataFilterFullLoad],
     ) -> list[WorkspaceUserDataFilters]:
         """Group user data filters by workspace ID and user ID."""
         ws_map: dict[str, dict[str, set[str]]] = {}
@@ -193,11 +197,8 @@ class UserDataFilterProvisioner(Provisioning[UserDataFilter]):
                     f"Failed to delete user data filters: {e}"
                 ) from e
 
-    def _provision(self) -> None:
+    def _provision_full_load(self) -> None:
         """Provision user data filters in GoodData workspaces."""
-        grouped_db_user_data_filters = (
-            self._group_db_user_data_filters_by_ws_id(self.source_group)
-        )
 
         if not self.maql_column_name:
             raise ContextException(
@@ -208,6 +209,13 @@ class UserDataFilterProvisioner(Provisioning[UserDataFilter]):
                 "LDM column name is not set. Please set it before provisioning."
             )
 
+        grouped_db_user_data_filters = (
+            self._group_db_user_data_filters_by_ws_id(self.source_group_full)
+        )
         self._create_user_data_filters(grouped_db_user_data_filters)
 
         self.logger.info("User data filters provisioning completed")
+
+    def _provision_incremental_load(self) -> None:
+        """Provision user data filters in GoodData workspaces."""
+        raise NotImplementedError("Not implemented yet.")

@@ -11,14 +11,18 @@ from gooddata_pipelines.api import GoodDataAPI
 from gooddata_pipelines.logger.logger import (
     LogObserver,
 )
+from gooddata_pipelines.provisioning.utils.utils import EntityGroupIds
 
-TSourceData = TypeVar("TSourceData")
+TFullLoadSourceData = TypeVar("TFullLoadSourceData")
+TIncrementalSourceData = TypeVar("TIncrementalSourceData")
 
 
-class Provisioning(Generic[TSourceData]):
+class Provisioning(Generic[TFullLoadSourceData, TIncrementalSourceData]):
     """Base provisioning class."""
 
     TProvisioning = TypeVar("TProvisioning", bound="Provisioning")
+    source_group_full: list[TFullLoadSourceData]
+    source_group_incremental: list[TIncrementalSourceData]
 
     def __init__(self, host: str, token: str) -> None:
         self.source_id: set[str] = set()
@@ -47,8 +51,8 @@ class Provisioning(Generic[TSourceData]):
     @staticmethod
     def _create_groups(
         source_id: set[str], panther_id: set[str]
-    ) -> tuple[set[str], set[str], set[str]]:
-        """Creates groups for provisioning.
+    ) -> EntityGroupIds:
+        """Creates groups for provisioning as sets of IDs.
 
         Sorts the IDs into three categories:
         - IDs that exist both source and upstream (to be checked further)
@@ -59,19 +63,38 @@ class Provisioning(Generic[TSourceData]):
         ids_to_delete: set[str] = panther_id.difference(source_id)
         ids_to_create: set[str] = source_id.difference(panther_id)
 
-        return ids_in_both_systems, ids_to_delete, ids_to_create
+        return EntityGroupIds(
+            ids_in_both_systems=ids_in_both_systems,
+            ids_to_delete=ids_to_delete,
+            ids_to_create=ids_to_create,
+        )
 
-    def _provision(self) -> None:
+    def _provision_incremental_load(self) -> None:
         raise NotImplementedError(
             "Provisioning method to be implemented in the subclass."
         )
 
-    def provision(self, source_data: list[TSourceData]) -> None:
-        """Runs the provisioning workflow with the provided source data."""
-        self.source_group: list[TSourceData] = source_data
+    def _provision_full_load(self) -> None:
+        raise NotImplementedError(
+            "Provisioning method to be implemented in the subclass."
+        )
+
+    def full_load(self, source_data: list[TFullLoadSourceData]) -> None:
+        """Runs full provisioning workflow with the provided source data.
+
+        Full provisioning is a full load of the source data, where the source data
+        is assumed to a single source of truth and the upstream workspaces are updated
+        to match it.
+
+        That means:
+        - All workspaces declared in the source data are created if missing, or
+        updated to match the source data
+        - All workspaces not declared in the source data are deleted
+        """
+        self.source_group_full = source_data
 
         try:
-            self._provision()
+            self._provision_full_load()
             self.logger.info("Provisioning completed successfully.")
         except Exception as e:
             self.fatal_exception = str(e)
@@ -79,3 +102,31 @@ class Provisioning(Generic[TSourceData]):
                 f"Provisioning failed. Error: {self.fatal_exception} "
                 + f"Context: {e.__dict__}"
             )
+
+    def incremental_load(
+        self, source_data: list[TIncrementalSourceData]
+    ) -> None:
+        """Runs incremental provisioning workflow with the provided source data.
+
+        Incremental provisioning is used to modify a subset of the upstream workspaces
+        based on the source data provided.
+        """
+        self.source_group_incremental = source_data
+
+        try:
+            self._provision_incremental_load()
+            self.logger.info("Provisioning completed successfully.")
+        except Exception as e:
+            self.fatal_exception = str(e)
+            self.logger.error(
+                f"Provisioning failed. Error: {self.fatal_exception} "
+                + f"Context: {e.__dict__}"
+            )
+
+    # TODO: implement a sceond provisioning method and name the two differently:
+    #  1) provision_incremental - will use the is_active logic, such as user provisioning now
+    #  2) provision_full - full load of the source data, like workspaces now
+    #  Each will have its own implementation and source data model.
+    #  Both use cases are required and need to be supported.
+    #  This will also improve the clarity of the code as now provisioning of each
+    #   entity works differently, leading to confusion.

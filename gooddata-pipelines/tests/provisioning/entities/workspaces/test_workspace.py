@@ -6,7 +6,7 @@ from gooddata_sdk.catalog.workspace.entity_model.workspace import (
 
 from gooddata_pipelines.provisioning import WorkspaceProvisioner
 from gooddata_pipelines.provisioning.entities.workspaces.models import (
-    Workspace,
+    WorkspaceFullLoad,
 )
 
 MOCK_WORKSPACE_PROVISIONER: WorkspaceProvisioner = WorkspaceProvisioner.create(
@@ -17,13 +17,13 @@ MOCK_WORKSPACE_PROVISIONER: WorkspaceProvisioner = WorkspaceProvisioner.create(
 def test_find_workspaces_to_update_same_ids_and_names() -> None:
     provisioner: WorkspaceProvisioner = MOCK_WORKSPACE_PROVISIONER
     ids_in_both_systems = {"workspace_id1", "workspace_id2"}
-    source_group: list[Workspace] = [
-        Workspace(
+    source_group: list[WorkspaceFullLoad] = [
+        WorkspaceFullLoad(
             parent_id="client_id1",
             workspace_id="workspace_id1",
             workspace_name="workspace_title1",
         ),
-        Workspace(
+        WorkspaceFullLoad(
             parent_id="client_id2",
             workspace_id="workspace_id2",
             workspace_name="workspace_title2",
@@ -52,13 +52,13 @@ def test_find_workspaces_to_update_same_ids_and_names() -> None:
 def test_find_workspaces_to_update_different_ids() -> None:
     provisioner: WorkspaceProvisioner = MOCK_WORKSPACE_PROVISIONER
     ids_in_both_systems = {"workspace_id1", "workspace_id2"}
-    source_group: list[Workspace] = [
-        Workspace(
+    source_group: list[WorkspaceFullLoad] = [
+        WorkspaceFullLoad(
             parent_id="client_id1",
             workspace_id="workspace_id1",
             workspace_name="workspace_title1",
         ),
-        Workspace(
+        WorkspaceFullLoad(
             parent_id="client_id2",
             workspace_id="workspace_id2",
             workspace_name="workspace_title2",
@@ -87,13 +87,13 @@ def test_find_workspaces_to_update_different_ids() -> None:
 def test_find_workspaces_to_update_same_ids_different_names() -> None:
     provisioner: WorkspaceProvisioner = MOCK_WORKSPACE_PROVISIONER
     ids_in_both_systems: set[str] = {"workspace_id1", "workspace_id2"}
-    source_group: list[Workspace] = [
-        Workspace(
+    source_group: list[WorkspaceFullLoad] = [
+        WorkspaceFullLoad(
             parent_id="client_id1",
             workspace_id="workspace_id1",
             workspace_name="workspace_title1",
         ),
-        Workspace(
+        WorkspaceFullLoad(
             parent_id="client_id2",
             workspace_id="workspace_id2",
             workspace_name="workspace_title2",
@@ -122,13 +122,13 @@ def test_find_workspaces_to_update_same_ids_different_names() -> None:
 def test_find_workspaces_to_update_no_panther() -> None:
     provisioner: WorkspaceProvisioner = MOCK_WORKSPACE_PROVISIONER
     ids_in_both_systems: set[str] = set()
-    source_group: list[Workspace] = [
-        Workspace(
+    source_group: list[WorkspaceFullLoad] = [
+        WorkspaceFullLoad(
             parent_id="client_id1",
             workspace_id="workspace_id1",
             workspace_name="workspace_title1",
         ),
-        Workspace(
+        WorkspaceFullLoad(
             parent_id="client_id2",
             workspace_id="workspace_id2",
             workspace_name="workspace_title2",

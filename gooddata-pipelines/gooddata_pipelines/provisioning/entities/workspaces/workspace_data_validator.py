@@ -9,7 +9,7 @@ from requests import Response
 from gooddata_pipelines.api import GoodDataAPI
 from gooddata_pipelines.logger.logger import LogObserver
 from gooddata_pipelines.provisioning.entities.workspaces.models import (
-    Workspace,
+    WorkspaceFullLoad,
 )
 from gooddata_pipelines.provisioning.utils.context_objects import (
     WorkspaceContext,
@@ -35,7 +35,7 @@ class WorkspaceDataValidator:
 
     def _check_basic_integrity(
         self,
-        source_group: list[Workspace],
+        source_group: list[WorkspaceFullLoad],
     ) -> tuple[set[str], dict[str, list[str]]]:
         """
         Checks that mandatory fields are not empty and that that the combinations
@@ -152,7 +152,9 @@ class WorkspaceDataValidator:
                     workspace_id=parent_id,
                 )
 
-    def validate_source_data(self, source_group: list[Workspace]) -> None:
+    def validate_source_data(
+        self, source_group: list[WorkspaceFullLoad]
+    ) -> None:
         """
         Validates the source data integrity.
 

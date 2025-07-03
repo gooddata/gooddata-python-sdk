@@ -18,7 +18,12 @@ class WorkspaceUserDataFilters:
 
 
 @dataclass
-class UserDataFilter:
+class UserDataFilterFullLoad:
     workspace_id: str
     udf_id: str
     udf_value: str
+
+
+@dataclass
+class UserDataFilterIncrementalLoad(UserDataFilterFullLoad):
+    is_active: bool
