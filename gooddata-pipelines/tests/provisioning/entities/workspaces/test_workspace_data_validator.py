@@ -4,7 +4,7 @@ import logging
 
 from gooddata_pipelines.logger.logger import LogObserver
 from gooddata_pipelines.provisioning.entities.workspaces.models import (
-    Workspace,
+    WorkspaceFullLoad,
 )
 from gooddata_pipelines.provisioning.entities.workspaces.workspace_data_validator import (
     WorkspaceDataValidator,
@@ -24,29 +24,29 @@ validator = WorkspaceDataValidator(MOCK_GODDATA_API)
 
 
 def test_check_basic_integrity_on_valid_data() -> None:
-    source_group: list[Workspace] = [
-        Workspace(
+    source_group: list[WorkspaceFullLoad] = [
+        WorkspaceFullLoad(
             parent_id="parent_id_1",
             workspace_id="workspace_id_1",
             workspace_name="workspace_name_1",
             workspace_data_filter_id="wdf_id_1",
             workspace_data_filter_values=["wdf_values_1"],
         ),
-        Workspace(
+        WorkspaceFullLoad(
             parent_id="parent_id_2",
             workspace_id="workspace_id_2",
             workspace_name="workspace_name_2",
             workspace_data_filter_id=None,
             workspace_data_filter_values=None,
         ),
-        Workspace(
+        WorkspaceFullLoad(
             parent_id="parent_id_3",
             workspace_id="workspace_id_3",
             workspace_name="workspace_name_3",
             workspace_data_filter_id="wdf_id_1",
             workspace_data_filter_values=["wdf_values_1"],
         ),
-        Workspace(
+        WorkspaceFullLoad(
             parent_id="parent_id_3",
             workspace_id="workspace_id_3",
             workspace_name="workspace_name_3",
@@ -67,8 +67,8 @@ def test_check_basic_integrity_on_valid_data() -> None:
 
 
 def test_check_basic_integrity_missing_parent_id() -> None:
-    source_group: list[Workspace] = [
-        Workspace(
+    source_group: list[WorkspaceFullLoad] = [
+        WorkspaceFullLoad(
             parent_id="",
             workspace_id="workspace_id_1",
             workspace_name="workspace_name_1",
@@ -86,8 +86,8 @@ def test_check_basic_integrity_missing_parent_id() -> None:
 
 
 def test_check_basic_integrity_missing_workspace_id() -> None:
-    source_group: list[Workspace] = [
-        Workspace(
+    source_group: list[WorkspaceFullLoad] = [
+        WorkspaceFullLoad(
             parent_id="parent_id_1",
             workspace_id="",
             workspace_name="workspace_name_1",
@@ -107,8 +107,8 @@ def test_check_basic_integrity_missing_workspace_id() -> None:
 
 
 def test_check_basic_integrity_missing_wdf_id() -> None:
-    source_group: list[Workspace] = [
-        Workspace(
+    source_group: list[WorkspaceFullLoad] = [
+        WorkspaceFullLoad(
             parent_id="parent_id_1",
             workspace_id="workspace_id_1",
             workspace_name="workspace_name_1",
@@ -131,8 +131,8 @@ def test_check_basic_integrity_missing_wdf_id() -> None:
 
 
 def test_check_basic_integrity_missing_wdf_values() -> None:
-    source_group: list[Workspace] = [
-        Workspace(
+    source_group: list[WorkspaceFullLoad] = [
+        WorkspaceFullLoad(
             parent_id="parent_id_1",
             workspace_id="workspace_id_1",
             workspace_name="workspace_name_1",
@@ -156,8 +156,8 @@ def test_check_basic_integrity_missing_wdf_values() -> None:
 
 
 def test_check_basic_integrity_missing_both_ids() -> None:
-    source_group: list[Workspace] = [
-        Workspace(
+    source_group: list[WorkspaceFullLoad] = [
+        WorkspaceFullLoad(
             parent_id="",
             workspace_id="",
             workspace_name="",
@@ -176,15 +176,15 @@ def test_check_basic_integrity_missing_both_ids() -> None:
 
 
 def test_check_basic_integrity_duplicates_warning(caplog) -> None:
-    source_group: list[Workspace] = [
-        Workspace(
+    source_group: list[WorkspaceFullLoad] = [
+        WorkspaceFullLoad(
             parent_id="parent_id_1",
             workspace_id="workspace_id_1",
             workspace_name="workspace_name_1",
             workspace_data_filter_id="wdf_id_1",
             workspace_data_filter_values=["wdf_values_1"],
         ),
-        Workspace(
+        WorkspaceFullLoad(
             parent_id="parent_id_1",
             workspace_id="workspace_id_1",
             workspace_name="workspace_name_1",

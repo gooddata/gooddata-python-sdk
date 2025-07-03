@@ -1,5 +1,4 @@
 # (C) 2025 GoodData Corporation
-
 """Module for provisioning workspaces in GoodData Cloud."""
 
 from typing import Literal
@@ -10,13 +9,14 @@ from gooddata_sdk.catalog.workspace.entity_model.workspace import (
 
 from gooddata_pipelines.api.exceptions import GoodDataApiException
 from gooddata_pipelines.provisioning.entities.workspaces.models import (
-    Workspace,
+    WorkspaceDataMaps,
+    WorkspaceFullLoad,
+    WorkspaceIncrementalLoad,
 )
 from gooddata_pipelines.provisioning.entities.workspaces.workspace_data_filters import (
     WorkspaceDataFilterManager,
 )
 from gooddata_pipelines.provisioning.entities.workspaces.workspace_data_parser import (
-    WorkspaceDataMaps,
     WorkspaceDataParser,
 )
 from gooddata_pipelines.provisioning.entities.workspaces.workspace_data_validator import (
@@ -29,8 +29,11 @@ from gooddata_pipelines.provisioning.utils.context_objects import (
 from gooddata_pipelines.provisioning.utils.exceptions import WorkspaceException
 
 
-class WorkspaceProvisioner(Provisioning[Workspace]):
-    source_group: list[Workspace]
+class WorkspaceProvisioner(
+    Provisioning[WorkspaceFullLoad, WorkspaceIncrementalLoad]
+):
+    source_group_full: list[WorkspaceFullLoad]
+    source_group_incremental: list[WorkspaceIncrementalLoad]
 
     def __init__(self, *args: str, **kwargs: str) -> None:
         """Creates an instance of the WorkspaceProvisioner.
@@ -47,7 +50,7 @@ class WorkspaceProvisioner(Provisioning[Workspace]):
 
     def _find_workspaces_to_update(
         self,
-        source_group: list[Workspace],
+        source_group: list[WorkspaceFullLoad],
         panther_group: list[CatalogWorkspace],
         ids_in_both_systems: set[str],
     ) -> set[str]:
@@ -91,7 +94,7 @@ class WorkspaceProvisioner(Provisioning[Workspace]):
     ) -> None:
         action: Literal["CREATE", "UPDATE"]
 
-        for source_workspace in self.source_group:
+        for source_workspace in self.source_group_full:
             if source_workspace.workspace_id in workspace_ids_to_update:
                 action = "UPDATE"
             elif source_workspace.workspace_id in workspace_ids_to_create:
@@ -156,7 +159,9 @@ class WorkspaceProvisioner(Provisioning[Workspace]):
                 )
 
     def verify_workspace_provisioning(
-        self, source_group: list[Workspace], parent_workspace_ids: set[str]
+        self,
+        source_group: list[WorkspaceFullLoad],
+        parent_workspace_ids: set[str],
     ) -> None:
         """Verifies that upstream content is equal to the source data."""
         source_ids_names: set[tuple[str, str]] = {
@@ -182,16 +187,15 @@ class WorkspaceProvisioner(Provisioning[Workspace]):
                 + f"match. Difference: {diff}"
             )
 
-    def _provision(self) -> None:
-        """Workspace provisioning workflow to synchronize workspaces between
-        source data and upstream domain."""
+    def _provision_full_load(self) -> None:
+        """Full load workspace provisioning."""
 
         # Validate the source data.
-        self.validator.validate_source_data(self.source_group)
+        self.validator.validate_source_data(self.source_group_full)
 
         # Set the maps based on the source data.
         self.maps = self.parser.set_maps_based_on_source(
-            self.maps, self.source_group
+            self.maps, self.source_group_full
         )
 
         # Get upstream children of all parent workspaces.
@@ -201,30 +205,32 @@ class WorkspaceProvisioner(Provisioning[Workspace]):
 
         # Set maps that require upstream data.
         self.maps = self.parser.set_maps_with_upstream_data(
-            self.maps, self.source_group, self.upstream_group
+            self.maps, self.source_group_full, self.upstream_group
         )
 
         # Create an instance of WDF manager with the created maps.
         self.wdf_manager = WorkspaceDataFilterManager(self._api, self.maps)
 
         # Sort the ids to groups based on provisioning logic.
-        self.ids_in_both_systems, self.ids_to_delete, self.ids_to_create = (
-            self._create_groups(self.maps.source_ids, self.maps.upstream_ids)
+        id_groups = self._create_groups(
+            self.maps.source_ids, self.maps.upstream_ids
         )
 
         # Find out which workspaces to update.
         self.ids_to_update: set[str] = self._find_workspaces_to_update(
-            self.source_group, self.upstream_group, self.ids_in_both_systems
+            self.source_group_full,
+            self.upstream_group,
+            id_groups.ids_in_both_systems,
         )
 
         # Delete the workspaces that are not in the source.
         self.delete_panther_workspaces(
-            self.ids_to_delete, self.maps.workspace_id_to_name_map
+            id_groups.ids_to_delete, self.maps.workspace_id_to_name_map
         )
 
         # Create or update selected workspaces.
         self._create_or_update_panther_workspaces(
-            self.ids_to_create,
+            id_groups.ids_to_create,
             self.ids_to_update,
             self.maps.child_to_parent_id_map,
             self.maps.workspace_id_to_wdf_map,
@@ -232,8 +238,8 @@ class WorkspaceProvisioner(Provisioning[Workspace]):
 
         # Check WDF settings of ignored workspaces.
         ignored_workspace_ids: set[str] = self.maps.source_ids.difference(
-            self.ids_to_create.union(self.ids_to_update).union(
-                self.ids_to_delete
+            id_groups.ids_to_create.union(self.ids_to_update).union(
+                id_groups.ids_to_delete
             )
         )
 
@@ -248,5 +254,10 @@ class WorkspaceProvisioner(Provisioning[Workspace]):
 
         # Verify the provisioning by queries to GoodData Cloud.
         self.verify_workspace_provisioning(
-            self.source_group, self.maps.parent_ids
+            self.source_group_full, self.maps.parent_ids
         )
+
+    def _provision_incremental_load(self) -> None:
+        """Incremental workspace provisioning."""
+
+        raise NotImplementedError("Not implemented yet.")

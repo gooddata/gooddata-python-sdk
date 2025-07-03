@@ -9,9 +9,9 @@ from gooddata_sdk.catalog.permission.declarative_model.permission import (
     CatalogDeclarativeWorkspacePermissions,
 )
 
-from gooddata_pipelines.provisioning.entities.users.models import (
-    Permission,
+from gooddata_pipelines.provisioning.entities.users.models.permissions import (
     PermissionDeclaration,
+    PermissionIncrementalLoad,
     PermissionType,
 )
 
@@ -189,7 +189,9 @@ def test_add_new_active_user_perm():
         {"user_1": {"ANALYZE": True, "VIEW": False}},
         {"ug_1": {"VIEW": True, "ANALYZE": False}},
     )
-    permission = Permission("MANAGE", "", "user_1", PermissionType.user, True)
+    permission = PermissionIncrementalLoad(
+        "MANAGE", "", "user_1", PermissionType.user, True
+    )
     declaration.add_permission(permission)
     assert declaration.users == {
         "user_1": {"ANALYZE": True, "VIEW": False, "MANAGE": True}
@@ -202,7 +204,9 @@ def test_add_new_inactive_user_perm():
         {"user_1": {"ANALYZE": True, "VIEW": False}},
         {"ug_1": {"VIEW": True, "ANALYZE": False}},
     )
-    permission = Permission("MANAGE", "", "user_1", PermissionType.user, False)
+    permission = PermissionIncrementalLoad(
+        "MANAGE", "", "user_1", PermissionType.user, False
+    )
     declaration.add_permission(permission)
     assert declaration.users == {
         "user_1": {"ANALYZE": True, "VIEW": False, "MANAGE": False}
@@ -215,7 +219,9 @@ def test_overwrite_inactive_user_perm():
         {"user_1": {"ANALYZE": True, "VIEW": False}},
         {"ug_1": {"VIEW": True, "ANALYZE": False}},
     )
-    permission = Permission("VIEW", "", "user_1", PermissionType.user, True)
+    permission = PermissionIncrementalLoad(
+        "VIEW", "", "user_1", PermissionType.user, True
+    )
     declaration.add_permission(permission)
     assert declaration.users == {"user_1": {"ANALYZE": True, "VIEW": True}}
     assert declaration.user_groups == {"ug_1": {"VIEW": True, "ANALYZE": False}}
@@ -226,7 +232,9 @@ def test_overwrite_active_user_perm():
         {"user_1": {"ANALYZE": True, "VIEW": False}},
         {"ug_1": {"VIEW": True, "ANALYZE": False}},
     )
-    permission = Permission("ANALYZE", "", "user_1", PermissionType.user, False)
+    permission = PermissionIncrementalLoad(
+        "ANALYZE", "", "user_1", PermissionType.user, False
+    )
     declaration.add_permission(permission)
     assert declaration.users == {"user_1": {"ANALYZE": True, "VIEW": False}}
     assert declaration.user_groups == {"ug_1": {"VIEW": True, "ANALYZE": False}}
@@ -237,7 +245,9 @@ def test_add_new_user_perm():
         {"user_1": {"ANALYZE": True, "VIEW": False}},
         {"ug_1": {"VIEW": True, "ANALYZE": False}},
     )
-    permission = Permission("VIEW", "", "user_2", PermissionType.user, True)
+    permission = PermissionIncrementalLoad(
+        "VIEW", "", "user_2", PermissionType.user, True
+    )
     declaration.add_permission(permission)
     assert declaration.users == {
         "user_1": {"ANALYZE": True, "VIEW": False},
@@ -251,7 +261,9 @@ def test_modify_one_of_user_perms():
         {"user_1": {"ANALYZE": True, "VIEW": False}, "user_2": {"VIEW": True}},
         {"ug_1": {"VIEW": True, "ANALYZE": False}},
     )
-    permission = Permission("MANAGE", "", "user_1", PermissionType.user, True)
+    permission = PermissionIncrementalLoad(
+        "MANAGE", "", "user_1", PermissionType.user, True
+    )
     declaration.add_permission(permission)
     assert declaration.users == {
         "user_1": {"ANALYZE": True, "VIEW": False, "MANAGE": True},
@@ -268,7 +280,7 @@ def test_add_new_active_ug_perm():
         {"user_1": {"ANALYZE": True, "VIEW": False}},
         {"ug_1": {"VIEW": True, "ANALYZE": False}},
     )
-    permission = Permission(
+    permission = PermissionIncrementalLoad(
         "MANAGE", "", "ug_1", PermissionType.user_group, True
     )
     declaration.add_permission(permission)
@@ -283,7 +295,7 @@ def test_add_new_inactive_ug_perm():
         {"user_1": {"ANALYZE": True, "VIEW": False}},
         {"ug_1": {"VIEW": True, "ANALYZE": False}},
     )
-    permission = Permission(
+    permission = PermissionIncrementalLoad(
         "MANAGE", "", "ug_1", PermissionType.user_group, False
     )
     declaration.add_permission(permission)
@@ -298,7 +310,7 @@ def test_overwrite_inactive_ug_perm():
         {"user_1": {"ANALYZE": True, "VIEW": False}},
         {"ug_1": {"VIEW": True, "ANALYZE": False}},
     )
-    permission = Permission(
+    permission = PermissionIncrementalLoad(
         "ANALYZE", "", "ug_1", PermissionType.user_group, True
     )
     declaration.add_permission(permission)
@@ -311,7 +323,7 @@ def test_overwrite_active_ug_perm():
         {"user_1": {"ANALYZE": True, "VIEW": False}},
         {"ug_1": {"VIEW": True, "ANALYZE": False}},
     )
-    permission = Permission(
+    permission = PermissionIncrementalLoad(
         "VIEW", "", "ug_1", PermissionType.user_group, False
     )
     declaration.add_permission(permission)
@@ -324,7 +336,9 @@ def test_add_new_ug_perm():
         {"user_1": {"ANALYZE": True, "VIEW": False}},
         {"ug_1": {"VIEW": True, "ANALYZE": False}},
     )
-    permission = Permission("VIEW", "", "ug_2", PermissionType.user_group, True)
+    permission = PermissionIncrementalLoad(
+        "VIEW", "", "ug_2", PermissionType.user_group, True
+    )
     declaration.add_permission(permission)
     assert declaration.users == {"user_1": {"ANALYZE": True, "VIEW": False}}
     assert declaration.user_groups == {
@@ -338,7 +352,7 @@ def test_modify_one_of_ug_perms():
         {"user_1": {"ANALYZE": True, "VIEW": False}},
         {"ug_1": {"VIEW": True, "ANALYZE": False}, "ug_2": {"VIEW": True}},
     )
-    permission = Permission(
+    permission = PermissionIncrementalLoad(
         "MANAGE", "", "ug_1", PermissionType.user_group, True
     )
     declaration.add_permission(permission)

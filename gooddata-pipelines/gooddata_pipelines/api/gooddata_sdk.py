@@ -247,6 +247,15 @@ class SDKMethods:
         return self._sdk.catalog_user.list_user_groups()
 
     @raise_with_context()
+    def list_users(self) -> list[CatalogUser]:
+        """Calls GoodData Python SDK to retrieve all users.
+
+        Returns:
+            list[CatalogUser]: A list of all users in the domain.
+        """
+        return self._sdk.catalog_user.list_users()
+
+    @raise_with_context()
     def create_or_update_user_group(
         self, catalog_user_group: CatalogUserGroup, **_: str
     ) -> None:

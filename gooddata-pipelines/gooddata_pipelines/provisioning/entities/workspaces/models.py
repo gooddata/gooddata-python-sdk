@@ -1,5 +1,4 @@
 # (C) 2025 GoodData Corporation
-
 """Module containing models related to workspace provisioning in GoodData Cloud."""
 
 from dataclasses import dataclass, field
@@ -22,7 +21,7 @@ class WorkspaceDataMaps:
     upstream_ids: set[str] = field(default_factory=set)
 
 
-class Workspace(BaseModel):
+class WorkspaceFullLoad(BaseModel):
     """Model representing input for provisioning of workspaces in GoodData Cloud."""
 
     model_config = ConfigDict(coerce_numbers_to_str=True)
@@ -32,6 +31,13 @@ class Workspace(BaseModel):
     workspace_name: str
     workspace_data_filter_id: str | None = None
     workspace_data_filter_values: list[str] | None = None
+
+
+class WorkspaceIncrementalLoad(WorkspaceFullLoad):
+    """Model representing input for incremental provisioning of workspaces in GoodData Cloud."""
+
+    # TODO: double check that the model loads the data correctly, write a test
+    is_active: bool
 
 
 class WDFSettingAttributes(BaseModel):

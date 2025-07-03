@@ -1,8 +1,5 @@
 # (C) 2025 GoodData Corporation
-
-"""Dataclass models for user, user group and permission provisioning."""
-
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Iterator, TypeAlias
 
@@ -11,10 +8,11 @@ from gooddata_sdk.catalog.permission.declarative_model.permission import (
     CatalogDeclarativeSingleWorkspacePermission,
     CatalogDeclarativeWorkspacePermissions,
 )
-from gooddata_sdk.catalog.user.entity_model.user import CatalogUser
 
 from gooddata_pipelines.provisioning.utils.exceptions import BaseUserException
-from gooddata_pipelines.provisioning.utils.utils import SplitMixin
+
+# TODO: refactor the full load and incremental load models to reuse as much as possible
+# TODO: use pydantic models instead of dataclasses?
 
 TargetsPermissionDict: TypeAlias = dict[str, dict[str, bool]]
 
@@ -25,7 +23,7 @@ class PermissionType(Enum):
 
 
 @dataclass(frozen=True)
-class Permission:
+class PermissionIncrementalLoad:
     permission: str
     workspace_id: str
     id: str
@@ -35,7 +33,7 @@ class Permission:
     @classmethod
     def from_list_of_dicts(
         cls, data: list[dict[str, Any]]
-    ) -> list["Permission"]:
+    ) -> list["PermissionIncrementalLoad"]:
         """Creates a list of User objects from list of dicts."""
         permissions = []
         for permission in data:
@@ -51,12 +49,48 @@ class Permission:
                 target_type = PermissionType.user_group
 
             permissions.append(
-                Permission(
+                PermissionIncrementalLoad(
                     permission=permission["ws_permissions"],
                     workspace_id=permission["ws_id"],
                     id=id,
                     type=target_type,
                     is_active=str(permission["is_active"]).lower() == "true",
+                )
+            )
+        return permissions
+
+
+@dataclass(frozen=True)
+class PermissionFullLoad:
+    permission: str
+    workspace_id: str
+    id: str
+    type: PermissionType
+
+    @classmethod
+    def from_list_of_dicts(
+        cls, data: list[dict[str, Any]]
+    ) -> list["PermissionFullLoad"]:
+        """Creates a list of User objects from list of dicts."""
+        permissions = []
+        for permission in data:
+            id = (
+                permission["user_id"]
+                if permission["user_id"]
+                else permission["ug_id"]
+            )
+
+            if permission["user_id"]:
+                target_type = PermissionType.user
+            else:
+                target_type = PermissionType.user_group
+
+            permissions.append(
+                PermissionFullLoad(
+                    permission=permission["ws_permissions"],
+                    workspace_id=permission["ws_id"],
+                    id=id,
+                    type=target_type,
                 )
             )
         return permissions
@@ -157,7 +191,7 @@ class PermissionDeclaration:
             permissions=permission_declarations
         )
 
-    def add_permission(self, permission: Permission) -> None:
+    def add_permission(self, permission: PermissionIncrementalLoad) -> None:
         """
         Adds WSPermission object into respective field within the instance.
         Handles duplicate permissions and different combinations of input
@@ -205,104 +239,3 @@ class PermissionDeclaration:
 
 
 WSPermissionsDeclarations: TypeAlias = dict[str, PermissionDeclaration]
-
-
-@dataclass
-class User(SplitMixin):
-    user_id: str
-    firstname: str | None
-    lastname: str | None
-    email: str | None
-    auth_id: str | None
-    user_groups: list[str]
-    is_active: bool = field(compare=False)
-
-    @classmethod
-    def from_list_of_dicts(
-        cls, data: list[dict[str, Any]], delimiter: str = ","
-    ) -> list["User"]:
-        """Creates a list of User objects from list of dicts."""
-        converted_users = []
-        for user in data:
-            user_groups = cls.split(user["user_groups"], delimiter=delimiter)
-            converted_users.append(
-                User(
-                    user_id=user["user_id"],
-                    firstname=user["firstname"],
-                    lastname=user["lastname"],
-                    email=user["email"],
-                    auth_id=user["auth_id"],
-                    user_groups=user_groups,
-                    is_active=user["is_active"],
-                )
-            )
-        return converted_users
-
-    @classmethod
-    def from_sdk_obj(cls, obj: CatalogUser) -> "User":
-        """Creates GDUserTarget from CatalogUser SDK object."""
-        if obj.attributes:
-            firstname = obj.attributes.firstname
-            lastname = obj.attributes.lastname
-            email = obj.attributes.email
-            auth_id = obj.attributes.authentication_id
-        else:
-            firstname = None
-            lastname = None
-            email = None
-            auth_id = None
-
-        return User(
-            user_id=obj.id,
-            firstname=firstname,
-            lastname=lastname,
-            email=email,
-            auth_id=auth_id,
-            user_groups=[ug.id for ug in obj.user_groups],
-            is_active=True,
-        )
-
-    def to_sdk_obj(self) -> CatalogUser:
-        """Converts GDUserTarget to CatalogUser SDK object."""
-        return CatalogUser.init(
-            user_id=self.user_id,
-            firstname=self.firstname,
-            lastname=self.lastname,
-            email=self.email,
-            authentication_id=self.auth_id,
-            user_group_ids=self.user_groups,
-        )
-
-
-@dataclass
-class UserGroup(SplitMixin):
-    user_group_id: str
-    user_group_name: str
-    parent_user_groups: list[str]
-    is_active: bool = field(compare=False)
-
-    @classmethod
-    def from_list_of_dicts(
-        cls, data: list[dict[str, Any]], delimiter: str = ","
-    ) -> list["UserGroup"]:
-        """Creates a list of User objects from list of dicts."""
-        user_groups = []
-        for user_group in data:
-            if user_group["user_group_name"]:
-                user_group_name = user_group["user_group_name"]
-            else:
-                user_group_name = user_group["user_group_id"]
-
-            parent_user_groups = cls.split(
-                user_group["parent_user_groups"], delimiter=delimiter
-            )
-
-            user_groups.append(
-                UserGroup(
-                    user_group_id=user_group["user_group_id"],
-                    user_group_name=user_group_name,
-                    parent_user_groups=parent_user_groups,
-                    is_active=str(user_group["is_active"]).lower() == "true",
-                )
-            )
-        return user_groups

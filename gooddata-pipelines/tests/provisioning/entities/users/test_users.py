@@ -10,7 +10,9 @@ from gooddata_api_client.exceptions import (  # type: ignore[import]
 from gooddata_sdk.catalog.user.entity_model.user import CatalogUser
 from gooddata_sdk.catalog.user.entity_model.user_group import CatalogUserGroup
 
-from gooddata_pipelines.provisioning.entities.users.models import User
+from gooddata_pipelines.provisioning.entities.users.models.users import (
+    UserIncrementalLoad,
+)
 
 
 @dataclass
@@ -64,10 +66,16 @@ def test_user_obj_from_sdk():
     user_input = MockUser(
         "some.user", "some", "user", "some@email.com", "auth", ["ug"]
     )
-    excepted = User(
-        "some.user", "some", "user", "some@email.com", "auth", ["ug"], True
+    excepted = UserIncrementalLoad(
+        user_id="some.user",
+        firstname="some",
+        lastname="user",
+        email="some@email.com",
+        auth_id="auth",
+        user_groups=["ug"],
+        is_active=True,
     )
-    user = User.from_sdk_obj(user_input.to_sdk())
+    user = UserIncrementalLoad.from_sdk_obj(user_input.to_sdk())
     assert excepted == user
 
 
@@ -75,10 +83,16 @@ def test_user_obj_from_sdk_no_ugs():
     user_input = MockUser(
         "some.user", "some", "user", "some@email.com", "auth", []
     )
-    excepted = User(
-        "some.user", "some", "user", "some@email.com", "auth", [], True
+    excepted = UserIncrementalLoad(
+        user_id="some.user",
+        firstname="some",
+        lastname="user",
+        email="some@email.com",
+        auth_id="auth",
+        user_groups=[],
+        is_active=True,
     )
-    user = User.from_sdk_obj(user_input.to_sdk())
+    user = UserIncrementalLoad.from_sdk_obj(user_input.to_sdk())
     assert excepted == user
 
 
@@ -86,8 +100,14 @@ def test_user_obj_to_sdk():
     user_input = MockUser(
         "some.user", "some", "user", "some@email.com", "auth", ["ug"]
     )
-    user = User(
-        "some.user", "some", "user", "some@email.com", "auth", ["ug"], True
+    user = UserIncrementalLoad(
+        user_id="some.user",
+        firstname="some",
+        lastname="user",
+        email="some@email.com",
+        auth_id="auth",
+        user_groups=["ug"],
+        is_active=True,
     )
     excepted = user_input.to_sdk()
     assert excepted == user.to_sdk_obj()
@@ -97,7 +117,15 @@ def test_user_obj_to_sdk_no_ugs():
     user_input = MockUser(
         "some.user", "some", "user", "some@email.com", "auth", []
     )
-    user = User("some.user", "some", "user", "some@email.com", "auth", [], True)
+    user = UserIncrementalLoad(
+        user_id="some.user",
+        firstname="some",
+        lastname="user",
+        email="some@email.com",
+        auth_id="auth",
+        user_groups=[],
+        is_active=True,
+    )
     excepted = user_input.to_sdk()
     assert excepted == user.to_sdk_obj()
 

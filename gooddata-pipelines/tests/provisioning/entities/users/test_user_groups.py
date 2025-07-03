@@ -3,9 +3,12 @@
 from dataclasses import dataclass
 from unittest import mock
 
+import pytest
 from gooddata_sdk.catalog.user.entity_model.user_group import CatalogUserGroup
 
-from gooddata_pipelines.provisioning.entities.users.models import UserGroup
+from gooddata_pipelines.provisioning.entities.users.models.user_groups import (
+    UserGroupIncrementalLoad,
+)
 
 TEST_CSV_PATH = "tests/data/user_group_mgmt/input.csv"
 
@@ -33,9 +36,9 @@ def test_from_csv_row_standard():
             "is_active": "True",
         }
     ]
-    result = UserGroup.from_list_of_dicts(input, "|")
+    result = UserGroupIncrementalLoad.from_list_of_dicts(input, "|")
     expected = [
-        UserGroup(
+        UserGroupIncrementalLoad(
             user_group_id="ug_1",
             user_group_name="Admins",
             parent_user_groups=["ug_2", "ug_3"],
@@ -54,9 +57,9 @@ def test_from_csv_row_no_parent_groups():
             "is_active": "True",
         }
     ]
-    result = UserGroup.from_list_of_dicts(input, "|")
+    result = UserGroupIncrementalLoad.from_list_of_dicts(input, "|")
     expected = [
-        UserGroup(
+        UserGroupIncrementalLoad(
             user_group_id="ug_2",
             user_group_name="Developers",
             parent_user_groups=[],
@@ -77,9 +80,9 @@ def test_from_csv_row_fallback_name():
             "is_active": "False",
         }
     ]
-    result = UserGroup.from_list_of_dicts(input, "|")
+    result = UserGroupIncrementalLoad.from_list_of_dicts(input, "|")
     expected = [
-        UserGroup(
+        UserGroupIncrementalLoad(
             user_group_id="ug_3",
             user_group_name="ug_3",
             parent_user_groups=[],
@@ -100,18 +103,8 @@ def test_from_csv_row_invalid_is_active():
             "is_active": "not_a_boolean",
         }
     ]
-    result = UserGroup.from_list_of_dicts(input, "|")
-    expected = [
-        UserGroup(
-            user_group_id="ug_4",
-            user_group_name="Testers",
-            parent_user_groups=["ug_1"],
-            is_active=False,
-        )
-    ]
-    assert result == expected, (
-        "Invalid 'is_active' value should default to False"
-    )
+    with pytest.raises(ValueError):
+        UserGroupIncrementalLoad.from_list_of_dicts(input, "|")
 
 
 def prepare_sdk():

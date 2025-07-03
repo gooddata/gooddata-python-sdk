@@ -3,9 +3,10 @@
 """Module for provisioning user permissions in GoodData workspaces."""
 
 from gooddata_pipelines.api.exceptions import GoodDataApiException
-from gooddata_pipelines.provisioning.entities.users.models import (
-    Permission,
+from gooddata_pipelines.provisioning.entities.users.models.permissions import (
     PermissionDeclaration,
+    PermissionFullLoad,
+    PermissionIncrementalLoad,
     PermissionType,
     TargetsPermissionDict,
     WSPermissionsDeclarations,
@@ -14,14 +15,17 @@ from gooddata_pipelines.provisioning.provisioning import Provisioning
 from gooddata_pipelines.provisioning.utils.exceptions import BaseUserException
 
 
-class PermissionProvisioner(Provisioning[Permission]):
+class PermissionProvisioner(
+    Provisioning[PermissionFullLoad, PermissionIncrementalLoad]
+):
     """Provisioning class for user permissions in GoodData workspaces.
 
     This class handles the provisioning of user permissions based on the provided
     source data.
     """
 
-    source_group: list[Permission]
+    source_group_incremental: list[PermissionIncrementalLoad]
+    source_group_full: list[PermissionFullLoad]
 
     def _get_ws_declaration(self, ws_id: str) -> PermissionDeclaration:
         users: TargetsPermissionDict = {}
@@ -68,7 +72,7 @@ class PermissionProvisioner(Provisioning[Permission]):
 
     @staticmethod
     def _construct_declarations(
-        permissions: list[Permission],
+        permissions: list[PermissionIncrementalLoad],
     ) -> WSPermissionsDeclarations:
         """Constructs workspace permission declarations from the input permissions."""
         ws_dict: WSPermissionsDeclarations = {}
@@ -85,7 +89,9 @@ class PermissionProvisioner(Provisioning[Permission]):
         """Checks if user group with provided ID exists."""
         self._api._sdk.catalog_user.get_user_group(ug_id)
 
-    def _validate_permission(self, permission: Permission) -> None:
+    def _validate_permission(
+        self, permission: PermissionIncrementalLoad
+    ) -> None:
         """Validates if the permission is correctly defined."""
         if permission.type == PermissionType.user:
             self._api.get_user(permission.id, error_message="User not found")
@@ -99,10 +105,10 @@ class PermissionProvisioner(Provisioning[Permission]):
         )
 
     def _filter_invalid_permissions(
-        self, permissions: list[Permission]
-    ) -> list[Permission]:
+        self, permissions: list[PermissionIncrementalLoad]
+    ) -> list[PermissionIncrementalLoad]:
         """Filters out invalid permissions from the input list."""
-        valid_permissions: list[Permission] = []
+        valid_permissions: list[PermissionIncrementalLoad] = []
         for permission in permissions:
             try:
                 self._validate_permission(permission)
@@ -115,7 +121,9 @@ class PermissionProvisioner(Provisioning[Permission]):
             valid_permissions.append(permission)
         return valid_permissions
 
-    def _manage_permissions(self, permissions: list[Permission]) -> None:
+    def _manage_permissions(
+        self, permissions: list[PermissionIncrementalLoad]
+    ) -> None:
         """Manages permissions for a list of workspaces.
         Modify upstream workspace declarations for each input workspace and skip non-existent ws_ids
         """
@@ -137,6 +145,9 @@ class PermissionProvisioner(Provisioning[Permission]):
             self._api.put_declarative_permissions(ws_id, ws_permissions)
             self.logger.info(f"Updated permissions for workspace {ws_id}")
 
-    def _provision(self) -> None:
+    def _provision_incremental_load(self) -> None:
         """Provision permissions based on the source group."""
-        self._manage_permissions(self.source_group)
+        self._manage_permissions(self.source_group_incremental)
+
+    def _provision_full_load(self) -> None:
+        raise NotImplementedError("Not implemented yet.")
