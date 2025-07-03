@@ -39,7 +39,7 @@ class GoodPandas:
         """
         if headers_host is not None:
             custom_headers_["Host"] = headers_host
-        self._sdk = GoodDataSdk.create(host, token, USER_AGENT, **custom_headers_)
+        self._sdk = GoodDataSdk.create(host, token, USER_AGENT, executions_cancellable=False, **custom_headers_)
         self._series_per_ws: dict[str, SeriesFactory] = dict()
         self._frames_per_ws: dict[str, DataFrameFactory] = dict()
 
