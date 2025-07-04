@@ -1,69 +1,63 @@
 # GoodData Pipelines
 
-The `gooddata-pipelines` package provides a number of high level scripts to interact with and manage [GoodData](https://www.gooddata.com/).
+A high level library for automating the lifecycle of GoodData Cloud (GDC).
 
-At the moment, the package allows you to automate these features:
+You can use the package to manage following resoursec in GDC:
 
-- Provisioning (creation, updtating and removal of resources) of
-  - workspaces
-  - users
-  - user groups
-  - user permissions
-  - user data filters
-  <!-- TODO: Backups, restores -->
+1. Provisioning (create, update, delete)
+   - User profiles
+   - User Groups
+   - User/Group permissions
+   - User Data Filters
+   - Child workspaces (incl. Workspace Data Filter settings)
+1. _[PLANNED]:_ Backup and restore of workspaces
+1. _[PLANNED]:_ Custom fields management
+   - extend the Logical Data Model of a child workspace
 
-<!-- TODO: link to documentation -->
-<!-- See [DOCUMENTATION](https://www.gooddata.com/docs/python-sdk/1.43.0) for more details. -->
+In case you are not interested in incorporating a library in your own program, but would like to use a ready-made script, consider having a look at [GoodData Productivity Tools](https://github.com/gooddata/gooddata-productivity-tools).
 
-## Requirements
+## Provisioning
 
-- GoodData Cloud or GoodData.CN installation
-- Python 3.10 or newer
+The entities can be managed either in _full load_ or _incremental_ way.
 
-## Installation
+Full load means that the input data should represent the full and complete desired state of GDC after the script has finished. For example, you would include specification of all child workspaces you want to exist in GDC in the input data for workspace provisioning. Any workspaces present in GDC and not defined in the source data (i.e., your input) will be deleted.
 
-Run the following command to install the `gooddata-pipelines` package on your system:
+On the other hand, the incremental load treats the source data as instructions for a specific change, e.g., a creation or a deletion of a specific workspace. You can specify which workspaces you would want to delete or create, while the rest of the workspaces already present in GDC will remain as they are, ignored by the provisioning script.
 
-    pip install gooddata-pipelines
-
-## Example
-
-This example illustrates how to use this package to manage GoodData Cloud workspaces. The provisioning script will ingest data which will be used as a source of truth to configure GoodData. The script will compare the source data with the current state of GoodData instance and will create, update and delete workspaces and user data filter settings to match the source data.
+The provisioning module exposes _Provisioner_ classes reflecting the different entities. The typical usage would involve importing the Provisioner class and the data input data model for the class and planned provisioning method:
 
 ```python
+import os
+from csv import DictReader
+from pathlib import Path
 
-# Import WorkspaceProvisioner and Workspace model.
-from gooddata_pipelines import Workspace, WorkspaceProvisioner
+# Import the Entity Provisioner class and corresponing model from gooddata_pipelines library
+from gooddata_pipelines import UserFullLoad, UserProvisioner
 
-# Gather the raw data to be used by the provisioner.
-raw_data: list[dict] = [
-    {
-        "parent_id": "parent_workspace_id",
-        "workspace_id": "workspace_id",
-        "workspace_name": "Workspace Name",
-        "workspace_data_filter_id": "wdf_id",
-        "workspace_data_filter_values": ["value1", "value2"],
-    }
-]
+# Optional: you can set up logging and subscribe it to the Provisioner
+from utils.logger import setup_logging
 
-# Convert raw data to Workspace objects.
-data = [Workspace(**item) for item in raw_data]
+setup_logging()
+logger = logging.getLogger(__name__)
 
-# Create a WorkspaceProvisioner using your GoodData host name and token.
-host = "https://your-gooddata-host.com"
-token = "your_gooddata_token"
-provisioner = WorkspaceProvisioner.create(host=host, token=token)
+# Create the Provisioner instance - you can also create the instance from a GDC yaml profile
+provisioner = UserProvisioner(
+    host=os.environ["GDC_HOSTNAME"], token=os.environ["GDC_AUTH_TOKEN"]
+)
 
-# Provision the workspaces
-provisioner.provision(data)
+# Optional: subscribe to logs
+provisioner.logger.subscribe(logger)
+
+# Load your data from your data source
+source_data_path: Path = Path("path/to/some.csv")
+source_data_reader = DictReader(source_data_path.read_text().splitlines())
+source_data = [row for row in source_data_reader]
+
+# Validate your input data with
+full_load_data: list[UserFullLoad] = UserFullLoad.from_list_of_dicts(
+    source_data
+)
+provisioner.full_load(full_load_data)
 ```
 
-## Bugs & Requests
-
-Please use the [GitHub issue tracker](https://github.com/gooddata/gooddata-python-sdk/issues) to submit bugs
-or request features.
-
-## Changelog
-
-See [Github releases](https://github.com/gooddata/gooddata-python-sdk/releases) for released versions
-and a list of changes.
+Ready made scripts covering the basic use cases can be found here in the [GoodData Productivity Tools](https://github.com/gooddata/gooddata-productivity-tools) repository
