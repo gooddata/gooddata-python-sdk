@@ -3,7 +3,7 @@
 import pytest
 
 from gooddata_pipelines.api.gooddata_api import (
-    PANTHER_API_VERSION,
+    API_VERSION,
     APIMethods,
 )
 
@@ -11,23 +11,23 @@ from gooddata_pipelines.api.gooddata_api import (
 @pytest.mark.parametrize(
     "domain, expected_base_url",
     [
-        ("example.com", f"https://example.com/api/{PANTHER_API_VERSION}"),
+        ("example.com", f"https://example.com/api/{API_VERSION}"),
         (
             "https://example.com",
-            f"https://example.com/api/{PANTHER_API_VERSION}",
+            f"https://example.com/api/{API_VERSION}",
         ),
         (
             "http://example.com",
-            f"https://example.com/api/{PANTHER_API_VERSION}",
+            f"https://example.com/api/{API_VERSION}",
         ),
-        ("example.com/", f"https://example.com/api/{PANTHER_API_VERSION}"),
+        ("example.com/", f"https://example.com/api/{API_VERSION}"),
         (
             "https://example.com/",
-            f"https://example.com/api/{PANTHER_API_VERSION}",
+            f"https://example.com/api/{API_VERSION}",
         ),
         (
             "http://example.com/",
-            f"https://example.com/api/{PANTHER_API_VERSION}",
+            f"https://example.com/api/{API_VERSION}",
         ),
     ],
 )

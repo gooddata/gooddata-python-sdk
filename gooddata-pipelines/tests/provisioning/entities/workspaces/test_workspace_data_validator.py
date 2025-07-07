@@ -2,6 +2,8 @@
 
 import logging
 
+import pytest
+
 from gooddata_pipelines.logger.logger import LogObserver
 from gooddata_pipelines.provisioning.entities.workspaces.models import (
     WorkspaceFullLoad,
@@ -12,7 +14,6 @@ from gooddata_pipelines.provisioning.entities.workspaces.workspace_data_validato
 from gooddata_pipelines.provisioning.utils.exceptions import (
     WorkspaceException,
 )
-from tests.commons import MOCK_GODDATA_API
 
 # Set up logging for the test
 logger = logging.getLogger("test_logger")
@@ -20,10 +21,13 @@ logger = logging.getLogger("test_logger")
 observer = LogObserver()
 observer.subscribe(logger)
 
-validator = WorkspaceDataValidator(MOCK_GODDATA_API)
+
+@pytest.fixture
+def validator(mock_gooddata_api):
+    return WorkspaceDataValidator(mock_gooddata_api)
 
 
-def test_check_basic_integrity_on_valid_data() -> None:
+def test_check_basic_integrity_on_valid_data(validator) -> None:
     source_group: list[WorkspaceFullLoad] = [
         WorkspaceFullLoad(
             parent_id="parent_id_1",
@@ -66,7 +70,7 @@ def test_check_basic_integrity_on_valid_data() -> None:
     }
 
 
-def test_check_basic_integrity_missing_parent_id() -> None:
+def test_check_basic_integrity_missing_parent_id(validator) -> None:
     source_group: list[WorkspaceFullLoad] = [
         WorkspaceFullLoad(
             parent_id="",
@@ -85,7 +89,7 @@ def test_check_basic_integrity_missing_parent_id() -> None:
         assert e.workspace_id == "workspace_id_1"
 
 
-def test_check_basic_integrity_missing_workspace_id() -> None:
+def test_check_basic_integrity_missing_workspace_id(validator) -> None:
     source_group: list[WorkspaceFullLoad] = [
         WorkspaceFullLoad(
             parent_id="parent_id_1",
@@ -106,7 +110,7 @@ def test_check_basic_integrity_missing_workspace_id() -> None:
         )
 
 
-def test_check_basic_integrity_missing_wdf_id() -> None:
+def test_check_basic_integrity_missing_wdf_id(validator) -> None:
     source_group: list[WorkspaceFullLoad] = [
         WorkspaceFullLoad(
             parent_id="parent_id_1",
@@ -130,7 +134,7 @@ def test_check_basic_integrity_missing_wdf_id() -> None:
         assert e.wdf_values == "some_values"
 
 
-def test_check_basic_integrity_missing_wdf_values() -> None:
+def test_check_basic_integrity_missing_wdf_values(validator) -> None:
     source_group: list[WorkspaceFullLoad] = [
         WorkspaceFullLoad(
             parent_id="parent_id_1",
@@ -155,7 +159,7 @@ def test_check_basic_integrity_missing_wdf_values() -> None:
         assert e.wdf_values is None
 
 
-def test_check_basic_integrity_missing_both_ids() -> None:
+def test_check_basic_integrity_missing_both_ids(validator) -> None:
     source_group: list[WorkspaceFullLoad] = [
         WorkspaceFullLoad(
             parent_id="",
@@ -175,7 +179,7 @@ def test_check_basic_integrity_missing_both_ids() -> None:
         )
 
 
-def test_check_basic_integrity_duplicates_warning(caplog) -> None:
+def test_check_basic_integrity_duplicates_warning(validator, caplog) -> None:
     source_group: list[WorkspaceFullLoad] = [
         WorkspaceFullLoad(
             parent_id="parent_id_1",

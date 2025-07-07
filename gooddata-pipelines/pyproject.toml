@@ -12,10 +12,9 @@ dependencies = [
     "requests (==2.32.3)",
     "types-requests (==2.32.0.20250602)",
     "gooddata-sdk (==1.43.0)",
+    "boto3 (>=1.39.3,<2.0.0)",
+    "boto3-stubs (>=1.39.3,<2.0.0)",
 ]
-
-[tool.poetry]
-packages = [{ include = "gooddata_pipelines" }]
 
 [tool.mypy]
 disallow_untyped_defs = true
@@ -27,12 +26,9 @@ no_implicit_optional = true
 exclude = [".venv"]
 line-length = 80
 
-[tool.poetry.group.dev.dependencies]
-pytest = "8.3.5"
-pytest-mock = "3.14.0"
-ruff = "0.11.2"
-mypy = "^1.16.0"
+[project.optional-dependencies]
+dev = ["pytest==8.3.5", "pytest-mock==3.14.0", "ruff==0.11.2", "mypy>=1.16.0"]
 
 [build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"

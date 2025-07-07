@@ -11,8 +11,8 @@ import requests
 #  or typed dicts.
 
 TIMEOUT = 60
-PANTHER_REQUEST_PAGE_SIZE = 250
-PANTHER_API_VERSION = "v1"
+REQUEST_PAGE_SIZE = 250
+API_VERSION = "v1"
 
 
 class APIMethods:
@@ -43,7 +43,7 @@ class APIMethods:
         if domain.startswith("http://") and not domain.startswith("https://"):
             domain = domain.replace("http://", "https://")
 
-        return f"{domain}/api/{PANTHER_API_VERSION}"
+        return f"{domain}/api/{API_VERSION}"
 
     def _get_url(self, endpoint: str) -> str:
         """Returns the full URL for a given API endpoint.
@@ -215,6 +215,18 @@ class APIMethods:
         """
         endpoint = f"/entities/workspaces/{workspace_id}/workspaceDataFilters"
         return self._post(endpoint, data, self.headers)
+
+    def get_user_data_filters(self, workspace_id: str) -> requests.Response:
+        """Gets the user data filters for a given workspace."""
+        endpoint = f"/layout/workspaces/{workspace_id}/userDataFilters"
+        return self._get(endpoint)
+
+    def get_automations(self, workspace_id: str) -> requests.Response:
+        """Gets the automations for a given workspace."""
+        endpoint = (
+            f"/entities/workspaces/{workspace_id}/automations?include=ALL"
+        )
+        return self._get(endpoint)
 
     def _get(
         self, endpoint: str, headers: dict[str, str] | None = None

@@ -2,6 +2,8 @@
 
 """Interaction with GoodData Cloud via the Gooddata Python SDK."""
 
+from pathlib import Path
+
 from gooddata_sdk.catalog.permission.declarative_model.permission import (
     CatalogDeclarativeWorkspacePermissions,
 )
@@ -21,12 +23,26 @@ from gooddata_sdk.sdk import GoodDataSdk
 from gooddata_pipelines.api.utils import raise_with_context
 
 
+def apply_to_all_methods(decorator):
+    def decorate(cls):
+        for attr in cls.__dict__:
+            if callable(getattr(cls, attr)) and not attr.startswith("__"):
+                setattr(cls, attr, decorator(getattr(cls, attr)))
+        return cls
+
+    return decorate
+
+
+@apply_to_all_methods(raise_with_context())
 class SDKMethods:
     """
     Class to intaract with GoodData Cloud via the Gooddata Python SDK.
     """
 
     _sdk: GoodDataSdk
+
+    def get_organization_id(self) -> str:
+        return self._sdk.catalog_organization.organization_id
 
     def check_workspace_exists(self, workspace_id: str) -> bool:
         try:
@@ -35,7 +51,6 @@ class SDKMethods:
         except Exception:
             return False
 
-    @raise_with_context()
     def get_workspace(self, workspace_id: str, **_: str) -> CatalogWorkspace:
         """
         Calls GoodData Python SDK to retrieve a workspace by its ID.
@@ -50,7 +65,6 @@ class SDKMethods:
         """
         return self._sdk.catalog_workspace.get_workspace(workspace_id)
 
-    @raise_with_context()
     def delete_panther_workspace(self, workspace_id: str) -> None:
         """
         Calls GoodData Python SDK to delete a workspace by its ID.
@@ -63,7 +77,6 @@ class SDKMethods:
         """
         self._sdk.catalog_workspace.delete_workspace(workspace_id)
 
-    @raise_with_context()
     def create_or_update_panther_workspace(
         self,
         workspace_id: str,
@@ -116,7 +129,6 @@ class SDKMethods:
 
         return children
 
-    @raise_with_context()
     def list_workspaces(self) -> list[CatalogWorkspace]:
         """Retrieves all workspaces in the GoodData Cloud domain.
 
@@ -128,7 +140,6 @@ class SDKMethods:
         """
         return self._sdk.catalog_workspace.list_workspaces()
 
-    @raise_with_context()
     def get_declarative_permissions(
         self, workspace_id: str
     ) -> CatalogDeclarativeWorkspacePermissions:
@@ -149,7 +160,6 @@ class SDKMethods:
             workspace_id
         )
 
-    @raise_with_context()
     def put_declarative_permissions(
         self,
         workspace_id: str,
@@ -173,7 +183,6 @@ class SDKMethods:
             workspace_id, ws_permissions
         )
 
-    @raise_with_context()
     def get_user(self, user_id: str, **_: str) -> CatalogUser:
         """
         Calls GoodData Python SDK to retrieve a user by its ID.
@@ -188,7 +197,6 @@ class SDKMethods:
         """
         return self._sdk.catalog_user.get_user(user_id)
 
-    @raise_with_context()
     def create_or_update_user(self, user: CatalogUser, **_: str) -> None:
         """
         Calls GoodData Python SDK to create or update a user.
@@ -203,7 +211,6 @@ class SDKMethods:
         """
         return self._sdk.catalog_user.create_or_update_user(user)
 
-    @raise_with_context()
     def delete_user(self, user_id: str, **_: str) -> None:
         """
         Calls GoodData Python SDK to delete a user by its ID.
@@ -218,7 +225,6 @@ class SDKMethods:
         """
         return self._sdk.catalog_user.delete_user(user_id)
 
-    @raise_with_context()
     def get_user_group(self, user_group_id: str, **_: str) -> CatalogUserGroup:
         """
         Calls GoodData Python SDK to retrieve a user group by its ID.
@@ -233,7 +239,6 @@ class SDKMethods:
         """
         return self._sdk.catalog_user.get_user_group(user_group_id)
 
-    @raise_with_context()
     def list_user_groups(self) -> list[CatalogUserGroup]:
         """
         Calls GoodData Python SDK to retrieve all user groups.
@@ -246,7 +251,6 @@ class SDKMethods:
         """
         return self._sdk.catalog_user.list_user_groups()
 
-    @raise_with_context()
     def list_users(self) -> list[CatalogUser]:
         """Calls GoodData Python SDK to retrieve all users.
 
@@ -255,7 +259,6 @@ class SDKMethods:
         """
         return self._sdk.catalog_user.list_users()
 
-    @raise_with_context()
     def create_or_update_user_group(
         self, catalog_user_group: CatalogUserGroup, **_: str
     ) -> None:
@@ -273,7 +276,6 @@ class SDKMethods:
             catalog_user_group
         )
 
-    @raise_with_context()
     def delete_user_group(self, user_group_id: str) -> None:
         """Calls GoodData Python SDK to delete a user group by its ID.
 
@@ -287,7 +289,6 @@ class SDKMethods:
         """
         return self._sdk.catalog_user.delete_user_group(user_group_id)
 
-    @raise_with_context()
     def get_declarative_workspace_data_filters(
         self,
     ) -> CatalogDeclarativeWorkspaceDataFilters:
@@ -303,7 +304,6 @@ class SDKMethods:
             self._sdk.catalog_workspace.get_declarative_workspace_data_filters()
         )
 
-    @raise_with_context()
     def list_user_data_filters(
         self, workspace_id: str
     ) -> list[CatalogUserDataFilter]:
@@ -319,7 +319,6 @@ class SDKMethods:
         """
         return self._sdk.catalog_workspace.list_user_data_filters(workspace_id)
 
-    @raise_with_context()
     def delete_user_data_filter(
         self, workspace_id: str, user_data_filter_id: str
     ) -> None:
@@ -338,7 +337,6 @@ class SDKMethods:
             workspace_id, user_data_filter_id
         )
 
-    @raise_with_context()
     def create_or_update_user_data_filter(
         self, workspace_id: str, user_data_filter: CatalogUserDataFilter
     ) -> None:
@@ -356,4 +354,20 @@ class SDKMethods:
         """
         self._sdk.catalog_workspace.create_or_update_user_data_filter(
             workspace_id, user_data_filter
+        )
+
+    def store_declarative_workspace(
+        self, workspace_id: str, export_path: Path
+    ) -> None:
+        """Stores the declarative workspace in the specified export path."""
+        self._sdk.catalog_workspace.store_declarative_workspace(
+            workspace_id, export_path
+        )
+
+    def store_declarative_filter_views(
+        self, workspace_id: str, export_path: Path
+    ) -> None:
+        """Stores the declarative filter views in the specified export path."""
+        self._sdk.catalog_workspace.store_declarative_filter_views(
+            workspace_id, export_path
         )

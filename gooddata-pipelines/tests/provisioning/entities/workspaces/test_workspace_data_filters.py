@@ -18,16 +18,18 @@ from gooddata_pipelines.provisioning.utils.context_objects import (
     WorkspaceContext,
 )
 from gooddata_pipelines.provisioning.utils.exceptions import WorkspaceException
-from tests.commons import MOCK_GODDATA_API
 from tests.data.mock_responses import (
     WDF_ACTUAL_WDF_SETTINGS,
     WDF_VALID_PAYLOAD,
 )
 
-wdf_manager = WorkspaceDataFilterManager(MOCK_GODDATA_API, WorkspaceDataMaps())
+
+@pytest.fixture
+def wdf_manager(mock_gooddata_api):
+    return WorkspaceDataFilterManager(mock_gooddata_api, WorkspaceDataMaps())
 
 
-def test_create_wdf_setting_dict() -> None:
+def test_create_wdf_setting_dict(wdf_manager) -> None:
     """Test construction of the WDF setting dictionary."""
     wdf_setting_id: str = "expected_wdf_setting_id"
     wdf_id: str = "expected_wdf_id"
@@ -55,7 +57,9 @@ def test_create_wdf_setting_dict() -> None:
     )
 
 
-def test_get_wdf_settings_for_workspace_valid_payload(mocker) -> None:
+def test_get_wdf_settings_for_workspace_valid_payload(
+    wdf_manager, mock_gooddata_api, mocker
+) -> None:
     """Test processing of a valid response"""
     workspace_id: str = "expected_workspace_id"
     mock_response: Response = Response()
@@ -66,7 +70,7 @@ def test_get_wdf_settings_for_workspace_valid_payload(mocker) -> None:
     mock_response._content = json.dumps(payload).encode("utf-8")
 
     mocker.patch.object(
-        MOCK_GODDATA_API,
+        mock_gooddata_api,
         "get_workspace_data_filter_settings",
         return_value=mock_response,
     )
@@ -78,7 +82,9 @@ def test_get_wdf_settings_for_workspace_valid_payload(mocker) -> None:
     )
 
 
-def test_get_wdf_settings_for_workspace_invalid_payload(mocker) -> None:
+def test_get_wdf_settings_for_workspace_invalid_payload(
+    wdf_manager, mock_gooddata_api, mocker
+) -> None:
     """Test with an invalid payload -> will raise ValidationError / ValueError"""
     workspace_id: str = "expected_workspace_id"
     mock_response: Response = Response()
@@ -99,7 +105,7 @@ def test_get_wdf_settings_for_workspace_invalid_payload(mocker) -> None:
     mock_response._content = json.dumps(payload).encode("utf-8")
 
     mocker.patch.object(
-        MOCK_GODDATA_API,
+        mock_gooddata_api,
         "get_workspace_data_filter_settings",
         return_value=mock_response,
     )
@@ -108,7 +114,7 @@ def test_get_wdf_settings_for_workspace_invalid_payload(mocker) -> None:
         wdf_manager._get_wdf_settings_for_workspace(workspace_id)
 
 
-def test_get_actual_wdf_setting_id_and_values() -> None:
+def test_get_actual_wdf_setting_id_and_values(wdf_manager) -> None:
     """Test getting the actual WDF setting ID and values."""
     data: dict[str, Any] = WDF_VALID_PAYLOAD["data"][0]
     actual_wdf_settings: list[WDFSetting] = [WDFSetting(**data)]
@@ -129,7 +135,7 @@ def test_get_actual_wdf_setting_id_and_values() -> None:
     )
 
 
-def test_get_actual_wdf_setting_id_and_values_no_actuals() -> None:
+def test_get_actual_wdf_setting_id_and_values_no_actuals(wdf_manager) -> None:
     """Should raise ValueError if no actuals are found"""
     actual_wdf_settings: list[WDFSetting] = []
     wdf_id: str = "expected_wdf_id"
@@ -142,7 +148,7 @@ def test_get_actual_wdf_setting_id_and_values_no_actuals() -> None:
         )
 
 
-def test_get_actual_wdf_setting_id_and_values_no_match() -> None:
+def test_get_actual_wdf_setting_id_and_values_no_match(wdf_manager) -> None:
     """Should raise ValueError if no match is found"""
     data: dict[str, Any] = WDF_VALID_PAYLOAD["data"][0]
     actual_wdf_settings: list[WDFSetting] = [WDFSetting(**data)]
@@ -156,7 +162,7 @@ def test_get_actual_wdf_setting_id_and_values_no_match() -> None:
         )
 
 
-def test_compare_wdf_settings(mocker) -> None:
+def test_compare_wdf_settings(wdf_manager, mocker) -> None:
     """Test the comparison of WDF settings."""
     workspace_context: WorkspaceContext = WorkspaceContext(
         workspace_id="workspace_id", workspace_name="workspace_name"

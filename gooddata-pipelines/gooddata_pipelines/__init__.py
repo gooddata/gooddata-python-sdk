@@ -1,6 +1,17 @@
 # (C) 2025 GoodData Corporation
 
 from ._version import __version__
+
+# -------- Backup and Restore --------
+from .backup_and_restore.backup_manager import BackupManager
+from .backup_and_restore.models.storage import (
+    BackupRestoreConfig,
+    StorageType,
+)
+from .backup_and_restore.storage.local_storage import LocalStorage
+from .backup_and_restore.storage.s3_storage import S3Storage
+
+# -------- Provisioning --------
 from .provisioning.entities.user_data_filters.models.udf_models import (
     UserDataFilterFullLoad,
 )
@@ -26,6 +37,11 @@ from .provisioning.entities.workspaces.models import WorkspaceFullLoad
 from .provisioning.entities.workspaces.workspace import WorkspaceProvisioner
 
 __all__ = [
+    "BackupManager",
+    "BackupRestoreConfig",
+    "StorageType",
+    "LocalStorage",
+    "S3Storage",
     "WorkspaceFullLoad",
     "WorkspaceProvisioner",
     "UserIncrementalLoad",

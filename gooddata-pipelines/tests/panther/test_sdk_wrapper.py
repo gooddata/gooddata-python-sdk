@@ -8,7 +8,6 @@ from gooddata_sdk.catalog.workspace.entity_model.workspace import (
 
 from gooddata_pipelines.api.exceptions import GoodDataApiException
 from gooddata_pipelines.api.utils import raise_with_context
-from tests.commons import MOCK_GODDATA_API
 
 GOODDATA_WRAPPER_OBJECT_PATH = (
     "gooddata_pipelines.api.gooddata_api_wrapper.GoodDataAPI.list_workspaces"
@@ -60,7 +59,9 @@ def test_raise_with_context_passes_method_kwargs():
         assert exc.value.http_method == "bar"
 
 
-def test_get_panther_children_workspaces_empty_response(mocker) -> None:
+def test_get_panther_children_workspaces_empty_response(
+    mock_gooddata_api, mocker
+) -> None:
     parent_ids: set[str] = {"parent_id_1", "parent_id_2"}
 
     mocker.patch(
@@ -68,14 +69,14 @@ def test_get_panther_children_workspaces_empty_response(mocker) -> None:
         return_value=[],
     )
 
-    panther_children = MOCK_GODDATA_API.get_panther_children_workspaces(
+    panther_children = mock_gooddata_api.get_panther_children_workspaces(
         parent_ids
     )
 
     assert panther_children == []
 
 
-def test_get_panther_children_full_match(mocker) -> None:
+def test_get_panther_children_full_match(mock_gooddata_api, mocker) -> None:
     parent_ids: set[str] = {"parent_id_1", "parent_id_2"}
 
     mocker.patch(
@@ -94,7 +95,7 @@ def test_get_panther_children_full_match(mocker) -> None:
         ],
     )
 
-    panther_children = MOCK_GODDATA_API.get_panther_children_workspaces(
+    panther_children = mock_gooddata_api.get_panther_children_workspaces(
         parent_ids
     )
 
@@ -103,7 +104,7 @@ def test_get_panther_children_full_match(mocker) -> None:
     assert panther_children[1].workspace_id == "workspace_id2"
 
 
-def test_get_panther_children_no_match(mocker) -> None:
+def test_get_panther_children_no_match(mock_gooddata_api, mocker) -> None:
     parent_ids: set[str] = {"parent_id_3", "parent_id_4"}
 
     mocker.patch(
@@ -122,7 +123,7 @@ def test_get_panther_children_no_match(mocker) -> None:
         ],
     )
 
-    panther_children = MOCK_GODDATA_API.get_panther_children_workspaces(
+    panther_children = mock_gooddata_api.get_panther_children_workspaces(
         parent_ids
     )
 
