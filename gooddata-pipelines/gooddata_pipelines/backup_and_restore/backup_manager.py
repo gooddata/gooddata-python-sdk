@@ -16,7 +16,7 @@ import requests
 import yaml
 from gooddata_sdk.utils import PROFILES_FILE_PATH, profile_content
 
-from gooddata_pipelines.api.gooddata_api_wrapper import GoodDataAPI
+from gooddata_pipelines.api.gooddata_api_wrapper import GoodDataApi
 from gooddata_pipelines.backup_and_restore.backup_input_processor import (
     BackupInputProcessor,
 )
@@ -50,7 +50,7 @@ class BackupManager:
     storage: BackupStorage
 
     def __init__(self, host: str, token: str, config: BackupRestoreConfig):
-        self._api = GoodDataAPI(host, token)
+        self._api = GoodDataApi(host, token)
         self.logger = LogObserver()
 
         self.config = config

@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 import requests
 
-from gooddata_pipelines.api import GoodDataAPI
+from gooddata_pipelines.api import GoodDataApi
 from gooddata_pipelines.api.gooddata_api import API_VERSION
 from gooddata_pipelines.backup_and_restore.csv_reader import CSVReader
 from gooddata_pipelines.backup_and_restore.models.input_type import InputType
@@ -23,12 +23,12 @@ class BackupInputProcessor:
     GoodData Cloud endpoints to get the IDs and return them as a list.
     """
 
-    _api: GoodDataAPI
+    _api: GoodDataApi
     base_workspace_endpoint: str
     hierarchy_endpoint: str
     all_workspaces_endpoint: str
 
-    def __init__(self, api: GoodDataAPI, page_size: int) -> None:
+    def __init__(self, api: GoodDataApi, page_size: int) -> None:
         self._api = api
         self.page_size = page_size
         self.logger = LogObserver()

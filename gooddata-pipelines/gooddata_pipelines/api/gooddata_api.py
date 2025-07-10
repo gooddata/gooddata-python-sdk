@@ -15,7 +15,7 @@ REQUEST_PAGE_SIZE = 250
 API_VERSION = "v1"
 
 
-class APIMethods:
+class ApiMethods:
     headers: dict[str, str]
     base_url: str
 

@@ -46,7 +46,7 @@ def backup_manager(mock_logger):
     with (
         mock.patch.object(BackupManager, "_api", create=True),
         mock.patch(
-            "gooddata_pipelines.api.gooddata_api_wrapper.GoodDataAPI.get_organization_id",
+            "gooddata_pipelines.api.gooddata_api_wrapper.GoodDataApi.get_organization_id",
             return_value="services",
         ),
     ):

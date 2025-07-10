@@ -2,6 +2,9 @@
 
 """This module defines data models for user data filters in a GoodData workspace."""
 
+# TODO: consider using attrs instead of dataclasses for these models. Dataclasses
+# have different functionality per Python version (not package version).
+
 from dataclasses import dataclass, field
 
 

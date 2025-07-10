@@ -45,12 +45,13 @@ class AttributesMixin:
             else:
                 # Generic handling for other objects
                 for key, value in context_object.__dict__.items():
+                    if value is None:
+                        continue
+
                     if isinstance(value, list):
                         attrs[key] = ", ".join(
                             str(list_item) for list_item in value
                         )
-                    elif value is None:
-                        continue
                     else:
                         attrs[key] = str(value)
 

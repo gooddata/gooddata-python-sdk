@@ -6,7 +6,7 @@ from typing import Any
 
 from requests import Response
 
-from gooddata_pipelines.api import GoodDataAPI
+from gooddata_pipelines.api import GoodDataApi
 from gooddata_pipelines.logger.logger import LogObserver
 from gooddata_pipelines.provisioning.entities.workspaces.models import (
     WorkspaceFullLoad,
@@ -23,12 +23,12 @@ from gooddata_pipelines.provisioning.utils.exceptions import (
 class WorkspaceDataValidator:
     """Class for validating workspace data integrity before provisioning."""
 
-    def __init__(self, api: GoodDataAPI):
+    def __init__(self, api: GoodDataApi):
         """
         Initializes the WorkspaceDataValidator with the GoodData API instance.
 
         Args:
-            api (GoodDataAPI): An instance of the GoodData API client.
+            api (GoodDataApi): An instance of the GoodData API client.
         """
         self.api = api
         self.logger = LogObserver()

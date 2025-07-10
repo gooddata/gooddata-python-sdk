@@ -13,6 +13,7 @@ from gooddata_pipelines.provisioning.utils.exceptions import BaseUserException
 
 # TODO: refactor the full load and incremental load models to reuse as much as possible
 # TODO: use pydantic models instead of dataclasses?
+# TODO: make the validation logic more readable (as in PermissionIncrementalLoad)
 
 TargetsPermissionDict: TypeAlias = dict[str, dict[str, bool]]
 
@@ -35,18 +36,18 @@ class PermissionIncrementalLoad:
         cls, data: list[dict[str, Any]]
     ) -> list["PermissionIncrementalLoad"]:
         """Creates a list of User objects from list of dicts."""
+        id: str
         permissions = []
         for permission in data:
-            id = (
-                permission["user_id"]
-                if permission["user_id"]
-                else permission["ug_id"]
-            )
+            user_id: str | None = permission.get("user_id")
+            user_group_id: str | None = permission.get("ug_id")
 
-            if permission["user_id"]:
+            if user_id is not None:
                 target_type = PermissionType.user
-            else:
+                id = user_id
+            elif user_group_id is not None:
                 target_type = PermissionType.user_group
+                id = user_group_id
 
             permissions.append(
                 PermissionIncrementalLoad(

@@ -54,27 +54,18 @@ class S3Storage(BackupStorage):
 
     def export(self, folder, org_id) -> None:
         """Uploads the content of the folder to S3 as backup."""
-        storage_path = self._config.bucket + "/" + self._backup_path
+        storage_path = f"{self._config.bucket}/{self._backup_path}"
         self.logger.info(f"Uploading {org_id} to {storage_path}")
-        folder = folder + "/" + org_id
+        folder = f"{folder}/{org_id}"
         for subdir, dirs, files in os.walk(folder):
             full_path = os.path.join(subdir)
             export_path = (
-                self._backup_path
-                + org_id
-                + "/"
-                + full_path[len(folder) + 1 :]
-                + "/"
+                f"{self._backup_path}{org_id}/{full_path[len(folder) + 1 :]}/"
             )
             self._bucket.put_object(Key=export_path)
 
             for file in files:
                 full_path = os.path.join(subdir, file)
                 with open(full_path, "rb") as data:
-                    export_path = (
-                        self._backup_path
-                        + org_id
-                        + "/"
-                        + full_path[len(folder) + 1 :]
-                    )
+                    export_path = f"{self._backup_path}{org_id}/{full_path[len(folder) + 1 :]}"
                     self._bucket.put_object(Key=export_path, Body=data)

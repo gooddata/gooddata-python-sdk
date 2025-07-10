@@ -4,11 +4,11 @@
 
 from gooddata_sdk.sdk import GoodDataSdk
 
-from gooddata_pipelines.api.gooddata_api import APIMethods
-from gooddata_pipelines.api.gooddata_sdk import SDKMethods
+from gooddata_pipelines.api.gooddata_api import ApiMethods
+from gooddata_pipelines.api.gooddata_sdk import SdkMethods
 
 
-class GoodDataAPI(SDKMethods, APIMethods):
+class GoodDataApi(SdkMethods, ApiMethods):
     """Wrapper class for the GoodData Cloud API.
 
     This class combines interactions with the GoodData Python SDK and direct API
@@ -16,7 +16,7 @@ class GoodDataAPI(SDKMethods, APIMethods):
     """
 
     def __init__(self, host: str, token: str) -> None:
-        """Initialize the GoodDataAPI with host and token.
+        """Initialize the GoodDataApi with host and token.
 
         Args:
             host (str): The GoodData Cloud host URL.

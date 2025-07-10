@@ -5,7 +5,7 @@ from typing import Generator
 import boto3
 import pytest
 
-from gooddata_pipelines.api import GoodDataAPI
+from gooddata_pipelines.api import GoodDataApi
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -37,7 +37,7 @@ def mock_boto_session(mocker):
 
 @pytest.fixture
 def mock_gooddata_api():
-    return GoodDataAPI("domain", "token")
+    return GoodDataApi("domain", "token")
 
 
 @pytest.fixture

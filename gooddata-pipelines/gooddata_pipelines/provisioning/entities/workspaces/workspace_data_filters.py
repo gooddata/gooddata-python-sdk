@@ -8,7 +8,7 @@ from uuid import uuid4
 
 from requests import Response
 
-from gooddata_pipelines.api import GoodDataAPI
+from gooddata_pipelines.api import GoodDataApi
 from gooddata_pipelines.logger.logger import LogObserver
 from gooddata_pipelines.provisioning.entities.workspaces.models import (
     WDFSetting,
@@ -28,8 +28,8 @@ class WorkspaceDataFilterManager:
     a specific workspace.
     """
 
-    def __init__(self, api: GoodDataAPI, maps: WorkspaceDataMaps) -> None:
-        self.api: GoodDataAPI = api
+    def __init__(self, api: GoodDataApi, maps: WorkspaceDataMaps) -> None:
+        self.api: GoodDataApi = api
         self.maps: WorkspaceDataMaps = maps
         self.logger: LogObserver = LogObserver()
 

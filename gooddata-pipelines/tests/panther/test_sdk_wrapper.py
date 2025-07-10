@@ -10,7 +10,7 @@ from gooddata_pipelines.api.exceptions import GoodDataApiException
 from gooddata_pipelines.api.utils import raise_with_context
 
 GOODDATA_WRAPPER_OBJECT_PATH = (
-    "gooddata_pipelines.api.gooddata_api_wrapper.GoodDataAPI.list_workspaces"
+    "gooddata_pipelines.api.gooddata_api_wrapper.GoodDataApi.list_workspaces"
 )
 
 

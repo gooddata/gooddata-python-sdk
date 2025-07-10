@@ -7,7 +7,7 @@ from typing import Generic, Type, TypeVar
 
 from gooddata_sdk.utils import PROFILES_FILE_PATH, profile_content
 
-from gooddata_pipelines.api import GoodDataAPI
+from gooddata_pipelines.api import GoodDataApi
 from gooddata_pipelines.logger.logger import (
     LogObserver,
 )
@@ -27,7 +27,7 @@ class Provisioning(Generic[TFullLoadSourceData, TIncrementalSourceData]):
     def __init__(self, host: str, token: str) -> None:
         self.source_id: set[str] = set()
         self.upstream_id: set[str] = set()
-        self._api = GoodDataAPI(host, token)
+        self._api = GoodDataApi(host, token)
         self.logger: LogObserver = LogObserver()
         self.fatal_exception: str = ""
 

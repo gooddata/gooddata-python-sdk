@@ -34,7 +34,7 @@ def apply_to_all_methods(decorator):
 
 
 @apply_to_all_methods(raise_with_context())
-class SDKMethods:
+class SdkMethods:
     """
     Class to intaract with GoodData Cloud via the Gooddata Python SDK.
     """
