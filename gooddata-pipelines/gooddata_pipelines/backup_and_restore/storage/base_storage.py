@@ -13,6 +13,6 @@ class BackupStorage(abc.ABC):
         self.logger = LogObserver()
 
     @abc.abstractmethod
-    def export(self, folder, org_id):
+    def export(self, folder: str, org_id: str) -> None:
         """Exports the content of the folder to the storage."""
         raise NotImplementedError

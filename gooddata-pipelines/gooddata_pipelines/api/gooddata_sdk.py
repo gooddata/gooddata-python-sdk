@@ -3,6 +3,7 @@
 """Interaction with GoodData Cloud via the Gooddata Python SDK."""
 
 from pathlib import Path
+from typing import Callable
 
 from gooddata_sdk.catalog.permission.declarative_model.permission import (
     CatalogDeclarativeWorkspacePermissions,
@@ -23,8 +24,8 @@ from gooddata_sdk.sdk import GoodDataSdk
 from gooddata_pipelines.api.utils import raise_with_context
 
 
-def apply_to_all_methods(decorator):
-    def decorate(cls):
+def apply_to_all_methods(decorator: Callable) -> Callable:
+    def decorate(cls: type) -> type:
         for attr in cls.__dict__:
             if callable(getattr(cls, attr)) and not attr.startswith("__"):
                 setattr(cls, attr, decorator(getattr(cls, attr)))

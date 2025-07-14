@@ -60,7 +60,7 @@ def backup_manager(mock_logger):
 
 
 @pytest.fixture()
-def s3(aws_credentials):
+def s3():
     with mock_aws():
         yield boto3.resource("s3")
 
@@ -274,7 +274,7 @@ def test_local_storage_export(backup_manager):
         shutil.rmtree("tests/data/local_export")
 
 
-def test_file_upload(backup_manager, s3, s3_bucket, mock_boto_session):
+def test_file_upload(backup_manager, s3, s3_bucket):
     backup_manager.storage.export("tests/data/backup/test_exports", "services")
     s3.Object(
         S3_BUCKET,

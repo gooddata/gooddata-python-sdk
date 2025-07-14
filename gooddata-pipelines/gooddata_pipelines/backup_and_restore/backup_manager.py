@@ -105,7 +105,7 @@ class BackupManager:
         user_data_filters: dict,
         export_path: Path,
         ws_id: str,
-    ):
+    ) -> None:
         """Stores the user data filters in the specified export path."""
         os.mkdir(
             os.path.join(
@@ -136,7 +136,7 @@ class BackupManager:
         shutil.move(source, destination)
 
     @staticmethod
-    def write_to_yaml(path: str, source):
+    def write_to_yaml(path: str, source: Any) -> None:
         """Writes the source to a YAML file."""
         with open(path, "w") as outfile:
             yaml.dump(source, outfile)

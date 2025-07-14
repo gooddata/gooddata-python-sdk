@@ -1,38 +1,51 @@
 # (C) 2025 GoodData Corporation
-import os
-from typing import Generator
+
+from unittest.mock import Mock
 
 import boto3
 import pytest
+from moto import mock_aws
 
 from gooddata_pipelines.api import GoodDataApi
 
 
-@pytest.fixture(scope="session", autouse=True)
-def aws_credentials() -> Generator[None, None, None]:
-    """
-    Set dummy AWS credentials for the entire test session.
-    This is an autouse fixture, so it runs automatically.
-    """
-    os.environ["AWS_ACCESS_KEY_ID"] = "testing"
-    os.environ["AWS_SECRET_ACCESS_KEY"] = "testing"
-    os.environ["AWS_SECURITY_TOKEN"] = "testing"
-    os.environ["AWS_SESSION_TOKEN"] = "testing"
-    os.environ["AWS_DEFAULT_REGION"] = "us-east-1"
-    yield
+@pytest.fixture(scope="function", autouse=True)
+def mock_aws_services():
+    """Mock AWS services for each test"""
+    with mock_aws():
+        yield
 
 
-@pytest.fixture
-def mock_boto_session(mocker):
-    """
-    Mocks boto3.Session to prevent it from using a real AWS profile.
-    It will return a default Session object, which then uses the
-    dummy credentials set by the conftest.py fixture.
-    """
-    # We patch boto3.Session and make it return a new, default session object.
-    # This new object will not have the `profile_name` and will fall back
-    # to using the environment variables we set in conftest.
-    mocker.patch("boto3.Session", return_value=boto3.Session())
+@pytest.fixture(scope="function")
+def mock_boto_session():
+    """Create a mock boto3 session for testing"""
+    return boto3.Session(
+        aws_access_key_id="testing",
+        aws_secret_access_key="testing",
+        aws_session_token="testing",
+        region_name="us-east-1",
+    )
+
+
+@pytest.fixture(scope="function", autouse=True)
+def mock_boto3_session(monkeypatch):
+    """Mock boto3.Session to prevent real AWS authentication"""
+    mock_client = Mock()
+    mock_client.head_bucket.return_value = {}
+
+    mock_resource = Mock()
+    mock_resource.meta.client = mock_client
+    mock_resource.Bucket.return_value = Mock()
+
+    mock_session = Mock()
+    mock_session.resource.return_value = mock_resource
+
+    # Mock the boto3.Session constructor
+    def mock_session_constructor(*args, **kwargs):
+        return mock_session
+
+    monkeypatch.setattr("boto3.Session", mock_session_constructor)
+    return mock_session
 
 
 @pytest.fixture

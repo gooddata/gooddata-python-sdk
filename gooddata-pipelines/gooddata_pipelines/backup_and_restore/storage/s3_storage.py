@@ -52,7 +52,7 @@ class S3Storage(BackupStorage):
                 f"Failed to connect to S3 bucket {self._config.bucket}: {e}"
             )
 
-    def export(self, folder, org_id) -> None:
+    def export(self, folder: str, org_id: str) -> None:
         """Uploads the content of the folder to S3 as backup."""
         storage_path = f"{self._config.bucket}/{self._backup_path}"
         self.logger.info(f"Uploading {org_id} to {storage_path}")

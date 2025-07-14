@@ -1863,4 +1863,4 @@ dev = ["moto", "mypy", "pytest", "pytest-mock", "ruff"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10"
-content-hash = "511289172004b452d144bf3f6d9c28f3b37ddfce3f51263bda5b2263e524fd77"
+content-hash = "3f625df5df598149d7c0260b40a5d1f17f4ccd57a969490ff77591f0f1e2eca3"
