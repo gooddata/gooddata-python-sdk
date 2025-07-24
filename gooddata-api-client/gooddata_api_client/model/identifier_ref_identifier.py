@@ -63,6 +63,7 @@ class IdentifierRefIdentifier(ModelNormal):
             'DASHBOARDPLUGIN': "dashboardPlugin",
             'DATASET': "dataset",
             'FACT': "fact",
+            'AGGREGATEDFACT': "aggregatedFact",
             'LABEL': "label",
             'METRIC': "metric",
             'USERDATAFILTER': "userDataFilter",

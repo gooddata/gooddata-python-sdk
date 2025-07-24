@@ -31,10 +31,8 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_attribute_out_relationships_dataset import JsonApiAttributeOutRelationshipsDataset
-    from gooddata_api_client.model.json_api_fact_out_relationships_source_fact import JsonApiFactOutRelationshipsSourceFact
-    globals()['JsonApiAttributeOutRelationshipsDataset'] = JsonApiAttributeOutRelationshipsDataset
-    globals()['JsonApiFactOutRelationshipsSourceFact'] = JsonApiFactOutRelationshipsSourceFact
+    from gooddata_api_client.model.json_api_aggregated_fact_out_relationships_dataset import JsonApiAggregatedFactOutRelationshipsDataset
+    globals()['JsonApiAggregatedFactOutRelationshipsDataset'] = JsonApiAggregatedFactOutRelationshipsDataset
 
 
 class JsonApiFactOutRelationships(ModelNormal):
@@ -90,8 +88,7 @@ class JsonApiFactOutRelationships(ModelNormal):
         """
         lazy_import()
         return {
-            'dataset': (JsonApiAttributeOutRelationshipsDataset,),  # noqa: E501
-            'source_fact': (JsonApiFactOutRelationshipsSourceFact,),  # noqa: E501
+            'dataset': (JsonApiAggregatedFactOutRelationshipsDataset,),  # noqa: E501
         }
 
     @cached_property
@@ -101,7 +98,6 @@ class JsonApiFactOutRelationships(ModelNormal):
 
     attribute_map = {
         'dataset': 'dataset',  # noqa: E501
-        'source_fact': 'sourceFact',  # noqa: E501
     }
 
     read_only_vars = {
@@ -145,8 +141,7 @@ class JsonApiFactOutRelationships(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            dataset (JsonApiAttributeOutRelationshipsDataset): [optional]  # noqa: E501
-            source_fact (JsonApiFactOutRelationshipsSourceFact): [optional]  # noqa: E501
+            dataset (JsonApiAggregatedFactOutRelationshipsDataset): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -232,8 +227,7 @@ class JsonApiFactOutRelationships(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            dataset (JsonApiAttributeOutRelationshipsDataset): [optional]  # noqa: E501
-            source_fact (JsonApiFactOutRelationshipsSourceFact): [optional]  # noqa: E501
+            dataset (JsonApiAggregatedFactOutRelationshipsDataset): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
