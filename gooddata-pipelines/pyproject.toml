@@ -4,7 +4,7 @@ name = "gooddata-pipelines"
 version = "0.1.0"
 description = ""
 authors = [{ name = "GoodData", email = "support@gooddata.com" }]
-license = { text = "BSD" }
+license = { text = "MIT" }
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
