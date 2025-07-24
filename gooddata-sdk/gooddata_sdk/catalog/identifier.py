@@ -16,6 +16,7 @@ from gooddata_api_client.model.declarative_notification_channel_identifier impor
 )
 from gooddata_api_client.model.declarative_user_group_identifier import DeclarativeUserGroupIdentifier
 from gooddata_api_client.model.declarative_user_identifier import DeclarativeUserIdentifier
+from gooddata_api_client.model.fact_identifier import FactIdentifier
 from gooddata_api_client.model.grain_identifier import GrainIdentifier
 from gooddata_api_client.model.label_identifier import LabelIdentifier
 from gooddata_api_client.model.reference_identifier import ReferenceIdentifier
@@ -80,6 +81,16 @@ class CatalogUserIdentifier(Base):
     @staticmethod
     def client_class() -> builtins.type[DeclarativeUserIdentifier]:
         return DeclarativeUserIdentifier
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogFactIdentifier(Base):
+    id: str
+    type: str = attr.field(validator=value_in_allowed)
+
+    @staticmethod
+    def client_class() -> builtins.type[FactIdentifier]:
+        return FactIdentifier
 
 
 @attr.s(auto_attribs=True, kw_only=True)

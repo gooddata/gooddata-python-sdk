@@ -58,6 +58,14 @@ def test_catalog_list_facts(test_config):
     assert len(facts_list) == 4
 
 
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_catalog_list_aggregated_facts.yaml"))
+def test_catalog_list_aggregated_facts(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    agg_facts_list = sdk.catalog_workspace_content.get_aggregated_facts_catalog(test_config["workspace"])
+    # TODO: Add a non-trivial test
+    assert len(agg_facts_list) == 0
+
+
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_catalog_list_attributes.yaml"))
 def test_catalog_list_attributes(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
@@ -157,6 +165,7 @@ def test_load_ldm_and_modify_tables_columns_case(test_config):
     assert ldm_e.ldm.datasets[0].data_source_table_id.id == table_id.upper()
     assert ldm_e.ldm.datasets[0].attributes[0].source_column == attribute_column.upper()
     assert ldm_e.ldm.datasets[0].facts[0].source_column == fact_column.upper()
+    # TODO: Add agg facts here
     assert ldm_e.ldm.datasets[0].references[0].source_columns is None
     assert ldm_e.ldm.datasets[0].references[0].sources[0].column == reference_column.upper()
     # Test chaining approach as well
@@ -168,6 +177,7 @@ def test_load_ldm_and_modify_tables_columns_case(test_config):
     assert ldm_o.ldm.datasets[0].data_source_table_id.id == table_id
     assert ldm_o.ldm.datasets[0].attributes[0].source_column == attribute_column
     assert ldm_o.ldm.datasets[0].facts[0].source_column == fact_column
+    # TODO: Add agg facts here
     assert ldm_o.ldm.datasets[0].references[0].source_columns is None
     assert ldm_e.ldm.datasets[0].references[0].sources[0].column == reference_column
 
