@@ -31,8 +31,8 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.raw_export_request import RawExportRequest
-    globals()['RawExportRequest'] = RawExportRequest
+    from gooddata_api_client.model.raw_export_automation_request import RawExportAutomationRequest
+    globals()['RawExportAutomationRequest'] = RawExportAutomationRequest
 
 
 class JsonApiAutomationInAttributesRawExportsInner(ModelNormal):
@@ -88,7 +88,7 @@ class JsonApiAutomationInAttributesRawExportsInner(ModelNormal):
         """
         lazy_import()
         return {
-            'request_payload': (RawExportRequest,),  # noqa: E501
+            'request_payload': (RawExportAutomationRequest,),  # noqa: E501
         }
 
     @cached_property
@@ -111,7 +111,7 @@ class JsonApiAutomationInAttributesRawExportsInner(ModelNormal):
         """JsonApiAutomationInAttributesRawExportsInner - a model defined in OpenAPI
 
         Args:
-            request_payload (RawExportRequest):
+            request_payload (RawExportAutomationRequest):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -200,7 +200,7 @@ class JsonApiAutomationInAttributesRawExportsInner(ModelNormal):
         """JsonApiAutomationInAttributesRawExportsInner - a model defined in OpenAPI
 
         Args:
-            request_payload (RawExportRequest):
+            request_payload (RawExportAutomationRequest):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types

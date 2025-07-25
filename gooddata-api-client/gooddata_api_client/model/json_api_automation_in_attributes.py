@@ -89,7 +89,6 @@ class JsonApiAutomationInAttributes(ModelNormal):
             'max_length': 10000,
         },
         ('details',): {
-            'max_length': 10000,
         },
         ('title',): {
             'max_length': 255,
@@ -123,7 +122,7 @@ class JsonApiAutomationInAttributes(ModelNormal):
             'are_relations_valid': (bool,),  # noqa: E501
             'dashboard_tabular_exports': ([JsonApiAutomationInAttributesDashboardTabularExportsInner],),  # noqa: E501
             'description': (str,),  # noqa: E501
-            'details': (bool, date, datetime, dict, float, int, list, str, none_type,),  # noqa: E501
+            'details': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),  # noqa: E501
             'external_recipients': ([JsonApiAutomationInAttributesExternalRecipientsInner],),  # noqa: E501
             'image_exports': ([JsonApiAutomationInAttributesImageExportsInner],),  # noqa: E501
             'metadata': (JsonApiAutomationInAttributesMetadata,),  # noqa: E501
@@ -206,7 +205,7 @@ class JsonApiAutomationInAttributes(ModelNormal):
             are_relations_valid (bool): [optional]  # noqa: E501
             dashboard_tabular_exports ([JsonApiAutomationInAttributesDashboardTabularExportsInner]): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
-            details (bool, date, datetime, dict, float, int, list, str, none_type): Additional details to be included in the automated message.. [optional]  # noqa: E501
+            details ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Additional details to be included in the automated message.. [optional]  # noqa: E501
             external_recipients ([JsonApiAutomationInAttributesExternalRecipientsInner]): External recipients of the automation action results.. [optional]  # noqa: E501
             image_exports ([JsonApiAutomationInAttributesImageExportsInner]): [optional]  # noqa: E501
             metadata (JsonApiAutomationInAttributesMetadata): [optional]  # noqa: E501
@@ -307,7 +306,7 @@ class JsonApiAutomationInAttributes(ModelNormal):
             are_relations_valid (bool): [optional]  # noqa: E501
             dashboard_tabular_exports ([JsonApiAutomationInAttributesDashboardTabularExportsInner]): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
-            details (bool, date, datetime, dict, float, int, list, str, none_type): Additional details to be included in the automated message.. [optional]  # noqa: E501
+            details ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Additional details to be included in the automated message.. [optional]  # noqa: E501
             external_recipients ([JsonApiAutomationInAttributesExternalRecipientsInner]): External recipients of the automation action results.. [optional]  # noqa: E501
             image_exports ([JsonApiAutomationInAttributesImageExportsInner]): [optional]  # noqa: E501
             metadata (JsonApiAutomationInAttributesMetadata): [optional]  # noqa: E501

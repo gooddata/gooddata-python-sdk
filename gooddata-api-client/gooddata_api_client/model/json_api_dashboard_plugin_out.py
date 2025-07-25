@@ -31,10 +31,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_attribute_hierarchy_out_meta import JsonApiAttributeHierarchyOutMeta
+    from gooddata_api_client.model.json_api_aggregated_fact_out_meta import JsonApiAggregatedFactOutMeta
     from gooddata_api_client.model.json_api_dashboard_plugin_out_attributes import JsonApiDashboardPluginOutAttributes
     from gooddata_api_client.model.json_api_dashboard_plugin_out_relationships import JsonApiDashboardPluginOutRelationships
-    globals()['JsonApiAttributeHierarchyOutMeta'] = JsonApiAttributeHierarchyOutMeta
+    globals()['JsonApiAggregatedFactOutMeta'] = JsonApiAggregatedFactOutMeta
     globals()['JsonApiDashboardPluginOutAttributes'] = JsonApiDashboardPluginOutAttributes
     globals()['JsonApiDashboardPluginOutRelationships'] = JsonApiDashboardPluginOutRelationships
 
@@ -103,7 +103,7 @@ class JsonApiDashboardPluginOut(ModelNormal):
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
             'attributes': (JsonApiDashboardPluginOutAttributes,),  # noqa: E501
-            'meta': (JsonApiAttributeHierarchyOutMeta,),  # noqa: E501
+            'meta': (JsonApiAggregatedFactOutMeta,),  # noqa: E501
             'relationships': (JsonApiDashboardPluginOutRelationships,),  # noqa: E501
         }
 
@@ -166,7 +166,7 @@ class JsonApiDashboardPluginOut(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             attributes (JsonApiDashboardPluginOutAttributes): [optional]  # noqa: E501
-            meta (JsonApiAttributeHierarchyOutMeta): [optional]  # noqa: E501
+            meta (JsonApiAggregatedFactOutMeta): [optional]  # noqa: E501
             relationships (JsonApiDashboardPluginOutRelationships): [optional]  # noqa: E501
         """
 
@@ -261,7 +261,7 @@ class JsonApiDashboardPluginOut(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             attributes (JsonApiDashboardPluginOutAttributes): [optional]  # noqa: E501
-            meta (JsonApiAttributeHierarchyOutMeta): [optional]  # noqa: E501
+            meta (JsonApiAggregatedFactOutMeta): [optional]  # noqa: E501
             relationships (JsonApiDashboardPluginOutRelationships): [optional]  # noqa: E501
         """
 

@@ -133,6 +133,22 @@ with gooddata_api_client.ApiClient() as api_client:
             ],
             datasets=[
                 DeclarativeDataset(
+                    aggregated_facts=[
+                        DeclarativeAggregatedFact(
+                            description="A number of orders created by the customer - including all orders, even the non-delivered ones.",
+                            id="fact.customer_order_count",
+                            source_column="customer_order_count",
+                            source_column_data_type="NUMERIC",
+                            source_fact_reference=DeclarativeSourceFactReference(
+                                operation="SUM",
+                                reference=FactIdentifier(
+                                    id="fact_id",
+                                    type="fact",
+                                ),
+                            ),
+                            tags=["Customers"],
+                        ),
+                    ],
                     attributes=[
                         DeclarativeAttribute(
                             default_view=LabelIdentifier(
@@ -173,13 +189,6 @@ with gooddata_api_client.ApiClient() as api_client:
                             id="fact.customer_order_count",
                             source_column="customer_order_count",
                             source_column_data_type="NUMERIC",
-                            source_fact_reference=DeclarativeSourceFactReference(
-                                operation="SUM",
-                                reference=FactIdentifier(
-                                    id="fact_id",
-                                    type="fact",
-                                ),
-                            ),
                             tags=["Customers"],
                             title="Customer order count",
                         ),

@@ -21,6 +21,7 @@ from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.ldm import CatalogDeclarativeModel
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import LAYOUT_WORKSPACES_DIR
 from gooddata_sdk.catalog.workspace.entity_model.content_objects.dataset import (
+    CatalogAggregatedFact,
     CatalogAttribute,
     CatalogFact,
     CatalogLabel,
@@ -190,6 +191,24 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         facts = load_all_entities(get_facts)
         catalog_facts = [CatalogFact.from_api(fact) for fact in facts.data]
         return catalog_facts
+
+    def get_aggregated_facts_catalog(self, workspace_id: str) -> list[CatalogAggregatedFact]:
+        """Retrieve all aggregated facts in a given workspace.
+
+        Args:
+            workspace_id (str):
+                Workspace identification string e.g. "demo"
+
+        Returns:
+            list[CatalogAggregatedFact]:
+                List of all aggregated facts in a given workspace.
+        """
+        get_agg_facts = functools.partial(
+            self._entities_api.get_all_entities_aggregated_facts, workspace_id, _check_return_type=False
+        )
+        agg_facts = load_all_entities(get_agg_facts)
+        catalog_agg_facts = [CatalogAggregatedFact.from_api(agg_fact) for agg_fact in agg_facts.data]
+        return catalog_agg_facts
 
     def get_dependent_entities_graph(self, workspace_id: str) -> CatalogDependentEntitiesResponse:
         """There are dependencies among all catalog objects, the chain is the following:

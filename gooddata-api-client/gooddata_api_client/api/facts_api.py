@@ -88,9 +88,7 @@ class FactsApi(object):
                     ('include',): {
 
                         "DATASETS": "datasets",
-                        "FACTS": "facts",
                         "DATASET": "dataset",
-                        "SOURCEFACT": "sourceFact",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -199,9 +197,7 @@ class FactsApi(object):
                     ('include',): {
 
                         "DATASETS": "datasets",
-                        "FACTS": "facts",
                         "DATASET": "dataset",
-                        "SOURCEFACT": "sourceFact",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {

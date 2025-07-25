@@ -31,11 +31,11 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_analytical_dashboard_out_list_meta import JsonApiAnalyticalDashboardOutListMeta
+    from gooddata_api_client.model.json_api_aggregated_fact_out_list_meta import JsonApiAggregatedFactOutListMeta
     from gooddata_api_client.model.json_api_export_definition_out_includes import JsonApiExportDefinitionOutIncludes
     from gooddata_api_client.model.json_api_export_definition_out_with_links import JsonApiExportDefinitionOutWithLinks
     from gooddata_api_client.model.list_links import ListLinks
-    globals()['JsonApiAnalyticalDashboardOutListMeta'] = JsonApiAnalyticalDashboardOutListMeta
+    globals()['JsonApiAggregatedFactOutListMeta'] = JsonApiAggregatedFactOutListMeta
     globals()['JsonApiExportDefinitionOutIncludes'] = JsonApiExportDefinitionOutIncludes
     globals()['JsonApiExportDefinitionOutWithLinks'] = JsonApiExportDefinitionOutWithLinks
     globals()['ListLinks'] = ListLinks
@@ -101,7 +101,7 @@ class JsonApiExportDefinitionOutList(ModelNormal):
             'data': ([JsonApiExportDefinitionOutWithLinks],),  # noqa: E501
             'included': ([JsonApiExportDefinitionOutIncludes],),  # noqa: E501
             'links': (ListLinks,),  # noqa: E501
-            'meta': (JsonApiAnalyticalDashboardOutListMeta,),  # noqa: E501
+            'meta': (JsonApiAggregatedFactOutListMeta,),  # noqa: E501
         }
 
     @cached_property
@@ -162,7 +162,7 @@ class JsonApiExportDefinitionOutList(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             included ([JsonApiExportDefinitionOutIncludes]): Included resources. [optional]  # noqa: E501
             links (ListLinks): [optional]  # noqa: E501
-            meta (JsonApiAnalyticalDashboardOutListMeta): [optional]  # noqa: E501
+            meta (JsonApiAggregatedFactOutListMeta): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -254,7 +254,7 @@ class JsonApiExportDefinitionOutList(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             included ([JsonApiExportDefinitionOutIncludes]): Included resources. [optional]  # noqa: E501
             links (ListLinks): [optional]  # noqa: E501
-            meta (JsonApiAnalyticalDashboardOutListMeta): [optional]  # noqa: E501
+            meta (JsonApiAggregatedFactOutListMeta): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

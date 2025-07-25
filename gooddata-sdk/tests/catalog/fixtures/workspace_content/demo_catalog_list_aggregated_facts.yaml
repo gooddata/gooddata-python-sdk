@@ -1,0 +1,56 @@
+# (C) 2025 GoodData Corporation
+version: 1
+interactions:
+  - request:
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/workspaces/demo/aggregatedFacts?page=0&size=500
+      body: null
+      headers:
+        Accept:
+          - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+    response:
+      status:
+        code: 200
+        message: OK
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Length:
+          - '211'
+        Content-Type:
+          - application/vnd.gooddata.api+json
+        DATE: &id001
+          - PLACEHOLDER
+        Expires:
+          - '0'
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - same-origin
+        Vary:
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      body:
+        string:
+          data: []
+          links:
+            self: http://localhost:3000/api/v1/entities/workspaces/demo/aggregatedFacts?page=0&size=500
+            next: http://localhost:3000/api/v1/entities/workspaces/demo/aggregatedFacts?page=1&size=500

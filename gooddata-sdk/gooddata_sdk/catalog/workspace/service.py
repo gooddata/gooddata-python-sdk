@@ -705,7 +705,8 @@ class CatalogWorkspaceService(CatalogServiceBase):
 
     @staticmethod
     def set_title_description(workspace_object: Any, translated: dict[str, str]) -> None:
-        if workspace_object.title:
+        # Aggregated facts do not have a title as a property
+        if hasattr(workspace_object, "title") and workspace_object.title:
             workspace_object.title = translated[workspace_object.title]
         if workspace_object.description:
             workspace_object.description = translated[workspace_object.description]
@@ -735,6 +736,8 @@ class CatalogWorkspaceService(CatalogServiceBase):
                         self.add_title_description_tags(to_translate, label.title, label.description, label.tags)
                 for fact in dataset.facts or []:
                     self.add_title_description_tags(to_translate, fact.title, fact.description, fact.tags)
+                for agg_fact in dataset.aggregated_facts or []:
+                    self.add_title_description_tags(to_translate, None, agg_fact.description, agg_fact.tags)
             for date_dataset in workspace_content.ldm.date_instances:
                 self.add_title_description_tags(
                     to_translate, date_dataset.title, date_dataset.description, date_dataset.tags
@@ -792,6 +795,8 @@ class CatalogWorkspaceService(CatalogServiceBase):
                         self.set_title_description_tags(label, translated)
                 for fact in dataset.facts or []:
                     self.set_title_description_tags(fact, translated)
+                for agg_fact in dataset.aggregated_facts or []:
+                    self.set_title_description_tags(agg_fact, translated)
             for date_dataset in new_workspace_content.ldm.date_instances:
                 self.set_title_description_tags(date_dataset, translated)
         # ADM

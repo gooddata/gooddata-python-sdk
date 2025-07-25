@@ -419,7 +419,8 @@
               "UnlimitedDailyAlertActions",
               "ScheduledActionMinimumRecurrenceMinutes",
               "FederatedIdentityManagement",
-              "AuditLogging"
+              "AuditLogging",
+              "ControlledFeatureRollout"
             ],
             "type": "string"
           },
@@ -747,7 +748,7 @@
       "AutomationRawExport": {
         "properties": {
           "requestPayload": {
-            "$ref": "#/components/schemas/RawExportRequest"
+            "$ref": "#/components/schemas/RawExportAutomationRequest"
           }
         },
         "required": [
@@ -840,6 +841,51 @@
         "required": [
           "userGroups",
           "users"
+        ],
+        "type": "object"
+      },
+      "BoundedFilter": {
+        "description": "Bounding filter for this relative date filter. This can be used to limit the range of the relative date filter to a specific date range.",
+        "properties": {
+          "from": {
+            "description": "Start of the filtering interval. Specified by number of periods (with respect to given granularity). Typically negative (historical time interval like -2 for '2 days/weeks, ... ago'). If null, then start of the range is unbounded.",
+            "example": -6,
+            "format": "int32",
+            "nullable": true,
+            "type": "integer"
+          },
+          "granularity": {
+            "description": "Date granularity specifying particular date attribute in given dimension.",
+            "enum": [
+              "MINUTE",
+              "HOUR",
+              "DAY",
+              "WEEK",
+              "MONTH",
+              "QUARTER",
+              "YEAR",
+              "MINUTE_OF_HOUR",
+              "HOUR_OF_DAY",
+              "DAY_OF_WEEK",
+              "DAY_OF_MONTH",
+              "DAY_OF_YEAR",
+              "WEEK_OF_YEAR",
+              "MONTH_OF_YEAR",
+              "QUARTER_OF_YEAR"
+            ],
+            "example": "DAY",
+            "type": "string"
+          },
+          "to": {
+            "description": "End of the filtering interval. Specified by number of periods (with respect to given granularity). Value 'O' is representing current time-interval (current day, week, ...). If null, then end of the range is unbounded.",
+            "example": 0,
+            "format": "int32",
+            "nullable": true,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "granularity"
         ],
         "type": "object"
       },
@@ -1530,6 +1576,66 @@
         },
         "required": [
           "value"
+        ],
+        "type": "object"
+      },
+      "DeclarativeAggregatedFact": {
+        "description": "A dataset fact.",
+        "properties": {
+          "description": {
+            "description": "Fact description.",
+            "example": "A number of orders created by the customer - including all orders, even the non-delivered ones.",
+            "maxLength": 10000,
+            "type": "string"
+          },
+          "id": {
+            "description": "Fact ID.",
+            "example": "fact.customer_order_count",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "sourceColumn": {
+            "description": "A name of the source column in the table.",
+            "example": "customer_order_count",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "sourceColumnDataType": {
+            "description": "A type of the source column",
+            "enum": [
+              "INT",
+              "STRING",
+              "DATE",
+              "NUMERIC",
+              "TIMESTAMP",
+              "TIMESTAMP_TZ",
+              "BOOLEAN"
+            ],
+            "example": "NUMERIC",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "sourceFactReference": {
+            "$ref": "#/components/schemas/DeclarativeSourceFactReference"
+          },
+          "tags": {
+            "description": "A list of tags.",
+            "example": [
+              "Customers"
+            ],
+            "items": {
+              "description": "A list of tags.",
+              "example": "[\"Customers\"]",
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "id",
+          "sourceColumn",
+          "sourceFactReference"
         ],
         "type": "object"
       },
@@ -2468,6 +2574,13 @@
       "DeclarativeDataset": {
         "description": "A dataset defined by its properties.",
         "properties": {
+          "aggregatedFacts": {
+            "description": "An array of aggregated facts.",
+            "items": {
+              "$ref": "#/components/schemas/DeclarativeAggregatedFact"
+            },
+            "type": "array"
+          },
           "attributes": {
             "description": "An array of attributes.",
             "items": {
@@ -2852,9 +2965,6 @@
             "maxLength": 255,
             "type": "string"
           },
-          "sourceFactReference": {
-            "$ref": "#/components/schemas/DeclarativeSourceFactReference"
-          },
           "tags": {
             "description": "A list of tags.",
             "example": [
@@ -3007,6 +3117,7 @@
             "enum": [
               "MANAGED_IDP",
               "FIM_IDP",
+              "DEX_IDP",
               "CUSTOM_IDP"
             ],
             "type": "string"
@@ -4864,7 +4975,8 @@
                 "UnlimitedDailyAlertActions",
                 "ScheduledActionMinimumRecurrenceMinutes",
                 "FederatedIdentityManagement",
-                "AuditLogging"
+                "AuditLogging",
+                "ControlledFeatureRollout"
               ],
               "type": "string"
             },
@@ -5350,6 +5462,7 @@
                   "dashboardPlugin",
                   "dataset",
                   "fact",
+                  "aggregatedFact",
                   "label",
                   "metric",
                   "userDataFilter",
@@ -5517,6 +5630,232 @@
           }
         },
         "type": "object"
+      },
+      "JsonApiAggregatedFactLinkage": {
+        "description": "The \\\"type\\\" and \\\"id\\\" to non-empty members.",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "aggregatedFact"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiAggregatedFactOut": {
+        "description": "JSON:API representation of aggregatedFact entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "areRelationsValid": {
+                "type": "boolean"
+              },
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "operation": {
+                "enum": [
+                  "SUM",
+                  "MIN",
+                  "MAX"
+                ],
+                "type": "string"
+              },
+              "sourceColumn": {
+                "maxLength": 255,
+                "type": "string"
+              },
+              "sourceColumnDataType": {
+                "enum": [
+                  "INT",
+                  "STRING",
+                  "DATE",
+                  "NUMERIC",
+                  "TIMESTAMP",
+                  "TIMESTAMP_TZ",
+                  "BOOLEAN"
+                ],
+                "type": "string"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "operation"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "meta": {
+            "properties": {
+              "origin": {
+                "properties": {
+                  "originId": {
+                    "description": "defines id of the workspace where the entity comes from",
+                    "type": "string"
+                  },
+                  "originType": {
+                    "description": "defines type of the origin of the entity",
+                    "enum": [
+                      "NATIVE",
+                      "PARENT"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "originId",
+                  "originType"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "relationships": {
+            "properties": {
+              "dataset": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiDatasetToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "sourceFact": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiFactToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "aggregatedFact"
+            ],
+            "example": "aggregatedFact",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiAggregatedFactOutDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiAggregatedFactOut"
+          },
+          "included": {
+            "description": "Included resources",
+            "items": {
+              "$ref": "#/components/schemas/JsonApiAggregatedFactOutIncludes"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "links": {
+            "$ref": "#/components/schemas/ObjectLinks"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiAggregatedFactOutIncludes": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiDatasetOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiFactOutWithLinks"
+          }
+        ]
+      },
+      "JsonApiAggregatedFactOutList": {
+        "description": "A JSON:API document with a list of resources",
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/JsonApiAggregatedFactOutWithLinks"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "included": {
+            "description": "Included resources",
+            "items": {
+              "$ref": "#/components/schemas/JsonApiAggregatedFactOutIncludes"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "links": {
+            "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiAggregatedFactOutWithLinks": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiAggregatedFactOut"
+          },
+          {
+            "$ref": "#/components/schemas/ObjectLinksContainer"
+          }
+        ]
+      },
+      "JsonApiAggregatedFactToManyLinkage": {
+        "description": "References to other resource objects in a to-many (\\\"relationship\\\"). Relationships can be specified by including a member in a resource's links object.",
+        "items": {
+          "$ref": "#/components/schemas/JsonApiAggregatedFactLinkage"
+        },
+        "type": "array"
       },
       "JsonApiAnalyticalDashboardIn": {
         "description": "JSON:API representation of analyticalDashboard entity.",
@@ -6932,7 +7271,8 @@
               },
               "details": {
                 "description": "Additional details to be included in the automated message.",
-                "maxLength": 10000
+                "maxLength": 10000,
+                "type": "object"
               },
               "externalRecipients": {
                 "description": "External recipients of the automation action results.",
@@ -6986,7 +7326,7 @@
                 "items": {
                   "properties": {
                     "requestPayload": {
-                      "$ref": "#/components/schemas/RawExportRequest"
+                      "$ref": "#/components/schemas/RawExportAutomationRequest"
                     }
                   },
                   "required": [
@@ -7247,7 +7587,8 @@
               },
               "details": {
                 "description": "Additional details to be included in the automated message.",
-                "maxLength": 10000
+                "maxLength": 10000,
+                "type": "object"
               },
               "externalRecipients": {
                 "description": "External recipients of the automation action results.",
@@ -7305,7 +7646,7 @@
                 "items": {
                   "properties": {
                     "requestPayload": {
-                      "$ref": "#/components/schemas/RawExportRequest"
+                      "$ref": "#/components/schemas/RawExportAutomationRequest"
                     }
                   },
                   "required": [
@@ -7666,7 +8007,8 @@
               },
               "details": {
                 "description": "Additional details to be included in the automated message.",
-                "maxLength": 10000
+                "maxLength": 10000,
+                "type": "object"
               },
               "externalRecipients": {
                 "description": "External recipients of the automation action results.",
@@ -7720,7 +8062,7 @@
                 "items": {
                   "properties": {
                     "requestPayload": {
-                      "$ref": "#/components/schemas/RawExportRequest"
+                      "$ref": "#/components/schemas/RawExportAutomationRequest"
                     }
                   },
                   "required": [
@@ -10059,6 +10401,17 @@
           },
           "relationships": {
             "properties": {
+              "aggregatedFacts": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiAggregatedFactToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
               "attributes": {
                 "properties": {
                   "data": {
@@ -10151,6 +10504,9 @@
           },
           {
             "$ref": "#/components/schemas/JsonApiFactOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiAggregatedFactOutWithLinks"
           },
           {
             "$ref": "#/components/schemas/JsonApiDatasetOutWithLinks"
@@ -11388,14 +11744,6 @@
                 "maxLength": 10000,
                 "type": "string"
               },
-              "operation": {
-                "enum": [
-                  "SUM",
-                  "MIN",
-                  "MAX"
-                ],
-                "type": "string"
-              },
               "sourceColumn": {
                 "maxLength": 255,
                 "type": "string"
@@ -11469,17 +11817,6 @@
                   "data"
                 ],
                 "type": "object"
-              },
-              "sourceFact": {
-                "properties": {
-                  "data": {
-                    "$ref": "#/components/schemas/JsonApiFactToOneLinkage"
-                  }
-                },
-                "required": [
-                  "data"
-                ],
-                "type": "object"
               }
             },
             "type": "object"
@@ -11507,7 +11844,7 @@
           "included": {
             "description": "Included resources",
             "items": {
-              "$ref": "#/components/schemas/JsonApiFactOutIncludes"
+              "$ref": "#/components/schemas/JsonApiDatasetOutWithLinks"
             },
             "type": "array",
             "uniqueItems": true
@@ -11520,16 +11857,6 @@
           "data"
         ],
         "type": "object"
-      },
-      "JsonApiFactOutIncludes": {
-        "oneOf": [
-          {
-            "$ref": "#/components/schemas/JsonApiDatasetOutWithLinks"
-          },
-          {
-            "$ref": "#/components/schemas/JsonApiFactOutWithLinks"
-          }
-        ]
       },
       "JsonApiFactOutList": {
         "description": "A JSON:API document with a list of resources",
@@ -11544,7 +11871,7 @@
           "included": {
             "description": "Included resources",
             "items": {
-              "$ref": "#/components/schemas/JsonApiFactOutIncludes"
+              "$ref": "#/components/schemas/JsonApiDatasetOutWithLinks"
             },
             "type": "array",
             "uniqueItems": true
@@ -12412,10 +12739,11 @@
                 "type": "array"
               },
               "idpType": {
-                "description": "Type of IdP for management purposes. MANAGED_IDP represents a GoodData managed IdP used in single OIDC setup, which is protected from altering/deletion. FIM_IDP represents a GoodData managed IdP used in federated identity management setup, which is protected from altering/deletion. CUSTOM_IDP represents customer's own IdP, protected from deletion if currently used by org for authentication, deletable otherwise.",
+                "description": "Type of IdP for management purposes. MANAGED_IDP represents a GoodData managed IdP used in single OIDC setup, which is protected from altering/deletion. FIM_IDP represents a GoodData managed IdP used in federated identity management setup, which is protected from altering/deletion. DEX_IDP represents internal Dex IdP which is protected from altering/deletion. CUSTOM_IDP represents customer's own IdP, protected from deletion if currently used by org for authentication, deletable otherwise.",
                 "enum": [
                   "MANAGED_IDP",
                   "FIM_IDP",
+                  "DEX_IDP",
                   "CUSTOM_IDP"
                 ],
                 "type": "string"
@@ -12547,10 +12875,11 @@
                 "type": "array"
               },
               "idpType": {
-                "description": "Type of IdP for management purposes. MANAGED_IDP represents a GoodData managed IdP used in single OIDC setup, which is protected from altering/deletion. FIM_IDP represents a GoodData managed IdP used in federated identity management setup, which is protected from altering/deletion. CUSTOM_IDP represents customer's own IdP, protected from deletion if currently used by org for authentication, deletable otherwise.",
+                "description": "Type of IdP for management purposes. MANAGED_IDP represents a GoodData managed IdP used in single OIDC setup, which is protected from altering/deletion. FIM_IDP represents a GoodData managed IdP used in federated identity management setup, which is protected from altering/deletion. DEX_IDP represents internal Dex IdP which is protected from altering/deletion. CUSTOM_IDP represents customer's own IdP, protected from deletion if currently used by org for authentication, deletable otherwise.",
                 "enum": [
                   "MANAGED_IDP",
                   "FIM_IDP",
+                  "DEX_IDP",
                   "CUSTOM_IDP"
                 ],
                 "type": "string"
@@ -12693,10 +13022,11 @@
                 "type": "array"
               },
               "idpType": {
-                "description": "Type of IdP for management purposes. MANAGED_IDP represents a GoodData managed IdP used in single OIDC setup, which is protected from altering/deletion. FIM_IDP represents a GoodData managed IdP used in federated identity management setup, which is protected from altering/deletion. CUSTOM_IDP represents customer's own IdP, protected from deletion if currently used by org for authentication, deletable otherwise.",
+                "description": "Type of IdP for management purposes. MANAGED_IDP represents a GoodData managed IdP used in single OIDC setup, which is protected from altering/deletion. FIM_IDP represents a GoodData managed IdP used in federated identity management setup, which is protected from altering/deletion. DEX_IDP represents internal Dex IdP which is protected from altering/deletion. CUSTOM_IDP represents customer's own IdP, protected from deletion if currently used by org for authentication, deletable otherwise.",
                 "enum": [
                   "MANAGED_IDP",
                   "FIM_IDP",
+                  "DEX_IDP",
                   "CUSTOM_IDP"
                 ],
                 "type": "string"
@@ -19833,7 +20163,7 @@
         },
         "type": "object"
       },
-      "RawExportRequest": {
+      "RawExportAutomationRequest": {
         "description": "Export request object describing the export properties and overrides for raw exports.",
         "properties": {
           "customOverride": {
@@ -19859,6 +20189,9 @@
             ],
             "example": "CSV",
             "type": "string"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/JsonNode"
           }
         },
         "required": [
@@ -19945,12 +20278,15 @@
         "type": "object"
       },
       "RelativeDateFilter": {
-        "description": "A date filter specifying a time interval that is relative to the current date. For example, last week, next month, and so on. Field dataset is representing qualifier of date dimension.",
+        "description": "A date filter specifying a time interval that is relative to the current date. For example, last week, next month, and so on. Field dataset is representing qualifier of date dimension. The 'from' and 'to' properties mark the boundaries of the interval. If 'from' is omitted, all values earlier than 'to' are included. If 'to' is omitted, all values later than 'from' are included. It is not allowed to omit both.",
         "properties": {
           "relativeDateFilter": {
             "properties": {
               "applyOnResult": {
                 "type": "boolean"
+              },
+              "boundedFilter": {
+                "$ref": "#/components/schemas/BoundedFilter"
               },
               "dataset": {
                 "$ref": "#/components/schemas/AfmObjectIdentifierDataset"
@@ -21494,7 +21830,7 @@
         },
         "summary": "Unsubscribe from all automations in all workspaces",
         "tags": [
-          "Unsubscribe",
+          "Automations",
           "actions"
         ]
       }
@@ -22321,7 +22657,7 @@
         },
         "summary": "Unsubscribe from all automations in the workspace",
         "tags": [
-          "Unsubscribe",
+          "Automations",
           "actions"
         ]
       }
@@ -22354,7 +22690,7 @@
         },
         "summary": "Unsubscribe from an automation",
         "tags": [
-          "Unsubscribe",
+          "Automations",
           "actions"
         ]
       }
@@ -24633,6 +24969,7 @@
         },
         "summary": "GET all Export Template entities",
         "tags": [
+          "Export templates",
           "entities",
           "organization-model-controller"
         ]
@@ -24663,6 +25000,7 @@
         },
         "summary": "Post Export Template entities",
         "tags": [
+          "Export templates",
           "entities",
           "organization-model-controller"
         ]
@@ -24692,6 +25030,7 @@
         },
         "summary": "Delete Export Template entity",
         "tags": [
+          "Export templates",
           "entities",
           "organization-model-controller"
         ]
@@ -24726,6 +25065,7 @@
         },
         "summary": "GET Export Template entity",
         "tags": [
+          "Export templates",
           "entities",
           "organization-model-controller"
         ]
@@ -24770,6 +25110,7 @@
         },
         "summary": "Patch Export Template entity",
         "tags": [
+          "Export templates",
           "entities",
           "organization-model-controller"
         ]
@@ -24814,6 +25155,7 @@
         },
         "summary": "PUT Export Template entity",
         "tags": [
+          "Export templates",
           "entities",
           "organization-model-controller"
         ]
@@ -28368,6 +28710,225 @@
         }
       }
     },
+    "/api/v1/entities/workspaces/{workspaceId}/aggregatedFacts": {
+      "get": {
+        "operationId": "getAllEntities@AggregatedFacts",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "origin",
+            "required": false,
+            "schema": {
+              "default": "ALL",
+              "description": "Defines scope of origin of objects. All by default.",
+              "enum": [
+                "ALL",
+                "PARENTS",
+                "NATIVE"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=description==someString;tags==v1,v2,v3;dataset.id==321;sourceFact.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=dataset,sourceFact",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "datasets",
+                  "facts",
+                  "dataset",
+                  "sourceFact",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/size"
+          },
+          {
+            "$ref": "#/components/parameters/sort"
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=origin,page,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "origin",
+                  "page",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiAggregatedFactOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "tags": [
+          "entities",
+          "workspace-object-controller"
+        ]
+      }
+    },
+    "/api/v1/entities/workspaces/{workspaceId}/aggregatedFacts/{objectId}": {
+      "get": {
+        "operationId": "getEntity@AggregatedFacts",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=description==someString;tags==v1,v2,v3;dataset.id==321;sourceFact.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=dataset,sourceFact",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "datasets",
+                  "facts",
+                  "dataset",
+                  "sourceFact",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=origin,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "origin",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiAggregatedFactOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "tags": [
+          "entities",
+          "workspace-object-controller"
+        ]
+      }
+    },
     "/api/v1/entities/workspaces/{workspaceId}/analyticalDashboards": {
       "get": {
         "operationId": "getAllEntities@AnalyticalDashboards",
@@ -31283,7 +31844,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=attributes,facts,references,workspaceDataFilters",
+            "example": "include=attributes,facts,aggregatedFacts,references,workspaceDataFilters",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -31293,6 +31854,7 @@
                 "enum": [
                   "attributes",
                   "facts",
+                  "aggregatedFacts",
                   "datasets",
                   "workspaceDataFilters",
                   "references",
@@ -31397,7 +31959,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=attributes,facts,references,workspaceDataFilters",
+            "example": "include=attributes,facts,aggregatedFacts,references,workspaceDataFilters",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -31407,6 +31969,7 @@
                 "enum": [
                   "attributes",
                   "facts",
+                  "aggregatedFacts",
                   "datasets",
                   "workspaceDataFilters",
                   "references",
@@ -32069,7 +32632,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=title==someString;description==someString;dataset.id==321;sourceFact.id==321",
+            "example": "filter=title==someString;description==someString;dataset.id==321",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -32078,7 +32641,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=dataset,sourceFact",
+            "example": "include=dataset",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -32087,9 +32650,7 @@
               "items": {
                 "enum": [
                   "datasets",
-                  "facts",
                   "dataset",
-                  "sourceFact",
                   "ALL"
                 ],
                 "type": "string"
@@ -32188,7 +32749,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=title==someString;description==someString;dataset.id==321;sourceFact.id==321",
+            "example": "filter=title==someString;description==someString;dataset.id==321",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -32197,7 +32758,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=dataset,sourceFact",
+            "example": "include=dataset",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -32206,9 +32767,7 @@
               "items": {
                 "enum": [
                   "datasets",
-                  "facts",
                   "dataset",
-                  "sourceFact",
                   "ALL"
                 ],
                 "type": "string"

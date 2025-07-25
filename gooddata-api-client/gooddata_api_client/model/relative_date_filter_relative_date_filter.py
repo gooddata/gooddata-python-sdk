@@ -32,7 +32,9 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.afm_object_identifier_dataset import AfmObjectIdentifierDataset
+    from gooddata_api_client.model.bounded_filter import BoundedFilter
     globals()['AfmObjectIdentifierDataset'] = AfmObjectIdentifierDataset
+    globals()['BoundedFilter'] = BoundedFilter
 
 
 class RelativeDateFilterRelativeDateFilter(ModelNormal):
@@ -110,6 +112,7 @@ class RelativeDateFilterRelativeDateFilter(ModelNormal):
             'granularity': (str,),  # noqa: E501
             'to': (int,),  # noqa: E501
             'apply_on_result': (bool,),  # noqa: E501
+            'bounded_filter': (BoundedFilter,),  # noqa: E501
             'local_identifier': (str,),  # noqa: E501
         }
 
@@ -124,6 +127,7 @@ class RelativeDateFilterRelativeDateFilter(ModelNormal):
         'granularity': 'granularity',  # noqa: E501
         'to': 'to',  # noqa: E501
         'apply_on_result': 'applyOnResult',  # noqa: E501
+        'bounded_filter': 'boundedFilter',  # noqa: E501
         'local_identifier': 'localIdentifier',  # noqa: E501
     }
 
@@ -175,6 +179,7 @@ class RelativeDateFilterRelativeDateFilter(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             apply_on_result (bool): [optional]  # noqa: E501
+            bounded_filter (BoundedFilter): [optional]  # noqa: E501
             local_identifier (str): [optional]  # noqa: E501
         """
 
@@ -272,6 +277,7 @@ class RelativeDateFilterRelativeDateFilter(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             apply_on_result (bool): [optional]  # noqa: E501
+            bounded_filter (BoundedFilter): [optional]  # noqa: E501
             local_identifier (str): [optional]  # noqa: E501
         """
 

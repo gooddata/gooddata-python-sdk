@@ -89,6 +89,7 @@ class DatasetsApi(object):
 
                         "ATTRIBUTES": "attributes",
                         "FACTS": "facts",
+                        "AGGREGATEDFACTS": "aggregatedFacts",
                         "DATASETS": "datasets",
                         "WORKSPACEDATAFILTERS": "workspaceDataFilters",
                         "REFERENCES": "references",
@@ -201,6 +202,7 @@ class DatasetsApi(object):
 
                         "ATTRIBUTES": "attributes",
                         "FACTS": "facts",
+                        "AGGREGATEDFACTS": "aggregatedFacts",
                         "DATASETS": "datasets",
                         "WORKSPACEDATAFILTERS": "workspaceDataFilters",
                         "REFERENCES": "references",

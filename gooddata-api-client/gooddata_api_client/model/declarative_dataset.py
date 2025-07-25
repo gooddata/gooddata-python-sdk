@@ -32,6 +32,7 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.data_source_table_identifier import DataSourceTableIdentifier
+    from gooddata_api_client.model.declarative_aggregated_fact import DeclarativeAggregatedFact
     from gooddata_api_client.model.declarative_attribute import DeclarativeAttribute
     from gooddata_api_client.model.declarative_dataset_sql import DeclarativeDatasetSql
     from gooddata_api_client.model.declarative_fact import DeclarativeFact
@@ -40,6 +41,7 @@ def lazy_import():
     from gooddata_api_client.model.declarative_workspace_data_filter_references import DeclarativeWorkspaceDataFilterReferences
     from gooddata_api_client.model.grain_identifier import GrainIdentifier
     globals()['DataSourceTableIdentifier'] = DataSourceTableIdentifier
+    globals()['DeclarativeAggregatedFact'] = DeclarativeAggregatedFact
     globals()['DeclarativeAttribute'] = DeclarativeAttribute
     globals()['DeclarativeDatasetSql'] = DeclarativeDatasetSql
     globals()['DeclarativeFact'] = DeclarativeFact
@@ -122,6 +124,7 @@ class DeclarativeDataset(ModelNormal):
             'id': (str,),  # noqa: E501
             'references': ([DeclarativeReference],),  # noqa: E501
             'title': (str,),  # noqa: E501
+            'aggregated_facts': ([DeclarativeAggregatedFact],),  # noqa: E501
             'attributes': ([DeclarativeAttribute],),  # noqa: E501
             'data_source_table_id': (DataSourceTableIdentifier,),  # noqa: E501
             'description': (str,),  # noqa: E501
@@ -143,6 +146,7 @@ class DeclarativeDataset(ModelNormal):
         'id': 'id',  # noqa: E501
         'references': 'references',  # noqa: E501
         'title': 'title',  # noqa: E501
+        'aggregated_facts': 'aggregatedFacts',  # noqa: E501
         'attributes': 'attributes',  # noqa: E501
         'data_source_table_id': 'dataSourceTableId',  # noqa: E501
         'description': 'description',  # noqa: E501
@@ -201,6 +205,7 @@ class DeclarativeDataset(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            aggregated_facts ([DeclarativeAggregatedFact]): An array of aggregated facts.. [optional]  # noqa: E501
             attributes ([DeclarativeAttribute]): An array of attributes.. [optional]  # noqa: E501
             data_source_table_id (DataSourceTableIdentifier): [optional]  # noqa: E501
             description (str): A dataset description.. [optional]  # noqa: E501
@@ -305,6 +310,7 @@ class DeclarativeDataset(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            aggregated_facts ([DeclarativeAggregatedFact]): An array of aggregated facts.. [optional]  # noqa: E501
             attributes ([DeclarativeAttribute]): An array of attributes.. [optional]  # noqa: E501
             data_source_table_id (DataSourceTableIdentifier): [optional]  # noqa: E501
             description (str): A dataset description.. [optional]  # noqa: E501

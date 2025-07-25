@@ -59,6 +59,7 @@ class DeclarativeIdentityProvider(ModelNormal):
         ('idp_type',): {
             'MANAGED_IDP': "MANAGED_IDP",
             'FIM_IDP': "FIM_IDP",
+            'DEX_IDP': "DEX_IDP",
             'CUSTOM_IDP': "CUSTOM_IDP",
         },
     }

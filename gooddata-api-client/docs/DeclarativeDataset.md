@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **id** | **str** | The Dataset ID. This ID is further used to refer to this instance of dataset. | 
 **references** | [**[DeclarativeReference]**](DeclarativeReference.md) | An array of references. | 
 **title** | **str** | A dataset title. | 
+**aggregated_facts** | [**[DeclarativeAggregatedFact]**](DeclarativeAggregatedFact.md) | An array of aggregated facts. | [optional] 
 **attributes** | [**[DeclarativeAttribute]**](DeclarativeAttribute.md) | An array of attributes. | [optional] 
 **data_source_table_id** | [**DataSourceTableIdentifier**](DataSourceTableIdentifier.md) |  | [optional] 
 **description** | **str** | A dataset description. | [optional] 

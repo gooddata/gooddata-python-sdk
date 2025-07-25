@@ -59,6 +59,7 @@ class JsonApiIdentityProviderOutAttributes(ModelNormal):
         ('idp_type',): {
             'MANAGED_IDP': "MANAGED_IDP",
             'FIM_IDP': "FIM_IDP",
+            'DEX_IDP': "DEX_IDP",
             'CUSTOM_IDP': "CUSTOM_IDP",
         },
     }
@@ -174,7 +175,7 @@ class JsonApiIdentityProviderOutAttributes(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             custom_claim_mapping ({str: (str,)}): Map of custom claim overrides. To be used when your Idp does not provide default claims (sub, email, name, given_name, family_name). Define the key pair for the claim you wish to override, where the key is the default name of the attribute and the value is your custom name for the given attribute.. [optional]  # noqa: E501
             identifiers ([str]): List of identifiers for this IdP, where an identifier is a domain name. Users with email addresses belonging to these domains will be authenticated by this IdP.. [optional]  # noqa: E501
-            idp_type (str): Type of IdP for management purposes. MANAGED_IDP represents a GoodData managed IdP used in single OIDC setup, which is protected from altering/deletion. FIM_IDP represents a GoodData managed IdP used in federated identity management setup, which is protected from altering/deletion. CUSTOM_IDP represents customer's own IdP, protected from deletion if currently used by org for authentication, deletable otherwise.. [optional]  # noqa: E501
+            idp_type (str): Type of IdP for management purposes. MANAGED_IDP represents a GoodData managed IdP used in single OIDC setup, which is protected from altering/deletion. FIM_IDP represents a GoodData managed IdP used in federated identity management setup, which is protected from altering/deletion. DEX_IDP represents internal Dex IdP which is protected from altering/deletion. CUSTOM_IDP represents customer's own IdP, protected from deletion if currently used by org for authentication, deletable otherwise.. [optional]  # noqa: E501
             oauth_client_id (str): The OAuth client id of your OIDC provider. This field is mandatory for OIDC IdP.. [optional]  # noqa: E501
             oauth_custom_auth_attributes ({str: (str,)}): Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.. [optional]  # noqa: E501
             oauth_custom_scopes ([str], none_type): List of additional OAuth scopes which may be required by other providers (e.g. Snowflake). [optional]  # noqa: E501
@@ -268,7 +269,7 @@ class JsonApiIdentityProviderOutAttributes(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             custom_claim_mapping ({str: (str,)}): Map of custom claim overrides. To be used when your Idp does not provide default claims (sub, email, name, given_name, family_name). Define the key pair for the claim you wish to override, where the key is the default name of the attribute and the value is your custom name for the given attribute.. [optional]  # noqa: E501
             identifiers ([str]): List of identifiers for this IdP, where an identifier is a domain name. Users with email addresses belonging to these domains will be authenticated by this IdP.. [optional]  # noqa: E501
-            idp_type (str): Type of IdP for management purposes. MANAGED_IDP represents a GoodData managed IdP used in single OIDC setup, which is protected from altering/deletion. FIM_IDP represents a GoodData managed IdP used in federated identity management setup, which is protected from altering/deletion. CUSTOM_IDP represents customer's own IdP, protected from deletion if currently used by org for authentication, deletable otherwise.. [optional]  # noqa: E501
+            idp_type (str): Type of IdP for management purposes. MANAGED_IDP represents a GoodData managed IdP used in single OIDC setup, which is protected from altering/deletion. FIM_IDP represents a GoodData managed IdP used in federated identity management setup, which is protected from altering/deletion. DEX_IDP represents internal Dex IdP which is protected from altering/deletion. CUSTOM_IDP represents customer's own IdP, protected from deletion if currently used by org for authentication, deletable otherwise.. [optional]  # noqa: E501
             oauth_client_id (str): The OAuth client id of your OIDC provider. This field is mandatory for OIDC IdP.. [optional]  # noqa: E501
             oauth_custom_auth_attributes ({str: (str,)}): Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.. [optional]  # noqa: E501
             oauth_custom_scopes ([str], none_type): List of additional OAuth scopes which may be required by other providers (e.g. Snowflake). [optional]  # noqa: E501
