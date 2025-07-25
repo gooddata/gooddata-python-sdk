@@ -1,0 +1,41 @@
+# (C) 2025 GoodData Corporation
+[project]
+name = "gooddata-pipelines"
+version = "0.1.0"
+description = ""
+authors = [{ name = "GoodData", email = "support@gooddata.com" }]
+license = { text = "MIT" }
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "pydantic (>=2.11.3,<3.0.0)",
+    "requests (>=2.32.3,<3.0.0)",
+    "types-requests (>=2.32.0,<3.0.0)",
+    "gooddata-sdk (>=1.43.0,<2.0.0)",
+    "boto3 (>=1.39.3,<2.0.0)",
+    "boto3-stubs (>=1.39.3,<2.0.0)",
+    "types-pyyaml (>=6.0.12.20250326,<7.0.0)",
+]
+
+[tool.mypy]
+disallow_untyped_defs = true
+warn_redundant_casts = true
+strict_equality = true
+no_implicit_optional = true
+
+[tool.ruff]
+exclude = [".venv"]
+line-length = 80
+
+[project.optional-dependencies]
+dev = [
+    "pytest (>=8.3.5,<9.0.0)",
+    "pytest-mock (>=3.14.0,<4.0.0)",
+    "ruff (>=0.11.2,<0.12.0)",
+    "mypy (>=1.16.0,<2.0.0)",
+    "moto (>=5.1.6,<6.0.0)",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

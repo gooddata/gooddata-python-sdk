@@ -48,3 +48,4 @@ jobs:
               - 'gooddata-dbt/**'
               - 'gooddata-flight-server/**'
               - 'gooddata-flexconnect/**'
+              - 'gooddata-pipelines/**'
