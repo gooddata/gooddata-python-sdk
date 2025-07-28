@@ -11,21 +11,22 @@ exclude = [
 ]
 line-length = 120
 lint.select = [
-    "E", # pycodestyle errors
-    "F", # pyflakes
-    "I", # isort
-    "PERF", # perflint
+    "E",       # pycodestyle errors
+    "F",       # pyflakes
+    "I",       # isort
+    "PERF",    # perflint
     "PIE",
     "PLR0402", # prevent unnecessary manual import aliases
     "PLR1711", # prevent useless returns
     "SIM",
     "UP",
-    "W", # pycodestyle warnings
-    "D417", # undocumented-param
+    "W",       # pycodestyle warnings
+    "D417",    # undocumented-param
 ]
 lint.ignore = [
     # rules recommended to be ignored when using ruff format
-    "E501", "W191",
+    "E501",
+    "W191",
     # ignore the rule banning Optional[X] in favor of X | None, we are fine with Optional for now
     "UP007",
     # ignore the rule, because it presents non-zero perf cost
@@ -55,7 +56,7 @@ convention = "google"
 # github_url = "https://github.com/<user or organization>/<project>/"
 
 [tool.tbump.version]
-current = "1.46.0"
+current = "1.47.0"
 regex = '''
   (?P<major>\d+)
   \.
@@ -183,6 +184,10 @@ search = '"Documentation": "https://gooddata-flight-server.readthedocs.io/en/v{c
 [[tool.tbump.file]]
 src = "gooddata-flexconnect/setup.py"
 search = '"Documentation": "https://gooddata-flexconnect.readthedocs.io/en/v{current_version}"'
+
+[[tool.tbump.file]]
+src = "gooddata-pipelines/pyproject.toml"
+search = 'version = "{current_version}"'
 
 # You can specify a list of commands to
 # run after the files have been patched

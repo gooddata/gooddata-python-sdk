@@ -1,0 +1,14 @@
+{
+  "data": {
+    "attributes": {
+      "filterValues": []
+    },
+    "id": "<wdf_setting_id>",
+    "relationships": {
+      "workspaceDataFilter": {
+        "data": { "id": "<wdf_id>", "type": "workspaceDataFilter" }
+      }
+    },
+    "type": "workspaceDataFilterSetting"
+  }
+}
