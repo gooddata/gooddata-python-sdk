@@ -975,14 +975,14 @@ test = ["pytest (>=6)"]
 
 [[package]]
 name = "gooddata-api-client"
-version = "1.43.0"
+version = "1.47.0"
 description = "OpenAPI definition"
 optional = false
 python-versions = ">=3.6"
 groups = ["main"]
 files = [
-    {file = "gooddata_api_client-1.43.0-py3-none-any.whl", hash = "sha256:9aa0cd7212b2d60213d88c81774204e9b992d868b364ec4b484cb4eb66d11f5e"},
-    {file = "gooddata_api_client-1.43.0.tar.gz", hash = "sha256:7115dbbee54b4964c1c679b95d019261283b7d304b7234bfaf2bbbcf73bde87b"},
+    {file = "gooddata_api_client-1.47.0-py3-none-any.whl", hash = "sha256:92e2c6592445fadcc1e714925d8940a8dbb3da3e97cf3f79ee94cb9c6585d48c"},
+    {file = "gooddata_api_client-1.47.0.tar.gz", hash = "sha256:60106f3de4e13b3a8f57957eb76072d8a650b4ccede2901763481495572ccf61"},
 ]
 
 [package.dependencies]
@@ -991,21 +991,21 @@ urllib3 = ">=1.25.3"
 
 [[package]]
 name = "gooddata-sdk"
-version = "1.43.0"
+version = "1.47.0"
 description = "GoodData Cloud Python SDK"
 optional = false
 python-versions = ">=3.9.0"
 groups = ["main"]
 files = [
-    {file = "gooddata_sdk-1.43.0-py3-none-any.whl", hash = "sha256:04e7d7f1e4f4849713198f70af463d5042f3db947dec9251b96972ea8a317a36"},
-    {file = "gooddata_sdk-1.43.0.tar.gz", hash = "sha256:f671c919086180ad91162c9ae20c395eae91d46e8d9fc12532505992f0093173"},
+    {file = "gooddata_sdk-1.47.0-py3-none-any.whl", hash = "sha256:927262dd36407124c7a239c6144ee1d3b58adfa788c1988b0dcb01f0d50410ef"},
+    {file = "gooddata_sdk-1.47.0.tar.gz", hash = "sha256:60a9a67830e63dd0f4aed0356f6f8af053c7ef1ffd3c52c8539fd0568faaaa19"},
 ]
 
 [package.dependencies]
 attrs = ">=21.4.0,<=24.2.0"
 brotli = "1.1.0"
 cattrs = ">=22.1.0,<=24.1.1"
-gooddata-api-client = ">=1.43.0,<1.44.0"
+gooddata-api-client = ">=1.47.0,<1.48.0"
 python-dateutil = ">=2.5.3"
 python-dotenv = ">=1.0.0,<2.0.0"
 pyyaml = ">=6.0"
@@ -1863,4 +1863,4 @@ dev = ["moto", "mypy", "pytest", "pytest-mock", "ruff"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10"
-content-hash = "3f625df5df598149d7c0260b40a5d1f17f4ccd57a969490ff77591f0f1e2eca3"
+content-hash = "4766d2adf4c533c85fcc65754105553be1629ff8d4de06fb8cbe6a5c11d9321e"

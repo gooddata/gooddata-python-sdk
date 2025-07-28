@@ -30,6 +30,7 @@ jobs:
           - gooddata-dbt
           - gooddata-flight-server
           - gooddata-flexconnect
+          - gooddata-pipelines
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -78,8 +79,8 @@ jobs:
           prerelease: false
           make_latest: true
           files: |
-                  dist/**/*.whl
-                  dist/**/*.tar.gz
+            dist/**/*.whl
+            dist/**/*.tar.gz
   publish:
     name: Publish components
     runs-on: ubuntu-latest
@@ -94,6 +95,7 @@ jobs:
           - gooddata-dbt
           - gooddata-flight-server
           - gooddata-flexconnect
+          - gooddata-pipelines
     steps:
       - name: Obtain ${{ matrix.component }} artifacts
         uses: actions/download-artifact@v4

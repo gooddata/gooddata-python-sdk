@@ -189,6 +189,10 @@ search = '"Documentation": "https://gooddata-flexconnect.readthedocs.io/en/v{cur
 src = "gooddata-pipelines/pyproject.toml"
 search = 'version = "{current_version}"'
 
+[[tool.tbump.file]]
+src = "gooddata-pipelines/pyproject.toml"
+search = "gooddata-sdk~={current_version}"
+
 # You can specify a list of commands to
 # run after the files have been patched
 # and before the git commit is made
