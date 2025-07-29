@@ -145,6 +145,14 @@ class CatalogDataset(AttrCatalogEntity):
         default=attr.Factory(lambda self: self.generate_facts_from_api(), takes_self=True),
     )
 
+    # TODO: Doublecheck if we shouldn't do something like for facts
+    aggregated_facts: Optional[list[CatalogAggregatedFact]] = attr.field(
+        default=attr.Factory(lambda self: self.json_api_attributes.get("aggregatedFacts"), takes_self=True),
+    )
+    precedence: Optional[int] = attr.field(
+        default=attr.Factory(lambda self: self.json_api_attributes.get("precedence"), takes_self=True)
+    )
+
     grain: Optional[list] = attr.field(
         default=attr.Factory(lambda self: self.json_api_attributes.get("grain"), takes_self=True)
     )

@@ -22,7 +22,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '211'
+          - '594'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: &id001
@@ -50,7 +50,23 @@ interactions:
           - 1; mode=block
       body:
         string:
-          data: []
+          data:
+            - id: budget_agg
+              type: aggregatedFact
+              attributes:
+                description: Budget Agg
+                tags:
+                  - Campaign channels per category
+                sourceColumn: budget
+                sourceColumnDataType: INT
+                areRelationsValid: true
+                operation: SUM
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/aggregatedFacts/budget_agg
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
           links:
             self: http://localhost:3000/api/v1/entities/workspaces/demo/aggregatedFacts?page=0&size=500
             next: http://localhost:3000/api/v1/entities/workspaces/demo/aggregatedFacts?page=1&size=500
