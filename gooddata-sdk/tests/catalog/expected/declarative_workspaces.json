@@ -2450,7 +2450,59 @@
               "title": "Campaign channels"
             },
             {
-              "aggregatedFacts": [],
+              "attributes": [],
+              "description": "Campaign channels per categories",
+              "facts": [],
+              "aggregatedFacts": [
+                {
+                  "description": "Budget Agg",
+                  "id": "budget_agg",
+                  "sourceColumn": "budget",
+                  "sourceColumnDataType": "INT",
+                  "tags": [
+                    "Campaign channels per category"
+                  ],
+                  "sourceFactReference": {
+                    "reference": {
+                      "id": "budget",
+                      "type": "fact"
+                    },
+                    "operation": "SUM"
+                  }
+                }
+              ],
+              "grain": [],
+              "id": "campaign_channels_per_category",
+              "precedence":  1,
+              "references": [
+                {
+                  "identifier": {
+                    "id": "campaign_channels",
+                    "type": "dataset"
+                  },
+                  "multivalue": false,
+                  "sources": [
+                    {
+                      "column": "campaign_channel_id",
+                      "dataType": "STRING",
+                      "target": {
+                        "id": "campaign_channel_id",
+                        "type": "attribute"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "tags": [
+                "Campaign channels per category"
+              ],
+              "sql": {
+                "statement": "SELECT category, SUM(budget) FROM campaign_channels GROUP BY category",
+                "dataSourceId": "demo-test-ds"
+              },
+              "title": "Campaign channels per category"
+            },
+            {
               "attributes": [
                 {
                   "description": "Campaign id",
@@ -2486,6 +2538,7 @@
               },
               "description": "Campaigns",
               "facts": [],
+              "aggregatedFacts": [],
               "grain": [
                 {
                   "id": "campaign_id",
@@ -2570,6 +2623,7 @@
               },
               "description": "Customers",
               "facts": [],
+              "aggregatedFacts": [],
               "grain": [
                 {
                   "id": "customer_id",
@@ -2652,6 +2706,7 @@
                   "title": "Quantity"
                 }
               ],
+              "aggregatedFacts": [],
               "grain": [
                 {
                   "id": "order_line_id",
@@ -2802,6 +2857,7 @@
               },
               "description": "Products",
               "facts": [],
+              "aggregatedFacts": [],
               "grain": [
                 {
                   "id": "product_id",
