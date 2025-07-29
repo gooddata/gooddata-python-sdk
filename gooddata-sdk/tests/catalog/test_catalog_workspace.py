@@ -672,7 +672,8 @@ def create_second_data_source(sdk: GoodDataSdk, ds_id: str) -> None:
                 username="demouser",
                 password="demopass",
             ),
-            url_params=[("autosave", "false")],
+            # SSL mode is a required parameter now for Postgres
+            url_params=[("autosave", "false"), ("sslmode", "prefer")],
         )
     )
 
@@ -699,6 +700,8 @@ def test_clone_workspace(test_config):
         default_cloned_decl_ws = sdk.catalog_workspace.get_declarative_workspace(default_cloned_ws_id)
         assert default_cloned_decl_ws.ldm.datasets[0].data_source_table_id.data_source_id == test_config["data_source2"]
         assert default_cloned_decl_ws.ldm.datasets[0].facts[0].source_column == "BUDGET"
+        # TODO: Add a nontrivial test for agg facts here
+        assert default_cloned_decl_ws.ldm.datasets[0].aggregated_facts == []
 
         sdk.catalog_workspace.clone_workspace(
             source_ws_id, target_workspace_id=custom_cloned_ws_id, target_workspace_name=custom_cloned_ws_name
@@ -752,6 +755,7 @@ def test_translate_workspace(test_config):
                 for fact in dataset.facts:
                     if fact.id == "budget":
                         assert fact.title == "Rozpočet"
+            # TODO: Add agg facts here for descriptions?
 
             # Run second time without translation function. Previous execution created translation file, which is used.
             sdk.catalog_workspace.generate_localized_workspaces(

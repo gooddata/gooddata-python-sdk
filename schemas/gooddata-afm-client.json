@@ -593,6 +593,7 @@
                   "HOUR_OF_DAY",
                   "DAY_OF_WEEK",
                   "DAY_OF_MONTH",
+                  "DAY_OF_QUARTER",
                   "DAY_OF_YEAR",
                   "WEEK_OF_YEAR",
                   "MONTH_OF_YEAR",
@@ -736,6 +737,52 @@
         "required": [
           "labelValue",
           "primaryLabelValue"
+        ],
+        "type": "object"
+      },
+      "BoundedFilter": {
+        "description": "Bounding filter for this relative date filter. This can be used to limit the range of the relative date filter to a specific date range.",
+        "properties": {
+          "from": {
+            "description": "Start of the filtering interval. Specified by number of periods (with respect to given granularity). Typically negative (historical time interval like -2 for '2 days/weeks, ... ago'). If null, then start of the range is unbounded.",
+            "example": -6,
+            "format": "int32",
+            "nullable": true,
+            "type": "integer"
+          },
+          "granularity": {
+            "description": "Date granularity specifying particular date attribute in given dimension.",
+            "enum": [
+              "MINUTE",
+              "HOUR",
+              "DAY",
+              "WEEK",
+              "MONTH",
+              "QUARTER",
+              "YEAR",
+              "MINUTE_OF_HOUR",
+              "HOUR_OF_DAY",
+              "DAY_OF_WEEK",
+              "DAY_OF_MONTH",
+              "DAY_OF_QUARTER",
+              "DAY_OF_YEAR",
+              "WEEK_OF_YEAR",
+              "MONTH_OF_YEAR",
+              "QUARTER_OF_YEAR"
+            ],
+            "example": "DAY",
+            "type": "string"
+          },
+          "to": {
+            "description": "End of the filtering interval. Specified by number of periods (with respect to given granularity). Value 'O' is representing current time-interval (current day, week, ...). If null, then end of the range is unbounded.",
+            "example": 0,
+            "format": "int32",
+            "nullable": true,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "granularity"
         ],
         "type": "object"
       },
@@ -1307,6 +1354,7 @@
                   "HOUR_OF_DAY",
                   "DAY_OF_WEEK",
                   "DAY_OF_MONTH",
+                  "DAY_OF_QUARTER",
                   "DAY_OF_YEAR",
                   "WEEK_OF_YEAR",
                   "MONTH_OF_YEAR",
@@ -1597,6 +1645,7 @@
               "HOUR_OF_DAY",
               "DAY_OF_WEEK",
               "DAY_OF_MONTH",
+              "DAY_OF_QUARTER",
               "DAY_OF_YEAR",
               "WEEK_OF_YEAR",
               "MONTH_OF_YEAR",
@@ -2112,6 +2161,7 @@
               "HOUR_OF_DAY",
               "DAY_OF_WEEK",
               "DAY_OF_MONTH",
+              "DAY_OF_QUARTER",
               "DAY_OF_YEAR",
               "WEEK_OF_YEAR",
               "MONTH_OF_YEAR",
@@ -2660,12 +2710,15 @@
         "type": "object"
       },
       "RelativeDateFilter": {
-        "description": "A date filter specifying a time interval that is relative to the current date. For example, last week, next month, and so on. Field dataset is representing qualifier of date dimension.",
+        "description": "A date filter specifying a time interval that is relative to the current date. For example, last week, next month, and so on. Field dataset is representing qualifier of date dimension. The 'from' and 'to' properties mark the boundaries of the interval. If 'from' is omitted, all values earlier than 'to' are included. If 'to' is omitted, all values later than 'from' are included. It is not allowed to omit both.",
         "properties": {
           "relativeDateFilter": {
             "properties": {
               "applyOnResult": {
                 "type": "boolean"
+              },
+              "boundedFilter": {
+                "$ref": "#/components/schemas/BoundedFilter"
               },
               "dataset": {
                 "$ref": "#/components/schemas/AfmObjectIdentifierDataset"
@@ -2690,6 +2743,7 @@
                   "HOUR_OF_DAY",
                   "DAY_OF_WEEK",
                   "DAY_OF_MONTH",
+                  "DAY_OF_QUARTER",
                   "DAY_OF_YEAR",
                   "WEEK_OF_YEAR",
                   "MONTH_OF_YEAR",
@@ -2719,6 +2773,37 @@
         },
         "required": [
           "relativeDateFilter"
+        ],
+        "type": "object"
+      },
+      "ResolvedLlmEndpoint": {
+        "properties": {
+          "id": {
+            "description": "Endpoint Id",
+            "type": "string"
+          },
+          "title": {
+            "description": "Endpoint Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "type": "object"
+      },
+      "ResolvedLlmEndpoints": {
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/ResolvedLlmEndpoint"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "data"
         ],
         "type": "object"
       },
@@ -3378,6 +3463,52 @@
           "type"
         ],
         "type": "object"
+      },
+      "ValidateLLMEndpointRequest": {
+        "properties": {
+          "baseUrl": {
+            "description": "Base URL for the LLM endpoint validation",
+            "type": "string"
+          },
+          "llmModel": {
+            "description": "LLM model for the LLM endpoint validation",
+            "type": "string"
+          },
+          "llmOrganization": {
+            "description": "Organization name for the LLM endpoint validation",
+            "type": "string"
+          },
+          "provider": {
+            "description": "Provider for the LLM endpoint validation",
+            "type": "string"
+          },
+          "token": {
+            "description": "Token for the LLM endpoint validation",
+            "type": "string"
+          }
+        },
+        "required": [
+          "provider",
+          "token"
+        ],
+        "type": "object"
+      },
+      "ValidateLLMEndpointResponse": {
+        "properties": {
+          "message": {
+            "description": "Additional message about the LLM endpoint validation",
+            "type": "string"
+          },
+          "successful": {
+            "description": "Whether the LLM endpoint validation was successful",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "message",
+          "successful"
+        ],
+        "type": "object"
       }
     }
   },
@@ -3387,6 +3518,39 @@
   },
   "openapi": "3.0.1",
   "paths": {
+    "/api/v1/actions/ai/validateLlmEndpoint": {
+      "post": {
+        "description": "Validates LLM endpoint with provided parameters.",
+        "operationId": "validateLLMEndpoint",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidateLLMEndpointRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidateLLMEndpointResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Validate LLM Endpoint",
+        "tags": [
+          "Smart Functions",
+          "actions"
+        ]
+      }
+    },
     "/api/v1/actions/workspaces/{workspaceId}/ai/chat": {
       "post": {
         "description": "(BETA) Combines multiple use cases such as search, create visualizations, ...",
@@ -3554,6 +3718,41 @@
           }
         },
         "summary": "Get Chat Usage",
+        "tags": [
+          "Smart Functions",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/resolveLlmEndpoints": {
+      "get": {
+        "description": "Returns a list of available LLM Endpoints",
+        "operationId": "resolveLlmEndpoints",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResolvedLlmEndpoints"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Get Active LLM Endpoints for this workspace",
         "tags": [
           "Smart Functions",
           "actions"
@@ -4015,7 +4214,7 @@
             }
           },
           {
-            "description": "Requested explain type. If not specified all types are bundled in a ZIP archive.\n\n`MAQL` - MAQL Abstract Syntax Tree, execution dimensions and related info\n\n`GRPC_MODEL` - Datasets used in execution\n\n`GRPC_MODEL_SVG` - Generated SVG image of the datasets\n\n`WDF` - Workspace data filters in execution workspace context\n\n`QT` - Query Tree, created from MAQL AST using Logical Data Model,  contains all information needed to generate SQL\n\n`QT_SVG` - Generated SVG image of the Query Tree\n\n`OPT_QT` - Optimized Query Tree\n\n`OPT_QT_SVG` - Generated SVG image of the Optimized Query Tree\n\n`SQL` - Final SQL to be executed\n\n`SETTINGS` - Settings used to execute explain request",
+            "description": "Requested explain type. If not specified all types are bundled in a ZIP archive.\n\n`MAQL` - MAQL Abstract Syntax Tree, execution dimensions and related info\n\n`GRPC_MODEL` - Datasets used in execution\n\n`GRPC_MODEL_SVG` - Generated SVG image of the datasets\n\n`COMPRESSED_GRPC_MODEL_SVG` - Generated SVG image of the model fragment used in the query\n\n`WDF` - Workspace data filters in execution workspace context\n\n`QT` - Query Tree, created from MAQL AST using Logical Data Model,  contains all information needed to generate SQL\n\n`QT_SVG` - Generated SVG image of the Query Tree\n\n`OPT_QT` - Optimized Query Tree\n\n`OPT_QT_SVG` - Generated SVG image of the Optimized Query Tree\n\n`SQL` - Final SQL to be executed\n\n`COMPRESSED_SQL` - Final SQL to be executed with rolled SQL datasets\n\n`SETTINGS` - Settings used to execute explain request",
             "in": "query",
             "name": "explainType",
             "required": false,
@@ -4030,7 +4229,8 @@
                 "OPT_QT",
                 "OPT_QT_SVG",
                 "SQL",
-                "SETTINGS"
+                "SETTINGS",
+                "COMPRESSED_SQL"
               ],
               "type": "string"
             }

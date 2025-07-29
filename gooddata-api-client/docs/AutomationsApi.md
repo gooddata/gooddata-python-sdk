@@ -13,6 +13,9 @@ Method | HTTP request | Description
 [**set_automations**](AutomationsApi.md#set_automations) | **PUT** /api/v1/layout/workspaces/{workspaceId}/automations | Set automations
 [**trigger_automation**](AutomationsApi.md#trigger_automation) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/trigger | Trigger automation.
 [**trigger_existing_automation**](AutomationsApi.md#trigger_existing_automation) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/{automationId}/trigger | Trigger existing automation.
+[**unsubscribe_all_automations**](AutomationsApi.md#unsubscribe_all_automations) | **DELETE** /api/v1/actions/organization/automations/unsubscribe | Unsubscribe from all automations in all workspaces
+[**unsubscribe_automation**](AutomationsApi.md#unsubscribe_automation) | **DELETE** /api/v1/actions/workspaces/{workspaceId}/automations/{automationId}/unsubscribe | Unsubscribe from an automation
+[**unsubscribe_workspace_automations**](AutomationsApi.md#unsubscribe_workspace_automations) | **DELETE** /api/v1/actions/workspaces/{workspaceId}/automations/unsubscribe | Unsubscribe from all automations in the workspace
 [**update_entity_automations**](AutomationsApi.md#update_entity_automations) | **PUT** /api/v1/entities/workspaces/{workspaceId}/automations/{objectId} | Put an Automation
 
 
@@ -100,7 +103,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     ),
                 ],
                 description="description_example",
-                details=None,
+                details={},
                 external_recipients=[
                     JsonApiAutomationInAttributesExternalRecipientsInner(
                         email="email_example",
@@ -131,7 +134,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 ),
                 raw_exports=[
                     JsonApiAutomationInAttributesRawExportsInner(
-                        request_payload=RawExportRequest(
+                        request_payload=RawExportAutomationRequest(
                             custom_override=RawCustomOverride(
                                 labels={
                                     "key": RawCustomLabel(
@@ -179,6 +182,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             ),
                             file_name="result",
                             format="CSV",
+                            metadata=JsonNode(),
                         ),
                     ),
                 ],
@@ -775,7 +779,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     ),
                 ],
                 description="description_example",
-                details=None,
+                details={},
                 external_recipients=[
                     JsonApiAutomationInAttributesExternalRecipientsInner(
                         email="email_example",
@@ -806,7 +810,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 ),
                 raw_exports=[
                     JsonApiAutomationInAttributesRawExportsInner(
-                        request_payload=RawExportRequest(
+                        request_payload=RawExportAutomationRequest(
                             custom_override=RawCustomOverride(
                                 labels={
                                     "key": RawCustomLabel(
@@ -854,6 +858,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             ),
                             file_name="result",
                             format="CSV",
+                            metadata=JsonNode(),
                         ),
                     ),
                 ],
@@ -1166,7 +1171,7 @@ with gooddata_api_client.ApiClient() as api_client:
             ),
             raw_exports=[
                 AutomationRawExport(
-                    request_payload=RawExportRequest(
+                    request_payload=RawExportAutomationRequest(
                         custom_override=RawCustomOverride(
                             labels={
                                 "key": RawCustomLabel(
@@ -1214,6 +1219,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         ),
                         file_name="result",
                         format="CSV",
+                        metadata=JsonNode(),
                     ),
                 ),
             ],
@@ -1471,7 +1477,7 @@ with gooddata_api_client.ApiClient() as api_client:
             ),
             raw_exports=[
                 AutomationRawExport(
-                    request_payload=RawExportRequest(
+                    request_payload=RawExportAutomationRequest(
                         custom_override=RawCustomOverride(
                             labels={
                                 "key": RawCustomLabel(
@@ -1519,6 +1525,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         ),
                         file_name="result",
                         format="CSV",
+                        metadata=JsonNode(),
                     ),
                 ),
             ],
@@ -1711,6 +1718,193 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **unsubscribe_all_automations**
+> unsubscribe_all_automations()
+
+Unsubscribe from all automations in all workspaces
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import automations_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = automations_api.AutomationsApi(api_client)
+
+    # example, this endpoint has no required or optional parameters
+    try:
+        # Unsubscribe from all automations in all workspaces
+        api_instance.unsubscribe_all_automations()
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling AutomationsApi->unsubscribe_all_automations: %s\n" % e)
+```
+
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **unsubscribe_automation**
+> unsubscribe_automation(workspace_id, automation_id)
+
+Unsubscribe from an automation
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import automations_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = automations_api.AutomationsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    automation_id = "automationId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Unsubscribe from an automation
+        api_instance.unsubscribe_automation(workspace_id, automation_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling AutomationsApi->unsubscribe_automation: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **automation_id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **unsubscribe_workspace_automations**
+> unsubscribe_workspace_automations(workspace_id)
+
+Unsubscribe from all automations in the workspace
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import automations_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = automations_api.AutomationsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Unsubscribe from all automations in the workspace
+        api_instance.unsubscribe_workspace_automations(workspace_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling AutomationsApi->unsubscribe_workspace_automations: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **update_entity_automations**
 > JsonApiAutomationOutDocument update_entity_automations(workspace_id, object_id, json_api_automation_in_document)
 
@@ -1796,7 +1990,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     ),
                 ],
                 description="description_example",
-                details=None,
+                details={},
                 external_recipients=[
                     JsonApiAutomationInAttributesExternalRecipientsInner(
                         email="email_example",
@@ -1827,7 +2021,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 ),
                 raw_exports=[
                     JsonApiAutomationInAttributesRawExportsInner(
-                        request_payload=RawExportRequest(
+                        request_payload=RawExportAutomationRequest(
                             custom_override=RawCustomOverride(
                                 labels={
                                     "key": RawCustomLabel(
@@ -1875,6 +2069,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             ),
                             file_name="result",
                             format="CSV",
+                            metadata=JsonNode(),
                         ),
                     ),
                 ],

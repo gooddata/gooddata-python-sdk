@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **access_info** | [**JsonApiAnalyticalDashboardOutMetaAccessInfo**](JsonApiAnalyticalDashboardOutMetaAccessInfo.md) |  | [optional] 
-**origin** | [**JsonApiAnalyticalDashboardOutMetaOrigin**](JsonApiAnalyticalDashboardOutMetaOrigin.md) |  | [optional] 
+**origin** | [**JsonApiAggregatedFactOutMetaOrigin**](JsonApiAggregatedFactOutMetaOrigin.md) |  | [optional] 
 **permissions** | **[str]** | List of valid permissions for a logged-in user. | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 

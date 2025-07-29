@@ -6,6 +6,7 @@ from typing import Optional
 
 import attr
 from gooddata_api_client.model.data_source_table_identifier import DataSourceTableIdentifier
+from gooddata_api_client.model.declarative_aggregated_fact import DeclarativeAggregatedFact
 from gooddata_api_client.model.declarative_attribute import DeclarativeAttribute
 from gooddata_api_client.model.declarative_dataset import DeclarativeDataset
 from gooddata_api_client.model.declarative_dataset_sql import DeclarativeDatasetSql
@@ -13,10 +14,16 @@ from gooddata_api_client.model.declarative_fact import DeclarativeFact
 from gooddata_api_client.model.declarative_label import DeclarativeLabel
 from gooddata_api_client.model.declarative_reference import DeclarativeReference
 from gooddata_api_client.model.declarative_reference_source import DeclarativeReferenceSource
+from gooddata_api_client.model.declarative_source_fact_reference import DeclarativeSourceFactReference
 from gooddata_api_client.model.declarative_workspace_data_filter_column import DeclarativeWorkspaceDataFilterColumn
 
 from gooddata_sdk.catalog.base import Base
-from gooddata_sdk.catalog.identifier import CatalogGrainIdentifier, CatalogLabelIdentifier, CatalogReferenceIdentifier
+from gooddata_sdk.catalog.identifier import (
+    CatalogFactIdentifier,
+    CatalogGrainIdentifier,
+    CatalogLabelIdentifier,
+    CatalogReferenceIdentifier,
+)
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.data_filter_references import (
     CatalogDeclarativeWorkspaceDataFilterReferences,
 )
@@ -34,6 +41,7 @@ class CatalogDeclarativeDataset(Base):
     description: Optional[str] = None
     attributes: Optional[list[CatalogDeclarativeAttribute]] = None
     facts: Optional[list[CatalogDeclarativeFact]] = None
+    aggregated_facts: Optional[list[CatalogDeclarativeAggregatedFact]] = None
     data_source_table_id: Optional[CatalogDataSourceTableIdentifier] = None
     sql: Optional[CatalogDeclarativeDatasetSql] = None
     tags: Optional[list[str]] = None
@@ -84,6 +92,30 @@ class CatalogDeclarativeFact(Base):
     @staticmethod
     def client_class() -> type[DeclarativeFact]:
         return DeclarativeFact
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogDeclarativeSourceFactReference(Base):
+    operation: str
+    reference: CatalogFactIdentifier
+
+    @staticmethod
+    def client_class() -> type[DeclarativeFact]:
+        return DeclarativeSourceFactReference
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogDeclarativeAggregatedFact(Base):
+    id: str
+    source_column: str
+    source_fact_reference: Optional[CatalogDeclarativeSourceFactReference] = None
+    source_column_data_type: Optional[str] = None
+    description: Optional[str] = None
+    tags: Optional[list[str]] = None
+
+    @staticmethod
+    def client_class() -> type[DeclarativeAggregatedFact]:
+        return DeclarativeAggregatedFact
 
 
 @attr.s(auto_attribs=True, kw_only=True)
