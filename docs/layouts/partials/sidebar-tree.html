@@ -1,7 +1,8 @@
 <!-- PETR: Menu assembled here -->
 <input type="checkbox" id="gd-docs-menu__mobile-trigger" class="gd-docs-menu__mobile-trigger" />
 <label for="gd-docs-menu__mobile-trigger" class="gd-docs-menu__mobile-icon"></label>
-<nav class="gd-docs-menu init">
+<div class="gd-docs-menu__mobile-bg"></div>
+<nav id="gd-docs-menu" class="gd-docs-menu init" aria-label="Articles">
   {{ $additionalNavRoot := .Site.GetPage "/versions" }}
   {{ $root := .Site.GetPage "/docs" }}
 
