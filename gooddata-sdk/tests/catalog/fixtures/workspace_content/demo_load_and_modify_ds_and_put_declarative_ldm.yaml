@@ -1,4 +1,4 @@
-# (C) 2024 GoodData Corporation
+# (C) 2025 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -19,61 +19,38 @@ interactions:
         code: 404
         message: Not Found
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - max-age=5, private
-        Connection:
-          - keep-alive
         Content-Length:
           - '172'
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/problem+json
         DATE: &id001
           - PLACEHOLDER
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Referrer-Policy:
-          - no-referrer
-        Server:
-          - nginx
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:35 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+        X-Xss-Protection:
+          - 1; mode=block
       body:
         string:
           detail: The requested endpoint does not exist or you do not have permission
             to access it.
           status: 404
           title: Not Found
-          traceId: 6703c34f8861cea1b9b4332f3c75835d
+          traceId: f52d25d4b7a0f025c7913ad17ed8ffd2
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces
@@ -99,57 +76,34 @@ interactions:
         code: 201
         message: Created
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '167'
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
-        Server:
-          - nginx
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:35 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+        X-Xss-Protection:
+          - 1; mode=block
       body:
         string:
           data:
@@ -177,64 +131,40 @@ interactions:
         code: 200
         message: OK
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
+        Content-Length:
+          - '7390'
         Content-Type:
           - application/json
         DATE: *id001
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
-        Server:
-          - nginx
-        Transfer-Encoding:
-          - chunked
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-        content-length:
-          - '6227'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:35 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+        X-Xss-Protection:
+          - 1; mode=block
       body:
         string:
           ldm:
             datasets:
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Campaign channel id
                     id: campaign_channel_id
                     labels: []
@@ -300,7 +230,54 @@ interactions:
                 tags:
                   - Campaign channels
                 title: Campaign channels
-              - attributes:
+              - aggregatedFacts:
+                  - description: Budget Agg
+                    id: budget_agg
+                    sourceColumn: budget
+                    sourceColumnDataType: INT
+                    sourceFactReference:
+                      operation: SUM
+                      reference:
+                        id: budget
+                        type: fact
+                    tags:
+                      - Campaign channels per category
+                attributes:
+                  - description: Category Agg
+                    id: campaign_channels.category_agg
+                    labels: []
+                    sourceColumn: category
+                    sourceColumnDataType: STRING
+                    tags:
+                      - Campaign channels
+                    title: Category
+                description: Campaign channels per categories
+                facts: []
+                grain:
+                  - id: campaign_channels.category_agg
+                    type: attribute
+                id: campaign_channels_per_category
+                precedence: 1
+                references:
+                  - identifier:
+                      id: campaign_channels
+                      type: dataset
+                    multivalue: false
+                    sources:
+                      - column: campaign_channel_category
+                        dataType: STRING
+                        target:
+                          id: campaign_channel_id
+                          type: attribute
+                sql:
+                  dataSourceId: demo-test-ds
+                  statement: SELECT category, SUM(budget) FROM campaign_channels GROUP
+                    BY category
+                tags:
+                  - Campaign channels per category
+                title: Campaign channels per category
+              - aggregatedFacts: []
+                attributes:
                   - description: Campaign id
                     id: campaign_id
                     labels: []
@@ -334,7 +311,8 @@ interactions:
                 tags:
                   - Campaigns
                 title: Campaigns
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Customer id
                     id: customer_id
                     labels: []
@@ -391,7 +369,8 @@ interactions:
                 tags:
                   - Customers
                 title: Customers
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Order id
                     id: order_id
                     labels: []
@@ -498,7 +477,8 @@ interactions:
                     filterId:
                       id: wdf__region
                       type: workspaceDataFilter
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Product id
                     id: product_id
                     labels: []
@@ -583,64 +563,41 @@ interactions:
         code: 200
         message: OK
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
-          - '476'
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
+          - '491'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
-        Server:
-          - nginx
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:36 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+        X-Xss-Protection:
+          - 1; mode=block
       body:
         string:
           data:
             - id: demo-test-ds
               type: dataSource
               attributes:
-                url: jdbc:postgresql://localhost:5432/demo
+                url: jdbc:postgresql://localhost:5432/demo?sslmode=prefer
                 username: demouser
                 authenticationType: USERNAME_PASSWORD
                 name: demo-test-ds
@@ -714,6 +671,7 @@ interactions:
                   description: Spend
                   tags:
                     - Campaign channels
+              aggregatedFacts: []
               dataSourceTableId:
                 dataSourceId: demo-test-ds
                 id: campaign_channels
@@ -723,6 +681,52 @@ interactions:
                   - campaign_channels
               tags:
                 - Campaign channels
+            - grain:
+                - id: campaign_channels.category_agg
+                  type: attribute
+              id: campaign_channels_per_category
+              references:
+                - identifier:
+                    id: campaign_channels
+                    type: dataset
+                  multivalue: false
+                  sources:
+                    - column: campaign_channel_category
+                      target:
+                        id: campaign_channel_id
+                        type: attribute
+                      dataType: STRING
+              title: Campaign channels per category
+              description: Campaign channels per categories
+              attributes:
+                - id: campaign_channels.category_agg
+                  labels: []
+                  sourceColumn: category
+                  title: Category
+                  sourceColumnDataType: STRING
+                  description: Category Agg
+                  tags:
+                    - Campaign channels
+              facts: []
+              aggregatedFacts:
+                - id: budget_agg
+                  sourceColumn: budget
+                  sourceFactReference:
+                    operation: SUM
+                    reference:
+                      id: budget
+                      type: fact
+                  sourceColumnDataType: INT
+                  description: Budget Agg
+                  tags:
+                    - Campaign channels per category
+              precedence: 1
+              sql:
+                dataSourceId: demo-test-ds
+                statement: SELECT category, SUM(budget) FROM campaign_channels GROUP
+                  BY category
+              tags:
+                - Campaign channels per category
             - grain:
                 - id: campaign_id
                   type: attribute
@@ -748,6 +752,7 @@ interactions:
                   tags:
                     - Campaigns
               facts: []
+              aggregatedFacts: []
               dataSourceTableId:
                 dataSourceId: demo-test-ds
                 id: campaigns
@@ -805,6 +810,7 @@ interactions:
                   tags:
                     - Customers
               facts: []
+              aggregatedFacts: []
               dataSourceTableId:
                 dataSourceId: demo-test-ds
                 id: customers
@@ -901,6 +907,7 @@ interactions:
                   description: Quantity
                   tags:
                     - Order lines
+              aggregatedFacts: []
               dataSourceTableId:
                 dataSourceId: demo-test-ds
                 id: order_lines
@@ -948,6 +955,7 @@ interactions:
                   tags:
                     - Products
               facts: []
+              aggregatedFacts: []
               dataSourceTableId:
                 dataSourceId: demo-test-ds
                 id: products
@@ -996,53 +1004,30 @@ interactions:
         code: 204
         message: No Content
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
         DATE: *id001
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
-        Server:
-          - nginx
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:36 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+        X-Xss-Protection:
+          - 1; mode=block
       body:
         string: ''
   - request:
@@ -1063,64 +1048,41 @@ interactions:
         code: 200
         message: OK
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
-          - '476'
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
+          - '491'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
-        Server:
-          - nginx
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:36 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+        X-Xss-Protection:
+          - 1; mode=block
       body:
         string:
           data:
             - id: demo-test-ds
               type: dataSource
               attributes:
-                url: jdbc:postgresql://localhost:5432/demo
+                url: jdbc:postgresql://localhost:5432/demo?sslmode=prefer
                 username: demouser
                 authenticationType: USERNAME_PASSWORD
                 name: demo-test-ds
@@ -1194,6 +1156,7 @@ interactions:
                   description: Spend
                   tags:
                     - Campaign channels
+              aggregatedFacts: []
               dataSourceTableId:
                 dataSourceId: demo-test-ds
                 id: campaign_channels
@@ -1203,6 +1166,52 @@ interactions:
                   - campaign_channels
               tags:
                 - Campaign channels
+            - grain:
+                - id: campaign_channels.category_agg
+                  type: attribute
+              id: campaign_channels_per_category
+              references:
+                - identifier:
+                    id: campaign_channels
+                    type: dataset
+                  multivalue: false
+                  sources:
+                    - column: campaign_channel_category
+                      target:
+                        id: campaign_channel_id
+                        type: attribute
+                      dataType: STRING
+              title: Campaign channels per category
+              description: Campaign channels per categories
+              attributes:
+                - id: campaign_channels.category_agg
+                  labels: []
+                  sourceColumn: category
+                  title: Category
+                  sourceColumnDataType: STRING
+                  description: Category Agg
+                  tags:
+                    - Campaign channels
+              facts: []
+              aggregatedFacts:
+                - id: budget_agg
+                  sourceColumn: budget
+                  sourceFactReference:
+                    operation: SUM
+                    reference:
+                      id: budget
+                      type: fact
+                  sourceColumnDataType: INT
+                  description: Budget Agg
+                  tags:
+                    - Campaign channels per category
+              precedence: 1
+              sql:
+                dataSourceId: demo-test-ds
+                statement: SELECT category, SUM(budget) FROM campaign_channels GROUP
+                  BY category
+              tags:
+                - Campaign channels per category
             - grain:
                 - id: campaign_id
                   type: attribute
@@ -1228,6 +1237,7 @@ interactions:
                   tags:
                     - Campaigns
               facts: []
+              aggregatedFacts: []
               dataSourceTableId:
                 dataSourceId: demo-test-ds
                 id: campaigns
@@ -1285,6 +1295,7 @@ interactions:
                   tags:
                     - Customers
               facts: []
+              aggregatedFacts: []
               dataSourceTableId:
                 dataSourceId: demo-test-ds
                 id: customers
@@ -1381,6 +1392,7 @@ interactions:
                   description: Quantity
                   tags:
                     - Order lines
+              aggregatedFacts: []
               dataSourceTableId:
                 dataSourceId: demo-test-ds
                 id: order_lines
@@ -1428,6 +1440,7 @@ interactions:
                   tags:
                     - Products
               facts: []
+              aggregatedFacts: []
               dataSourceTableId:
                 dataSourceId: demo-test-ds
                 id: products
@@ -1476,53 +1489,30 @@ interactions:
         code: 204
         message: No Content
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
         DATE: *id001
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
-        Server:
-          - nginx
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:36 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+        X-Xss-Protection:
+          - 1; mode=block
       body:
         string: ''
   - request:
@@ -1543,64 +1533,40 @@ interactions:
         code: 200
         message: OK
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
+        Content-Length:
+          - '7232'
         Content-Type:
           - application/json
         DATE: *id001
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
-        Server:
-          - nginx
-        Transfer-Encoding:
-          - chunked
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-        content-length:
-          - '6069'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:36 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+        X-Xss-Protection:
+          - 1; mode=block
       body:
         string:
           ldm:
             datasets:
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Campaign channel id
                     id: campaign_channel_id
                     labels: []
@@ -1666,7 +1632,54 @@ interactions:
                 tags:
                   - Campaign channels
                 title: Campaign channels
-              - attributes:
+              - aggregatedFacts:
+                  - description: Budget Agg
+                    id: budget_agg
+                    sourceColumn: budget
+                    sourceColumnDataType: INT
+                    sourceFactReference:
+                      operation: SUM
+                      reference:
+                        id: budget
+                        type: fact
+                    tags:
+                      - Campaign channels per category
+                attributes:
+                  - description: Category Agg
+                    id: campaign_channels.category_agg
+                    labels: []
+                    sourceColumn: category
+                    sourceColumnDataType: STRING
+                    tags:
+                      - Campaign channels
+                    title: Category
+                description: Campaign channels per categories
+                facts: []
+                grain:
+                  - id: campaign_channels.category_agg
+                    type: attribute
+                id: campaign_channels_per_category
+                precedence: 1
+                references:
+                  - identifier:
+                      id: campaign_channels
+                      type: dataset
+                    multivalue: false
+                    sources:
+                      - column: campaign_channel_category
+                        dataType: STRING
+                        target:
+                          id: campaign_channel_id
+                          type: attribute
+                sql:
+                  dataSourceId: demo-test-ds
+                  statement: SELECT category, SUM(budget) FROM campaign_channels GROUP
+                    BY category
+                tags:
+                  - Campaign channels per category
+                title: Campaign channels per category
+              - aggregatedFacts: []
+                attributes:
                   - description: Campaign id
                     id: campaign_id
                     labels: []
@@ -1700,7 +1713,8 @@ interactions:
                 tags:
                   - Campaigns
                 title: Campaigns
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Customer id
                     id: customer_id
                     labels: []
@@ -1757,7 +1771,8 @@ interactions:
                 tags:
                   - Customers
                 title: Customers
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Order id
                     id: order_id
                     labels: []
@@ -1858,7 +1873,8 @@ interactions:
                     name: wdf__region
                   - dataType: STRING
                     name: wdf__state
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Product id
                     id: product_id
                     labels: []
@@ -1933,6 +1949,9 @@ interactions:
           - columnName: wdf__region
             id: wdf__region
             title: Customer region
+            workspace:
+              id: demo
+              type: workspace
             workspaceDataFilterSettings:
               - filterValues:
                   - West
@@ -1941,12 +1960,12 @@ interactions:
                 workspace:
                   id: demo_west
                   type: workspace
-            workspace:
-              id: demo
-              type: workspace
           - columnName: wdf__state
             id: wdf__state
             title: Customer state
+            workspace:
+              id: demo_west
+              type: workspace
             workspaceDataFilterSettings:
               - filterValues:
                   - California
@@ -1955,13 +1974,12 @@ interactions:
                 workspace:
                   id: demo_west_california
                   type: workspace
-            workspace:
-              id: demo_west
-              type: workspace
         workspaces:
           - id: demo
             name: Demo
+            automations: []
             customApplicationSettings: []
+            filterViews: []
             hierarchyPermissions:
               - assignee:
                   id: demo2
@@ -3361,6 +3379,50 @@ interactions:
                     tags:
                       - Campaign channels
                   - grain:
+                      - id: campaign_channels.category_agg
+                        type: attribute
+                    id: campaign_channels_per_category
+                    references:
+                      - identifier:
+                          id: campaign_channels
+                          type: dataset
+                        multivalue: false
+                        sourceColumns:
+                          - campaign_channel_category
+                        sourceColumnDataTypes:
+                          - STRING
+                    title: Campaign channels per category
+                    attributes:
+                      - id: campaign_channels.category_agg
+                        labels: []
+                        sourceColumn: category
+                        title: Category
+                        description: Category Agg
+                        sourceColumnDataType: STRING
+                        tags:
+                          - Campaign channels
+                    description: Campaign channels per categories
+                    facts: []
+                    aggregatedFacts:
+                      - id: budget_agg
+                        sourceColumn: budget
+                        sourceFactReference:
+                          operation: SUM
+                          reference:
+                            id: budget
+                            type: fact
+                        description: Budget Agg
+                        sourceColumnDataType: INT
+                        tags:
+                          - Campaign channels per category
+                    precedence: 1
+                    tags:
+                      - Campaign channels per category
+                    sql:
+                      dataSourceId: demo-test-ds
+                      statement: SELECT category, SUM(budget) FROM campaign_channels
+                        GROUP BY category
+                  - grain:
                       - id: campaign_id
                         type: attribute
                     id: campaigns
@@ -3636,11 +3698,11 @@ interactions:
                 name: VIEW
             settings: []
             userDataFilters: []
-            automations: []
-            filterViews: []
           - id: demo_west
             name: Demo West
+            automations: []
             customApplicationSettings: []
+            filterViews: []
             hierarchyPermissions: []
             model:
               analytics:
@@ -3674,11 +3736,11 @@ interactions:
             permissions: []
             settings: []
             userDataFilters: []
-            automations: []
-            filterViews: []
           - id: demo_west_california
             name: Demo West California
+            automations: []
             customApplicationSettings: []
+            filterViews: []
             hierarchyPermissions: []
             model:
               analytics:
@@ -3699,8 +3761,6 @@ interactions:
             permissions: []
             settings: []
             userDataFilters: []
-            automations: []
-            filterViews: []
       headers:
         Accept-Encoding:
           - br, gzip, deflate
@@ -3715,52 +3775,29 @@ interactions:
         code: 204
         message: No Content
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
         DATE: *id001
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
-        Server:
-          - nginx
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:36 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+        X-Xss-Protection:
+          - 1; mode=block
       body:
         string: ''

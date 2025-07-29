@@ -1,4 +1,4 @@
-# (C) 2024 GoodData Corporation
+# (C) 2025 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -19,54 +19,31 @@ interactions:
         code: 200
         message: OK
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - max-age=5, private
-        Connection:
-          - keep-alive
         Content-Length:
           - '162'
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: &id001
           - PLACEHOLDER
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Referrer-Policy:
-          - no-referrer
-        Server:
-          - nginx
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:48 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+        X-Xss-Protection:
+          - 1; mode=block
       body:
         string:
           data:
@@ -94,59 +71,34 @@ interactions:
         code: 200
         message: OK
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
+        Content-Length:
+          - '38311'
         Content-Type:
           - application/json
         DATE: *id001
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
-        Server:
-          - nginx
-        Transfer-Encoding:
-          - chunked
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-        content-length:
-          - '37148'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:48 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+        X-Xss-Protection:
+          - 1; mode=block
       body:
         string:
           analytics:
@@ -199,7 +151,7 @@ interactions:
                               drills: []
                               properties: {}
                   version: '2'
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -242,7 +194,7 @@ interactions:
                           type: dashboardPlugin
                       version: '2'
                   version: '2'
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -392,7 +344,7 @@ interactions:
                               drills: []
                               properties: {}
                   version: '2'
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -404,7 +356,7 @@ interactions:
               - content:
                   url: https://www.example.com
                   version: '2'
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -414,7 +366,7 @@ interactions:
               - content:
                   url: https://www.example.com
                   version: '2'
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -464,7 +416,7 @@ interactions:
               - content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -473,7 +425,7 @@ interactions:
               - content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/order_id})
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -483,7 +435,7 @@ interactions:
                   format: '#,##0'
                   maql: 'SELECT {metric/amount_of_active_customers} WHERE (SELECT
                     {metric/revenue} BY {attribute/customer_id}) >  10000 '
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -493,7 +445,7 @@ interactions:
                   format: '#,##0.00'
                   maql: SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -503,7 +455,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT SUM({fact/spend})
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -512,7 +464,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT SUM({fact/price}*{fact/quantity})
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -521,7 +473,7 @@ interactions:
               - content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / {metric/total_revenue}
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -531,7 +483,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -541,7 +493,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -551,7 +503,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -561,7 +513,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -571,7 +523,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
                     ALL OTHER)
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -581,7 +533,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL
                     {attribute/product_id})
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -591,7 +543,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -602,7 +554,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Clothing")
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -612,7 +564,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ( "Electronics")
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -622,7 +574,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Home")
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -632,7 +584,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Outdoor")
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -641,7 +593,7 @@ interactions:
               - content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -650,7 +602,7 @@ interactions:
               - content:
                   format: $#,##0.0
                   maql: SELECT {metric/revenue} / {metric/campaign_spend}
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -659,7 +611,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -668,7 +620,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -677,7 +629,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} BY ALL OTHER
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -686,7 +638,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -751,7 +703,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:treemap
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -827,7 +779,7 @@ interactions:
                         rotation: auto
                   version: '2'
                   visualizationUrl: local:combo2
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -906,7 +858,7 @@ interactions:
                         direction: asc
                   version: '2'
                   visualizationUrl: local:table
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -965,7 +917,7 @@ interactions:
                       stackMeasuresToPercent: true
                   version: '2'
                   visualizationUrl: local:area
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -1022,7 +974,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:treemap
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -1075,7 +1027,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:donut
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -1150,7 +1102,7 @@ interactions:
                           visible: false
                   version: '2'
                   visualizationUrl: local:column
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -1207,7 +1159,7 @@ interactions:
                         enabled: true
                   version: '2'
                   visualizationUrl: local:scatter
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -1306,7 +1258,7 @@ interactions:
                         direction: asc
                   version: '2'
                   visualizationUrl: local:table
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -1362,7 +1314,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:line
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -1401,7 +1353,7 @@ interactions:
                   properties: {}
                   version: '2'
                   visualizationUrl: local:bar
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -1457,7 +1409,7 @@ interactions:
                         min: '0'
                   version: '2'
                   visualizationUrl: local:scatter
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -1525,7 +1477,7 @@ interactions:
                         rotation: auto
                   version: '2'
                   visualizationUrl: local:combo2
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -1582,7 +1534,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:bar
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -1639,7 +1591,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:bar
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -1647,7 +1599,8 @@ interactions:
                 title: Top 10 Products
           ldm:
             datasets:
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Campaign channel id
                     id: campaign_channel_id
                     labels: []
@@ -1713,7 +1666,54 @@ interactions:
                 tags:
                   - Campaign channels
                 title: Campaign channels
-              - attributes:
+              - aggregatedFacts:
+                  - description: Budget Agg
+                    id: budget_agg
+                    sourceColumn: budget
+                    sourceColumnDataType: INT
+                    sourceFactReference:
+                      operation: SUM
+                      reference:
+                        id: budget
+                        type: fact
+                    tags:
+                      - Campaign channels per category
+                attributes:
+                  - description: Category Agg
+                    id: campaign_channels.category_agg
+                    labels: []
+                    sourceColumn: category
+                    sourceColumnDataType: STRING
+                    tags:
+                      - Campaign channels
+                    title: Category
+                description: Campaign channels per categories
+                facts: []
+                grain:
+                  - id: campaign_channels.category_agg
+                    type: attribute
+                id: campaign_channels_per_category
+                precedence: 1
+                references:
+                  - identifier:
+                      id: campaign_channels
+                      type: dataset
+                    multivalue: false
+                    sources:
+                      - column: campaign_channel_category
+                        dataType: STRING
+                        target:
+                          id: campaign_channel_id
+                          type: attribute
+                sql:
+                  dataSourceId: demo-test-ds
+                  statement: SELECT category, SUM(budget) FROM campaign_channels GROUP
+                    BY category
+                tags:
+                  - Campaign channels per category
+                title: Campaign channels per category
+              - aggregatedFacts: []
+                attributes:
                   - description: Campaign id
                     id: campaign_id
                     labels: []
@@ -1747,7 +1747,8 @@ interactions:
                 tags:
                   - Campaigns
                 title: Campaigns
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Customer id
                     id: customer_id
                     labels: []
@@ -1804,7 +1805,8 @@ interactions:
                 tags:
                   - Customers
                 title: Customers
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Order id
                     id: order_id
                     labels: []
@@ -1911,7 +1913,8 @@ interactions:
                     filterId:
                       id: wdf__region
                       type: workspaceDataFilter
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Product id
                     id: product_id
                     labels: []
@@ -1994,57 +1997,34 @@ interactions:
         code: 302
         message: Found
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '0'
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
         DATE: *id001
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Location:
           - /api/v1/entities/admin/organizations/default
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
-        Server:
-          - nginx
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:48 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+        X-Xss-Protection:
+          - 1; mode=block
       body:
         string: ''
   - request:
@@ -2063,57 +2043,34 @@ interactions:
         code: 200
         message: OK
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
-          - '275'
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
+          - '255'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
-        Server:
-          - nginx
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:48 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+        X-Xss-Protection:
+          - 1; mode=block
       body:
         string:
           data:
@@ -2122,8 +2079,7 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              allowedOrigins: []
-              oauthClientId: 5bb276be-d7d9-4b4c-85ab-57710f158448
+              oauthClientId: 91a51c5f-b767-495b-bdfa-4951d56d66b7
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -2144,53 +2100,30 @@ interactions:
         code: 200
         message: OK
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - max-age=5, private
-        Connection:
-          - keep-alive
         Content-Length:
           - '162'
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Referrer-Policy:
-          - no-referrer
-        Server:
-          - nginx
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:48 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+        X-Xss-Protection:
+          - 1; mode=block
       body:
         string:
           data:
@@ -2218,59 +2151,34 @@ interactions:
         code: 200
         message: OK
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
+        Content-Length:
+          - '38311'
         Content-Type:
           - application/json
         DATE: *id001
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
-        Server:
-          - nginx
-        Transfer-Encoding:
-          - chunked
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-        content-length:
-          - '37148'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:48 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+        X-Xss-Protection:
+          - 1; mode=block
       body:
         string:
           analytics:
@@ -2323,7 +2231,7 @@ interactions:
                               drills: []
                               properties: {}
                   version: '2'
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -2366,7 +2274,7 @@ interactions:
                           type: dashboardPlugin
                       version: '2'
                   version: '2'
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -2516,7 +2424,7 @@ interactions:
                               drills: []
                               properties: {}
                   version: '2'
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -2528,7 +2436,7 @@ interactions:
               - content:
                   url: https://www.example.com
                   version: '2'
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -2538,7 +2446,7 @@ interactions:
               - content:
                   url: https://www.example.com
                   version: '2'
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -2588,7 +2496,7 @@ interactions:
               - content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -2597,7 +2505,7 @@ interactions:
               - content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/order_id})
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -2607,7 +2515,7 @@ interactions:
                   format: '#,##0'
                   maql: 'SELECT {metric/amount_of_active_customers} WHERE (SELECT
                     {metric/revenue} BY {attribute/customer_id}) >  10000 '
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -2617,7 +2525,7 @@ interactions:
                   format: '#,##0.00'
                   maql: SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -2627,7 +2535,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT SUM({fact/spend})
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -2636,7 +2544,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT SUM({fact/price}*{fact/quantity})
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -2645,7 +2553,7 @@ interactions:
               - content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / {metric/total_revenue}
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -2655,7 +2563,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -2665,7 +2573,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -2675,7 +2583,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -2685,7 +2593,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -2695,7 +2603,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
                     ALL OTHER)
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -2705,7 +2613,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL
                     {attribute/product_id})
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -2715,7 +2623,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -2726,7 +2634,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Clothing")
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -2736,7 +2644,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ( "Electronics")
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -2746,7 +2654,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Home")
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -2756,7 +2664,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Outdoor")
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -2765,7 +2673,7 @@ interactions:
               - content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -2774,7 +2682,7 @@ interactions:
               - content:
                   format: $#,##0.0
                   maql: SELECT {metric/revenue} / {metric/campaign_spend}
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -2783,7 +2691,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -2792,7 +2700,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -2801,7 +2709,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} BY ALL OTHER
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -2810,7 +2718,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -2875,7 +2783,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:treemap
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -2951,7 +2859,7 @@ interactions:
                         rotation: auto
                   version: '2'
                   visualizationUrl: local:combo2
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -3030,7 +2938,7 @@ interactions:
                         direction: asc
                   version: '2'
                   visualizationUrl: local:table
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -3089,7 +2997,7 @@ interactions:
                       stackMeasuresToPercent: true
                   version: '2'
                   visualizationUrl: local:area
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -3146,7 +3054,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:treemap
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -3199,7 +3107,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:donut
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -3274,7 +3182,7 @@ interactions:
                           visible: false
                   version: '2'
                   visualizationUrl: local:column
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -3331,7 +3239,7 @@ interactions:
                         enabled: true
                   version: '2'
                   visualizationUrl: local:scatter
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -3430,7 +3338,7 @@ interactions:
                         direction: asc
                   version: '2'
                   visualizationUrl: local:table
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -3486,7 +3394,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:line
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -3525,7 +3433,7 @@ interactions:
                   properties: {}
                   version: '2'
                   visualizationUrl: local:bar
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -3581,7 +3489,7 @@ interactions:
                         min: '0'
                   version: '2'
                   visualizationUrl: local:scatter
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -3649,7 +3557,7 @@ interactions:
                         rotation: auto
                   version: '2'
                   visualizationUrl: local:combo2
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -3706,7 +3614,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:bar
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -3763,7 +3671,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:bar
-                createdAt: 2024-10-07 11:15
+                createdAt: 2025-07-29 15:10
                 createdBy:
                   id: admin
                   type: user
@@ -3771,7 +3679,8 @@ interactions:
                 title: Top 10 Products
           ldm:
             datasets:
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Campaign channel id
                     id: campaign_channel_id
                     labels: []
@@ -3837,7 +3746,54 @@ interactions:
                 tags:
                   - Campaign channels
                 title: Campaign channels
-              - attributes:
+              - aggregatedFacts:
+                  - description: Budget Agg
+                    id: budget_agg
+                    sourceColumn: budget
+                    sourceColumnDataType: INT
+                    sourceFactReference:
+                      operation: SUM
+                      reference:
+                        id: budget
+                        type: fact
+                    tags:
+                      - Campaign channels per category
+                attributes:
+                  - description: Category Agg
+                    id: campaign_channels.category_agg
+                    labels: []
+                    sourceColumn: category
+                    sourceColumnDataType: STRING
+                    tags:
+                      - Campaign channels
+                    title: Category
+                description: Campaign channels per categories
+                facts: []
+                grain:
+                  - id: campaign_channels.category_agg
+                    type: attribute
+                id: campaign_channels_per_category
+                precedence: 1
+                references:
+                  - identifier:
+                      id: campaign_channels
+                      type: dataset
+                    multivalue: false
+                    sources:
+                      - column: campaign_channel_category
+                        dataType: STRING
+                        target:
+                          id: campaign_channel_id
+                          type: attribute
+                sql:
+                  dataSourceId: demo-test-ds
+                  statement: SELECT category, SUM(budget) FROM campaign_channels GROUP
+                    BY category
+                tags:
+                  - Campaign channels per category
+                title: Campaign channels per category
+              - aggregatedFacts: []
+                attributes:
                   - description: Campaign id
                     id: campaign_id
                     labels: []
@@ -3871,7 +3827,8 @@ interactions:
                 tags:
                   - Campaigns
                 title: Campaigns
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Customer id
                     id: customer_id
                     labels: []
@@ -3928,7 +3885,8 @@ interactions:
                 tags:
                   - Customers
                 title: Customers
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Order id
                     id: order_id
                     labels: []
@@ -4035,7 +3993,8 @@ interactions:
                     filterId:
                       id: wdf__region
                       type: workspaceDataFilter
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Product id
                     id: product_id
                     labels: []
@@ -4120,60 +4079,37 @@ interactions:
         code: 404
         message: Not Found
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - max-age=5, private
-        Connection:
-          - keep-alive
         Content-Length:
           - '172'
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/problem+json
         DATE: *id001
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Referrer-Policy:
-          - no-referrer
-        Server:
-          - nginx
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:48 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+        X-Xss-Protection:
+          - 1; mode=block
       body:
         string:
           detail: The requested endpoint does not exist or you do not have permission
             to access it.
           status: 404
           title: Not Found
-          traceId: 6703c2e4d5b3bb9185490fad4dc5efcc
+          traceId: ed5f33f3f06eac97bfaf04e41a60b98f
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces
@@ -4199,57 +4135,34 @@ interactions:
         code: 201
         message: Created
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '154'
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
-        Server:
-          - nginx
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:48 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+        X-Xss-Protection:
+          - 1; mode=block
       body:
         string:
           data:
@@ -4277,59 +4190,34 @@ interactions:
         code: 200
         message: OK
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
+        Content-Length:
+          - '603'
         Content-Type:
           - application/json
         DATE: *id001
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
-        Server:
-          - nginx
-        Transfer-Encoding:
-          - chunked
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-        content-length:
-          - '603'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:48 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+        X-Xss-Protection:
+          - 1; mode=block
       body:
         string:
           workspaceDataFilters:
@@ -4369,6 +4257,9 @@ interactions:
           - columnName: wdf__region
             id: wdf__region
             title: Customer region
+            workspace:
+              id: demo
+              type: workspace
             workspaceDataFilterSettings:
               - filterValues:
                   - West
@@ -4377,12 +4268,12 @@ interactions:
                 workspace:
                   id: demo_west
                   type: workspace
-            workspace:
-              id: demo
-              type: workspace
           - columnName: wdf__state
             id: wdf__state
             title: Customer state
+            workspace:
+              id: demo_west
+              type: workspace
             workspaceDataFilterSettings:
               - filterValues:
                   - California
@@ -4391,16 +4282,13 @@ interactions:
                 workspace:
                   id: demo_west_california
                   type: workspace
-            workspace:
-              id: demo_west
-              type: workspace
           - columnName: wdf__region
             id: wdf__region_demo_cs
             title: Customer region
-            workspaceDataFilterSettings: []
             workspace:
               id: demo_cs
               type: workspace
+            workspaceDataFilterSettings: []
       headers:
         Accept-Encoding:
           - br, gzip, deflate
@@ -4415,53 +4303,30 @@ interactions:
         code: 204
         message: No Content
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
         DATE: *id001
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
-        Server:
-          - nginx
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:48 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+        X-Xss-Protection:
+          - 1; mode=block
       body:
         string: ''
   - request:
@@ -4527,6 +4392,7 @@ interactions:
                   description: Spend
                   tags:
                     - Campaign channels
+              aggregatedFacts: []
               dataSourceTableId:
                 dataSourceId: demo-test-ds
                 id: campaign_channels
@@ -4536,6 +4402,52 @@ interactions:
                   - campaign_channels
               tags:
                 - Campaign channels
+            - grain:
+                - id: campaign_channels.category_agg
+                  type: attribute
+              id: campaign_channels_per_category
+              references:
+                - identifier:
+                    id: campaign_channels
+                    type: dataset
+                  multivalue: false
+                  sources:
+                    - column: campaign_channel_category
+                      target:
+                        id: campaign_channel_id
+                        type: attribute
+                      dataType: STRING
+              title: Campaign channels per category
+              description: Campaign channels per categories
+              attributes:
+                - id: campaign_channels.category_agg
+                  labels: []
+                  sourceColumn: category
+                  title: Category
+                  sourceColumnDataType: STRING
+                  description: Category Agg
+                  tags:
+                    - Campaign channels
+              facts: []
+              aggregatedFacts:
+                - id: budget_agg
+                  sourceColumn: budget
+                  sourceFactReference:
+                    operation: SUM
+                    reference:
+                      id: budget
+                      type: fact
+                  sourceColumnDataType: INT
+                  description: Budget Agg
+                  tags:
+                    - Campaign channels per category
+              precedence: 1
+              sql:
+                dataSourceId: demo-test-ds
+                statement: SELECT category, SUM(budget) FROM campaign_channels GROUP
+                  BY category
+              tags:
+                - Campaign channels per category
             - grain:
                 - id: campaign_id
                   type: attribute
@@ -4561,6 +4473,7 @@ interactions:
                   tags:
                     - Campaigns
               facts: []
+              aggregatedFacts: []
               dataSourceTableId:
                 dataSourceId: demo-test-ds
                 id: campaigns
@@ -4618,6 +4531,7 @@ interactions:
                   tags:
                     - Customers
               facts: []
+              aggregatedFacts: []
               dataSourceTableId:
                 dataSourceId: demo-test-ds
                 id: customers
@@ -4714,6 +4628,7 @@ interactions:
                   description: Quantity
                   tags:
                     - Order lines
+              aggregatedFacts: []
               dataSourceTableId:
                 dataSourceId: demo-test-ds
                 id: order_lines
@@ -4767,6 +4682,7 @@ interactions:
                   tags:
                     - Products
               facts: []
+              aggregatedFacts: []
               dataSourceTableId:
                 dataSourceId: demo-test-ds
                 id: products
@@ -4852,11 +4768,11 @@ interactions:
                 version: '2'
               id: campaign
               title: Campaign
-              description: ''
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
+              description: ''
               permissions:
                 - name: VIEW
                   assigneeRule:
@@ -4895,7 +4811,7 @@ interactions:
                 version: '2'
               id: dashboard_plugin
               title: Dashboard plugin
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
@@ -5045,11 +4961,11 @@ interactions:
                 version: '2'
               id: product_and_category
               title: Product & Category
-              description: ''
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
+              description: ''
           analyticalDashboardExtensions: []
           attributeHierarchies: []
           dashboardPlugins:
@@ -5058,21 +4974,21 @@ interactions:
                 version: '2'
               id: dashboard_plugin_1
               title: dashboard_plugin_1
-              description: Testing record dashboard_plugin_1
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
+              description: Testing record dashboard_plugin_1
             - content:
                 url: https://www.example.com
                 version: '2'
               id: dashboard_plugin_2
               title: dashboard_plugin_2
-              description: Testing record dashboard_plugin_2
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
+              description: Testing record dashboard_plugin_2
           filterContexts:
             - content:
                 filters:
@@ -5117,7 +5033,7 @@ interactions:
                 maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
               id: amount_of_active_customers
               title: '# of Active Customers'
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
@@ -5126,7 +5042,7 @@ interactions:
                 maql: SELECT COUNT({attribute/order_id})
               id: amount_of_orders
               title: '# of Orders'
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
@@ -5136,7 +5052,7 @@ interactions:
                   BY {attribute/customer_id}) >  10000 '
               id: amount_of_top_customers
               title: '# of Top Customers'
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
@@ -5146,17 +5062,17 @@ interactions:
                   IN ("Returned", "Canceled"))
               id: amount_of_valid_orders
               title: '# of Valid Orders'
-              description: ''
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
+              description: ''
             - content:
                 format: $#,##0
                 maql: SELECT SUM({fact/spend})
               id: campaign_spend
               title: Campaign Spend
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
@@ -5165,7 +5081,7 @@ interactions:
                 maql: SELECT SUM({fact/price}*{fact/quantity})
               id: order_amount
               title: Order Amount
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
@@ -5174,7 +5090,7 @@ interactions:
                 maql: SELECT {metric/revenue} / {metric/total_revenue}
               id: percent_revenue
               title: '% Revenue'
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
@@ -5184,7 +5100,7 @@ interactions:
                   \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_customers
               title: '% Revenue from Top 10 Customers'
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
@@ -5194,7 +5110,7 @@ interactions:
                   \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_percent_customers
               title: '% Revenue from Top 10% Customers'
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
@@ -5204,7 +5120,7 @@ interactions:
                   \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_percent_products
               title: '% Revenue from Top 10% Products'
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
@@ -5214,7 +5130,7 @@ interactions:
                   \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_products
               title: '% Revenue from Top 10 Products'
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
@@ -5224,7 +5140,7 @@ interactions:
                   ALL OTHER)
               id: percent_revenue_in_category
               title: '% Revenue in Category'
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
@@ -5233,7 +5149,7 @@ interactions:
                 maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL {attribute/product_id})
               id: percent_revenue_per_product
               title: '% Revenue per Product'
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
@@ -5243,17 +5159,17 @@ interactions:
                   IN ("Returned", "Canceled"))
               id: revenue
               title: Revenue
-              description: ''
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
+              description: ''
             - content:
                 format: $#,##0
                 maql: SELECT {metric/revenue} WHERE {label/products.category} IN ("Clothing")
               id: revenue-clothing
               title: Revenue (Clothing)
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
@@ -5263,7 +5179,7 @@ interactions:
                   "Electronics")
               id: revenue-electronic
               title: Revenue (Electronic)
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
@@ -5272,7 +5188,7 @@ interactions:
                 maql: SELECT {metric/revenue} WHERE {label/products.category} IN ("Home")
               id: revenue-home
               title: Revenue (Home)
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
@@ -5281,7 +5197,7 @@ interactions:
                 maql: SELECT {metric/revenue} WHERE {label/products.category} IN ("Outdoor")
               id: revenue-outdoor
               title: Revenue (Outdoor)
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
@@ -5290,7 +5206,7 @@ interactions:
                 maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
               id: revenue_per_customer
               title: Revenue per Customer
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
@@ -5299,7 +5215,7 @@ interactions:
                 maql: SELECT {metric/revenue} / {metric/campaign_spend}
               id: revenue_per_dollar_spent
               title: Revenue per Dollar Spent
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
@@ -5308,7 +5224,7 @@ interactions:
                 maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
               id: revenue_top_10
               title: Revenue / Top 10
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
@@ -5317,7 +5233,7 @@ interactions:
                 maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
               id: revenue_top_10_percent
               title: Revenue / Top 10%
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
@@ -5326,7 +5242,7 @@ interactions:
                 maql: SELECT {metric/revenue} BY ALL OTHER
               id: total_revenue
               title: Total Revenue
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
@@ -5335,7 +5251,7 @@ interactions:
                 maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
               id: total_revenue-no_filters
               title: Total Revenue (No Filters)
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
@@ -5400,7 +5316,7 @@ interactions:
                 visualizationUrl: local:treemap
               id: campaign_spend
               title: Campaign Spend
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
@@ -5476,7 +5392,7 @@ interactions:
                 visualizationUrl: local:combo2
               id: customers_trend
               title: Customers Trend
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
@@ -5555,7 +5471,7 @@ interactions:
                 visualizationUrl: local:table
               id: percent_revenue_per_product_by_customer_and_category
               title: '% Revenue per Product by Customer and Category'
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
@@ -5614,7 +5530,7 @@ interactions:
                 visualizationUrl: local:area
               id: percentage_of_customers_by_region
               title: Percentage of Customers by Region
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
@@ -5671,7 +5587,7 @@ interactions:
                 visualizationUrl: local:treemap
               id: product_breakdown
               title: Product Breakdown
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
@@ -5724,7 +5640,7 @@ interactions:
                 visualizationUrl: local:donut
               id: product_categories_pie_chart
               title: Product Categories Pie Chart
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
@@ -5799,7 +5715,7 @@ interactions:
                 visualizationUrl: local:column
               id: product_revenue_comparison-over_previous_period
               title: Product Revenue Comparison (over previous period)
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
@@ -5856,7 +5772,7 @@ interactions:
                 visualizationUrl: local:scatter
               id: product_saleability
               title: Product Saleability
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
@@ -5955,7 +5871,7 @@ interactions:
                 visualizationUrl: local:table
               id: revenue_and_quantity_by_product_and_category
               title: Revenue and Quantity by Product and Category
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
@@ -6011,7 +5927,7 @@ interactions:
                 visualizationUrl: local:line
               id: revenue_by_category_trend
               title: Revenue by Category Trend
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
@@ -6050,7 +5966,7 @@ interactions:
                 visualizationUrl: local:bar
               id: revenue_by_product
               title: Revenue by Product
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
@@ -6106,7 +6022,7 @@ interactions:
                 visualizationUrl: local:scatter
               id: revenue_per_usd_vs_spend_by_campaign
               title: Revenue per $ vs Spend by Campaign
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
@@ -6174,7 +6090,7 @@ interactions:
                 visualizationUrl: local:combo2
               id: revenue_trend
               title: Revenue Trend
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
@@ -6231,7 +6147,7 @@ interactions:
                 visualizationUrl: local:bar
               id: top_10_customers
               title: Top 10 Customers
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
@@ -6288,7 +6204,7 @@ interactions:
                 visualizationUrl: local:bar
               id: top_10_products
               title: Top 10 Products
-              createdAt: 2024-10-07 11:15
+              createdAt: 2025-07-29 15:10
               createdBy:
                 id: admin
                 type: user
@@ -6307,53 +6223,30 @@ interactions:
         code: 204
         message: No Content
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
         DATE: *id001
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
-        Server:
-          - nginx
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:49 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+        X-Xss-Protection:
+          - 1; mode=block
       body:
         string: ''
   - request:
@@ -6372,53 +6265,30 @@ interactions:
         code: 204
         message: No Content
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
         DATE: *id001
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
-        Server:
-          - nginx
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:49 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+        X-Xss-Protection:
+          - 1; mode=block
       body:
         string: ''
   - request:
@@ -6437,53 +6307,30 @@ interactions:
         code: 204
         message: No Content
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
         DATE: *id001
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
-        Server:
-          - nginx
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:49 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+        X-Xss-Protection:
+          - 1; mode=block
       body:
         string: ''
   - request:
@@ -6504,64 +6351,41 @@ interactions:
         code: 404
         message: Not Found
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '172'
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/problem+json
         DATE: *id001
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
-        Server:
-          - nginx
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:49 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+        X-Xss-Protection:
+          - 1; mode=block
       body:
         string:
           detail: The requested endpoint does not exist or you do not have permission
             to access it.
           status: 404
           title: Not Found
-          traceId: 6703c2e5ec8ffda67ecf10957b5f2247
+          traceId: fbbb542a70bbc3266505c7cff1c2f5fe
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces/demo_cs/workspaceSettings
@@ -6589,57 +6413,34 @@ interactions:
         code: 201
         message: Created
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '273'
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
-        Server:
-          - nginx
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:49 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+        X-Xss-Protection:
+          - 1; mode=block
       body:
         string:
           data:
@@ -6673,64 +6474,41 @@ interactions:
         code: 404
         message: Not Found
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '172'
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/problem+json
         DATE: *id001
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
-        Server:
-          - nginx
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:49 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+        X-Xss-Protection:
+          - 1; mode=block
       body:
         string:
           detail: The requested endpoint does not exist or you do not have permission
             to access it.
           status: 404
           title: Not Found
-          traceId: 6703c2e57dd7039f836385649f133fc5
+          traceId: f45624e29fef62b00c6cec8d765f970a
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces/demo_cs/workspaceSettings
@@ -6758,57 +6536,34 @@ interactions:
         code: 201
         message: Created
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '292'
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
-        Server:
-          - nginx
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:49 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+        X-Xss-Protection:
+          - 1; mode=block
       body:
         string:
           data:
@@ -6832,6 +6587,9 @@ interactions:
           - columnName: wdf__region
             id: wdf__region
             title: Customer region
+            workspace:
+              id: demo
+              type: workspace
             workspaceDataFilterSettings:
               - filterValues:
                   - West
@@ -6840,12 +6598,12 @@ interactions:
                 workspace:
                   id: demo_west
                   type: workspace
-            workspace:
-              id: demo
-              type: workspace
           - columnName: wdf__state
             id: wdf__state
             title: Customer state
+            workspace:
+              id: demo_west
+              type: workspace
             workspaceDataFilterSettings:
               - filterValues:
                   - California
@@ -6854,13 +6612,12 @@ interactions:
                 workspace:
                   id: demo_west_california
                   type: workspace
-            workspace:
-              id: demo_west
-              type: workspace
         workspaces:
           - id: demo
             name: Demo
+            automations: []
             customApplicationSettings: []
+            filterViews: []
             hierarchyPermissions:
               - assignee:
                   id: demo2
@@ -8260,6 +8017,50 @@ interactions:
                     tags:
                       - Campaign channels
                   - grain:
+                      - id: campaign_channels.category_agg
+                        type: attribute
+                    id: campaign_channels_per_category
+                    references:
+                      - identifier:
+                          id: campaign_channels
+                          type: dataset
+                        multivalue: false
+                        sourceColumns:
+                          - campaign_channel_category
+                        sourceColumnDataTypes:
+                          - STRING
+                    title: Campaign channels per category
+                    attributes:
+                      - id: campaign_channels.category_agg
+                        labels: []
+                        sourceColumn: category
+                        title: Category
+                        description: Category Agg
+                        sourceColumnDataType: STRING
+                        tags:
+                          - Campaign channels
+                    description: Campaign channels per categories
+                    facts: []
+                    aggregatedFacts:
+                      - id: budget_agg
+                        sourceColumn: budget
+                        sourceFactReference:
+                          operation: SUM
+                          reference:
+                            id: budget
+                            type: fact
+                        description: Budget Agg
+                        sourceColumnDataType: INT
+                        tags:
+                          - Campaign channels per category
+                    precedence: 1
+                    tags:
+                      - Campaign channels per category
+                    sql:
+                      dataSourceId: demo-test-ds
+                      statement: SELECT category, SUM(budget) FROM campaign_channels
+                        GROUP BY category
+                  - grain:
                       - id: campaign_id
                         type: attribute
                     id: campaigns
@@ -8535,11 +8336,11 @@ interactions:
                 name: VIEW
             settings: []
             userDataFilters: []
-            automations: []
-            filterViews: []
           - id: demo_west
             name: Demo West
+            automations: []
             customApplicationSettings: []
+            filterViews: []
             hierarchyPermissions: []
             model:
               analytics:
@@ -8573,11 +8374,11 @@ interactions:
             permissions: []
             settings: []
             userDataFilters: []
-            automations: []
-            filterViews: []
           - id: demo_west_california
             name: Demo West California
+            automations: []
             customApplicationSettings: []
+            filterViews: []
             hierarchyPermissions: []
             model:
               analytics:
@@ -8598,8 +8399,6 @@ interactions:
             permissions: []
             settings: []
             userDataFilters: []
-            automations: []
-            filterViews: []
       headers:
         Accept-Encoding:
           - br, gzip, deflate
@@ -8614,52 +8413,29 @@ interactions:
         code: 204
         message: No Content
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
         DATE: *id001
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
-        Server:
-          - nginx
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:49 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+        X-Xss-Protection:
+          - 1; mode=block
       body:
         string: ''

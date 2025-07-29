@@ -99,14 +99,17 @@ def test_load_and_put_declarative_workspaces(test_config):
         workspaces_e = CatalogDeclarativeWorkspaces.from_dict(data)
 
     try:
-        _empty_workspaces(sdk)
+        # Must create the second DS, backend validates when putting the re-mapped LDM
+        create_second_data_source(sdk, test_config["data_source2"])
 
+        _empty_workspaces(sdk)
         sdk.catalog_workspace.load_and_put_declarative_workspaces(path)
         workspaces_o = sdk.catalog_workspace.get_declarative_workspaces(exclude=["ACTIVITY_INFO"])
         assert workspaces_e == workspaces_o
         assert workspaces_e.to_dict(camel_case=True) == workspaces_o.to_dict(camel_case=True)
     finally:
         _refresh_workspaces(sdk)
+        delete_data_source(sdk, test_config["data_source2"])
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_store_declarative_workspaces.yaml"))
@@ -647,6 +650,8 @@ def test_load_and_put_declarative_workspace(test_config):
     )
 
     try:
+        # Must create the second DS, backend validates when putting the re-mapped LDM
+        create_second_data_source(sdk, test_config["data_source2"])
         _empty_workspace(sdk, workspace_id=test_config["workspace"])
 
         sdk.catalog_workspace.load_and_put_declarative_workspace(
@@ -659,6 +664,7 @@ def test_load_and_put_declarative_workspace(test_config):
         assert workspace_e.to_dict(camel_case=True) == workspace_o.to_dict(camel_case=True)
     finally:
         _refresh_workspaces(sdk)
+        delete_data_source(sdk, test_config["data_source2"])
 
 
 def create_second_data_source(sdk: GoodDataSdk, ds_id: str) -> None:
