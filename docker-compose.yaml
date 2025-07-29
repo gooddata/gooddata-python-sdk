@@ -24,6 +24,7 @@ services:
       GDC_FEATURES_VALUES_ENABLE_SCHEDULING: "true"
       GDC_FEATURES_VALUES_ENABLE_ALERTING: "true"
       GDC_FEATURES_VALUES_ENABLE_SMTP: "true"
+      GDC_FEATURES_VALUES_ENABLE_PRE_AGGREGATION_DATASETS: "true"
 #      In the case of failing tests (HTTP 500), you can increase the memory for the metadata API
 #      METADATA_API_JAVA_OPTS: "-Xmx1024m -Xms512m"
   gooddata-fdw:

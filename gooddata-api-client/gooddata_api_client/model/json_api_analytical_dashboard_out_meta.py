@@ -31,10 +31,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.json_api_aggregated_fact_out_meta_origin import JsonApiAggregatedFactOutMetaOrigin
     from gooddata_api_client.model.json_api_analytical_dashboard_out_meta_access_info import JsonApiAnalyticalDashboardOutMetaAccessInfo
-    from gooddata_api_client.model.json_api_analytical_dashboard_out_meta_origin import JsonApiAnalyticalDashboardOutMetaOrigin
+    globals()['JsonApiAggregatedFactOutMetaOrigin'] = JsonApiAggregatedFactOutMetaOrigin
     globals()['JsonApiAnalyticalDashboardOutMetaAccessInfo'] = JsonApiAnalyticalDashboardOutMetaAccessInfo
-    globals()['JsonApiAnalyticalDashboardOutMetaOrigin'] = JsonApiAnalyticalDashboardOutMetaOrigin
 
 
 class JsonApiAnalyticalDashboardOutMeta(ModelNormal):
@@ -96,7 +96,7 @@ class JsonApiAnalyticalDashboardOutMeta(ModelNormal):
         lazy_import()
         return {
             'access_info': (JsonApiAnalyticalDashboardOutMetaAccessInfo,),  # noqa: E501
-            'origin': (JsonApiAnalyticalDashboardOutMetaOrigin,),  # noqa: E501
+            'origin': (JsonApiAggregatedFactOutMetaOrigin,),  # noqa: E501
             'permissions': ([str],),  # noqa: E501
         }
 
@@ -153,7 +153,7 @@ class JsonApiAnalyticalDashboardOutMeta(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             access_info (JsonApiAnalyticalDashboardOutMetaAccessInfo): [optional]  # noqa: E501
-            origin (JsonApiAnalyticalDashboardOutMetaOrigin): [optional]  # noqa: E501
+            origin (JsonApiAggregatedFactOutMetaOrigin): [optional]  # noqa: E501
             permissions ([str]): List of valid permissions for a logged-in user.. [optional]  # noqa: E501
         """
 
@@ -241,7 +241,7 @@ class JsonApiAnalyticalDashboardOutMeta(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             access_info (JsonApiAnalyticalDashboardOutMetaAccessInfo): [optional]  # noqa: E501
-            origin (JsonApiAnalyticalDashboardOutMetaOrigin): [optional]  # noqa: E501
+            origin (JsonApiAggregatedFactOutMetaOrigin): [optional]  # noqa: E501
             permissions ([str]): List of valid permissions for a logged-in user.. [optional]  # noqa: E501
         """
 

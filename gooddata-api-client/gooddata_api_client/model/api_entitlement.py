@@ -83,6 +83,7 @@ class ApiEntitlement(ModelNormal):
             'SCHEDULEDACTIONMINIMUMRECURRENCEMINUTES': "ScheduledActionMinimumRecurrenceMinutes",
             'FEDERATEDIDENTITYMANAGEMENT': "FederatedIdentityManagement",
             'AUDITLOGGING': "AuditLogging",
+            'CONTROLLEDFEATUREROLLOUT': "ControlledFeatureRollout",
         },
     }
 

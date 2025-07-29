@@ -178,6 +178,7 @@ from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.da
 )
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.dataset.dataset import (
     CatalogDataSourceTableIdentifier,
+    CatalogDeclarativeAggregatedFact,
     CatalogDeclarativeAttribute,
     CatalogDeclarativeDataset,
     CatalogDeclarativeDatasetSql,

@@ -31,7 +31,8 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_attribute_hierarchy_out_meta import JsonApiAttributeHierarchyOutMeta
+    from gooddata_api_client.model.json_api_aggregated_fact_out_meta import JsonApiAggregatedFactOutMeta
+    from gooddata_api_client.model.json_api_aggregated_fact_out_with_links import JsonApiAggregatedFactOutWithLinks
     from gooddata_api_client.model.json_api_attribute_out_with_links import JsonApiAttributeOutWithLinks
     from gooddata_api_client.model.json_api_dataset_out_with_links import JsonApiDatasetOutWithLinks
     from gooddata_api_client.model.json_api_fact_out_with_links import JsonApiFactOutWithLinks
@@ -39,7 +40,8 @@ def lazy_import():
     from gooddata_api_client.model.json_api_workspace_data_filter_in_relationships import JsonApiWorkspaceDataFilterInRelationships
     from gooddata_api_client.model.json_api_workspace_data_filter_out_with_links import JsonApiWorkspaceDataFilterOutWithLinks
     from gooddata_api_client.model.object_links import ObjectLinks
-    globals()['JsonApiAttributeHierarchyOutMeta'] = JsonApiAttributeHierarchyOutMeta
+    globals()['JsonApiAggregatedFactOutMeta'] = JsonApiAggregatedFactOutMeta
+    globals()['JsonApiAggregatedFactOutWithLinks'] = JsonApiAggregatedFactOutWithLinks
     globals()['JsonApiAttributeOutWithLinks'] = JsonApiAttributeOutWithLinks
     globals()['JsonApiDatasetOutWithLinks'] = JsonApiDatasetOutWithLinks
     globals()['JsonApiFactOutWithLinks'] = JsonApiFactOutWithLinks
@@ -110,7 +112,7 @@ class JsonApiDatasetOutIncludes(ModelComposed):
         """
         lazy_import()
         return {
-            'meta': (JsonApiAttributeHierarchyOutMeta,),  # noqa: E501
+            'meta': (JsonApiAggregatedFactOutMeta,),  # noqa: E501
             'relationships': (JsonApiWorkspaceDataFilterInRelationships,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
             'attributes': (JsonApiWorkspaceDataFilterInAttributes,),  # noqa: E501
@@ -171,7 +173,7 @@ class JsonApiDatasetOutIncludes(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            meta (JsonApiAttributeHierarchyOutMeta): [optional]  # noqa: E501
+            meta (JsonApiAggregatedFactOutMeta): [optional]  # noqa: E501
             relationships (JsonApiWorkspaceDataFilterInRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
             attributes (JsonApiWorkspaceDataFilterInAttributes): [optional]  # noqa: E501
@@ -280,7 +282,7 @@ class JsonApiDatasetOutIncludes(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            meta (JsonApiAttributeHierarchyOutMeta): [optional]  # noqa: E501
+            meta (JsonApiAggregatedFactOutMeta): [optional]  # noqa: E501
             relationships (JsonApiWorkspaceDataFilterInRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
             attributes (JsonApiWorkspaceDataFilterInAttributes): [optional]  # noqa: E501
@@ -357,6 +359,7 @@ class JsonApiDatasetOutIncludes(ModelComposed):
           'allOf': [
           ],
           'oneOf': [
+              JsonApiAggregatedFactOutWithLinks,
               JsonApiAttributeOutWithLinks,
               JsonApiDatasetOutWithLinks,
               JsonApiFactOutWithLinks,

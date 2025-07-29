@@ -31,13 +31,13 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.json_api_aggregated_fact_out_relationships_dataset import JsonApiAggregatedFactOutRelationshipsDataset
     from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_labels import JsonApiAnalyticalDashboardOutRelationshipsLabels
     from gooddata_api_client.model.json_api_attribute_out_relationships_attribute_hierarchies import JsonApiAttributeOutRelationshipsAttributeHierarchies
-    from gooddata_api_client.model.json_api_attribute_out_relationships_dataset import JsonApiAttributeOutRelationshipsDataset
     from gooddata_api_client.model.json_api_attribute_out_relationships_default_view import JsonApiAttributeOutRelationshipsDefaultView
+    globals()['JsonApiAggregatedFactOutRelationshipsDataset'] = JsonApiAggregatedFactOutRelationshipsDataset
     globals()['JsonApiAnalyticalDashboardOutRelationshipsLabels'] = JsonApiAnalyticalDashboardOutRelationshipsLabels
     globals()['JsonApiAttributeOutRelationshipsAttributeHierarchies'] = JsonApiAttributeOutRelationshipsAttributeHierarchies
-    globals()['JsonApiAttributeOutRelationshipsDataset'] = JsonApiAttributeOutRelationshipsDataset
     globals()['JsonApiAttributeOutRelationshipsDefaultView'] = JsonApiAttributeOutRelationshipsDefaultView
 
 
@@ -95,7 +95,7 @@ class JsonApiAttributeOutRelationships(ModelNormal):
         lazy_import()
         return {
             'attribute_hierarchies': (JsonApiAttributeOutRelationshipsAttributeHierarchies,),  # noqa: E501
-            'dataset': (JsonApiAttributeOutRelationshipsDataset,),  # noqa: E501
+            'dataset': (JsonApiAggregatedFactOutRelationshipsDataset,),  # noqa: E501
             'default_view': (JsonApiAttributeOutRelationshipsDefaultView,),  # noqa: E501
             'labels': (JsonApiAnalyticalDashboardOutRelationshipsLabels,),  # noqa: E501
         }
@@ -154,7 +154,7 @@ class JsonApiAttributeOutRelationships(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             attribute_hierarchies (JsonApiAttributeOutRelationshipsAttributeHierarchies): [optional]  # noqa: E501
-            dataset (JsonApiAttributeOutRelationshipsDataset): [optional]  # noqa: E501
+            dataset (JsonApiAggregatedFactOutRelationshipsDataset): [optional]  # noqa: E501
             default_view (JsonApiAttributeOutRelationshipsDefaultView): [optional]  # noqa: E501
             labels (JsonApiAnalyticalDashboardOutRelationshipsLabels): [optional]  # noqa: E501
         """
@@ -243,7 +243,7 @@ class JsonApiAttributeOutRelationships(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             attribute_hierarchies (JsonApiAttributeOutRelationshipsAttributeHierarchies): [optional]  # noqa: E501
-            dataset (JsonApiAttributeOutRelationshipsDataset): [optional]  # noqa: E501
+            dataset (JsonApiAggregatedFactOutRelationshipsDataset): [optional]  # noqa: E501
             default_view (JsonApiAttributeOutRelationshipsDefaultView): [optional]  # noqa: E501
             labels (JsonApiAnalyticalDashboardOutRelationshipsLabels): [optional]  # noqa: E501
         """

@@ -5,6 +5,7 @@ from typing import Any, Optional, Union, cast
 
 import attr
 import attrs
+from gooddata_api_client.model.json_api_aggregated_fact_out import JsonApiAggregatedFactOut
 from gooddata_api_client.model.json_api_attribute_out import JsonApiAttributeOut
 from gooddata_api_client.model.json_api_dataset_out import JsonApiDatasetOut
 from gooddata_api_client.model.json_api_fact_out import JsonApiFactOut
@@ -92,6 +93,18 @@ class CatalogFact(AttrCatalogEntity):
     @staticmethod
     def client_class() -> Any:
         return JsonApiFactOut
+
+    def as_computable(self) -> Metric:
+        return SimpleMetric(local_id=self.id, item=self.obj_id)
+
+    # TODO - dataset?
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogAggregatedFact(AttrCatalogEntity):
+    @staticmethod
+    def client_class() -> Any:
+        return JsonApiAggregatedFactOut
 
     def as_computable(self) -> Metric:
         return SimpleMetric(local_id=self.id, item=self.obj_id)

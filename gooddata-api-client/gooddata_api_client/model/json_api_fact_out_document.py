@@ -31,11 +31,11 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.json_api_dataset_out_with_links import JsonApiDatasetOutWithLinks
     from gooddata_api_client.model.json_api_fact_out import JsonApiFactOut
-    from gooddata_api_client.model.json_api_fact_out_includes import JsonApiFactOutIncludes
     from gooddata_api_client.model.object_links import ObjectLinks
+    globals()['JsonApiDatasetOutWithLinks'] = JsonApiDatasetOutWithLinks
     globals()['JsonApiFactOut'] = JsonApiFactOut
-    globals()['JsonApiFactOutIncludes'] = JsonApiFactOutIncludes
     globals()['ObjectLinks'] = ObjectLinks
 
 
@@ -95,7 +95,7 @@ class JsonApiFactOutDocument(ModelNormal):
         lazy_import()
         return {
             'data': (JsonApiFactOut,),  # noqa: E501
-            'included': ([JsonApiFactOutIncludes],),  # noqa: E501
+            'included': ([JsonApiDatasetOutWithLinks],),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
         }
 
@@ -154,7 +154,7 @@ class JsonApiFactOutDocument(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            included ([JsonApiFactOutIncludes]): Included resources. [optional]  # noqa: E501
+            included ([JsonApiDatasetOutWithLinks]): Included resources. [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """
 
@@ -245,7 +245,7 @@ class JsonApiFactOutDocument(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            included ([JsonApiFactOutIncludes]): Included resources. [optional]  # noqa: E501
+            included ([JsonApiDatasetOutWithLinks]): Included resources. [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """
 

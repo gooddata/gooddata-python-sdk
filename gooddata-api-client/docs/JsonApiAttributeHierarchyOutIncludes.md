@@ -6,7 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **attributes** | [**JsonApiAttributeOutAttributes**](JsonApiAttributeOutAttributes.md) |  | [optional] 
 **links** | [**ObjectLinks**](ObjectLinks.md) |  | [optional] 
-**meta** | [**JsonApiAttributeHierarchyOutMeta**](JsonApiAttributeHierarchyOutMeta.md) |  | [optional] 
+**meta** | [**JsonApiAggregatedFactOutMeta**](JsonApiAggregatedFactOutMeta.md) |  | [optional] 
 **relationships** | [**JsonApiAttributeOutRelationships**](JsonApiAttributeOutRelationships.md) |  | [optional] 
 **id** | **str** | API identifier of an object | [optional] 
 **type** | **str** | Object type | [optional]  if omitted the server will use the default value of "attribute"
