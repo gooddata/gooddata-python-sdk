@@ -103,7 +103,7 @@ jobs:
           name: artifacts_${{ matrix.component }}
           path: dist/${{ matrix.component }}
       - name: Push ${{ matrix.component}} to pypi
-        uses: pypa/gh-action-pypi-publish@v1
+        uses: pypa/gh-action-pypi-publish@release/v1
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN }}
