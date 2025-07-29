@@ -28,7 +28,7 @@ from gooddata_sdk.compute.model.filter import AbsoluteDateFilter, RelativeDateFi
 from gooddata_sdk.utils import recreate_directory
 from tests_support.vcrpy_utils import get_vcr
 
-from tests.catalog.test_catalog_workspace import _refresh_workspaces
+from tests.catalog.test_catalog_workspace import _refresh_workspaces, create_second_data_source, delete_data_source
 
 gd_vcr = get_vcr()
 
@@ -62,8 +62,7 @@ def test_catalog_list_facts(test_config):
 def test_catalog_list_aggregated_facts(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     agg_facts_list = sdk.catalog_workspace_content.get_aggregated_facts_catalog(test_config["workspace"])
-    # TODO: Add a non-trivial test
-    assert len(agg_facts_list) == 0
+    assert len(agg_facts_list) == 1
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_catalog_list_attributes.yaml"))
@@ -103,6 +102,9 @@ def test_load_and_put_declarative_ldm(test_config):
     identifier = test_config["workspace_test"]
 
     try:
+        # Must create the second DS, backend validates when putting the re-mapped LDM
+        create_second_data_source(sdk, test_config["data_source2"])
+
         workspace = CatalogWorkspace(workspace_id=identifier, name=identifier)
         sdk.catalog_workspace.create_or_update(workspace)
         ldm_e = sdk.catalog_workspace_content.get_declarative_ldm(workspace_id)
@@ -115,6 +117,7 @@ def test_load_and_put_declarative_ldm(test_config):
         assert ldm_e.to_api().to_dict() == ldm_o.to_api().to_dict()
     finally:
         _refresh_workspaces(sdk)
+        delete_data_source(sdk, test_config["data_source2"])
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_load_and_modify_ds_and_put_declarative_ldm.yaml"))
@@ -128,7 +131,7 @@ def test_load_and_modify_ds_and_put_declarative_ldm(test_config):
     sdk.catalog_workspace.create_or_update(workspace)
 
     ldm_e = sdk.catalog_workspace_content.get_declarative_ldm(workspace_id)
-    ds_e = list(set([d.data_source_table_id.data_source_id for d in ldm_e.ldm.datasets]))
+    ds_e = list(set([d.data_source_table_id.data_source_id for d in ldm_e.ldm.datasets if d.data_source_table_id]))
     assert ds_e == [test_config["data_source"]]
 
     try:
@@ -146,7 +149,7 @@ def test_load_and_modify_ds_and_put_declarative_ldm(test_config):
         ldm_e.ldm.modify_mapped_data_source(data_source_mapping=reverse_data_source_mapping)
         sdk.catalog_workspace_content.put_declarative_ldm(identifier, ldm_e, validator, standalone_copy=True)
         ldm_o = sdk.catalog_workspace_content.get_declarative_ldm(identifier)
-        ds_o = list(set([d.data_source_table_id.data_source_id for d in ldm_o.ldm.datasets]))
+        ds_o = list(set([d.data_source_table_id.data_source_id for d in ldm_o.ldm.datasets if d.data_source_table_id]))
         assert ds_o == [test_config["data_source"]]
     finally:
         _refresh_workspaces(sdk)
@@ -165,7 +168,7 @@ def test_load_ldm_and_modify_tables_columns_case(test_config):
     assert ldm_e.ldm.datasets[0].data_source_table_id.id == table_id.upper()
     assert ldm_e.ldm.datasets[0].attributes[0].source_column == attribute_column.upper()
     assert ldm_e.ldm.datasets[0].facts[0].source_column == fact_column.upper()
-    # TODO: Add agg facts here
+    assert ldm_e.ldm.datasets[1].aggregated_facts[0].source_column == fact_column.upper()
     assert ldm_e.ldm.datasets[0].references[0].source_columns is None
     assert ldm_e.ldm.datasets[0].references[0].sources[0].column == reference_column.upper()
     # Test chaining approach as well
@@ -177,7 +180,7 @@ def test_load_ldm_and_modify_tables_columns_case(test_config):
     assert ldm_o.ldm.datasets[0].data_source_table_id.id == table_id
     assert ldm_o.ldm.datasets[0].attributes[0].source_column == attribute_column
     assert ldm_o.ldm.datasets[0].facts[0].source_column == fact_column
-    # TODO: Add agg facts here
+    assert ldm_o.ldm.datasets[1].aggregated_facts[0].source_column == fact_column
     assert ldm_o.ldm.datasets[0].references[0].source_columns is None
     assert ldm_e.ldm.datasets[0].references[0].sources[0].column == reference_column
 

@@ -1,4 +1,4 @@
-# (C) 2024 GoodData Corporation
+# (C) 2025 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -19,65 +19,41 @@ interactions:
         code: 200
         message: OK
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
+        Content-Length:
+          - '7390'
         Content-Type:
           - application/json
         DATE: &id001
           - PLACEHOLDER
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
-        Server:
-          - nginx
-        Transfer-Encoding:
-          - chunked
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-        content-length:
-          - '6227'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:43 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+        X-Xss-Protection:
+          - 1; mode=block
       body:
         string:
           ldm:
             datasets:
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Campaign channel id
                     id: campaign_channel_id
                     labels: []
@@ -143,7 +119,54 @@ interactions:
                 tags:
                   - Campaign channels
                 title: Campaign channels
-              - attributes:
+              - aggregatedFacts:
+                  - description: Budget Agg
+                    id: budget_agg
+                    sourceColumn: budget
+                    sourceColumnDataType: INT
+                    sourceFactReference:
+                      operation: SUM
+                      reference:
+                        id: budget
+                        type: fact
+                    tags:
+                      - Campaign channels per category
+                attributes:
+                  - description: Category Agg
+                    id: campaign_channels.category_agg
+                    labels: []
+                    sourceColumn: category
+                    sourceColumnDataType: STRING
+                    tags:
+                      - Campaign channels
+                    title: Category
+                description: Campaign channels per categories
+                facts: []
+                grain:
+                  - id: campaign_channels.category_agg
+                    type: attribute
+                id: campaign_channels_per_category
+                precedence: 1
+                references:
+                  - identifier:
+                      id: campaign_channels
+                      type: dataset
+                    multivalue: false
+                    sources:
+                      - column: campaign_channel_category
+                        dataType: STRING
+                        target:
+                          id: campaign_channel_id
+                          type: attribute
+                sql:
+                  dataSourceId: demo-test-ds
+                  statement: SELECT category, SUM(budget) FROM campaign_channels GROUP
+                    BY category
+                tags:
+                  - Campaign channels per category
+                title: Campaign channels per category
+              - aggregatedFacts: []
+                attributes:
                   - description: Campaign id
                     id: campaign_id
                     labels: []
@@ -177,7 +200,8 @@ interactions:
                 tags:
                   - Campaigns
                 title: Campaigns
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Customer id
                     id: customer_id
                     labels: []
@@ -234,7 +258,8 @@ interactions:
                 tags:
                   - Customers
                 title: Customers
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Order id
                     id: order_id
                     labels: []
@@ -341,7 +366,8 @@ interactions:
                     filterId:
                       id: wdf__region
                       type: workspaceDataFilter
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Product id
                     id: product_id
                     labels: []
@@ -471,6 +497,7 @@ interactions:
                   description: Spend
                   tags:
                     - Campaign channels
+              aggregatedFacts: []
               dataSourceTableId:
                 dataSourceId: demo-test-ds
                 id: campaign_channels
@@ -480,6 +507,52 @@ interactions:
                   - campaign_channels
               tags:
                 - Campaign channels
+            - grain:
+                - id: campaign_channels.category_agg
+                  type: attribute
+              id: campaign_channels_per_category
+              references:
+                - identifier:
+                    id: campaign_channels
+                    type: dataset
+                  multivalue: false
+                  sources:
+                    - column: campaign_channel_category
+                      target:
+                        id: campaign_channel_id
+                        type: attribute
+                      dataType: STRING
+              title: Campaign channels per category
+              description: Campaign channels per categories
+              attributes:
+                - id: campaign_channels.category_agg
+                  labels: []
+                  sourceColumn: category
+                  title: Category
+                  sourceColumnDataType: STRING
+                  description: Category Agg
+                  tags:
+                    - Campaign channels
+              facts: []
+              aggregatedFacts:
+                - id: budget_agg
+                  sourceColumn: budget
+                  sourceFactReference:
+                    operation: SUM
+                    reference:
+                      id: budget
+                      type: fact
+                  sourceColumnDataType: INT
+                  description: Budget Agg
+                  tags:
+                    - Campaign channels per category
+              precedence: 1
+              sql:
+                dataSourceId: demo-test-ds
+                statement: SELECT category, SUM(budget) FROM campaign_channels GROUP
+                  BY category
+              tags:
+                - Campaign channels per category
             - grain:
                 - id: campaign_id
                   type: attribute
@@ -505,6 +578,7 @@ interactions:
                   tags:
                     - Campaigns
               facts: []
+              aggregatedFacts: []
               dataSourceTableId:
                 dataSourceId: demo-test-ds
                 id: campaigns
@@ -562,6 +636,7 @@ interactions:
                   tags:
                     - Customers
               facts: []
+              aggregatedFacts: []
               dataSourceTableId:
                 dataSourceId: demo-test-ds
                 id: customers
@@ -664,6 +739,7 @@ interactions:
                   description: Quantity
                   tags:
                     - Order lines
+              aggregatedFacts: []
               dataSourceTableId:
                 dataSourceId: demo-test-ds
                 id: order_lines
@@ -717,6 +793,7 @@ interactions:
                   tags:
                     - Products
               facts: []
+              aggregatedFacts: []
               dataSourceTableId:
                 dataSourceId: demo-test-ds
                 id: products
@@ -765,53 +842,30 @@ interactions:
         code: 204
         message: No Content
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
         DATE: *id001
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
-        Server:
-          - nginx
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:43 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+        X-Xss-Protection:
+          - 1; mode=block
       body:
         string: ''
   - request:
@@ -832,64 +886,40 @@ interactions:
         code: 200
         message: OK
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
+        Content-Length:
+          - '7548'
         Content-Type:
           - application/json
         DATE: *id001
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
-        Server:
-          - nginx
-        Transfer-Encoding:
-          - chunked
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-        content-length:
-          - '6385'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:43 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+        X-Xss-Protection:
+          - 1; mode=block
       body:
         string:
           ldm:
             datasets:
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Campaign channel id
                     id: campaign_channel_id
                     labels: []
@@ -955,7 +985,54 @@ interactions:
                 tags:
                   - Campaign channels
                 title: Campaign channels
-              - attributes:
+              - aggregatedFacts:
+                  - description: Budget Agg
+                    id: budget_agg
+                    sourceColumn: budget
+                    sourceColumnDataType: INT
+                    sourceFactReference:
+                      operation: SUM
+                      reference:
+                        id: budget
+                        type: fact
+                    tags:
+                      - Campaign channels per category
+                attributes:
+                  - description: Category Agg
+                    id: campaign_channels.category_agg
+                    labels: []
+                    sourceColumn: category
+                    sourceColumnDataType: STRING
+                    tags:
+                      - Campaign channels
+                    title: Category
+                description: Campaign channels per categories
+                facts: []
+                grain:
+                  - id: campaign_channels.category_agg
+                    type: attribute
+                id: campaign_channels_per_category
+                precedence: 1
+                references:
+                  - identifier:
+                      id: campaign_channels
+                      type: dataset
+                    multivalue: false
+                    sources:
+                      - column: campaign_channel_category
+                        dataType: STRING
+                        target:
+                          id: campaign_channel_id
+                          type: attribute
+                sql:
+                  dataSourceId: demo-test-ds
+                  statement: SELECT category, SUM(budget) FROM campaign_channels GROUP
+                    BY category
+                tags:
+                  - Campaign channels per category
+                title: Campaign channels per category
+              - aggregatedFacts: []
+                attributes:
                   - description: Campaign id
                     id: campaign_id
                     labels: []
@@ -989,7 +1066,8 @@ interactions:
                 tags:
                   - Campaigns
                 title: Campaigns
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Customer id
                     id: customer_id
                     labels: []
@@ -1052,7 +1130,8 @@ interactions:
                     filterId:
                       id: wdf__region
                       type: workspaceDataFilter
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Order id
                     id: order_id
                     labels: []
@@ -1159,7 +1238,8 @@ interactions:
                     filterId:
                       id: wdf__region
                       type: workspaceDataFilter
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Product id
                     id: product_id
                     labels: []
@@ -1244,57 +1324,34 @@ interactions:
         code: 200
         message: OK
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
-          - '27636'
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
+          - '29383'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
-        Server:
-          - nginx
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:43 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+        X-Xss-Protection:
+          - 1; mode=block
       body:
         string:
           data:
@@ -1369,6 +1426,31 @@ interactions:
                       type: label
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/type
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: campaign_channels.category_agg
+              type: attribute
+              attributes:
+                title: Category
+                description: Category Agg
+                tags:
+                  - Campaign channels
+                areRelationsValid: true
+                sourceColumn: category
+                sourceColumnDataType: STRING
+              relationships:
+                dataset:
+                  data:
+                    id: campaign_channels_per_category
+                    type: dataset
+                labels:
+                  data:
+                    - id: campaign_channels.category_agg
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_channels.category_agg
               meta:
                 origin:
                   originType: NATIVE
@@ -1494,6 +1576,37 @@ interactions:
                       type: label
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/region
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: state
+              type: attribute
+              attributes:
+                title: State
+                description: State
+                tags:
+                  - Customers
+                areRelationsValid: true
+                sourceColumn: state
+                sourceColumnDataType: STRING
+              relationships:
+                defaultView:
+                  data:
+                    id: state
+                    type: label
+                dataset:
+                  data:
+                    id: customers
+                    type: dataset
+                labels:
+                  data:
+                    - id: state
+                      type: label
+                    - id: geo__state__location
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/state
               meta:
                 origin:
                   originType: NATIVE
@@ -1692,37 +1805,6 @@ interactions:
                       type: label
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.hour
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: state
-              type: attribute
-              attributes:
-                title: State
-                description: State
-                tags:
-                  - Customers
-                areRelationsValid: true
-                sourceColumn: state
-                sourceColumnDataType: STRING
-              relationships:
-                defaultView:
-                  data:
-                    id: state
-                    type: label
-                dataset:
-                  data:
-                    id: customers
-                    type: dataset
-                labels:
-                  data:
-                    - id: geo__state__location
-                      type: label
-                    - id: state
-                      type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/state
               meta:
                 origin:
                   originType: NATIVE
@@ -2040,6 +2122,37 @@ interactions:
                   originType: NATIVE
                   originId: demo
           included:
+            - id: campaign_channels_per_category
+              type: dataset
+              attributes:
+                title: Campaign channels per category
+                description: Campaign channels per categories
+                tags:
+                  - Campaign channels per category
+                grain:
+                  - id: campaign_channels.category_agg
+                    type: attribute
+                referenceProperties:
+                  - identifier:
+                      id: campaign_channels
+                      type: dataset
+                    multivalue: false
+                    sources:
+                      - column: campaign_channel_category
+                        dataType: STRING
+                        target:
+                          id: campaign_channel_id
+                          type: attribute
+                    sourceColumns: null
+                    sourceColumnDataTypes: null
+                sql:
+                  statement: SELECT category, SUM(budget) FROM campaign_channels GROUP
+                    BY category
+                  dataSourceId: demo-test-ds
+                precedence: 1
+                type: NORMAL
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/campaign_channels_per_category
             - id: date.minuteOfHour
               type: label
               attributes:
@@ -2100,18 +2213,6 @@ interactions:
                     type: attribute
                 referenceProperties:
                   - identifier:
-                      id: campaigns
-                      type: dataset
-                    multivalue: false
-                    sources:
-                      - column: campaign_id
-                        dataType: INT
-                        target:
-                          id: campaign_id
-                          type: attribute
-                    sourceColumns: null
-                    sourceColumnDataTypes: null
-                  - identifier:
                       id: products
                       type: dataset
                     multivalue: false
@@ -2136,6 +2237,18 @@ interactions:
                     sourceColumns: null
                     sourceColumnDataTypes: null
                   - identifier:
+                      id: campaigns
+                      type: dataset
+                    multivalue: false
+                    sources:
+                      - column: campaign_id
+                        dataType: INT
+                        target:
+                          id: campaign_id
+                          type: attribute
+                    sourceColumns: null
+                    sourceColumnDataTypes: null
+                  - identifier:
                       id: customers
                       type: dataset
                     multivalue: false
@@ -2152,20 +2265,20 @@ interactions:
                   - demo
                   - order_lines
                 workspaceDataFilterColumns:
-                  - name: wdf__region
-                    dataType: STRING
                   - name: wdf__state
                     dataType: STRING
+                  - name: wdf__region
+                    dataType: STRING
                 workspaceDataFilterReferences:
-                  - filterId:
-                      id: wdf__state
-                      type: workspaceDataFilter
-                    filterColumn: wdf__state
-                    filterColumnDataType: STRING
                   - filterId:
                       id: wdf__region
                       type: workspaceDataFilter
                     filterColumn: wdf__region
+                    filterColumnDataType: STRING
+                  - filterId:
+                      id: wdf__state
+                      type: workspaceDataFilter
+                    filterColumn: wdf__state
                     filterColumnDataType: STRING
                 type: NORMAL
               links:
@@ -2455,6 +2568,19 @@ interactions:
                 valueType: TEXT
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/product_id
+            - id: campaign_channels.category_agg
+              type: label
+              attributes:
+                title: Category
+                description: Category Agg
+                tags:
+                  - Campaign channels
+                primary: true
+                sourceColumn: category
+                sourceColumnDataType: STRING
+                valueType: TEXT
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_channels.category_agg
             - id: date.hourOfDay
               type: label
               attributes:
@@ -2612,57 +2738,34 @@ interactions:
         code: 200
         message: OK
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
-          - '15414'
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
+          - '16743'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
-        Server:
-          - nginx
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:43 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+        X-Xss-Protection:
+          - 1; mode=block
       body:
         string:
           data:
@@ -2698,11 +2801,11 @@ interactions:
               relationships:
                 attributes:
                   data:
+                    - id: campaign_channel_id
+                      type: attribute
                     - id: campaign_channels.category
                       type: attribute
                     - id: type
-                      type: attribute
-                    - id: campaign_channel_id
                       type: attribute
                 facts:
                   data:
@@ -2712,6 +2815,149 @@ interactions:
                       type: fact
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/campaign_channels
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: campaign_channels_per_category
+              type: dataset
+              attributes:
+                title: Campaign channels per category
+                description: Campaign channels per categories
+                tags:
+                  - Campaign channels per category
+                grain:
+                  - id: campaign_channels.category_agg
+                    type: attribute
+                referenceProperties:
+                  - identifier:
+                      id: campaign_channels
+                      type: dataset
+                    multivalue: false
+                    sources:
+                      - column: campaign_channel_category
+                        dataType: STRING
+                        target:
+                          id: campaign_channel_id
+                          type: attribute
+                    sourceColumns: null
+                    sourceColumnDataTypes: null
+                sql:
+                  statement: SELECT category, SUM(budget) FROM campaign_channels GROUP
+                    BY category
+                  dataSourceId: demo-test-ds
+                precedence: 1
+                areRelationsValid: true
+                type: NORMAL
+              relationships:
+                attributes:
+                  data:
+                    - id: campaign_channels.category_agg
+                      type: attribute
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/campaign_channels_per_category
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: order_lines
+              type: dataset
+              attributes:
+                title: Order lines
+                description: Order lines
+                tags:
+                  - Order lines
+                grain:
+                  - id: order_line_id
+                    type: attribute
+                referenceProperties:
+                  - identifier:
+                      id: products
+                      type: dataset
+                    multivalue: false
+                    sources:
+                      - column: product_id
+                        dataType: INT
+                        target:
+                          id: product_id
+                          type: attribute
+                    sourceColumns: null
+                    sourceColumnDataTypes: null
+                  - identifier:
+                      id: date
+                      type: dataset
+                    multivalue: false
+                    sources:
+                      - column: date
+                        dataType: DATE
+                        target:
+                          id: date
+                          type: date
+                    sourceColumns: null
+                    sourceColumnDataTypes: null
+                  - identifier:
+                      id: campaigns
+                      type: dataset
+                    multivalue: false
+                    sources:
+                      - column: campaign_id
+                        dataType: INT
+                        target:
+                          id: campaign_id
+                          type: attribute
+                    sourceColumns: null
+                    sourceColumnDataTypes: null
+                  - identifier:
+                      id: customers
+                      type: dataset
+                    multivalue: false
+                    sources:
+                      - column: customer_id
+                        dataType: INT
+                        target:
+                          id: customer_id
+                          type: attribute
+                    sourceColumns: null
+                    sourceColumnDataTypes: null
+                dataSourceTableId: demo-test-ds:order_lines
+                dataSourceTablePath:
+                  - demo
+                  - order_lines
+                areRelationsValid: true
+                workspaceDataFilterColumns:
+                  - name: wdf__state
+                    dataType: STRING
+                  - name: wdf__region
+                    dataType: STRING
+                workspaceDataFilterReferences:
+                  - filterId:
+                      id: wdf__region
+                      type: workspaceDataFilter
+                    filterColumn: wdf__region
+                    filterColumnDataType: STRING
+                  - filterId:
+                      id: wdf__state
+                      type: workspaceDataFilter
+                    filterColumn: wdf__state
+                    filterColumnDataType: STRING
+                type: NORMAL
+              relationships:
+                attributes:
+                  data:
+                    - id: order_id
+                      type: attribute
+                    - id: order_line_id
+                      type: attribute
+                    - id: order_status
+                      type: attribute
+                facts:
+                  data:
+                    - id: price
+                      type: fact
+                    - id: quantity
+                      type: fact
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/order_lines
               meta:
                 origin:
                   originType: NATIVE
@@ -2745,6 +2991,85 @@ interactions:
                 origin:
                   originType: NATIVE
                   originId: demo
+            - id: products
+              type: dataset
+              attributes:
+                title: Products
+                description: Products
+                tags:
+                  - Products
+                grain:
+                  - id: product_id
+                    type: attribute
+                dataSourceTableId: demo-test-ds:products
+                dataSourceTablePath:
+                  - demo
+                  - products
+                areRelationsValid: true
+                type: NORMAL
+              relationships:
+                attributes:
+                  data:
+                    - id: product_id
+                      type: attribute
+                    - id: product_name
+                      type: attribute
+                    - id: products.category
+                      type: attribute
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/products
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: date
+              type: dataset
+              attributes:
+                title: Date
+                description: ''
+                tags:
+                  - Date
+                areRelationsValid: true
+                type: DATE
+              relationships:
+                attributes:
+                  data:
+                    - id: date.minute
+                      type: attribute
+                    - id: date.hour
+                      type: attribute
+                    - id: date.day
+                      type: attribute
+                    - id: date.week
+                      type: attribute
+                    - id: date.month
+                      type: attribute
+                    - id: date.quarter
+                      type: attribute
+                    - id: date.year
+                      type: attribute
+                    - id: date.minuteOfHour
+                      type: attribute
+                    - id: date.hourOfDay
+                      type: attribute
+                    - id: date.dayOfWeek
+                      type: attribute
+                    - id: date.dayOfMonth
+                      type: attribute
+                    - id: date.dayOfYear
+                      type: attribute
+                    - id: date.weekOfYear
+                      type: attribute
+                    - id: date.monthOfYear
+                      type: attribute
+                    - id: date.quarterOfYear
+                      type: attribute
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/date
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: customers
               type: dataset
               attributes:
@@ -2772,195 +3097,14 @@ interactions:
                   data:
                     - id: customer_id
                       type: attribute
+                    - id: customer_name
+                      type: attribute
                     - id: region
                       type: attribute
                     - id: state
                       type: attribute
-                    - id: customer_name
-                      type: attribute
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/customers
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: order_lines
-              type: dataset
-              attributes:
-                title: Order lines
-                description: Order lines
-                tags:
-                  - Order lines
-                grain:
-                  - id: order_line_id
-                    type: attribute
-                referenceProperties:
-                  - identifier:
-                      id: campaigns
-                      type: dataset
-                    multivalue: false
-                    sources:
-                      - column: campaign_id
-                        dataType: INT
-                        target:
-                          id: campaign_id
-                          type: attribute
-                    sourceColumns: null
-                    sourceColumnDataTypes: null
-                  - identifier:
-                      id: products
-                      type: dataset
-                    multivalue: false
-                    sources:
-                      - column: product_id
-                        dataType: INT
-                        target:
-                          id: product_id
-                          type: attribute
-                    sourceColumns: null
-                    sourceColumnDataTypes: null
-                  - identifier:
-                      id: date
-                      type: dataset
-                    multivalue: false
-                    sources:
-                      - column: date
-                        dataType: DATE
-                        target:
-                          id: date
-                          type: date
-                    sourceColumns: null
-                    sourceColumnDataTypes: null
-                  - identifier:
-                      id: customers
-                      type: dataset
-                    multivalue: false
-                    sources:
-                      - column: customer_id
-                        dataType: INT
-                        target:
-                          id: customer_id
-                          type: attribute
-                    sourceColumns: null
-                    sourceColumnDataTypes: null
-                dataSourceTableId: demo-test-ds:order_lines
-                dataSourceTablePath:
-                  - demo
-                  - order_lines
-                areRelationsValid: true
-                workspaceDataFilterColumns:
-                  - name: wdf__region
-                    dataType: STRING
-                  - name: wdf__state
-                    dataType: STRING
-                workspaceDataFilterReferences:
-                  - filterId:
-                      id: wdf__state
-                      type: workspaceDataFilter
-                    filterColumn: wdf__state
-                    filterColumnDataType: STRING
-                  - filterId:
-                      id: wdf__region
-                      type: workspaceDataFilter
-                    filterColumn: wdf__region
-                    filterColumnDataType: STRING
-                type: NORMAL
-              relationships:
-                attributes:
-                  data:
-                    - id: order_line_id
-                      type: attribute
-                    - id: order_status
-                      type: attribute
-                    - id: order_id
-                      type: attribute
-                facts:
-                  data:
-                    - id: quantity
-                      type: fact
-                    - id: price
-                      type: fact
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/order_lines
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: products
-              type: dataset
-              attributes:
-                title: Products
-                description: Products
-                tags:
-                  - Products
-                grain:
-                  - id: product_id
-                    type: attribute
-                dataSourceTableId: demo-test-ds:products
-                dataSourceTablePath:
-                  - demo
-                  - products
-                areRelationsValid: true
-                type: NORMAL
-              relationships:
-                attributes:
-                  data:
-                    - id: product_name
-                      type: attribute
-                    - id: products.category
-                      type: attribute
-                    - id: product_id
-                      type: attribute
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/products
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: date
-              type: dataset
-              attributes:
-                title: Date
-                description: ''
-                tags:
-                  - Date
-                areRelationsValid: true
-                type: DATE
-              relationships:
-                attributes:
-                  data:
-                    - id: date.month
-                      type: attribute
-                    - id: date.week
-                      type: attribute
-                    - id: date.minuteOfHour
-                      type: attribute
-                    - id: date.quarter
-                      type: attribute
-                    - id: date.hourOfDay
-                      type: attribute
-                    - id: date.hour
-                      type: attribute
-                    - id: date.monthOfYear
-                      type: attribute
-                    - id: date.dayOfYear
-                      type: attribute
-                    - id: date.day
-                      type: attribute
-                    - id: date.year
-                      type: attribute
-                    - id: date.weekOfYear
-                      type: attribute
-                    - id: date.minute
-                      type: attribute
-                    - id: date.dayOfMonth
-                      type: attribute
-                    - id: date.dayOfWeek
-                      type: attribute
-                    - id: date.quarterOfYear
-                      type: attribute
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/date
               meta:
                 origin:
                   originType: NATIVE
@@ -3113,6 +3257,17 @@ interactions:
                 sourceColumnDataType: STRING
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_id
+            - id: campaign_channels.category_agg
+              type: attribute
+              attributes:
+                title: Category
+                description: Category Agg
+                tags:
+                  - Campaign channels
+                sourceColumn: category
+                sourceColumnDataType: STRING
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_channels.category_agg
             - id: date.hour
               type: attribute
               attributes:
@@ -3346,57 +3501,34 @@ interactions:
         code: 200
         message: OK
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '10543'
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
-        Server:
-          - nginx
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:43 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+        X-Xss-Protection:
+          - 1; mode=block
       body:
         string:
           data:
@@ -3405,7 +3537,7 @@ interactions:
               attributes:
                 title: '# of Active Customers'
                 areRelationsValid: true
-                createdAt: 2024-10-07 11:17
+                createdAt: 2025-07-29 15:10
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
@@ -3420,7 +3552,7 @@ interactions:
               attributes:
                 title: '# of Orders'
                 areRelationsValid: true
-                createdAt: 2024-10-07 11:17
+                createdAt: 2025-07-29 15:10
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/order_id})
@@ -3435,7 +3567,7 @@ interactions:
               attributes:
                 title: '# of Top Customers'
                 areRelationsValid: true
-                createdAt: 2024-10-07 11:17
+                createdAt: 2025-07-29 15:10
                 content:
                   format: '#,##0'
                   maql: 'SELECT {metric/amount_of_active_customers} WHERE (SELECT
@@ -3452,7 +3584,7 @@ interactions:
                 title: '# of Valid Orders'
                 description: ''
                 areRelationsValid: true
-                createdAt: 2024-10-07 11:17
+                createdAt: 2025-07-29 15:10
                 content:
                   format: '#,##0.00'
                   maql: SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status}
@@ -3468,7 +3600,7 @@ interactions:
               attributes:
                 title: Campaign Spend
                 areRelationsValid: true
-                createdAt: 2024-10-07 11:17
+                createdAt: 2025-07-29 15:10
                 content:
                   format: $#,##0
                   maql: SELECT SUM({fact/spend})
@@ -3483,7 +3615,7 @@ interactions:
               attributes:
                 title: Order Amount
                 areRelationsValid: true
-                createdAt: 2024-10-07 11:17
+                createdAt: 2025-07-29 15:10
                 content:
                   format: $#,##0
                   maql: SELECT SUM({fact/price}*{fact/quantity})
@@ -3498,7 +3630,7 @@ interactions:
               attributes:
                 title: '% Revenue'
                 areRelationsValid: true
-                createdAt: 2024-10-07 11:17
+                createdAt: 2025-07-29 15:10
                 content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / {metric/total_revenue}
@@ -3513,7 +3645,7 @@ interactions:
               attributes:
                 title: '% Revenue from Top 10 Customers'
                 areRelationsValid: true
-                createdAt: 2024-10-07 11:17
+                createdAt: 2025-07-29 15:10
                 content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
@@ -3529,7 +3661,7 @@ interactions:
               attributes:
                 title: '% Revenue from Top 10% Customers'
                 areRelationsValid: true
-                createdAt: 2024-10-07 11:17
+                createdAt: 2025-07-29 15:10
                 content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
@@ -3545,7 +3677,7 @@ interactions:
               attributes:
                 title: '% Revenue from Top 10% Products'
                 areRelationsValid: true
-                createdAt: 2024-10-07 11:17
+                createdAt: 2025-07-29 15:10
                 content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
@@ -3561,7 +3693,7 @@ interactions:
               attributes:
                 title: '% Revenue from Top 10 Products'
                 areRelationsValid: true
-                createdAt: 2024-10-07 11:17
+                createdAt: 2025-07-29 15:10
                 content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
@@ -3577,7 +3709,7 @@ interactions:
               attributes:
                 title: '% Revenue in Category'
                 areRelationsValid: true
-                createdAt: 2024-10-07 11:17
+                createdAt: 2025-07-29 15:10
                 content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
@@ -3593,7 +3725,7 @@ interactions:
               attributes:
                 title: '% Revenue per Product'
                 areRelationsValid: true
-                createdAt: 2024-10-07 11:17
+                createdAt: 2025-07-29 15:10
                 content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL
@@ -3610,7 +3742,7 @@ interactions:
                 title: Revenue
                 description: ''
                 areRelationsValid: true
-                createdAt: 2024-10-07 11:17
+                createdAt: 2025-07-29 15:10
                 content:
                   format: $#,##0
                   maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
@@ -3626,7 +3758,7 @@ interactions:
               attributes:
                 title: Revenue (Clothing)
                 areRelationsValid: true
-                createdAt: 2024-10-07 11:17
+                createdAt: 2025-07-29 15:10
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
@@ -3642,7 +3774,7 @@ interactions:
               attributes:
                 title: Revenue (Electronic)
                 areRelationsValid: true
-                createdAt: 2024-10-07 11:17
+                createdAt: 2025-07-29 15:10
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
@@ -3658,7 +3790,7 @@ interactions:
               attributes:
                 title: Revenue (Home)
                 areRelationsValid: true
-                createdAt: 2024-10-07 11:17
+                createdAt: 2025-07-29 15:10
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
@@ -3674,7 +3806,7 @@ interactions:
               attributes:
                 title: Revenue (Outdoor)
                 areRelationsValid: true
-                createdAt: 2024-10-07 11:17
+                createdAt: 2025-07-29 15:10
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
@@ -3690,7 +3822,7 @@ interactions:
               attributes:
                 title: Revenue per Customer
                 areRelationsValid: true
-                createdAt: 2024-10-07 11:17
+                createdAt: 2025-07-29 15:10
                 content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
@@ -3705,7 +3837,7 @@ interactions:
               attributes:
                 title: Revenue per Dollar Spent
                 areRelationsValid: true
-                createdAt: 2024-10-07 11:17
+                createdAt: 2025-07-29 15:10
                 content:
                   format: $#,##0.0
                   maql: SELECT {metric/revenue} / {metric/campaign_spend}
@@ -3720,7 +3852,7 @@ interactions:
               attributes:
                 title: Revenue / Top 10
                 areRelationsValid: true
-                createdAt: 2024-10-07 11:17
+                createdAt: 2025-07-29 15:10
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
@@ -3735,7 +3867,7 @@ interactions:
               attributes:
                 title: Revenue / Top 10%
                 areRelationsValid: true
-                createdAt: 2024-10-07 11:17
+                createdAt: 2025-07-29 15:10
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
@@ -3750,7 +3882,7 @@ interactions:
               attributes:
                 title: Total Revenue
                 areRelationsValid: true
-                createdAt: 2024-10-07 11:17
+                createdAt: 2025-07-29 15:10
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} BY ALL OTHER
@@ -3765,7 +3897,7 @@ interactions:
               attributes:
                 title: Total Revenue (No Filters)
                 areRelationsValid: true
-                createdAt: 2024-10-07 11:17
+                createdAt: 2025-07-29 15:10
                 content:
                   format: $#,##0
                   maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
@@ -3786,6 +3918,9 @@ interactions:
           - columnName: wdf__region
             id: wdf__region
             title: Customer region
+            workspace:
+              id: demo
+              type: workspace
             workspaceDataFilterSettings:
               - filterValues:
                   - West
@@ -3794,12 +3929,12 @@ interactions:
                 workspace:
                   id: demo_west
                   type: workspace
-            workspace:
-              id: demo
-              type: workspace
           - columnName: wdf__state
             id: wdf__state
             title: Customer state
+            workspace:
+              id: demo_west
+              type: workspace
             workspaceDataFilterSettings:
               - filterValues:
                   - California
@@ -3808,13 +3943,12 @@ interactions:
                 workspace:
                   id: demo_west_california
                   type: workspace
-            workspace:
-              id: demo_west
-              type: workspace
         workspaces:
           - id: demo
             name: Demo
+            automations: []
             customApplicationSettings: []
+            filterViews: []
             hierarchyPermissions:
               - assignee:
                   id: demo2
@@ -5214,6 +5348,50 @@ interactions:
                     tags:
                       - Campaign channels
                   - grain:
+                      - id: campaign_channels.category_agg
+                        type: attribute
+                    id: campaign_channels_per_category
+                    references:
+                      - identifier:
+                          id: campaign_channels
+                          type: dataset
+                        multivalue: false
+                        sourceColumns:
+                          - campaign_channel_category
+                        sourceColumnDataTypes:
+                          - STRING
+                    title: Campaign channels per category
+                    attributes:
+                      - id: campaign_channels.category_agg
+                        labels: []
+                        sourceColumn: category
+                        title: Category
+                        description: Category Agg
+                        sourceColumnDataType: STRING
+                        tags:
+                          - Campaign channels
+                    description: Campaign channels per categories
+                    facts: []
+                    aggregatedFacts:
+                      - id: budget_agg
+                        sourceColumn: budget
+                        sourceFactReference:
+                          operation: SUM
+                          reference:
+                            id: budget
+                            type: fact
+                        description: Budget Agg
+                        sourceColumnDataType: INT
+                        tags:
+                          - Campaign channels per category
+                    precedence: 1
+                    tags:
+                      - Campaign channels per category
+                    sql:
+                      dataSourceId: demo-test-ds
+                      statement: SELECT category, SUM(budget) FROM campaign_channels
+                        GROUP BY category
+                  - grain:
                       - id: campaign_id
                         type: attribute
                     id: campaigns
@@ -5489,11 +5667,11 @@ interactions:
                 name: VIEW
             settings: []
             userDataFilters: []
-            automations: []
-            filterViews: []
           - id: demo_west
             name: Demo West
+            automations: []
             customApplicationSettings: []
+            filterViews: []
             hierarchyPermissions: []
             model:
               analytics:
@@ -5527,11 +5705,11 @@ interactions:
             permissions: []
             settings: []
             userDataFilters: []
-            automations: []
-            filterViews: []
           - id: demo_west_california
             name: Demo West California
+            automations: []
             customApplicationSettings: []
+            filterViews: []
             hierarchyPermissions: []
             model:
               analytics:
@@ -5552,8 +5730,6 @@ interactions:
             permissions: []
             settings: []
             userDataFilters: []
-            automations: []
-            filterViews: []
       headers:
         Accept-Encoding:
           - br, gzip, deflate
@@ -5568,52 +5744,29 @@ interactions:
         code: 204
         message: No Content
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
         DATE: *id001
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
-        Server:
-          - nginx
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:17:43 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+        X-Xss-Protection:
+          - 1; mode=block
       body:
         string: ''
