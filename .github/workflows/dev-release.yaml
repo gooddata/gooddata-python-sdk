@@ -22,6 +22,7 @@ jobs:
           - gooddata-dbt
           - gooddata-flight-server
           - gooddata-flexconnect
+          - gooddata-pipelines
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4

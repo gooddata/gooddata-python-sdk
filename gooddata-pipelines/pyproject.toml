@@ -1,7 +1,7 @@
 # (C) 2025 GoodData Corporation
 [project]
 name = "gooddata-pipelines"
-version = "0.1.0"
+version = "1.47.0"
 description = ""
 authors = [{ name = "GoodData", email = "support@gooddata.com" }]
 license = { text = "MIT" }
@@ -11,7 +11,7 @@ dependencies = [
     "pydantic (>=2.11.3,<3.0.0)",
     "requests (>=2.32.3,<3.0.0)",
     "types-requests (>=2.32.0,<3.0.0)",
-    "gooddata-sdk (>=1.43.0,<2.0.0)",
+    "gooddata-sdk~=1.47.0",
     "boto3 (>=1.39.3,<2.0.0)",
     "boto3-stubs (>=1.39.3,<2.0.0)",
     "types-pyyaml (>=6.0.12.20250326,<7.0.0)",
