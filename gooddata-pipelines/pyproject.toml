@@ -1,7 +1,7 @@
 # (C) 2025 GoodData Corporation
 [project]
 name = "gooddata-pipelines"
-version = "0.1.0"
+version = "1.47.0"
 description = ""
 authors = [{ name = "GoodData", email = "support@gooddata.com" }]
 license = { text = "MIT" }
