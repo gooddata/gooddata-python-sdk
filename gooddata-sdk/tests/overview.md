@@ -64,3 +64,12 @@ def test_something():
 ```
 
 **NOTE**: you do not have to set token value in config file unless you are going to create new recordings.
+
+You can set the envvar `OVERWRITE=1` when you want to rerecord existing cassettes.
+
+## Testing on bigger structures
+
+You are welcome and actually encouraged to use DeepDiff when you are comparing bigger structures.
+It can be imported from `tests_support.compare_utils` in the `deep_eq` function.
+This simplifies debugging in case of errors.
+See other tests how it is used.
