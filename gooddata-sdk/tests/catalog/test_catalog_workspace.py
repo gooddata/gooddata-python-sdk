@@ -34,6 +34,7 @@ from gooddata_sdk.catalog.organization.layout.notification_channel import (
     CatalogWebhook,
 )
 from gooddata_sdk.utils import recreate_directory
+from tests_support.compare_utils import deep_eq
 from tests_support.vcrpy_utils import get_vcr
 
 from tests.catalog.utils import _refresh_workspaces
@@ -165,8 +166,8 @@ def test_get_declarative_workspaces(test_config):
 
     expected_o = CatalogDeclarativeWorkspaces.from_dict(data)
 
-    assert workspaces_o == expected_o
-    assert workspaces_o.to_api().to_dict(camel_case=True) == data
+    assert deep_eq(expected_o, workspaces_o)
+    assert deep_eq(data, workspaces_o.to_api().to_dict(camel_case=True))
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_declarative_workspaces.yaml"))
@@ -610,10 +611,10 @@ def test_put_declarative_workspace(test_config):
         workspace_o = sdk.catalog_workspace.get_declarative_workspace(
             test_config["workspace_test"], exclude=["ACTIVITY_INFO"]
         )
-        assert workspace_e != workspace_o
+        assert not deep_eq(workspace_e, workspace_o)
         workspace_e.remove_wdf_refs()
-        assert workspace_e == workspace_o
-        assert workspace_e.to_dict() == workspace_o.to_dict()
+        assert deep_eq(workspace_e, workspace_o)
+        assert deep_eq(workspace_e.to_dict(), workspace_o.to_dict())
     finally:
         _refresh_workspaces(sdk)
 
@@ -634,8 +635,8 @@ def test_store_declarative_workspace(test_config):
         workspace_id=test_config["workspace"], layout_root_path=path
     )
 
-    assert workspaces_e == workspaces_o
-    assert workspaces_e.to_dict(camel_case=True) == workspaces_o.to_dict(camel_case=True)
+    assert deep_eq(workspaces_e, workspaces_o)
+    assert deep_eq(workspaces_e.to_dict(camel_case=True), workspaces_o.to_dict(camel_case=True))
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_load_and_put_declarative_workspace.yaml"))
@@ -655,8 +656,8 @@ def test_load_and_put_declarative_workspace(test_config):
         workspace_o = sdk.catalog_workspace.get_declarative_workspace(
             workspace_id=test_config["workspace"], exclude=["ACTIVITY_INFO"]
         )
-        assert workspace_e == workspace_o
-        assert workspace_e.to_dict(camel_case=True) == workspace_o.to_dict(camel_case=True)
+        assert deep_eq(workspace_e, workspace_o)
+        assert deep_eq(workspace_e.to_dict(camel_case=True), workspace_o.to_dict(camel_case=True))
     finally:
         _refresh_workspaces(sdk)
 

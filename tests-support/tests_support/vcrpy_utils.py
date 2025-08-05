@@ -2,12 +2,14 @@
 from __future__ import annotations
 
 import json
+import os
 import typing
 from json import JSONDecodeError
 from typing import Any, Optional
 
 import vcr
 import yaml
+from vcr.record_mode import RecordMode
 
 VCR_MATCH_ON = ("method", "scheme", "host", "port", "path", "query", "body")
 NON_STATIC_HEADERS = ["DATE", "X-GDC-TRACE-ID"]
@@ -22,6 +24,7 @@ def get_vcr() -> vcr.VCR:
         before_record_request=custom_before_request,
         before_record_response=custom_before_response,
         decode_compressed_response=True,
+        record_mode=RecordMode.ALL if "OVERWRITE" in os.environ else RecordMode.ONCE,
     )
 
     gd_vcr.register_serializer("custom", CustomSerializerYaml())

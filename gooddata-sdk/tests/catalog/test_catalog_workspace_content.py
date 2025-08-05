@@ -26,6 +26,7 @@ from gooddata_sdk import (
 )
 from gooddata_sdk.compute.model.filter import AbsoluteDateFilter, RelativeDateFilter
 from gooddata_sdk.utils import recreate_directory
+from tests_support.compare_utils import deep_eq
 from tests_support.vcrpy_utils import get_vcr
 
 from tests.catalog.test_catalog_workspace import _refresh_workspaces
@@ -91,8 +92,8 @@ def test_store_declarative_ldm(test_config):
     sdk.catalog_workspace_content.store_declarative_ldm(workspace_id, path)
     ldm_o = sdk.catalog_workspace_content.load_declarative_ldm(workspace_id, path)
 
-    assert ldm_e == ldm_o
-    assert ldm_e.to_api().to_dict() == ldm_o.to_api().to_dict()
+    assert deep_eq(ldm_e, ldm_o)
+    assert deep_eq(ldm_e.to_api().to_dict(), ldm_o.to_api().to_dict())
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_load_and_put_declarative_ldm.yaml"))
@@ -109,10 +110,10 @@ def test_load_and_put_declarative_ldm(test_config):
 
         sdk.catalog_workspace_content.load_and_put_declarative_ldm(identifier, path, standalone_copy=True)
         ldm_o = sdk.catalog_workspace_content.get_declarative_ldm(identifier)
-        assert ldm_e != ldm_o
+        assert not deep_eq(ldm_e, ldm_o)
         ldm_e.remove_wdf_refs()
-        assert ldm_e == ldm_o
-        assert ldm_e.to_api().to_dict() == ldm_o.to_api().to_dict()
+        assert deep_eq(ldm_e, ldm_o)
+        assert deep_eq(ldm_e.to_api().to_dict(), ldm_o.to_api().to_dict())
     finally:
         _refresh_workspaces(sdk)
 
@@ -193,8 +194,8 @@ def test_store_declarative_analytics_model(test_config):
     sdk.catalog_workspace_content.store_declarative_analytics_model(workspace_id, path)
     analytics_model_o = sdk.catalog_workspace_content.load_declarative_analytics_model(workspace_id, path)
 
-    assert analytics_model_e == analytics_model_o
-    assert analytics_model_e.to_api().to_dict() == analytics_model_o.to_api().to_dict()
+    assert deep_eq(analytics_model_e, analytics_model_o)
+    assert deep_eq(analytics_model_e.to_api().to_dict(), analytics_model_o.to_api().to_dict())
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_load_and_put_declarative_analytics_model.yaml"))
@@ -214,8 +215,8 @@ def test_load_and_put_declarative_analytics_model(test_config):
         analytics_model_o = sdk.catalog_workspace_content.get_declarative_analytics_model(
             identifier, exclude=["ACTIVITY_INFO"]
         )
-        assert analytics_model_e == analytics_model_o
-        assert analytics_model_e.to_api().to_dict() == analytics_model_o.to_api().to_dict()
+        assert deep_eq(analytics_model_e, analytics_model_o)
+        assert deep_eq(analytics_model_e.to_api().to_dict(), analytics_model_o.to_api().to_dict())
     finally:
         _refresh_workspaces(sdk)
 
@@ -231,8 +232,8 @@ def test_put_declarative_analytics_model(test_config):
 
         sdk.catalog_workspace_content.put_declarative_analytics_model(identifier, analytics_model_e)
         analytics_model_o = sdk.catalog_workspace_content.get_declarative_analytics_model(identifier)
-        assert analytics_model_e == analytics_model_o
-        assert analytics_model_e.to_api().to_dict() == analytics_model_o.to_api().to_dict()
+        assert deep_eq(analytics_model_e, analytics_model_o)
+        assert deep_eq(analytics_model_e.to_api().to_dict(), analytics_model_o.to_api().to_dict())
     finally:
         _refresh_workspaces(sdk)
 
@@ -248,10 +249,10 @@ def test_put_declarative_ldm(test_config):
     try:
         sdk.catalog_workspace_content.put_declarative_ldm(identifier, ldm_e, standalone_copy=True)
         ldm_o = sdk.catalog_workspace_content.get_declarative_ldm(identifier)
-        assert ldm_e != ldm_o
+        assert not deep_eq(ldm_e, ldm_o)
         ldm_e.remove_wdf_refs()
-        assert ldm_e == ldm_o
-        assert ldm_e.to_api().to_dict() == ldm_o.to_api().to_dict()
+        assert deep_eq(ldm_e, ldm_o)
+        assert deep_eq(ldm_e.to_api().to_dict(), ldm_o.to_api().to_dict())
     finally:
         _refresh_workspaces(sdk)
 
@@ -269,8 +270,8 @@ def test_get_declarative_analytics_model(test_config):
 
     expected_o = CatalogDeclarativeAnalytics.from_dict(data)
 
-    assert analytics_model_o == expected_o
-    assert analytics_model_o.to_api().to_dict(camel_case=True) == data
+    assert deep_eq(expected_o, analytics_model_o)
+    assert deep_eq(data, analytics_model_o.to_api().to_dict(camel_case=True))
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_declarative_analytics_model_child.yaml"))
@@ -286,8 +287,8 @@ def test_get_declarative_analytics_model_child(test_config):
 
     expected_o = CatalogDeclarativeAnalytics.from_dict(data)
 
-    assert analytics_model_o == expected_o
-    assert analytics_model_o.to_api().to_dict(camel_case=True) == data
+    assert deep_eq(expected_o, analytics_model_o)
+    assert deep_eq(data, analytics_model_o.to_api().to_dict(camel_case=True))
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_declarative_ldm.yaml"))
@@ -301,8 +302,8 @@ def test_get_declarative_ldm(test_config):
 
     expected_o = CatalogDeclarativeModel.from_dict(data)
 
-    assert ldm_o == expected_o
-    assert ldm_o.to_api().to_dict(camel_case=True) == data
+    assert deep_eq(expected_o, ldm_o)
+    assert deep_eq(data, ldm_o.to_api().to_dict(camel_case=True))
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_catalog.yaml"))
@@ -367,7 +368,7 @@ def test_ldm_store_load(test_config):
 
     sdk.catalog_workspace_content.store_ldm_to_disk(test_config["workspace"], path)
     loaded_ldm = sdk.catalog_workspace_content.load_ldm_from_disk(path)
-    assert loaded_ldm == ldm
+    assert deep_eq(ldm, loaded_ldm)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "analytics_store_load.yaml"))
@@ -378,7 +379,7 @@ def test_analytics_store_load(test_config):
 
     sdk.catalog_workspace_content.store_analytics_model_to_disk(test_config["workspace"], path)
     loaded_analytics_model = sdk.catalog_workspace_content.load_analytics_model_from_disk(path)
-    assert loaded_analytics_model == analytics_model
+    assert deep_eq(analytics_model, loaded_analytics_model)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "label_elements.yaml"))
@@ -468,7 +469,7 @@ def test_explicit_workspace_data_filter(test_config):
 
         updated_ldm = sdk.catalog_workspace_content.get_declarative_ldm(workspace_id=test_config["workspace"])
 
-        assert model_cpy == updated_ldm
+        assert deep_eq(model_cpy, updated_ldm)
 
         dataset = sdk.catalog_workspace_content.get_full_catalog(workspace_id=test_config["workspace"]).get_dataset(
             dataset_id
@@ -496,6 +497,6 @@ def test_export_definition_analytics_layout(test_config):
         analytics_e = sdk.catalog_workspace_content.get_declarative_analytics_model(
             test_config["workspace"], exclude=["ACTIVITY_INFO"]
         )
-        assert analytics_o.analytics.export_definitions == analytics_e.analytics.export_definitions
+        assert deep_eq(analytics_o.analytics.export_definitions, analytics_e.analytics.export_definitions)
     finally:
         _refresh_workspaces(sdk)
