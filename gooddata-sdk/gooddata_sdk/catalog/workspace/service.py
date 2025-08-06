@@ -716,6 +716,22 @@ class CatalogWorkspaceService(CatalogServiceBase):
         if workspace_object.tags:
             workspace_object.tags = [translated[x] for x in workspace_object.tags]
 
+    def _extract_dashboard_date_filter_titles(self, to_translate: set[str], dashboard_content: dict) -> None:
+        """Extract date filter titles from dashboard content for translation.
+
+        Args:
+            to_translate: Set to collect translatable strings
+            dashboard_content: Dashboard content dictionary containing date filter configurations
+        """
+        # Extract implicit date filter title
+        implicit_date_filter_title = dashboard_content.get("dateFilterConfig", {}).get("filterName")
+        self.add_title_description(to_translate, implicit_date_filter_title, None)
+
+        # Extract explicit date filter titles
+        for date_filter_config in dashboard_content.get("dateFilterConfigs", []):
+            explicit_date_filter_title = date_filter_config.get("config", {}).get("filterName")
+            self.add_title_description(to_translate, explicit_date_filter_title, None)
+
     def get_texts_to_translate(
         self,
         workspace: CatalogWorkspace,
@@ -745,7 +761,6 @@ class CatalogWorkspaceService(CatalogServiceBase):
         if workspace_content.analytics:
             for metric in workspace_content.analytics.metrics or []:
                 self.add_title_description(to_translate, metric.title, metric.description)
-        if workspace_content.analytics:
             for visualization in workspace_content.analytics.visualization_objects or []:
                 self.add_title_description(to_translate, visualization.title, visualization.description)
                 for bucket in visualization.content["buckets"]:
@@ -754,7 +769,8 @@ class CatalogWorkspaceService(CatalogServiceBase):
                             to_translate.add(item["measure"]["alias"])
             for dashboard in workspace_content.analytics.analytical_dashboards or []:
                 self.add_title_description(to_translate, dashboard.title, dashboard.description)
-                # Hack: translate titles in free-form, which is not processed intentionally by this SDK
+                # Extract date filter titles for translation
+                self._extract_dashboard_date_filter_titles(to_translate, dashboard.content)
                 for section in dashboard.content["layout"]["sections"]:
                     for item in section["items"]:
                         widget = item["widget"]
@@ -763,10 +779,20 @@ class CatalogWorkspaceService(CatalogServiceBase):
                         self.add_title_description(to_translate, title, description)
                         if widget.get("type") == "richText" and "content" in widget:
                             to_translate.add(widget["content"])
+                        # process visualizations within visualization switcher
+                        if widget.get("type") == "visualizationSwitcher":
+                            for visualization_spec in widget.get("visualizations", []):
+                                title = visualization_spec.get("title")
+                                description = visualization_spec.get("description")
+                                self.add_title_description(to_translate, title, description)
                     if "header" in section:
                         title = section["header"].get("title")
                         description = section["header"].get("description")
                         self.add_title_description(to_translate, title, description)
+            for filter_context in workspace_content.analytics.filter_contexts or []:
+                for filter_spec in filter_context.content.get("filters", []):
+                    attribute_filter_title = filter_spec.get("attributeFilter", {}).get("title")
+                    self.add_title_description(to_translate, attribute_filter_title, None)
 
         # Translate texts, which have not been translated yet
         if already_translated:
