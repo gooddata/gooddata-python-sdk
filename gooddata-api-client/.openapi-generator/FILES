@@ -407,9 +407,17 @@ docs/JsonApiAutomationOutDocument.md
 docs/JsonApiAutomationOutIncludes.md
 docs/JsonApiAutomationOutList.md
 docs/JsonApiAutomationOutRelationships.md
+docs/JsonApiAutomationOutRelationshipsAutomationResult.md
 docs/JsonApiAutomationOutWithLinks.md
 docs/JsonApiAutomationPatch.md
 docs/JsonApiAutomationPatchDocument.md
+docs/JsonApiAutomationResultLinkage.md
+docs/JsonApiAutomationResultOut.md
+docs/JsonApiAutomationResultOutAttributes.md
+docs/JsonApiAutomationResultOutRelationships.md
+docs/JsonApiAutomationResultOutRelationshipsAutomation.md
+docs/JsonApiAutomationResultOutWithLinks.md
+docs/JsonApiAutomationResultToManyLinkage.md
 docs/JsonApiAutomationToOneLinkage.md
 docs/JsonApiColorPaletteIn.md
 docs/JsonApiColorPaletteInAttributes.md
@@ -519,7 +527,6 @@ docs/JsonApiExportDefinitionOutDocument.md
 docs/JsonApiExportDefinitionOutIncludes.md
 docs/JsonApiExportDefinitionOutList.md
 docs/JsonApiExportDefinitionOutRelationships.md
-docs/JsonApiExportDefinitionOutRelationshipsAutomation.md
 docs/JsonApiExportDefinitionOutWithLinks.md
 docs/JsonApiExportDefinitionPatch.md
 docs/JsonApiExportDefinitionPatchDocument.md
@@ -902,6 +909,7 @@ docs/RawExportRequest.md
 docs/ReferenceIdentifier.md
 docs/ReferenceSourceColumn.md
 docs/Relative.md
+docs/RelativeBoundedDateFilter.md
 docs/RelativeDateFilter.md
 docs/RelativeDateFilterRelativeDateFilter.md
 docs/RelativeWrapper.md
@@ -1478,9 +1486,17 @@ gooddata_api_client/model/json_api_automation_out_document.py
 gooddata_api_client/model/json_api_automation_out_includes.py
 gooddata_api_client/model/json_api_automation_out_list.py
 gooddata_api_client/model/json_api_automation_out_relationships.py
+gooddata_api_client/model/json_api_automation_out_relationships_automation_result.py
 gooddata_api_client/model/json_api_automation_out_with_links.py
 gooddata_api_client/model/json_api_automation_patch.py
 gooddata_api_client/model/json_api_automation_patch_document.py
+gooddata_api_client/model/json_api_automation_result_linkage.py
+gooddata_api_client/model/json_api_automation_result_out.py
+gooddata_api_client/model/json_api_automation_result_out_attributes.py
+gooddata_api_client/model/json_api_automation_result_out_relationships.py
+gooddata_api_client/model/json_api_automation_result_out_relationships_automation.py
+gooddata_api_client/model/json_api_automation_result_out_with_links.py
+gooddata_api_client/model/json_api_automation_result_to_many_linkage.py
 gooddata_api_client/model/json_api_automation_to_one_linkage.py
 gooddata_api_client/model/json_api_color_palette_in.py
 gooddata_api_client/model/json_api_color_palette_in_attributes.py
@@ -1590,7 +1606,6 @@ gooddata_api_client/model/json_api_export_definition_out_document.py
 gooddata_api_client/model/json_api_export_definition_out_includes.py
 gooddata_api_client/model/json_api_export_definition_out_list.py
 gooddata_api_client/model/json_api_export_definition_out_relationships.py
-gooddata_api_client/model/json_api_export_definition_out_relationships_automation.py
 gooddata_api_client/model/json_api_export_definition_out_with_links.py
 gooddata_api_client/model/json_api_export_definition_patch.py
 gooddata_api_client/model/json_api_export_definition_patch_document.py
@@ -1956,6 +1971,7 @@ gooddata_api_client/model/raw_export_request.py
 gooddata_api_client/model/reference_identifier.py
 gooddata_api_client/model/reference_source_column.py
 gooddata_api_client/model/relative.py
+gooddata_api_client/model/relative_bounded_date_filter.py
 gooddata_api_client/model/relative_date_filter.py
 gooddata_api_client/model/relative_date_filter_relative_date_filter.py
 gooddata_api_client/model/relative_wrapper.py

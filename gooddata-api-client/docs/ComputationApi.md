@@ -4,6 +4,7 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**column_statistics**](ComputationApi.md#column_statistics) | **POST** /api/v1/actions/dataSources/{dataSourceId}/computeColumnStatistics | (EXPERIMENTAL) Compute column statistics
 [**compute_label_elements_post**](ComputationApi.md#compute_label_elements_post) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/collectLabelElements | Listing of label values. The resulting data are limited by the static platform limit to the maximum of 10000 rows.
 [**compute_report**](ComputationApi.md#compute_report) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute | Executes analytical request and returns link to the result
 [**compute_valid_descendants**](ComputationApi.md#compute_valid_descendants) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidDescendants | (BETA) Valid descendants
@@ -14,6 +15,88 @@ Method | HTTP request | Description
 [**retrieve_execution_metadata**](ComputationApi.md#retrieve_execution_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId}/metadata | Get a single execution result&#39;s metadata.
 [**retrieve_result**](ComputationApi.md#retrieve_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId} | Get a single execution result
 
+
+# **column_statistics**
+> ColumnStatisticsResponse column_statistics(data_source_id, column_statistics_request)
+
+(EXPERIMENTAL) Compute column statistics
+
+(EXPERIMENTAL) Computes the requested statistical parameters of a column in a data source.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import computation_api
+from gooddata_api_client.model.column_statistics_response import ColumnStatisticsResponse
+from gooddata_api_client.model.column_statistics_request import ColumnStatisticsRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = computation_api.ComputationApi(api_client)
+    data_source_id = "dataSourceId_example" # str | 
+    column_statistics_request = ColumnStatisticsRequest(
+        column_name="column_name_example",
+        frequency=FrequencyProperties(
+            value_limit=10,
+        ),
+        _from=ColumnStatisticsRequestFrom(None),
+        histogram=HistogramProperties(
+            bucket_count=1,
+        ),
+        statistics=[
+            "COUNT",
+        ],
+    ) # ColumnStatisticsRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (EXPERIMENTAL) Compute column statistics
+        api_response = api_instance.column_statistics(data_source_id, column_statistics_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ComputationApi->column_statistics: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **data_source_id** | **str**|  |
+ **column_statistics_request** | [**ColumnStatisticsRequest**](ColumnStatisticsRequest.md)|  |
+
+### Return type
+
+[**ColumnStatisticsResponse**](ColumnStatisticsResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **compute_label_elements_post**
 > ElementsResponse compute_label_elements_post(workspace_id, elements_request)

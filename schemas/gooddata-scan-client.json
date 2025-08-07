@@ -630,7 +630,8 @@
               "MOTHERDUCK",
               "FLEXCONNECT",
               "STARROCKS",
-              "ATHENA"
+              "ATHENA",
+              "MONGODB"
             ],
             "example": "POSTGRESQL",
             "type": "string"
@@ -850,6 +851,7 @@
         },
         "summary": "(EXPERIMENTAL) Compute column statistics",
         "tags": [
+          "Computation",
           "actions"
         ]
       }

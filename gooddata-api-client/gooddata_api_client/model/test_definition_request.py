@@ -86,6 +86,7 @@ class TestDefinitionRequest(ModelNormal):
             'FLEXCONNECT': "FLEXCONNECT",
             'STARROCKS': "STARROCKS",
             'ATHENA': "ATHENA",
+            'MONGODB': "MONGODB",
         },
     }
 

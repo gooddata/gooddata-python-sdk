@@ -69,6 +69,7 @@ class IdentifierRefIdentifier(ModelNormal):
             'USERDATAFILTER': "userDataFilter",
             'EXPORTDEFINITION': "exportDefinition",
             'AUTOMATION': "automation",
+            'AUTOMATIONRESULT': "automationResult",
             'PROMPT': "prompt",
             'VISUALIZATIONOBJECT': "visualizationObject",
             'FILTERCONTEXT': "filterContext",

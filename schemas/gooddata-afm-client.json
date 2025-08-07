@@ -851,6 +851,19 @@
             "description": "User feedback.",
             "type": "boolean"
           },
+          "responseState": {
+            "description": "Response state indicating the outcome of the AI interaction.",
+            "enum": [
+              "SUCCESSFUL",
+              "UNEXPECTED_ERROR",
+              "NOT_FOUND_ATTRIBUTES",
+              "TOO_MANY_DATA_POINTS",
+              "NO_DATA",
+              "NO_RESULTS",
+              "OUT_OF_TOPIC"
+            ],
+            "type": "string"
+          },
           "savedVisualization": {
             "$ref": "#/components/schemas/SavedVisualization"
           },
