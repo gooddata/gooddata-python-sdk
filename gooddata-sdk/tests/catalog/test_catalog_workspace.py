@@ -104,8 +104,8 @@ def test_load_and_put_declarative_workspaces(test_config):
 
         sdk.catalog_workspace.load_and_put_declarative_workspaces(path)
         workspaces_o = sdk.catalog_workspace.get_declarative_workspaces(exclude=["ACTIVITY_INFO"])
-        assert workspaces_e == workspaces_o
-        assert workspaces_e.to_dict(camel_case=True) == workspaces_o.to_dict(camel_case=True)
+        assert deep_eq(workspaces_e, workspaces_o)
+        assert deep_eq(workspaces_e.to_dict(camel_case=True), workspaces_o.to_dict(camel_case=True))
     finally:
         _refresh_workspaces(sdk)
 
@@ -957,7 +957,7 @@ def test_layout_automations(test_config):
                 title="Automation",
                 state="ACTIVE",
                 notification_channel=CatalogNotificationChannelIdentifier(id="webhook"),
-                schedule=CatalogAutomationSchedule(cron="0 0 * * *", first_run="2023-10-05 14:30:00+00:00"),
+                schedule=CatalogAutomationSchedule(cron="0 0 0 ? * *", first_run="2023-10-05 14:30:00+00:00"),
                 metadata={"key": "value"},
             )
         ]

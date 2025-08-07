@@ -1,4 +1,4 @@
-# (C) 2024 GoodData Corporation
+# (C) 2025 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -68,9 +68,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:15:02 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -172,7 +169,7 @@ interactions:
                       direction: asc
                 version: '2'
                 visualizationUrl: local:table
-              createdAt: 2024-10-07 09:14
+              createdAt: 2025-08-07 10:53
             relationships:
               createdBy:
                 data:
@@ -219,7 +216,7 @@ interactions:
               attributes:
                 title: Revenue
                 description: ''
-                createdAt: 2024-10-07 09:14
+                createdAt: 2025-08-07 10:53
                 content:
                   format: $#,##0
                   maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
@@ -272,7 +269,7 @@ interactions:
               type: metric
               attributes:
                 title: '% Revenue in Category'
-                createdAt: 2024-10-07 09:14
+                createdAt: 2025-08-07 10:53
                 content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
@@ -424,14 +421,13 @@ interactions:
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-GDC-CANCEL-TOKEN:
+          - 72adeaab-1a45-4d42-a95a-b5a0ea65981b
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
         content-length:
           - '1235'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:15:02 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           executionResponse:
@@ -480,10 +476,10 @@ interactions:
                         name: Revenue
                 localIdentifier: dim_1
             links:
-              executionResult: 290c375bb3fdca5bf5b463342cb66709f2029fcd:46da4f32e268e4d4bebe451bfb76726d3dc0f13d462a4a18e6692b56c8371c5a
+              executionResult: 44b60e5919a17db934353cdd24c11e0f2b9a302a:15e4fef82cbedc67ec2c1658d5882add81bac9e91fe2bfb359395a68f4e596c9
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/290c375bb3fdca5bf5b463342cb66709f2029fcd%3A46da4f32e268e4d4bebe451bfb76726d3dc0f13d462a4a18e6692b56c8371c5a?offset=0%2C0&limit=512%2C256
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/44b60e5919a17db934353cdd24c11e0f2b9a302a%3A15e4fef82cbedc67ec2c1658d5882add81bac9e91fe2bfb359395a68f4e596c9?offset=0%2C0&limit=512%2C256
       body: null
       headers:
         Accept:
@@ -548,10 +544,7 @@ interactions:
         X-XSS-Protection:
           - '0'
         content-length:
-          - '4052'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:15:02 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+          - '4089'
       body:
         string:
           data:
@@ -750,8 +743,6 @@ interactions:
                     - measureHeader:
                         measureIndex: 3
           grandTotals: []
-          metadata:
-            dataSourceMessages: []
           paging:
             count:
               - 18
@@ -762,3 +753,5 @@ interactions:
             total:
               - 18
               - 4
+          metadata:
+            dataSourceMessages: []

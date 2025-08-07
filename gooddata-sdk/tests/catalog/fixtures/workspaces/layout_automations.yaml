@@ -1,4 +1,4 @@
-# (C) 2024 GoodData Corporation
+# (C) 2025 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -68,9 +68,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Thu, 24 Oct 2024 09:45:11 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: []
   - request:
@@ -142,9 +139,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Thu, 24 Oct 2024 09:45:11 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
   - request:
@@ -160,9 +154,9 @@ interactions:
             id: webhook
             type: notificationChannel
           schedule:
-            cron: 0 0 * * *
-            firstRun: '2023-10-05T14:30:00+00:00'
+            cron: 0 0 0 ? * *
             timezone: UTC
+            firstRun: '2023-10-05T14:30:00+00:00'
       headers:
         Accept-Encoding:
           - br, gzip, deflate
@@ -221,9 +215,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Thu, 24 Oct 2024 09:45:11 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
   - request:
@@ -293,10 +284,7 @@ interactions:
         X-XSS-Protection:
           - '0'
         content-length:
-          - '237'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Thu, 24 Oct 2024 09:45:11 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+          - '239'
       body:
         string:
           - id: automation
@@ -306,7 +294,7 @@ interactions:
               id: webhook
               type: notificationChannel
             schedule:
-              cron: 0 0 * * *
+              cron: 0 0 0 ? * *
               firstRun: '2023-10-05T14:30:00Z'
               timezone: UTC
             state: ACTIVE
@@ -373,9 +361,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Thu, 24 Oct 2024 09:45:11 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
   - request:
@@ -444,9 +429,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Thu, 24 Oct 2024 09:45:11 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: []
   - request:
@@ -512,8 +494,5 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Thu, 24 Oct 2024 09:45:11 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''

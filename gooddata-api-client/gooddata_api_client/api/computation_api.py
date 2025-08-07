@@ -28,6 +28,8 @@ from gooddata_api_client.model.afm_valid_descendants_query import AfmValidDescen
 from gooddata_api_client.model.afm_valid_descendants_response import AfmValidDescendantsResponse
 from gooddata_api_client.model.afm_valid_objects_query import AfmValidObjectsQuery
 from gooddata_api_client.model.afm_valid_objects_response import AfmValidObjectsResponse
+from gooddata_api_client.model.column_statistics_request import ColumnStatisticsRequest
+from gooddata_api_client.model.column_statistics_response import ColumnStatisticsResponse
 from gooddata_api_client.model.elements_request import ElementsRequest
 from gooddata_api_client.model.elements_response import ElementsResponse
 from gooddata_api_client.model.execution_result import ExecutionResult
@@ -48,6 +50,62 @@ class ComputationApi(object):
         if api_client is None:
             api_client = ApiClient()
         self.api_client = api_client
+        self.column_statistics_endpoint = _Endpoint(
+            settings={
+                'response_type': (ColumnStatisticsResponse,),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/dataSources/{dataSourceId}/computeColumnStatistics',
+                'operation_id': 'column_statistics',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'data_source_id',
+                    'column_statistics_request',
+                ],
+                'required': [
+                    'data_source_id',
+                    'column_statistics_request',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'data_source_id':
+                        (str,),
+                    'column_statistics_request':
+                        (ColumnStatisticsRequest,),
+                },
+                'attribute_map': {
+                    'data_source_id': 'dataSourceId',
+                },
+                'location_map': {
+                    'data_source_id': 'path',
+                    'column_statistics_request': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [
+                    'application/json'
+                ]
+            },
+            api_client=api_client
+        )
         self.compute_label_elements_post_endpoint = _Endpoint(
             settings={
                 'response_type': (ElementsResponse,),
@@ -710,6 +768,93 @@ class ComputationApi(object):
             },
             api_client=api_client
         )
+
+    def column_statistics(
+        self,
+        data_source_id,
+        column_statistics_request,
+        **kwargs
+    ):
+        """(EXPERIMENTAL) Compute column statistics  # noqa: E501
+
+        (EXPERIMENTAL) Computes the requested statistical parameters of a column in a data source.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.column_statistics(data_source_id, column_statistics_request, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            data_source_id (str):
+            column_statistics_request (ColumnStatisticsRequest):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            ColumnStatisticsResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['data_source_id'] = \
+            data_source_id
+        kwargs['column_statistics_request'] = \
+            column_statistics_request
+        return self.column_statistics_endpoint.call_with_http_info(**kwargs)
 
     def compute_label_elements_post(
         self,

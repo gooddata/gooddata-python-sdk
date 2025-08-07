@@ -82,6 +82,7 @@ class JsonApiDataSourceIdentifierOutAttributes(ModelNormal):
             'FLEXCONNECT': "FLEXCONNECT",
             'STARROCKS': "STARROCKS",
             'ATHENA': "ATHENA",
+            'MONGODB': "MONGODB",
         },
     }
 

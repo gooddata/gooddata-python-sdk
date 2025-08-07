@@ -1,4 +1,50 @@
 {
+  "workspaceDataFilters": [
+    {
+      "columnName": "wdf__region",
+      "id": "wdf__region",
+      "title": "Customer region",
+      "workspace": {
+        "id": "demo",
+        "type": "workspace"
+      },
+      "workspaceDataFilterSettings": [
+        {
+          "filterValues": [
+            "West"
+          ],
+          "id": "region_west",
+          "title": "Region West",
+          "workspace": {
+            "id": "demo_west",
+            "type": "workspace"
+          }
+        }
+      ]
+    },
+    {
+      "columnName": "wdf__state",
+      "id": "wdf__state",
+      "title": "Customer state",
+      "workspace": {
+        "id": "demo_west",
+        "type": "workspace"
+      },
+      "workspaceDataFilterSettings": [
+        {
+          "filterValues": [
+            "California"
+          ],
+          "id": "region_west_california",
+          "title": "Region West California",
+          "workspace": {
+            "id": "demo_west_california",
+            "type": "workspace"
+          }
+        }
+      ]
+    }
+  ],
   "workspaces": [
     {
       "automations": [],
@@ -62,7 +108,9 @@
                               }
                             },
                             "drills": [],
-                            "properties": {}
+                            "properties": {
+
+                            }
                           }
                         },
                         {
@@ -84,7 +132,9 @@
                               }
                             },
                             "drills": [],
-                            "properties": {}
+                            "properties": {
+
+                            }
                           }
                         }
                       ]
@@ -93,6 +143,8 @@
                 },
                 "version": "2"
               },
+              "description": "",
+              "id": "campaign",
               "permissions": [
                 {
                   "assigneeRule": {
@@ -101,8 +153,6 @@
                   "name": "VIEW"
                 }
               ],
-              "description": "",
-              "id": "campaign",
               "title": "Campaign"
             },
             {
@@ -134,7 +184,9 @@
                                 "type": "visualizationObject"
                               }
                             },
-                            "properties": {},
+                            "properties": {
+
+                            },
                             "title": "DHO simple",
                             "type": "insight"
                           }
@@ -200,7 +252,9 @@
                               }
                             },
                             "drills": [],
-                            "properties": {}
+                            "properties": {
+
+                            }
                           }
                         },
                         {
@@ -228,7 +282,9 @@
                               }
                             },
                             "drills": [],
-                            "properties": {}
+                            "properties": {
+
+                            }
                           }
                         },
                         {
@@ -256,7 +312,9 @@
                               }
                             },
                             "drills": [],
-                            "properties": {}
+                            "properties": {
+
+                            }
                           }
                         },
                         {
@@ -284,7 +342,9 @@
                               }
                             },
                             "drills": [],
-                            "properties": {}
+                            "properties": {
+
+                            }
                           }
                         },
                         {
@@ -312,7 +372,9 @@
                               }
                             },
                             "drills": [],
-                            "properties": {}
+                            "properties": {
+
+                            }
                           }
                         },
                         {
@@ -340,7 +402,9 @@
                               }
                             },
                             "drills": [],
-                            "properties": {}
+                            "properties": {
+
+                            }
                           }
                         },
                         {
@@ -368,7 +432,9 @@
                               }
                             },
                             "drills": [],
-                            "properties": {}
+                            "properties": {
+
+                            }
                           }
                         }
                       ]
@@ -403,6 +469,7 @@
               "title": "dashboard_plugin_2"
             }
           ],
+          "exportDefinitions": [],
           "filterContexts": [
             {
               "content": {
@@ -485,7 +552,7 @@
             {
               "content": {
                 "format": "#,##0",
-                "maql": "SELECT {metric/amount_of_active_customers} WHERE (SELECT {metric/revenue} BY {attribute/customer_id}) >  10000 "
+                "maql": "SELECT {metric/amount_of_active_customers} WHERE (SELECT {metric/revenue} BY {attribute/customer_id}) \u003E  10000 "
               },
               "id": "amount_of_top_customers",
               "title": "# of Top Customers"
@@ -526,7 +593,7 @@
             {
               "content": {
                 "format": "#,##0.0%",
-                "maql": "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10} BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
+                "maql": "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10} BY {attribute/customer_id}) \u003E 0)\n  /\n {metric/revenue}"
               },
               "id": "percent_revenue_from_top_10_customers",
               "title": "% Revenue from Top 10 Customers"
@@ -534,7 +601,7 @@
             {
               "content": {
                 "format": "#,##0.0%",
-                "maql": "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent} BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
+                "maql": "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent} BY {attribute/customer_id}) \u003E 0)\n  /\n {metric/revenue}"
               },
               "id": "percent_revenue_from_top_10_percent_customers",
               "title": "% Revenue from Top 10% Customers"
@@ -542,7 +609,7 @@
             {
               "content": {
                 "format": "#,##0.0%",
-                "maql": "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent} BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
+                "maql": "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent} BY {attribute/product_id}) \u003E 0)\n  /\n {metric/revenue}"
               },
               "id": "percent_revenue_from_top_10_percent_products",
               "title": "% Revenue from Top 10% Products"
@@ -550,7 +617,7 @@
             {
               "content": {
                 "format": "#,##0.0%",
-                "maql": "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10} BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
+                "maql": "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10} BY {attribute/product_id}) \u003E 0)\n  /\n {metric/revenue}"
               },
               "id": "percent_revenue_from_top_10_products",
               "title": "% Revenue from Top 10 Products"
@@ -1020,7 +1087,9 @@
                     }
                   }
                 ],
-                "properties": {},
+                "properties": {
+
+                },
                 "sorts": [
                   {
                     "attributeSortItem": {
@@ -1694,7 +1763,9 @@
                     }
                   }
                 ],
-                "properties": {},
+                "properties": {
+
+                },
                 "sorts": [
                   {
                     "attributeSortItem": {
@@ -1863,7 +1934,9 @@
                     }
                   }
                 ],
-                "properties": {},
+                "properties": {
+
+                },
                 "version": "2",
                 "visualizationUrl": "local:bar"
               },
@@ -2272,12 +2345,12 @@
               "id": "top_10_products",
               "title": "Top 10 Products"
             }
-          ],
-          "exportDefinitions": []
+          ]
         },
         "ldm": {
           "datasets": [
             {
+              "aggregatedFacts": [],
               "attributes": [
                 {
                   "description": "Campaign channel id",
@@ -2362,11 +2435,11 @@
                   "sources": [
                     {
                       "column": "campaign_id",
+                      "dataType": "INT",
                       "target": {
                         "id": "campaign_id",
                         "type": "attribute"
-                      },
-                      "dataType": "INT"
+                      }
                     }
                   ]
                 }
@@ -2377,6 +2450,7 @@
               "title": "Campaign channels"
             },
             {
+              "aggregatedFacts": [],
               "attributes": [
                 {
                   "description": "Campaign id",
@@ -2426,6 +2500,7 @@
               "title": "Campaigns"
             },
             {
+              "aggregatedFacts": [],
               "attributes": [
                 {
                   "description": "Customer id",
@@ -2472,7 +2547,8 @@
                       "tags": [
                         "Customers"
                       ],
-                      "title": "Location"
+                      "title": "Location",
+                      "valueType": "GEO"
                     }
                   ],
                   "sourceColumn": "state",
@@ -2508,6 +2584,7 @@
               "title": "Customers"
             },
             {
+              "aggregatedFacts": [],
               "attributes": [
                 {
                   "description": "Order id",
@@ -2592,11 +2669,11 @@
                   "sources": [
                     {
                       "column": "campaign_id",
+                      "dataType": "INT",
                       "target": {
                         "id": "campaign_id",
                         "type": "attribute"
-                      },
-                      "dataType": "INT"
+                      }
                     }
                   ]
                 },
@@ -2609,11 +2686,11 @@
                   "sources": [
                     {
                       "column": "customer_id",
+                      "dataType": "INT",
                       "target": {
                         "id": "customer_id",
                         "type": "attribute"
-                      },
-                      "dataType": "INT"
+                      }
                     }
                   ]
                 },
@@ -2626,11 +2703,11 @@
                   "sources": [
                     {
                       "column": "date",
+                      "dataType": "DATE",
                       "target": {
                         "id": "date",
                         "type": "date"
-                      },
-                      "dataType": "DATE"
+                      }
                     }
                   ]
                 },
@@ -2643,11 +2720,11 @@
                   "sources": [
                     {
                       "column": "product_id",
+                      "dataType": "INT",
                       "target": {
                         "id": "product_id",
                         "type": "attribute"
-                      },
-                      "dataType": "INT"
+                      }
                     }
                   ]
                 }
@@ -2678,6 +2755,7 @@
               ]
             },
             {
+              "aggregatedFacts": [],
               "attributes": [
                 {
                   "description": "Product id",
@@ -2742,21 +2820,11 @@
             {
               "description": "",
               "granularities": [
-                "MINUTE",
-                "HOUR",
                 "DAY",
                 "WEEK",
                 "MONTH",
                 "QUARTER",
-                "YEAR",
-                "MINUTE_OF_HOUR",
-                "HOUR_OF_DAY",
-                "DAY_OF_WEEK",
-                "DAY_OF_MONTH",
-                "DAY_OF_YEAR",
-                "WEEK_OF_YEAR",
-                "MONTH_OF_YEAR",
-                "QUARTER_OF_YEAR"
+                "YEAR"
               ],
               "granularitiesFormatting": {
                 "titleBase": "",
@@ -2789,8 +2857,7 @@
         }
       ],
       "settings": [],
-      "userDataFilters": [],
-      "automations": []
+      "userDataFilters": []
     },
     {
       "automations": [],
@@ -2816,10 +2883,10 @@
           "analyticalDashboards": [],
           "attributeHierarchies": [],
           "dashboardPlugins": [],
+          "exportDefinitions": [],
           "filterContexts": [],
           "metrics": [],
-          "visualizationObjects": [],
-          "exportDefinitions": []
+          "visualizationObjects": []
         },
         "ldm": {
           "datasetExtensions": [
@@ -2848,8 +2915,7 @@
       },
       "permissions": [],
       "settings": [],
-      "userDataFilters": [],
-      "automations": []
+      "userDataFilters": []
     },
     {
       "automations": [],
@@ -2863,10 +2929,10 @@
           "analyticalDashboards": [],
           "attributeHierarchies": [],
           "dashboardPlugins": [],
+          "exportDefinitions": [],
           "filterContexts": [],
           "metrics": [],
-          "visualizationObjects": [],
-          "exportDefinitions": []
+          "visualizationObjects": []
         },
         "ldm": {
           "datasets": [],
@@ -2880,54 +2946,7 @@
       },
       "permissions": [],
       "settings": [],
-      "userDataFilters": [],
-      "automations": []
-    }
-  ],
-  "workspaceDataFilters": [
-    {
-      "columnName": "wdf__region",
-      "id": "wdf__region",
-      "title": "Customer region",
-      "workspace": {
-        "id": "demo",
-        "type": "workspace"
-      },
-      "workspaceDataFilterSettings": [
-        {
-          "filterValues": [
-            "West"
-          ],
-          "id": "region_west",
-          "title": "Region West",
-          "workspace": {
-            "id": "demo_west",
-            "type": "workspace"
-          }
-        }
-      ]
-    },
-    {
-      "columnName": "wdf__state",
-      "id": "wdf__state",
-      "title": "Customer state",
-      "workspace": {
-        "id": "demo_west",
-        "type": "workspace"
-      },
-      "workspaceDataFilterSettings": [
-        {
-          "filterValues": [
-            "California"
-          ],
-          "id": "region_west_california",
-          "title": "Region West California",
-          "workspace": {
-            "id": "demo_west_california",
-            "type": "workspace"
-          }
-        }
-      ]
+      "userDataFilters": []
     }
   ]
 }

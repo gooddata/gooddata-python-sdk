@@ -88,6 +88,7 @@ class DeclarativeDataSource(ModelNormal):
             'FLEXCONNECT': "FLEXCONNECT",
             'STARROCKS': "STARROCKS",
             'ATHENA': "ATHENA",
+            'MONGODB': "MONGODB",
         },
         ('authentication_type',): {
             'None': None,

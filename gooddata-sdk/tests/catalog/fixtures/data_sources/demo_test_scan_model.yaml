@@ -1,4 +1,4 @@
-# (C) 2024 GoodData Corporation
+# (C) 2025 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -75,9 +75,6 @@ interactions:
           - '0'
         content-length:
           - '2372'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:27 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           pdm:
@@ -275,9 +272,6 @@ interactions:
           - '0'
         content-length:
           - '35'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:27 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           pdm:

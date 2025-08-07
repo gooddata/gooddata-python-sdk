@@ -21,67 +21,8 @@
       ],
       "schema": "demo",
       "type": "POSTGRESQL",
-      "url": "jdbc:postgresql://localhost:5432/demo",
+      "url": "jdbc:postgresql://localhost:5432/demo?sslmode=prefer",
       "username": "demouser"
-    },
-    {
-      "id": "demo-test-ds-databricks-client-secret",
-      "name": "demo-test-ds-databricks-client-secret",
-      "permissions": [
-        {
-          "assignee": {
-            "id": "demo2",
-            "type": "user"
-          },
-          "name": "MANAGE"
-        },
-        {
-          "assignee": {
-            "id": "demoGroup",
-            "type": "userGroup"
-          },
-          "name": "USE"
-        }
-      ],
-      "schema": "demo",
-      "type": "DATABRICKS",
-      "url": "jdbc:databricks://dbc-1234-abc.cloud.databricks.com:443;httpPath=/sql/1.0/warehouses/9876fdsa;",
-      "clientId": "client-id",
-      "parameters": [
-        {
-          "name": "catalog",
-          "value": "demo"
-        }
-      ]
-    },
-    {
-      "id": "demo-test-ds-databricks-token",
-      "name": "demo-test-ds-databricks-token",
-      "permissions": [
-        {
-          "assignee": {
-            "id": "demo2",
-            "type": "user"
-          },
-          "name": "MANAGE"
-        },
-        {
-          "assignee": {
-            "id": "demoGroup",
-            "type": "userGroup"
-          },
-          "name": "USE"
-        }
-      ],
-      "schema": "demo",
-      "type": "DATABRICKS",
-      "url": "jdbc:databricks://dbc-1234-abc.cloud.databricks.com:443;httpPath=/sql/1.0/warehouses/9876fdsa;",
-      "parameters": [
-        {
-          "name": "catalog",
-          "value": "demo"
-        }
-      ]
     }
   ]
 }

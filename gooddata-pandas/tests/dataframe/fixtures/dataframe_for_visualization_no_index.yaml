@@ -68,9 +68,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Fri, 17 Jan 2025 13:32:58 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -172,7 +169,7 @@ interactions:
                       direction: asc
                 version: '2'
                 visualizationUrl: local:table
-              createdAt: 2025-01-17 12:21
+              createdAt: 2025-08-07 10:53
             relationships:
               createdBy:
                 data:
@@ -219,7 +216,7 @@ interactions:
               attributes:
                 title: Revenue
                 description: ''
-                createdAt: 2025-01-17 12:21
+                createdAt: 2025-08-07 10:53
                 content:
                   format: $#,##0
                   maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
@@ -272,7 +269,7 @@ interactions:
               type: metric
               attributes:
                 title: '% Revenue in Category'
-                createdAt: 2025-01-17 12:21
+                createdAt: 2025-08-07 10:53
                 content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
@@ -420,14 +417,13 @@ interactions:
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-GDC-CANCEL-TOKEN:
+          - 0ee360e0-de07-45c3-b05a-3c076d904204
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
         content-length:
           - '1235'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Fri, 17 Jan 2025 13:32:58 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           executionResponse:
@@ -476,7 +472,7 @@ interactions:
                       valueType: TEXT
                 localIdentifier: dim_1
             links:
-              executionResult: baf95c7bb9d3d1d3a1a1df72f4ecd638d489e42d:4c0c41e57c838aac38159c0071379ecc9316d72b17a2f377f36a457c96ab333a
+              executionResult: 17c7c30359dddc54d282a6b1a33727f577806c7d:6c69c4fdf5816ef596e869ca24cdaa4d84af1241087a91c963ddcf12e1c5f0d4
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3Din%3D%28products.category%2Cproduct_name%29&page=0&size=500
@@ -543,37 +539,9 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Fri, 17 Jan 2025 13:32:58 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
-            - id: products.category
-              type: attribute
-              attributes:
-                title: Category
-                description: Category
-                tags:
-                  - Products
-                areRelationsValid: true
-                sourceColumn: category
-                sourceColumnDataType: STRING
-              relationships:
-                dataset:
-                  data:
-                    id: products
-                    type: dataset
-                labels:
-                  data:
-                    - id: products.category
-                      type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/products.category
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
             - id: product_name
               type: attribute
               attributes:
@@ -595,6 +563,31 @@ interactions:
                       type: label
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/product_name
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: products.category
+              type: attribute
+              attributes:
+                title: Category
+                description: Category
+                tags:
+                  - Products
+                areRelationsValid: true
+                sourceColumn: category
+                sourceColumnDataType: STRING
+              relationships:
+                dataset:
+                  data:
+                    id: products
+                    type: dataset
+                labels:
+                  data:
+                    - id: products.category
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/products.category
               meta:
                 origin:
                   originType: NATIVE
@@ -648,7 +641,7 @@ interactions:
             next: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3Din%3D%28%27products.category%27%2C%27product_name%27%29&page=1&size=500
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/baf95c7bb9d3d1d3a1a1df72f4ecd638d489e42d%3A4c0c41e57c838aac38159c0071379ecc9316d72b17a2f377f36a457c96ab333a?offset=0%2C0&limit=4%2C1000
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/17c7c30359dddc54d282a6b1a33727f577806c7d%3A6c69c4fdf5816ef596e869ca24cdaa4d84af1241087a91c963ddcf12e1c5f0d4?offset=0%2C0&limit=4%2C1000
       body: null
       headers:
         Accept:
@@ -713,10 +706,7 @@ interactions:
         X-XSS-Protection:
           - '0'
         content-length:
-          - '4024'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Fri, 17 Jan 2025 13:32:58 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+          - '4061'
       body:
         string:
           data:
@@ -915,8 +905,6 @@ interactions:
                         labelValue: Neptide
                         primaryLabelValue: Neptide
           grandTotals: []
-          metadata:
-            dataSourceMessages: []
           paging:
             count:
               - 4
@@ -927,3 +915,5 @@ interactions:
             total:
               - 4
               - 18
+          metadata:
+            dataSourceMessages: []

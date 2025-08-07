@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Optional
 
 import attr
+import attrs
 from gooddata_api_client.model.data_source_table_identifier import DataSourceTableIdentifier
 from gooddata_api_client.model.declarative_aggregated_fact import DeclarativeAggregatedFact
 from gooddata_api_client.model.declarative_attribute import DeclarativeAttribute
@@ -41,7 +42,7 @@ class CatalogDeclarativeDataset(Base):
     description: Optional[str] = None
     attributes: Optional[list[CatalogDeclarativeAttribute]] = None
     facts: Optional[list[CatalogDeclarativeFact]] = None
-    aggregated_facts: Optional[list[CatalogDeclarativeAggregatedFact]] = None
+    aggregated_facts: Optional[list[CatalogDeclarativeAggregatedFact]] = attrs.field(factory=list)
     data_source_table_id: Optional[CatalogDataSourceTableIdentifier] = None
     sql: Optional[CatalogDeclarativeDatasetSql] = None
     tags: Optional[list[str]] = None

@@ -125,6 +125,7 @@ Class | Method | HTTP request | Description
 *CSPDirectivesApi* | [**get_entity_csp_directives**](docs/CSPDirectivesApi.md#get_entity_csp_directives) | **GET** /api/v1/entities/cspDirectives/{id} | Get CSP Directives
 *CSPDirectivesApi* | [**patch_entity_csp_directives**](docs/CSPDirectivesApi.md#patch_entity_csp_directives) | **PATCH** /api/v1/entities/cspDirectives/{id} | Patch CSP Directives
 *CSPDirectivesApi* | [**update_entity_csp_directives**](docs/CSPDirectivesApi.md#update_entity_csp_directives) | **PUT** /api/v1/entities/cspDirectives/{id} | Put CSP Directives
+*ComputationApi* | [**column_statistics**](docs/ComputationApi.md#column_statistics) | **POST** /api/v1/actions/dataSources/{dataSourceId}/computeColumnStatistics | (EXPERIMENTAL) Compute column statistics
 *ComputationApi* | [**compute_label_elements_post**](docs/ComputationApi.md#compute_label_elements_post) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/collectLabelElements | Listing of label values. The resulting data are limited by the static platform limit to the maximum of 10000 rows.
 *ComputationApi* | [**compute_report**](docs/ComputationApi.md#compute_report) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute | Executes analytical request and returns link to the result
 *ComputationApi* | [**compute_valid_descendants**](docs/ComputationApi.md#compute_valid_descendants) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidDescendants | (BETA) Valid descendants
@@ -1309,9 +1310,17 @@ Class | Method | HTTP request | Description
  - [JsonApiAutomationOutIncludes](docs/JsonApiAutomationOutIncludes.md)
  - [JsonApiAutomationOutList](docs/JsonApiAutomationOutList.md)
  - [JsonApiAutomationOutRelationships](docs/JsonApiAutomationOutRelationships.md)
+ - [JsonApiAutomationOutRelationshipsAutomationResult](docs/JsonApiAutomationOutRelationshipsAutomationResult.md)
  - [JsonApiAutomationOutWithLinks](docs/JsonApiAutomationOutWithLinks.md)
  - [JsonApiAutomationPatch](docs/JsonApiAutomationPatch.md)
  - [JsonApiAutomationPatchDocument](docs/JsonApiAutomationPatchDocument.md)
+ - [JsonApiAutomationResultLinkage](docs/JsonApiAutomationResultLinkage.md)
+ - [JsonApiAutomationResultOut](docs/JsonApiAutomationResultOut.md)
+ - [JsonApiAutomationResultOutAttributes](docs/JsonApiAutomationResultOutAttributes.md)
+ - [JsonApiAutomationResultOutRelationships](docs/JsonApiAutomationResultOutRelationships.md)
+ - [JsonApiAutomationResultOutRelationshipsAutomation](docs/JsonApiAutomationResultOutRelationshipsAutomation.md)
+ - [JsonApiAutomationResultOutWithLinks](docs/JsonApiAutomationResultOutWithLinks.md)
+ - [JsonApiAutomationResultToManyLinkage](docs/JsonApiAutomationResultToManyLinkage.md)
  - [JsonApiAutomationToOneLinkage](docs/JsonApiAutomationToOneLinkage.md)
  - [JsonApiColorPaletteIn](docs/JsonApiColorPaletteIn.md)
  - [JsonApiColorPaletteInAttributes](docs/JsonApiColorPaletteInAttributes.md)
@@ -1421,7 +1430,6 @@ Class | Method | HTTP request | Description
  - [JsonApiExportDefinitionOutIncludes](docs/JsonApiExportDefinitionOutIncludes.md)
  - [JsonApiExportDefinitionOutList](docs/JsonApiExportDefinitionOutList.md)
  - [JsonApiExportDefinitionOutRelationships](docs/JsonApiExportDefinitionOutRelationships.md)
- - [JsonApiExportDefinitionOutRelationshipsAutomation](docs/JsonApiExportDefinitionOutRelationshipsAutomation.md)
  - [JsonApiExportDefinitionOutWithLinks](docs/JsonApiExportDefinitionOutWithLinks.md)
  - [JsonApiExportDefinitionPatch](docs/JsonApiExportDefinitionPatch.md)
  - [JsonApiExportDefinitionPatchDocument](docs/JsonApiExportDefinitionPatchDocument.md)
@@ -1787,6 +1795,7 @@ Class | Method | HTTP request | Description
  - [ReferenceIdentifier](docs/ReferenceIdentifier.md)
  - [ReferenceSourceColumn](docs/ReferenceSourceColumn.md)
  - [Relative](docs/Relative.md)
+ - [RelativeBoundedDateFilter](docs/RelativeBoundedDateFilter.md)
  - [RelativeDateFilter](docs/RelativeDateFilter.md)
  - [RelativeDateFilterRelativeDateFilter](docs/RelativeDateFilterRelativeDateFilter.md)
  - [RelativeWrapper](docs/RelativeWrapper.md)

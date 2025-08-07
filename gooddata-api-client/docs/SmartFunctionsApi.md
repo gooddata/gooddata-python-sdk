@@ -137,6 +137,7 @@ with gooddata_api_client.ApiClient() as api_client:
     chat_history_request = ChatHistoryRequest(
         chat_history_interaction_id="chat_history_interaction_id_example",
         reset=True,
+        response_state="SUCCESSFUL",
         saved_visualization=SavedVisualization(
             created_visualization_id="created_visualization_id_example",
             saved_visualization_id="saved_visualization_id_example",

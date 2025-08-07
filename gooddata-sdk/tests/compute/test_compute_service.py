@@ -1,9 +1,16 @@
 # (C) 2025 GoodData Corporation
 from pathlib import Path
 
+import pytest
 from gooddata_sdk import CatalogWorkspace
 from gooddata_sdk.sdk import GoodDataSdk
 from tests_support.vcrpy_utils import get_vcr
+
+# Skip all tests in this module
+pytest.skip(
+    "Skipping all tests in this module because it requires gen-ai which is not available in AIO.",
+    allow_module_level=True,
+)
 
 gd_vcr = get_vcr()
 
@@ -97,8 +104,8 @@ def test_ai_chat(test_config):
         assert response.chat_history_interaction_id is not None
     finally:
         # Clean up workspace and all related content
-        sdk.compute.reset_ai_chat_history(test_workspace_id)
         sdk.catalog_workspace.delete_workspace(test_workspace_id)
+        sdk.compute.reset_ai_chat_history(test_workspace_id)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "get_ai_chat_history.yaml"))
@@ -121,8 +128,8 @@ def test_get_ai_chat_history(test_config):
         assert response.interactions[1]["question"] == second_question
 
     finally:
-        sdk.compute.reset_ai_chat_history(test_workspace_id)
         sdk.catalog_workspace.delete_workspace(test_workspace_id)
+        sdk.compute.reset_ai_chat_history(test_workspace_id)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "set_ai_chat_history_feedback.yaml"))
@@ -141,8 +148,8 @@ def test_set_ai_chat_history_feedback(test_config):
         response = sdk.compute.get_ai_chat_history(test_workspace_id)
         assert response.interactions[0]["userFeedback"] == "POSITIVE"
     finally:
-        sdk.compute.reset_ai_chat_history(test_workspace_id)
         sdk.catalog_workspace.delete_workspace(test_workspace_id)
+        sdk.compute.reset_ai_chat_history(test_workspace_id)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "set_ai_chat_history_saved_visualization.yaml"))
@@ -169,8 +176,8 @@ def test_set_ai_chat_history_saved_visualization(test_config):
             == saved_visualization_id
         )
     finally:
-        sdk.compute.reset_ai_chat_history(test_workspace_id)
         sdk.catalog_workspace.delete_workspace(test_workspace_id)
+        sdk.compute.reset_ai_chat_history(test_workspace_id)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "reset_ai_chat_history.yaml"))
@@ -208,8 +215,8 @@ def test_ai_chat_stream(test_config):
             buffer = {**buffer, **chunk}
         assert buffer is not None
     finally:
-        sdk.compute.reset_ai_chat_history(test_workspace_id)
         sdk.catalog_workspace.delete_workspace(test_workspace_id)
+        sdk.compute.reset_ai_chat_history(test_workspace_id)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "build_exec_def_from_chat_result.yaml"))
@@ -229,5 +236,5 @@ def test_build_exec_def_from_chat_result(test_config):
         assert execution.result_id is not None
 
     finally:
-        sdk.compute.reset_ai_chat_history(test_workspace_id)
         sdk.catalog_workspace.delete_workspace(test_workspace_id)
+        sdk.compute.reset_ai_chat_history(test_workspace_id)

@@ -1,4 +1,4 @@
-# (C) 2024 GoodData Corporation
+# (C) 2025 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -69,15 +69,13 @@ interactions:
         X-XSS-Protection:
           - '0'
         content-length:
-          - '6088'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:22 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+          - '6211'
       body:
         string:
           ldm:
             datasets:
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Campaign channel id
                     id: campaign_channel_id
                     labels: []
@@ -143,7 +141,8 @@ interactions:
                 tags:
                   - Campaign channels
                 title: Campaign channels
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Campaign id
                     id: campaign_id
                     labels: []
@@ -177,7 +176,8 @@ interactions:
                 tags:
                   - Campaigns
                 title: Campaigns
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Customer id
                     id: customer_id
                     labels: []
@@ -212,6 +212,7 @@ interactions:
                         tags:
                           - Customers
                         title: Location
+                        valueType: GEO
                     sourceColumn: state
                     sourceColumnDataType: STRING
                     tags:
@@ -234,7 +235,8 @@ interactions:
                 tags:
                   - Customers
                 title: Customers
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Order id
                     id: order_id
                     labels: []
@@ -341,7 +343,8 @@ interactions:
                     filterId:
                       id: wdf__region
                       type: workspaceDataFilter
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Product id
                     id: product_id
                     labels: []
@@ -471,9 +474,6 @@ interactions:
           - '0'
         content-length:
           - '2372'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:23 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           pdm:
@@ -791,15 +791,13 @@ interactions:
         X-XSS-Protection:
           - '0'
         content-length:
-          - '6210'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:23 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+          - '6333'
       body:
         string:
           ldm:
             datasets:
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Campaign channel id
                     id: campaign_channel_id
                     labels: []
@@ -865,7 +863,8 @@ interactions:
                 tags:
                   - Campaign channels
                 title: Campaign channels
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Campaign id
                     id: campaign_id
                     labels: []
@@ -899,7 +898,8 @@ interactions:
                 tags:
                   - Campaigns
                 title: Campaigns
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Customer id
                     id: customer_id
                     labels: []
@@ -934,6 +934,7 @@ interactions:
                         tags:
                           - Customers
                         title: Location
+                        valueType: GEO
                     sourceColumn: state
                     sourceColumnDataType: STRING
                     tags:
@@ -956,7 +957,8 @@ interactions:
                 tags:
                   - Customers
                 title: Customers
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Order id
                     id: order_id
                     labels: []
@@ -1063,7 +1065,8 @@ interactions:
                     filterId:
                       id: wdf__region
                       type: workspaceDataFilter
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Product id
                     id: product_id
                     labels: []

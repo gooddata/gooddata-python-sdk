@@ -1,4 +1,4 @@
-# (C) 2024 GoodData Corporation
+# (C) 2025 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -75,9 +75,6 @@ interactions:
           - '0'
         content-length:
           - '2372'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:23 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           pdm:
@@ -429,15 +426,13 @@ interactions:
         X-XSS-Protection:
           - '0'
         content-length:
-          - '9633'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:23 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+          - '9798'
       body:
         string:
           ldm:
             datasets:
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Campaign channel id
                     id: campaign_channel_id
                     labels: []
@@ -503,7 +498,8 @@ interactions:
                 tags:
                   - Campaign channels
                 title: Campaign channels
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Campaign name
                     id: campaign_name
                     labels: []
@@ -537,7 +533,8 @@ interactions:
                 tags:
                   - Campaigns
                 title: Campaigns
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Customer id
                     id: customers.customer_id
                     labels: []
@@ -572,6 +569,7 @@ interactions:
                         tags:
                           - Customers
                         title: Location
+                        valueType: GEO
                     sourceColumn: state
                     sourceColumnDataType: STRING
                     tags:
@@ -594,7 +592,8 @@ interactions:
                 tags:
                   - Customers
                 title: Customers
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Order id
                     id: order_lines.order_id
                     labels: []
@@ -695,7 +694,8 @@ interactions:
                     name: wdf__region
                   - dataType: STRING
                     name: wdf__state
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Product name
                     id: product_name
                     labels: []
@@ -737,7 +737,8 @@ interactions:
                 tags:
                   - Products
                 title: Products
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Campaign id
                     id: Order_lines_duplicate_sql_dataset.campaign_id
                     labels: []
@@ -821,7 +822,8 @@ interactions:
                 tags:
                   - Order lines duplicate sql dataset
                 title: Order lines duplicate sql dataset
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Customer id
                     id: Customers_sql_dataset_with_WDF.customer_id
                     labels: []

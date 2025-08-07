@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 **granularity** | **str** |  | 
 **type** | **str** |  | 
 **attribute** | [**IdentifierRef**](IdentifierRef.md) |  | [optional] 
+**bounded_filter** | [**RelativeBoundedDateFilter**](RelativeBoundedDateFilter.md) |  | [optional] 
 **data_set** | [**IdentifierRef**](IdentifierRef.md) |  | [optional] 
 **_from** | [**DashboardDateFilterDateFilterFrom**](DashboardDateFilterDateFilterFrom.md) |  | [optional] 
 **local_identifier** | **str** |  | [optional] 

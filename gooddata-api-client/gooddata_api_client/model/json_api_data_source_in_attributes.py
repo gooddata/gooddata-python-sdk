@@ -86,6 +86,7 @@ class JsonApiDataSourceInAttributes(ModelNormal):
             'FLEXCONNECT': "FLEXCONNECT",
             'STARROCKS': "STARROCKS",
             'ATHENA': "ATHENA",
+            'MONGODB': "MONGODB",
         },
         ('cache_strategy',): {
             'None': None,
