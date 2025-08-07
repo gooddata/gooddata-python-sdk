@@ -1,4 +1,4 @@
-# (C) 2024 GoodData Corporation
+# (C) 2025 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -109,14 +109,13 @@ interactions:
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-GDC-CANCEL-TOKEN:
+          - 098563a6-e625-4a25-9c80-7dfbd6087d11
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
         content-length:
           - '907'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:18:03 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           executionResponse:
@@ -161,14 +160,14 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: b002a8bfc281d11071ec985f51af42013aa9319b:d715acc6517c9af7e0d060193b42162fdca55031f4f32feac4d77277b84f34e2
+              executionResult: c7cf33042c62bfd15489bedf7861ad163aed22f5:8451351a21b385772eb34e95ab686b97bf43f16ca9aab53621ef69fc127e1512
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular
       body:
         fileName: test_xlsx
         format: XLSX
-        executionResult: b002a8bfc281d11071ec985f51af42013aa9319b:d715acc6517c9af7e0d060193b42162fdca55031f4f32feac4d77277b84f34e2
+        executionResult: c7cf33042c62bfd15489bedf7861ad163aed22f5:8451351a21b385772eb34e95ab686b97bf43f16ca9aab53621ef69fc127e1512
         customOverride:
           labels:
             region:
@@ -244,15 +243,12 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:18:03 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
-          exportResult: c6f3b78d8798916d4a71a7d9311c579ddcc5f094
+          exportResult: 3781f63de66bafad229214c9dbd47228531cf178
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/c6f3b78d8798916d4a71a7d9311c579ddcc5f094
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/3781f63de66bafad229214c9dbd47228531cf178
       body: null
       headers:
         Accept:
@@ -315,14 +311,11 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:18:03 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/c6f3b78d8798916d4a71a7d9311c579ddcc5f094
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/3781f63de66bafad229214c9dbd47228531cf178
       body: null
       headers:
         Accept:
@@ -339,8 +332,6 @@ interactions:
         code: 200
         message: OK
       headers:
-        Accept-Ranges:
-          - bytes
         Access-Control-Allow-Credentials:
           - 'true'
         Access-Control-Expose-Headers:
@@ -391,9 +382,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:18:03 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: !!binary |
           UEsDBBQAAAAIAAAAPwBhXUk6TwEAAI8EAAATAAAAW0NvbnRlbnRfVHlwZXNdLnhtbK2Uy27CMBBF
@@ -504,13 +492,13 @@ interactions:
           BzREgkKnU5EgZF+Vdr6GmVPXn68zRmWfmasr0+J3SI4IG2TV28zst1A06yalI3Lc6aDZpuoahv3/
           8OTjrph8zh4PFoLc88wirtb0tUfBxtupcM5Hbd1scd1b+1GbwuEDZV/QuKnw2WK+HfADiD6aT5QI
           EvFSqyy/+eYQdG5pxmWs/tkxahGC1op4X+TwqTm7scLZZ4t7c2d7Bl97Z7vaXi5RWzvI5KulP574
-          8D7I3oGD0oQpWbxNegBHze7sLwPgYy9It/4GUEsDBBQAAAAIAAAAPwCoaERtJQEAAFACAAARAAAA
-          ZG9jUHJvcHMvY29yZS54bWydks1OwzAQhO88ReR7YrtFUKwklQD1RCUkikDcLHvbWsQ/sg1p3x43
-          TdJW6onjema/nV25nO90k/2CD8qaCtGCoAyMsFKZTYXeV4t8hrIQuZG8sQYqtIeA5vVNKRwT1sOr
-          tw58VBCyBDKBCVehbYyOYRzEFjQPRXKYJK6t1zym0m+w4+KbbwBPCLnDGiKXPHJ8AOZuJKIeKcWI
-          dD++6QBSYGhAg4kB04LikzeC1+FqQ6ecObWKewdXrYM4undBjca2bYt22llTfoo/ly9v3aq5ModT
-          CUB1KQUTHni0vi7xeZEO1/AQl+nEawXycZ/0K2/9Isc+kFkKwI5xB+Vj+vS8WqB6Qia3OSU5uV+R
-          B0ZnjEy/DiMv+k9A3Q/5N3EAHHNffoL6D1BLAwQUAAAACAAAAD8ABHFFY3sBAAATAwAAEAAAAGRv
+          8D7I3oGD0oQpWbxNegBHze7sLwPgYy9It/4GUEsDBBQAAAAIAAAAPwAy6HPnJQEAAFACAAARAAAA
+          ZG9jUHJvcHMvY29yZS54bWydks1qwzAQhO99CqO7LcmhbRC2A23JqYFCU1pyE9ImEbV+kNQ6efsq
+          TuIk4FOPq5n9dnZRNdvpNvsFH5Q1NaIFQRkYYaUymxp9LOf5FGUhciN5aw3UaA8BzZq7SjgmrIc3
+          bx34qCBkCWQCE65G2xgdwziILWgeiuQwSVxbr3lMpd9gx8U33wAuCXnAGiKXPHJ8AOZuIKITUooB
+          6X582wOkwNCCBhMDpgXFF28Er8NoQ69cObWKewej1rM4uHdBDcau64pu0ltTfoq/Fq/v/aq5ModT
+          CUBNJQUTHni0vqnwdZEO1/IQF+nEawXyaZ/0kbfTIsc+kFkKwI5xz8rn5PllOUdNScr7nExz8rik
+          lJWUUbI6jLzpvwD1aci/iWfAMfftJ2j+AFBLAwQUAAAACAAAAD8ABHFFY3sBAAATAwAAEAAAAGRv
           Y1Byb3BzL2FwcC54bWydUsFO4zAQvfMVke/UabVaocoxWpVd9bCISi1wXBln0lh1bMszRClfj5Oq
           IYU94dObN0/PzzMWt11jsxYiGu8KNp/lLAOnfWncvmCPuz/XNyxDUq5U1jso2BGQ3corsYk+QCQD
           mCUHhwWricKSc9Q1NApnqe1Sp/KxUZTKuOe+qoyGO69fG3DEF3n+k0NH4Eoor8NoyE6Oy5a+a1p6
@@ -527,6 +515,6 @@ interactions:
           ACwGAAAUAAAAAAAAAAAAAACAgbwMAAB4bC9zaGFyZWRTdHJpbmdzLnhtbFBLAQIUAxQAAAAIAAAA
           PwCCg3RkHgMAAIUTAAANAAAAAAAAAAAAAACAgf0OAAB4bC9zdHlsZXMueG1sUEsBAhQDFAAAAAgA
           AAA/ABj6RlSwBQAAUhsAABMAAAAAAAAAAAAAAICBRhIAAHhsL3RoZW1lL3RoZW1lMS54bWxQSwEC
-          FAMUAAAACAAAAD8AqGhEbSUBAABQAgAAEQAAAAAAAAAAAAAAgIEnGAAAZG9jUHJvcHMvY29yZS54
+          FAMUAAAACAAAAD8AMuhz5yUBAABQAgAAEQAAAAAAAAAAAAAAgIEnGAAAZG9jUHJvcHMvY29yZS54
           bWxQSwECFAMUAAAACAAAAD8ABHFFY3sBAAATAwAAEAAAAAAAAAAAAAAAgIF7GQAAZG9jUHJvcHMv
           YXBwLnhtbFBLBQYAAAAACgAKAIACAAAkGwAAAAA=

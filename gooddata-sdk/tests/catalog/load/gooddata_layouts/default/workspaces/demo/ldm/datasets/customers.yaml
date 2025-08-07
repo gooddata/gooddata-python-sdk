@@ -1,4 +1,5 @@
-# (C) 2023 GoodData Corporation
+# (C) 2025 GoodData Corporation
+aggregatedFacts: []
 attributes:
   - description: Customer id
     id: customer_id
@@ -34,6 +35,7 @@ attributes:
         tags:
           - Customers
         title: Location
+        valueType: GEO
     sourceColumn: state
     sourceColumnDataType: STRING
     tags:

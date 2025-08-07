@@ -1440,9 +1440,6 @@
       "BoundedFilter": {
         "description": "Bounding filter for this relative date filter. This can be used to limit the range of the relative date filter to a specific date range.",
         "properties": {
-          "dataset": {
-            "$ref": "#/components/schemas/AfmObjectIdentifierDataset"
-          },
           "from": {
             "description": "Start of the filtering interval. Specified by number of periods (with respect to given granularity). Typically negative (historical time interval like -2 for '2 days/weeks, ... ago'). If null, then start of the range is unbounded.",
             "example": -6,
@@ -1464,6 +1461,7 @@
               "HOUR_OF_DAY",
               "DAY_OF_WEEK",
               "DAY_OF_MONTH",
+              "DAY_OF_QUARTER",
               "DAY_OF_YEAR",
               "WEEK_OF_YEAR",
               "MONTH_OF_YEAR",
@@ -1549,6 +1547,19 @@
           "reset": {
             "description": "User feedback.",
             "type": "boolean"
+          },
+          "responseState": {
+            "description": "Response state indicating the outcome of the AI interaction.",
+            "enum": [
+              "SUCCESSFUL",
+              "UNEXPECTED_ERROR",
+              "NOT_FOUND_ATTRIBUTES",
+              "TOO_MANY_DATA_POINTS",
+              "NO_DATA",
+              "NO_RESULTS",
+              "OUT_OF_TOPIC"
+            ],
+            "type": "string"
           },
           "savedVisualization": {
             "$ref": "#/components/schemas/SavedVisualization"
@@ -2311,6 +2322,9 @@
             "properties": {
               "attribute": {
                 "$ref": "#/components/schemas/IdentifierRef"
+              },
+              "boundedFilter": {
+                "$ref": "#/components/schemas/RelativeBoundedDateFilter"
               },
               "dataSet": {
                 "$ref": "#/components/schemas/IdentifierRef"
@@ -3828,7 +3842,8 @@
               "MOTHERDUCK",
               "FLEXCONNECT",
               "STARROCKS",
-              "ATHENA"
+              "ATHENA",
+              "MONGODB"
             ],
             "example": "POSTGRESQL",
             "type": "string"
@@ -4076,6 +4091,7 @@
                 "HOUR_OF_DAY",
                 "DAY_OF_WEEK",
                 "DAY_OF_MONTH",
+                "DAY_OF_QUARTER",
                 "DAY_OF_YEAR",
                 "WEEK_OF_YEAR",
                 "MONTH_OF_YEAR",
@@ -5280,7 +5296,8 @@
               "ENABLE_SLIDES_EXPORT",
               "AI_RATE_LIMIT",
               "ATTACHMENT_SIZE_LIMIT",
-              "ATTACHMENT_LINK_TTL"
+              "ATTACHMENT_LINK_TTL",
+              "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -7625,6 +7642,7 @@
                   "userDataFilter",
                   "exportDefinition",
                   "automation",
+                  "automationResult",
                   "prompt",
                   "visualizationObject",
                   "filterContext",
@@ -9146,6 +9164,7 @@
                   "HOUR_OF_DAY",
                   "DAY_OF_WEEK",
                   "DAY_OF_MONTH",
+                  "DAY_OF_QUARTER",
                   "DAY_OF_YEAR",
                   "WEEK_OF_YEAR",
                   "MONTH_OF_YEAR",
@@ -9962,6 +9981,17 @@
                 ],
                 "type": "object"
               },
+              "automationResult": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiAutomationResultToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
               "createdBy": {
                 "properties": {
                   "data": {
@@ -10073,6 +10103,9 @@
           },
           {
             "$ref": "#/components/schemas/JsonApiUserOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiAutomationResultOutWithLinks"
           }
         ]
       },
@@ -10413,6 +10446,105 @@
           "data"
         ],
         "type": "object"
+      },
+      "JsonApiAutomationResultLinkage": {
+        "description": "The \\\"type\\\" and \\\"id\\\" to non-empty members.",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "automationResult"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiAutomationResultOut": {
+        "description": "JSON:API representation of automationResult entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "executedAt": {
+                "description": "Timestamp of the last automation run.",
+                "format": "date-time",
+                "type": "string"
+              },
+              "status": {
+                "description": "Status of the last automation run.",
+                "enum": [
+                  "SUCCESS",
+                  "FAILED"
+                ],
+                "type": "string"
+              }
+            },
+            "required": [
+              "executedAt",
+              "status"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "relationships": {
+            "properties": {
+              "automation": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiAutomationToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "automationResult"
+            ],
+            "example": "automationResult",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiAutomationResultOutWithLinks": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiAutomationResultOut"
+          },
+          {
+            "$ref": "#/components/schemas/ObjectLinksContainer"
+          }
+        ]
+      },
+      "JsonApiAutomationResultToManyLinkage": {
+        "description": "References to other resource objects in a to-many (\\\"relationship\\\"). Relationships can be specified by including a member in a resource's links object.",
+        "items": {
+          "$ref": "#/components/schemas/JsonApiAutomationResultLinkage"
+        },
+        "type": "array"
       },
       "JsonApiAutomationToOneLinkage": {
         "description": "References to other resource objects in a to-one (\\\"relationship\\\"). Relationships can be specified by including a member in a resource's links object.",
@@ -11672,7 +11804,8 @@
                   "MOTHERDUCK",
                   "FLEXCONNECT",
                   "STARROCKS",
-                  "ATHENA"
+                  "ATHENA",
+                  "MONGODB"
                 ],
                 "type": "string"
               }
@@ -11880,7 +12013,8 @@
                   "MOTHERDUCK",
                   "FLEXCONNECT",
                   "STARROCKS",
-                  "ATHENA"
+                  "ATHENA",
+                  "MONGODB"
                 ],
                 "type": "string"
               },
@@ -12046,7 +12180,8 @@
                   "MOTHERDUCK",
                   "FLEXCONNECT",
                   "STARROCKS",
-                  "ATHENA"
+                  "ATHENA",
+                  "MONGODB"
                 ],
                 "type": "string"
               },
@@ -12266,7 +12401,8 @@
                   "MOTHERDUCK",
                   "FLEXCONNECT",
                   "STARROCKS",
-                  "ATHENA"
+                  "ATHENA",
+                  "MONGODB"
                 ],
                 "type": "string"
               },
@@ -17598,7 +17734,8 @@
                   "ENABLE_SLIDES_EXPORT",
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
-                  "ATTACHMENT_LINK_TTL"
+                  "ATTACHMENT_LINK_TTL",
+                  "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE"
                 ],
                 "type": "string"
               }
@@ -17673,7 +17810,8 @@
                   "ENABLE_SLIDES_EXPORT",
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
-                  "ATTACHMENT_LINK_TTL"
+                  "ATTACHMENT_LINK_TTL",
+                  "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE"
                 ],
                 "type": "string"
               }
@@ -17788,7 +17926,8 @@
                   "ENABLE_SLIDES_EXPORT",
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
-                  "ATTACHMENT_LINK_TTL"
+                  "ATTACHMENT_LINK_TTL",
+                  "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE"
                 ],
                 "type": "string"
               }
@@ -19269,7 +19408,8 @@
                   "ENABLE_SLIDES_EXPORT",
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
-                  "ATTACHMENT_LINK_TTL"
+                  "ATTACHMENT_LINK_TTL",
+                  "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE"
                 ],
                 "type": "string"
               }
@@ -19344,7 +19484,8 @@
                   "ENABLE_SLIDES_EXPORT",
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
-                  "ATTACHMENT_LINK_TTL"
+                  "ATTACHMENT_LINK_TTL",
+                  "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE"
                 ],
                 "type": "string"
               }
@@ -21097,7 +21238,8 @@
                   "ENABLE_SLIDES_EXPORT",
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
-                  "ATTACHMENT_LINK_TTL"
+                  "ATTACHMENT_LINK_TTL",
+                  "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE"
                 ],
                 "type": "string"
               }
@@ -21172,7 +21314,8 @@
                   "ENABLE_SLIDES_EXPORT",
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
-                  "ATTACHMENT_LINK_TTL"
+                  "ATTACHMENT_LINK_TTL",
+                  "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE"
                 ],
                 "type": "string"
               }
@@ -21313,7 +21456,8 @@
                   "ENABLE_SLIDES_EXPORT",
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
-                  "ATTACHMENT_LINK_TTL"
+                  "ATTACHMENT_LINK_TTL",
+                  "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE"
                 ],
                 "type": "string"
               }
@@ -21388,7 +21532,8 @@
                   "ENABLE_SLIDES_EXPORT",
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
-                  "ATTACHMENT_LINK_TTL"
+                  "ATTACHMENT_LINK_TTL",
+                  "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE"
                 ],
                 "type": "string"
               }
@@ -22874,6 +23019,50 @@
         ],
         "type": "object"
       },
+      "RelativeBoundedDateFilter": {
+        "properties": {
+          "from": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "granularity": {
+            "enum": [
+              "ALL_TIME_GRANULARITY",
+              "GDC.time.year",
+              "GDC.time.week_us",
+              "GDC.time.week_in_year",
+              "GDC.time.week_in_quarter",
+              "GDC.time.week",
+              "GDC.time.euweek_in_year",
+              "GDC.time.euweek_in_quarter",
+              "GDC.time.quarter",
+              "GDC.time.quarter_in_year",
+              "GDC.time.month",
+              "GDC.time.month_in_quarter",
+              "GDC.time.month_in_year",
+              "GDC.time.day_in_year",
+              "GDC.time.day_in_quarter",
+              "GDC.time.day_in_month",
+              "GDC.time.day_in_week",
+              "GDC.time.day_in_euweek",
+              "GDC.time.date",
+              "GDC.time.hour",
+              "GDC.time.hour_in_day",
+              "GDC.time.minute",
+              "GDC.time.minute_in_hour"
+            ],
+            "type": "string"
+          },
+          "to": {
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "granularity"
+        ],
+        "type": "object"
+      },
       "RelativeDateFilter": {
         "description": "A date filter specifying a time interval that is relative to the current date. For example, last week, next month, and so on. Field dataset is representing qualifier of date dimension. The 'from' and 'to' properties mark the boundaries of the interval. If 'from' is omitted, all values earlier than 'to' are included. If 'to' is omitted, all values later than 'from' are included. It is not allowed to omit both.",
         "properties": {
@@ -22908,6 +23097,7 @@
                   "HOUR_OF_DAY",
                   "DAY_OF_WEEK",
                   "DAY_OF_MONTH",
+                  "DAY_OF_QUARTER",
                   "DAY_OF_YEAR",
                   "WEEK_OF_YEAR",
                   "MONTH_OF_YEAR",
@@ -23039,7 +23229,8 @@
               "ENABLE_SLIDES_EXPORT",
               "AI_RATE_LIMIT",
               "ATTACHMENT_SIZE_LIMIT",
-              "ATTACHMENT_LINK_TTL"
+              "ATTACHMENT_LINK_TTL",
+              "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -24295,7 +24486,8 @@
               "MOTHERDUCK",
               "FLEXCONNECT",
               "STARROCKS",
-              "ATHENA"
+              "ATHENA",
+              "MONGODB"
             ],
             "example": "POSTGRESQL",
             "type": "string"
@@ -25740,6 +25932,7 @@
         },
         "summary": "(EXPERIMENTAL) Compute column statistics",
         "tags": [
+          "Computation",
           "actions"
         ]
       }
@@ -37186,7 +37379,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients",
+            "example": "include=notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResult",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -37199,11 +37392,13 @@
                   "userIdentifiers",
                   "exportDefinitions",
                   "users",
+                  "automationResults",
                   "notificationChannel",
                   "analyticalDashboard",
                   "createdBy",
                   "modifiedBy",
                   "recipients",
+                  "automationResult",
                   "ALL"
                 ],
                 "type": "string"
@@ -37292,7 +37487,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients",
+            "example": "include=notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResult",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -37305,11 +37500,13 @@
                   "userIdentifiers",
                   "exportDefinitions",
                   "users",
+                  "automationResults",
                   "notificationChannel",
                   "analyticalDashboard",
                   "createdBy",
                   "modifiedBy",
                   "recipients",
+                  "automationResult",
                   "ALL"
                 ],
                 "type": "string"
@@ -37455,7 +37652,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients",
+            "example": "include=notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResult",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -37468,11 +37665,13 @@
                   "userIdentifiers",
                   "exportDefinitions",
                   "users",
+                  "automationResults",
                   "notificationChannel",
                   "analyticalDashboard",
                   "createdBy",
                   "modifiedBy",
                   "recipients",
+                  "automationResult",
                   "ALL"
                 ],
                 "type": "string"
@@ -37568,7 +37767,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients",
+            "example": "include=notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResult",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -37581,11 +37780,13 @@
                   "userIdentifiers",
                   "exportDefinitions",
                   "users",
+                  "automationResults",
                   "notificationChannel",
                   "analyticalDashboard",
                   "createdBy",
                   "modifiedBy",
                   "recipients",
+                  "automationResult",
                   "ALL"
                 ],
                 "type": "string"
@@ -37660,7 +37861,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients",
+            "example": "include=notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResult",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -37673,11 +37874,13 @@
                   "userIdentifiers",
                   "exportDefinitions",
                   "users",
+                  "automationResults",
                   "notificationChannel",
                   "analyticalDashboard",
                   "createdBy",
                   "modifiedBy",
                   "recipients",
+                  "automationResult",
                   "ALL"
                 ],
                 "type": "string"

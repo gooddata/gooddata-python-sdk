@@ -1,4 +1,4 @@
-# (C) 2024 GoodData Corporation
+# (C) 2025 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -69,10 +69,7 @@ interactions:
         X-XSS-Protection:
           - '0'
         content-length:
-          - '36252'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:37 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+          - '36287'
       body:
         string:
           workspaceDataFilters:
@@ -1442,7 +1439,8 @@ interactions:
                       title: Top 10 Products
                 ldm:
                   datasets:
-                    - attributes:
+                    - aggregatedFacts: []
+                      attributes:
                         - description: Campaign channel id
                           id: campaign_channel_id
                           labels: []
@@ -1508,7 +1506,8 @@ interactions:
                       tags:
                         - Campaign channels
                       title: Campaign channels
-                    - attributes:
+                    - aggregatedFacts: []
+                      attributes:
                         - description: Campaign id
                           id: campaign_id
                           labels: []
@@ -1542,7 +1541,8 @@ interactions:
                       tags:
                         - Campaigns
                       title: Campaigns
-                    - attributes:
+                    - aggregatedFacts: []
+                      attributes:
                         - description: Customer id
                           id: customer_id
                           labels: []
@@ -1577,6 +1577,7 @@ interactions:
                               tags:
                                 - Customers
                               title: Location
+                              valueType: GEO
                           sourceColumn: state
                           sourceColumnDataType: STRING
                           tags:
@@ -1599,7 +1600,8 @@ interactions:
                       tags:
                         - Customers
                       title: Customers
-                    - attributes:
+                    - aggregatedFacts: []
+                      attributes:
                         - description: Order id
                           id: order_id
                           labels: []
@@ -1706,7 +1708,8 @@ interactions:
                           filterId:
                             id: wdf__region
                             type: workspaceDataFilter
-                    - attributes:
+                    - aggregatedFacts: []
+                      attributes:
                         - description: Product id
                           id: product_id
                           labels: []
@@ -1751,21 +1754,11 @@ interactions:
                   dateInstances:
                     - description: ''
                       granularities:
-                        - MINUTE
-                        - HOUR
                         - DAY
                         - WEEK
                         - MONTH
                         - QUARTER
                         - YEAR
-                        - MINUTE_OF_HOUR
-                        - HOUR_OF_DAY
-                        - DAY_OF_WEEK
-                        - DAY_OF_MONTH
-                        - DAY_OF_YEAR
-                        - WEEK_OF_YEAR
-                        - MONTH_OF_YEAR
-                        - QUARTER_OF_YEAR
                       granularitiesFormatting:
                         titleBase: ''
                         titlePattern: '%titleBase - %granularityTitle'
@@ -1915,10 +1908,7 @@ interactions:
         X-XSS-Protection:
           - '0'
         content-length:
-          - '36252'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:38 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+          - '36287'
       body:
         string:
           workspaceDataFilters:
@@ -3288,7 +3278,8 @@ interactions:
                       title: Top 10 Products
                 ldm:
                   datasets:
-                    - attributes:
+                    - aggregatedFacts: []
+                      attributes:
                         - description: Campaign channel id
                           id: campaign_channel_id
                           labels: []
@@ -3354,7 +3345,8 @@ interactions:
                       tags:
                         - Campaign channels
                       title: Campaign channels
-                    - attributes:
+                    - aggregatedFacts: []
+                      attributes:
                         - description: Campaign id
                           id: campaign_id
                           labels: []
@@ -3388,7 +3380,8 @@ interactions:
                       tags:
                         - Campaigns
                       title: Campaigns
-                    - attributes:
+                    - aggregatedFacts: []
+                      attributes:
                         - description: Customer id
                           id: customer_id
                           labels: []
@@ -3423,6 +3416,7 @@ interactions:
                               tags:
                                 - Customers
                               title: Location
+                              valueType: GEO
                           sourceColumn: state
                           sourceColumnDataType: STRING
                           tags:
@@ -3445,7 +3439,8 @@ interactions:
                       tags:
                         - Customers
                       title: Customers
-                    - attributes:
+                    - aggregatedFacts: []
+                      attributes:
                         - description: Order id
                           id: order_id
                           labels: []
@@ -3552,7 +3547,8 @@ interactions:
                           filterId:
                             id: wdf__region
                             type: workspaceDataFilter
-                    - attributes:
+                    - aggregatedFacts: []
+                      attributes:
                         - description: Product id
                           id: product_id
                           labels: []
@@ -3597,21 +3593,11 @@ interactions:
                   dateInstances:
                     - description: ''
                       granularities:
-                        - MINUTE
-                        - HOUR
                         - DAY
                         - WEEK
                         - MONTH
                         - QUARTER
                         - YEAR
-                        - MINUTE_OF_HOUR
-                        - HOUR_OF_DAY
-                        - DAY_OF_WEEK
-                        - DAY_OF_MONTH
-                        - DAY_OF_YEAR
-                        - WEEK_OF_YEAR
-                        - MONTH_OF_YEAR
-                        - QUARTER_OF_YEAR
                       granularitiesFormatting:
                         titleBase: ''
                         titlePattern: '%titleBase - %granularityTitle'

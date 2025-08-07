@@ -49,7 +49,7 @@ def _set_up_workspace_ldm(sdk: GoodDataSdk, workspace_id: str, identifier: str) 
 def test_catalog_list_labels(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     labels_list = sdk.catalog_workspace_content.get_labels_catalog(test_config["workspace"])
-    assert len(labels_list) == 31
+    assert len(labels_list) == 21
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_catalog_list_facts.yaml"))
@@ -71,7 +71,7 @@ def test_catalog_list_aggregated_facts(test_config):
 def test_catalog_list_attributes(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     attributes_list = sdk.catalog_workspace_content.get_attributes_catalog(test_config["workspace"])
-    assert len(attributes_list) == 30
+    assert len(attributes_list) == 20
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_catalog_list_metrics.yaml"))
@@ -342,8 +342,8 @@ def test_get_dependent_entities_graph(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     response = sdk.catalog_workspace_content.get_dependent_entities_graph(workspace_id=test_config["workspace"])
 
-    assert len(response.graph.edges) == 191
-    assert len(response.graph.nodes) == 117
+    assert len(response.graph.edges) == 171
+    assert len(response.graph.nodes) == 97
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_dependent_entities_graph_from_entry_points.yaml"))

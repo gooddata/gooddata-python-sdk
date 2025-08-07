@@ -1,4 +1,4 @@
-# (C) 2024 GoodData Corporation
+# (C) 2025 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -68,9 +68,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:38 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -184,9 +181,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:38 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -294,9 +288,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:38 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
   - request:
@@ -365,9 +356,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:38 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -406,6 +394,9 @@ interactions:
           - columnName: wdf__region
             id: wdf__region
             title: Customer region
+            workspace:
+              id: demo
+              type: workspace
             workspaceDataFilterSettings:
               - filterValues:
                   - West
@@ -414,12 +405,12 @@ interactions:
                 workspace:
                   id: demo_west
                   type: workspace
-            workspace:
-              id: demo
-              type: workspace
           - columnName: wdf__state
             id: wdf__state
             title: Customer state
+            workspace:
+              id: demo_west
+              type: workspace
             workspaceDataFilterSettings:
               - filterValues:
                   - California
@@ -428,13 +419,12 @@ interactions:
                 workspace:
                   id: demo_west_california
                   type: workspace
-            workspace:
-              id: demo_west
-              type: workspace
         workspaces:
           - id: demo
             name: Demo
+            automations: []
             customApplicationSettings: []
+            filterViews: []
             hierarchyPermissions:
               - assignee:
                   id: demo2
@@ -497,11 +487,11 @@ interactions:
                       version: '2'
                     id: campaign
                     title: Campaign
+                    description: ''
                     permissions:
                       - assigneeRule:
                           type: allWorkspaceUsers
                         name: VIEW
-                    description: ''
                   - content:
                       filterContextRef:
                         identifier:
@@ -697,6 +687,7 @@ interactions:
                     id: dashboard_plugin_2
                     title: dashboard_plugin_2
                     description: Testing record dashboard_plugin_2
+                exportDefinitions: []
                 filterContexts:
                   - content:
                       filters:
@@ -1764,7 +1755,6 @@ interactions:
                       visualizationUrl: local:bar
                     id: top_10_products
                     title: Top 10 Products
-                exportDefinitions: []
               ldm:
                 datasets:
                   - grain:
@@ -1783,6 +1773,7 @@ interactions:
                               type: attribute
                             dataType: INT
                     title: Campaign channels
+                    aggregatedFacts: []
                     attributes:
                       - id: campaign_channel_id
                         labels: []
@@ -1839,6 +1830,7 @@ interactions:
                     id: campaigns
                     references: []
                     title: Campaigns
+                    aggregatedFacts: []
                     attributes:
                       - id: campaign_id
                         labels: []
@@ -1873,6 +1865,7 @@ interactions:
                     id: customers
                     references: []
                     title: Customers
+                    aggregatedFacts: []
                     attributes:
                       - id: customer_id
                         labels: []
@@ -1907,6 +1900,7 @@ interactions:
                             sourceColumnDataType: STRING
                             tags:
                               - Customers
+                            valueType: GEO
                         sourceColumn: state
                         title: State
                         description: State
@@ -1970,6 +1964,7 @@ interactions:
                               type: attribute
                             dataType: INT
                     title: Order lines
+                    aggregatedFacts: []
                     attributes:
                       - id: order_id
                         labels: []
@@ -2037,6 +2032,7 @@ interactions:
                     id: products
                     references: []
                     title: Products
+                    aggregatedFacts: []
                     attributes:
                       - id: product_id
                         labels: []
@@ -2075,21 +2071,11 @@ interactions:
                       - Products
                 dateInstances:
                   - granularities:
-                      - MINUTE
-                      - HOUR
                       - DAY
                       - WEEK
                       - MONTH
                       - QUARTER
                       - YEAR
-                      - MINUTE_OF_HOUR
-                      - HOUR_OF_DAY
-                      - DAY_OF_WEEK
-                      - DAY_OF_MONTH
-                      - DAY_OF_YEAR
-                      - WEEK_OF_YEAR
-                      - MONTH_OF_YEAR
-                      - QUARTER_OF_YEAR
                     granularitiesFormatting:
                       titleBase: ''
                       titlePattern: '%titleBase - %granularityTitle'
@@ -2109,11 +2095,11 @@ interactions:
                 name: VIEW
             settings: []
             userDataFilters: []
-            automations: []
-            filterViews: []
           - id: demo_west
             name: Demo West
+            automations: []
             customApplicationSettings: []
+            filterViews: []
             hierarchyPermissions: []
             model:
               analytics:
@@ -2126,10 +2112,10 @@ interactions:
                 analyticalDashboards: []
                 attributeHierarchies: []
                 dashboardPlugins: []
+                exportDefinitions: []
                 filterContexts: []
                 metrics: []
                 visualizationObjects: []
-                exportDefinitions: []
               ldm:
                 datasetExtensions:
                   - id: order_lines
@@ -2147,11 +2133,11 @@ interactions:
             permissions: []
             settings: []
             userDataFilters: []
-            automations: []
-            filterViews: []
           - id: demo_west_california
             name: Demo West California
+            automations: []
             customApplicationSettings: []
+            filterViews: []
             hierarchyPermissions: []
             model:
               analytics:
@@ -2159,10 +2145,10 @@ interactions:
                 analyticalDashboards: []
                 attributeHierarchies: []
                 dashboardPlugins: []
+                exportDefinitions: []
                 filterContexts: []
                 metrics: []
                 visualizationObjects: []
-                exportDefinitions: []
               ldm:
                 datasets: []
                 dateInstances: []
@@ -2172,8 +2158,6 @@ interactions:
             permissions: []
             settings: []
             userDataFilters: []
-            automations: []
-            filterViews: []
       headers:
         Accept-Encoding:
           - br, gzip, deflate
@@ -2232,8 +2216,5 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:39 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''

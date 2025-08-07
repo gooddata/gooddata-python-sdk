@@ -33,8 +33,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 def lazy_import():
     from gooddata_api_client.model.dashboard_date_filter_date_filter_from import DashboardDateFilterDateFilterFrom
     from gooddata_api_client.model.identifier_ref import IdentifierRef
+    from gooddata_api_client.model.relative_bounded_date_filter import RelativeBoundedDateFilter
     globals()['DashboardDateFilterDateFilterFrom'] = DashboardDateFilterDateFilterFrom
     globals()['IdentifierRef'] = IdentifierRef
+    globals()['RelativeBoundedDateFilter'] = RelativeBoundedDateFilter
 
 
 class DashboardDateFilterDateFilter(ModelNormal):
@@ -122,6 +124,7 @@ class DashboardDateFilterDateFilter(ModelNormal):
             'granularity': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
             'attribute': (IdentifierRef,),  # noqa: E501
+            'bounded_filter': (RelativeBoundedDateFilter,),  # noqa: E501
             'data_set': (IdentifierRef,),  # noqa: E501
             '_from': (DashboardDateFilterDateFilterFrom,),  # noqa: E501
             'local_identifier': (str,),  # noqa: E501
@@ -137,6 +140,7 @@ class DashboardDateFilterDateFilter(ModelNormal):
         'granularity': 'granularity',  # noqa: E501
         'type': 'type',  # noqa: E501
         'attribute': 'attribute',  # noqa: E501
+        'bounded_filter': 'boundedFilter',  # noqa: E501
         'data_set': 'dataSet',  # noqa: E501
         '_from': 'from',  # noqa: E501
         'local_identifier': 'localIdentifier',  # noqa: E501
@@ -189,6 +193,7 @@ class DashboardDateFilterDateFilter(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             attribute (IdentifierRef): [optional]  # noqa: E501
+            bounded_filter (RelativeBoundedDateFilter): [optional]  # noqa: E501
             data_set (IdentifierRef): [optional]  # noqa: E501
             _from (DashboardDateFilterDateFilterFrom): [optional]  # noqa: E501
             local_identifier (str): [optional]  # noqa: E501
@@ -285,6 +290,7 @@ class DashboardDateFilterDateFilter(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             attribute (IdentifierRef): [optional]  # noqa: E501
+            bounded_filter (RelativeBoundedDateFilter): [optional]  # noqa: E501
             data_set (IdentifierRef): [optional]  # noqa: E501
             _from (DashboardDateFilterDateFilterFrom): [optional]  # noqa: E501
             local_identifier (str): [optional]  # noqa: E501

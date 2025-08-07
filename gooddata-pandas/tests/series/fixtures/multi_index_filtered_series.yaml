@@ -108,14 +108,13 @@ interactions:
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-GDC-CANCEL-TOKEN:
+          - 46c3b762-b7cc-4a75-92c7-60892c25faa6
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
         content-length:
           - '954'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Fri, 17 Jan 2025 13:33:01 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           executionResponse:
@@ -157,7 +156,7 @@ interactions:
                       valueType: TEXT
                 localIdentifier: dim_1
             links:
-              executionResult: c88bb35d36a30a26887ab5b433d66b3680290155:f54532b9aa57193ec2a2b28a177d9d99e995f796c1645fe39fab3a79fd9efaef
+              executionResult: f049145262244d590d8aa1bfd692451fb611ce70:75f9870c51f80a12febf925e3a8d5cdb63d0558d41ba428c434d5236b0dc2e9f
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3Din%3D%28region%2Cproducts.category%29&page=0&size=500
@@ -224,9 +223,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Fri, 17 Jan 2025 13:33:01 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -346,7 +342,7 @@ interactions:
             next: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3Din%3D%28%27region%27%2C%27products.category%27%29&page=1&size=500
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/c88bb35d36a30a26887ab5b433d66b3680290155%3Af54532b9aa57193ec2a2b28a177d9d99e995f796c1645fe39fab3a79fd9efaef?offset=0%2C0&limit=1%2C1000
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/f049145262244d590d8aa1bfd692451fb611ce70%3A75f9870c51f80a12febf925e3a8d5cdb63d0558d41ba428c434d5236b0dc2e9f?offset=0%2C0&limit=1%2C1000
       body: null
       headers:
         Accept:
@@ -411,10 +407,7 @@ interactions:
         X-XSS-Protection:
           - '0'
         content-length:
-          - '1014'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Fri, 17 Jan 2025 13:33:01 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+          - '1051'
       body:
         string:
           data:
@@ -462,8 +455,6 @@ interactions:
                         labelValue: Clothing
                         primaryLabelValue: Clothing
           grandTotals: []
-          metadata:
-            dataSourceMessages: []
           paging:
             count:
               - 1
@@ -474,3 +465,5 @@ interactions:
             total:
               - 1
               - 5
+          metadata:
+            dataSourceMessages: []

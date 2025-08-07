@@ -1,4 +1,4 @@
-# (C) 2024 GoodData Corporation
+# (C) 2025 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -70,9 +70,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:30 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
   - request:
@@ -143,9 +140,6 @@ interactions:
           - '0'
         content-length:
           - '148'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:30 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           - assignee:
@@ -222,9 +216,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:30 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
   - request:
@@ -295,9 +286,6 @@ interactions:
           - '0'
         content-length:
           - '69'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:30 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           - assignee:

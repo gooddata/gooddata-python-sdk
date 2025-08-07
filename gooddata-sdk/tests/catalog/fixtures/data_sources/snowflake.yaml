@@ -1,4 +1,4 @@
-# (C) 2024 GoodData Corporation
+# (C) 2025 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -68,16 +68,13 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:24 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           detail: The requested endpoint does not exist or you do not have permission
             to access it.
           status: 404
           title: Not Found
-          traceId: 6703a72432afb1389afa755ee70b425a
+          traceId: 689494ad1babbd1416e2f84becd38a3c
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources
@@ -156,9 +153,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:24 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -239,9 +233,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:24 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -316,9 +307,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:24 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
   - request:
@@ -387,16 +375,13 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:24 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           detail: The requested endpoint does not exist or you do not have permission
             to access it.
           status: 404
           title: Not Found
-          traceId: 6703a72405b7540efb7f7536f081f56e
+          traceId: 689494add9f38be4c9a7b8e92e5c4db3
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources
@@ -476,9 +461,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:24 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -559,9 +541,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:24 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -636,8 +615,5 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:24 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''

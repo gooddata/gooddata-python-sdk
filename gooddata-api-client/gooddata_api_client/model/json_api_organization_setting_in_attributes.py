@@ -82,6 +82,7 @@ class JsonApiOrganizationSettingInAttributes(ModelNormal):
             'AI_RATE_LIMIT': "AI_RATE_LIMIT",
             'ATTACHMENT_SIZE_LIMIT': "ATTACHMENT_SIZE_LIMIT",
             'ATTACHMENT_LINK_TTL': "ATTACHMENT_LINK_TTL",
+            'AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE': "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
         },
     }
 

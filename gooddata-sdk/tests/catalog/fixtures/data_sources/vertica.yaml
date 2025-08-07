@@ -1,4 +1,4 @@
-# (C) 2024 GoodData Corporation
+# (C) 2025 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -68,16 +68,13 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:24 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           detail: The requested endpoint does not exist or you do not have permission
             to access it.
           status: 404
           title: Not Found
-          traceId: 6703a724c8fc02a92870457a5e819017
+          traceId: 689494ad0e4ba05321f19bd97653ac8f
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources
@@ -156,9 +153,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:24 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -239,9 +233,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:24 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -316,8 +307,5 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:24 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''

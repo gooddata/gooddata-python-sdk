@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **analytical_dashboard** | [**JsonApiAutomationInRelationshipsAnalyticalDashboard**](JsonApiAutomationInRelationshipsAnalyticalDashboard.md) |  | [optional] 
-**automation** | [**JsonApiExportDefinitionOutRelationshipsAutomation**](JsonApiExportDefinitionOutRelationshipsAutomation.md) |  | [optional] 
+**automation** | [**JsonApiAutomationResultOutRelationshipsAutomation**](JsonApiAutomationResultOutRelationshipsAutomation.md) |  | [optional] 
 **created_by** | [**JsonApiAnalyticalDashboardOutRelationshipsCreatedBy**](JsonApiAnalyticalDashboardOutRelationshipsCreatedBy.md) |  | [optional] 
 **modified_by** | [**JsonApiAnalyticalDashboardOutRelationshipsCreatedBy**](JsonApiAnalyticalDashboardOutRelationshipsCreatedBy.md) |  | [optional] 
 **visualization_object** | [**JsonApiExportDefinitionInRelationshipsVisualizationObject**](JsonApiExportDefinitionInRelationshipsVisualizationObject.md) |  | [optional] 

@@ -885,9 +885,6 @@
       "BoundedFilter": {
         "description": "Bounding filter for this relative date filter. This can be used to limit the range of the relative date filter to a specific date range.",
         "properties": {
-          "dataset": {
-            "$ref": "#/components/schemas/AfmObjectIdentifierDataset"
-          },
           "from": {
             "description": "Start of the filtering interval. Specified by number of periods (with respect to given granularity). Typically negative (historical time interval like -2 for '2 days/weeks, ... ago'). If null, then start of the range is unbounded.",
             "example": -6,
@@ -909,6 +906,7 @@
               "HOUR_OF_DAY",
               "DAY_OF_WEEK",
               "DAY_OF_MONTH",
+              "DAY_OF_QUARTER",
               "DAY_OF_YEAR",
               "WEEK_OF_YEAR",
               "MONTH_OF_YEAR",
@@ -926,7 +924,6 @@
           }
         },
         "required": [
-          "dataset",
           "granularity"
         ],
         "type": "object"
@@ -1140,6 +1137,9 @@
             "properties": {
               "attribute": {
                 "$ref": "#/components/schemas/IdentifierRef"
+              },
+              "boundedFilter": {
+                "$ref": "#/components/schemas/RelativeBoundedDateFilter"
               },
               "dataSet": {
                 "$ref": "#/components/schemas/IdentifierRef"
@@ -1539,11 +1539,13 @@
                   "dashboardPlugin",
                   "dataset",
                   "fact",
+                  "aggregatedFact",
                   "label",
                   "metric",
                   "userDataFilter",
                   "exportDefinition",
                   "automation",
+                  "automationResult",
                   "prompt",
                   "visualizationObject",
                   "filterContext",
@@ -2415,6 +2417,50 @@
         ],
         "type": "object"
       },
+      "RelativeBoundedDateFilter": {
+        "properties": {
+          "from": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "granularity": {
+            "enum": [
+              "ALL_TIME_GRANULARITY",
+              "GDC.time.year",
+              "GDC.time.week_us",
+              "GDC.time.week_in_year",
+              "GDC.time.week_in_quarter",
+              "GDC.time.week",
+              "GDC.time.euweek_in_year",
+              "GDC.time.euweek_in_quarter",
+              "GDC.time.quarter",
+              "GDC.time.quarter_in_year",
+              "GDC.time.month",
+              "GDC.time.month_in_quarter",
+              "GDC.time.month_in_year",
+              "GDC.time.day_in_year",
+              "GDC.time.day_in_quarter",
+              "GDC.time.day_in_month",
+              "GDC.time.day_in_week",
+              "GDC.time.day_in_euweek",
+              "GDC.time.date",
+              "GDC.time.hour",
+              "GDC.time.hour_in_day",
+              "GDC.time.minute",
+              "GDC.time.minute_in_hour"
+            ],
+            "type": "string"
+          },
+          "to": {
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "granularity"
+        ],
+        "type": "object"
+      },
       "RelativeDateFilter": {
         "description": "A date filter specifying a time interval that is relative to the current date. For example, last week, next month, and so on. Field dataset is representing qualifier of date dimension. The 'from' and 'to' properties mark the boundaries of the interval. If 'from' is omitted, all values earlier than 'to' are included. If 'to' is omitted, all values later than 'from' are included. It is not allowed to omit both.",
         "properties": {
@@ -2449,6 +2495,7 @@
                   "HOUR_OF_DAY",
                   "DAY_OF_WEEK",
                   "DAY_OF_MONTH",
+                  "DAY_OF_QUARTER",
                   "DAY_OF_YEAR",
                   "WEEK_OF_YEAR",
                   "MONTH_OF_YEAR",

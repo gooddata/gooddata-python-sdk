@@ -1,4 +1,4 @@
-# (C) 2024 GoodData Corporation
+# (C) 2025 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -70,9 +70,6 @@ interactions:
           - '0'
         content-length:
           - '22'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:41 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           userDataFilters: []
@@ -144,9 +141,6 @@ interactions:
           - '0'
         content-length:
           - '22'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:41 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           userDataFilters: []
@@ -214,9 +208,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:41 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
   - request:
@@ -244,7 +235,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '275'
+          - '255'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -283,9 +274,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:41 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -294,8 +282,7 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              allowedOrigins: []
-              oauthClientId: 5bb276be-d7d9-4b4c-85ab-57710f158448
+              oauthClientId: 480a0248-4e34-4275-b13e-cc597e28c7d1
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -362,9 +349,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:41 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
   - request:
@@ -392,7 +376,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '275'
+          - '255'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -431,9 +415,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:41 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -442,7 +423,6 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              allowedOrigins: []
-              oauthClientId: 5bb276be-d7d9-4b4c-85ab-57710f158448
+              oauthClientId: 480a0248-4e34-4275-b13e-cc597e28c7d1
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default

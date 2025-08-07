@@ -1,4 +1,4 @@
-# (C) 2024 GoodData Corporation
+# (C) 2025 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -81,14 +81,13 @@ interactions:
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-GDC-CANCEL-TOKEN:
+          - ad83b194-d5da-4568-9014-4ab145b4ab74
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
         content-length:
           - '478'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:18:08 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           executionResponse:
@@ -111,10 +110,10 @@ interactions:
                       valueType: TEXT
                 localIdentifier: dim_0
             links:
-              executionResult: c503da1a362b4a218a3b0a1dd502dc5d2f3af056:61cf2f8ea45f6a82f5ea989cc4cf09aa857184cbb0d79427beea1cb251caacb9
+              executionResult: 753ea559fafd9a1bad53cb3e4a2d4e0d98c2d93e:5b165d659b175d66954df234a8f3a6c2adcd5e9feb357089b7833bb6c624939f
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/c503da1a362b4a218a3b0a1dd502dc5d2f3af056%3A61cf2f8ea45f6a82f5ea989cc4cf09aa857184cbb0d79427beea1cb251caacb9?offset=0&limit=512
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/753ea559fafd9a1bad53cb3e4a2d4e0d98c2d93e%3A5b165d659b175d66954df234a8f3a6c2adcd5e9feb357089b7833bb6c624939f?offset=0&limit=512
       body: null
       headers:
         Accept:
@@ -179,10 +178,7 @@ interactions:
         X-XSS-Protection:
           - '0'
         content-length:
-          - '499'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:18:08 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+          - '536'
       body:
         string:
           data: []
@@ -205,8 +201,6 @@ interactions:
                         labelValue: West
                         primaryLabelValue: West
           grandTotals: []
-          metadata:
-            dataSourceMessages: []
           paging:
             count:
               - 5
@@ -214,3 +208,5 @@ interactions:
               - 0
             total:
               - 5
+          metadata:
+            dataSourceMessages: []

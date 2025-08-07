@@ -1,4 +1,4 @@
-# (C) 2024 GoodData Corporation
+# (C) 2025 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -128,14 +128,13 @@ interactions:
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-GDC-CANCEL-TOKEN:
+          - 3138a0d0-4adb-499c-946a-f6baf7e3f863
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
         content-length:
           - '1128'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:15:00 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           executionResponse:
@@ -184,10 +183,10 @@ interactions:
                         name: Revenue
                 localIdentifier: dim_1
             links:
-              executionResult: 4d1f50398791ab893b174e2513c169a3e36ad2f8:8d7f88b42888fa431c50f3c14bd8d364a4eedd36c2511475e2e172825e5e9b1e
+              executionResult: 8904999f58d7d4f07858b50e0d64e5ef414ec5de:3f2f47be061c43ad3a3066b17f0e06c40bd9f4d096d7db374df09d2e48a3e0be
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/4d1f50398791ab893b174e2513c169a3e36ad2f8%3A8d7f88b42888fa431c50f3c14bd8d364a4eedd36c2511475e2e172825e5e9b1e?offset=0%2C0&limit=512%2C256
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/8904999f58d7d4f07858b50e0d64e5ef414ec5de%3A3f2f47be061c43ad3a3066b17f0e06c40bd9f4d096d7db374df09d2e48a3e0be?offset=0%2C0&limit=512%2C256
       body: null
       headers:
         Accept:
@@ -252,10 +251,7 @@ interactions:
         X-XSS-Protection:
           - '0'
         content-length:
-          - '3876'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:15:01 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+          - '3913'
       body:
         string:
           data:
@@ -454,8 +450,6 @@ interactions:
                     - measureHeader:
                         measureIndex: 3
           grandTotals: []
-          metadata:
-            dataSourceMessages: []
           paging:
             count:
               - 18
@@ -466,3 +460,5 @@ interactions:
             total:
               - 18
               - 4
+          metadata:
+            dataSourceMessages: []

@@ -12,5 +12,5 @@ permissions:
     name: USE
 schema: demo
 type: POSTGRESQL
-url: jdbc:postgresql://localhost:5432/demo
+url: jdbc:postgresql://localhost:5432/demo?sslmode=prefer
 username: demouser
