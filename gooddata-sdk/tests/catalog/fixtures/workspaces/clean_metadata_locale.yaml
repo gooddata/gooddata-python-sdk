@@ -1,4 +1,4 @@
-# (C) 2024 GoodData Corporation
+# (C) 2025 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -65,9 +65,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:51 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
   - request:
@@ -100,7 +97,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '47036'
+          - '40154'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -139,9 +136,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:51 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><xliff xmlns="urn:oasis:names:tc:xliff:document:2.0"
           version="2.1" srcLang="en-US" trgLang="fr-FR"><file id="demo"><group id="analyticalDashboard"><group
@@ -243,12 +237,6 @@ interactions:
           id="attribute.products.category"><unit id="attribute.products.category.title"><segment><source>Category</source></segment></unit><unit
           id="attribute.products.category.description"><segment><source>Category</source></segment></unit><unit
           id="attribute.products.category.tags"><segment><source>Products</source></segment></unit></group><group
-          id="attribute.date.minute"><unit id="attribute.date.minute.title"><segment><source>Date
-          - Minute</source></segment></unit><unit id="attribute.date.minute.description"><segment><source>Minute</source></segment></unit><unit
-          id="attribute.date.minute.tags"><segment><source>Date</source></segment></unit></group><group
-          id="attribute.date.hour"><unit id="attribute.date.hour.title"><segment><source>Date
-          - Hour</source></segment></unit><unit id="attribute.date.hour.description"><segment><source>Hour</source></segment></unit><unit
-          id="attribute.date.hour.tags"><segment><source>Date</source></segment></unit></group><group
           id="attribute.date.day"><unit id="attribute.date.day.title"><segment><source>Date
           - Date</source></segment></unit><unit id="attribute.date.day.description"><segment><source>Date</source></segment></unit><unit
           id="attribute.date.day.tags"><segment><source>Date</source></segment></unit></group><group
@@ -264,30 +252,6 @@ interactions:
           id="attribute.date.year"><unit id="attribute.date.year.title"><segment><source>Date
           - Year</source></segment></unit><unit id="attribute.date.year.description"><segment><source>Year</source></segment></unit><unit
           id="attribute.date.year.tags"><segment><source>Date</source></segment></unit></group><group
-          id="attribute.date.minuteOfHour"><unit id="attribute.date.minuteOfHour.title"><segment><source>Date
-          - Minute of Hour</source></segment></unit><unit id="attribute.date.minuteOfHour.description"><segment><source>Generic
-          Minute of the Hour(MI1-MI60)</source></segment></unit><unit id="attribute.date.minuteOfHour.tags"><segment><source>Date</source></segment></unit></group><group
-          id="attribute.date.hourOfDay"><unit id="attribute.date.hourOfDay.title"><segment><source>Date
-          - Hour of Day</source></segment></unit><unit id="attribute.date.hourOfDay.description"><segment><source>Generic
-          Hour of the Day(H1-H24)</source></segment></unit><unit id="attribute.date.hourOfDay.tags"><segment><source>Date</source></segment></unit></group><group
-          id="attribute.date.dayOfWeek"><unit id="attribute.date.dayOfWeek.title"><segment><source>Date
-          - Day of Week</source></segment></unit><unit id="attribute.date.dayOfWeek.description"><segment><source>Generic
-          Day of the Week (D1-D7)</source></segment></unit><unit id="attribute.date.dayOfWeek.tags"><segment><source>Date</source></segment></unit></group><group
-          id="attribute.date.dayOfMonth"><unit id="attribute.date.dayOfMonth.title"><segment><source>Date
-          - Day of Month</source></segment></unit><unit id="attribute.date.dayOfMonth.description"><segment><source>Generic
-          Day of the Month (D1-D31)</source></segment></unit><unit id="attribute.date.dayOfMonth.tags"><segment><source>Date</source></segment></unit></group><group
-          id="attribute.date.dayOfYear"><unit id="attribute.date.dayOfYear.title"><segment><source>Date
-          - Day of Year</source></segment></unit><unit id="attribute.date.dayOfYear.description"><segment><source>Generic
-          Day of the Year (D1-D366)</source></segment></unit><unit id="attribute.date.dayOfYear.tags"><segment><source>Date</source></segment></unit></group><group
-          id="attribute.date.weekOfYear"><unit id="attribute.date.weekOfYear.title"><segment><source>Date
-          - Week of Year</source></segment></unit><unit id="attribute.date.weekOfYear.description"><segment><source>Generic
-          Week (W1-W53)</source></segment></unit><unit id="attribute.date.weekOfYear.tags"><segment><source>Date</source></segment></unit></group><group
-          id="attribute.date.monthOfYear"><unit id="attribute.date.monthOfYear.title"><segment><source>Date
-          - Month of Year</source></segment></unit><unit id="attribute.date.monthOfYear.description"><segment><source>Generic
-          Month (M1-M12)</source></segment></unit><unit id="attribute.date.monthOfYear.tags"><segment><source>Date</source></segment></unit></group><group
-          id="attribute.date.quarterOfYear"><unit id="attribute.date.quarterOfYear.title"><segment><source>Date
-          - Quarter of Year</source></segment></unit><unit id="attribute.date.quarterOfYear.description"><segment><source>Generic
-          Quarter (Q1-Q4)</source></segment></unit><unit id="attribute.date.quarterOfYear.tags"><segment><source>Date</source></segment></unit></group><group
           id="attribute.state"><unit id="attribute.state.title"><segment><source>State</source></segment></unit><unit
           id="attribute.state.description"><segment><source>State</source></segment></unit><unit
           id="attribute.state.tags"><segment><source>Customers</source></segment></unit></group></group><group
@@ -374,12 +338,6 @@ interactions:
           id="label.products.category"><unit id="label.products.category.title"><segment><source>Category</source></segment></unit><unit
           id="label.products.category.description"><segment><source>Category</source></segment></unit><unit
           id="label.products.category.tags"><segment><source>Products</source></segment></unit></group><group
-          id="label.date.minute"><unit id="label.date.minute.title"><segment><source>Date
-          - Minute</source></segment></unit><unit id="label.date.minute.description"><segment><source>Minute</source></segment></unit><unit
-          id="label.date.minute.tags"><segment><source>Date</source></segment></unit></group><group
-          id="label.date.hour"><unit id="label.date.hour.title"><segment><source>Date
-          - Hour</source></segment></unit><unit id="label.date.hour.description"><segment><source>Hour</source></segment></unit><unit
-          id="label.date.hour.tags"><segment><source>Date</source></segment></unit></group><group
           id="label.date.day"><unit id="label.date.day.title"><segment><source>Date
           - Date</source></segment></unit><unit id="label.date.day.description"><segment><source>Date</source></segment></unit><unit
           id="label.date.day.tags"><segment><source>Date</source></segment></unit></group><group
@@ -394,38 +352,14 @@ interactions:
           and Year (Q1/2020)</source></segment></unit><unit id="label.date.quarter.tags"><segment><source>Date</source></segment></unit></group><group
           id="label.date.year"><unit id="label.date.year.title"><segment><source>Date
           - Year</source></segment></unit><unit id="label.date.year.description"><segment><source>Year</source></segment></unit><unit
-          id="label.date.year.tags"><segment><source>Date</source></segment></unit></group><group
-          id="label.date.minuteOfHour"><unit id="label.date.minuteOfHour.title"><segment><source>Date
-          - Minute of Hour</source></segment></unit><unit id="label.date.minuteOfHour.description"><segment><source>Generic
-          Minute of the Hour(MI1-MI60)</source></segment></unit><unit id="label.date.minuteOfHour.tags"><segment><source>Date</source></segment></unit></group><group
-          id="label.date.hourOfDay"><unit id="label.date.hourOfDay.title"><segment><source>Date
-          - Hour of Day</source></segment></unit><unit id="label.date.hourOfDay.description"><segment><source>Generic
-          Hour of the Day(H1-H24)</source></segment></unit><unit id="label.date.hourOfDay.tags"><segment><source>Date</source></segment></unit></group><group
-          id="label.date.dayOfWeek"><unit id="label.date.dayOfWeek.title"><segment><source>Date
-          - Day of Week</source></segment></unit><unit id="label.date.dayOfWeek.description"><segment><source>Generic
-          Day of the Week (D1-D7)</source></segment></unit><unit id="label.date.dayOfWeek.tags"><segment><source>Date</source></segment></unit></group><group
-          id="label.date.dayOfMonth"><unit id="label.date.dayOfMonth.title"><segment><source>Date
-          - Day of Month</source></segment></unit><unit id="label.date.dayOfMonth.description"><segment><source>Generic
-          Day of the Month (D1-D31)</source></segment></unit><unit id="label.date.dayOfMonth.tags"><segment><source>Date</source></segment></unit></group><group
-          id="label.date.dayOfYear"><unit id="label.date.dayOfYear.title"><segment><source>Date
-          - Day of Year</source></segment></unit><unit id="label.date.dayOfYear.description"><segment><source>Generic
-          Day of the Year (D1-D366)</source></segment></unit><unit id="label.date.dayOfYear.tags"><segment><source>Date</source></segment></unit></group><group
-          id="label.date.weekOfYear"><unit id="label.date.weekOfYear.title"><segment><source>Date
-          - Week of Year</source></segment></unit><unit id="label.date.weekOfYear.description"><segment><source>Generic
-          Week (W1-W53)</source></segment></unit><unit id="label.date.weekOfYear.tags"><segment><source>Date</source></segment></unit></group><group
-          id="label.date.monthOfYear"><unit id="label.date.monthOfYear.title"><segment><source>Date
-          - Month of Year</source></segment></unit><unit id="label.date.monthOfYear.description"><segment><source>Generic
-          Month (M1-M12)</source></segment></unit><unit id="label.date.monthOfYear.tags"><segment><source>Date</source></segment></unit></group><group
-          id="label.date.quarterOfYear"><unit id="label.date.quarterOfYear.title"><segment><source>Date
-          - Quarter of Year</source></segment></unit><unit id="label.date.quarterOfYear.description"><segment><source>Generic
-          Quarter (Q1-Q4)</source></segment></unit><unit id="label.date.quarterOfYear.tags"><segment><source>Date</source></segment></unit></group></group><group
-          id="metric"><group id="metric.amount_of_active_customers"><unit id="metric.amount_of_active_customers.title"><segment><source>#
-          of Active Customers</source></segment></unit></group><group id="metric.amount_of_orders"><unit
-          id="metric.amount_of_orders.title"><segment><source># of Orders</source></segment></unit></group><group
-          id="metric.amount_of_top_customers"><unit id="metric.amount_of_top_customers.title"><segment><source>#
+          id="label.date.year.tags"><segment><source>Date</source></segment></unit></group></group><group
+          id="metric"><group id="metric.amount_of_top_customers"><unit id="metric.amount_of_top_customers.title"><segment><source>#
           of Top Customers</source></segment></unit></group><group id="metric.amount_of_valid_orders"><unit
           id="metric.amount_of_valid_orders.title"><segment><source># of Valid Orders</source></segment></unit><unit
           id="metric.amount_of_valid_orders.description"><segment><source></source></segment></unit></group><group
+          id="metric.amount_of_active_customers"><unit id="metric.amount_of_active_customers.title"><segment><source>#
+          of Active Customers</source></segment></unit></group><group id="metric.amount_of_orders"><unit
+          id="metric.amount_of_orders.title"><segment><source># of Orders</source></segment></unit></group><group
           id="metric.campaign_spend"><unit id="metric.campaign_spend.title"><segment><source>Campaign
           Spend</source></segment></unit></group><group id="metric.order_amount"><unit
           id="metric.order_amount.title"><segment><source>Order Amount</source></segment></unit></group><group
@@ -434,14 +368,15 @@ interactions:
           id="metric.percent_revenue_from_top_10_customers.title"><segment><source>%
           Revenue from Top 10 Customers</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_percent_customers"><unit
           id="metric.percent_revenue_from_top_10_percent_customers.title"><segment><source>%
-          Revenue from Top 10% Customers</source></segment></unit></group><group id="metric.revenue-outdoor"><unit
-          id="metric.revenue-outdoor.title"><segment><source>Revenue (Outdoor)</source></segment></unit></group><group
-          id="metric.percent_revenue_from_top_10_percent_products"><unit id="metric.percent_revenue_from_top_10_percent_products.title"><segment><source>%
+          Revenue from Top 10% Customers</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_percent_products"><unit
+          id="metric.percent_revenue_from_top_10_percent_products.title"><segment><source>%
           Revenue from Top 10% Products</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_products"><unit
           id="metric.percent_revenue_from_top_10_products.title"><segment><source>%
           Revenue from Top 10 Products</source></segment></unit></group><group id="metric.percent_revenue_in_category"><unit
           id="metric.percent_revenue_in_category.title"><segment><source>% Revenue
-          in Category</source></segment></unit></group><group id="metric.percent_revenue_per_product"><unit
+          in Category</source></segment></unit></group><group id="metric.total_revenue-no_filters"><unit
+          id="metric.total_revenue-no_filters.title"><segment><source>Total Revenue
+          (No Filters)</source></segment></unit></group><group id="metric.percent_revenue_per_product"><unit
           id="metric.percent_revenue_per_product.title"><segment><source>% Revenue
           per Product</source></segment></unit></group><group id="metric.revenue"><unit
           id="metric.revenue.title"><segment><source>Revenue</source></segment></unit><unit
@@ -450,17 +385,18 @@ interactions:
           (Clothing)</source></segment></unit></group><group id="metric.revenue-electronic"><unit
           id="metric.revenue-electronic.title"><segment><source>Revenue (Electronic)</source></segment></unit></group><group
           id="metric.revenue-home"><unit id="metric.revenue-home.title"><segment><source>Revenue
-          (Home)</source></segment></unit></group><group id="metric.revenue_per_customer"><unit
-          id="metric.revenue_per_customer.title"><segment><source>Revenue per Customer</source></segment></unit></group><group
-          id="metric.revenue_per_dollar_spent"><unit id="metric.revenue_per_dollar_spent.title"><segment><source>Revenue
-          per Dollar Spent</source></segment></unit></group><group id="metric.revenue_top_10"><unit
+          (Home)</source></segment></unit></group><group id="metric.revenue-outdoor"><unit
+          id="metric.revenue-outdoor.title"><segment><source>Revenue (Outdoor)</source></segment></unit></group><group
+          id="metric.revenue_per_customer"><unit id="metric.revenue_per_customer.title"><segment><source>Revenue
+          per Customer</source></segment></unit></group><group id="metric.revenue_per_dollar_spent"><unit
+          id="metric.revenue_per_dollar_spent.title"><segment><source>Revenue per
+          Dollar Spent</source></segment></unit></group><group id="metric.revenue_top_10"><unit
           id="metric.revenue_top_10.title"><segment><source>Revenue / Top 10</source></segment></unit></group><group
           id="metric.revenue_top_10_percent"><unit id="metric.revenue_top_10_percent.title"><segment><source>Revenue
           / Top 10%</source></segment></unit></group><group id="metric.total_revenue"><unit
-          id="metric.total_revenue.title"><segment><source>Total Revenue</source></segment></unit></group><group
-          id="metric.total_revenue-no_filters"><unit id="metric.total_revenue-no_filters.title"><segment><source>Total
-          Revenue (No Filters)</source></segment></unit></group></group><group id="visualizationObject"><group
-          id="visualizationObject.campaign_spend"><unit id="visualizationObject.campaign_spend.title"><segment><source>Campaign
+          id="metric.total_revenue.title"><segment><source>Total Revenue</source></segment></unit></group></group><group
+          id="visualizationObject"><group id="visualizationObject.campaign_spend"><unit
+          id="visualizationObject.campaign_spend.title"><segment><source>Campaign
           Spend</source></segment></unit><unit id="visualizationObject.campaign_spend.free-form"><notes><note
           appliesTo="source">Free-form translations are marked by the 'id' attribute,
           which is a hash combining the JSON path and the source text's value. Since
@@ -642,7 +578,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '47036'
+          - '40154'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -681,9 +617,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:51 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><xliff xmlns="urn:oasis:names:tc:xliff:document:2.0"
           version="2.1" srcLang="en-US" trgLang="fr-FR"><file id="demo"><group id="analyticalDashboard"><group
@@ -785,12 +718,6 @@ interactions:
           id="attribute.products.category"><unit id="attribute.products.category.title"><segment><source>Category</source></segment></unit><unit
           id="attribute.products.category.description"><segment><source>Category</source></segment></unit><unit
           id="attribute.products.category.tags"><segment><source>Products</source></segment></unit></group><group
-          id="attribute.date.minute"><unit id="attribute.date.minute.title"><segment><source>Date
-          - Minute</source></segment></unit><unit id="attribute.date.minute.description"><segment><source>Minute</source></segment></unit><unit
-          id="attribute.date.minute.tags"><segment><source>Date</source></segment></unit></group><group
-          id="attribute.date.hour"><unit id="attribute.date.hour.title"><segment><source>Date
-          - Hour</source></segment></unit><unit id="attribute.date.hour.description"><segment><source>Hour</source></segment></unit><unit
-          id="attribute.date.hour.tags"><segment><source>Date</source></segment></unit></group><group
           id="attribute.date.day"><unit id="attribute.date.day.title"><segment><source>Date
           - Date</source></segment></unit><unit id="attribute.date.day.description"><segment><source>Date</source></segment></unit><unit
           id="attribute.date.day.tags"><segment><source>Date</source></segment></unit></group><group
@@ -806,30 +733,6 @@ interactions:
           id="attribute.date.year"><unit id="attribute.date.year.title"><segment><source>Date
           - Year</source></segment></unit><unit id="attribute.date.year.description"><segment><source>Year</source></segment></unit><unit
           id="attribute.date.year.tags"><segment><source>Date</source></segment></unit></group><group
-          id="attribute.date.minuteOfHour"><unit id="attribute.date.minuteOfHour.title"><segment><source>Date
-          - Minute of Hour</source></segment></unit><unit id="attribute.date.minuteOfHour.description"><segment><source>Generic
-          Minute of the Hour(MI1-MI60)</source></segment></unit><unit id="attribute.date.minuteOfHour.tags"><segment><source>Date</source></segment></unit></group><group
-          id="attribute.date.hourOfDay"><unit id="attribute.date.hourOfDay.title"><segment><source>Date
-          - Hour of Day</source></segment></unit><unit id="attribute.date.hourOfDay.description"><segment><source>Generic
-          Hour of the Day(H1-H24)</source></segment></unit><unit id="attribute.date.hourOfDay.tags"><segment><source>Date</source></segment></unit></group><group
-          id="attribute.date.dayOfWeek"><unit id="attribute.date.dayOfWeek.title"><segment><source>Date
-          - Day of Week</source></segment></unit><unit id="attribute.date.dayOfWeek.description"><segment><source>Generic
-          Day of the Week (D1-D7)</source></segment></unit><unit id="attribute.date.dayOfWeek.tags"><segment><source>Date</source></segment></unit></group><group
-          id="attribute.date.dayOfMonth"><unit id="attribute.date.dayOfMonth.title"><segment><source>Date
-          - Day of Month</source></segment></unit><unit id="attribute.date.dayOfMonth.description"><segment><source>Generic
-          Day of the Month (D1-D31)</source></segment></unit><unit id="attribute.date.dayOfMonth.tags"><segment><source>Date</source></segment></unit></group><group
-          id="attribute.date.dayOfYear"><unit id="attribute.date.dayOfYear.title"><segment><source>Date
-          - Day of Year</source></segment></unit><unit id="attribute.date.dayOfYear.description"><segment><source>Generic
-          Day of the Year (D1-D366)</source></segment></unit><unit id="attribute.date.dayOfYear.tags"><segment><source>Date</source></segment></unit></group><group
-          id="attribute.date.weekOfYear"><unit id="attribute.date.weekOfYear.title"><segment><source>Date
-          - Week of Year</source></segment></unit><unit id="attribute.date.weekOfYear.description"><segment><source>Generic
-          Week (W1-W53)</source></segment></unit><unit id="attribute.date.weekOfYear.tags"><segment><source>Date</source></segment></unit></group><group
-          id="attribute.date.monthOfYear"><unit id="attribute.date.monthOfYear.title"><segment><source>Date
-          - Month of Year</source></segment></unit><unit id="attribute.date.monthOfYear.description"><segment><source>Generic
-          Month (M1-M12)</source></segment></unit><unit id="attribute.date.monthOfYear.tags"><segment><source>Date</source></segment></unit></group><group
-          id="attribute.date.quarterOfYear"><unit id="attribute.date.quarterOfYear.title"><segment><source>Date
-          - Quarter of Year</source></segment></unit><unit id="attribute.date.quarterOfYear.description"><segment><source>Generic
-          Quarter (Q1-Q4)</source></segment></unit><unit id="attribute.date.quarterOfYear.tags"><segment><source>Date</source></segment></unit></group><group
           id="attribute.state"><unit id="attribute.state.title"><segment><source>State</source></segment></unit><unit
           id="attribute.state.description"><segment><source>State</source></segment></unit><unit
           id="attribute.state.tags"><segment><source>Customers</source></segment></unit></group></group><group
@@ -916,12 +819,6 @@ interactions:
           id="label.products.category"><unit id="label.products.category.title"><segment><source>Category</source></segment></unit><unit
           id="label.products.category.description"><segment><source>Category</source></segment></unit><unit
           id="label.products.category.tags"><segment><source>Products</source></segment></unit></group><group
-          id="label.date.minute"><unit id="label.date.minute.title"><segment><source>Date
-          - Minute</source></segment></unit><unit id="label.date.minute.description"><segment><source>Minute</source></segment></unit><unit
-          id="label.date.minute.tags"><segment><source>Date</source></segment></unit></group><group
-          id="label.date.hour"><unit id="label.date.hour.title"><segment><source>Date
-          - Hour</source></segment></unit><unit id="label.date.hour.description"><segment><source>Hour</source></segment></unit><unit
-          id="label.date.hour.tags"><segment><source>Date</source></segment></unit></group><group
           id="label.date.day"><unit id="label.date.day.title"><segment><source>Date
           - Date</source></segment></unit><unit id="label.date.day.description"><segment><source>Date</source></segment></unit><unit
           id="label.date.day.tags"><segment><source>Date</source></segment></unit></group><group
@@ -936,38 +833,14 @@ interactions:
           and Year (Q1/2020)</source></segment></unit><unit id="label.date.quarter.tags"><segment><source>Date</source></segment></unit></group><group
           id="label.date.year"><unit id="label.date.year.title"><segment><source>Date
           - Year</source></segment></unit><unit id="label.date.year.description"><segment><source>Year</source></segment></unit><unit
-          id="label.date.year.tags"><segment><source>Date</source></segment></unit></group><group
-          id="label.date.minuteOfHour"><unit id="label.date.minuteOfHour.title"><segment><source>Date
-          - Minute of Hour</source></segment></unit><unit id="label.date.minuteOfHour.description"><segment><source>Generic
-          Minute of the Hour(MI1-MI60)</source></segment></unit><unit id="label.date.minuteOfHour.tags"><segment><source>Date</source></segment></unit></group><group
-          id="label.date.hourOfDay"><unit id="label.date.hourOfDay.title"><segment><source>Date
-          - Hour of Day</source></segment></unit><unit id="label.date.hourOfDay.description"><segment><source>Generic
-          Hour of the Day(H1-H24)</source></segment></unit><unit id="label.date.hourOfDay.tags"><segment><source>Date</source></segment></unit></group><group
-          id="label.date.dayOfWeek"><unit id="label.date.dayOfWeek.title"><segment><source>Date
-          - Day of Week</source></segment></unit><unit id="label.date.dayOfWeek.description"><segment><source>Generic
-          Day of the Week (D1-D7)</source></segment></unit><unit id="label.date.dayOfWeek.tags"><segment><source>Date</source></segment></unit></group><group
-          id="label.date.dayOfMonth"><unit id="label.date.dayOfMonth.title"><segment><source>Date
-          - Day of Month</source></segment></unit><unit id="label.date.dayOfMonth.description"><segment><source>Generic
-          Day of the Month (D1-D31)</source></segment></unit><unit id="label.date.dayOfMonth.tags"><segment><source>Date</source></segment></unit></group><group
-          id="label.date.dayOfYear"><unit id="label.date.dayOfYear.title"><segment><source>Date
-          - Day of Year</source></segment></unit><unit id="label.date.dayOfYear.description"><segment><source>Generic
-          Day of the Year (D1-D366)</source></segment></unit><unit id="label.date.dayOfYear.tags"><segment><source>Date</source></segment></unit></group><group
-          id="label.date.weekOfYear"><unit id="label.date.weekOfYear.title"><segment><source>Date
-          - Week of Year</source></segment></unit><unit id="label.date.weekOfYear.description"><segment><source>Generic
-          Week (W1-W53)</source></segment></unit><unit id="label.date.weekOfYear.tags"><segment><source>Date</source></segment></unit></group><group
-          id="label.date.monthOfYear"><unit id="label.date.monthOfYear.title"><segment><source>Date
-          - Month of Year</source></segment></unit><unit id="label.date.monthOfYear.description"><segment><source>Generic
-          Month (M1-M12)</source></segment></unit><unit id="label.date.monthOfYear.tags"><segment><source>Date</source></segment></unit></group><group
-          id="label.date.quarterOfYear"><unit id="label.date.quarterOfYear.title"><segment><source>Date
-          - Quarter of Year</source></segment></unit><unit id="label.date.quarterOfYear.description"><segment><source>Generic
-          Quarter (Q1-Q4)</source></segment></unit><unit id="label.date.quarterOfYear.tags"><segment><source>Date</source></segment></unit></group></group><group
-          id="metric"><group id="metric.amount_of_active_customers"><unit id="metric.amount_of_active_customers.title"><segment><source>#
-          of Active Customers</source></segment></unit></group><group id="metric.amount_of_orders"><unit
-          id="metric.amount_of_orders.title"><segment><source># of Orders</source></segment></unit></group><group
-          id="metric.amount_of_top_customers"><unit id="metric.amount_of_top_customers.title"><segment><source>#
+          id="label.date.year.tags"><segment><source>Date</source></segment></unit></group></group><group
+          id="metric"><group id="metric.amount_of_top_customers"><unit id="metric.amount_of_top_customers.title"><segment><source>#
           of Top Customers</source></segment></unit></group><group id="metric.amount_of_valid_orders"><unit
           id="metric.amount_of_valid_orders.title"><segment><source># of Valid Orders</source></segment></unit><unit
           id="metric.amount_of_valid_orders.description"><segment><source></source></segment></unit></group><group
+          id="metric.amount_of_active_customers"><unit id="metric.amount_of_active_customers.title"><segment><source>#
+          of Active Customers</source></segment></unit></group><group id="metric.amount_of_orders"><unit
+          id="metric.amount_of_orders.title"><segment><source># of Orders</source></segment></unit></group><group
           id="metric.campaign_spend"><unit id="metric.campaign_spend.title"><segment><source>Campaign
           Spend</source></segment></unit></group><group id="metric.order_amount"><unit
           id="metric.order_amount.title"><segment><source>Order Amount</source></segment></unit></group><group
@@ -976,14 +849,15 @@ interactions:
           id="metric.percent_revenue_from_top_10_customers.title"><segment><source>%
           Revenue from Top 10 Customers</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_percent_customers"><unit
           id="metric.percent_revenue_from_top_10_percent_customers.title"><segment><source>%
-          Revenue from Top 10% Customers</source></segment></unit></group><group id="metric.revenue-outdoor"><unit
-          id="metric.revenue-outdoor.title"><segment><source>Revenue (Outdoor)</source></segment></unit></group><group
-          id="metric.percent_revenue_from_top_10_percent_products"><unit id="metric.percent_revenue_from_top_10_percent_products.title"><segment><source>%
+          Revenue from Top 10% Customers</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_percent_products"><unit
+          id="metric.percent_revenue_from_top_10_percent_products.title"><segment><source>%
           Revenue from Top 10% Products</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_products"><unit
           id="metric.percent_revenue_from_top_10_products.title"><segment><source>%
           Revenue from Top 10 Products</source></segment></unit></group><group id="metric.percent_revenue_in_category"><unit
           id="metric.percent_revenue_in_category.title"><segment><source>% Revenue
-          in Category</source></segment></unit></group><group id="metric.percent_revenue_per_product"><unit
+          in Category</source></segment></unit></group><group id="metric.total_revenue-no_filters"><unit
+          id="metric.total_revenue-no_filters.title"><segment><source>Total Revenue
+          (No Filters)</source></segment></unit></group><group id="metric.percent_revenue_per_product"><unit
           id="metric.percent_revenue_per_product.title"><segment><source>% Revenue
           per Product</source></segment></unit></group><group id="metric.revenue"><unit
           id="metric.revenue.title"><segment><source>Revenue</source></segment></unit><unit
@@ -992,17 +866,18 @@ interactions:
           (Clothing)</source></segment></unit></group><group id="metric.revenue-electronic"><unit
           id="metric.revenue-electronic.title"><segment><source>Revenue (Electronic)</source></segment></unit></group><group
           id="metric.revenue-home"><unit id="metric.revenue-home.title"><segment><source>Revenue
-          (Home)</source></segment></unit></group><group id="metric.revenue_per_customer"><unit
-          id="metric.revenue_per_customer.title"><segment><source>Revenue per Customer</source></segment></unit></group><group
-          id="metric.revenue_per_dollar_spent"><unit id="metric.revenue_per_dollar_spent.title"><segment><source>Revenue
-          per Dollar Spent</source></segment></unit></group><group id="metric.revenue_top_10"><unit
+          (Home)</source></segment></unit></group><group id="metric.revenue-outdoor"><unit
+          id="metric.revenue-outdoor.title"><segment><source>Revenue (Outdoor)</source></segment></unit></group><group
+          id="metric.revenue_per_customer"><unit id="metric.revenue_per_customer.title"><segment><source>Revenue
+          per Customer</source></segment></unit></group><group id="metric.revenue_per_dollar_spent"><unit
+          id="metric.revenue_per_dollar_spent.title"><segment><source>Revenue per
+          Dollar Spent</source></segment></unit></group><group id="metric.revenue_top_10"><unit
           id="metric.revenue_top_10.title"><segment><source>Revenue / Top 10</source></segment></unit></group><group
           id="metric.revenue_top_10_percent"><unit id="metric.revenue_top_10_percent.title"><segment><source>Revenue
           / Top 10%</source></segment></unit></group><group id="metric.total_revenue"><unit
-          id="metric.total_revenue.title"><segment><source>Total Revenue</source></segment></unit></group><group
-          id="metric.total_revenue-no_filters"><unit id="metric.total_revenue-no_filters.title"><segment><source>Total
-          Revenue (No Filters)</source></segment></unit></group></group><group id="visualizationObject"><group
-          id="visualizationObject.campaign_spend"><unit id="visualizationObject.campaign_spend.title"><segment><source>Campaign
+          id="metric.total_revenue.title"><segment><source>Total Revenue</source></segment></unit></group></group><group
+          id="visualizationObject"><group id="visualizationObject.campaign_spend"><unit
+          id="visualizationObject.campaign_spend.title"><segment><source>Campaign
           Spend</source></segment></unit><unit id="visualizationObject.campaign_spend.free-form"><notes><note
           appliesTo="source">Free-form translations are marked by the 'id' attribute,
           which is a hash combining the JSON path and the source text's value. Since
@@ -1275,12 +1150,6 @@ interactions:
         id="attribute.products.category"><unit id="attribute.products.category.title"><segment><source>Category</source><target>Category.</target></segment></unit><unit
         id="attribute.products.category.description"><segment><source>Category</source><target>Category.</target></segment></unit><unit
         id="attribute.products.category.tags"><segment><source>Products</source><target>Products.</target></segment></unit></group><group
-        id="attribute.date.minute"><unit id="attribute.date.minute.title"><segment><source>Date
-        - Minute</source><target>Date - Minute.</target></segment></unit><unit id="attribute.date.minute.description"><segment><source>Minute</source><target>Minute.</target></segment></unit><unit
-        id="attribute.date.minute.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-        id="attribute.date.hour"><unit id="attribute.date.hour.title"><segment><source>Date
-        - Hour</source><target>Date - Hour.</target></segment></unit><unit id="attribute.date.hour.description"><segment><source>Hour</source><target>Hour.</target></segment></unit><unit
-        id="attribute.date.hour.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
         id="attribute.date.day"><unit id="attribute.date.day.title"><segment><source>Date
         - Date</source><target>Date - Date.</target></segment></unit><unit id="attribute.date.day.description"><segment><source>Date</source><target>Date.</target></segment></unit><unit
         id="attribute.date.day.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
@@ -1300,45 +1169,6 @@ interactions:
         id="attribute.date.year"><unit id="attribute.date.year.title"><segment><source>Date
         - Year</source><target>Date - Year.</target></segment></unit><unit id="attribute.date.year.description"><segment><source>Year</source><target>Year.</target></segment></unit><unit
         id="attribute.date.year.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-        id="attribute.date.minuteOfHour"><unit id="attribute.date.minuteOfHour.title"><segment><source>Date
-        - Minute of Hour</source><target>Date - Minute of Hour.</target></segment></unit><unit
-        id="attribute.date.minuteOfHour.description"><segment><source>Generic Minute
-        of the Hour(MI1-MI60)</source><target>Generic Minute of the Hour(MI1-MI60).</target></segment></unit><unit
-        id="attribute.date.minuteOfHour.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-        id="attribute.date.hourOfDay"><unit id="attribute.date.hourOfDay.title"><segment><source>Date
-        - Hour of Day</source><target>Date - Hour of Day.</target></segment></unit><unit
-        id="attribute.date.hourOfDay.description"><segment><source>Generic Hour of
-        the Day(H1-H24)</source><target>Generic Hour of the Day(H1-H24).</target></segment></unit><unit
-        id="attribute.date.hourOfDay.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-        id="attribute.date.dayOfWeek"><unit id="attribute.date.dayOfWeek.title"><segment><source>Date
-        - Day of Week</source><target>Date - Day of Week.</target></segment></unit><unit
-        id="attribute.date.dayOfWeek.description"><segment><source>Generic Day of
-        the Week (D1-D7)</source><target>Generic Day of the Week (D1-D7).</target></segment></unit><unit
-        id="attribute.date.dayOfWeek.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-        id="attribute.date.dayOfMonth"><unit id="attribute.date.dayOfMonth.title"><segment><source>Date
-        - Day of Month</source><target>Date - Day of Month.</target></segment></unit><unit
-        id="attribute.date.dayOfMonth.description"><segment><source>Generic Day of
-        the Month (D1-D31)</source><target>Generic Day of the Month (D1-D31).</target></segment></unit><unit
-        id="attribute.date.dayOfMonth.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-        id="attribute.date.dayOfYear"><unit id="attribute.date.dayOfYear.title"><segment><source>Date
-        - Day of Year</source><target>Date - Day of Year.</target></segment></unit><unit
-        id="attribute.date.dayOfYear.description"><segment><source>Generic Day of
-        the Year (D1-D366)</source><target>Generic Day of the Year (D1-D366).</target></segment></unit><unit
-        id="attribute.date.dayOfYear.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-        id="attribute.date.weekOfYear"><unit id="attribute.date.weekOfYear.title"><segment><source>Date
-        - Week of Year</source><target>Date - Week of Year.</target></segment></unit><unit
-        id="attribute.date.weekOfYear.description"><segment><source>Generic Week (W1-W53)</source><target>Generic
-        Week (W1-W53).</target></segment></unit><unit id="attribute.date.weekOfYear.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-        id="attribute.date.monthOfYear"><unit id="attribute.date.monthOfYear.title"><segment><source>Date
-        - Month of Year</source><target>Date - Month of Year.</target></segment></unit><unit
-        id="attribute.date.monthOfYear.description"><segment><source>Generic Month
-        (M1-M12)</source><target>Generic Month (M1-M12).</target></segment></unit><unit
-        id="attribute.date.monthOfYear.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-        id="attribute.date.quarterOfYear"><unit id="attribute.date.quarterOfYear.title"><segment><source>Date
-        - Quarter of Year</source><target>Date - Quarter of Year.</target></segment></unit><unit
-        id="attribute.date.quarterOfYear.description"><segment><source>Generic Quarter
-        (Q1-Q4)</source><target>Generic Quarter (Q1-Q4).</target></segment></unit><unit
-        id="attribute.date.quarterOfYear.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
         id="attribute.state"><unit id="attribute.state.title"><segment><source>State</source><target>State.</target></segment></unit><unit
         id="attribute.state.description"><segment><source>State</source><target>State.</target></segment></unit><unit
         id="attribute.state.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group></group><group
@@ -1429,12 +1259,6 @@ interactions:
         id="label.products.category"><unit id="label.products.category.title"><segment><source>Category</source><target>Category.</target></segment></unit><unit
         id="label.products.category.description"><segment><source>Category</source><target>Category.</target></segment></unit><unit
         id="label.products.category.tags"><segment><source>Products</source><target>Products.</target></segment></unit></group><group
-        id="label.date.minute"><unit id="label.date.minute.title"><segment><source>Date
-        - Minute</source><target>Date - Minute.</target></segment></unit><unit id="label.date.minute.description"><segment><source>Minute</source><target>Minute.</target></segment></unit><unit
-        id="label.date.minute.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-        id="label.date.hour"><unit id="label.date.hour.title"><segment><source>Date
-        - Hour</source><target>Date - Hour.</target></segment></unit><unit id="label.date.hour.description"><segment><source>Hour</source><target>Hour.</target></segment></unit><unit
-        id="label.date.hour.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
         id="label.date.day"><unit id="label.date.day.title"><segment><source>Date
         - Date</source><target>Date - Date.</target></segment></unit><unit id="label.date.day.description"><segment><source>Date</source><target>Date.</target></segment></unit><unit
         id="label.date.day.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
@@ -1452,54 +1276,16 @@ interactions:
         and Year (Q1/2020).</target></segment></unit><unit id="label.date.quarter.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
         id="label.date.year"><unit id="label.date.year.title"><segment><source>Date
         - Year</source><target>Date - Year.</target></segment></unit><unit id="label.date.year.description"><segment><source>Year</source><target>Year.</target></segment></unit><unit
-        id="label.date.year.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-        id="label.date.minuteOfHour"><unit id="label.date.minuteOfHour.title"><segment><source>Date
-        - Minute of Hour</source><target>Date - Minute of Hour.</target></segment></unit><unit
-        id="label.date.minuteOfHour.description"><segment><source>Generic Minute of
-        the Hour(MI1-MI60)</source><target>Generic Minute of the Hour(MI1-MI60).</target></segment></unit><unit
-        id="label.date.minuteOfHour.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-        id="label.date.hourOfDay"><unit id="label.date.hourOfDay.title"><segment><source>Date
-        - Hour of Day</source><target>Date - Hour of Day.</target></segment></unit><unit
-        id="label.date.hourOfDay.description"><segment><source>Generic Hour of the
-        Day(H1-H24)</source><target>Generic Hour of the Day(H1-H24).</target></segment></unit><unit
-        id="label.date.hourOfDay.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-        id="label.date.dayOfWeek"><unit id="label.date.dayOfWeek.title"><segment><source>Date
-        - Day of Week</source><target>Date - Day of Week.</target></segment></unit><unit
-        id="label.date.dayOfWeek.description"><segment><source>Generic Day of the
-        Week (D1-D7)</source><target>Generic Day of the Week (D1-D7).</target></segment></unit><unit
-        id="label.date.dayOfWeek.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-        id="label.date.dayOfMonth"><unit id="label.date.dayOfMonth.title"><segment><source>Date
-        - Day of Month</source><target>Date - Day of Month.</target></segment></unit><unit
-        id="label.date.dayOfMonth.description"><segment><source>Generic Day of the
-        Month (D1-D31)</source><target>Generic Day of the Month (D1-D31).</target></segment></unit><unit
-        id="label.date.dayOfMonth.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-        id="label.date.dayOfYear"><unit id="label.date.dayOfYear.title"><segment><source>Date
-        - Day of Year</source><target>Date - Day of Year.</target></segment></unit><unit
-        id="label.date.dayOfYear.description"><segment><source>Generic Day of the
-        Year (D1-D366)</source><target>Generic Day of the Year (D1-D366).</target></segment></unit><unit
-        id="label.date.dayOfYear.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-        id="label.date.weekOfYear"><unit id="label.date.weekOfYear.title"><segment><source>Date
-        - Week of Year</source><target>Date - Week of Year.</target></segment></unit><unit
-        id="label.date.weekOfYear.description"><segment><source>Generic Week (W1-W53)</source><target>Generic
-        Week (W1-W53).</target></segment></unit><unit id="label.date.weekOfYear.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-        id="label.date.monthOfYear"><unit id="label.date.monthOfYear.title"><segment><source>Date
-        - Month of Year</source><target>Date - Month of Year.</target></segment></unit><unit
-        id="label.date.monthOfYear.description"><segment><source>Generic Month (M1-M12)</source><target>Generic
-        Month (M1-M12).</target></segment></unit><unit id="label.date.monthOfYear.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-        id="label.date.quarterOfYear"><unit id="label.date.quarterOfYear.title"><segment><source>Date
-        - Quarter of Year</source><target>Date - Quarter of Year.</target></segment></unit><unit
-        id="label.date.quarterOfYear.description"><segment><source>Generic Quarter
-        (Q1-Q4)</source><target>Generic Quarter (Q1-Q4).</target></segment></unit><unit
-        id="label.date.quarterOfYear.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group></group><group
-        id="metric"><group id="metric.amount_of_active_customers"><unit id="metric.amount_of_active_customers.title"><segment><source>#
-        of Active Customers</source><target># of Active Customers.</target></segment></unit></group><group
-        id="metric.amount_of_orders"><unit id="metric.amount_of_orders.title"><segment><source>#
-        of Orders</source><target># of Orders.</target></segment></unit></group><group
-        id="metric.amount_of_top_customers"><unit id="metric.amount_of_top_customers.title"><segment><source>#
+        id="label.date.year.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group></group><group
+        id="metric"><group id="metric.amount_of_top_customers"><unit id="metric.amount_of_top_customers.title"><segment><source>#
         of Top Customers</source><target># of Top Customers.</target></segment></unit></group><group
         id="metric.amount_of_valid_orders"><unit id="metric.amount_of_valid_orders.title"><segment><source>#
         of Valid Orders</source><target># of Valid Orders.</target></segment></unit><unit
         id="metric.amount_of_valid_orders.description"><segment><source /></segment></unit></group><group
+        id="metric.amount_of_active_customers"><unit id="metric.amount_of_active_customers.title"><segment><source>#
+        of Active Customers</source><target># of Active Customers.</target></segment></unit></group><group
+        id="metric.amount_of_orders"><unit id="metric.amount_of_orders.title"><segment><source>#
+        of Orders</source><target># of Orders.</target></segment></unit></group><group
         id="metric.campaign_spend"><unit id="metric.campaign_spend.title"><segment><source>Campaign
         Spend</source><target>Campaign Spend.</target></segment></unit></group><group
         id="metric.order_amount"><unit id="metric.order_amount.title"><segment><source>Order
@@ -1510,14 +1296,14 @@ interactions:
         Revenue from Top 10 Customers</source><target>% Revenue from Top 10 Customers.</target></segment></unit></group><group
         id="metric.percent_revenue_from_top_10_percent_customers"><unit id="metric.percent_revenue_from_top_10_percent_customers.title"><segment><source>%
         Revenue from Top 10% Customers</source><target>% Revenue from Top 10% Customers.</target></segment></unit></group><group
-        id="metric.revenue-outdoor"><unit id="metric.revenue-outdoor.title"><segment><source>Revenue
-        (Outdoor)</source><target>Revenue (Outdoor).</target></segment></unit></group><group
         id="metric.percent_revenue_from_top_10_percent_products"><unit id="metric.percent_revenue_from_top_10_percent_products.title"><segment><source>%
         Revenue from Top 10% Products</source><target>% Revenue from Top 10% Products.</target></segment></unit></group><group
         id="metric.percent_revenue_from_top_10_products"><unit id="metric.percent_revenue_from_top_10_products.title"><segment><source>%
         Revenue from Top 10 Products</source><target>% Revenue from Top 10 Products.</target></segment></unit></group><group
         id="metric.percent_revenue_in_category"><unit id="metric.percent_revenue_in_category.title"><segment><source>%
         Revenue in Category</source><target>% Revenue in Category.</target></segment></unit></group><group
+        id="metric.total_revenue-no_filters"><unit id="metric.total_revenue-no_filters.title"><segment><source>Total
+        Revenue (No Filters)</source><target>Total Revenue (No Filters).</target></segment></unit></group><group
         id="metric.percent_revenue_per_product"><unit id="metric.percent_revenue_per_product.title"><segment><source>%
         Revenue per Product</source><target>% Revenue per Product.</target></segment></unit></group><group
         id="metric.revenue"><unit id="metric.revenue.title"><segment><source>Revenue</source><target>Revenue.</target></segment></unit><unit
@@ -1528,6 +1314,8 @@ interactions:
         (Electronic)</source><target>Revenue (Electronic).</target></segment></unit></group><group
         id="metric.revenue-home"><unit id="metric.revenue-home.title"><segment><source>Revenue
         (Home)</source><target>Revenue (Home).</target></segment></unit></group><group
+        id="metric.revenue-outdoor"><unit id="metric.revenue-outdoor.title"><segment><source>Revenue
+        (Outdoor)</source><target>Revenue (Outdoor).</target></segment></unit></group><group
         id="metric.revenue_per_customer"><unit id="metric.revenue_per_customer.title"><segment><source>Revenue
         per Customer</source><target>Revenue per Customer.</target></segment></unit></group><group
         id="metric.revenue_per_dollar_spent"><unit id="metric.revenue_per_dollar_spent.title"><segment><source>Revenue
@@ -1537,9 +1325,7 @@ interactions:
         id="metric.revenue_top_10_percent"><unit id="metric.revenue_top_10_percent.title"><segment><source>Revenue
         / Top 10%</source><target>Revenue / Top 10%.</target></segment></unit></group><group
         id="metric.total_revenue"><unit id="metric.total_revenue.title"><segment><source>Total
-        Revenue</source><target>Total Revenue.</target></segment></unit></group><group
-        id="metric.total_revenue-no_filters"><unit id="metric.total_revenue-no_filters.title"><segment><source>Total
-        Revenue (No Filters)</source><target>Total Revenue (No Filters).</target></segment></unit></group></group><group
+        Revenue</source><target>Total Revenue.</target></segment></unit></group></group><group
         id="visualizationObject"><group id="visualizationObject.campaign_spend"><unit
         id="visualizationObject.campaign_spend.title"><segment><source>Campaign Spend</source><target>Campaign
         Spend.</target></segment></unit><unit id="visualizationObject.campaign_spend.free-form"><notes><note
@@ -1718,7 +1504,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '56610'
+          - '47730'
         Content-Type:
           - application/xml
     response:
@@ -1770,9 +1556,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:51 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
   - request:
@@ -1805,7 +1588,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '56630'
+          - '47750'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -1844,9 +1627,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:51 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><xliff xmlns="urn:oasis:names:tc:xliff:document:2.0"
           version="2.1" srcLang="en-US" trgLang="fr-FR"><file id="demo"><group id="analyticalDashboard"><group
@@ -1963,12 +1743,6 @@ interactions:
           id="attribute.products.category"><unit id="attribute.products.category.title"><segment><source>Category</source><target>Category.</target></segment></unit><unit
           id="attribute.products.category.description"><segment><source>Category</source><target>Category.</target></segment></unit><unit
           id="attribute.products.category.tags"><segment><source>Products</source><target>Products.</target></segment></unit></group><group
-          id="attribute.date.minute"><unit id="attribute.date.minute.title"><segment><source>Date
-          - Minute</source><target>Date - Minute.</target></segment></unit><unit id="attribute.date.minute.description"><segment><source>Minute</source><target>Minute.</target></segment></unit><unit
-          id="attribute.date.minute.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-          id="attribute.date.hour"><unit id="attribute.date.hour.title"><segment><source>Date
-          - Hour</source><target>Date - Hour.</target></segment></unit><unit id="attribute.date.hour.description"><segment><source>Hour</source><target>Hour.</target></segment></unit><unit
-          id="attribute.date.hour.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
           id="attribute.date.day"><unit id="attribute.date.day.title"><segment><source>Date
           - Date</source><target>Date - Date.</target></segment></unit><unit id="attribute.date.day.description"><segment><source>Date</source><target>Date.</target></segment></unit><unit
           id="attribute.date.day.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
@@ -1988,46 +1762,6 @@ interactions:
           id="attribute.date.year"><unit id="attribute.date.year.title"><segment><source>Date
           - Year</source><target>Date - Year.</target></segment></unit><unit id="attribute.date.year.description"><segment><source>Year</source><target>Year.</target></segment></unit><unit
           id="attribute.date.year.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-          id="attribute.date.minuteOfHour"><unit id="attribute.date.minuteOfHour.title"><segment><source>Date
-          - Minute of Hour</source><target>Date - Minute of Hour.</target></segment></unit><unit
-          id="attribute.date.minuteOfHour.description"><segment><source>Generic Minute
-          of the Hour(MI1-MI60)</source><target>Generic Minute of the Hour(MI1-MI60).</target></segment></unit><unit
-          id="attribute.date.minuteOfHour.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-          id="attribute.date.hourOfDay"><unit id="attribute.date.hourOfDay.title"><segment><source>Date
-          - Hour of Day</source><target>Date - Hour of Day.</target></segment></unit><unit
-          id="attribute.date.hourOfDay.description"><segment><source>Generic Hour
-          of the Day(H1-H24)</source><target>Generic Hour of the Day(H1-H24).</target></segment></unit><unit
-          id="attribute.date.hourOfDay.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-          id="attribute.date.dayOfWeek"><unit id="attribute.date.dayOfWeek.title"><segment><source>Date
-          - Day of Week</source><target>Date - Day of Week.</target></segment></unit><unit
-          id="attribute.date.dayOfWeek.description"><segment><source>Generic Day of
-          the Week (D1-D7)</source><target>Generic Day of the Week (D1-D7).</target></segment></unit><unit
-          id="attribute.date.dayOfWeek.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-          id="attribute.date.dayOfMonth"><unit id="attribute.date.dayOfMonth.title"><segment><source>Date
-          - Day of Month</source><target>Date - Day of Month.</target></segment></unit><unit
-          id="attribute.date.dayOfMonth.description"><segment><source>Generic Day
-          of the Month (D1-D31)</source><target>Generic Day of the Month (D1-D31).</target></segment></unit><unit
-          id="attribute.date.dayOfMonth.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-          id="attribute.date.dayOfYear"><unit id="attribute.date.dayOfYear.title"><segment><source>Date
-          - Day of Year</source><target>Date - Day of Year.</target></segment></unit><unit
-          id="attribute.date.dayOfYear.description"><segment><source>Generic Day of
-          the Year (D1-D366)</source><target>Generic Day of the Year (D1-D366).</target></segment></unit><unit
-          id="attribute.date.dayOfYear.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-          id="attribute.date.weekOfYear"><unit id="attribute.date.weekOfYear.title"><segment><source>Date
-          - Week of Year</source><target>Date - Week of Year.</target></segment></unit><unit
-          id="attribute.date.weekOfYear.description"><segment><source>Generic Week
-          (W1-W53)</source><target>Generic Week (W1-W53).</target></segment></unit><unit
-          id="attribute.date.weekOfYear.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-          id="attribute.date.monthOfYear"><unit id="attribute.date.monthOfYear.title"><segment><source>Date
-          - Month of Year</source><target>Date - Month of Year.</target></segment></unit><unit
-          id="attribute.date.monthOfYear.description"><segment><source>Generic Month
-          (M1-M12)</source><target>Generic Month (M1-M12).</target></segment></unit><unit
-          id="attribute.date.monthOfYear.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-          id="attribute.date.quarterOfYear"><unit id="attribute.date.quarterOfYear.title"><segment><source>Date
-          - Quarter of Year</source><target>Date - Quarter of Year.</target></segment></unit><unit
-          id="attribute.date.quarterOfYear.description"><segment><source>Generic Quarter
-          (Q1-Q4)</source><target>Generic Quarter (Q1-Q4).</target></segment></unit><unit
-          id="attribute.date.quarterOfYear.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
           id="attribute.state"><unit id="attribute.state.title"><segment><source>State</source><target>State.</target></segment></unit><unit
           id="attribute.state.description"><segment><source>State</source><target>State.</target></segment></unit><unit
           id="attribute.state.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group></group><group
@@ -2123,12 +1857,6 @@ interactions:
           id="label.products.category"><unit id="label.products.category.title"><segment><source>Category</source><target>Category.</target></segment></unit><unit
           id="label.products.category.description"><segment><source>Category</source><target>Category.</target></segment></unit><unit
           id="label.products.category.tags"><segment><source>Products</source><target>Products.</target></segment></unit></group><group
-          id="label.date.minute"><unit id="label.date.minute.title"><segment><source>Date
-          - Minute</source><target>Date - Minute.</target></segment></unit><unit id="label.date.minute.description"><segment><source>Minute</source><target>Minute.</target></segment></unit><unit
-          id="label.date.minute.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-          id="label.date.hour"><unit id="label.date.hour.title"><segment><source>Date
-          - Hour</source><target>Date - Hour.</target></segment></unit><unit id="label.date.hour.description"><segment><source>Hour</source><target>Hour.</target></segment></unit><unit
-          id="label.date.hour.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
           id="label.date.day"><unit id="label.date.day.title"><segment><source>Date
           - Date</source><target>Date - Date.</target></segment></unit><unit id="label.date.day.description"><segment><source>Date</source><target>Date.</target></segment></unit><unit
           id="label.date.day.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
@@ -2146,54 +1874,16 @@ interactions:
           and Year (Q1/2020).</target></segment></unit><unit id="label.date.quarter.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
           id="label.date.year"><unit id="label.date.year.title"><segment><source>Date
           - Year</source><target>Date - Year.</target></segment></unit><unit id="label.date.year.description"><segment><source>Year</source><target>Year.</target></segment></unit><unit
-          id="label.date.year.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-          id="label.date.minuteOfHour"><unit id="label.date.minuteOfHour.title"><segment><source>Date
-          - Minute of Hour</source><target>Date - Minute of Hour.</target></segment></unit><unit
-          id="label.date.minuteOfHour.description"><segment><source>Generic Minute
-          of the Hour(MI1-MI60)</source><target>Generic Minute of the Hour(MI1-MI60).</target></segment></unit><unit
-          id="label.date.minuteOfHour.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-          id="label.date.hourOfDay"><unit id="label.date.hourOfDay.title"><segment><source>Date
-          - Hour of Day</source><target>Date - Hour of Day.</target></segment></unit><unit
-          id="label.date.hourOfDay.description"><segment><source>Generic Hour of the
-          Day(H1-H24)</source><target>Generic Hour of the Day(H1-H24).</target></segment></unit><unit
-          id="label.date.hourOfDay.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-          id="label.date.dayOfWeek"><unit id="label.date.dayOfWeek.title"><segment><source>Date
-          - Day of Week</source><target>Date - Day of Week.</target></segment></unit><unit
-          id="label.date.dayOfWeek.description"><segment><source>Generic Day of the
-          Week (D1-D7)</source><target>Generic Day of the Week (D1-D7).</target></segment></unit><unit
-          id="label.date.dayOfWeek.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-          id="label.date.dayOfMonth"><unit id="label.date.dayOfMonth.title"><segment><source>Date
-          - Day of Month</source><target>Date - Day of Month.</target></segment></unit><unit
-          id="label.date.dayOfMonth.description"><segment><source>Generic Day of the
-          Month (D1-D31)</source><target>Generic Day of the Month (D1-D31).</target></segment></unit><unit
-          id="label.date.dayOfMonth.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-          id="label.date.dayOfYear"><unit id="label.date.dayOfYear.title"><segment><source>Date
-          - Day of Year</source><target>Date - Day of Year.</target></segment></unit><unit
-          id="label.date.dayOfYear.description"><segment><source>Generic Day of the
-          Year (D1-D366)</source><target>Generic Day of the Year (D1-D366).</target></segment></unit><unit
-          id="label.date.dayOfYear.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-          id="label.date.weekOfYear"><unit id="label.date.weekOfYear.title"><segment><source>Date
-          - Week of Year</source><target>Date - Week of Year.</target></segment></unit><unit
-          id="label.date.weekOfYear.description"><segment><source>Generic Week (W1-W53)</source><target>Generic
-          Week (W1-W53).</target></segment></unit><unit id="label.date.weekOfYear.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-          id="label.date.monthOfYear"><unit id="label.date.monthOfYear.title"><segment><source>Date
-          - Month of Year</source><target>Date - Month of Year.</target></segment></unit><unit
-          id="label.date.monthOfYear.description"><segment><source>Generic Month (M1-M12)</source><target>Generic
-          Month (M1-M12).</target></segment></unit><unit id="label.date.monthOfYear.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-          id="label.date.quarterOfYear"><unit id="label.date.quarterOfYear.title"><segment><source>Date
-          - Quarter of Year</source><target>Date - Quarter of Year.</target></segment></unit><unit
-          id="label.date.quarterOfYear.description"><segment><source>Generic Quarter
-          (Q1-Q4)</source><target>Generic Quarter (Q1-Q4).</target></segment></unit><unit
-          id="label.date.quarterOfYear.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group></group><group
-          id="metric"><group id="metric.amount_of_active_customers"><unit id="metric.amount_of_active_customers.title"><segment><source>#
-          of Active Customers</source><target># of Active Customers.</target></segment></unit></group><group
-          id="metric.amount_of_orders"><unit id="metric.amount_of_orders.title"><segment><source>#
-          of Orders</source><target># of Orders.</target></segment></unit></group><group
-          id="metric.amount_of_top_customers"><unit id="metric.amount_of_top_customers.title"><segment><source>#
+          id="label.date.year.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group></group><group
+          id="metric"><group id="metric.amount_of_top_customers"><unit id="metric.amount_of_top_customers.title"><segment><source>#
           of Top Customers</source><target># of Top Customers.</target></segment></unit></group><group
           id="metric.amount_of_valid_orders"><unit id="metric.amount_of_valid_orders.title"><segment><source>#
           of Valid Orders</source><target># of Valid Orders.</target></segment></unit><unit
           id="metric.amount_of_valid_orders.description"><segment><source></source></segment></unit></group><group
+          id="metric.amount_of_active_customers"><unit id="metric.amount_of_active_customers.title"><segment><source>#
+          of Active Customers</source><target># of Active Customers.</target></segment></unit></group><group
+          id="metric.amount_of_orders"><unit id="metric.amount_of_orders.title"><segment><source>#
+          of Orders</source><target># of Orders.</target></segment></unit></group><group
           id="metric.campaign_spend"><unit id="metric.campaign_spend.title"><segment><source>Campaign
           Spend</source><target>Campaign Spend.</target></segment></unit></group><group
           id="metric.order_amount"><unit id="metric.order_amount.title"><segment><source>Order
@@ -2204,14 +1894,14 @@ interactions:
           Revenue from Top 10 Customers</source><target>% Revenue from Top 10 Customers.</target></segment></unit></group><group
           id="metric.percent_revenue_from_top_10_percent_customers"><unit id="metric.percent_revenue_from_top_10_percent_customers.title"><segment><source>%
           Revenue from Top 10% Customers</source><target>% Revenue from Top 10% Customers.</target></segment></unit></group><group
-          id="metric.revenue-outdoor"><unit id="metric.revenue-outdoor.title"><segment><source>Revenue
-          (Outdoor)</source><target>Revenue (Outdoor).</target></segment></unit></group><group
           id="metric.percent_revenue_from_top_10_percent_products"><unit id="metric.percent_revenue_from_top_10_percent_products.title"><segment><source>%
           Revenue from Top 10% Products</source><target>% Revenue from Top 10% Products.</target></segment></unit></group><group
           id="metric.percent_revenue_from_top_10_products"><unit id="metric.percent_revenue_from_top_10_products.title"><segment><source>%
           Revenue from Top 10 Products</source><target>% Revenue from Top 10 Products.</target></segment></unit></group><group
           id="metric.percent_revenue_in_category"><unit id="metric.percent_revenue_in_category.title"><segment><source>%
           Revenue in Category</source><target>% Revenue in Category.</target></segment></unit></group><group
+          id="metric.total_revenue-no_filters"><unit id="metric.total_revenue-no_filters.title"><segment><source>Total
+          Revenue (No Filters)</source><target>Total Revenue (No Filters).</target></segment></unit></group><group
           id="metric.percent_revenue_per_product"><unit id="metric.percent_revenue_per_product.title"><segment><source>%
           Revenue per Product</source><target>% Revenue per Product.</target></segment></unit></group><group
           id="metric.revenue"><unit id="metric.revenue.title"><segment><source>Revenue</source><target>Revenue.</target></segment></unit><unit
@@ -2222,6 +1912,8 @@ interactions:
           (Electronic)</source><target>Revenue (Electronic).</target></segment></unit></group><group
           id="metric.revenue-home"><unit id="metric.revenue-home.title"><segment><source>Revenue
           (Home)</source><target>Revenue (Home).</target></segment></unit></group><group
+          id="metric.revenue-outdoor"><unit id="metric.revenue-outdoor.title"><segment><source>Revenue
+          (Outdoor)</source><target>Revenue (Outdoor).</target></segment></unit></group><group
           id="metric.revenue_per_customer"><unit id="metric.revenue_per_customer.title"><segment><source>Revenue
           per Customer</source><target>Revenue per Customer.</target></segment></unit></group><group
           id="metric.revenue_per_dollar_spent"><unit id="metric.revenue_per_dollar_spent.title"><segment><source>Revenue
@@ -2231,9 +1923,7 @@ interactions:
           id="metric.revenue_top_10_percent"><unit id="metric.revenue_top_10_percent.title"><segment><source>Revenue
           / Top 10%</source><target>Revenue / Top 10%.</target></segment></unit></group><group
           id="metric.total_revenue"><unit id="metric.total_revenue.title"><segment><source>Total
-          Revenue</source><target>Total Revenue.</target></segment></unit></group><group
-          id="metric.total_revenue-no_filters"><unit id="metric.total_revenue-no_filters.title"><segment><source>Total
-          Revenue (No Filters)</source><target>Total Revenue (No Filters).</target></segment></unit></group></group><group
+          Revenue</source><target>Total Revenue.</target></segment></unit></group></group><group
           id="visualizationObject"><group id="visualizationObject.campaign_spend"><unit
           id="visualizationObject.campaign_spend.title"><segment><source>Campaign
           Spend</source><target>Campaign Spend.</target></segment></unit><unit id="visualizationObject.campaign_spend.free-form"><notes><note
@@ -2469,9 +2159,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:51 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
   - request:
@@ -2504,7 +2191,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '47036'
+          - '40154'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -2543,9 +2230,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:51 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><xliff xmlns="urn:oasis:names:tc:xliff:document:2.0"
           version="2.1" srcLang="en-US" trgLang="fr-FR"><file id="demo"><group id="analyticalDashboard"><group
@@ -2647,12 +2331,6 @@ interactions:
           id="attribute.products.category"><unit id="attribute.products.category.title"><segment><source>Category</source></segment></unit><unit
           id="attribute.products.category.description"><segment><source>Category</source></segment></unit><unit
           id="attribute.products.category.tags"><segment><source>Products</source></segment></unit></group><group
-          id="attribute.date.minute"><unit id="attribute.date.minute.title"><segment><source>Date
-          - Minute</source></segment></unit><unit id="attribute.date.minute.description"><segment><source>Minute</source></segment></unit><unit
-          id="attribute.date.minute.tags"><segment><source>Date</source></segment></unit></group><group
-          id="attribute.date.hour"><unit id="attribute.date.hour.title"><segment><source>Date
-          - Hour</source></segment></unit><unit id="attribute.date.hour.description"><segment><source>Hour</source></segment></unit><unit
-          id="attribute.date.hour.tags"><segment><source>Date</source></segment></unit></group><group
           id="attribute.date.day"><unit id="attribute.date.day.title"><segment><source>Date
           - Date</source></segment></unit><unit id="attribute.date.day.description"><segment><source>Date</source></segment></unit><unit
           id="attribute.date.day.tags"><segment><source>Date</source></segment></unit></group><group
@@ -2668,30 +2346,6 @@ interactions:
           id="attribute.date.year"><unit id="attribute.date.year.title"><segment><source>Date
           - Year</source></segment></unit><unit id="attribute.date.year.description"><segment><source>Year</source></segment></unit><unit
           id="attribute.date.year.tags"><segment><source>Date</source></segment></unit></group><group
-          id="attribute.date.minuteOfHour"><unit id="attribute.date.minuteOfHour.title"><segment><source>Date
-          - Minute of Hour</source></segment></unit><unit id="attribute.date.minuteOfHour.description"><segment><source>Generic
-          Minute of the Hour(MI1-MI60)</source></segment></unit><unit id="attribute.date.minuteOfHour.tags"><segment><source>Date</source></segment></unit></group><group
-          id="attribute.date.hourOfDay"><unit id="attribute.date.hourOfDay.title"><segment><source>Date
-          - Hour of Day</source></segment></unit><unit id="attribute.date.hourOfDay.description"><segment><source>Generic
-          Hour of the Day(H1-H24)</source></segment></unit><unit id="attribute.date.hourOfDay.tags"><segment><source>Date</source></segment></unit></group><group
-          id="attribute.date.dayOfWeek"><unit id="attribute.date.dayOfWeek.title"><segment><source>Date
-          - Day of Week</source></segment></unit><unit id="attribute.date.dayOfWeek.description"><segment><source>Generic
-          Day of the Week (D1-D7)</source></segment></unit><unit id="attribute.date.dayOfWeek.tags"><segment><source>Date</source></segment></unit></group><group
-          id="attribute.date.dayOfMonth"><unit id="attribute.date.dayOfMonth.title"><segment><source>Date
-          - Day of Month</source></segment></unit><unit id="attribute.date.dayOfMonth.description"><segment><source>Generic
-          Day of the Month (D1-D31)</source></segment></unit><unit id="attribute.date.dayOfMonth.tags"><segment><source>Date</source></segment></unit></group><group
-          id="attribute.date.dayOfYear"><unit id="attribute.date.dayOfYear.title"><segment><source>Date
-          - Day of Year</source></segment></unit><unit id="attribute.date.dayOfYear.description"><segment><source>Generic
-          Day of the Year (D1-D366)</source></segment></unit><unit id="attribute.date.dayOfYear.tags"><segment><source>Date</source></segment></unit></group><group
-          id="attribute.date.weekOfYear"><unit id="attribute.date.weekOfYear.title"><segment><source>Date
-          - Week of Year</source></segment></unit><unit id="attribute.date.weekOfYear.description"><segment><source>Generic
-          Week (W1-W53)</source></segment></unit><unit id="attribute.date.weekOfYear.tags"><segment><source>Date</source></segment></unit></group><group
-          id="attribute.date.monthOfYear"><unit id="attribute.date.monthOfYear.title"><segment><source>Date
-          - Month of Year</source></segment></unit><unit id="attribute.date.monthOfYear.description"><segment><source>Generic
-          Month (M1-M12)</source></segment></unit><unit id="attribute.date.monthOfYear.tags"><segment><source>Date</source></segment></unit></group><group
-          id="attribute.date.quarterOfYear"><unit id="attribute.date.quarterOfYear.title"><segment><source>Date
-          - Quarter of Year</source></segment></unit><unit id="attribute.date.quarterOfYear.description"><segment><source>Generic
-          Quarter (Q1-Q4)</source></segment></unit><unit id="attribute.date.quarterOfYear.tags"><segment><source>Date</source></segment></unit></group><group
           id="attribute.state"><unit id="attribute.state.title"><segment><source>State</source></segment></unit><unit
           id="attribute.state.description"><segment><source>State</source></segment></unit><unit
           id="attribute.state.tags"><segment><source>Customers</source></segment></unit></group></group><group
@@ -2778,12 +2432,6 @@ interactions:
           id="label.products.category"><unit id="label.products.category.title"><segment><source>Category</source></segment></unit><unit
           id="label.products.category.description"><segment><source>Category</source></segment></unit><unit
           id="label.products.category.tags"><segment><source>Products</source></segment></unit></group><group
-          id="label.date.minute"><unit id="label.date.minute.title"><segment><source>Date
-          - Minute</source></segment></unit><unit id="label.date.minute.description"><segment><source>Minute</source></segment></unit><unit
-          id="label.date.minute.tags"><segment><source>Date</source></segment></unit></group><group
-          id="label.date.hour"><unit id="label.date.hour.title"><segment><source>Date
-          - Hour</source></segment></unit><unit id="label.date.hour.description"><segment><source>Hour</source></segment></unit><unit
-          id="label.date.hour.tags"><segment><source>Date</source></segment></unit></group><group
           id="label.date.day"><unit id="label.date.day.title"><segment><source>Date
           - Date</source></segment></unit><unit id="label.date.day.description"><segment><source>Date</source></segment></unit><unit
           id="label.date.day.tags"><segment><source>Date</source></segment></unit></group><group
@@ -2798,38 +2446,14 @@ interactions:
           and Year (Q1/2020)</source></segment></unit><unit id="label.date.quarter.tags"><segment><source>Date</source></segment></unit></group><group
           id="label.date.year"><unit id="label.date.year.title"><segment><source>Date
           - Year</source></segment></unit><unit id="label.date.year.description"><segment><source>Year</source></segment></unit><unit
-          id="label.date.year.tags"><segment><source>Date</source></segment></unit></group><group
-          id="label.date.minuteOfHour"><unit id="label.date.minuteOfHour.title"><segment><source>Date
-          - Minute of Hour</source></segment></unit><unit id="label.date.minuteOfHour.description"><segment><source>Generic
-          Minute of the Hour(MI1-MI60)</source></segment></unit><unit id="label.date.minuteOfHour.tags"><segment><source>Date</source></segment></unit></group><group
-          id="label.date.hourOfDay"><unit id="label.date.hourOfDay.title"><segment><source>Date
-          - Hour of Day</source></segment></unit><unit id="label.date.hourOfDay.description"><segment><source>Generic
-          Hour of the Day(H1-H24)</source></segment></unit><unit id="label.date.hourOfDay.tags"><segment><source>Date</source></segment></unit></group><group
-          id="label.date.dayOfWeek"><unit id="label.date.dayOfWeek.title"><segment><source>Date
-          - Day of Week</source></segment></unit><unit id="label.date.dayOfWeek.description"><segment><source>Generic
-          Day of the Week (D1-D7)</source></segment></unit><unit id="label.date.dayOfWeek.tags"><segment><source>Date</source></segment></unit></group><group
-          id="label.date.dayOfMonth"><unit id="label.date.dayOfMonth.title"><segment><source>Date
-          - Day of Month</source></segment></unit><unit id="label.date.dayOfMonth.description"><segment><source>Generic
-          Day of the Month (D1-D31)</source></segment></unit><unit id="label.date.dayOfMonth.tags"><segment><source>Date</source></segment></unit></group><group
-          id="label.date.dayOfYear"><unit id="label.date.dayOfYear.title"><segment><source>Date
-          - Day of Year</source></segment></unit><unit id="label.date.dayOfYear.description"><segment><source>Generic
-          Day of the Year (D1-D366)</source></segment></unit><unit id="label.date.dayOfYear.tags"><segment><source>Date</source></segment></unit></group><group
-          id="label.date.weekOfYear"><unit id="label.date.weekOfYear.title"><segment><source>Date
-          - Week of Year</source></segment></unit><unit id="label.date.weekOfYear.description"><segment><source>Generic
-          Week (W1-W53)</source></segment></unit><unit id="label.date.weekOfYear.tags"><segment><source>Date</source></segment></unit></group><group
-          id="label.date.monthOfYear"><unit id="label.date.monthOfYear.title"><segment><source>Date
-          - Month of Year</source></segment></unit><unit id="label.date.monthOfYear.description"><segment><source>Generic
-          Month (M1-M12)</source></segment></unit><unit id="label.date.monthOfYear.tags"><segment><source>Date</source></segment></unit></group><group
-          id="label.date.quarterOfYear"><unit id="label.date.quarterOfYear.title"><segment><source>Date
-          - Quarter of Year</source></segment></unit><unit id="label.date.quarterOfYear.description"><segment><source>Generic
-          Quarter (Q1-Q4)</source></segment></unit><unit id="label.date.quarterOfYear.tags"><segment><source>Date</source></segment></unit></group></group><group
-          id="metric"><group id="metric.amount_of_active_customers"><unit id="metric.amount_of_active_customers.title"><segment><source>#
-          of Active Customers</source></segment></unit></group><group id="metric.amount_of_orders"><unit
-          id="metric.amount_of_orders.title"><segment><source># of Orders</source></segment></unit></group><group
-          id="metric.amount_of_top_customers"><unit id="metric.amount_of_top_customers.title"><segment><source>#
+          id="label.date.year.tags"><segment><source>Date</source></segment></unit></group></group><group
+          id="metric"><group id="metric.amount_of_top_customers"><unit id="metric.amount_of_top_customers.title"><segment><source>#
           of Top Customers</source></segment></unit></group><group id="metric.amount_of_valid_orders"><unit
           id="metric.amount_of_valid_orders.title"><segment><source># of Valid Orders</source></segment></unit><unit
           id="metric.amount_of_valid_orders.description"><segment><source></source></segment></unit></group><group
+          id="metric.amount_of_active_customers"><unit id="metric.amount_of_active_customers.title"><segment><source>#
+          of Active Customers</source></segment></unit></group><group id="metric.amount_of_orders"><unit
+          id="metric.amount_of_orders.title"><segment><source># of Orders</source></segment></unit></group><group
           id="metric.campaign_spend"><unit id="metric.campaign_spend.title"><segment><source>Campaign
           Spend</source></segment></unit></group><group id="metric.order_amount"><unit
           id="metric.order_amount.title"><segment><source>Order Amount</source></segment></unit></group><group
@@ -2838,14 +2462,15 @@ interactions:
           id="metric.percent_revenue_from_top_10_customers.title"><segment><source>%
           Revenue from Top 10 Customers</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_percent_customers"><unit
           id="metric.percent_revenue_from_top_10_percent_customers.title"><segment><source>%
-          Revenue from Top 10% Customers</source></segment></unit></group><group id="metric.revenue-outdoor"><unit
-          id="metric.revenue-outdoor.title"><segment><source>Revenue (Outdoor)</source></segment></unit></group><group
-          id="metric.percent_revenue_from_top_10_percent_products"><unit id="metric.percent_revenue_from_top_10_percent_products.title"><segment><source>%
+          Revenue from Top 10% Customers</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_percent_products"><unit
+          id="metric.percent_revenue_from_top_10_percent_products.title"><segment><source>%
           Revenue from Top 10% Products</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_products"><unit
           id="metric.percent_revenue_from_top_10_products.title"><segment><source>%
           Revenue from Top 10 Products</source></segment></unit></group><group id="metric.percent_revenue_in_category"><unit
           id="metric.percent_revenue_in_category.title"><segment><source>% Revenue
-          in Category</source></segment></unit></group><group id="metric.percent_revenue_per_product"><unit
+          in Category</source></segment></unit></group><group id="metric.total_revenue-no_filters"><unit
+          id="metric.total_revenue-no_filters.title"><segment><source>Total Revenue
+          (No Filters)</source></segment></unit></group><group id="metric.percent_revenue_per_product"><unit
           id="metric.percent_revenue_per_product.title"><segment><source>% Revenue
           per Product</source></segment></unit></group><group id="metric.revenue"><unit
           id="metric.revenue.title"><segment><source>Revenue</source></segment></unit><unit
@@ -2854,17 +2479,18 @@ interactions:
           (Clothing)</source></segment></unit></group><group id="metric.revenue-electronic"><unit
           id="metric.revenue-electronic.title"><segment><source>Revenue (Electronic)</source></segment></unit></group><group
           id="metric.revenue-home"><unit id="metric.revenue-home.title"><segment><source>Revenue
-          (Home)</source></segment></unit></group><group id="metric.revenue_per_customer"><unit
-          id="metric.revenue_per_customer.title"><segment><source>Revenue per Customer</source></segment></unit></group><group
-          id="metric.revenue_per_dollar_spent"><unit id="metric.revenue_per_dollar_spent.title"><segment><source>Revenue
-          per Dollar Spent</source></segment></unit></group><group id="metric.revenue_top_10"><unit
+          (Home)</source></segment></unit></group><group id="metric.revenue-outdoor"><unit
+          id="metric.revenue-outdoor.title"><segment><source>Revenue (Outdoor)</source></segment></unit></group><group
+          id="metric.revenue_per_customer"><unit id="metric.revenue_per_customer.title"><segment><source>Revenue
+          per Customer</source></segment></unit></group><group id="metric.revenue_per_dollar_spent"><unit
+          id="metric.revenue_per_dollar_spent.title"><segment><source>Revenue per
+          Dollar Spent</source></segment></unit></group><group id="metric.revenue_top_10"><unit
           id="metric.revenue_top_10.title"><segment><source>Revenue / Top 10</source></segment></unit></group><group
           id="metric.revenue_top_10_percent"><unit id="metric.revenue_top_10_percent.title"><segment><source>Revenue
           / Top 10%</source></segment></unit></group><group id="metric.total_revenue"><unit
-          id="metric.total_revenue.title"><segment><source>Total Revenue</source></segment></unit></group><group
-          id="metric.total_revenue-no_filters"><unit id="metric.total_revenue-no_filters.title"><segment><source>Total
-          Revenue (No Filters)</source></segment></unit></group></group><group id="visualizationObject"><group
-          id="visualizationObject.campaign_spend"><unit id="visualizationObject.campaign_spend.title"><segment><source>Campaign
+          id="metric.total_revenue.title"><segment><source>Total Revenue</source></segment></unit></group></group><group
+          id="visualizationObject"><group id="visualizationObject.campaign_spend"><unit
+          id="visualizationObject.campaign_spend.title"><segment><source>Campaign
           Spend</source></segment></unit><unit id="visualizationObject.campaign_spend.free-form"><notes><note
           appliesTo="source">Free-form translations are marked by the 'id' attribute,
           which is a hash combining the JSON path and the source text's value. Since

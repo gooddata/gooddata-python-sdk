@@ -1,4 +1,4 @@
-# (C) 2024 GoodData Corporation
+# (C) 2025 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -69,10 +69,7 @@ interactions:
         X-XSS-Protection:
           - '0'
         content-length:
-          - '33980'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:44 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+          - '33964'
       body:
         string:
           analytics:
@@ -1397,7 +1394,8 @@ interactions:
                 title: Top 10 Products
           ldm:
             datasets:
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Campaign channel id
                     id: campaign_channel_id
                     labels: []
@@ -1463,7 +1461,8 @@ interactions:
                 tags:
                   - Campaign channels
                 title: Campaign channels
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Campaign id
                     id: campaign_id
                     labels: []
@@ -1497,7 +1496,8 @@ interactions:
                 tags:
                   - Campaigns
                 title: Campaigns
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Customer id
                     id: customer_id
                     labels: []
@@ -1532,6 +1532,7 @@ interactions:
                         tags:
                           - Customers
                         title: Location
+                        valueType: GEO
                     sourceColumn: state
                     sourceColumnDataType: STRING
                     tags:
@@ -1554,7 +1555,8 @@ interactions:
                 tags:
                   - Customers
                 title: Customers
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Order id
                     id: order_id
                     labels: []
@@ -1661,7 +1663,8 @@ interactions:
                     filterId:
                       id: wdf__region
                       type: workspaceDataFilter
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Product id
                     id: product_id
                     labels: []
@@ -1706,21 +1709,11 @@ interactions:
             dateInstances:
               - description: ''
                 granularities:
-                  - MINUTE
-                  - HOUR
                   - DAY
                   - WEEK
                   - MONTH
                   - QUARTER
                   - YEAR
-                  - MINUTE_OF_HOUR
-                  - HOUR_OF_DAY
-                  - DAY_OF_WEEK
-                  - DAY_OF_MONTH
-                  - DAY_OF_YEAR
-                  - WEEK_OF_YEAR
-                  - MONTH_OF_YEAR
-                  - QUARTER_OF_YEAR
                 granularitiesFormatting:
                   titleBase: ''
                   titlePattern: '%titleBase - %granularityTitle'
@@ -1792,9 +1785,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:44 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
   - request:
@@ -1822,7 +1812,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '275'
+          - '255'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -1861,9 +1851,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:44 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -1872,8 +1859,7 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              allowedOrigins: []
-              oauthClientId: 5bb276be-d7d9-4b4c-85ab-57710f158448
+              oauthClientId: 480a0248-4e34-4275-b13e-cc597e28c7d1
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -1943,10 +1929,7 @@ interactions:
         X-XSS-Protection:
           - '0'
         content-length:
-          - '33980'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:44 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+          - '33964'
       body:
         string:
           analytics:
@@ -3271,7 +3254,8 @@ interactions:
                 title: Top 10 Products
           ldm:
             datasets:
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Campaign channel id
                     id: campaign_channel_id
                     labels: []
@@ -3337,7 +3321,8 @@ interactions:
                 tags:
                   - Campaign channels
                 title: Campaign channels
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Campaign id
                     id: campaign_id
                     labels: []
@@ -3371,7 +3356,8 @@ interactions:
                 tags:
                   - Campaigns
                 title: Campaigns
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Customer id
                     id: customer_id
                     labels: []
@@ -3406,6 +3392,7 @@ interactions:
                         tags:
                           - Customers
                         title: Location
+                        valueType: GEO
                     sourceColumn: state
                     sourceColumnDataType: STRING
                     tags:
@@ -3428,7 +3415,8 @@ interactions:
                 tags:
                   - Customers
                 title: Customers
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Order id
                     id: order_id
                     labels: []
@@ -3535,7 +3523,8 @@ interactions:
                     filterId:
                       id: wdf__region
                       type: workspaceDataFilter
-              - attributes:
+              - aggregatedFacts: []
+                attributes:
                   - description: Product id
                     id: product_id
                     labels: []
@@ -3580,21 +3569,11 @@ interactions:
             dateInstances:
               - description: ''
                 granularities:
-                  - MINUTE
-                  - HOUR
                   - DAY
                   - WEEK
                   - MONTH
                   - QUARTER
                   - YEAR
-                  - MINUTE_OF_HOUR
-                  - HOUR_OF_DAY
-                  - DAY_OF_WEEK
-                  - DAY_OF_MONTH
-                  - DAY_OF_YEAR
-                  - WEEK_OF_YEAR
-                  - MONTH_OF_YEAR
-                  - QUARTER_OF_YEAR
                 granularitiesFormatting:
                   titleBase: ''
                   titlePattern: '%titleBase - %granularityTitle'
@@ -3666,9 +3645,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:44 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
   - request:
@@ -3696,7 +3672,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '275'
+          - '255'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -3735,9 +3711,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 11:15:44 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -3746,7 +3719,6 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              allowedOrigins: []
-              oauthClientId: 5bb276be-d7d9-4b4c-85ab-57710f158448
+              oauthClientId: 480a0248-4e34-4275-b13e-cc597e28c7d1
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default

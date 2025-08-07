@@ -132,14 +132,13 @@ interactions:
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-GDC-CANCEL-TOKEN:
+          - 07a87087-d429-400a-a708-c8be0a9f9cd6
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
         content-length:
           - '1219'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Fri, 17 Jan 2025 13:32:54 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           executionResponse:
@@ -199,10 +198,10 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: a2a9ac803c174ab21306a723478c6fc605d7206e:b5899aad7e94ba7c7c53c8721b42192860ea7301393f863d474f1da048acb333
+              executionResult: 54b4520e4d45b94dd91e2908aca4b5a4549e97f3:57e78402c7b9750eda892a486f974172fa38cc46d62a5b5f5d8633ba0976cc59
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/a2a9ac803c174ab21306a723478c6fc605d7206e%3Ab5899aad7e94ba7c7c53c8721b42192860ea7301393f863d474f1da048acb333/metadata
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/54b4520e4d45b94dd91e2908aca4b5a4549e97f3%3A57e78402c7b9750eda892a486f974172fa38cc46d62a5b5f5d8633ba0976cc59/metadata
       body: null
       headers:
         Accept:
@@ -268,9 +267,6 @@ interactions:
           - '0'
         content-length:
           - '2511'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Fri, 17 Jan 2025 13:32:54 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           afm:
@@ -372,7 +368,7 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: a2a9ac803c174ab21306a723478c6fc605d7206e:b5899aad7e94ba7c7c53c8721b42192860ea7301393f863d474f1da048acb333
+              executionResult: 54b4520e4d45b94dd91e2908aca4b5a4549e97f3:57e78402c7b9750eda892a486f974172fa38cc46d62a5b5f5d8633ba0976cc59
           resultSpec:
             dimensions:
               - localIdentifier: dim_0
@@ -405,7 +401,7 @@ interactions:
           resultSize: 15292
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/a2a9ac803c174ab21306a723478c6fc605d7206e%3Ab5899aad7e94ba7c7c53c8721b42192860ea7301393f863d474f1da048acb333?offset=0%2C0&limit=100%2C100
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/54b4520e4d45b94dd91e2908aca4b5a4549e97f3%3A57e78402c7b9750eda892a486f974172fa38cc46d62a5b5f5d8633ba0976cc59?offset=0%2C0&limit=100%2C100
       body: null
       headers:
         Accept:
@@ -470,10 +466,7 @@ interactions:
         X-XSS-Protection:
           - '0'
         content-length:
-          - '24535'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Fri, 17 Jan 2025 13:32:54 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+          - '24572'
       body:
         string:
           data:
@@ -2906,8 +2899,6 @@ interactions:
                             function: MAX
               totalDimensions:
                 - dim_1
-          metadata:
-            dataSourceMessages: []
           paging:
             count:
               - 17
@@ -2918,9 +2909,11 @@ interactions:
             total:
               - 17
               - 96
+          metadata:
+            dataSourceMessages: []
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/a2a9ac803c174ab21306a723478c6fc605d7206e%3Ab5899aad7e94ba7c7c53c8721b42192860ea7301393f863d474f1da048acb333/metadata
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/54b4520e4d45b94dd91e2908aca4b5a4549e97f3%3A57e78402c7b9750eda892a486f974172fa38cc46d62a5b5f5d8633ba0976cc59/metadata
       body: null
       headers:
         Accept:
@@ -2986,9 +2979,6 @@ interactions:
           - '0'
         content-length:
           - '2511'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Fri, 17 Jan 2025 13:32:54 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           afm:
@@ -3090,7 +3080,7 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: a2a9ac803c174ab21306a723478c6fc605d7206e:b5899aad7e94ba7c7c53c8721b42192860ea7301393f863d474f1da048acb333
+              executionResult: 54b4520e4d45b94dd91e2908aca4b5a4549e97f3:57e78402c7b9750eda892a486f974172fa38cc46d62a5b5f5d8633ba0976cc59
           resultSpec:
             dimensions:
               - localIdentifier: dim_0
@@ -3123,7 +3113,7 @@ interactions:
           resultSize: 15292
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/a2a9ac803c174ab21306a723478c6fc605d7206e%3Ab5899aad7e94ba7c7c53c8721b42192860ea7301393f863d474f1da048acb333?offset=0%2C0&limit=100%2C100
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/54b4520e4d45b94dd91e2908aca4b5a4549e97f3%3A57e78402c7b9750eda892a486f974172fa38cc46d62a5b5f5d8633ba0976cc59?offset=0%2C0&limit=100%2C100
       body: null
       headers:
         Accept:
@@ -3188,10 +3178,7 @@ interactions:
         X-XSS-Protection:
           - '0'
         content-length:
-          - '24535'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Fri, 17 Jan 2025 13:32:55 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+          - '24572'
       body:
         string:
           data:
@@ -5624,8 +5611,6 @@ interactions:
                             function: MAX
               totalDimensions:
                 - dim_1
-          metadata:
-            dataSourceMessages: []
           paging:
             count:
               - 17
@@ -5636,3 +5621,5 @@ interactions:
             total:
               - 17
               - 96
+          metadata:
+            dataSourceMessages: []

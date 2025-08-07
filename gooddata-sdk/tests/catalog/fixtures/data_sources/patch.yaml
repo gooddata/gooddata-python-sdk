@@ -1,4 +1,4 @@
-# (C) 2024 GoodData Corporation
+# (C) 2025 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -28,7 +28,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '476'
+          - '491'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -68,16 +68,13 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:24 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
             - id: demo-test-ds
               type: dataSource
               attributes:
-                url: jdbc:postgresql://localhost:5432/demo
+                url: jdbc:postgresql://localhost:5432/demo?sslmode=prefer
                 username: demouser
                 authenticationType: USERNAME_PASSWORD
                 name: demo-test-ds
@@ -154,16 +151,13 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:24 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           detail: The requested endpoint does not exist or you do not have permission
             to access it.
           status: 404
           title: Not Found
-          traceId: 6703a7240cc7154eb2e7a5938b0c4d9b
+          traceId: 689494aee77ffd51ddb649fe16a2ec46
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources
@@ -175,7 +169,7 @@ interactions:
             type: POSTGRESQL
             username: demouser
             password: demopass
-            url: jdbc:postgresql://localhost:5432/demo?autosave=true
+            url: jdbc:postgresql://localhost:5432/demo?autosave=true&sslmode=prefer
           id: test
           type: dataSource
       headers:
@@ -203,7 +197,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '304'
+          - '319'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -242,16 +236,13 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:24 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
             id: test
             type: dataSource
             attributes:
-              url: jdbc:postgresql://localhost:5432/demo?autosave=true
+              url: jdbc:postgresql://localhost:5432/demo?autosave=true&sslmode=prefer
               username: demouser
               authenticationType: USERNAME_PASSWORD
               name: Test
@@ -286,7 +277,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '304'
+          - '319'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -325,16 +316,13 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:24 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
             id: test
             type: dataSource
             attributes:
-              url: jdbc:postgresql://localhost:5432/demo?autosave=true
+              url: jdbc:postgresql://localhost:5432/demo?autosave=true&sslmode=prefer
               username: demouser
               authenticationType: USERNAME_PASSWORD
               name: Test
@@ -369,7 +357,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '304'
+          - '319'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -408,16 +396,13 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:24 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
             id: test
             type: dataSource
             attributes:
-              url: jdbc:postgresql://localhost:5432/demo?autosave=true
+              url: jdbc:postgresql://localhost:5432/demo?autosave=true&sslmode=prefer
               username: demouser
               authenticationType: USERNAME_PASSWORD
               name: Test
@@ -433,7 +418,7 @@ interactions:
           attributes:
             name: Test2
             type: POSTGRESQL
-            url: jdbc:postgresql://localhost:5432/demo?autosave=true
+            url: jdbc:postgresql://localhost:5432/demo?autosave=true&sslmode=prefer
           id: test
           type: dataSource
       headers:
@@ -461,7 +446,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '305'
+          - '320'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -500,16 +485,13 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:24 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
             id: test
             type: dataSource
             attributes:
-              url: jdbc:postgresql://localhost:5432/demo?autosave=true
+              url: jdbc:postgresql://localhost:5432/demo?autosave=true&sslmode=prefer
               username: demouser
               authenticationType: USERNAME_PASSWORD
               name: Test2
@@ -544,7 +526,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '305'
+          - '320'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -583,16 +565,13 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:24 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
             id: test
             type: dataSource
             attributes:
-              url: jdbc:postgresql://localhost:5432/demo?autosave=true
+              url: jdbc:postgresql://localhost:5432/demo?autosave=true&sslmode=prefer
               username: demouser
               authenticationType: USERNAME_PASSWORD
               name: Test2
@@ -660,8 +639,5 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:17:24 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''

@@ -102,14 +102,13 @@ interactions:
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-GDC-CANCEL-TOKEN:
+          - 927afdc6-ac4a-4c38-9e59-22b8f132dbd1
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
         content-length:
           - '810'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Fri, 17 Jan 2025 13:33:00 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           executionResponse:
@@ -141,7 +140,7 @@ interactions:
                       valueType: TEXT
                 localIdentifier: dim_1
             links:
-              executionResult: edeb5fa8ad799e890171815810736f1048fcfe36:170fad358e69328c6f86e8b2ceb7ae1c5f9551d096145b1a483e34f089d75b09
+              executionResult: aa672b8f14d7ef236206e0c8422371e627148b22:1b20f0aa1fe4bf454c9c73da95c7d8cfbf8b99c75d84c5caf5d222037e7a4c02
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3Din%3D%28product_name%29&page=0&size=500
@@ -208,9 +207,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Fri, 17 Jan 2025 13:33:00 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -275,7 +271,7 @@ interactions:
             next: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3D%3D%27product_name%27&page=1&size=500
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/edeb5fa8ad799e890171815810736f1048fcfe36%3A170fad358e69328c6f86e8b2ceb7ae1c5f9551d096145b1a483e34f089d75b09?offset=0%2C0&limit=2%2C1000
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/aa672b8f14d7ef236206e0c8422371e627148b22%3A1b20f0aa1fe4bf454c9c73da95c7d8cfbf8b99c75d84c5caf5d222037e7a4c02?offset=0%2C0&limit=2%2C1000
       body: null
       headers:
         Accept:
@@ -340,10 +336,7 @@ interactions:
         X-XSS-Protection:
           - '0'
         content-length:
-          - '171'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Fri, 17 Jan 2025 13:33:00 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+          - '208'
       body:
         string:
           data: []
@@ -353,8 +346,6 @@ interactions:
             - headerGroups:
                 - headers: []
           grandTotals: []
-          metadata:
-            dataSourceMessages: []
           paging:
             count:
               - 0
@@ -365,3 +356,5 @@ interactions:
             total:
               - 0
               - 0
+          metadata:
+            dataSourceMessages: []

@@ -1,4 +1,4 @@
-# (C) 2024 GoodData Corporation
+# (C) 2025 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -85,14 +85,13 @@ interactions:
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-GDC-CANCEL-TOKEN:
+          - 2abc63c4-fc5a-4079-9e91-8d19c1014c7a
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
         content-length:
           - '310'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:18:08 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           executionResponse:
@@ -104,10 +103,10 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_0
             links:
-              executionResult: acbaa4d2a399070ad77d8cac5db560b161dda458:fe83d3ae2080aa4da286724774f9aa53c73c221d89f5b080e2a37a57c2cc3d32
+              executionResult: 0fb08e0514235712d6fc81beb08ee7b1542e0b56:ccc98881eb5fc2507f78c13e55e7ce5290ba32a25d4dfc620851363a7b2ba706
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/acbaa4d2a399070ad77d8cac5db560b161dda458%3Afe83d3ae2080aa4da286724774f9aa53c73c221d89f5b080e2a37a57c2cc3d32?offset=0&limit=256
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/0fb08e0514235712d6fc81beb08ee7b1542e0b56%3Accc98881eb5fc2507f78c13e55e7ce5290ba32a25d4dfc620851363a7b2ba706?offset=0&limit=256
       body: null
       headers:
         Accept:
@@ -172,10 +171,7 @@ interactions:
         X-XSS-Protection:
           - '0'
         content-length:
-          - '176'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 07 Oct 2024 09:18:09 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+          - '213'
       body:
         string:
           data:
@@ -186,8 +182,6 @@ interactions:
                     - measureHeader:
                         measureIndex: 0
           grandTotals: []
-          metadata:
-            dataSourceMessages: []
           paging:
             count:
               - 1
@@ -195,3 +189,5 @@ interactions:
               - 0
             total:
               - 1
+          metadata:
+            dataSourceMessages: []

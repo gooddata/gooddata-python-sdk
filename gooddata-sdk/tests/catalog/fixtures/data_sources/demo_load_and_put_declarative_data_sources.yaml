@@ -65,9 +65,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 06 Jan 2025 11:44:46 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
   - request:
@@ -134,9 +131,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 06 Jan 2025 11:44:46 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
   - request:
@@ -203,9 +197,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 06 Jan 2025 11:44:46 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           data:
@@ -214,7 +205,7 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              oauthClientId: e76fea3d-624e-4a32-9b15-912e7b107085
+              oauthClientId: 651f02ab-465f-4823-9751-7e4c02b6f49f
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -238,7 +229,7 @@ interactions:
             name: demo-test-ds
             schema: demo
             type: POSTGRESQL
-            url: jdbc:postgresql://localhost:5432/demo
+            url: jdbc:postgresql://localhost:5432/demo?sslmode=prefer
             username: demouser
             permissions:
               - assignee:
@@ -351,9 +342,6 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 06 Jan 2025 11:44:47 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''
   - request:
@@ -423,14 +411,12 @@ interactions:
         X-XSS-Protection:
           - '0'
         content-length:
-          - '1698'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 06 Jan 2025 11:44:47 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+          - '1814'
       body:
         string:
           dataSources:
-            - decodedParameters:
+            - authenticationType: TOKEN
+              decodedParameters:
                 - name: clientEmail
                   value: SERVICE_ACCOUNT_EMAIL
                 - name: keyId
@@ -445,7 +431,8 @@ interactions:
               permissions: []
               schema: demo
               type: BIGQUERY
-            - id: demo-test-ds
+            - authenticationType: USERNAME_PASSWORD
+              id: demo-test-ds
               name: demo-test-ds
               permissions:
                 - assignee:
@@ -458,9 +445,10 @@ interactions:
                   name: USE
               schema: demo
               type: POSTGRESQL
-              url: jdbc:postgresql://localhost:5432/demo
+              url: jdbc:postgresql://localhost:5432/demo?sslmode=prefer
               username: demouser
-            - clientId: client-id
+            - authenticationType: CLIENT_SECRET
+              clientId: client-id
               id: demo-test-ds-databricks-client-secret
               name: demo-test-ds-databricks-client-secret
               parameters:
@@ -477,8 +465,9 @@ interactions:
                   name: USE
               schema: demo
               type: DATABRICKS
-              url: jdbc:databricks://dbc-1234-abc.cloud.databricks.com:443;UserAgentEntry=gooddata+cloud-native/v3;httpPath=/sql/1.0/warehouses/9876fdsa
-            - id: demo-test-ds-databricks-token
+              url: jdbc:databricks://dbc-1234-abc.cloud.databricks.com:443;httpPath=/sql/1.0/warehouses/9876fdsa;AuthMech=11;Auth_Flow=1
+            - authenticationType: TOKEN
+              id: demo-test-ds-databricks-token
               name: demo-test-ds-databricks-token
               parameters:
                 - name: catalog
@@ -494,7 +483,7 @@ interactions:
                   name: USE
               schema: demo
               type: DATABRICKS
-              url: jdbc:databricks://dbc-1234-abc.cloud.databricks.com:443;UserAgentEntry=gooddata+cloud-native/v3;httpPath=/sql/1.0/warehouses/9876fdsa
+              url: jdbc:databricks://dbc-1234-abc.cloud.databricks.com:443;httpPath=/sql/1.0/warehouses/9876fdsa;UID=token;AuthMech=3
             - id: demo-vertica-ds
               name: demo-vertica-ds
               permissions: []
@@ -510,7 +499,7 @@ interactions:
             name: demo-test-ds
             schema: demo
             type: POSTGRESQL
-            url: jdbc:postgresql://localhost:5432/demo
+            url: jdbc:postgresql://localhost:5432/demo?sslmode=prefer
             username: demouser
             permissions:
               - assignee:
@@ -522,43 +511,6 @@ interactions:
                   type: userGroup
                 name: USE
             password: demopass
-          - id: demo-test-ds-databricks-client-secret
-            name: demo-test-ds-databricks-client-secret
-            schema: demo
-            type: DATABRICKS
-            url: jdbc:databricks://dbc-1234-abc.cloud.databricks.com:443;httpPath=/sql/1.0/warehouses/9876fdsa;
-            parameters:
-              - name: catalog
-                value: demo
-            permissions:
-              - assignee:
-                  id: demo2
-                  type: user
-                name: MANAGE
-              - assignee:
-                  id: demoGroup
-                  type: userGroup
-                name: USE
-            clientId: client-id
-            clientSecret: databricks-client-secret
-          - id: demo-test-ds-databricks-token
-            name: demo-test-ds-databricks-token
-            schema: demo
-            type: DATABRICKS
-            url: jdbc:databricks://dbc-1234-abc.cloud.databricks.com:443;httpPath=/sql/1.0/warehouses/9876fdsa;
-            parameters:
-              - name: catalog
-                value: demo
-            permissions:
-              - assignee:
-                  id: demo2
-                  type: user
-                name: MANAGE
-              - assignee:
-                  id: demoGroup
-                  type: userGroup
-                name: USE
-            token: databricks-token
       headers:
         Accept-Encoding:
           - br, gzip, deflate
@@ -617,8 +569,5 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - '0'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 06 Jan 2025 11:44:47 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string: ''

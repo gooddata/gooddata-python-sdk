@@ -69,14 +69,12 @@ interactions:
         X-XSS-Protection:
           - '0'
         content-length:
-          - '1228'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 06 Jan 2025 11:44:49 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
+          - '359'
       body:
         string:
           dataSources:
-            - id: demo-test-ds
+            - authenticationType: USERNAME_PASSWORD
+              id: demo-test-ds
               name: demo-test-ds
               permissions:
                 - assignee:
@@ -89,49 +87,14 @@ interactions:
                   name: USE
               schema: demo
               type: POSTGRESQL
-              url: jdbc:postgresql://localhost:5432/demo
+              url: jdbc:postgresql://localhost:5432/demo?sslmode=prefer
               username: demouser
-            - clientId: client-id
-              id: demo-test-ds-databricks-client-secret
-              name: demo-test-ds-databricks-client-secret
-              parameters:
-                - name: catalog
-                  value: demo
-              permissions:
-                - assignee:
-                    id: demo2
-                    type: user
-                  name: MANAGE
-                - assignee:
-                    id: demoGroup
-                    type: userGroup
-                  name: USE
-              schema: demo
-              type: DATABRICKS
-              url: jdbc:databricks://dbc-1234-abc.cloud.databricks.com:443;UserAgentEntry=gooddata+cloud-native/v3;httpPath=/sql/1.0/warehouses/9876fdsa
-            - id: demo-test-ds-databricks-token
-              name: demo-test-ds-databricks-token
-              parameters:
-                - name: catalog
-                  value: demo
-              permissions:
-                - assignee:
-                    id: demo2
-                    type: user
-                  name: MANAGE
-                - assignee:
-                    id: demoGroup
-                    type: userGroup
-                  name: USE
-              schema: demo
-              type: DATABRICKS
-              url: jdbc:databricks://dbc-1234-abc.cloud.databricks.com:443;UserAgentEntry=gooddata+cloud-native/v3;httpPath=/sql/1.0/warehouses/9876fdsa
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/dataSource/test
       body:
         type: POSTGRESQL
-        url: jdbc:postgresql://localhost:5432/demo
+        url: jdbc:postgresql://localhost:5432/demo?sslmode=prefer
         schema: demo
         username: demouser
       headers:
@@ -200,9 +163,6 @@ interactions:
           - '0'
         content-length:
           - '274'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 06 Jan 2025 11:44:50 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           error: 'DB request exception (state=GENERAL_ERROR dataSourceId=null vendorErrorState=GENERAL_ERROR
@@ -215,7 +175,7 @@ interactions:
       uri: http://localhost:3000/api/v1/actions/dataSource/test
       body:
         type: POSTGRESQL
-        url: jdbc:postgresql://localhost:5432/demo
+        url: jdbc:postgresql://localhost:5432/demo?sslmode=prefer
         schema: demo
         password: demopass
         username: demouser
@@ -285,12 +245,9 @@ interactions:
           - '0'
         content-length:
           - '81'
-        set-cookie:
-          - SPRING_REDIRECT_URI=; Max-Age=0; Expires=Mon, 06 Jan 2025 11:44:50 GMT;
-            Path=/; HTTPOnly; SameSite=Lax
       body:
         string:
           queryDurationMillis:
             createCacheTable: 0
-            simpleSelect: 0
+            simpleSelect: 5
           successful: true
