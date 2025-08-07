@@ -91,6 +91,7 @@
                   ]
                 }
               ],
+              "aggregated_facts": [],
               "data_source_table_id": {
                 "id": "campaign_channels",
                 "data_source_id": "demo-test-ds",
@@ -139,6 +140,7 @@
                 }
               ],
               "facts": [],
+              "aggregated_facts": [],
               "data_source_table_id": {
                 "id": "campaigns",
                 "data_source_id": "demo-test-ds",
@@ -209,7 +211,8 @@
                       "description": "Location",
                       "tags": [
                         "Customers"
-                      ]
+                      ],
+                      "value_type": "GEO"
                     }
                   ],
                   "source_column_data_type": "STRING",
@@ -220,6 +223,7 @@
                 }
               ],
               "facts": [],
+              "aggregated_facts": [],
               "data_source_table_id": {
                 "id": "customers",
                 "data_source_id": "demo-test-ds",
@@ -365,6 +369,7 @@
                   ]
                 }
               ],
+              "aggregated_facts": [],
               "data_source_table_id": {
                 "id": "order_lines",
                 "data_source_id": "demo-test-ds",
@@ -443,6 +448,7 @@
                 }
               ],
               "facts": [],
+              "aggregated_facts": [],
               "data_source_table_id": {
                 "id": "products",
                 "data_source_id": "demo-test-ds",
@@ -465,21 +471,11 @@
                 "title_pattern": "%titleBase - %granularityTitle"
               },
               "granularities": [
-                "MINUTE",
-                "HOUR",
                 "DAY",
                 "WEEK",
                 "MONTH",
                 "QUARTER",
-                "YEAR",
-                "MINUTE_OF_HOUR",
-                "HOUR_OF_DAY",
-                "DAY_OF_WEEK",
-                "DAY_OF_MONTH",
-                "DAY_OF_YEAR",
-                "WEEK_OF_YEAR",
-                "MONTH_OF_YEAR",
-                "QUARTER_OF_YEAR"
+                "YEAR"
               ],
               "description": "",
               "tags": [
@@ -560,15 +556,15 @@
                 },
                 "version": "2"
               },
+              "description": "",
               "permissions": [
                 {
+                  "name": "VIEW",
                   "assignee_rule": {
                     "type": "allWorkspaceUsers"
-                  },
-                  "name": "VIEW"
+                  }
                 }
-              ],
-              "description": ""
+              ]
             },
             {
               "id": "dashboard_plugin",
@@ -2809,10 +2805,10 @@
               "id": "campaign",
               "permissions": [
                 {
+                  "name": "VIEW",
                   "assignee_rule": {
                     "type": "allWorkspaceUsers"
-                  },
-                  "name": "VIEW"
+                  }
                 }
               ]
             }

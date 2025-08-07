@@ -1,4 +1,4 @@
-# (C) 2022 GoodData Corporation
+# (C) 2025 GoodData Corporation
 content:
   filterContextRef:
     identifier:
@@ -46,9 +46,9 @@ content:
     type: IDashboardLayout
   version: '2'
 description: ''
+id: campaign
 permissions:
   - assigneeRule:
       type: allWorkspaceUsers
     name: VIEW
-id: campaign
 title: Campaign

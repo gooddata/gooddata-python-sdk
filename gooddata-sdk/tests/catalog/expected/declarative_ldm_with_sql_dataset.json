@@ -205,7 +205,8 @@
                 "description": "Location",
                 "tags": [
                   "Customers"
-                ]
+                ],
+                "valueType": "GEO"
               }
             ],
             "sourceColumn": "state",

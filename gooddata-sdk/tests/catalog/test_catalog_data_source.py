@@ -221,7 +221,7 @@ def _create_default_data_source(sdk: GoodDataSdk, data_source_id: str = "test"):
             username="demouser",
             password="demopass",
         ),
-        url_params=[("autosave", "true")],
+        url_params=[("autosave", "true"), ("sslmode", "prefer")],
     )
     sdk.catalog_data_source.create_or_update_data_source(data_source=expected_data_source)
     data_source = sdk.catalog_data_source.get_data_source(data_source_id)
@@ -255,7 +255,7 @@ def test_catalog_create_update_list_data_source(test_config):
                 username="demouser",
                 password="demopass",
             ),
-            url_params=[("autosave", "false")],
+            url_params=[("autosave", "false"), ("sslmode", "prefer")],
         )
         sdk.catalog_data_source.create_or_update_data_source(updated_data_source)
 

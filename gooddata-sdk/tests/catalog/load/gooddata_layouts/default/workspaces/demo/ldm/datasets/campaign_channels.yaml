@@ -1,4 +1,5 @@
-# (C) 2023 GoodData Corporation
+# (C) 2025 GoodData Corporation
+aggregatedFacts: []
 attributes:
   - description: Campaign channel id
     id: campaign_channel_id
@@ -56,10 +57,12 @@ references:
       id: campaigns
       type: dataset
     multivalue: false
-    sourceColumnDataTypes:
-      - INT
-    sourceColumns:
-      - campaign_id
+    sources:
+      - column: campaign_id
+        dataType: INT
+        target:
+          id: campaign_id
+          type: attribute
 tags:
   - Campaign channels
 title: Campaign channels
