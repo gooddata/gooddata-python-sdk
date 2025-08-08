@@ -6,6 +6,7 @@ from gooddata_sdk.compute.model.base import ObjId
 from gooddata_sdk.compute.model.filter import (
     AbsoluteDateFilter,
     AllTimeFilter,
+    BoundedFilter,
     Filter,
     MetricValueFilter,
     NegativeAttributeFilter,
@@ -71,11 +72,22 @@ class ComputeToSdkConverter:
             if ("from" not in f) or ("to" not in f):
                 return AllTimeFilter(ref_extract_obj_id(f["dataset"]))
 
+            # Extract bounded filter if present
+            bounded_filter = None
+            if "boundedFilter" in f:
+                bf = f["boundedFilter"]
+                bounded_filter = BoundedFilter(
+                    granularity=bf["granularity"],
+                    from_shift=bf.get("from"),
+                    to_shift=bf.get("to"),
+                )
+
             return RelativeDateFilter(
                 dataset=ref_extract_obj_id(f["dataset"]),
                 granularity=f["granularity"],
                 from_shift=f["from"],
                 to_shift=f["to"],
+                bounded_filter=bounded_filter,
             )
 
         if "absoluteDateFilter" in filter_dict:

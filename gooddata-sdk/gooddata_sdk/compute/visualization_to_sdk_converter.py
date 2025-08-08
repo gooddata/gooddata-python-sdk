@@ -6,6 +6,7 @@ from gooddata_sdk.compute.model.base import ObjId
 from gooddata_sdk.compute.model.filter import (
     AbsoluteDateFilter,
     AllTimeFilter,
+    BoundedFilter,
     Filter,
     NegativeAttributeFilter,
     PositiveAttributeFilter,
@@ -65,8 +66,20 @@ class VisualizationToSdkConverter:
         elif exclude is not None:
             return NegativeAttributeFilter(label=ObjId(using, "label"), values=exclude)
         elif granularity is not None and _from is not None and _to is not None:
+            bounded_filter = None
+            if "boundedFilter" in filter_dict:
+                bf = filter_dict["boundedFilter"]
+                bounded_filter = BoundedFilter(
+                    granularity=bf["granularity"],
+                    from_shift=bf.get("from"),
+                    to_shift=bf.get("to"),
+                )
             return RelativeDateFilter(
-                dataset=ObjId(using, "dataset"), granularity=granularity, from_shift=_from, to_shift=_to
+                dataset=ObjId(using, "dataset"),
+                granularity=granularity,
+                from_shift=_from,
+                to_shift=_to,
+                bounded_filter=bounded_filter,
             )
         elif _from is not None and _to is not None:
             return AbsoluteDateFilter(dataset=ObjId(using, "dataset"), from_date=_from, to_date=_to)
