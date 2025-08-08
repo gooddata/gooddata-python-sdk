@@ -5,6 +5,7 @@ from datetime import datetime
 from importlib.util import find_spec
 from typing import Any, Optional, Union
 
+import attrs
 from gooddata_api_client.model.inline_filter_definition_inline import InlineFilterDefinitionInline
 
 if find_spec("icu") is not None:
@@ -153,8 +154,35 @@ _GRANULARITY: set[str] = {
 }
 
 
+@attrs.define
+class BoundedFilter:
+    granularity: str
+    from_shift: Optional[int] = None
+    to_shift: Optional[int] = None
+
+    def __attrs_post_init__(self) -> None:
+        # Validate that exactly one of from_shift or to_shift is set
+        if (self.from_shift is None) == (self.to_shift is None):
+            raise ValueError("BoundedFilter requires exactly one of `from_shift` or `to_shift` to be set.")
+
+    def as_api_model(self) -> afm_models.BoundedFilter:
+        return afm_models.BoundedFilter(
+            granularity=self.granularity,
+            _from=self.from_shift,
+            to=self.to_shift,
+            _check_type=False,
+        )
+
+
 class RelativeDateFilter(Filter):
-    def __init__(self, dataset: ObjId, granularity: str, from_shift: int, to_shift: int) -> None:
+    def __init__(
+        self,
+        dataset: ObjId,
+        granularity: str,
+        from_shift: int,
+        to_shift: int,
+        bounded_filter: Optional[BoundedFilter] = None,
+    ) -> None:
         super().__init__()
 
         if granularity not in _GRANULARITY:
@@ -166,6 +194,7 @@ class RelativeDateFilter(Filter):
         self._granularity = granularity
         self._from_shift = from_shift
         self._to_shift = to_shift
+        self._bounded_filter = bounded_filter
 
     @property
     def dataset(self) -> ObjId:
@@ -183,17 +212,26 @@ class RelativeDateFilter(Filter):
     def to_shift(self) -> int:
         return self._to_shift
 
+    @property
+    def bounded_filter(self) -> Optional[BoundedFilter]:
+        return self._bounded_filter
+
     def is_noop(self) -> bool:
         return False
 
     def as_api_model(self) -> afm_models.RelativeDateFilter:
-        body = RelativeDateFilterBody(
-            dataset=self.dataset.as_afm_id(),
-            granularity=self.granularity,
-            _from=self.from_shift,
-            to=self.to_shift,
-            _check_type=False,
-        )
+        body_params = {
+            "dataset": self.dataset.as_afm_id(),
+            "granularity": self.granularity,
+            "_from": self.from_shift,
+            "to": self.to_shift,
+            "_check_type": False,
+        }
+
+        if self.bounded_filter is not None:
+            body_params["bounded_filter"] = self.bounded_filter.as_api_model()
+
+        body = RelativeDateFilterBody(**body_params)
         return afm_models.RelativeDateFilter(body)
 
     def description(self, labels: dict[str, str], format_locale: Optional[str] = None) -> str:
