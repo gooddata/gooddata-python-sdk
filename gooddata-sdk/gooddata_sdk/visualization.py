@@ -13,6 +13,7 @@ from gooddata_sdk.compute.model.filter import (
     AbsoluteDateFilter,
     AllMetricValueFilter,
     AllTimeFilter,
+    BoundedFilter,
     Filter,
     MetricValueFilter,
     NegativeAttributeFilter,
@@ -181,11 +182,22 @@ def _convert_filter_to_computable(filter_obj: dict[str, Any]) -> Filter:
         if ("from" not in f) or ("to" not in f):
             return AllTimeFilter(ref_extract_obj_id(f["dataSet"]))
 
+        # Extract bounded filter if present
+        bounded_filter = None
+        if "boundedFilter" in f:
+            bf = f["boundedFilter"]
+            bounded_filter = BoundedFilter(
+                granularity=_GRANULARITY_CONVERSION[bf["granularity"]],
+                from_shift=bf.get("from"),
+                to_shift=bf.get("to"),
+            )
+
         return RelativeDateFilter(
             dataset=ref_extract_obj_id(f["dataSet"]),
             granularity=_GRANULARITY_CONVERSION[f["granularity"]],
             from_shift=f["from"],
             to_shift=f["to"],
+            bounded_filter=bounded_filter,
         )
 
     elif "absoluteDateFilter" in filter_obj:

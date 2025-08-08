@@ -253,6 +253,7 @@ from gooddata_sdk.compute.model.filter import (
     AllMetricValueFilter,
     AllTimeFilter,
     AttributeFilter,
+    BoundedFilter,
     Filter,
     InlineFilter,
     MetricValueFilter,
