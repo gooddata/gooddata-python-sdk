@@ -5,24 +5,9 @@ weight: 10
 superheading: "catalog_data_source."
 ---
 
+{{< api-ref "sdk.CatalogDataSourceService.create_or_update_data_source" >}}
 
-
-``create_or_update_data_source(data_source: CatalogDataSource)``
-
-Pushes the data source to the GoodData environment. Automatically decides, whether to create or update.
-
-{{% parameters-block  title="Parameters"%}}
-
-{{< parameter p_name="data_source" p_type="CatalogDataSource" >}}
-Catalog data source object
-{{< /parameter >}}
-
-{{% /parameters-block %}}
-
-{{% parameters-block title="Returns" None="yes"%}}
-{{% /parameters-block %}}
-
-### Example
+## Example
 
 ```python
 # PostgreSQL example

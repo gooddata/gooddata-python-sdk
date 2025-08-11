@@ -6,20 +6,7 @@ no_list: true
 superheading: "catalog_user."
 ---
 
-
-
-``put_declarative_user_groups(user_groups: CatalogDeclarativeUserGroups)``
-
-Sets all user groups eventually with their parents.
-
-{{% parameters-block  title="Parameters" %}}
-{{< parameter p_name="user_groups" p_type="CatalogDeclarativeUserGroups" >}}
-Declarative User Groups object.
-{{< /parameter >}}
-{{% /parameters-block %}}
-
-{{% parameters-block title="Returns" None="yes"%}}
-{{% /parameters-block %}}
+{{< api-ref "sdk.CatalogUserService.put_declarative_user_groups" >}}
 
 ## Example
 

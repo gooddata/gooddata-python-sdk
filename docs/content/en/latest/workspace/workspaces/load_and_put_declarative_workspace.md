@@ -5,24 +5,7 @@ weight: 130
 superheading: "catalog_workspace."
 ---
 
-
-
-``load_and_put_declarative_workspace(workspace_id: str, layout_root_path: Path = Path.cwd())``
-
-This method combines [load_declarative_workspace](../load_declarative_workspace/) and [put_declarative_workspace](../put_declarative_workspace/) methods to load and
-set layouts stored using [store_declarative_workspace](../store_declarative_workspace/).
-
-{{% parameters-block title="Parameters" %}}
-{{< parameter p_name="workspace_id" p_type="string" >}}
-Workspace identification string e.g. "demo"
-{{< /parameter >}}
-{{< parameter p_name="layout_root_path" p_type="Optional[Path]" >}}
-Path to the root of the layout directory. Defaults to Path.cwd().
-{{< /parameter >}}
-{{% /parameters-block %}}
-
-{{% parameters-block title="Returns" None="yes"%}}
-{{% /parameters-block %}}
+{{< api-ref "sdk.CatalogWorkspaceService.load_and_put_declarative_workspace" >}}
 
 ## Example
 

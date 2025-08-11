@@ -5,20 +5,7 @@ weight: 40
 superheading: "catalog_workspace."
 ---
 
-
-
-``list_workspaces()``
-
-Gets a list of all existing workspaces.
-
-{{% parameters-block title="Parameters" None="yes"%}}
-{{% /parameters-block %}}
-
-{{% parameters-block title="Returns" %}}
-{{< parameter p_type="List[CatalogWorkspace]" >}}
-List of workspaces in the current organization.
-{{< /parameter >}}
-{{% /parameters-block %}}
+{{< api-ref "sdk.CatalogWorkspaceService.list_workspaces" >}}
 
 ## Example
 

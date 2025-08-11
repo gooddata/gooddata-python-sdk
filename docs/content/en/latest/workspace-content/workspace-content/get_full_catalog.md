@@ -5,23 +5,7 @@ weight: 20
 superheading: "catalog_workspace_content."
 ---
 
-
-
-``get_full_catalog(workspace_id: str)``
-
-Gets catalog for a workspace. Catalog contains all data sets and metrics defined in that workspace.
-
-{{% parameters-block  title="Parameters" %}}
-{{< parameter p_name="workspace_id" p_type="string" >}}
-Workspace identification string e.g. "demo"
-{{< /parameter >}}
-{{% /parameters-block %}}
-
-{{% parameters-block title="Returns"%}}
-{{< parameter p_type="CatalogWorkspaceContent" >}}
-Object containing all data sets and metrics.
-{{< /parameter >}}
-{{% /parameters-block %}}
+{{< api-ref "sdk.CatalogWorkspaceContentService.get_full_catalog" >}}
 
 ## Example
 
