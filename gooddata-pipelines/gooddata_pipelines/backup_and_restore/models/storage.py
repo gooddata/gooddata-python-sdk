@@ -1,7 +1,7 @@
 # (C) 2025 GoodData Corporation
 
 from enum import Enum
-from typing import Annotated, TypeAlias
+from typing import Annotated, TypeAlias, Optional
 
 import yaml
 from pydantic import BaseModel, Field
@@ -22,6 +22,9 @@ class S3StorageConfig(BaseModel):
     backup_path: str
     bucket: str
     profile: str = "default"
+    aws_access_key_id: Optional[str] = None
+    aws_secret_access_key: Optional[str] = None
+    aws_default_region: Optional[str] = None
 
 
 class LocalStorageConfig(BaseModel):
