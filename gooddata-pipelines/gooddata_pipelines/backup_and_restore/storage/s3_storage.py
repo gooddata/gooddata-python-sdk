@@ -21,8 +21,7 @@ class S3Storage(BackupStorage):
             raise ValueError("S3 storage config is required")
 
         self._config = conf.storage
-        self._profile = self._config.profile
-        self._session = self._create_boto_session(self._profile)
+        self._session = self._create_boto_session(self._config)
         self._resource = self._session.resource("s3")
         self._bucket = self._resource.Bucket(self._config.bucket)  # type: ignore [missing library stubs]
         suffix = "/" if not self._config.backup_path.endswith("/") else ""
@@ -30,9 +29,25 @@ class S3Storage(BackupStorage):
 
         self._verify_connection()
 
-    def _create_boto_session(self, profile: str) -> boto3.Session:
+    def _create_boto_session(self, config: S3StorageConfig) -> boto3.Session:
+        if config.aws_access_key_id and config.aws_secret_access_key:
+            if not config.aws_default_region:
+                self.logger.warning(
+                    "No AWS region specified. Defaulting to us-east-1."
+                )
+            try:
+                return boto3.Session(
+                    aws_access_key_id=config.aws_access_key_id,
+                    aws_secret_access_key=config.aws_secret_access_key,
+                    region_name=config.aws_default_region,
+                )
+            except Exception:
+                self.logger.warning(
+                    "Failed to create boto3 session with supplied credentials. Falling back to profile..."
+                )
+
         try:
-            return boto3.Session(profile_name=profile)
+            return boto3.Session(profile_name=config.profile)
         except Exception:
             self.logger.warning(
                 'AWS profile "[default]" not found. Trying other fallback methods...'
