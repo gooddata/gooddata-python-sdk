@@ -1,8 +1,8 @@
 # GoodData Pipelines
 
-A high level library for automating the lifecycle of GoodData Cloud (GDC).
+A high-level library for automating the lifecycle of GoodData Cloud (GDC).
 
-You can use the package to manage following resoursec in GDC:
+You can use the package to manage following resources in GDC:
 
 1. Provisioning (create, update, delete)
    - User profiles
@@ -14,7 +14,7 @@ You can use the package to manage following resoursec in GDC:
 1. _[PLANNED]:_ Custom fields management
    - extend the Logical Data Model of a child workspace
 
-In case you are not interested in incorporating a library in your own program, but would like to use a ready-made script, consider having a look at [GoodData Productivity Tools](https://github.com/gooddata/gooddata-productivity-tools).
+In case you are not interested in incorporating a library in your own program but would like to use a ready-made script, consider having a look at [GoodData Productivity Tools](https://github.com/gooddata/gooddata-productivity-tools).
 
 ## Provisioning
 
@@ -31,22 +31,19 @@ import os
 from csv import DictReader
 from pathlib import Path
 
-# Import the Entity Provisioner class and corresponing model from gooddata_pipelines library
+# Import the Entity Provisioner class and corresponding model from gooddata_pipelines library
 from gooddata_pipelines import UserFullLoad, UserProvisioner
+from gooddata_pipelines.logger.logger import LogObserver
 
-# Optional: you can set up logging and subscribe it to the Provisioner
-from utils.logger import setup_logging
-
-setup_logging()
+# Optionally, subscribe a standard Python logger to the LogObserver
+import logging
 logger = logging.getLogger(__name__)
+LogObserver().subscribe(logger)
 
 # Create the Provisioner instance - you can also create the instance from a GDC yaml profile
 provisioner = UserProvisioner(
     host=os.environ["GDC_HOSTNAME"], token=os.environ["GDC_AUTH_TOKEN"]
 )
-
-# Optional: subscribe to logs
-provisioner.logger.subscribe(logger)
 
 # Load your data from your data source
 source_data_path: Path = Path("path/to/some.csv")
@@ -60,4 +57,4 @@ full_load_data: list[UserFullLoad] = UserFullLoad.from_list_of_dicts(
 provisioner.full_load(full_load_data)
 ```
 
-Ready made scripts covering the basic use cases can be found here in the [GoodData Productivity Tools](https://github.com/gooddata/gooddata-productivity-tools) repository
+Ready-made scripts covering the basic use cases can be found here in the [GoodData Productivity Tools](https://github.com/gooddata/gooddata-productivity-tools) repository
