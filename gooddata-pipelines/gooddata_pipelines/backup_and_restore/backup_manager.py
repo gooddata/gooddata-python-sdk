@@ -373,29 +373,37 @@ class BackupManager:
 
                     raise
 
-    def backup_workspaces(self, path_to_csv: str) -> None:
+    def backup_workspaces(
+        self, path_to_csv: str | None, workspace_ids: list[str] | None
+    ) -> None:
         """Runs the backup process for a list of workspace IDs.
 
-        Will read the list of workspace IDs from a CSV file and create backup for
-        each workspace in storage specified in the configuration.
+        Will take the list of workspace IDs or read the list of
+        workspace IDs from a CSV file and create backup for each
+        workspace in storage specified in the configuration.
 
         Args:
             path_to_csv (str): Path to a CSV file containing a list of workspace IDs.
+            workspace_ids (list[str]): List of workspace IDs
         """
-        self.backup(InputType.LIST_OF_WORKSPACES, path_to_csv)
+        self.backup(InputType.LIST_OF_WORKSPACES, path_to_csv, workspace_ids)
 
-    def backup_hierarchies(self, path_to_csv: str) -> None:
+    def backup_hierarchies(
+        self, path_to_csv: str | None, workspace_ids: list[str] | None
+    ) -> None:
         """Runs the backup process for a list of hierarchies.
 
-        Will read the list of workspace IDs from a CSV file and create backup for
-        each those workspaces' hierarchies in storage specified in the configuration.
+        Will take the list of workspace IDs or read the list of workspace IDs
+        from a CSV file and create backup for each those workspaces' hierarchies
+        in storage specified in the configuration.
         Workspace hierarchy means the workspace itself and all its direct and
         indirect children.
 
         Args:
             path_to_csv (str): Path to a CSV file containing a list of workspace IDs.
+            workspace_ids (list[str]): List of workspace IDs
         """
-        self.backup(InputType.HIERARCHY, path_to_csv)
+        self.backup(InputType.HIERARCHY, path_to_csv, workspace_ids)
 
     def backup_entire_organization(self) -> None:
         """Runs the backup process for the entire organization.
@@ -406,12 +414,17 @@ class BackupManager:
         self.backup(InputType.ORGANIZATION)
 
     def backup(
-        self, input_type: InputType, path_to_csv: str | None = None
+        self,
+        input_type: InputType,
+        path_to_csv: str | None = None,
+        workspace_ids: list[str] | None = None,
     ) -> None:
         """Runs the backup process with selected input type."""
         try:
             workspaces_to_export: list[str] = self.loader.get_ids_to_backup(
-                input_type, path_to_csv
+                input_type,
+                path_to_csv,
+                workspace_ids,
             )
             batches = self.split_to_batches(
                 workspaces_to_export, self.config.batch_size

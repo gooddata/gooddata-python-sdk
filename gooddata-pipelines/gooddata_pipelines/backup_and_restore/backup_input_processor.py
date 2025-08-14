@@ -158,25 +158,33 @@ class BackupInputProcessor:
         return all_workspaces
 
     def get_ids_to_backup(
-        self, input_type: InputType, path_to_csv: str | None = None
+        self,
+        input_type: InputType,
+        path_to_csv: str | None = None,
+        workspace_ids: list[str] | None = None,
     ) -> list[str]:
         """Returns the list of workspace IDs to back up based on the input type."""
 
         if input_type in (InputType.LIST_OF_WORKSPACES, InputType.HIERARCHY):
-            if path_to_csv is None:
+            if (path_to_csv is None) == (workspace_ids is None):
                 raise ValueError(
-                    f"Path to CSV is required for this input type: {input_type.value}"
+                    f"Path to CSV and list of workspace IDs must be specified exclusively for this input type: {input_type.value}"
                 )
 
             # If we're backing up based on the list, simply read it from the CSV
+            list_of_parents = []
+            if path_to_csv is not None:
+                list_of_parents = self.csv_reader.read_backup_csv(path_to_csv)
+            if workspace_ids is not None:
+                list_of_parents = workspace_ids
+
             if input_type == InputType.LIST_OF_WORKSPACES:
-                return self.csv_reader.read_backup_csv(path_to_csv)
+                return list_of_parents
             else:
                 # For hierarchy backup, we read the CSV and treat it as a list of
                 # parent workspace IDs. Then we retrieve the children of each parent,
                 # including their children, and so on. The parent workspaces are
                 # also included in the backup.
-                list_of_parents = self.csv_reader.read_backup_csv(path_to_csv)
                 list_of_children: list[str] = []
 
                 for parent in list_of_parents:
