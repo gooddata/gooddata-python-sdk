@@ -1,6 +1,6 @@
 {{ $footer := getJSON "https://www.gooddata.com/learn-assets/js/footer-definition.json" }}
 
-<footer class="gd-footer">
+<footer class="gd-footer" aria-label="Page footer">
   {{ if $footer.footer.bannerLinks }}
     <ul class="gd-footer-banner-links gd-footer-links">
     {{ range $index, $link := $footer.footer.bannerLinks }}
