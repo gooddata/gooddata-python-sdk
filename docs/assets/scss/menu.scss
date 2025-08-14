@@ -51,14 +51,14 @@
 
     &__mobile-icon {
         position: fixed;
-        top: $header-first-nav-height;
+        top: 80px;
         display: flex;
         justify-content: center;
         align-items: center;
         width: 55px;
         height: $header-second-nav-height;
         left: 10px;
-        z-index: 32;
+        z-index: 34;
         transition: $transition;
 
         &::before {
@@ -81,6 +81,25 @@
         @include mq(medium) {
             display: none;
         }
+    }
+
+    &__mobile-bg {
+        position: fixed;
+        top: $header-first-nav-height + 1px;
+        left: -100%;
+        bottom: 0;
+        width: 100%;
+        z-index: 32;
+        background-color: rgba($color-deep-purple, 0.5);
+        transition: $transition;
+
+        @include mq(medium) {
+            display: none;
+        }
+    }
+    &__mobile-trigger:checked ~ &,
+    &__mobile-trigger:checked ~ &__mobile-bg {
+        left: 0;
     }
 
     &__mobile-trigger:checked ~ & {
@@ -144,11 +163,10 @@
             position: relative;
             display: inline-block;
             flex: 1 1 auto;
-            margin: 2px 20px 2px 0; // orig values ->  8px 20px 3px 0;
+            margin: 8px 20px 3px 0;
             padding: 0 0 5px;
             max-width: 100%;
             font-size: 15px;
-            //font-family: "Lucida Console", "Courier New", monospace;
             line-height: 1.5;
 
             &,
