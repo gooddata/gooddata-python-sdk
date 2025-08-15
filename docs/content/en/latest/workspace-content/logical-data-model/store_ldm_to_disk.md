@@ -6,7 +6,7 @@ superheading: "catalog_workspace_content."
 ---
 
 
-``store_ldm_to_disk(workspace_id: str, path: Path = Path.cwd())``
+``store_ldm_to_disk(workspace_id: str, path: Path = Path.cwd(), sort: bool = False)``
 
 Stores the declarative logical data model for a given workspace in directory hierarchy. This method does not tie the LDM to the workspace and organization, thus it is recommended for migration between organizations. If you want to backup LDM use [store_declarative_ldm](../store_declarative_ldm/).
 
@@ -25,6 +25,9 @@ Workspace identification string e.g. "demo"
 {{< /parameter >}}
 {{< parameter p_name="path" p_type="Optional[Path]" >}}
 Path to the root of the layout directory. Defaults to Path.cwd().
+{{< /parameter >}}
+{{< parameter p_name="sort" p_type="bool" >}}
+Flag if the output should be sorted before storing to disk. Default is False.
 {{< /parameter >}}
 {{% /parameters-block %}}
 

@@ -54,11 +54,11 @@ class CatalogDeclarativeWorkspaceModel(Base):
     def client_class() -> type[DeclarativeWorkspaceModel]:
         return DeclarativeWorkspaceModel
 
-    def store_to_disk(self, workspace_folder: Path) -> None:
+    def store_to_disk(self, workspace_folder: Path, sort: bool = False) -> None:
         if self.ldm is not None:
-            self.ldm.store_to_disk(workspace_folder)
+            self.ldm.store_to_disk(workspace_folder, sort=sort)
         if self.analytics is not None:
-            self.analytics.store_to_disk(workspace_folder)
+            self.analytics.store_to_disk(workspace_folder, sort=sort)
 
     @classmethod
     def load_from_disk(cls, workspace_folder: Path) -> CatalogDeclarativeWorkspaceModel:
@@ -102,16 +102,16 @@ class CatalogDeclarativeWorkspace(Base):
             del dictionary["model"]
         return client_class.from_dict(dictionary, camel_case=False)
 
-    def store_to_disk(self, workspaces_folder: Path) -> None:
+    def store_to_disk(self, workspaces_folder: Path, sort: bool = False) -> None:
         workspace_folder = workspaces_folder / self.id
         file_path = workspace_folder / f"{self.id}.yaml"
         create_directory(workspace_folder)
 
         workspace_dict = self.to_api(include_nested_structures=False).to_dict(camel_case=True)
-        write_layout_to_file(file_path, workspace_dict)
+        write_layout_to_file(file_path, workspace_dict, sort=sort)
 
         if self.model is not None:
-            self.model.store_to_disk(workspace_folder)
+            self.model.store_to_disk(workspace_folder, sort)
 
     @classmethod
     def load_from_disk(cls, workspaces_folder: Path, workspace_id: str) -> CatalogDeclarativeWorkspace:
@@ -204,9 +204,9 @@ class CatalogDeclarativeWorkspaceDataFilter(Base):
     def client_class() -> type[DeclarativeWorkspaceDataFilter]:
         return DeclarativeWorkspaceDataFilter
 
-    def store_to_disk(self, workspaces_data_filters_folder: Path) -> None:
+    def store_to_disk(self, workspaces_data_filters_folder: Path, sort: bool = False) -> None:
         workspaces_data_filter_file = workspaces_data_filters_folder / f"{self.id}.yaml"
-        write_layout_to_file(workspaces_data_filter_file, self.to_api().to_dict(camel_case=True))
+        write_layout_to_file(workspaces_data_filter_file, self.to_api().to_dict(camel_case=True), sort=sort)
 
     @classmethod
     def load_from_disk(cls, workspaces_data_filter_file: Path) -> CatalogDeclarativeWorkspaceDataFilter:
@@ -267,9 +267,9 @@ class CatalogDeclarativeUserDataFilter(Base):
     def client_class() -> type[DeclarativeUserDataFilter]:
         return DeclarativeUserDataFilter
 
-    def store_to_disk(self, user_data_filters_folder: Path) -> None:
+    def store_to_disk(self, user_data_filters_folder: Path, sort: bool = False) -> None:
         user_data_filter_file = user_data_filters_folder / f"{self.id}.yaml"
-        write_layout_to_file(user_data_filter_file, self.to_api().to_dict(camel_case=True))
+        write_layout_to_file(user_data_filter_file, self.to_api().to_dict(camel_case=True), sort=sort)
 
     @classmethod
     def load_from_disk(cls, user_data_filter_file: Path) -> CatalogDeclarativeUserDataFilter:
@@ -306,9 +306,9 @@ class CatalogDeclarativeFilterView(Base):
     def client_class() -> type[DeclarativeFilterView]:
         return DeclarativeFilterView
 
-    def store_to_disk(self, filter_views_folder: Path) -> None:
+    def store_to_disk(self, filter_views_folder: Path, sort: bool = False) -> None:
         filter_view_file = filter_views_folder / f"{self.id}.yaml"
-        write_layout_to_file(filter_view_file, self.to_api().to_dict(camel_case=True))
+        write_layout_to_file(filter_view_file, self.to_api().to_dict(camel_case=True), sort=sort)
 
     @classmethod
     def load_from_disk(cls, filter_view_file: Path) -> CatalogDeclarativeFilterView:

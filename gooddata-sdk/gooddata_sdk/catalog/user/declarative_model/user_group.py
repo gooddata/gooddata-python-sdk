@@ -33,12 +33,12 @@ class CatalogDeclarativeUserGroups(Base):
         user_groups = [CatalogDeclarativeUserGroup.from_dict(record, camel_case=True) for record in data]
         return cls(user_groups=user_groups)
 
-    def store_to_disk(self, layout_organization_folder: Path) -> None:
+    def store_to_disk(self, layout_organization_folder: Path, sort: bool = False) -> None:
         user_groups_directory = layout_organization_folder / LAYOUT_USER_GROUPS_DIR
         user_groups_file = user_groups_directory / LAYOUT_USER_GROUPS_FILE
         create_directory(user_groups_directory)
         user_groups = [user_group.to_dict(camel_case=True) for user_group in self.user_groups]
-        write_layout_to_file(user_groups_file, user_groups)
+        write_layout_to_file(user_groups_file, user_groups, sort=sort)
 
 
 @attr.s(auto_attribs=True, kw_only=True)

@@ -5,7 +5,7 @@ import functools
 import json
 import os
 import re
-from collections.abc import KeysView
+from collections.abc import KeysView, Mapping
 from enum import Enum, auto
 from pathlib import Path
 from shutil import rmtree
@@ -182,9 +182,18 @@ class IndentDumper(yaml.SafeDumper):
         return super().increase_indent(flow, False)
 
 
-def write_layout_to_file(path: Path, content: Union[dict[str, Any], list[dict]]) -> None:
+def write_layout_to_file(path: Path, content: Union[dict[str, Any], list[dict]], sort: bool = False) -> None:
+    """
+    Write content to a YAML file.
+
+    Args:
+        path (Path): The path to the file where the content will be written.
+        content (Union[dict[str, Any], list[dict]]): The content to write to the file.
+        sort (bool): If True, the content will be sorted before writing. Defaults to False
+    """
+    content_to_store = deep_sort(content) if sort else content
     with open(path, "w", encoding="utf-8") as fp:
-        yaml.dump(content, fp, indent=2, Dumper=IndentDumper, allow_unicode=True)
+        yaml.dump(content_to_store, fp, indent=2, Dumper=IndentDumper, allow_unicode=True)
 
 
 def read_layout_from_file(path: Path) -> Any:
@@ -451,3 +460,21 @@ def filter_for_attributes_labels(attributes: list[Attribute], character_limit: i
     if current_batch:  # Add remaining batch
         queries.append(f"labels.id=in=({','.join(current_batch)})")
     return queries
+
+
+def deep_sort(obj: Any) -> Any:
+    """
+    Recursively sort dictionaries by key. The order of lists and tuples is preserved.
+    """
+    if isinstance(obj, Mapping):
+        # Sort dict by keys, deep-sorting values
+        return {k: deep_sort(v) for k, v in sorted(obj.items(), key=lambda kv: kv[0])}
+    elif isinstance(obj, list):
+        # Deep-sort elements first
+        list_items = [deep_sort(x) for x in obj]
+        return list_items
+    elif isinstance(obj, tuple):
+        tuple_items = tuple(deep_sort(x) for x in obj)
+        return tuple_items
+    else:
+        return obj

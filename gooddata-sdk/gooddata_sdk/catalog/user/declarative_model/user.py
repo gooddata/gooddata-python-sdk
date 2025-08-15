@@ -34,12 +34,12 @@ class CatalogDeclarativeUsers(Base):
         users = [CatalogDeclarativeUser.from_dict(record, camel_case=True) for record in data]
         return cls(users=users)
 
-    def store_to_disk(self, layout_organization_folder: Path) -> None:
+    def store_to_disk(self, layout_organization_folder: Path, sort: bool = False) -> None:
         users_directory = layout_organization_folder / LAYOUT_USERS_DIR
         users_file = users_directory / LAYOUT_USERS_FILE
         create_directory(users_directory)
         users = [user.to_dict(camel_case=True) for user in self.users]
-        write_layout_to_file(users_file, users)
+        write_layout_to_file(users_file, users, sort=sort)
 
 
 @attr.s(auto_attribs=True, kw_only=True)

@@ -34,9 +34,9 @@ class CatalogDeclarativeModel(Base):
     def client_class() -> type[DeclarativeModel]:
         return DeclarativeModel
 
-    def store_to_disk(self, workspace_folder: Path) -> None:
+    def store_to_disk(self, workspace_folder: Path, sort: bool = False) -> None:
         if self.ldm is not None:
-            self.ldm.store_to_disk(workspace_folder)
+            self.ldm.store_to_disk(workspace_folder, sort=sort)
 
     @classmethod
     def load_from_disk(cls, workspace_folder: Path) -> CatalogDeclarativeModel:
@@ -106,20 +106,20 @@ class CatalogDeclarativeLdm(Base):
         create_directory(folder)
         return folder
 
-    def store_to_disk(self, workspace_folder: Path) -> None:
+    def store_to_disk(self, workspace_folder: Path, sort: bool = False) -> None:
         ldm_folder = self.create_ldm_folder(workspace_folder)
         datasets_folder = self.create_datasets_folder(ldm_folder)
         date_instances_folder = self.create_date_instances_folder(ldm_folder)
 
         for dataset in self.datasets:
-            dataset.store_to_disk(datasets_folder)
+            dataset.store_to_disk(datasets_folder, sort=sort)
         for date_instance in self.date_instances:
-            date_instance.store_to_disk(date_instances_folder)
+            date_instance.store_to_disk(date_instances_folder, sort=sort)
         # Note: should be defaulted to an empty list in the future
         if self.dataset_extensions:
             dataset_extensions_folder = self.create_dataset_extensions_folder(ldm_folder)
             for dataset_extension in self.dataset_extensions:
-                dataset_extension.store_to_disk(dataset_extensions_folder)
+                dataset_extension.store_to_disk(dataset_extensions_folder, sort=sort)
 
     @classmethod
     def load_from_disk(cls, workspace_folder: Path) -> CatalogDeclarativeLdm:
