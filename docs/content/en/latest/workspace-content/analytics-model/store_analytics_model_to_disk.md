@@ -5,7 +5,7 @@ weight: 131
 superheading: "catalog_workspace_content."
 ---
 
-``store_analytics_model_to_disk(workspace_id: str, path: Path = Path.cwd())``
+``store_analytics_model_to_disk(workspace_id: str, path: Path = Path.cwd(), exclude: Optional[list[str]] = None, sort: bool = False)``
 
 Stores analytics model for a given workspace in directory hierarchy.This method does not tie the declarative analytics model to the workspace and organization, thus it is recommended for migration between workspaces. If you want to backup analytics model between workspaces or organizations, use [store_analytics_model_to_disk](../store_analytics_model_to_disk/).
 
@@ -30,6 +30,12 @@ Workspace identification string e.g. "demo"
 {{< /parameter >}}
 {{< parameter p_name="path" p_type="Optional[Path]" >}}
 Path to the root of the layout directory. Defaults to Path.cwd().
+{{< /parameter >}}
+{{< parameter p_name="exclude" p_type=" Optional[list[str]]" >}}
+Defines properties which should not be included in the result. E.g.: ["ACTIVITY_INFO"] – refers to createdBy, etc. Default is None.
+{{< /parameter >}}
+{{< parameter p_name="sort" p_type="bool" >}}
+Flag if the output should be sorted before storing to disk. Default is False.
 {{< /parameter >}}
 {{% /parameters-block %}}
 

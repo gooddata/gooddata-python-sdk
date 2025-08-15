@@ -358,7 +358,7 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         declarative_ldm = self.load_declarative_ldm(workspace_id, layout_root_path)
         self.put_declarative_ldm(workspace_id, declarative_ldm, validator, standalone_copy)
 
-    def store_ldm_to_disk(self, workspace_id: str, path: Path = Path.cwd()) -> None:
+    def store_ldm_to_disk(self, workspace_id: str, path: Path = Path.cwd(), sort: bool = False) -> None:
         """Store declarative logical data model for a given workspace in directory hierarchy.
             This method does not tie the LDM to the workspace and organization, thus it is recommended
             for migration between organizations. If you want to backup LDM use store_declarative_ldm.
@@ -368,11 +368,13 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
                 Workspace identification string e.g. "demo"
             path (Path, optional):
                 Path to the root of the layout directory. Defaults to Path.cwd().
+            sort (bool, optional):
+                Flag if the output should be sorted before storing to disk. Default is False.
 
         Returns:
             None
         """
-        self.get_declarative_ldm(workspace_id).store_to_disk(path)
+        self.get_declarative_ldm(workspace_id).store_to_disk(path, sort=sort)
 
     @staticmethod
     def load_ldm_from_disk(path: Path = Path.cwd()) -> CatalogDeclarativeModel:
@@ -479,7 +481,7 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         self.put_declarative_analytics_model(workspace_id, declarative_analytics_model)
 
     def store_analytics_model_to_disk(
-        self, workspace_id: str, path: Path = Path.cwd(), exclude: Optional[list[str]] = None
+        self, workspace_id: str, path: Path = Path.cwd(), exclude: Optional[list[str]] = None, sort: bool = False
     ) -> None:
         """Store analytics model for a given workspace in directory hierarchy.This method does not tie the declarative
             analytics model to the workspace and organization, thus it is recommended for migration between workspaces.
@@ -491,12 +493,14 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
             path (Path, optional):
                 Path to the root of the layout directory. Defaults to Path.cwd().
             exclude (Optional[list[str]]):
-                Defines properties which should not be included in the payload. E.g.: ["ACTIVITY_INFO"]
+                Defines properties which should not be included in the result. E.g.: ["ACTIVITY_INFO"] – refers to createdBy, etc. Default is None.
+            sort (bool, optional):
+                Flag if the output should be sorted before storing to disk. Default is False.
 
         Returns:
             None
         """
-        self.get_declarative_analytics_model(workspace_id, exclude).store_to_disk(path)
+        self.get_declarative_analytics_model(workspace_id, exclude).store_to_disk(path, sort=sort)
 
     @staticmethod
     def load_analytics_model_from_disk(path: Path = Path.cwd()) -> CatalogDeclarativeAnalytics:

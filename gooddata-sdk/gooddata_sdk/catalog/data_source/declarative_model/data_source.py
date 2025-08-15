@@ -110,11 +110,11 @@ class CatalogDeclarativeDataSources(Base):
     def data_sources_folder(layout_organization_folder: Path) -> Path:
         return layout_organization_folder / LAYOUT_DATA_SOURCES_DIR
 
-    def store_to_disk(self, layout_organization_folder: Path) -> None:
+    def store_to_disk(self, layout_organization_folder: Path, sort: bool = False) -> None:
         data_sources_folder = self.data_sources_folder(layout_organization_folder)
         create_directory(data_sources_folder)
         for data_source in self.data_sources:
-            data_source.store_to_disk(data_sources_folder)
+            data_source.store_to_disk(data_sources_folder, sort=sort)
 
     @classmethod
     def load_from_disk(cls, layout_organization_folder: Path) -> CatalogDeclarativeDataSources:
@@ -201,12 +201,12 @@ class CatalogDeclarativeDataSource(Base):
             dictionary["client_secret"] = client_secret
         return self.client_class().from_dict(dictionary)
 
-    def store_to_disk(self, data_sources_folder: Path) -> None:
+    def store_to_disk(self, data_sources_folder: Path, sort: bool = False) -> None:
         data_source_folder = self.data_source_folder(data_sources_folder, self.id)
         file_path = data_source_folder / f"{self.id}.yaml"
         data_source_dict = self.to_api().to_dict(camel_case=True)
 
-        write_layout_to_file(file_path, data_source_dict)
+        write_layout_to_file(file_path, data_source_dict, sort=sort)
 
     @classmethod
     def load_from_disk(cls, data_sources_folder: Path, data_source_id: str) -> CatalogDeclarativeDataSource:

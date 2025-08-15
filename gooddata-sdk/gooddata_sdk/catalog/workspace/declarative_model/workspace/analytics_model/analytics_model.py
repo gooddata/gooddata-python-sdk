@@ -58,9 +58,9 @@ class CatalogDeclarativeAnalytics(Base):
     def client_class() -> type[DeclarativeAnalytics]:
         return DeclarativeAnalytics
 
-    def store_to_disk(self, workspace_folder: Path) -> None:
+    def store_to_disk(self, workspace_folder: Path, sort: bool = False) -> None:
         if self.analytics is not None:
-            self.analytics.store_to_disk(workspace_folder)
+            self.analytics.store_to_disk(workspace_folder, sort=sort)
 
     @classmethod
     def load_from_disk(cls, workspace_folder: Path) -> CatalogDeclarativeAnalytics:
@@ -137,7 +137,7 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         create_directory(folder)
         return folder
 
-    def store_to_disk(self, workspace_folder: Path) -> None:
+    def store_to_disk(self, workspace_folder: Path, sort: bool = False) -> None:
         analytics_model_folder = self.get_analytics_model_folder(workspace_folder)
 
         analytical_dashboards_folder = self.get_analytical_dashboards_folder(analytics_model_folder)
@@ -150,28 +150,28 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         export_definition_folder = self.get_export_definition_dif(analytical_dashboards_folder)
 
         for analytical_dashboard in self.analytical_dashboards:
-            analytical_dashboard.store_to_disk(analytical_dashboards_folder)
+            analytical_dashboard.store_to_disk(analytical_dashboards_folder, sort=sort)
 
         for analytical_dashboard_extension in self.analytical_dashboard_extensions:
-            analytical_dashboard_extension.store_to_disk(analytical_dashboard_extensions_folder)
+            analytical_dashboard_extension.store_to_disk(analytical_dashboard_extensions_folder, sort=sort)
 
         for dashboard_plugin in self.dashboard_plugins:
-            dashboard_plugin.store_to_disk(dashboard_plugins_folder)
+            dashboard_plugin.store_to_disk(dashboard_plugins_folder, sort=sort)
 
         for filter_context in self.filter_contexts:
-            filter_context.store_to_disk(filter_contexts_folder)
+            filter_context.store_to_disk(filter_contexts_folder, sort=sort)
 
         for metric in self.metrics:
-            metric.store_to_disk(metrics_folder)
+            metric.store_to_disk(metrics_folder, sort=sort)
 
         for visualization_object in self.visualization_objects:
-            visualization_object.store_to_disk(visualization_objects_folder)
+            visualization_object.store_to_disk(visualization_objects_folder, sort=sort)
 
         for attribute_hierarchy in self.attribute_hierarchies:
-            attribute_hierarchy.store_to_disk(attribute_hierarchy_folder)
+            attribute_hierarchy.store_to_disk(attribute_hierarchy_folder, sort=sort)
 
         for export_definition in self.export_definitions:
-            export_definition.store_to_disk(export_definition_folder)
+            export_definition.store_to_disk(export_definition_folder, sort=sort)
 
     @classmethod
     def load_from_disk(cls, workspace_folder: Path) -> CatalogDeclarativeAnalyticsLayer:

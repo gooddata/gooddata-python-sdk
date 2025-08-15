@@ -15,9 +15,9 @@ T = TypeVar("T", bound="CatalogAnalyticsObjectBase")
 class CatalogAnalyticsObjectBase(Base):
     id: str
 
-    def store_to_disk(self, analytics_folder: Path) -> None:
+    def store_to_disk(self, analytics_folder: Path, sort: bool = False) -> None:
         analytics_file = analytics_folder / f"{self.id}.yaml"
-        write_layout_to_file(analytics_file, self.to_api().to_dict(camel_case=True))
+        write_layout_to_file(analytics_file, self.to_api().to_dict(camel_case=True), sort=sort)
 
     @classmethod
     def load_from_disk(cls: type[T], analytics_file: Path) -> T:
