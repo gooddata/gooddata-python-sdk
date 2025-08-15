@@ -666,6 +666,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
         from_lang: str,
         already_translated: dict[str, str],
         translation_file_path: Path,
+        sort: bool = False,
     ) -> dict[str, str]:
         if to_translate and translator_func:
             translated = {
@@ -673,7 +674,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
                 **already_translated,
             }
             # Write translation file
-            write_layout_to_file(translation_file_path, translated)
+            write_layout_to_file(translation_file_path, translated, sort=sort)
         elif already_translated:
             logger.info("Nothing to translate, but translation file exists, so we can apply it.")
             translated = already_translated
@@ -686,7 +687,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
             translated = {}
             for x in to_translate:
                 translated[x] = x
-            write_layout_to_file(translation_file_path, translated)
+            write_layout_to_file(translation_file_path, translated, sort=sort)
         return translated
 
     @staticmethod

@@ -27,9 +27,9 @@ class CatalogDeclarativeDateDataset(Base):
     def client_class() -> type[DeclarativeDateDataset]:
         return DeclarativeDateDataset
 
-    def store_to_disk(self, date_instances_folder: Path) -> None:
+    def store_to_disk(self, date_instances_folder: Path, sort: bool = False) -> None:
         date_instance_file = date_instances_folder / f"{self.id}.yaml"
-        write_layout_to_file(date_instance_file, self.to_api().to_dict(camel_case=True))
+        write_layout_to_file(date_instance_file, self.to_api().to_dict(camel_case=True), sort=sort)
 
     @classmethod
     def load_from_disk(cls, date_instance_file: Path) -> CatalogDeclarativeDateDataset:

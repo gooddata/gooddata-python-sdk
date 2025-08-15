@@ -22,9 +22,9 @@ class CatalogDeclarativeDatasetExtension(Base):
     def client_class() -> type[DeclarativeDatasetExtension]:
         return DeclarativeDatasetExtension
 
-    def store_to_disk(self, dataset_extension_folder: Path) -> None:
+    def store_to_disk(self, dataset_extension_folder: Path, sort: bool = False) -> None:
         dataset_extension_file = dataset_extension_folder / f"{self.id}.yaml"
-        write_layout_to_file(dataset_extension_file, self.to_api().to_dict(camel_case=True))
+        write_layout_to_file(dataset_extension_file, self.to_api().to_dict(camel_case=True), sort=sort)
 
     @classmethod
     def load_from_disk(cls, dataset_extension_file: Path) -> "CatalogDeclarativeDatasetExtension":

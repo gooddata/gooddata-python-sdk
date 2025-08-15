@@ -25,10 +25,10 @@ class CatalogDeclarativeTable(Base):
     def client_class() -> builtins.type[DeclarativeTable]:
         return DeclarativeTable
 
-    def store_to_disk(self, pdm_folder: Path) -> None:
+    def store_to_disk(self, pdm_folder: Path, sort: bool = False) -> None:
         table_dict = self.to_api().to_dict(camel_case=True)
         table_file_path = pdm_folder / f"{self.id}.yaml"
-        write_layout_to_file(table_file_path, table_dict)
+        write_layout_to_file(table_file_path, table_dict, sort=sort)
 
     @classmethod
     def load_from_disk(cls, table_file_path: Path) -> CatalogDeclarativeTable:

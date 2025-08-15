@@ -53,9 +53,9 @@ class CatalogDeclarativeDataset(Base):
     def client_class() -> type[DeclarativeDataset]:
         return DeclarativeDataset
 
-    def store_to_disk(self, datasets_folder: Path) -> None:
+    def store_to_disk(self, datasets_folder: Path, sort: bool = False) -> None:
         dataset_file = datasets_folder / f"{self.id}.yaml"
-        write_layout_to_file(dataset_file, self.to_api().to_dict(camel_case=True))
+        write_layout_to_file(dataset_file, self.to_api().to_dict(camel_case=True), sort=sort)
 
     @classmethod
     def load_from_disk(cls, dataset_file: Path) -> CatalogDeclarativeDataset:
