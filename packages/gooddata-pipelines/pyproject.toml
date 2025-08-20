@@ -8,9 +8,9 @@ license = { text = "MIT" }
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-    "pydantic (>=2.11.3,<3.0.0)",
+    "pydantic (>=2.9.2,<3.0.0)",
     "requests (>=2.32.3,<3.0.0)",
-    "types-requests (>=2.32.0,<3.0.0)",
+    "types-requests (>1.0.0,<3.0.0)",
     "gooddata-sdk~=1.48.0",
     "boto3 (>=1.39.3,<2.0.0)",
     "boto3-stubs (>=1.39.3,<2.0.0)",
@@ -31,8 +31,8 @@ line-length = 80
 dev = [
     "pytest (>=8.3.5,<9.0.0)",
     "pytest-mock (>=3.14.0,<4.0.0)",
-    "ruff (>=0.11.2,<0.12.0)",
-    "mypy (>=1.16.0,<2.0.0)",
+    "ruff (>=0.9.5,<0.12.0)",
+    "mypy (>=1.11.2,<2.0.0)",
     "moto (>=5.1.6,<6.0.0)",
 ]
 
