@@ -15,6 +15,9 @@
     </header>
     <div class="container-fluid td-outer">
       <div class="td-main">
+        <div class="gd-docs-header-nav__mobile">
+          {{ partial "navbar-breadcrumb.html" . }}
+        </div>
         <div class="row flex-xl-nowrap">
           <div class="col-12 col-md-4 col-xl-3 td-sidebar d-print-none">
             {{ partial "sidebar.html" . }}
@@ -22,7 +25,7 @@
           <div class="d-none d-xl-block col-xl-2 td-toc d-print-none">
             {{ partial "toc.html" . }}
           </div>
-          <main class="col-12 col-md-8 col-xl-7 pl-md-5" role="main" aria-label="Article content">
+          <main class="col-12 col-lg-8 col-xl-7 pl-lg-5 ps-lg-5" role="main" aria-label="Article content">
             {{ partial "version-banner.html" . }}
             {{ if not .Site.Params.ui.breadcrumb_disable }}{{ partial "breadcrumb.html" . }}{{ end }}
             {{ if .Draft }}

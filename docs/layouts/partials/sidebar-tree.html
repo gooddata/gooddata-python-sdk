@@ -1,93 +1,21 @@
-<!-- PETR: Menu assembled here -->
-<input type="checkbox" id="gd-docs-menu__mobile-trigger" class="gd-docs-menu__mobile-trigger" />
-<label for="gd-docs-menu__mobile-trigger" class="gd-docs-menu__mobile-icon"></label>
-<div class="gd-docs-menu__mobile-bg"></div>
-<nav id="gd-docs-menu" class="gd-docs-menu init" aria-label="Articles">
-  {{ $additionalNavRoot := .Site.GetPage "/versions" }}
-  {{ $root := .Site.GetPage "/docs" }}
+{{/* (C) 2023 GoodData Corporation */}}
+{{ $additionalNavRoot := .Site.GetPage "/versions" }}
+{{ $root := .Site.GetPage "/latest" }}
 
-  {{ if or (eq .FirstSection $additionalNavRoot) (eq .FirstSection .Site.Home) }}
-    {{- if .Site.Params.versions -}}
-    {{- $root = index (where .Site.Sections "RelPermalink" (index .Site.Params.versions 0).url) 0 -}}
-    {{- end -}}
-  {{ else }}
-    {{ $root = .FirstSection }}
-  {{ end }}
-
-  {{ template "site-title" . }}
-
-  {{ template "root-link" (dict "currentPage" . "root" $root "site" .Site) }}
-  {{ template "section-tree-nav-sections" (dict "root" $root.CurrentSection.Pages "currentPage" . "site" .Site) }}
-  {{ template "section-tree-nav-sections" (dict "root" $additionalNavRoot.CurrentSection.Pages "currentPage" . "site" .Site) }}
-</nav>
-
-{{ define "root-link" }}
-  {{ $isCurrent := eq .currentPage .root.FirstSection }}
-  {{ with .root }}
-    <ul class="gd-docs-menu-section gd-docs-menu-section__root">
-      <li class="gd-docs-menu-page{{ if $isCurrent }} active{{ end }}">
-        <div class="gd-docs-menu-page__title">
-          <a href="{{ .RelPermalink }}" class="gd-docs-menu-page__link">{{ .LinkTitle }}</a>
-        </div>
-      </li>
-    </ul>
-  {{ end }}
+{{ if or (eq .FirstSection $additionalNavRoot) (eq .FirstSection .Site.Home) }}
+  {{- if .Site.Params.versions -}}
+  {{- $root = index (where .Site.Sections "RelPermalink" (index .Site.Params.versions 0).url) 0 -}}
+  {{- end -}}
+{{ else }}
+  {{ $root = .FirstSection }}
 {{ end }}
 
-{{ define "section-tree-nav-sections" }}
-  {{ $root := .root }}
-  {{ $site := .site }}
-  {{ $currentPage := .currentPage }}
-  {{ $firstInSection := (index $root 0) }}
-  {{ $isRootSection := eq $firstInSection.Parent .site.Home }}
+<h4>Python SDK</h4>
 
-  {{ if gt (len (where $root.ByWeight "Params.toc_hide" "ne" true)) 0 }}
-
-  <ul class="gd-docs-menu-section{{ if .activeSection }} active{{ end }}">
-    {{ range $page := $root.ByWeight }}
-      {{ $page := $page.Page }}
-      {{ $pageId := replace (replaceRE "^/|/$" "" $page.RelPermalink) "/" "_" }}
-
-      {{ if and (not (eq $page.Params.toc_hide true)) (not (eq $page $site.Home)) }}
-        {{ $activePage := eq $page $currentPage }}
-        {{ $activeSection := $currentPage.IsDescendant $page }}
-        {{ $pageId := replace (replaceRE "^/|/$" "" $page.RelPermalink) "/" "_" }}
-
-        <li class="gd-docs-menu-page{{ if $activePage }} active{{ end }}{{ if $page.Params.navSeparator }} gd-docs-menu-page__separator{{ end }}">
-          {{ if $page.Params.navigationLabel }}
-            <span class="gd-docs-menu-page__label">{{ $page.LinkTitle }}</span>
-          {{ else }}
-            {{ if $page.Pages }}
-              <input type="checkbox" id="gd-docs-menu-page__{{ $pageId }}" class="gd-docs-menu-page__toggle"{{ if $activeSection }} checked{{ end }} />
-            {{ end }}
-
-            <div class="gd-docs-menu-page__title">
-              {{ if $page.Params.externalLink }}
-                <a href ="{{ $page.Params.externalLink }}" class="gd-docs-menu-page__link" target="_blank">{{ $page.LinkTitle }}</a>
-              {{ else }}
-                <a href ="{{ $page.Permalink }}" class="gd-docs-menu-page__link">{{ $page.LinkTitle }}</a>
-              {{ end }}
-
-              {{ if $page.Pages }}
-                <label for="gd-docs-menu-page__{{ $pageId }}" class="gd-docs-menu-page__chevron">
-                  {{ with resources.Get "icons/chevron-menu.svg" }}{{ ( . | minify).Content | safeHTML }}{{ end }}
-                </label>
-              {{ end }}
-            </div>
-          {{ end }}
-
-          {{ if $page.Pages }}
-            {{ template "section-tree-nav-sections" (dict "root" $page.Pages "currentPage" $currentPage "activeSection" $activeSection "site" $site)  }}
-          {{ end }}
-        </li>
-      {{ end }}
-    {{ end }}
-    </ul>
-  {{ end }}
+{{ template "root-link" (dict "currentPage" . "root" $root "site" .Site) }}
+{{ if $root.CurrentSection }}
+{{ template "section-tree-nav-sections" (dict "root" $root.CurrentSection.Pages "currentPage" . "site" .Site) }}
 {{ end }}
-
-{{ define "site-title" }}
-  {{ if .Site.Params.menuTitle }}
-    <h4>{{ .Site.Params.menuTitle }}</h4>
-  {{ end }}
+{{ if $additionalNavRoot.CurrentSection }}
+{{ template "section-tree-nav-sections" (dict "root" $additionalNavRoot.CurrentSection.Pages "currentPage" . "site" .Site) }}
 {{ end }}
