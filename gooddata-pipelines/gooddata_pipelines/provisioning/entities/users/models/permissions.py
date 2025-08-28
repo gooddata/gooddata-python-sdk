@@ -1,7 +1,7 @@
 # (C) 2025 GoodData Corporation
 from abc import abstractmethod
 from enum import Enum
-from typing import Any, Iterator, Self, TypeAlias
+from typing import Any, Iterator, TypeAlias, TypeVar
 
 import attrs
 from gooddata_sdk.catalog.identifier import CatalogAssigneeIdentifier
@@ -14,6 +14,7 @@ from pydantic import BaseModel
 from gooddata_pipelines.provisioning.utils.exceptions import BaseUserException
 
 TargetsPermissionDict: TypeAlias = dict[str, dict[str, bool]]
+ConstructorType = TypeVar("ConstructorType", bound="ConstructorMixin")
 
 
 class PermissionType(str, Enum):
@@ -39,7 +40,9 @@ class ConstructorMixin:
             raise ValueError("Either user_id or ug_id must be present")
 
     @classmethod
-    def from_list_of_dicts(cls, data: list[dict[str, Any]]) -> list[Self]:
+    def from_list_of_dicts(
+        cls: type[ConstructorType], data: list[dict[str, Any]]
+    ) -> list[ConstructorType]:
         """Creates a list of instances from list of dicts."""
         # NOTE: We can use typing.Self for the return type in Python 3.11
         permissions = []
