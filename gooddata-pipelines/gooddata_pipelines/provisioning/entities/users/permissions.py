@@ -2,6 +2,8 @@
 
 """Module for provisioning user permissions in GoodData workspaces."""
 
+from typing import TypeVar
+
 from gooddata_pipelines.api.exceptions import GoodDataApiException
 from gooddata_pipelines.provisioning.entities.users.models.permissions import (
     PermissionDeclaration,
@@ -13,6 +15,11 @@ from gooddata_pipelines.provisioning.entities.users.models.permissions import (
 )
 from gooddata_pipelines.provisioning.provisioning import Provisioning
 from gooddata_pipelines.provisioning.utils.exceptions import BaseUserException
+
+# Type variable for permission models (PermissionIncrementalLoad or PermissionFullLoad)
+PermissionModel = TypeVar(
+    "PermissionModel", PermissionIncrementalLoad, PermissionFullLoad
+)
 
 
 class PermissionProvisioner(
@@ -72,7 +79,7 @@ class PermissionProvisioner(
 
     @staticmethod
     def _construct_declarations(
-        permissions: list[PermissionIncrementalLoad],
+        permissions: list[PermissionIncrementalLoad] | list[PermissionFullLoad],
     ) -> WSPermissionsDeclarations:
         """Constructs workspace permission declarations from the input permissions."""
         ws_dict: WSPermissionsDeclarations = {}
@@ -82,7 +89,12 @@ class PermissionProvisioner(
             if ws_id not in ws_dict:
                 ws_dict[ws_id] = PermissionDeclaration({}, {})
 
-            ws_dict[ws_id].add_permission(permission)
+            if isinstance(permission, PermissionIncrementalLoad):
+                ws_dict[ws_id].add_incremental_permission(permission)
+            elif isinstance(permission, PermissionFullLoad):
+                ws_dict[ws_id].add_full_load_permission(permission)
+            else:
+                raise ValueError(f"Invalid permission type: {type(permission)}")
         return ws_dict
 
     def _check_user_group_exists(self, ug_id: str) -> None:
@@ -90,14 +102,14 @@ class PermissionProvisioner(
         self._api._sdk.catalog_user.get_user_group(ug_id)
 
     def _validate_permission(
-        self, permission: PermissionIncrementalLoad
+        self, permission: PermissionFullLoad | PermissionIncrementalLoad
     ) -> None:
         """Validates if the permission is correctly defined."""
-        if permission.type == PermissionType.user:
-            self._api.get_user(permission.id, error_message="User not found")
+        if permission.type_ == PermissionType.user:
+            self._api.get_user(permission.id_, error_message="User not found")
         else:
             self._api.get_user_group(
-                permission.id, error_message="User group not found"
+                permission.id_, error_message="User group not found"
             )
 
         self._api.get_workspace(
@@ -105,10 +117,12 @@ class PermissionProvisioner(
         )
 
     def _filter_invalid_permissions(
-        self, permissions: list[PermissionIncrementalLoad]
-    ) -> list[PermissionIncrementalLoad]:
+        self,
+        permissions: list[PermissionModel],
+    ) -> list[PermissionModel]:
         """Filters out invalid permissions from the input list."""
-        valid_permissions: list[PermissionIncrementalLoad] = []
+        valid_permissions: list[PermissionModel] = []
+
         for permission in permissions:
             try:
                 self._validate_permission(permission)
@@ -121,13 +135,15 @@ class PermissionProvisioner(
             valid_permissions.append(permission)
         return valid_permissions
 
-    def _manage_permissions(
-        self, permissions: list[PermissionIncrementalLoad]
-    ) -> None:
-        """Manages permissions for a list of workspaces.
-        Modify upstream workspace declarations for each input workspace and skip non-existent ws_ids
+    def _provision_incremental_load(self) -> None:
+        """Provisiones permissions for a list of workspaces.
+
+        Modifies existing upstream workspace permission declarations for each
+        input workspace and skips rest of the workspaces.
         """
-        valid_permissions = self._filter_invalid_permissions(permissions)
+        valid_permissions = self._filter_invalid_permissions(
+            self.source_group_incremental
+        )
 
         input_declarations = self._construct_declarations(valid_permissions)
 
@@ -145,9 +161,21 @@ class PermissionProvisioner(
             self._api.put_declarative_permissions(ws_id, ws_permissions)
             self.logger.info(f"Updated permissions for workspace {ws_id}")
 
-    def _provision_incremental_load(self) -> None:
-        """Provision permissions based on the source group."""
-        self._manage_permissions(self.source_group_incremental)
-
     def _provision_full_load(self) -> None:
-        raise NotImplementedError("Not implemented yet.")
+        """Provisions permissions for selected of workspaces.
+
+        Modifies upstream workspace declarations for each input workspace and
+        skips non-existent workspace ids. Overwrites any existing configuration
+        of the workspace permissions.
+        """
+        valid_permissions = self._filter_invalid_permissions(
+            self.source_group_full
+        )
+
+        input_declarations = self._construct_declarations(valid_permissions)
+
+        for ws_id, declaration in input_declarations.items():
+            ws_permissions = declaration.to_sdk_api()
+
+            self._api.put_declarative_permissions(ws_id, ws_permissions)
+            self.logger.info(f"Updated permissions for workspace {ws_id}")

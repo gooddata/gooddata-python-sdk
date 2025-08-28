@@ -25,6 +25,9 @@ from gooddata_pipelines.backup_and_restore.storage.local_storage import (
     LocalStorage,
 )
 from gooddata_pipelines.backup_and_restore.storage.s3_storage import S3Storage
+from tests.conftest import TEST_DATA_DIR
+
+TEST_DATA_SUBDIR = f"{TEST_DATA_DIR}/backup"
 
 S3_BACKUP_PATH = "some/s3/backup/path/org_id/"
 S3_BUCKET = "some-s3-bucket"
@@ -117,7 +120,9 @@ def test_get_local_storage(backup_manager):
 def test_archive_gooddata_layouts_to_zip(backup_manager):
     with tempfile.TemporaryDirectory() as tmpdir:
         shutil.copytree(
-            Path("tests/data/backup/test_exports/services/"),
+            Path(
+                f"{TEST_DATA_SUBDIR}/test_exports/services/",
+            ),
             Path(tmpdir + "/services"),
         )
         backup_manager.archive_gooddata_layouts_to_zip(
@@ -196,13 +201,11 @@ def test_store_user_data_filters(backup_manager):
             },
         ]
     }
-    user_data_filter_folderlocation = Path(
-        "tests/data/backup/test_exports/services/wsid1/20230713-132759-1_3_1_dev5/gooddata_layouts/services/workspaces/wsid1/user_data_filters"
-    )
+    user_data_filter_folderlocation = f"{TEST_DATA_SUBDIR}/test_exports/services/wsid1/20230713-132759-1_3_1_dev5/gooddata_layouts/services/workspaces/wsid1/user_data_filters"
     backup_manager.store_user_data_filters(
         user_data_filters,
         Path(
-            "tests/data/backup/test_exports/services/wsid1/20230713-132759-1_3_1_dev5"
+            f"{TEST_DATA_SUBDIR}/test_exports/services/wsid1/20230713-132759-1_3_1_dev5",
         ),
         "wsid1",
     )
@@ -227,7 +230,9 @@ def test_store_user_data_filters(backup_manager):
     assert count == 2
 
     shutil.rmtree(
-        "tests/data/backup/test_exports/services/wsid1/20230713-132759-1_3_1_dev5/gooddata_layouts/services/workspaces/wsid1/user_data_filters"
+        Path(
+            f"{TEST_DATA_SUBDIR}/test_exports/services/wsid1/20230713-132759-1_3_1_dev5/gooddata_layouts/services/workspaces/wsid1/user_data_filters",
+        )
     )
 
 
@@ -235,47 +240,52 @@ def test_local_storage_export(backup_manager):
     with tempfile.TemporaryDirectory() as tmpdir:
         org_store_location = Path(tmpdir + "/services")
         shutil.copytree(
-            Path("tests/data/backup/test_exports/services/"), org_store_location
+            Path(
+                f"{TEST_DATA_SUBDIR}/test_exports/services/",
+            ),
+            org_store_location,
         )
         local_storage = backup_manager.get_storage(LOCAL_CONFIG)
 
         local_storage.export(
             folder=tmpdir,
             org_id="services",
-            export_folder="tests/data/local_export",
+            export_folder=f"{TEST_DATA_DIR}/local_export",
         )
 
         local_export_folder_exist = os.path.isdir(
             Path(
-                "tests/data/local_export/services/wsid1/20230713-132759-1_3_1_dev5/gooddata_layouts/services/workspaces/wsid1/analytics_model"
+                f"{TEST_DATA_DIR}/local_export/services/wsid1/20230713-132759-1_3_1_dev5/gooddata_layouts/services/workspaces/wsid1/analytics_model"
             )
         )
         local_export_folder2_exist = os.path.isdir(
             Path(
-                "tests/data/local_export/services/wsid3/20230713-132759-1_3_1_dev5/gooddata_layouts/services/workspaces/wsid3/ldm"
+                f"{TEST_DATA_DIR}/local_export/services/wsid3/20230713-132759-1_3_1_dev5/gooddata_layouts/services/workspaces/wsid3/ldm"
             )
         )
 
         local_export_folder3_exist = os.path.isdir(
             Path(
-                "tests/data/local_export/services/wsid3/20230713-132759-1_3_1_dev5/gooddata_layouts/services/workspaces/wsid3/user_data_filters"
+                f"{TEST_DATA_DIR}/local_export/services/wsid3/20230713-132759-1_3_1_dev5/gooddata_layouts/services/workspaces/wsid3/user_data_filters"
             )
         )
 
         local_export_file_exist = os.path.isfile(
             Path(
-                "tests/data/local_export/services/wsid2/20230713-132759-1_3_1_dev5/gooddata_layouts/services/workspaces/wsid2/analytics_model/analytical_dashboards/id.yaml"
+                f"{TEST_DATA_DIR}/local_export/services/wsid2/20230713-132759-1_3_1_dev5/gooddata_layouts/services/workspaces/wsid2/analytics_model/analytical_dashboards/id.yaml"
             )
         )
         assert local_export_folder_exist
         assert local_export_folder2_exist
         assert local_export_folder3_exist
         assert local_export_file_exist
-        shutil.rmtree("tests/data/local_export")
+        shutil.rmtree(f"{TEST_DATA_DIR}/local_export")
 
 
 def test_file_upload(backup_manager, s3, s3_bucket):
-    backup_manager.storage.export("tests/data/backup/test_exports", "services")
+    backup_manager.storage.export(
+        f"{TEST_DATA_SUBDIR}/test_exports", "services"
+    )
     s3.Object(
         S3_BUCKET,
         "some/s3/backup/path/org_id/services/wsid2/20230713-132759-1_3_1_dev5/gooddata_layouts/services/workspaces/wsid2/analytics_model/filter_contexts/id.yaml",

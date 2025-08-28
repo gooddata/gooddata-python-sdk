@@ -36,6 +36,7 @@ class Provisioning(Generic[TFullLoadSourceData, TIncrementalSourceData]):
         cls: Type[TProvisioning], host: str, token: str
     ) -> TProvisioning:
         """Creates a provisioner instance using provided host and token."""
+        cls._validate_credentials(host, token)
         return cls(host=host, token=token)
 
     @classmethod
@@ -47,6 +48,16 @@ class Provisioning(Generic[TFullLoadSourceData, TIncrementalSourceData]):
         """Creates a provisioner instance using a GoodData profile file."""
         content = profile_content(profile, profiles_path)
         return cls(**content)
+
+    @staticmethod
+    def _validate_credentials(host: str, token: str) -> None:
+        """Validates the credentials."""
+        if (not host) and (not token):
+            raise ValueError("Host and token are required.")
+        if not host:
+            raise ValueError("Host is required.")
+        if not token:
+            raise ValueError("Token is required.")
 
     @staticmethod
     def _create_groups(
@@ -95,13 +106,9 @@ class Provisioning(Generic[TFullLoadSourceData, TIncrementalSourceData]):
 
         try:
             self._provision_full_load()
-            self.logger.info("Provisioning completed successfully.")
+            self.logger.info("Provisioning completed.")
         except Exception as e:
-            self.fatal_exception = str(e)
-            self.logger.error(
-                f"Provisioning failed. Error: {self.fatal_exception} "
-                + f"Context: {e.__dict__}"
-            )
+            self._handle_fatal_exception(e)
 
     def incremental_load(
         self, source_data: list[TIncrementalSourceData]
@@ -111,22 +118,34 @@ class Provisioning(Generic[TFullLoadSourceData, TIncrementalSourceData]):
         Incremental provisioning is used to modify a subset of the upstream workspaces
         based on the source data provided.
         """
+        # TODO: validate the data type of source group at runtime
         self.source_group_incremental = source_data
 
         try:
             self._provision_incremental_load()
-            self.logger.info("Provisioning completed successfully.")
+            self.logger.info("Provisioning completed.")
         except Exception as e:
-            self.fatal_exception = str(e)
-            self.logger.error(
-                f"Provisioning failed. Error: {self.fatal_exception} "
-                + f"Context: {e.__dict__}"
-            )
+            self._handle_fatal_exception(e)
 
-    # TODO: implement a sceond provisioning method and name the two differently:
-    #  1) provision_incremental - will use the is_active logic, such as user provisioning now
-    #  2) provision_full - full load of the source data, like workspaces now
-    #  Each will have its own implementation and source data model.
-    #  Both use cases are required and need to be supported.
-    #  This will also improve the clarity of the code as now provisioning of each
-    #   entity works differently, leading to confusion.
+    def _handle_fatal_exception(self, e: Exception) -> None:
+        """Handles fatal exceptions during provisioning.
+
+        Logs the exception content. Re-raises the exception if there is no
+        subscriber to the logger.
+        """
+        self.fatal_exception = str(e)
+
+        if hasattr(e, "__dict__"):
+            exception_context = f"Context: {e.__dict__}"
+        else:
+            exception_context = ""
+
+        exception_message = (
+            f"Provisioning failed. Error: {self.fatal_exception}. "
+            + exception_context
+        )
+
+        self.logger.error(exception_message)
+
+        if not self.logger.subscribers:
+            raise Exception(exception_message)
