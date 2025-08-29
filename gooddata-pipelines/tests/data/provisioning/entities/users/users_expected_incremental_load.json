@@ -1,0 +1,21 @@
+{
+  "modified_users": [
+    {
+      "user_id": "user_1",
+      "firstname": "John",
+      "lastname": "Doe",
+      "email": "john.doe@example.com",
+      "authentication_id": "auth_1",
+      "user_groups": ["group_1", "group_2"]
+    },
+    {
+      "user_id": "user_3",
+      "firstname": "Jim",
+      "lastname": "Rock",
+      "email": "jim.rock@example.com",
+      "authentication_id": "auth_3",
+      "user_groups": ["group_3", "group_4"]
+    }
+  ],
+  "deleted_users": ["user_4"]
+}

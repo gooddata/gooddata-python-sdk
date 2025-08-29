@@ -1,0 +1,26 @@
+[
+  {
+    "user_id": "user_1",
+    "firstname": "John",
+    "lastname": "Doe",
+    "email": "john.doe@example.com",
+    "auth_id": "auth_1",
+    "user_groups": "group_1,group_2"
+  },
+  {
+    "user_id": "user_2",
+    "firstname": "Jane",
+    "lastname": "Doe",
+    "email": "jane.doe@example.com",
+    "auth_id": "auth_2",
+    "user_groups": "group_2,group_3"
+  },
+  {
+    "user_id": "user_3",
+    "firstname": "Jim",
+    "lastname": "Rock",
+    "email": "jim.rock@example.com",
+    "auth_id": "auth_3",
+    "user_groups": "group_3,group_4"
+  }
+]
