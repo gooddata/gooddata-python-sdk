@@ -1,7 +1,7 @@
 # (C) 2025 GoodData Corporation
-from abc import abstractmethod
+
 from enum import Enum
-from typing import Any, Iterator, TypeAlias, TypeVar
+from typing import Iterator, TypeAlias
 
 import attrs
 from gooddata_sdk.catalog.identifier import CatalogAssigneeIdentifier
@@ -14,85 +14,29 @@ from pydantic import BaseModel
 from gooddata_pipelines.provisioning.utils.exceptions import BaseUserException
 
 TargetsPermissionDict: TypeAlias = dict[str, dict[str, bool]]
-ConstructorType = TypeVar("ConstructorType", bound="ConstructorMixin")
 
 
-class PermissionType(str, Enum):
+class EntityType(str, Enum):
     # NOTE: Start using StrEnum with Python 3.11
     user = "user"
     user_group = "userGroup"
 
 
-class ConstructorMixin:
-    @staticmethod
-    def _get_id_and_type(
-        permission: dict[str, Any],
-    ) -> tuple[str, PermissionType]:
-        user_id: str | None = permission.get("user_id")
-        user_group_id: str | None = permission.get("ug_id")
-        if user_id and user_group_id:
-            raise ValueError("Only one of user_id or ug_id must be present")
-        elif user_id:
-            return user_id, PermissionType.user
-        elif user_group_id:
-            return user_group_id, PermissionType.user_group
-        else:
-            raise ValueError("Either user_id or ug_id must be present")
-
-    @classmethod
-    def from_list_of_dicts(
-        cls: type[ConstructorType], data: list[dict[str, Any]]
-    ) -> list[ConstructorType]:
-        """Creates a list of instances from list of dicts."""
-        # NOTE: We can use typing.Self for the return type in Python 3.11
-        permissions = []
-        for permission in data:
-            permissions.append(cls.from_dict(permission))
-        return permissions
-
-    @classmethod
-    @abstractmethod
-    def from_dict(cls, data: dict[str, Any]) -> Any:
-        """Construction form a dictionary to be implemented by subclasses."""
-        pass
-
-
-class PermissionIncrementalLoad(BaseModel, ConstructorMixin):
+class BasePermission(BaseModel):
     permission: str
     workspace_id: str
-    id_: str
-    type_: PermissionType
+    entity_id: str
+    entity_type: EntityType
+
+
+class PermissionFullLoad(BasePermission):
+    """Input validator for full load of workspace permissions provisioning."""
+
+
+class PermissionIncrementalLoad(BasePermission):
+    """Input validator for incremental load of workspace permissions provisioning."""
+
     is_active: bool
-
-    @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "PermissionIncrementalLoad":
-        """Returns an instance of PermissionIncrementalLoad from a dictionary."""
-        id_, target_type = cls._get_id_and_type(data)
-        return cls(
-            permission=data["ws_permissions"],
-            workspace_id=data["ws_id"],
-            id_=id_,
-            type_=target_type,
-            is_active=data["is_active"],
-        )
-
-
-class PermissionFullLoad(BaseModel, ConstructorMixin):
-    permission: str
-    workspace_id: str
-    id_: str
-    type_: PermissionType
-
-    @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "PermissionFullLoad":
-        """Returns an instance of PermissionFullLoad from a dictionary."""
-        id_, target_type = cls._get_id_and_type(data)
-        return cls(
-            permission=data["ws_permissions"],
-            workspace_id=data["ws_id"],
-            id_=id_,
-            type_=target_type,
-        )
 
 
 @attrs.define
@@ -117,7 +61,7 @@ class PermissionDeclaration:
                 permission.assignee.id,
             )
 
-            if permission_type == PermissionType.user.value:
+            if permission_type == EntityType.user.value:
                 target_dict = users
             else:
                 target_dict = user_groups
@@ -170,7 +114,7 @@ class PermissionDeclaration:
 
         for user_id, permissions in self.users.items():
             assignee = CatalogAssigneeIdentifier(
-                id=user_id, type=PermissionType.user.value
+                id=user_id, type=EntityType.user.value
             )
             for declaration in self._permissions_for_target(
                 permissions, assignee
@@ -179,7 +123,7 @@ class PermissionDeclaration:
 
         for ug_id, permissions in self.user_groups.items():
             assignee = CatalogAssigneeIdentifier(
-                id=ug_id, type=PermissionType.user_group.value
+                id=ug_id, type=EntityType.user_group.value
             )
             for declaration in self._permissions_for_target(
                 permissions, assignee
@@ -200,15 +144,15 @@ class PermissionDeclaration:
         """
         target_dict = (
             self.users
-            if permission.type_ == PermissionType.user
+            if permission.entity_type == EntityType.user
             else self.user_groups
         )
 
-        if permission.id_ not in target_dict:
-            target_dict[permission.id_] = {}
+        if permission.entity_id not in target_dict:
+            target_dict[permission.entity_id] = {}
 
         is_active = permission.is_active
-        target_permissions = target_dict[permission.id_]
+        target_permissions = target_dict[permission.entity_id]
         permission_value = permission.permission
 
         if permission_value not in target_permissions:
@@ -233,14 +177,14 @@ class PermissionDeclaration:
         """
         target_dict = (
             self.users
-            if permission.type_ == PermissionType.user
+            if permission.entity_type == EntityType.user
             else self.user_groups
         )
 
-        if permission.id_ not in target_dict:
-            target_dict[permission.id_] = {}
+        if permission.entity_id not in target_dict:
+            target_dict[permission.entity_id] = {}
 
-        target_permissions = target_dict[permission.id_]
+        target_permissions = target_dict[permission.entity_id]
         permission_value = permission.permission
 
         if permission_value not in target_permissions:

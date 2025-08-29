@@ -2,7 +2,7 @@
 
 """Module for utilities used in GoodData Pipelines provisioning."""
 
-from pydantic import BaseModel
+import attrs
 from requests import Response
 
 
@@ -61,20 +61,8 @@ class AttributesMixin:
         return attrs
 
 
-class SplitMixin:
-    @staticmethod
-    def split(string_value: str, delimiter: str = ",") -> list[str]:
-        """
-        Splits a string by the given delimiter and returns a list of stripped values.
-        If the input is empty, returns an empty list.
-        """
-        if not string_value:
-            return []
-
-        return [value.strip() for value in string_value.split(delimiter)]
-
-
-class EntityGroupIds(BaseModel):
+@attrs.define
+class EntityGroupIds:
     ids_in_both_systems: set[str]
     ids_to_delete: set[str]
     ids_to_create: set[str]

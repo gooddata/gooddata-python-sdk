@@ -39,7 +39,8 @@ class WorkspaceProvisioner(
         """Creates an instance of the WorkspaceProvisioner.
 
         Calls the superclass constructor and initializes the validator, parser,
-        and maps for workspace data.
+        and maps for workspace data. Use the `full_load` or `incremental_load`
+        methods to run the provisioning.
         """
         super().__init__(*args, **kwargs)
         self.validator: WorkspaceDataValidator = WorkspaceDataValidator(

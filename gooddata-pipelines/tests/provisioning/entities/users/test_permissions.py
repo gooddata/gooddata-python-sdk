@@ -14,6 +14,7 @@ from gooddata_sdk.catalog.permission.declarative_model.permission import (
 from pytest_mock import MockerFixture
 
 from gooddata_pipelines.provisioning.entities.users.models.permissions import (
+    EntityType,
     PermissionDeclaration,
     PermissionFullLoad,
     PermissionIncrementalLoad,
@@ -147,15 +148,14 @@ def test_add_new_active_user_perm() -> None:
         {"user_1": {"ANALYZE": True, "VIEW": False}},
         {"ug_1": {"VIEW": True, "ANALYZE": False}},
     )
-    permission = PermissionIncrementalLoad.from_dict(
-        {
-            "ws_id": "",
-            "ws_permissions": "MANAGE",
-            "ug_id": "",
-            "user_id": "user_1",
-            "is_active": True,
-        }
+    permission = PermissionIncrementalLoad(
+        permission="MANAGE",
+        workspace_id="",
+        entity_id="user_1",
+        is_active=True,
+        entity_type=EntityType.user,
     )
+
     declaration.add_incremental_permission(permission)
     assert declaration.users == {
         "user_1": {"ANALYZE": True, "VIEW": False, "MANAGE": True}
@@ -168,14 +168,12 @@ def test_add_new_inactive_user_perm() -> None:
         {"user_1": {"ANALYZE": True, "VIEW": False}},
         {"ug_1": {"VIEW": True, "ANALYZE": False}},
     )
-    permission = PermissionIncrementalLoad.from_dict(
-        {
-            "ws_id": "",
-            "ws_permissions": "MANAGE",
-            "ug_id": "",
-            "user_id": "user_1",
-            "is_active": False,
-        }
+    permission = PermissionIncrementalLoad(
+        permission="MANAGE",
+        workspace_id="",
+        entity_id="user_1",
+        entity_type=EntityType.user,
+        is_active=False,
     )
 
     declaration.add_incremental_permission(permission)
@@ -190,15 +188,14 @@ def test_overwrite_inactive_user_perm() -> None:
         {"user_1": {"ANALYZE": True, "VIEW": False}},
         {"ug_1": {"VIEW": True, "ANALYZE": False}},
     )
-    permission = PermissionIncrementalLoad.from_dict(
-        {
-            "ws_id": "",
-            "ws_permissions": "VIEW",
-            "ug_id": "",
-            "user_id": "user_1",
-            "is_active": True,
-        }
+    permission = PermissionIncrementalLoad(
+        workspace_id="",
+        permission="VIEW",
+        entity_id="user_1",
+        entity_type=EntityType.user,
+        is_active=True,
     )
+
     declaration.add_incremental_permission(permission)
     assert declaration.users == {"user_1": {"ANALYZE": True, "VIEW": True}}
     assert declaration.user_groups == {"ug_1": {"VIEW": True, "ANALYZE": False}}
@@ -209,15 +206,14 @@ def test_overwrite_active_user_perm() -> None:
         {"user_1": {"ANALYZE": True, "VIEW": False}},
         {"ug_1": {"VIEW": True, "ANALYZE": False}},
     )
-    permission = PermissionIncrementalLoad.from_dict(
-        {
-            "ws_id": "",
-            "ws_permissions": "ANALYZE",
-            "ug_id": "",
-            "user_id": "user_1",
-            "is_active": False,
-        }
+    permission = PermissionIncrementalLoad(
+        workspace_id="",
+        permission="ANALYZE",
+        entity_id="user_1",
+        entity_type=EntityType.user,
+        is_active=False,
     )
+
     declaration.add_incremental_permission(permission)
     assert declaration.users == {"user_1": {"ANALYZE": True, "VIEW": False}}
     assert declaration.user_groups == {"ug_1": {"VIEW": True, "ANALYZE": False}}
@@ -228,15 +224,15 @@ def test_add_new_user_perm() -> None:
         {"user_1": {"ANALYZE": True, "VIEW": False}},
         {"ug_1": {"VIEW": True, "ANALYZE": False}},
     )
-    permission = PermissionIncrementalLoad.from_dict(
-        {
-            "ws_id": "",
-            "ws_permissions": "VIEW",
-            "ug_id": "",
-            "user_id": "user_2",
-            "is_active": True,
-        }
+
+    permission = PermissionIncrementalLoad(
+        workspace_id="",
+        permission="VIEW",
+        entity_id="user_2",
+        entity_type=EntityType.user,
+        is_active=True,
     )
+
     declaration.add_incremental_permission(permission)
     assert declaration.users == {
         "user_1": {"ANALYZE": True, "VIEW": False},
@@ -250,14 +246,12 @@ def test_modify_one_of_user_perms() -> None:
         {"user_1": {"ANALYZE": True, "VIEW": False}, "user_2": {"VIEW": True}},
         {"ug_1": {"VIEW": True, "ANALYZE": False}},
     )
-    permission = PermissionIncrementalLoad.from_dict(
-        {
-            "ws_id": "",
-            "ws_permissions": "MANAGE",
-            "ug_id": "",
-            "user_id": "user_1",
-            "is_active": True,
-        }
+    permission = PermissionIncrementalLoad(
+        workspace_id="",
+        permission="MANAGE",
+        entity_id="user_1",
+        entity_type=EntityType.user,
+        is_active=True,
     )
     declaration.add_incremental_permission(permission)
     assert declaration.users == {
@@ -275,14 +269,12 @@ def test_add_new_active_ug_perm() -> None:
         {"user_1": {"ANALYZE": True, "VIEW": False}},
         {"ug_1": {"VIEW": True, "ANALYZE": False}},
     )
-    permission = PermissionIncrementalLoad.from_dict(
-        {
-            "ws_id": "",
-            "ws_permissions": "MANAGE",
-            "ug_id": "ug_1",
-            "user_id": "",
-            "is_active": True,
-        }
+    permission = PermissionIncrementalLoad(
+        workspace_id="",
+        permission="MANAGE",
+        entity_id="ug_1",
+        entity_type=EntityType.user_group,
+        is_active=True,
     )
     declaration.add_incremental_permission(permission)
     assert declaration.users == {"user_1": {"ANALYZE": True, "VIEW": False}}
@@ -296,14 +288,12 @@ def test_add_new_inactive_ug_perm() -> None:
         {"user_1": {"ANALYZE": True, "VIEW": False}},
         {"ug_1": {"VIEW": True, "ANALYZE": False}},
     )
-    permission = PermissionIncrementalLoad.from_dict(
-        {
-            "ws_id": "",
-            "ws_permissions": "MANAGE",
-            "ug_id": "ug_1",
-            "user_id": "",
-            "is_active": False,
-        }
+    permission = PermissionIncrementalLoad(
+        workspace_id="",
+        permission="MANAGE",
+        entity_id="ug_1",
+        entity_type=EntityType.user_group,
+        is_active=False,
     )
     declaration.add_incremental_permission(permission)
     assert declaration.users == {"user_1": {"ANALYZE": True, "VIEW": False}}
@@ -317,14 +307,12 @@ def test_overwrite_inactive_ug_perm() -> None:
         {"user_1": {"ANALYZE": True, "VIEW": False}},
         {"ug_1": {"VIEW": True, "ANALYZE": False}},
     )
-    permission = PermissionIncrementalLoad.from_dict(
-        {
-            "ws_id": "",
-            "ws_permissions": "ANALYZE",
-            "ug_id": "ug_1",
-            "user_id": "",
-            "is_active": True,
-        }
+    permission = PermissionIncrementalLoad(
+        workspace_id="",
+        permission="ANALYZE",
+        entity_id="ug_1",
+        entity_type=EntityType.user_group,
+        is_active=True,
     )
     declaration.add_incremental_permission(permission)
     assert declaration.users == {"user_1": {"ANALYZE": True, "VIEW": False}}
@@ -336,14 +324,12 @@ def test_overwrite_active_ug_perm() -> None:
         {"user_1": {"ANALYZE": True, "VIEW": False}},
         {"ug_1": {"VIEW": True, "ANALYZE": False}},
     )
-    permission = PermissionIncrementalLoad.from_dict(
-        {
-            "ws_id": "",
-            "ws_permissions": "VIEW",
-            "ug_id": "ug_1",
-            "user_id": "",
-            "is_active": False,
-        }
+    permission = PermissionIncrementalLoad(
+        workspace_id="",
+        permission="VIEW",
+        entity_id="ug_1",
+        entity_type=EntityType.user_group,
+        is_active=True,
     )
     declaration.add_incremental_permission(permission)
     assert declaration.users == {"user_1": {"ANALYZE": True, "VIEW": False}}
@@ -355,14 +341,12 @@ def test_add_new_ug_perm() -> None:
         {"user_1": {"ANALYZE": True, "VIEW": False}},
         {"ug_1": {"VIEW": True, "ANALYZE": False}},
     )
-    permission = PermissionIncrementalLoad.from_dict(
-        {
-            "ws_id": "",
-            "ws_permissions": "VIEW",
-            "ug_id": "ug_2",
-            "user_id": "",
-            "is_active": True,
-        }
+    permission = PermissionIncrementalLoad(
+        workspace_id="",
+        permission="VIEW",
+        entity_id="ug_2",
+        entity_type=EntityType.user_group,
+        is_active=True,
     )
     declaration.add_incremental_permission(permission)
     assert declaration.users == {"user_1": {"ANALYZE": True, "VIEW": False}}
@@ -377,14 +361,12 @@ def test_modify_one_of_ug_perms() -> None:
         {"user_1": {"ANALYZE": True, "VIEW": False}},
         {"ug_1": {"VIEW": True, "ANALYZE": False}, "ug_2": {"VIEW": True}},
     )
-    permission = PermissionIncrementalLoad.from_dict(
-        {
-            "ws_id": "",
-            "ws_permissions": "MANAGE",
-            "ug_id": "ug_1",
-            "user_id": "",
-            "is_active": True,
-        }
+    permission = PermissionIncrementalLoad(
+        workspace_id="",
+        permission="MANAGE",
+        entity_id="ug_1",
+        entity_type=EntityType.user_group,
+        is_active=True,
     )
     declaration.add_incremental_permission(permission)
     assert declaration.users == {"user_1": {"ANALYZE": True, "VIEW": False}}
@@ -540,10 +522,10 @@ def test_permission_provisioner(
     )
 
     if load_method == "incremental_load":
-        incremental_load_data = PermissionIncrementalLoad.from_list_of_dicts(
-            source_data
-        )
+        incremental_load_data = [
+            PermissionIncrementalLoad(**row) for row in source_data
+        ]
         permission_provisioner.incremental_load(incremental_load_data)
     else:
-        full_load_data = PermissionFullLoad.from_list_of_dicts(source_data)
+        full_load_data = [PermissionFullLoad(**row) for row in source_data]
         permission_provisioner.full_load(full_load_data)

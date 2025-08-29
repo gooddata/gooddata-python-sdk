@@ -269,12 +269,12 @@ def test_user_provisioning(
 
     # Run the provisioning
     if load_method == "incremental_load":
-        incremental_load_data = UserIncrementalLoad.from_list_of_dicts(
-            input_data
-        )
+        incremental_load_data = [
+            UserIncrementalLoad(**row) for row in input_data
+        ]
         user_provisioner.incremental_load(incremental_load_data)
     else:
-        full_load_data = UserFullLoad.from_list_of_dicts(input_data)
+        full_load_data = [UserFullLoad(**row) for row in input_data]
         user_provisioner.full_load(full_load_data)
 
     # Compare list lengths

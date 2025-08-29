@@ -24,7 +24,8 @@ class UserProvisioner(Provisioning[UserFullLoad, UserIncrementalLoad]):
     """Provisioning class for users in GoodData workspaces.
 
     This class handles the creation, update, and deletion of users
-    based on the provided source data.
+    based on the provided source data. Use the `full_load` or `incremental_load`
+    methods to run the provisioning.
     """
 
     source_group_incremental: list[UserIncrementalLoad]

@@ -19,6 +19,7 @@ from .provisioning.entities.user_data_filters.user_data_filters import (
     UserDataFilterProvisioner,
 )
 from .provisioning.entities.users.models.permissions import (
+    EntityType,
     PermissionFullLoad,
     PermissionIncrementalLoad,
 )
@@ -55,5 +56,6 @@ __all__ = [
     "PermissionProvisioner",
     "UserDataFilterProvisioner",
     "UserDataFilterFullLoad",
+    "EntityType",
     "__version__",
 ]

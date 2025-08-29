@@ -100,7 +100,8 @@ class Provisioning(Generic[TFullLoadSourceData, TIncrementalSourceData]):
         That means:
         - All workspaces declared in the source data are created if missing, or
         updated to match the source data
-        - All workspaces not declared in the source data are deleted
+        - All child workspaces not declared under the parent workspace in the
+        source data are deleted
         """
         self.source_group_full = source_data
 
@@ -116,7 +117,8 @@ class Provisioning(Generic[TFullLoadSourceData, TIncrementalSourceData]):
         """Runs incremental provisioning workflow with the provided source data.
 
         Incremental provisioning is used to modify a subset of the upstream workspaces
-        based on the source data provided.
+        based on the source data provided. Only changes requested in the source
+        data will be applied.
         """
         # TODO: validate the data type of source group at runtime
         self.source_group_incremental = source_data

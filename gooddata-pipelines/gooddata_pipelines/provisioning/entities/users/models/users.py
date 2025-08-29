@@ -5,10 +5,8 @@ from typing import Any
 from gooddata_sdk.catalog.user.entity_model.user import CatalogUser
 from pydantic import BaseModel
 
-from gooddata_pipelines.provisioning.utils.utils import SplitMixin
 
-
-class BaseUser(BaseModel, SplitMixin):
+class BaseUser(BaseModel):
     """Base class containing shared user fields and functionality."""
 
     user_id: str
@@ -17,21 +15,6 @@ class BaseUser(BaseModel, SplitMixin):
     email: str | None
     auth_id: str | None
     user_groups: list[str]
-
-    @classmethod
-    def _create_from_dict_data(
-        cls, user_data: dict[str, Any], delimiter: str = ","
-    ) -> dict[str, Any]:
-        """Helper method to extract common data from dict."""
-        user_groups = cls.split(user_data["user_groups"], delimiter=delimiter)
-        return {
-            "user_id": user_data["user_id"],
-            "firstname": user_data["firstname"],
-            "lastname": user_data["lastname"],
-            "email": user_data["email"],
-            "auth_id": user_data["auth_id"],
-            "user_groups": user_groups,
-        }
 
     @classmethod
     def _create_from_sdk_data(cls, obj: CatalogUser) -> dict[str, Any]:
@@ -68,47 +51,24 @@ class BaseUser(BaseModel, SplitMixin):
         )
 
 
-class UserIncrementalLoad(BaseUser):
-    """User model for incremental load operations with active status tracking."""
-
-    is_active: bool
+class UserFullLoad(BaseUser):
+    """Input validator for full load of user provisioning."""
 
     @classmethod
-    def from_list_of_dicts(
-        cls, data: list[dict[str, Any]], delimiter: str = ","
-    ) -> list["UserIncrementalLoad"]:
-        """Creates a list of User objects from list of dicts."""
-        converted_users = []
-        for user in data:
-            base_data = cls._create_from_dict_data(user, delimiter)
-            base_data["is_active"] = user["is_active"]
-            converted_users.append(cls(**base_data))
-        return converted_users
+    def from_sdk_obj(cls, obj: CatalogUser) -> "UserFullLoad":
+        """Creates GDUserTarget from CatalogUser SDK object."""
+        base_data = cls._create_from_sdk_data(obj)
+        return cls(**base_data)
+
+
+class UserIncrementalLoad(BaseUser):
+    """Input validator for incremental load of user provisioning."""
+
+    is_active: bool
 
     @classmethod
     def from_sdk_obj(cls, obj: CatalogUser) -> "UserIncrementalLoad":
         """Creates GDUserTarget from CatalogUser SDK object."""
         base_data = cls._create_from_sdk_data(obj)
         base_data["is_active"] = True
-        return cls(**base_data)
-
-
-class UserFullLoad(BaseUser):
-    """User model for full load operations."""
-
-    @classmethod
-    def from_list_of_dicts(
-        cls, data: list[dict[str, Any]], delimiter: str = ","
-    ) -> list["UserFullLoad"]:
-        """Creates a list of User objects from list of dicts."""
-        converted_users = []
-        for user in data:
-            base_data = cls._create_from_dict_data(user, delimiter)
-            converted_users.append(cls(**base_data))
-        return converted_users
-
-    @classmethod
-    def from_sdk_obj(cls, obj: CatalogUser) -> "UserFullLoad":
-        """Creates GDUserTarget from CatalogUser SDK object."""
-        base_data = cls._create_from_sdk_data(obj)
         return cls(**base_data)
