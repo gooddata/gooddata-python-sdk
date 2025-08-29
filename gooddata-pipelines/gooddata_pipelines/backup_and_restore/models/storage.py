@@ -21,10 +21,38 @@ class S3StorageConfig(BaseModel):
 
     backup_path: str
     bucket: str
-    profile: str = "default"
+    profile: Optional[str] = None
     aws_access_key_id: Optional[str] = None
     aws_secret_access_key: Optional[str] = None
     aws_default_region: Optional[str] = None
+
+    @classmethod
+    def from_iam_role(cls, backup_path: str, bucket: str):
+        """Use default IAM role or environment credentials."""
+        return cls(backup_path=backup_path, bucket=bucket)
+
+    @classmethod
+    def from_aws_credentials(
+        cls,
+        backup_path: str,
+        bucket: str,
+        aws_access_key_id: str,
+        aws_secret_access_key: str,
+        aws_default_region: str,
+    ):
+        """Use explicit AWS access keys and region."""
+        return cls(
+            backup_path=backup_path,
+            bucket=bucket,
+            aws_access_key_id=aws_access_key_id,
+            aws_secret_access_key=aws_secret_access_key,
+            aws_default_region=aws_default_region,
+        )
+
+    @classmethod
+    def from_aws_profile(cls, backup_path: str, bucket: str, profile: str):
+        """Use a named AWS CLI profile."""
+        return cls(backup_path=backup_path, bucket=bucket, profile=profile)
 
 
 class LocalStorageConfig(BaseModel):
