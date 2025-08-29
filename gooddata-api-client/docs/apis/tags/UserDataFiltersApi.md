@@ -23,10 +23,11 @@ import gooddata_api_client
 from gooddata_api_client.apis.tags import user_data_filters_api
 from gooddata_api_client.model.declarative_user_data_filters import DeclarativeUserDataFilters
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
-    host = "http://localhost"
+    host="http://localhost"
 )
 
 # Enter a context with an instance of the API client

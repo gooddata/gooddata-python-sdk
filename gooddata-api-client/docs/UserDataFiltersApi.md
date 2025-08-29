@@ -17,25 +17,24 @@ Retrieve current user data filters assigned to the workspace.
 
 ### Example
 
-
 ```python
 import time
 import gooddata_api_client
 from gooddata_api_client.api import user_data_filters_api
 from gooddata_api_client.model.declarative_user_data_filters import DeclarativeUserDataFilters
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
-    host = "http://localhost"
+    host="http://localhost"
 )
-
 
 # Enter a context with an instance of the API client
 with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = user_data_filters_api.UserDataFiltersApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
+    workspace_id = "workspaceId_example"  # str | 
 
     # example passing only required values which don't have defaults set
     try:
