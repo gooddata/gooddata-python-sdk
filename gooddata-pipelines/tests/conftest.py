@@ -1,5 +1,6 @@
 # (C) 2025 GoodData Corporation
 
+from pathlib import Path
 from unittest.mock import Mock
 
 import boto3
@@ -7,6 +8,8 @@ import pytest
 from moto import mock_aws
 
 from gooddata_pipelines.api import GoodDataApi
+
+TEST_DATA_DIR = str((Path(__file__).parent / "data").absolute())
 
 
 @pytest.fixture(scope="function", autouse=True)

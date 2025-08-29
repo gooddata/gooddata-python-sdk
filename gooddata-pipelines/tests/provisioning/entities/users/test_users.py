@@ -1,18 +1,31 @@
 # (C) 2025 GoodData Corporation
-
+import json
 from dataclasses import dataclass
-from typing import Any, Optional
-from unittest import mock
+from typing import Literal, Optional
 
-from gooddata_api_client.exceptions import (  # type: ignore[import]
-    NotFoundException,
+import pytest
+from gooddata_api_client.exceptions import NotFoundException  # type: ignore
+from gooddata_sdk.catalog.user.entity_model.user import (
+    CatalogUser,
+    CatalogUserAttributes,
+    CatalogUserGroupsData,
+    CatalogUserRelationships,
 )
-from gooddata_sdk.catalog.user.entity_model.user import CatalogUser
-from gooddata_sdk.catalog.user.entity_model.user_group import CatalogUserGroup
+from gooddata_sdk.catalog.user.entity_model.user_group import (
+    CatalogUserGroup,
+)
+from pytest_mock import MockerFixture
 
 from gooddata_pipelines.provisioning.entities.users.models.users import (
+    UserFullLoad,
     UserIncrementalLoad,
 )
+from gooddata_pipelines.provisioning.entities.users.users import (
+    UserProvisioner,
+)
+from tests.conftest import TEST_DATA_DIR
+
+TEST_DATA_SUBDIR = f"{TEST_DATA_DIR}/provisioning/entities/users"
 
 
 @dataclass
@@ -130,74 +143,150 @@ def test_user_obj_to_sdk_no_ugs():
     assert excepted == user.to_sdk_obj()
 
 
-class MockResponse:
-    def __init__(
-        self, status_code, json_response: dict[str, Any] = {}, text: str = ""
-    ):
-        self.status_code = status_code
-        self.json_response = json_response
-        self.text = text
+@pytest.fixture
+def user_provisioner(mocker: MockerFixture) -> UserProvisioner:
+    """Mock instance of UserProvisioner."""
+    provisioner_instance = UserProvisioner.create(
+        host="https://localhost:3000", token="token"
+    )
 
-    def json(self):
-        return self.json_response
+    # Patch the API
+    mocker.patch.object(provisioner_instance, "_api", return_value=None)
 
-
-UPSTREAM_USERS = {
-    "jozef.mrkva": MockUser(
-        "jozef.mrkva", "jozef", "mrkva", "jozef.mrkva@test.com", "auth_id_1", []
-    ),
-    "kristian.kalerab": MockUser(
-        "kristian.kalerab",
-        "kristian",
-        "kalerab",
-        "kristian.kalerab@test.com",
-        "auth_id_5",
-        [],
-    ),
-    "richard.cvikla": MockUser(
-        "richard.cvikla", "richard", "cvikla", None, "auth_id_6", []
-    ),
-    "adam.avokado": MockUser("adam.avokado", None, None, None, "auth_id_7", []),
-}
-
-UPSTREAM_UG_ID = "ug_1"
-EXPECTED_NEW_UG_OBJ = CatalogUserGroup.init("ug_2", "ug_2")
-EXPECTED_GET_IDS = {
-    "jozef.mrkva",
-    "kristian.kalerab",
-    "peter.pertzlen",
-    "zoltan.zeler",
-}
-EXPECTED_CREATE_OR_UPDATE_IDS = {
-    "peter.pertzlen",
-    "zoltan.zeler",
-    "kristian.kalerab",
-}
+    return provisioner_instance
 
 
-def prepare_sdk():
-    def mock_get_user(user_id):
-        if user_id not in UPSTREAM_USERS:
-            raise NotFoundException
-        return UPSTREAM_USERS[user_id].to_sdk()
+def parse_user_data(user_data: list[dict]) -> list[CatalogUser]:
+    """Parse json user metadata to CatalogUser objects."""
+    users: list[CatalogUser] = []
+    for user in user_data:
+        users.append(
+            CatalogUser(
+                id=user["user_id"],
+                attributes=CatalogUserAttributes(
+                    firstname=user["firstname"],
+                    lastname=user["lastname"],
+                    email=user["email"],
+                    authentication_id=user["authentication_id"],
+                ),
+                relationships=CatalogUserRelationships(
+                    user_groups=CatalogUserGroupsData(
+                        data=[
+                            CatalogUserGroup(id=group)
+                            for group in user["user_groups"]
+                        ]
+                    )
+                ),
+            )
+        )
+    return sorted(users, key=lambda x: x.id)
 
-    def mock_get_user_group(ug_id):
-        if ug_id != UPSTREAM_UG_ID:
-            raise NotFoundException
-        return
 
-    sdk = mock.Mock()
-    sdk.catalog_user.get_user.side_effect = mock_get_user
-    sdk.catalog_user.get_user_group.side_effect = mock_get_user_group
-    return sdk
+@pytest.mark.parametrize(
+    ("input_path", "expected_path", "load_method"),
+    [
+        (
+            "users_input_full_load.json",
+            "users_expected_full_load.json",
+            "full_load",
+        ),
+        (
+            "users_input_incremental_load.json",
+            "users_expected_incremental_load.json",
+            "incremental_load",
+        ),
+    ],
+)
+def test_user_provisioning(
+    input_path: str,
+    expected_path: str,
+    load_method: Literal["full_load", "incremental_load"],
+    user_provisioner: UserProvisioner,
+    mocker: MockerFixture,
+):
+    """Test complete user provisioning workflow by checking that the script will
+    attempt to create, update or delete expected users for given input."""
 
+    # Load input data
+    with open(f"{TEST_DATA_SUBDIR}/{input_path}", "r") as f:
+        input_data = json.load(f)
 
-"""
-jozef - No change; user exists
-bartolomej - no change; user doesnt exist
-peter - create (2 ugs); 1 ug exists, 1 doesnt
-zoltan - create (1 ug); ug exists
-kristian - update
-richard - delete (diff fields than in upstream)
-adam - delete (same fields as in upstream)
-"""
+    # Load expected data
+    with open(f"{TEST_DATA_SUBDIR}/{expected_path}", "r") as f:
+        raw_expected_data = json.load(f)
+
+    # Load and patch "existing users"
+    with open(f"{TEST_DATA_SUBDIR}/existing_upstream_users.json", "r") as f:
+        raw_upstream_users = json.load(f)
+
+    upstream_users = parse_user_data(raw_upstream_users)
+
+    mocker.patch.object(
+        user_provisioner._api,
+        "list_users",
+        return_value=upstream_users,
+    )
+
+    upstream_user_cache = {user.id: user for user in upstream_users}
+
+    def patch_get_user(user_id: str):
+        if user_id in upstream_user_cache:
+            return upstream_user_cache[user_id]
+        raise NotFoundException(f"User {user_id} not found")
+
+    mocker.patch.object(
+        user_provisioner._api._sdk.catalog_user,
+        "get_user",
+        side_effect=patch_get_user,
+    )
+
+    # Parse expected data
+    expected_deleted_users = sorted(raw_expected_data["deleted_users"])
+    raw_expected_modified_users = raw_expected_data["modified_users"]
+
+    expected_modified_users = parse_user_data(raw_expected_modified_users)
+
+    # Patch the API methods to store which users were modified or deleted
+    created_or_updated_users: list[CatalogUser] = []
+    deleted_users: list[str] = []
+
+    def patch_create_or_update_user(user: CatalogUser, *args, **kwargs):
+        created_or_updated_users.append(user)
+
+    def patch_delete_user(user_id: str, *args, **kwargs):
+        deleted_users.append(user_id)
+
+    mocker.patch.object(
+        user_provisioner._api,
+        "create_or_update_user",
+        side_effect=patch_create_or_update_user,
+    )
+    mocker.patch.object(
+        user_provisioner._api,
+        "delete_user",
+        side_effect=patch_delete_user,
+    )
+
+    # Run the provisioning
+    if load_method == "incremental_load":
+        incremental_load_data = UserIncrementalLoad.from_list_of_dicts(
+            input_data
+        )
+        user_provisioner.incremental_load(incremental_load_data)
+    else:
+        full_load_data = UserFullLoad.from_list_of_dicts(input_data)
+        user_provisioner.full_load(full_load_data)
+
+    # Compare list lengths
+    assert len(created_or_updated_users) == len(expected_modified_users)
+    assert len(deleted_users) == len(expected_deleted_users)
+
+    # Sort the actual data
+    created_or_updated_users = sorted(
+        created_or_updated_users, key=lambda x: x.id
+    )
+    deleted_users = sorted(deleted_users)
+
+    # Compare the actual data
+    assert deleted_users == expected_deleted_users
+    assert created_or_updated_users == expected_modified_users

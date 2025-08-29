@@ -1,0 +1,36 @@
+{
+  "child_workspace_id_1": [
+    {
+      "name": "ANALYZE",
+      "assignee_id": "user_1",
+      "assignee_type": "user"
+    },
+    {
+      "name": "VIEW",
+      "assignee_id": "user_2",
+      "assignee_type": "user"
+    },
+    {
+      "name": "VIEW",
+      "assignee_id": "user_4",
+      "assignee_type": "user"
+    }
+  ],
+  "child_workspace_id_2": [
+    {
+      "name": "ANALYZE",
+      "assignee_id": "user_1",
+      "assignee_type": "user"
+    },
+    {
+      "name": "MANAGE",
+      "assignee_id": "user_3",
+      "assignee_type": "user"
+    },
+    {
+      "name": "ANALYZE",
+      "assignee_id": "user_4",
+      "assignee_type": "user"
+    }
+  ]
+}
