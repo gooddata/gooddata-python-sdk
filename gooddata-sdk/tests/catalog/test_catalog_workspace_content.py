@@ -162,6 +162,7 @@ def test_load_ldm_and_modify_tables_columns_case(test_config):
     attribute_column = "campaign_channel_id"
     fact_column = "budget"
     reference_column = "campaign_id"
+
     assert ldm_e.ldm.datasets[0].data_source_table_id.id == table_id.upper()
     assert ldm_e.ldm.datasets[0].attributes[0].source_column == attribute_column.upper()
     assert ldm_e.ldm.datasets[0].facts[0].source_column == fact_column.upper()
