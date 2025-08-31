@@ -49,7 +49,7 @@ class CatalogWorkspaceContent:
 
     @property
     def aggregated_facts(self) -> list[CatalogAggregatedFact]:
-        return [f for d in self._datasets for f in d.aggregated_facts]
+        return [f for d in self._datasets for f in (d.aggregated_facts if d.aggregated_facts else [])]
 
     @property
     def attributes(self) -> list[CatalogAttribute]:
