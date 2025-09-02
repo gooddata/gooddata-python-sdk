@@ -238,6 +238,7 @@ class DataFrameFactory:
         created_visualizations_response: dict,
         on_execution_submitted: Optional[Callable[[Execution], None]] = None,
         is_cancellable: bool = False,
+        optimized: bool = False,
     ) -> tuple[pandas.DataFrame, DataFrameMetadata]:
         """
         Creates a data frame using a created visualization.
@@ -247,6 +248,10 @@ class DataFrameFactory:
             on_execution_submitted (Optional[Callable[[Execution], None]]): Callback to call when the execution was
                 submitted to the backend.
             is_cancellable (bool, optional): Whether the execution should be cancelled when the connection is interrupted.
+            optimized (bool, default=False): Use memory optimized accumulator if True; by default, the accumulator stores
+                headers in memory as lists of dicts, which can consume a lot of memory for large results.
+                Optimized accumulator stores only unique values and story only reference to them in the list,
+                which can significantly reduce memory usage.
 
         Returns:
             pandas.DataFrame: A DataFrame instance.
@@ -257,6 +262,7 @@ class DataFrameFactory:
         return self.for_exec_def(
             exec_def=execution_definition,
             on_execution_submitted=on_execution_submitted,
+            optimized=optimized,
         )
 
     def result_cache_metadata_for_exec_result_id(self, result_id: str) -> ResultCacheMetadata:
@@ -279,6 +285,7 @@ class DataFrameFactory:
         result_size_bytes_limit: Optional[int] = None,
         page_size: int = _DEFAULT_PAGE_SIZE,
         on_execution_submitted: Optional[Callable[[Execution], None]] = None,
+        optimized: bool = False,
     ) -> tuple[pandas.DataFrame, DataFrameMetadata]:
         """
         Creates a data frame using an execution definition.
@@ -311,6 +318,10 @@ class DataFrameFactory:
             page_size (int): Number of records per page.
             on_execution_submitted (Optional[Callable[[Execution], None]]): Callback to call when the execution was
                 submitted to the backend.
+            optimized (bool, default=False): Use memory optimized accumulator if True; by default, the accumulator stores
+                headers in memory as lists of dicts, which can consume a lot of memory for large results.
+                Optimized accumulator stores only unique values and story only reference to them in the list,
+                which can significantly reduce memory usage.
 
         Returns:
             Tuple[pandas.DataFrame, DataFrameMetadata]: Tuple holding DataFrame and DataFrame metadata.
@@ -331,6 +342,7 @@ class DataFrameFactory:
             result_size_dimensions_limits=result_size_dimensions_limits,
             result_size_bytes_limit=result_size_bytes_limit,
             page_size=page_size,
+            optimized=optimized,
         )
 
     def for_exec_result_id(
@@ -343,6 +355,7 @@ class DataFrameFactory:
         use_local_ids_in_headers: bool = False,
         use_primary_labels_in_attributes: bool = False,
         page_size: int = _DEFAULT_PAGE_SIZE,
+        optimized: bool = False,
     ) -> tuple[pandas.DataFrame, DataFrameMetadata]:
         """
             Retrieves a DataFrame and DataFrame metadata for a given execution result identifier.
@@ -373,6 +386,10 @@ class DataFrameFactory:
             use_local_ids_in_headers (bool): Use local identifier in headers.
             use_primary_labels_in_attributes (bool): Use primary labels in attributes.
             page_size (int): Number of records per page.
+            optimized (bool, default=False): Use memory optimized accumulator if True; by default, the accumulator stores
+                headers in memory as lists of dicts, which can consume a lot of memory for large results.
+                Optimized accumulator stores only unique values and story only reference to them in the list,
+                which can significantly reduce memory usage.
 
         Returns:
             Tuple[pandas.DataFrame, DataFrameMetadata]: Tuple holding DataFrame and DataFrame metadata.
@@ -398,4 +415,5 @@ class DataFrameFactory:
             use_local_ids_in_headers=use_local_ids_in_headers,
             use_primary_labels_in_attributes=use_primary_labels_in_attributes,
             page_size=page_size,
+            optimized=optimized,
         )
