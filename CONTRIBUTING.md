@@ -66,7 +66,7 @@ One logical change is done in one commit.
 
 ### Documenting new features
 
-To document a new feature, you need to create a new `.md` file in one of the subsections. These subsections reresent the left navigation menu and are in a hierarchical directories.
+To document a new feature, you need to create a new `.md` file in one of the subsections. These subsections represent the left navigation menu and are in a hierarchical directories.
 
 e.g.:
 
