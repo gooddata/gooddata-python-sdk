@@ -2,6 +2,7 @@
 from pathlib import Path
 from typing import Optional
 
+import pytest
 from gooddata_pandas import DataFrameFactory
 from gooddata_sdk import (
     Attribute,
@@ -28,6 +29,7 @@ def _run_and_validate_results(
     expected: tuple[int, int],
     expected_row_totals: Optional[list[list[int]]] = None,
     page_size: int = 100,
+    optimized: bool = False,
 ) -> str:
     # generate dataframe from exec_def
     result, result_metadata = gdf.for_exec_def(exec_def=exec_def, page_size=page_size)
@@ -35,7 +37,7 @@ def _run_and_validate_results(
 
     # use result ID from computation above and generate dataframe just from it
     result_from_result_id, result_metadata_from_result_id = gdf.for_exec_result_id(
-        result_id=result_metadata.execution_response.result_id, page_size=page_size
+        result_id=result_metadata.execution_response.result_id, page_size=page_size, optimized=optimized
     )
 
     if expected_row_totals is not None:
@@ -50,7 +52,8 @@ def _run_and_validate_results(
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_two_dim1.yaml"))
-def test_dataframe_for_exec_def_two_dim1(test_config, gdf: DataFrameFactory):
+@pytest.mark.parametrize("optimized", [True, False])
+def test_dataframe_for_exec_def_two_dim1(test_config, gdf: DataFrameFactory, optimized: bool):
     exec_def = ExecutionDefinition(
         attributes=[
             Attribute(local_id="region", label="region"),
@@ -67,7 +70,7 @@ def test_dataframe_for_exec_def_two_dim1(test_config, gdf: DataFrameFactory):
             TableDimension(item_ids=["product_category", "measureGroup"]),
         ],
     )
-    exec_result_id = _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(48, 8))
+    exec_result_id = _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(48, 8), optimized=optimized)
 
     # check also label overrides
     overrides = {
@@ -78,7 +81,7 @@ def test_dataframe_for_exec_def_two_dim1(test_config, gdf: DataFrameFactory):
             "price": {"title": "PRICE LABEL"},
         },
     }
-    result, _ = gdf.for_exec_result_id(exec_result_id, label_overrides=overrides)
+    result, _ = gdf.for_exec_result_id(exec_result_id, label_overrides=overrides, optimized=optimized)
     assert result.to_string().find(overrides["labels"]["state"]["title"]) == 262
     assert result.to_string().find(overrides["metrics"]["price"]["title"]) == 162
 
@@ -145,7 +148,8 @@ def test_dataframe_for_exec_def_bytes_limits_failure(test_config, gdf: DataFrame
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_two_dim2.yaml"))
-def test_dataframe_for_exec_def_two_dim2(gdf: DataFrameFactory):
+@pytest.mark.parametrize("optimized", [True, False])
+def test_dataframe_for_exec_def_two_dim2(gdf: DataFrameFactory, optimized: bool):
     exec_def = ExecutionDefinition(
         attributes=[
             Attribute(local_id="region", label="region"),
@@ -162,11 +166,12 @@ def test_dataframe_for_exec_def_two_dim2(gdf: DataFrameFactory):
             TableDimension(item_ids=["measureGroup"]),
         ],
     )
-    _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(182, 2))
+    _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(182, 2), optimized=optimized)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_two_dim3.yaml"))
-def test_dataframe_for_exec_def_two_dim3(gdf: DataFrameFactory):
+@pytest.mark.parametrize("optimized", [True, False])
+def test_dataframe_for_exec_def_two_dim3(gdf: DataFrameFactory, optimized: bool):
     exec_def = ExecutionDefinition(
         attributes=[
             Attribute(local_id="region", label="region"),
@@ -183,11 +188,12 @@ def test_dataframe_for_exec_def_two_dim3(gdf: DataFrameFactory):
             TableDimension(item_ids=["region", "state", "measureGroup"]),
         ],
     )
-    _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(4, 96))
+    _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(4, 96), optimized=optimized)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_totals1.yaml"))
-def test_dataframe_for_exec_def_totals1(gdf: DataFrameFactory):
+@pytest.mark.parametrize("optimized", [True, False])
+def test_dataframe_for_exec_def_totals1(gdf: DataFrameFactory, optimized: bool):
     """
     Execution with column totals; the row dimension has single label
     """
@@ -221,11 +227,14 @@ def test_dataframe_for_exec_def_totals1(gdf: DataFrameFactory):
             ),
         ],
     )
-    _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(6, 96), expected_row_totals=[[4, 5]])
+    _run_and_validate_results(
+        gdf=gdf, exec_def=exec_def, expected=(6, 96), expected_row_totals=[[4, 5]], optimized=optimized
+    )
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_totals2.yaml"))
-def test_dataframe_for_exec_def_totals2(gdf: DataFrameFactory):
+@pytest.mark.parametrize("optimized", [True, False])
+def test_dataframe_for_exec_def_totals2(gdf: DataFrameFactory, optimized: bool):
     """
     Execution with column totals; the row dimension have two labels; this exercises that the index is
     padded appropriately
@@ -260,11 +269,14 @@ def test_dataframe_for_exec_def_totals2(gdf: DataFrameFactory):
             ),
         ],
     )
-    _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(19, 96), expected_row_totals=[[17, 18], [17, 18]])
+    _run_and_validate_results(
+        gdf=gdf, exec_def=exec_def, expected=(19, 96), expected_row_totals=[[17, 18], [17, 18]], optimized=optimized
+    )
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_totals3.yaml"))
-def test_dataframe_for_exec_def_totals3(gdf: DataFrameFactory):
+@pytest.mark.parametrize("optimized", [True, False])
+def test_dataframe_for_exec_def_totals3(gdf: DataFrameFactory, optimized: bool):
     """
     Execution with row totals; the column dimension has single label.
     """
@@ -298,11 +310,12 @@ def test_dataframe_for_exec_def_totals3(gdf: DataFrameFactory):
             ),
         ],
     )
-    _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(96, 6))
+    _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(96, 6), optimized=optimized)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_totals4.yaml"))
-def test_dataframe_for_exec_def_totals4(gdf: DataFrameFactory):
+@pytest.mark.parametrize("optimized", [True, False])
+def test_dataframe_for_exec_def_totals4(gdf: DataFrameFactory, optimized: bool):
     """
     Execution with row totals; the column dimension have two label.
     """
@@ -336,7 +349,7 @@ def test_dataframe_for_exec_def_totals4(gdf: DataFrameFactory):
             ),
         ],
     )
-    _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(96, 19))
+    _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(96, 19), optimized=optimized)
 
 
 # TODO - not implemented yet
@@ -377,7 +390,8 @@ def test_dataframe_for_exec_def_totals4(gdf: DataFrameFactory):
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_one_dim1.yaml"))
-def test_dataframe_for_exec_def_one_dim1(gdf: DataFrameFactory):
+@pytest.mark.parametrize("optimized", [True, False])
+def test_dataframe_for_exec_def_one_dim1(gdf: DataFrameFactory, optimized: bool):
     exec_def = ExecutionDefinition(
         attributes=[
             Attribute(local_id="region", label="region"),
@@ -392,11 +406,12 @@ def test_dataframe_for_exec_def_one_dim1(gdf: DataFrameFactory):
         dimensions=[TableDimension(item_ids=["region", "state", "product_category", "measureGroup"])],
     )
     # TODO: remove page_size=500 once UNI-591 is resolved
-    _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(364, 1), page_size=500)
+    _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(364, 1), page_size=500, optimized=optimized)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_one_dim2.yaml"))
-def test_dataframe_for_exec_def_one_dim2(gdf: DataFrameFactory):
+@pytest.mark.parametrize("optimized", [True, False])
+def test_dataframe_for_exec_def_one_dim2(gdf: DataFrameFactory, optimized: bool):
     exec_def = ExecutionDefinition(
         attributes=[
             Attribute(local_id="region", label="region"),
@@ -413,4 +428,4 @@ def test_dataframe_for_exec_def_one_dim2(gdf: DataFrameFactory):
             TableDimension(item_ids=["region", "state", "product_category", "measureGroup"]),
         ],
     )
-    _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(1, 364))
+    _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(1, 364), optimized=optimized)
