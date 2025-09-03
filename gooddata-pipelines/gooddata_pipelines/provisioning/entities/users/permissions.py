@@ -6,10 +6,10 @@ from typing import TypeVar
 
 from gooddata_pipelines.api.exceptions import GoodDataApiException
 from gooddata_pipelines.provisioning.entities.users.models.permissions import (
+    EntityType,
     PermissionDeclaration,
     PermissionFullLoad,
     PermissionIncrementalLoad,
-    PermissionType,
     TargetsPermissionDict,
     WSPermissionsDeclarations,
 )
@@ -28,11 +28,17 @@ class PermissionProvisioner(
     """Provisioning class for user permissions in GoodData workspaces.
 
     This class handles the provisioning of user permissions based on the provided
-    source data.
+    source data. Use the `full_load` or `incremental_load`
+    methods to run the provisioning.
     """
 
     source_group_incremental: list[PermissionIncrementalLoad]
     source_group_full: list[PermissionFullLoad]
+
+    FULL_LOAD_TYPE: type[PermissionFullLoad] = PermissionFullLoad
+    INCREMENTAL_LOAD_TYPE: type[PermissionIncrementalLoad] = (
+        PermissionIncrementalLoad
+    )
 
     def _get_ws_declaration(self, ws_id: str) -> PermissionDeclaration:
         users: TargetsPermissionDict = {}
@@ -47,7 +53,7 @@ class PermissionProvisioner(
             )
             target_dict = (
                 users
-                if permission_type == PermissionType.user.value
+                if permission_type == EntityType.user.value
                 else user_groups
             )
 
@@ -105,11 +111,13 @@ class PermissionProvisioner(
         self, permission: PermissionFullLoad | PermissionIncrementalLoad
     ) -> None:
         """Validates if the permission is correctly defined."""
-        if permission.type_ == PermissionType.user:
-            self._api.get_user(permission.id_, error_message="User not found")
+        if permission.entity_type == EntityType.user:
+            self._api.get_user(
+                permission.entity_id, error_message="User not found"
+            )
         else:
             self._api.get_user_group(
-                permission.id_, error_message="User group not found"
+                permission.entity_id, error_message="User group not found"
             )
 
         self._api.get_workspace(

@@ -1,64 +1,37 @@
 # (C) 2025 GoodData Corporation
 
-from typing import Any
-
-from pydantic import BaseModel
-
-from gooddata_pipelines.provisioning.utils.utils import SplitMixin
+from pydantic import BaseModel, Field, ValidationInfo, field_validator
 
 
-class BaseUserGroup(BaseModel, SplitMixin):
+class UserGroupBase(BaseModel):
     user_group_id: str
     user_group_name: str
-    parent_user_groups: list[str]
+    parent_user_groups: list[str] = Field(default_factory=list)
 
+    @field_validator("user_group_name", mode="before")
     @classmethod
-    def _create_from_dict_data(
-        cls, user_group_data: dict[str, Any], delimiter: str = ","
-    ) -> dict[str, Any]:
-        """Helper method to extract common data from dict."""
-        parent_user_groups = cls.split(
-            user_group_data["parent_user_groups"], delimiter=delimiter
-        )
-        user_group_name = user_group_data["user_group_name"]
-        if not user_group_name:
-            user_group_name = user_group_data["user_group_id"]
+    def validate_user_group_name(
+        cls, v: str | None, info: ValidationInfo
+    ) -> str:
+        """If user_group_name is None or empty, default to user_group_id."""
+        if not v:  # handles None and empty string
+            return info.data.get("user_group_id", "")
+        return v
 
-        return {
-            "user_group_id": user_group_data["user_group_id"],
-            "user_group_name": user_group_name,
-            "parent_user_groups": parent_user_groups,
-        }
+    @field_validator("parent_user_groups", mode="before")
+    @classmethod
+    def validate_parent_user_groups(cls, v: list[str] | None) -> list[str]:
+        """If parent_user_groups is None or empty, default to empty list."""
+        if not v:
+            return []
+        return v
 
 
-class UserGroupIncrementalLoad(BaseUserGroup):
+class UserGroupFullLoad(UserGroupBase):
+    """Input validator for full load of user group provisioning."""
+
+
+class UserGroupIncrementalLoad(UserGroupBase):
+    """Input validator for incremental load of user group provisioning."""
+
     is_active: bool
-
-    @classmethod
-    def from_list_of_dicts(
-        cls, data: list[dict[str, Any]], delimiter: str = ","
-    ) -> list["UserGroupIncrementalLoad"]:
-        """Creates a list of User objects from list of dicts."""
-        user_groups = []
-        for user_group in data:
-            base_data = cls._create_from_dict_data(user_group, delimiter)
-            base_data["is_active"] = user_group["is_active"]
-
-            user_groups.append(UserGroupIncrementalLoad(**base_data))
-
-        return user_groups
-
-
-class UserGroupFullLoad(BaseUserGroup):
-    @classmethod
-    def from_list_of_dicts(
-        cls, data: list[dict[str, Any]], delimiter: str = ","
-    ) -> list["UserGroupFullLoad"]:
-        """Creates a list of User objects from list of dicts."""
-        user_groups = []
-        for user_group in data:
-            base_data = cls._create_from_dict_data(user_group, delimiter)
-
-            user_groups.append(UserGroupFullLoad(**base_data))
-
-        return user_groups

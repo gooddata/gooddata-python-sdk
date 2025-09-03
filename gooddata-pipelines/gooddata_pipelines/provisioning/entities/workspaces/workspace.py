@@ -35,11 +35,19 @@ class WorkspaceProvisioner(
     source_group_full: list[WorkspaceFullLoad]
     source_group_incremental: list[WorkspaceIncrementalLoad]
 
+    FULL_LOAD_TYPE: type[WorkspaceFullLoad] = WorkspaceFullLoad
+    INCREMENTAL_LOAD_TYPE: type[WorkspaceIncrementalLoad] = (
+        WorkspaceIncrementalLoad
+    )
+
+    upstream_group: list[CatalogWorkspace]
+
     def __init__(self, *args: str, **kwargs: str) -> None:
         """Creates an instance of the WorkspaceProvisioner.
 
         Calls the superclass constructor and initializes the validator, parser,
-        and maps for workspace data.
+        and maps for workspace data. Use the `full_load` or `incremental_load`
+        methods to run the provisioning.
         """
         super().__init__(*args, **kwargs)
         self.validator: WorkspaceDataValidator = WorkspaceDataValidator(
@@ -91,10 +99,11 @@ class WorkspaceProvisioner(
         workspace_ids_to_update: set[str],
         child_to_parent_map: dict[str, str],
         workspace_id_to_wdf_map: dict[str, dict[str, list[str]]],
+        source_group: list[WorkspaceFullLoad] | list[WorkspaceIncrementalLoad],
     ) -> None:
         action: Literal["CREATE", "UPDATE"]
 
-        for source_workspace in self.source_group_full:
+        for source_workspace in source_group:
             if source_workspace.workspace_id in workspace_ids_to_update:
                 action = "UPDATE"
             elif source_workspace.workspace_id in workspace_ids_to_create:
@@ -199,8 +208,8 @@ class WorkspaceProvisioner(
         )
 
         # Get upstream children of all parent workspaces.
-        self.upstream_group: list[CatalogWorkspace] = (
-            self._api.get_panther_children_workspaces(self.maps.parent_ids)
+        self.upstream_group = self._api.get_panther_children_workspaces(
+            self.maps.parent_ids
         )
 
         # Set maps that require upstream data.
@@ -234,6 +243,7 @@ class WorkspaceProvisioner(
             self.ids_to_update,
             self.maps.child_to_parent_id_map,
             self.maps.workspace_id_to_wdf_map,
+            self.source_group_full,
         )
 
         # Check WDF settings of ignored workspaces.
@@ -259,5 +269,42 @@ class WorkspaceProvisioner(
 
     def _provision_incremental_load(self) -> None:
         """Incremental workspace provisioning."""
+        # Set the maps based on the source data.
+        self.maps = self.parser.set_maps_based_on_source(
+            self.maps, self.source_group_incremental
+        )
 
-        raise NotImplementedError("Not implemented yet.")
+        # Get upstream children of all parent workspaces.
+        self.upstream_group = self._api.get_panther_children_workspaces(
+            self.maps.parent_ids
+        )
+
+        # Set maps that require upstream data.
+        self.maps = self.parser.set_maps_with_upstream_data(
+            self.maps, self.source_group_incremental, self.upstream_group
+        )
+
+        # Create an instance of WDF manager with the created maps.
+        self.wdf_manager = WorkspaceDataFilterManager(self._api, self.maps)
+
+        # Iterate through the source data and sort workspace ID to groups
+        ids_to_update: set[str] = set()
+        ids_to_delete: set[str] = set()
+
+        for workspace in self.source_group_incremental:
+            if workspace.is_active:
+                ids_to_update.add(workspace.workspace_id)
+            else:
+                ids_to_delete.add(workspace.workspace_id)
+
+        self._create_or_update_panther_workspaces(
+            set(),
+            ids_to_update,
+            self.maps.child_to_parent_id_map,
+            self.maps.workspace_id_to_wdf_map,
+            self.source_group_incremental,
+        )
+
+        self.delete_panther_workspaces(
+            ids_to_delete, self.maps.workspace_id_to_name_map
+        )
