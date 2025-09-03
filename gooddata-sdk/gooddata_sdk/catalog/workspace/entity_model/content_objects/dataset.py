@@ -106,9 +106,7 @@ class CatalogAggregatedFact(AttrCatalogEntity):
     def client_class() -> Any:
         return JsonApiAggregatedFactOut
 
-    def as_computable(self) -> Metric:
-        return SimpleMetric(local_id=self.id, item=self.obj_id)
-
+    # as_computable skipped because aggregated fact cannot be ever used in metric
     # TODO - dataset?
 
 
@@ -131,28 +129,22 @@ class CatalogDataset(AttrCatalogEntity):
         repr=False,
         default=attr.Factory(lambda self: self.generate_attributes_from_api(), takes_self=True),
     )
-
-    def generate_facts_from_api(self) -> list[CatalogFact]:
-        related_fact_ids = [x.get("id") for x in safeget_list(self.json_api_relationships, ["facts", "data"])]
-        return [
-            CatalogFact.from_api(sl)
-            for sl in self.json_api_side_loads
-            if sl["type"] == "fact" and sl["id"] in related_fact_ids
-        ]
-
     facts: list[CatalogFact] = attr.field(
         repr=False,
-        default=attr.Factory(lambda self: self.generate_facts_from_api(), takes_self=True),
+        default=attr.Factory(
+            lambda self: self._relation_entity_from_side_loads(CatalogFact, ["facts", "data"]), takes_self=True
+        ),
     )
-
-    # TODO: Doublecheck if we shouldn't do something like for facts
     aggregated_facts: Optional[list[CatalogAggregatedFact]] = attr.field(
-        default=attr.Factory(lambda self: self.json_api_attributes.get("aggregatedFacts"), takes_self=True),
+        repr=False,
+        default=attr.Factory(
+            lambda self: self._relation_entity_from_side_loads(CatalogAggregatedFact, ["aggregatedFacts", "data"]),
+            takes_self=True,
+        ),
     )
     precedence: Optional[int] = attr.field(
         default=attr.Factory(lambda self: self.json_api_attributes.get("precedence"), takes_self=True)
     )
-
     grain: Optional[list] = attr.field(
         default=attr.Factory(lambda self: self.json_api_attributes.get("grain"), takes_self=True)
     )
