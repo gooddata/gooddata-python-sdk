@@ -347,7 +347,7 @@ class BackupManager:
         stop_event = threading.Event()
 
         with ThreadPoolExecutor(
-            max_workers=BackupSettings.MAX_WORKERS
+            max_workers=self.config.max_workers
         ) as executor:
             # Set the futures tasks.
             futures = []
