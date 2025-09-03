@@ -23,6 +23,8 @@ class Provisioning(Generic[TFullLoadSourceData, TIncrementalSourceData]):
     TProvisioning = TypeVar("TProvisioning", bound="Provisioning")
     source_group_full: list[TFullLoadSourceData]
     source_group_incremental: list[TIncrementalSourceData]
+    FULL_LOAD_TYPE: type[TFullLoadSourceData]
+    INCREMENTAL_LOAD_TYPE: type[TIncrementalSourceData]
 
     def __init__(self, host: str, token: str) -> None:
         self.source_id: set[str] = set()
@@ -80,6 +82,17 @@ class Provisioning(Generic[TFullLoadSourceData, TIncrementalSourceData]):
             ids_to_create=ids_to_create,
         )
 
+    def _validate_source_data_type(
+        self,
+        source_data: list[TFullLoadSourceData] | list[TIncrementalSourceData],
+        model: type[TFullLoadSourceData] | type[TIncrementalSourceData],
+    ) -> None:
+        """Validates data type of the source data."""
+        if not all(isinstance(record, model) for record in source_data):
+            raise TypeError(
+                f"Not all elements in source data are instances of {model.__name__}"
+            )
+
     def _provision_incremental_load(self) -> None:
         raise NotImplementedError(
             "Provisioning method to be implemented in the subclass."
@@ -103,9 +116,10 @@ class Provisioning(Generic[TFullLoadSourceData, TIncrementalSourceData]):
         - All child workspaces not declared under the parent workspace in the
         source data are deleted
         """
-        self.source_group_full = source_data
 
         try:
+            self._validate_source_data_type(source_data, self.FULL_LOAD_TYPE)
+            self.source_group_full = source_data
             self._provision_full_load()
             self.logger.info("Provisioning completed.")
         except Exception as e:
@@ -120,10 +134,11 @@ class Provisioning(Generic[TFullLoadSourceData, TIncrementalSourceData]):
         based on the source data provided. Only changes requested in the source
         data will be applied.
         """
-        # TODO: validate the data type of source group at runtime
-        self.source_group_incremental = source_data
-
         try:
+            self._validate_source_data_type(
+                source_data, self.INCREMENTAL_LOAD_TYPE
+            )
+            self.source_group_incremental = source_data
             self._provision_incremental_load()
             self.logger.info("Provisioning completed.")
         except Exception as e:

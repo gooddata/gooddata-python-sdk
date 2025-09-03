@@ -29,6 +29,11 @@ class UserGroupProvisioner(
     source_group_full: list[UserGroupFullLoad]
     upstream_user_groups: list[CatalogUserGroup]
 
+    FULL_LOAD_TYPE: type[UserGroupFullLoad] = UserGroupFullLoad
+    INCREMENTAL_LOAD_TYPE: type[UserGroupIncrementalLoad] = (
+        UserGroupIncrementalLoad
+    )
+
     @staticmethod
     def _is_changed(
         group: UserGroupModel, existing_group: CatalogUserGroup

@@ -35,6 +35,11 @@ class WorkspaceProvisioner(
     source_group_full: list[WorkspaceFullLoad]
     source_group_incremental: list[WorkspaceIncrementalLoad]
 
+    FULL_LOAD_TYPE: type[WorkspaceFullLoad] = WorkspaceFullLoad
+    INCREMENTAL_LOAD_TYPE: type[WorkspaceIncrementalLoad] = (
+        WorkspaceIncrementalLoad
+    )
+
     def __init__(self, *args: str, **kwargs: str) -> None:
         """Creates an instance of the WorkspaceProvisioner.
 

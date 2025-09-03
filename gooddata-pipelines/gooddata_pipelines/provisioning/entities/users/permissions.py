@@ -35,6 +35,11 @@ class PermissionProvisioner(
     source_group_incremental: list[PermissionIncrementalLoad]
     source_group_full: list[PermissionFullLoad]
 
+    FULL_LOAD_TYPE: type[PermissionFullLoad] = PermissionFullLoad
+    INCREMENTAL_LOAD_TYPE: type[PermissionIncrementalLoad] = (
+        PermissionIncrementalLoad
+    )
+
     def _get_ws_declaration(self, ws_id: str) -> PermissionDeclaration:
         users: TargetsPermissionDict = {}
         user_groups: TargetsPermissionDict = {}

@@ -402,18 +402,6 @@ def mock_upstream_perms(ws_id: str) -> CatalogDeclarativeWorkspacePermissions:
     return UPSTREAM_WS_PERMISSIONS[ws_id]
 
 
-@pytest.fixture
-def permission_provisioner(mocker: MockerFixture) -> PermissionProvisioner:
-    provisioner_instance = PermissionProvisioner.create(
-        host="https://localhost:3000", token="token"
-    )
-
-    # Patch the API
-    mocker.patch.object(provisioner_instance, "_api", return_value=None)
-
-    return provisioner_instance
-
-
 def parse_expected_permissions(
     raw_data: dict,
 ) -> dict[str, list[CatalogDeclarativeSingleWorkspacePermission]]:

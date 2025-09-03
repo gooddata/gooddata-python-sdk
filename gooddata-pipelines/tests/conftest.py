@@ -6,7 +6,15 @@ from unittest.mock import Mock
 import boto3
 import pytest
 from moto import mock_aws
+from pytest_mock import MockerFixture
 
+from gooddata_pipelines import (
+    PermissionProvisioner,
+    UserDataFilterProvisioner,
+    UserGroupProvisioner,
+    UserProvisioner,
+    WorkspaceProvisioner,
+)
 from gooddata_pipelines.api import GoodDataApi
 
 TEST_DATA_DIR = str((Path(__file__).parent / "data").absolute())
@@ -69,3 +77,53 @@ def mock_logger():
             print(msg)
 
     return MockLogger()
+
+
+@pytest.fixture
+def workspace_provisioner(mocker: MockerFixture):
+    provisioner_instance = WorkspaceProvisioner.create("host", "token")
+
+    # Patch the API
+    mocker.patch.object(provisioner_instance, "_api", return_value=None)
+
+    return provisioner_instance
+
+
+@pytest.fixture
+def user_provisioner(mocker: MockerFixture):
+    provisioner_instance = UserProvisioner.create("host", "token")
+
+    # Patch the API
+    mocker.patch.object(provisioner_instance, "_api", return_value=None)
+
+    return UserProvisioner.create("host", "token")
+
+
+@pytest.fixture
+def user_group_provisioner(mocker: MockerFixture):
+    provisioner_instance = UserGroupProvisioner.create("host", "token")
+
+    # Patch the API
+    mocker.patch.object(provisioner_instance, "_api", return_value=None)
+
+    return provisioner_instance
+
+
+@pytest.fixture
+def permission_provisioner(mocker: MockerFixture) -> PermissionProvisioner:
+    provisioner_instance = PermissionProvisioner.create("host", "token")
+
+    # Patch the API
+    mocker.patch.object(provisioner_instance, "_api", return_value=None)
+
+    return provisioner_instance
+
+
+@pytest.fixture
+def user_data_filter_provisioner(mocker: MockerFixture):
+    provisioner_instance = UserDataFilterProvisioner.create("host", "token")
+
+    # Patch the API
+    mocker.patch.object(provisioner_instance, "_api", return_value=None)
+
+    return provisioner_instance
