@@ -9,6 +9,7 @@ from gooddata_sdk.catalog.workspace.entity_model.workspace import (
 from gooddata_pipelines.provisioning.entities.workspaces.models import (
     WorkspaceDataMaps,
     WorkspaceFullLoad,
+    WorkspaceIncrementalLoad,
 )
 
 
@@ -17,7 +18,7 @@ class WorkspaceDataParser:
 
     @staticmethod
     def _get_id_to_name_map(
-        source_group: list[WorkspaceFullLoad],
+        source_group: list[WorkspaceFullLoad] | list[WorkspaceIncrementalLoad],
         upstream_group: list[CatalogWorkspace],
     ) -> dict[str, str]:
         """Creates a map of workspace IDs to their names for all known workspaces."""
@@ -33,7 +34,7 @@ class WorkspaceDataParser:
 
     @staticmethod
     def _get_child_to_parent_map(
-        source_group: list[WorkspaceFullLoad],
+        source_group: list[WorkspaceFullLoad] | list[WorkspaceIncrementalLoad],
     ) -> dict[str, str]:
         """Creates a map of child workspace IDs to their parent workspace IDs."""
         child_to_parent_map: dict[str, str] = {
@@ -45,7 +46,8 @@ class WorkspaceDataParser:
 
     @staticmethod
     def _get_set_of_ids_from_source(
-        source_group: list[WorkspaceFullLoad], column_name: str
+        source_group: list[WorkspaceFullLoad] | list[WorkspaceIncrementalLoad],
+        column_name: str,
     ) -> set[str]:
         """Creates a set of unique parent workspace IDs."""
         set_of_ids: set[str] = {
@@ -64,7 +66,8 @@ class WorkspaceDataParser:
         return set_of_ids
 
     def _get_child_to_wdfs_map(
-        self, source_group: list[WorkspaceFullLoad]
+        self,
+        source_group: list[WorkspaceFullLoad] | list[WorkspaceIncrementalLoad],
     ) -> dict[str, dict[str, list[str]]]:
         """Creates a map of child workspace IDs to their WDF IDs."""
         # TODO: Use objects or a more transparent data structure instead of this.
@@ -88,7 +91,7 @@ class WorkspaceDataParser:
     def set_maps_based_on_source(
         self,
         map_object: WorkspaceDataMaps,
-        source_group: list[WorkspaceFullLoad],
+        source_group: list[WorkspaceFullLoad] | list[WorkspaceIncrementalLoad],
     ) -> WorkspaceDataMaps:
         """Creates maps which are dependent on the source group only."""
         map_object.child_to_parent_id_map = self._get_child_to_parent_map(
@@ -109,7 +112,7 @@ class WorkspaceDataParser:
     def set_maps_with_upstream_data(
         self,
         map_object: WorkspaceDataMaps,
-        source_group: list[WorkspaceFullLoad],
+        source_group: list[WorkspaceFullLoad] | list[WorkspaceIncrementalLoad],
         upstream_group: list[CatalogWorkspace],
     ) -> WorkspaceDataMaps:
         """Creates maps which are dependent on both the source group and upstream group."""

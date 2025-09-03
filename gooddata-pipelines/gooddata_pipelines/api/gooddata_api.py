@@ -7,9 +7,6 @@ from typing import Any
 
 import requests
 
-# TODO: Limit the use of "typing.Any". Improve readability by using either models
-#  or typed dicts.
-
 TIMEOUT = 60
 REQUEST_PAGE_SIZE = 250
 API_VERSION = "v1"

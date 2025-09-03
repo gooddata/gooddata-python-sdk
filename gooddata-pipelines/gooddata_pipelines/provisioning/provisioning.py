@@ -23,6 +23,7 @@ class Provisioning(Generic[TFullLoadSourceData, TIncrementalSourceData]):
     TProvisioning = TypeVar("TProvisioning", bound="Provisioning")
     source_group_full: list[TFullLoadSourceData]
     source_group_incremental: list[TIncrementalSourceData]
+
     FULL_LOAD_TYPE: type[TFullLoadSourceData]
     INCREMENTAL_LOAD_TYPE: type[TIncrementalSourceData]
 

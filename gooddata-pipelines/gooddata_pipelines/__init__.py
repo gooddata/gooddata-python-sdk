@@ -34,7 +34,10 @@ from .provisioning.entities.users.models.users import (
 from .provisioning.entities.users.permissions import PermissionProvisioner
 from .provisioning.entities.users.user_groups import UserGroupProvisioner
 from .provisioning.entities.users.users import UserProvisioner
-from .provisioning.entities.workspaces.models import WorkspaceFullLoad
+from .provisioning.entities.workspaces.models import (
+    WorkspaceFullLoad,
+    WorkspaceIncrementalLoad,
+)
 from .provisioning.entities.workspaces.workspace import WorkspaceProvisioner
 
 __all__ = [
@@ -53,6 +56,7 @@ __all__ = [
     "UserGroupFullLoad",
     "UserProvisioner",
     "UserGroupProvisioner",
+    "WorkspaceIncrementalLoad",
     "PermissionProvisioner",
     "UserDataFilterProvisioner",
     "UserDataFilterFullLoad",

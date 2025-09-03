@@ -7,13 +7,8 @@ from gooddata_pipelines.provisioning.entities.users.models.user_groups import (
     UserGroupIncrementalLoad,
 )
 
-# TODO: Test business logic
-
 
 def test_missing_key_no_parent_groups() -> None:
-    # NOTE: Type ignore because of the missing parent_user_groups key. In Python
-    # 3.11, we can use NotRequired to make the key optional.
-
     result = UserGroupIncrementalLoad(
         user_group_id="ug_2", user_group_name="Developers", is_active=True
     )
