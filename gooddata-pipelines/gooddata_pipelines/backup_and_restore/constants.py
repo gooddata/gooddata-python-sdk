@@ -1,3 +1,4 @@
+# (C) 2025 GoodData Corporation
 import datetime
 from dataclasses import dataclass
 
@@ -22,7 +23,7 @@ class DirNames:
 
 @dataclass(frozen=True)
 class ConcurrencyDefaults:
-    MAX_WORKERS = 2
+    MAX_WORKERS = 1
     DEFAULT_BATCH_SIZE = 100
 
 
