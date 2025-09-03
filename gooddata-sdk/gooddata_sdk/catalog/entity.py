@@ -11,7 +11,7 @@ import attr
 
 from gooddata_sdk.catalog.base import Base, JsonApiEntityBase
 from gooddata_sdk.compute.model.base import ObjId
-from gooddata_sdk.utils import AllPagedEntities
+from gooddata_sdk.utils import AllPagedEntities, safeget_list
 
 T = TypeVar("T", bound="AttrCatalogEntity")
 
@@ -83,6 +83,10 @@ class AttrCatalogEntity:
     @staticmethod
     def client_class() -> Any:
         return NotImplemented
+
+    def _relation_entity_from_side_loads(self, entity: builtins.type[T], path: list[str]) -> list[T]:
+        related_fact_ids = [(x.get("id"), x.get("type")) for x in safeget_list(self.json_api_relationships, path)]
+        return [entity.from_api(sl) for sl in self.json_api_side_loads if (sl["id"], sl["type"]) in related_fact_ids]
 
 
 class CatalogEntity:

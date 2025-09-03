@@ -79,7 +79,7 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         get_datasets = functools.partial(
             self._entities_api.get_all_entities_datasets,
             workspace_id,
-            include=["attributes", "facts"],
+            include=["attributes", "facts", "aggregatedFacts"],
             _check_return_type=False,
         )
 

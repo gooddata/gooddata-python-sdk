@@ -35,7 +35,7 @@ def rest_op(op, url_path, data=None, raise_ex=True):
 
     if response.status_code < 200 or response.status_code > 299:
         if raise_ex:
-            raise Exception(f"Call to {url} failed - {str(response)}")
+            raise Exception(f"Call to {url} failed - {str(response.text)}")
         else:
             return None
 
