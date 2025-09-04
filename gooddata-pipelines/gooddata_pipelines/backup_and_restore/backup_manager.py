@@ -376,7 +376,9 @@ class BackupManager:
                     raise
 
     def backup_workspaces(
-        self, path_to_csv: str | None, workspace_ids: list[str] | None
+        self,
+        path_to_csv: str | None = None,
+        workspace_ids: list[str] | None = None,
     ) -> None:
         """Runs the backup process for a list of workspace IDs.
 
@@ -391,7 +393,9 @@ class BackupManager:
         self._backup(InputType.LIST_OF_WORKSPACES, path_to_csv, workspace_ids)
 
     def backup_hierarchies(
-        self, path_to_csv: str | None, workspace_ids: list[str] | None
+        self,
+        path_to_csv: str | None = None,
+        workspace_ids: list[str] | None = None,
     ) -> None:
         """Runs the backup process for a list of hierarchies.
 
