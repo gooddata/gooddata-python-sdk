@@ -28,6 +28,7 @@ def _run_and_validate_results(
     exec_def: ExecutionDefinition,
     expected: tuple[int, int],
     expected_row_totals: Optional[list[list[int]]] = None,
+    expected_column_totals: Optional[list[list[int]]] = None,
     page_size: int = 100,
     optimized: bool = False,
 ) -> str:
@@ -42,6 +43,8 @@ def _run_and_validate_results(
 
     if expected_row_totals is not None:
         assert result_metadata_from_result_id.row_totals_indexes == expected_row_totals
+    if expected_column_totals is not None:
+        assert result_metadata_from_result_id.column_totals_indexes == expected_column_totals
 
     assert result_from_result_id.values.shape == expected
 
@@ -349,7 +352,9 @@ def test_dataframe_for_exec_def_totals4(gdf: DataFrameFactory, optimized: bool):
             ),
         ],
     )
-    _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(96, 19), optimized=optimized)
+    _run_and_validate_results(
+        gdf=gdf, exec_def=exec_def, expected=(96, 19), optimized=optimized, expected_column_totals=[[17, 18], [17, 18]]
+    )
 
 
 # TODO - not implemented yet
