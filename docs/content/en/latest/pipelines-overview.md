@@ -29,7 +29,7 @@ Here are a couple of introductory examples how to manage GoodData resources usin
 
 ### Provision Child Workspaces
 ```python
-from gooddata_pipelines import WorkspaceProvisioner, WorkspaceFullLoad
+from gooddata_pipelines import WorkspaceFullLoad, WorkspaceProvisioner
 
 # GoodData.CN host in the form of uri eg. "http://localhost:3000"
 host = "http://localhost:3000"
@@ -42,21 +42,21 @@ provisioner = WorkspaceProvisioner.create(host=host, token=token)
 
 # Gather the definitions of the workspaces you want to create
 raw_data: list[dict] = [
-        {
-            "parent_id": "parent_workspace_id",
-            "workspace_id": "child_workspace_0",
-            "workspace_name": "Child Workspace 0",
-            "workspace_data_filter_id": "data_filter_id",
-            "workspace_data_filter_values": ["value_0"],
-        },
-        ...
-    ]
+    {
+        "parent_id": "parent_workspace_id",
+        "workspace_id": "child_workspace_0",
+        "workspace_name": "Child Workspace 0",
+        "workspace_data_filter_id": "data_filter_id",
+        "workspace_data_filter_values": ["value_0"],
+    },
+]
 
 # Validate the data
 validated_data = [WorkspaceFullLoad(**item) for item in raw_data]
 
 # Run the provisioning
 provisioner.full_load(validated_data)
+
 ```
 
 ### Workspace Backup

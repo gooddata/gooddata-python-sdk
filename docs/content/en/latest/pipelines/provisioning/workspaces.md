@@ -17,10 +17,12 @@ Start by importing and initializing the WorkspaceProvisioner.
 
 from gooddata_pipelines import WorkspaceProvisioner
 
-host="http://localhost:3000", token="some_user_token"
+host="http://localhost:3000"
+token="some_user_token"
 
 # Initialize the provisioner with GoodData credentials
 provisioner = WorkspaceProvisioner.create(host=host, token=token)
+
 ```
 
 
@@ -45,13 +47,16 @@ class WorkspaceIncrementalLoad
 
 ```
 
-Use one of the models to validate your data:
+> **Note on IDs**: Each ID can only contain allowed characters. See [Workspace Object Identification](https://www.gooddata.com/docs/cloud/create-workspaces/objects-identification/) to learn more about object identifiers.
+
+Use the appropriate model to validate your data:
 
 ```python
 # Add the model to the imports
-from gooddata_pipelines import WorkspaceProvisioner, WorkspaceFullLoad
+from gooddata_pipelines import WorkspaceFullLoad, WorkspaceProvisioner
 
-host="http://localhost:3000", token="some_user_token"
+host = "http://localhost:3000"
+token = "some_user_token"
 
 # Initialize the provisioner with GoodData credentials
 provisioner = WorkspaceProvisioner.create(host=host, token=token)
@@ -68,13 +73,17 @@ raw_data = [
 ]
 
 # Validate the data
-validated_data = [WorkspaceFullLoad(
-    parent_id=item["parent_id"],
-    workspace_id=item["workspace_id"],
-    workspace_name=item["workspace_name"],
-    workspace_data_filter_id=item["workspace_data_filter_id"],
-    workspace_data_filter_values=item["workspace_data_filter_values"],
-) for item in raw_data]
+validated_data = [
+    WorkspaceFullLoad(
+        parent_id=item["parent_id"],
+        workspace_id=item["workspace_id"],
+        workspace_name=item["workspace_name"],
+        workspace_data_filter_id=item["workspace_data_filter_id"],
+        workspace_data_filter_values=item["workspace_data_filter_values"],
+    )
+    for item in raw_data
+]
+
 
 ```
 
@@ -105,9 +114,10 @@ Here are full examples of a full load and incremental load workspace provisionin
 ```python
 import logging
 
-from gooddata_pipelines import WorkspaceProvisioner, WorkspaceFullLoad
+from gooddata_pipelines import WorkspaceFullLoad, WorkspaceProvisioner
 
-host="http://localhost:3000", token="some_user_token"
+host = "http://localhost:3000"
+token = "some_user_token"
 
 # Initialize the provisioner
 provisioner = WorkspaceProvisioner.create(host=host, token=token)
@@ -144,13 +154,16 @@ raw_data: list[dict] = [
 ]
 
 # Validate the data
-validated_data = [WorkspaceFullLoad(
-    parent_id=item["parent_id"],
-    workspace_id=item["workspace_id"],
-    workspace_name=item["workspace_name"],
-    workspace_data_filter_id=item["workspace_data_filter_id"],
-    workspace_data_filter_values=item["workspace_data_filter_values"],
-) for item in raw_data]
+validated_data = [
+    WorkspaceFullLoad(
+        parent_id=item["parent_id"],
+        workspace_id=item["workspace_id"],
+        workspace_name=item["workspace_name"],
+        workspace_data_filter_id=item["workspace_data_filter_id"],
+        workspace_data_filter_values=item["workspace_data_filter_values"],
+    )
+    for item in raw_data
+]
 
 # Run the provisioning with the validated data
 provisioner.full_load(validated_data)
@@ -162,9 +175,10 @@ provisioner.full_load(validated_data)
 ```python
 import logging
 
-from gooddata_pipelines import WorkspaceProvisioner, WorkspaceIncrementalLoad
+from gooddata_pipelines import WorkspaceIncrementalLoad, WorkspaceProvisioner
 
-host="http://localhost:3000", token="some_user_token"
+host = "http://localhost:3000"
+token = "some_user_token"
 
 # Initialize the provisioner
 provisioner = WorkspaceProvisioner.create(host=host, token=token)
@@ -199,19 +213,22 @@ raw_data: list[dict] = [
         "workspace_name": "Workspace 3",
         "workspace_data_filter_id": "data_filter_id",
         "workspace_data_filter_values": ["workspace_data_filter_value_3"],
-        "is_active": False # This will mark the workspace for deletion
+        "is_active": False,  # This will mark the workspace for deletion
     },
 ]
 
 # Validate the data
-validated_data = [WorkspaceIncrementalLoad(
-    parent_id=item["parent_id"],
-    workspace_id=item["workspace_id"],
-    workspace_name=item["workspace_name"],
-    workspace_data_filter_id=item["workspace_data_filter_id"],
-    workspace_data_filter_values=item["workspace_data_filter_values"],
-    is_active=item["is_active]
-) for item in raw_data]
+validated_data = [
+    WorkspaceIncrementalLoad(
+        parent_id=item["parent_id"],
+        workspace_id=item["workspace_id"],
+        workspace_name=item["workspace_name"],
+        workspace_data_filter_id=item["workspace_data_filter_id"],
+        workspace_data_filter_values=item["workspace_data_filter_values"],
+        is_active=item["is_active"],
+    )
+    for item in raw_data
+]
 
 # Run the provisioning with the validated data
 provisioner.incremental_load(validated_data)
