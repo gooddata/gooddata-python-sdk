@@ -1,7 +1,7 @@
 ---
 title: "API Reference"
 linkTitle: "API Reference"
-weight: 70
+weight: 60
 navigationLabel: true
 ---
 
