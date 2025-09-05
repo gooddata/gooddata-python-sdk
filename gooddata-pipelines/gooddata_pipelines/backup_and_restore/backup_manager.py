@@ -4,10 +4,8 @@ import json
 import os
 import shutil
 import tempfile
-import threading
 import time
 import traceback
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Type
@@ -291,7 +289,6 @@ class BackupManager:
     def _process_batch(
         self,
         batch: BackupBatch,
-        stop_event: threading.Event,
         retry_count: int = 0,
     ) -> None:
         """Processes a single batch of workspaces for backup.
@@ -299,10 +296,6 @@ class BackupManager:
         and retry with exponential backoff up to BackupSettings.MAX_RETRIES.
         The base wait time is defined by BackupSettings.RETRY_DELAY.
         """
-        if stop_event.is_set():
-            # If the stop_event flag is set, return. This will terminate the thread
-            return
-
         try:
             with tempfile.TemporaryDirectory() as tmpdir:
                 self._get_workspace_export(tmpdir, batch.list_of_ids)
@@ -314,10 +307,7 @@ class BackupManager:
                 self.storage.export(tmpdir, self.org_id)
 
         except Exception as e:
-            if stop_event.is_set():
-                return
-
-            elif retry_count < BackupSettings.MAX_RETRIES:
+            if retry_count < BackupSettings.MAX_RETRIES:
                 # Retry with exponential backoff until MAX_RETRIES
                 next_retry = retry_count + 1
                 wait_time = BackupSettings.RETRY_DELAY**next_retry
@@ -328,52 +318,23 @@ class BackupManager:
                 )
 
                 time.sleep(wait_time)
-                self._process_batch(batch, stop_event, next_retry)
+                self._process_batch(batch, next_retry)
             else:
                 # If the batch fails after MAX_RETRIES, raise the error
                 self.logger.error(f"Batch failed: {e.__class__.__name__}: {e}")
                 raise
 
-    def _process_batches_in_parallel(
+    def _process_batches(
         self,
         batches: list[BackupBatch],
     ) -> None:
         """
-        Processes batches in parallel using concurrent.futures. Will stop the processing
-        if any one of the batches fails.
+        Processes batches sequentially to avoid overloading the API.
+        If any batch fails, the processing will stop.
         """
-
-        # Create a threading flag to control the threads that have already been started
-        stop_event = threading.Event()
-
-        with ThreadPoolExecutor(
-            max_workers=self.config.max_workers
-        ) as executor:
-            # Set the futures tasks.
-            futures = []
-            for batch in batches:
-                futures.append(
-                    executor.submit(
-                        self._process_batch,
-                        batch,
-                        stop_event,
-                    )
-                )
-
-            # Process futures as they complete
-            for future in as_completed(futures):
-                try:
-                    future.result()
-                except Exception:
-                    # On failure, set the flag to True - signal running processes to stop
-                    stop_event.set()
-
-                    # Cancel unstarted threads
-                    for f in futures:
-                        if not f.done():
-                            f.cancel()
-
-                    raise
+        for i, batch in enumerate(batches, 1):
+            self.logger.info(f"Processing batch {i}/{len(batches)}...")
+            self._process_batch(batch)
 
     def backup_workspaces(
         self,
@@ -440,7 +401,7 @@ class BackupManager:
                 f"Exporting {len(workspaces_to_export)} workspaces in {len(batches)} batches."
             )
 
-            self._process_batches_in_parallel(batches)
+            self._process_batches(batches)
 
             self.logger.info("Backup completed")
         except Exception as e:
