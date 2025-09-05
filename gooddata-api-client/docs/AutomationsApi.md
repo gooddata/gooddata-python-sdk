@@ -6,15 +6,23 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**create_entity_automations**](AutomationsApi.md#create_entity_automations) | **POST** /api/v1/entities/workspaces/{workspaceId}/automations | Post Automations
 [**delete_entity_automations**](AutomationsApi.md#delete_entity_automations) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/automations/{objectId} | Delete an Automation
+[**delete_organization_automations**](AutomationsApi.md#delete_organization_automations) | **POST** /api/v1/actions/organization/automations/delete | Delete selected automations across all workspaces
+[**delete_workspace_automations**](AutomationsApi.md#delete_workspace_automations) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/delete | Delete selected automations in the workspace
+[**get_all_automations_workspace_automations**](AutomationsApi.md#get_all_automations_workspace_automations) | **GET** /api/v1/entities/organization/workspaceAutomations | Get all Automations across all Workspaces
 [**get_all_entities_automations**](AutomationsApi.md#get_all_entities_automations) | **GET** /api/v1/entities/workspaces/{workspaceId}/automations | Get all Automations
 [**get_automations**](AutomationsApi.md#get_automations) | **GET** /api/v1/layout/workspaces/{workspaceId}/automations | Get automations
 [**get_entity_automations**](AutomationsApi.md#get_entity_automations) | **GET** /api/v1/entities/workspaces/{workspaceId}/automations/{objectId} | Get an Automation
 [**patch_entity_automations**](AutomationsApi.md#patch_entity_automations) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/automations/{objectId} | Patch an Automation
+[**pause_organization_automations**](AutomationsApi.md#pause_organization_automations) | **POST** /api/v1/actions/organization/automations/pause | Pause selected automations across all workspaces
+[**pause_workspace_automations**](AutomationsApi.md#pause_workspace_automations) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/pause | Pause selected automations in the workspace
 [**set_automations**](AutomationsApi.md#set_automations) | **PUT** /api/v1/layout/workspaces/{workspaceId}/automations | Set automations
 [**trigger_automation**](AutomationsApi.md#trigger_automation) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/trigger | Trigger automation.
 [**trigger_existing_automation**](AutomationsApi.md#trigger_existing_automation) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/{automationId}/trigger | Trigger existing automation.
+[**unpause_organization_automations**](AutomationsApi.md#unpause_organization_automations) | **POST** /api/v1/actions/organization/automations/unpause | Unpause selected automations across all workspaces
+[**unpause_workspace_automations**](AutomationsApi.md#unpause_workspace_automations) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/unpause | Unpause selected automations in the workspace
 [**unsubscribe_all_automations**](AutomationsApi.md#unsubscribe_all_automations) | **DELETE** /api/v1/actions/organization/automations/unsubscribe | Unsubscribe from all automations in all workspaces
 [**unsubscribe_automation**](AutomationsApi.md#unsubscribe_automation) | **DELETE** /api/v1/actions/workspaces/{workspaceId}/automations/{automationId}/unsubscribe | Unsubscribe from an automation
+[**unsubscribe_selected_workspace_automations**](AutomationsApi.md#unsubscribe_selected_workspace_automations) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/unsubscribe | Unsubscribe from selected automations in the workspace
 [**unsubscribe_workspace_automations**](AutomationsApi.md#unsubscribe_workspace_automations) | **DELETE** /api/v1/actions/workspaces/{workspaceId}/automations/unsubscribe | Unsubscribe from all automations in the workspace
 [**update_entity_automations**](AutomationsApi.md#update_entity_automations) | **PUT** /api/v1/entities/workspaces/{workspaceId}/automations/{objectId} | Put an Automation
 
@@ -233,6 +241,8 @@ with gooddata_api_client.ApiClient() as api_client:
                             settings=Settings(
                                 export_info=True,
                                 merge_headers=True,
+                                page_orientation="PORTRAIT",
+                                page_size="A4",
                                 pdf_page_size="a4 landscape",
                                 pdf_table_style=[
                                     PdfTableStyle(
@@ -248,6 +258,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                 pdf_top_left_content="Good",
                                 pdf_top_right_content="Morning",
                                 show_filters=False,
+                                show_info_page=False,
                             ),
                             visualization_object="f7c359bc-c230-4487-b15b-ad9685bcb537",
                             visualization_object_custom_filters=[
@@ -299,7 +310,7 @@ with gooddata_api_client.ApiClient() as api_client:
         ),
     ) # JsonApiAutomationInDocument | 
     include = [
-        "include=notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResult",
+        "include=notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResults",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
     meta_include = [
         "metaInclude=origin,all",
@@ -430,6 +441,231 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **delete_organization_automations**
+> delete_organization_automations(organization_automation_management_bulk_request)
+
+Delete selected automations across all workspaces
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import automations_api
+from gooddata_api_client.model.organization_automation_management_bulk_request import OrganizationAutomationManagementBulkRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = automations_api.AutomationsApi(api_client)
+    organization_automation_management_bulk_request = OrganizationAutomationManagementBulkRequest(
+        automations=[
+            OrganizationAutomationIdentifier(
+                id="id_example",
+                workspace_id="workspace_id_example",
+            ),
+        ],
+    ) # OrganizationAutomationManagementBulkRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Delete selected automations across all workspaces
+        api_instance.delete_organization_automations(organization_automation_management_bulk_request)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling AutomationsApi->delete_organization_automations: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **organization_automation_management_bulk_request** | [**OrganizationAutomationManagementBulkRequest**](OrganizationAutomationManagementBulkRequest.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **delete_workspace_automations**
+> delete_workspace_automations(workspace_id, workspace_automation_management_bulk_request)
+
+Delete selected automations in the workspace
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import automations_api
+from gooddata_api_client.model.workspace_automation_management_bulk_request import WorkspaceAutomationManagementBulkRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = automations_api.AutomationsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    workspace_automation_management_bulk_request = WorkspaceAutomationManagementBulkRequest(
+        automations=[
+            WorkspaceAutomationIdentifier(
+                id="id_example",
+            ),
+        ],
+    ) # WorkspaceAutomationManagementBulkRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Delete selected automations in the workspace
+        api_instance.delete_workspace_automations(workspace_id, workspace_automation_management_bulk_request)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling AutomationsApi->delete_workspace_automations: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **workspace_automation_management_bulk_request** | [**WorkspaceAutomationManagementBulkRequest**](WorkspaceAutomationManagementBulkRequest.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_all_automations_workspace_automations**
+> JsonApiWorkspaceAutomationOutList get_all_automations_workspace_automations()
+
+Get all Automations across all Workspaces
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import automations_api
+from gooddata_api_client.model.json_api_workspace_automation_out_list import JsonApiWorkspaceAutomationOutList
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = automations_api.AutomationsApi(api_client)
+    filter = "filter=workspaceId==someString;title==someString;notificationChannel.id==321;analyticalDashboard.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = [
+        "include=notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResults",
+    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
+    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
+    sort = [
+        "sort_example",
+    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = [
+        "metaInclude=page,all",
+    ] # [str] | Include Meta objects. (optional)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Get all Automations across all Workspaces
+        api_response = api_instance.get_all_automations_workspace_automations(filter=filter, include=include, page=page, size=size, sort=sort, meta_include=meta_include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling AutomationsApi->get_all_automations_workspace_automations: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+ **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
+ **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
+ **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
+
+### Return type
+
+[**JsonApiWorkspaceAutomationOutList**](JsonApiWorkspaceAutomationOutList.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **get_all_entities_automations**
 > JsonApiAutomationOutList get_all_entities_automations(workspace_id)
 
@@ -459,7 +695,7 @@ with gooddata_api_client.ApiClient() as api_client:
     origin = "ALL" # str |  (optional) if omitted the server will use the default value of "ALL"
     filter = "filter=title==someString;description==someString;notificationChannel.id==321;analyticalDashboard.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     include = [
-        "include=notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResult",
+        "include=notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResults",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
     page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
     size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
@@ -635,7 +871,7 @@ with gooddata_api_client.ApiClient() as api_client:
     object_id = "objectId_example" # str | 
     filter = "filter=title==someString;description==someString;notificationChannel.id==321;analyticalDashboard.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     include = [
-        "include=notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResult",
+        "include=notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResults",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
     meta_include = [
@@ -909,6 +1145,8 @@ with gooddata_api_client.ApiClient() as api_client:
                             settings=Settings(
                                 export_info=True,
                                 merge_headers=True,
+                                page_orientation="PORTRAIT",
+                                page_size="A4",
                                 pdf_page_size="a4 landscape",
                                 pdf_table_style=[
                                     PdfTableStyle(
@@ -924,6 +1162,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                 pdf_top_left_content="Good",
                                 pdf_top_right_content="Morning",
                                 show_filters=False,
+                                show_info_page=False,
                             ),
                             visualization_object="f7c359bc-c230-4487-b15b-ad9685bcb537",
                             visualization_object_custom_filters=[
@@ -976,7 +1215,7 @@ with gooddata_api_client.ApiClient() as api_client:
     ) # JsonApiAutomationPatchDocument | 
     filter = "filter=title==someString;description==someString;notificationChannel.id==321;analyticalDashboard.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     include = [
-        "include=notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResult",
+        "include=notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResults",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
 
     # example passing only required values which don't have defaults set
@@ -1027,6 +1266,149 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **pause_organization_automations**
+> pause_organization_automations(organization_automation_management_bulk_request)
+
+Pause selected automations across all workspaces
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import automations_api
+from gooddata_api_client.model.organization_automation_management_bulk_request import OrganizationAutomationManagementBulkRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = automations_api.AutomationsApi(api_client)
+    organization_automation_management_bulk_request = OrganizationAutomationManagementBulkRequest(
+        automations=[
+            OrganizationAutomationIdentifier(
+                id="id_example",
+                workspace_id="workspace_id_example",
+            ),
+        ],
+    ) # OrganizationAutomationManagementBulkRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Pause selected automations across all workspaces
+        api_instance.pause_organization_automations(organization_automation_management_bulk_request)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling AutomationsApi->pause_organization_automations: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **organization_automation_management_bulk_request** | [**OrganizationAutomationManagementBulkRequest**](OrganizationAutomationManagementBulkRequest.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **pause_workspace_automations**
+> pause_workspace_automations(workspace_id, workspace_automation_management_bulk_request)
+
+Pause selected automations in the workspace
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import automations_api
+from gooddata_api_client.model.workspace_automation_management_bulk_request import WorkspaceAutomationManagementBulkRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = automations_api.AutomationsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    workspace_automation_management_bulk_request = WorkspaceAutomationManagementBulkRequest(
+        automations=[
+            WorkspaceAutomationIdentifier(
+                id="id_example",
+            ),
+        ],
+    ) # WorkspaceAutomationManagementBulkRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Pause selected automations in the workspace
+        api_instance.pause_workspace_automations(workspace_id, workspace_automation_management_bulk_request)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling AutomationsApi->pause_workspace_automations: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **workspace_automation_management_bulk_request** | [**WorkspaceAutomationManagementBulkRequest**](WorkspaceAutomationManagementBulkRequest.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -1276,6 +1658,8 @@ with gooddata_api_client.ApiClient() as api_client:
                         settings=Settings(
                             export_info=True,
                             merge_headers=True,
+                            page_orientation="PORTRAIT",
+                            page_size="A4",
                             pdf_page_size="a4 landscape",
                             pdf_table_style=[
                                 PdfTableStyle(
@@ -1291,6 +1675,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             pdf_top_left_content="Good",
                             pdf_top_right_content="Morning",
                             show_filters=False,
+                            show_info_page=False,
                         ),
                         visualization_object="f7c359bc-c230-4487-b15b-ad9685bcb537",
                         visualization_object_custom_filters=[
@@ -1576,6 +1961,8 @@ with gooddata_api_client.ApiClient() as api_client:
                         settings=Settings(
                             export_info=True,
                             merge_headers=True,
+                            page_orientation="PORTRAIT",
+                            page_size="A4",
                             pdf_page_size="a4 landscape",
                             pdf_table_style=[
                                 PdfTableStyle(
@@ -1591,6 +1978,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             pdf_top_left_content="Good",
                             pdf_top_right_content="Morning",
                             show_filters=False,
+                            show_info_page=False,
                         ),
                         visualization_object="f7c359bc-c230-4487-b15b-ad9685bcb537",
                         visualization_object_custom_filters=[
@@ -1718,6 +2106,149 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **unpause_organization_automations**
+> unpause_organization_automations(organization_automation_management_bulk_request)
+
+Unpause selected automations across all workspaces
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import automations_api
+from gooddata_api_client.model.organization_automation_management_bulk_request import OrganizationAutomationManagementBulkRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = automations_api.AutomationsApi(api_client)
+    organization_automation_management_bulk_request = OrganizationAutomationManagementBulkRequest(
+        automations=[
+            OrganizationAutomationIdentifier(
+                id="id_example",
+                workspace_id="workspace_id_example",
+            ),
+        ],
+    ) # OrganizationAutomationManagementBulkRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Unpause selected automations across all workspaces
+        api_instance.unpause_organization_automations(organization_automation_management_bulk_request)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling AutomationsApi->unpause_organization_automations: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **organization_automation_management_bulk_request** | [**OrganizationAutomationManagementBulkRequest**](OrganizationAutomationManagementBulkRequest.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **unpause_workspace_automations**
+> unpause_workspace_automations(workspace_id, workspace_automation_management_bulk_request)
+
+Unpause selected automations in the workspace
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import automations_api
+from gooddata_api_client.model.workspace_automation_management_bulk_request import WorkspaceAutomationManagementBulkRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = automations_api.AutomationsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    workspace_automation_management_bulk_request = WorkspaceAutomationManagementBulkRequest(
+        automations=[
+            WorkspaceAutomationIdentifier(
+                id="id_example",
+            ),
+        ],
+    ) # WorkspaceAutomationManagementBulkRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Unpause selected automations in the workspace
+        api_instance.unpause_workspace_automations(workspace_id, workspace_automation_management_bulk_request)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling AutomationsApi->unpause_workspace_automations: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **workspace_automation_management_bulk_request** | [**WorkspaceAutomationManagementBulkRequest**](WorkspaceAutomationManagementBulkRequest.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **unsubscribe_all_automations**
 > unsubscribe_all_automations()
 
@@ -1831,6 +2362,78 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **unsubscribe_selected_workspace_automations**
+> unsubscribe_selected_workspace_automations(workspace_id, workspace_automation_management_bulk_request)
+
+Unsubscribe from selected automations in the workspace
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import automations_api
+from gooddata_api_client.model.workspace_automation_management_bulk_request import WorkspaceAutomationManagementBulkRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = automations_api.AutomationsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    workspace_automation_management_bulk_request = WorkspaceAutomationManagementBulkRequest(
+        automations=[
+            WorkspaceAutomationIdentifier(
+                id="id_example",
+            ),
+        ],
+    ) # WorkspaceAutomationManagementBulkRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Unsubscribe from selected automations in the workspace
+        api_instance.unsubscribe_selected_workspace_automations(workspace_id, workspace_automation_management_bulk_request)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling AutomationsApi->unsubscribe_selected_workspace_automations: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **workspace_automation_management_bulk_request** | [**WorkspaceAutomationManagementBulkRequest**](WorkspaceAutomationManagementBulkRequest.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
  - **Accept**: Not defined
 
 
@@ -2120,6 +2723,8 @@ with gooddata_api_client.ApiClient() as api_client:
                             settings=Settings(
                                 export_info=True,
                                 merge_headers=True,
+                                page_orientation="PORTRAIT",
+                                page_size="A4",
                                 pdf_page_size="a4 landscape",
                                 pdf_table_style=[
                                     PdfTableStyle(
@@ -2135,6 +2740,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                 pdf_top_left_content="Good",
                                 pdf_top_right_content="Morning",
                                 show_filters=False,
+                                show_info_page=False,
                             ),
                             visualization_object="f7c359bc-c230-4487-b15b-ad9685bcb537",
                             visualization_object_custom_filters=[
@@ -2187,7 +2793,7 @@ with gooddata_api_client.ApiClient() as api_client:
     ) # JsonApiAutomationInDocument | 
     filter = "filter=title==someString;description==someString;notificationChannel.id==321;analyticalDashboard.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     include = [
-        "include=notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResult",
+        "include=notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResults",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
 
     # example passing only required values which don't have defaults set

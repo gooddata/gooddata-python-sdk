@@ -2704,6 +2704,8 @@ with gooddata_api_client.ApiClient() as api_client:
                         settings=Settings(
                             export_info=True,
                             merge_headers=True,
+                            page_orientation="PORTRAIT",
+                            page_size="A4",
                             pdf_page_size="a4 landscape",
                             pdf_table_style=[
                                 PdfTableStyle(
@@ -2719,6 +2721,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             pdf_top_left_content="Good",
                             pdf_top_right_content="Morning",
                             show_filters=False,
+                            show_info_page=False,
                         ),
                         visualization_object="f7c359bc-c230-4487-b15b-ad9685bcb537",
                         visualization_object_custom_filters=[
@@ -4013,6 +4016,8 @@ with gooddata_api_client.ApiClient() as api_client:
                                     settings=Settings(
                                         export_info=True,
                                         merge_headers=True,
+                                        page_orientation="PORTRAIT",
+                                        page_size="A4",
                                         pdf_page_size="a4 landscape",
                                         pdf_table_style=[
                                             PdfTableStyle(
@@ -4028,6 +4033,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                         pdf_top_left_content="Good",
                                         pdf_top_right_content="Morning",
                                         show_filters=False,
+                                        show_info_page=False,
                                     ),
                                     visualization_object="f7c359bc-c230-4487-b15b-ad9685bcb537",
                                     visualization_object_custom_filters=[
@@ -5233,6 +5239,8 @@ with gooddata_api_client.ApiClient() as api_client:
                                     settings=Settings(
                                         export_info=True,
                                         merge_headers=True,
+                                        page_orientation="PORTRAIT",
+                                        page_size="A4",
                                         pdf_page_size="a4 landscape",
                                         pdf_table_style=[
                                             PdfTableStyle(
@@ -5248,6 +5256,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                         pdf_top_left_content="Good",
                                         pdf_top_right_content="Morning",
                                         show_filters=False,
+                                        show_info_page=False,
                                     ),
                                     visualization_object="f7c359bc-c230-4487-b15b-ad9685bcb537",
                                     visualization_object_custom_filters=[

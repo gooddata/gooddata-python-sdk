@@ -1977,6 +1977,7 @@
         "type": "object"
       },
       "PdfTableStyle": {
+        "deprecated": true,
         "description": "Custom CSS styles for the table. (PDF, HTML)",
         "example": [
           {
@@ -2553,12 +2554,33 @@
             "example": true,
             "type": "boolean"
           },
+          "pageOrientation": {
+            "default": "PORTRAIT",
+            "description": "Set page orientation. (PDF)",
+            "enum": [
+              "PORTRAIT",
+              "LANDSCAPE"
+            ],
+            "type": "string"
+          },
+          "pageSize": {
+            "default": "A4",
+            "description": "Set page size. (PDF)",
+            "enum": [
+              "A3",
+              "A4",
+              "LETTER"
+            ],
+            "type": "string"
+          },
           "pdfPageSize": {
+            "deprecated": true,
             "description": "Page size and orientation. (PDF)",
             "example": "a4 landscape",
             "type": "string"
           },
           "pdfTableStyle": {
+            "deprecated": true,
             "description": "Custom CSS styles for the table. (PDF, HTML)",
             "example": [
               {
@@ -2577,18 +2599,26 @@
             "type": "array"
           },
           "pdfTopLeftContent": {
+            "deprecated": true,
             "description": "Top left header content. (PDF)",
             "example": "Good",
             "type": "string"
           },
           "pdfTopRightContent": {
+            "deprecated": true,
             "description": "Top right header content. (PDF)",
             "example": "Morning",
             "type": "string"
           },
           "showFilters": {
+            "deprecated": true,
             "description": "Print applied filters on top of the document. (PDF/HTML when visualizationObject is given)",
             "example": false,
+            "type": "boolean"
+          },
+          "showInfoPage": {
+            "default": false,
+            "description": "Show info page with export information.",
             "type": "boolean"
           }
         },

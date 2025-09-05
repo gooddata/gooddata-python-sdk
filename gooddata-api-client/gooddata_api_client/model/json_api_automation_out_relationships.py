@@ -36,13 +36,13 @@ def lazy_import():
     from gooddata_api_client.model.json_api_automation_in_relationships_export_definitions import JsonApiAutomationInRelationshipsExportDefinitions
     from gooddata_api_client.model.json_api_automation_in_relationships_notification_channel import JsonApiAutomationInRelationshipsNotificationChannel
     from gooddata_api_client.model.json_api_automation_in_relationships_recipients import JsonApiAutomationInRelationshipsRecipients
-    from gooddata_api_client.model.json_api_automation_out_relationships_automation_result import JsonApiAutomationOutRelationshipsAutomationResult
+    from gooddata_api_client.model.json_api_automation_out_relationships_automation_results import JsonApiAutomationOutRelationshipsAutomationResults
     globals()['JsonApiAnalyticalDashboardOutRelationshipsCreatedBy'] = JsonApiAnalyticalDashboardOutRelationshipsCreatedBy
     globals()['JsonApiAutomationInRelationshipsAnalyticalDashboard'] = JsonApiAutomationInRelationshipsAnalyticalDashboard
     globals()['JsonApiAutomationInRelationshipsExportDefinitions'] = JsonApiAutomationInRelationshipsExportDefinitions
     globals()['JsonApiAutomationInRelationshipsNotificationChannel'] = JsonApiAutomationInRelationshipsNotificationChannel
     globals()['JsonApiAutomationInRelationshipsRecipients'] = JsonApiAutomationInRelationshipsRecipients
-    globals()['JsonApiAutomationOutRelationshipsAutomationResult'] = JsonApiAutomationOutRelationshipsAutomationResult
+    globals()['JsonApiAutomationOutRelationshipsAutomationResults'] = JsonApiAutomationOutRelationshipsAutomationResults
 
 
 class JsonApiAutomationOutRelationships(ModelNormal):
@@ -99,7 +99,7 @@ class JsonApiAutomationOutRelationships(ModelNormal):
         lazy_import()
         return {
             'analytical_dashboard': (JsonApiAutomationInRelationshipsAnalyticalDashboard,),  # noqa: E501
-            'automation_result': (JsonApiAutomationOutRelationshipsAutomationResult,),  # noqa: E501
+            'automation_results': (JsonApiAutomationOutRelationshipsAutomationResults,),  # noqa: E501
             'created_by': (JsonApiAnalyticalDashboardOutRelationshipsCreatedBy,),  # noqa: E501
             'export_definitions': (JsonApiAutomationInRelationshipsExportDefinitions,),  # noqa: E501
             'modified_by': (JsonApiAnalyticalDashboardOutRelationshipsCreatedBy,),  # noqa: E501
@@ -114,7 +114,7 @@ class JsonApiAutomationOutRelationships(ModelNormal):
 
     attribute_map = {
         'analytical_dashboard': 'analyticalDashboard',  # noqa: E501
-        'automation_result': 'automationResult',  # noqa: E501
+        'automation_results': 'automationResults',  # noqa: E501
         'created_by': 'createdBy',  # noqa: E501
         'export_definitions': 'exportDefinitions',  # noqa: E501
         'modified_by': 'modifiedBy',  # noqa: E501
@@ -164,7 +164,7 @@ class JsonApiAutomationOutRelationships(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             analytical_dashboard (JsonApiAutomationInRelationshipsAnalyticalDashboard): [optional]  # noqa: E501
-            automation_result (JsonApiAutomationOutRelationshipsAutomationResult): [optional]  # noqa: E501
+            automation_results (JsonApiAutomationOutRelationshipsAutomationResults): [optional]  # noqa: E501
             created_by (JsonApiAnalyticalDashboardOutRelationshipsCreatedBy): [optional]  # noqa: E501
             export_definitions (JsonApiAutomationInRelationshipsExportDefinitions): [optional]  # noqa: E501
             modified_by (JsonApiAnalyticalDashboardOutRelationshipsCreatedBy): [optional]  # noqa: E501
@@ -256,7 +256,7 @@ class JsonApiAutomationOutRelationships(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             analytical_dashboard (JsonApiAutomationInRelationshipsAnalyticalDashboard): [optional]  # noqa: E501
-            automation_result (JsonApiAutomationOutRelationshipsAutomationResult): [optional]  # noqa: E501
+            automation_results (JsonApiAutomationOutRelationshipsAutomationResults): [optional]  # noqa: E501
             created_by (JsonApiAnalyticalDashboardOutRelationshipsCreatedBy): [optional]  # noqa: E501
             export_definitions (JsonApiAutomationInRelationshipsExportDefinitions): [optional]  # noqa: E501
             modified_by (JsonApiAnalyticalDashboardOutRelationshipsCreatedBy): [optional]  # noqa: E501

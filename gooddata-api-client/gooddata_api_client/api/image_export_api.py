@@ -96,7 +96,7 @@ class ImageExportApi(object):
         )
         self.get_image_export_endpoint = _Endpoint(
             settings={
-                'response_type': None,
+                'response_type': (file_type,),
                 'auth': [],
                 'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/export/image/{exportId}',
                 'operation_id': 'get_image_export',
@@ -344,7 +344,7 @@ class ImageExportApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            None
+            file_type
                 If the method is called asynchronously, returns the request
                 thread.
         """

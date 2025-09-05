@@ -67,6 +67,7 @@ class ApiEntitlement(ModelNormal):
             'UILOCALIZATION': "UiLocalization",
             'TIER': "Tier",
             'USERCOUNT': "UserCount",
+            'MANAGEDIDPUSERCOUNT': "ManagedIdpUserCount",
             'UNLIMITEDUSERS': "UnlimitedUsers",
             'UNLIMITEDWORKSPACES': "UnlimitedWorkspaces",
             'WHITELABELING': "WhiteLabeling",

@@ -63,6 +63,12 @@ class JsonApiAutomationResultOutAttributes(ModelNormal):
     }
 
     validations = {
+        ('error_message',): {
+            'max_length': 10000,
+        },
+        ('trace_id',): {
+            'max_length': 255,
+        },
     }
 
     @cached_property
@@ -88,6 +94,8 @@ class JsonApiAutomationResultOutAttributes(ModelNormal):
         return {
             'executed_at': (datetime,),  # noqa: E501
             'status': (str,),  # noqa: E501
+            'error_message': (str,),  # noqa: E501
+            'trace_id': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -98,6 +106,8 @@ class JsonApiAutomationResultOutAttributes(ModelNormal):
     attribute_map = {
         'executed_at': 'executedAt',  # noqa: E501
         'status': 'status',  # noqa: E501
+        'error_message': 'errorMessage',  # noqa: E501
+        'trace_id': 'traceId',  # noqa: E501
     }
 
     read_only_vars = {
@@ -145,6 +155,8 @@ class JsonApiAutomationResultOutAttributes(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            error_message (str): [optional]  # noqa: E501
+            trace_id (str): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -236,6 +248,8 @@ class JsonApiAutomationResultOutAttributes(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            error_message (str): [optional]  # noqa: E501
+            trace_id (str): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

@@ -43,11 +43,21 @@ with gooddata_api_client.ApiClient() as api_client:
         file_name="filename",
         metadata={},
     ) # VisualExportRequest | 
+    x_gdc_debug = False # bool |  (optional) if omitted the server will use the default value of False
 
     # example passing only required values which don't have defaults set
     try:
         # Create visual - pdf export request
         api_response = api_instance.create_pdf_export(workspace_id, visual_export_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling VisualExportApi->create_pdf_export: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Create visual - pdf export request
+        api_response = api_instance.create_pdf_export(workspace_id, visual_export_request, x_gdc_debug=x_gdc_debug)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling VisualExportApi->create_pdf_export: %s\n" % e)
@@ -60,6 +70,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
  **visual_export_request** | [**VisualExportRequest**](VisualExportRequest.md)|  |
+ **x_gdc_debug** | **bool**|  | [optional] if omitted the server will use the default value of False
 
 ### Return type
 
@@ -84,7 +95,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_exported_file**
-> get_exported_file(workspace_id, export_id)
+> file_type get_exported_file(workspace_id, export_id)
 
 Retrieve exported files
 
@@ -115,7 +126,8 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     try:
         # Retrieve exported files
-        api_instance.get_exported_file(workspace_id, export_id)
+        api_response = api_instance.get_exported_file(workspace_id, export_id)
+        pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling VisualExportApi->get_exported_file: %s\n" % e)
 ```
@@ -130,7 +142,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-void (empty response body)
+**file_type**
 
 ### Authorization
 
