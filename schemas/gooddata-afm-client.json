@@ -557,6 +557,10 @@
           "pattern": {
             "description": "ICU formatting pattern like 'y', 'dd.MM.y', etc.",
             "type": "string"
+          },
+          "timezone": {
+            "description": "Timezone for date formatting like 'America/New_York', 'Europe/Prague', etc.",
+            "type": "string"
           }
         },
         "required": [
@@ -3477,6 +3481,31 @@
         ],
         "type": "object"
       },
+      "ValidateLLMEndpointByIdRequest": {
+        "properties": {
+          "baseUrl": {
+            "description": "Base URL for the LLM endpoint validation",
+            "type": "string"
+          },
+          "llmModel": {
+            "description": "LLM model for the LLM endpoint validation",
+            "type": "string"
+          },
+          "llmOrganization": {
+            "description": "Organization name for the LLM endpoint validation",
+            "type": "string"
+          },
+          "provider": {
+            "description": "Provider for the LLM endpoint validation",
+            "type": "string"
+          },
+          "token": {
+            "description": "Token for the LLM endpoint validation",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "ValidateLLMEndpointRequest": {
         "properties": {
           "baseUrl": {
@@ -3531,7 +3560,7 @@
   },
   "openapi": "3.0.1",
   "paths": {
-    "/api/v1/actions/ai/validateLlmEndpoint": {
+    "/api/v1/actions/ai/llmEndpoint/test": {
       "post": {
         "description": "Validates LLM endpoint with provided parameters.",
         "operationId": "validateLLMEndpoint",
@@ -3558,6 +3587,48 @@
           }
         },
         "summary": "Validate LLM Endpoint",
+        "tags": [
+          "Smart Functions",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/ai/llmEndpoint/{llmEndpointId}/test": {
+      "post": {
+        "description": "Validates existing LLM endpoint with provided parameters and updates it if they are valid.",
+        "operationId": "validateLLMEndpointById",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "llmEndpointId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidateLLMEndpointByIdRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidateLLMEndpointResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Validate LLM Endpoint By Id",
         "tags": [
           "Smart Functions",
           "actions"

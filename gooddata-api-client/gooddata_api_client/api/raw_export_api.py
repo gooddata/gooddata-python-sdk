@@ -95,7 +95,7 @@ class RawExportApi(object):
         )
         self.get_raw_export_endpoint = _Endpoint(
             settings={
-                'response_type': None,
+                'response_type': (file_type,),
                 'auth': [],
                 'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/export/raw/{exportId}',
                 'operation_id': 'get_raw_export',
@@ -290,7 +290,7 @@ class RawExportApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            None
+            file_type
                 If the method is called asynchronously, returns the request
                 thread.
         """

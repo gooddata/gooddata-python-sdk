@@ -16,7 +16,8 @@ Method | HTTP request | Description
 [**forecast**](SmartFunctionsApi.md#forecast) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/{resultId} | (BETA) Smart functions - Forecast
 [**forecast_result**](SmartFunctionsApi.md#forecast_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/result/{resultId} | (BETA) Smart functions - Forecast Result
 [**resolve_llm_endpoints**](SmartFunctionsApi.md#resolve_llm_endpoints) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/resolveLlmEndpoints | Get Active LLM Endpoints for this workspace
-[**validate_llm_endpoint**](SmartFunctionsApi.md#validate_llm_endpoint) | **POST** /api/v1/actions/ai/validateLlmEndpoint | Validate LLM Endpoint
+[**validate_llm_endpoint**](SmartFunctionsApi.md#validate_llm_endpoint) | **POST** /api/v1/actions/ai/llmEndpoint/test | Validate LLM Endpoint
+[**validate_llm_endpoint_by_id**](SmartFunctionsApi.md#validate_llm_endpoint_by_id) | **POST** /api/v1/actions/ai/llmEndpoint/{llmEndpointId}/test | Validate LLM Endpoint By Id
 
 
 # **ai_chat**
@@ -1038,6 +1039,91 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **validate_llm_endpoint_request** | [**ValidateLLMEndpointRequest**](ValidateLLMEndpointRequest.md)|  |
+
+### Return type
+
+[**ValidateLLMEndpointResponse**](ValidateLLMEndpointResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **validate_llm_endpoint_by_id**
+> ValidateLLMEndpointResponse validate_llm_endpoint_by_id(llm_endpoint_id)
+
+Validate LLM Endpoint By Id
+
+Validates existing LLM endpoint with provided parameters and updates it if they are valid.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import smart_functions_api
+from gooddata_api_client.model.validate_llm_endpoint_response import ValidateLLMEndpointResponse
+from gooddata_api_client.model.validate_llm_endpoint_by_id_request import ValidateLLMEndpointByIdRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = smart_functions_api.SmartFunctionsApi(api_client)
+    llm_endpoint_id = "llmEndpointId_example" # str | 
+    validate_llm_endpoint_by_id_request = ValidateLLMEndpointByIdRequest(
+        base_url="base_url_example",
+        llm_model="llm_model_example",
+        llm_organization="llm_organization_example",
+        provider="provider_example",
+        token="token_example",
+    ) # ValidateLLMEndpointByIdRequest |  (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Validate LLM Endpoint By Id
+        api_response = api_instance.validate_llm_endpoint_by_id(llm_endpoint_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling SmartFunctionsApi->validate_llm_endpoint_by_id: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Validate LLM Endpoint By Id
+        api_response = api_instance.validate_llm_endpoint_by_id(llm_endpoint_id, validate_llm_endpoint_by_id_request=validate_llm_endpoint_by_id_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling SmartFunctionsApi->validate_llm_endpoint_by_id: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **llm_endpoint_id** | **str**|  |
+ **validate_llm_endpoint_by_id_request** | [**ValidateLLMEndpointByIdRequest**](ValidateLLMEndpointByIdRequest.md)|  | [optional]
 
 ### Return type
 
