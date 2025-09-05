@@ -145,6 +145,8 @@ with gooddata_api_client.ApiClient() as api_client:
         settings=Settings(
             export_info=True,
             merge_headers=True,
+            page_orientation="PORTRAIT",
+            page_size="A4",
             pdf_page_size="a4 landscape",
             pdf_table_style=[
                 PdfTableStyle(
@@ -160,6 +162,7 @@ with gooddata_api_client.ApiClient() as api_client:
             pdf_top_left_content="Good",
             pdf_top_right_content="Morning",
             show_filters=False,
+            show_info_page=False,
         ),
         visualization_object="f7c359bc-c230-4487-b15b-ad9685bcb537",
         visualization_object_custom_filters=[
@@ -207,7 +210,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_tabular_export**
-> get_tabular_export(workspace_id, export_id)
+> file_type get_tabular_export(workspace_id, export_id)
 
 Retrieve exported files
 
@@ -238,7 +241,8 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     try:
         # Retrieve exported files
-        api_instance.get_tabular_export(workspace_id, export_id)
+        api_response = api_instance.get_tabular_export(workspace_id, export_id)
+        pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling TabularExportApi->get_tabular_export: %s\n" % e)
 ```
@@ -253,7 +257,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-void (empty response body)
+**file_type**
 
 ### Authorization
 

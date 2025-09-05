@@ -797,6 +797,7 @@
               "UiLocalization",
               "Tier",
               "UserCount",
+              "ManagedIdpUserCount",
               "UnlimitedUsers",
               "UnlimitedWorkspaces",
               "WhiteLabeling",
@@ -1049,6 +1050,10 @@
           },
           "pattern": {
             "description": "ICU formatting pattern like 'y', 'dd.MM.y', etc.",
+            "type": "string"
+          },
+          "timezone": {
+            "description": "Timezone for date formatting like 'America/New_York', 'Europe/Prague', etc.",
             "type": "string"
           }
         },
@@ -5281,6 +5286,7 @@
               "METADATA_LOCALE",
               "FORMAT_LOCALE",
               "MAPBOX_TOKEN",
+              "AG_GRID_TOKEN",
               "WEEK_START",
               "SHOW_HIDDEN_CATALOG_ITEMS",
               "OPERATOR_OVERRIDES",
@@ -5297,7 +5303,8 @@
               "AI_RATE_LIMIT",
               "ATTACHMENT_SIZE_LIMIT",
               "ATTACHMENT_LINK_TTL",
-              "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE"
+              "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
+              "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -6629,6 +6636,7 @@
                 "UiLocalization",
                 "Tier",
                 "UserCount",
+                "ManagedIdpUserCount",
                 "UnlimitedUsers",
                 "UnlimitedWorkspaces",
                 "WhiteLabeling",
@@ -9981,7 +9989,7 @@
                 ],
                 "type": "object"
               },
-              "automationResult": {
+              "automationResults": {
                 "properties": {
                   "data": {
                     "$ref": "#/components/schemas/JsonApiAutomationResultToManyLinkage"
@@ -10471,6 +10479,10 @@
         "properties": {
           "attributes": {
             "properties": {
+              "errorMessage": {
+                "maxLength": 10000,
+                "type": "string"
+              },
               "executedAt": {
                 "description": "Timestamp of the last automation run.",
                 "format": "date-time",
@@ -10482,6 +10494,10 @@
                   "SUCCESS",
                   "FAILED"
                 ],
+                "type": "string"
+              },
+              "traceId": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -17719,6 +17735,7 @@
                   "METADATA_LOCALE",
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
+                  "AG_GRID_TOKEN",
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
@@ -17735,7 +17752,8 @@
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
-                  "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE"
+                  "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
+                  "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS"
                 ],
                 "type": "string"
               }
@@ -17795,6 +17813,7 @@
                   "METADATA_LOCALE",
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
+                  "AG_GRID_TOKEN",
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
@@ -17811,7 +17830,8 @@
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
-                  "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE"
+                  "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
+                  "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS"
                 ],
                 "type": "string"
               }
@@ -17911,6 +17931,7 @@
                   "METADATA_LOCALE",
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
+                  "AG_GRID_TOKEN",
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
@@ -17927,7 +17948,8 @@
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
-                  "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE"
+                  "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
+                  "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS"
                 ],
                 "type": "string"
               }
@@ -19393,6 +19415,7 @@
                   "METADATA_LOCALE",
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
+                  "AG_GRID_TOKEN",
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
@@ -19409,7 +19432,8 @@
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
-                  "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE"
+                  "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
+                  "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS"
                 ],
                 "type": "string"
               }
@@ -19469,6 +19493,7 @@
                   "METADATA_LOCALE",
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
+                  "AG_GRID_TOKEN",
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
@@ -19485,7 +19510,8 @@
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
-                  "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE"
+                  "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
+                  "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS"
                 ],
                 "type": "string"
               }
@@ -20068,6 +20094,383 @@
         "oneOf": [
           {
             "$ref": "#/components/schemas/JsonApiVisualizationObjectLinkage"
+          }
+        ]
+      },
+      "JsonApiWorkspaceAutomationOut": {
+        "description": "JSON:API representation of workspaceAutomation entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "alert": {
+                "properties": {
+                  "condition": {
+                    "$ref": "#/components/schemas/AlertCondition"
+                  },
+                  "execution": {
+                    "$ref": "#/components/schemas/AlertAfm"
+                  },
+                  "trigger": {
+                    "default": "ALWAYS",
+                    "description": "Trigger behavior for the alert.\nALWAYS - alert is triggered every time the condition is met.\nONCE - alert is triggered only once when the condition is met.\n",
+                    "enum": [
+                      "ALWAYS",
+                      "ONCE"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "condition",
+                  "execution"
+                ],
+                "type": "object"
+              },
+              "areRelationsValid": {
+                "type": "boolean"
+              },
+              "createdAt": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "dashboardTabularExports": {
+                "items": {
+                  "properties": {
+                    "requestPayload": {
+                      "$ref": "#/components/schemas/DashboardTabularExportRequestV2"
+                    }
+                  },
+                  "required": [
+                    "requestPayload"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "details": {
+                "description": "Additional details to be included in the automated message.",
+                "maxLength": 10000,
+                "type": "object"
+              },
+              "externalRecipients": {
+                "description": "External recipients of the automation action results.",
+                "items": {
+                  "properties": {
+                    "email": {
+                      "description": "E-mail address to send notifications from.",
+                      "format": "email",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "email"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "imageExports": {
+                "items": {
+                  "properties": {
+                    "requestPayload": {
+                      "$ref": "#/components/schemas/ImageExportRequest"
+                    }
+                  },
+                  "required": [
+                    "requestPayload"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "metadata": {
+                "description": "Additional information for the automation.",
+                "maxLength": 250000,
+                "nullable": true,
+                "properties": {
+                  "visibleFilters": {
+                    "items": {
+                      "$ref": "#/components/schemas/VisibleFilter"
+                    },
+                    "type": "array"
+                  },
+                  "widget": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "modifiedAt": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "rawExports": {
+                "items": {
+                  "properties": {
+                    "requestPayload": {
+                      "$ref": "#/components/schemas/RawExportAutomationRequest"
+                    }
+                  },
+                  "required": [
+                    "requestPayload"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "schedule": {
+                "properties": {
+                  "cron": {
+                    "description": "Cron expression defining the schedule of the automation. The format is SECOND MINUTE HOUR DAY-OF-MONTH MONTH DAY-OF-WEEK (YEAR). The example expression signifies an action every 30 minutes from 9:00 to 17:00 on workdays.",
+                    "example": "0 */30 9-17 ? * MON-FRI",
+                    "maxLength": 255,
+                    "type": "string"
+                  },
+                  "cronDescription": {
+                    "description": "Human-readable description of the cron expression.",
+                    "readOnly": true,
+                    "type": "string"
+                  },
+                  "firstRun": {
+                    "description": "Timestamp of the first scheduled action. If not provided default to the next scheduled time.",
+                    "example": "2025-01-01T12:00:00Z",
+                    "format": "date-time",
+                    "type": "string"
+                  },
+                  "timezone": {
+                    "description": "Timezone in which the schedule is defined.",
+                    "example": "Europe/Prague",
+                    "maxLength": 255,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "cron",
+                  "timezone"
+                ],
+                "type": "object"
+              },
+              "slidesExports": {
+                "items": {
+                  "properties": {
+                    "requestPayload": {
+                      "$ref": "#/components/schemas/SlidesExportRequest"
+                    }
+                  },
+                  "required": [
+                    "requestPayload"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "state": {
+                "description": "Current state of the automation.",
+                "enum": [
+                  "ACTIVE",
+                  "PAUSED"
+                ],
+                "type": "string"
+              },
+              "tabularExports": {
+                "items": {
+                  "properties": {
+                    "requestPayload": {
+                      "$ref": "#/components/schemas/TabularExportRequest"
+                    }
+                  },
+                  "required": [
+                    "requestPayload"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              },
+              "visualExports": {
+                "items": {
+                  "properties": {
+                    "requestPayload": {
+                      "$ref": "#/components/schemas/VisualExportRequest"
+                    }
+                  },
+                  "required": [
+                    "requestPayload"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "workspaceId": {
+                "description": "ID of the workspace to which the automation belongs.",
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "required": [
+              "workspaceId"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "relationships": {
+            "properties": {
+              "analyticalDashboard": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiAnalyticalDashboardToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "automationResults": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiAutomationResultToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "createdBy": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserIdentifierToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "exportDefinitions": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiExportDefinitionToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "modifiedBy": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserIdentifierToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "notificationChannel": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiNotificationChannelToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "recipients": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "workspaceAutomation"
+            ],
+            "example": "workspaceAutomation",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiWorkspaceAutomationOutList": {
+        "description": "A JSON:API document with a list of resources",
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/JsonApiWorkspaceAutomationOutWithLinks"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "included": {
+            "description": "Included resources",
+            "items": {
+              "$ref": "#/components/schemas/JsonApiAutomationOutIncludes"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "links": {
+            "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiWorkspaceAutomationOutWithLinks": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiWorkspaceAutomationOut"
+          },
+          {
+            "$ref": "#/components/schemas/ObjectLinksContainer"
           }
         ]
       },
@@ -21223,6 +21626,7 @@
                   "METADATA_LOCALE",
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
+                  "AG_GRID_TOKEN",
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
@@ -21239,7 +21643,8 @@
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
-                  "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE"
+                  "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
+                  "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS"
                 ],
                 "type": "string"
               }
@@ -21299,6 +21704,7 @@
                   "METADATA_LOCALE",
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
+                  "AG_GRID_TOKEN",
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
@@ -21315,7 +21721,8 @@
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
-                  "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE"
+                  "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
+                  "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS"
                 ],
                 "type": "string"
               }
@@ -21441,6 +21848,7 @@
                   "METADATA_LOCALE",
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
+                  "AG_GRID_TOKEN",
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
@@ -21457,7 +21865,8 @@
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
-                  "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE"
+                  "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
+                  "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS"
                 ],
                 "type": "string"
               }
@@ -21517,6 +21926,7 @@
                   "METADATA_LOCALE",
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
+                  "AG_GRID_TOKEN",
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
@@ -21533,7 +21943,8 @@
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
-                  "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE"
+                  "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
+                  "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS"
                 ],
                 "type": "string"
               }
@@ -22221,6 +22632,35 @@
         },
         "type": "object"
       },
+      "OrganizationAutomationIdentifier": {
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "workspaceId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "workspaceId"
+        ],
+        "type": "object"
+      },
+      "OrganizationAutomationManagementBulkRequest": {
+        "properties": {
+          "automations": {
+            "items": {
+              "$ref": "#/components/schemas/OrganizationAutomationIdentifier"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "automations"
+        ],
+        "type": "object"
+      },
       "OrganizationPermissionAssignment": {
         "description": "Organization permission assignments",
         "properties": {
@@ -22333,6 +22773,7 @@
         "type": "object"
       },
       "PdfTableStyle": {
+        "deprecated": true,
         "description": "Custom CSS styles for the table. (PDF, HTML)",
         "example": [
           {
@@ -23214,6 +23655,7 @@
               "METADATA_LOCALE",
               "FORMAT_LOCALE",
               "MAPBOX_TOKEN",
+              "AG_GRID_TOKEN",
               "WEEK_START",
               "SHOW_HIDDEN_CATALOG_ITEMS",
               "OPERATOR_OVERRIDES",
@@ -23230,7 +23672,8 @@
               "AI_RATE_LIMIT",
               "ATTACHMENT_SIZE_LIMIT",
               "ATTACHMENT_LINK_TTL",
-              "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE"
+              "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
+              "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -23816,12 +24259,33 @@
             "example": true,
             "type": "boolean"
           },
+          "pageOrientation": {
+            "default": "PORTRAIT",
+            "description": "Set page orientation. (PDF)",
+            "enum": [
+              "PORTRAIT",
+              "LANDSCAPE"
+            ],
+            "type": "string"
+          },
+          "pageSize": {
+            "default": "A4",
+            "description": "Set page size. (PDF)",
+            "enum": [
+              "A3",
+              "A4",
+              "LETTER"
+            ],
+            "type": "string"
+          },
           "pdfPageSize": {
+            "deprecated": true,
             "description": "Page size and orientation. (PDF)",
             "example": "a4 landscape",
             "type": "string"
           },
           "pdfTableStyle": {
+            "deprecated": true,
             "description": "Custom CSS styles for the table. (PDF, HTML)",
             "example": [
               {
@@ -23840,18 +24304,26 @@
             "type": "array"
           },
           "pdfTopLeftContent": {
+            "deprecated": true,
             "description": "Top left header content. (PDF)",
             "example": "Good",
             "type": "string"
           },
           "pdfTopRightContent": {
+            "deprecated": true,
             "description": "Top right header content. (PDF)",
             "example": "Morning",
             "type": "string"
           },
           "showFilters": {
+            "deprecated": true,
             "description": "Print applied filters on top of the document. (PDF/HTML when visualizationObject is given)",
             "example": false,
+            "type": "boolean"
+          },
+          "showInfoPage": {
+            "default": false,
+            "description": "Show info page with export information.",
             "type": "boolean"
           }
         },
@@ -25159,6 +25631,31 @@
         ],
         "type": "object"
       },
+      "ValidateLLMEndpointByIdRequest": {
+        "properties": {
+          "baseUrl": {
+            "description": "Base URL for the LLM endpoint validation",
+            "type": "string"
+          },
+          "llmModel": {
+            "description": "LLM model for the LLM endpoint validation",
+            "type": "string"
+          },
+          "llmOrganization": {
+            "description": "Organization name for the LLM endpoint validation",
+            "type": "string"
+          },
+          "provider": {
+            "description": "Provider for the LLM endpoint validation",
+            "type": "string"
+          },
+          "token": {
+            "description": "Token for the LLM endpoint validation",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "ValidateLLMEndpointRequest": {
         "properties": {
           "baseUrl": {
@@ -25501,6 +25998,31 @@
         ],
         "type": "object"
       },
+      "WorkspaceAutomationIdentifier": {
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "type": "object"
+      },
+      "WorkspaceAutomationManagementBulkRequest": {
+        "properties": {
+          "automations": {
+            "items": {
+              "$ref": "#/components/schemas/WorkspaceAutomationIdentifier"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "automations"
+        ],
+        "type": "object"
+      },
       "WorkspaceDataSource": {
         "description": "The data source used for the particular workspace instead of the one defined in the LDM inherited from its parent workspace. Such data source cannot be defined for a single or a top-parent workspace.",
         "properties": {
@@ -25731,7 +26253,7 @@
   },
   "openapi": "3.0.1",
   "paths": {
-    "/api/v1/actions/ai/validateLlmEndpoint": {
+    "/api/v1/actions/ai/llmEndpoint/test": {
       "post": {
         "description": "Validates LLM endpoint with provided parameters.",
         "operationId": "validateLLMEndpoint",
@@ -25758,6 +26280,48 @@
           }
         },
         "summary": "Validate LLM Endpoint",
+        "tags": [
+          "Smart Functions",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/ai/llmEndpoint/{llmEndpointId}/test": {
+      "post": {
+        "description": "Validates existing LLM endpoint with provided parameters and updates it if they are valid.",
+        "operationId": "validateLLMEndpointById",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "llmEndpointId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidateLLMEndpointByIdRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidateLLMEndpointResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Validate LLM Endpoint By Id",
         "tags": [
           "Smart Functions",
           "actions"
@@ -26601,6 +27165,81 @@
         "summary": "Mark notification as read.",
         "tags": [
           "Notification Channels",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/organization/automations/delete": {
+      "post": {
+        "operationId": "deleteOrganizationAutomations",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrganizationAutomationManagementBulkRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "summary": "Delete selected automations across all workspaces",
+        "tags": [
+          "Automations",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/organization/automations/pause": {
+      "post": {
+        "operationId": "pauseOrganizationAutomations",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrganizationAutomationManagementBulkRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "summary": "Pause selected automations across all workspaces",
+        "tags": [
+          "Automations",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/organization/automations/unpause": {
+      "post": {
+        "operationId": "unpauseOrganizationAutomations",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrganizationAutomationManagementBulkRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "summary": "Unpause selected automations across all workspaces",
+        "tags": [
+          "Automations",
           "actions"
         ]
       }
@@ -27732,6 +28371,76 @@
         ]
       }
     },
+    "/api/v1/actions/workspaces/{workspaceId}/automations/delete": {
+      "post": {
+        "operationId": "deleteWorkspaceAutomations",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkspaceAutomationManagementBulkRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "summary": "Delete selected automations in the workspace",
+        "tags": [
+          "Automations",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/automations/pause": {
+      "post": {
+        "operationId": "pauseWorkspaceAutomations",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkspaceAutomationManagementBulkRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "summary": "Pause selected automations in the workspace",
+        "tags": [
+          "Automations",
+          "actions"
+        ]
+      }
+    },
     "/api/v1/actions/workspaces/{workspaceId}/automations/trigger": {
       "post": {
         "description": "Trigger the automation in the request.",
@@ -27768,6 +28477,41 @@
         ]
       }
     },
+    "/api/v1/actions/workspaces/{workspaceId}/automations/unpause": {
+      "post": {
+        "operationId": "unpauseWorkspaceAutomations",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkspaceAutomationManagementBulkRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "summary": "Unpause selected automations in the workspace",
+        "tags": [
+          "Automations",
+          "actions"
+        ]
+      }
+    },
     "/api/v1/actions/workspaces/{workspaceId}/automations/unsubscribe": {
       "delete": {
         "operationId": "unsubscribeWorkspaceAutomations",
@@ -27787,6 +28531,39 @@
           }
         },
         "summary": "Unsubscribe from all automations in the workspace",
+        "tags": [
+          "Automations",
+          "actions"
+        ]
+      },
+      "post": {
+        "operationId": "unsubscribeSelectedWorkspaceAutomations",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkspaceAutomationManagementBulkRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "summary": "Unsubscribe from selected automations in the workspace",
         "tags": [
           "Automations",
           "actions"
@@ -29137,7 +29914,12 @@
         "responses": {
           "200": {
             "content": {
-              "image/png": {}
+              "image/png": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
             },
             "description": "Binary export result.",
             "headers": {
@@ -29326,9 +30108,24 @@
         "responses": {
           "200": {
             "content": {
-              "application/vnd.apache.arrow.file": {},
-              "application/vnd.apache.arrow.stream": {},
-              "text/csv": {}
+              "application/vnd.apache.arrow.file": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              },
+              "application/vnd.apache.arrow.stream": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
             },
             "description": "Binary export result.",
             "headers": {
@@ -29390,6 +30187,15 @@
             "required": true,
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-Gdc-Debug",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
             }
           }
         ],
@@ -29453,8 +30259,18 @@
         "responses": {
           "200": {
             "content": {
-              "application/pdf": {},
-              "application/vnd.openxmlformats-officedocument.presentationml.presentation": {}
+              "application/pdf": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              },
+              "application/vnd.openxmlformats-officedocument.presentationml.presentation": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
             },
             "description": "Binary export result.",
             "headers": {
@@ -29682,10 +30498,30 @@
         "responses": {
           "200": {
             "content": {
-              "application/pdf": {},
-              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {},
-              "text/csv": {},
-              "text/html": {}
+              "application/pdf": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              },
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              },
+              "text/html": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
             },
             "description": "Binary export result.",
             "headers": {
@@ -29754,6 +30590,15 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "in": "header",
+            "name": "X-Gdc-Debug",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
           }
         ],
         "requestBody": {
@@ -29816,7 +30661,12 @@
         "responses": {
           "200": {
             "content": {
-              "application/pdf": {}
+              "application/pdf": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
             },
             "description": "Binary export result.",
             "headers": {
@@ -33438,6 +34288,106 @@
           "Organization - Entity APIs",
           "entities"
         ]
+      }
+    },
+    "/api/v1/entities/organization/workspaceAutomations": {
+      "get": {
+        "operationId": "getAllAutomations@WorkspaceAutomations",
+        "parameters": [
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=workspaceId==someString;title==someString;notificationChannel.id==321;analyticalDashboard.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResults",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "notificationChannels",
+                  "analyticalDashboards",
+                  "userIdentifiers",
+                  "exportDefinitions",
+                  "users",
+                  "automationResults",
+                  "notificationChannel",
+                  "analyticalDashboard",
+                  "createdBy",
+                  "modifiedBy",
+                  "recipients",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/size"
+          },
+          {
+            "$ref": "#/components/parameters/sort"
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=page,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "page",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiWorkspaceAutomationOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Get all Automations across all Workspaces",
+        "tags": [
+          "Automations",
+          "entities",
+          "automation-organization-view-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
       }
     },
     "/api/v1/entities/organizationSettings": {
@@ -37379,7 +38329,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResult",
+            "example": "include=notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResults",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -37398,7 +38348,6 @@
                   "createdBy",
                   "modifiedBy",
                   "recipients",
-                  "automationResult",
                   "ALL"
                 ],
                 "type": "string"
@@ -37487,7 +38436,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResult",
+            "example": "include=notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResults",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -37506,7 +38455,6 @@
                   "createdBy",
                   "modifiedBy",
                   "recipients",
-                  "automationResult",
                   "ALL"
                 ],
                 "type": "string"
@@ -37652,7 +38600,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResult",
+            "example": "include=notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResults",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -37671,7 +38619,6 @@
                   "createdBy",
                   "modifiedBy",
                   "recipients",
-                  "automationResult",
                   "ALL"
                 ],
                 "type": "string"
@@ -37767,7 +38714,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResult",
+            "example": "include=notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResults",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -37786,7 +38733,6 @@
                   "createdBy",
                   "modifiedBy",
                   "recipients",
-                  "automationResult",
                   "ALL"
                 ],
                 "type": "string"
@@ -37861,7 +38807,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResult",
+            "example": "include=notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResults",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -37880,7 +38826,6 @@
                   "createdBy",
                   "modifiedBy",
                   "recipients",
-                  "automationResult",
                   "ALL"
                 ],
                 "type": "string"

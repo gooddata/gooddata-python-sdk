@@ -88,7 +88,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_image_export**
-> get_image_export(workspace_id, export_id)
+> file_type get_image_export(workspace_id, export_id)
 
 (EXPERIMENTAL) Retrieve exported files
 
@@ -120,7 +120,8 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     try:
         # (EXPERIMENTAL) Retrieve exported files
-        api_instance.get_image_export(workspace_id, export_id)
+        api_response = api_instance.get_image_export(workspace_id, export_id)
+        pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling ImageExportApi->get_image_export: %s\n" % e)
 ```
@@ -135,7 +136,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-void (empty response body)
+**file_type**
 
 ### Authorization
 

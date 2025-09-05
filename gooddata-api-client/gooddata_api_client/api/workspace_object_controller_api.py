@@ -344,7 +344,6 @@ class WorkspaceObjectControllerApi(object):
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
                         "RECIPIENTS": "recipients",
-                        "AUTOMATIONRESULT": "automationResult",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -2685,7 +2684,6 @@ class WorkspaceObjectControllerApi(object):
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
                         "RECIPIENTS": "recipients",
-                        "AUTOMATIONRESULT": "automationResult",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -4860,7 +4858,6 @@ class WorkspaceObjectControllerApi(object):
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
                         "RECIPIENTS": "recipients",
-                        "AUTOMATIONRESULT": "automationResult",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -6451,7 +6448,6 @@ class WorkspaceObjectControllerApi(object):
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
                         "RECIPIENTS": "recipients",
-                        "AUTOMATIONRESULT": "automationResult",
                         "ALL": "ALL"
                     },
                 },
@@ -7595,7 +7591,6 @@ class WorkspaceObjectControllerApi(object):
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
                         "RECIPIENTS": "recipients",
-                        "AUTOMATIONRESULT": "automationResult",
                         "ALL": "ALL"
                     },
                 },
