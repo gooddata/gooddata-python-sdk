@@ -60,6 +60,8 @@ The project documentation is done in hugo. To contribute:
 
 2. Run `make new-docs`
 
+3. Open [http://localhost:1313/latest/](http://localhost:1313/latest/) in your browser to see the preview.
+
 The documentation is deployed using manually triggered GitHub workflows.
 
 One logical change is done in one commit.
