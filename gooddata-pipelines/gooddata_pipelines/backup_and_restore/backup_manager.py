@@ -37,6 +37,7 @@ from gooddata_pipelines.backup_and_restore.storage.s3_storage import (
     S3Storage,
 )
 from gooddata_pipelines.logger import LogObserver
+from gooddata_pipelines.utils.rate_limiter import RateLimiter
 
 
 @dataclass
@@ -57,6 +58,10 @@ class BackupManager:
         self.org_id = self._api.get_organization_id()
 
         self.loader = BackupInputProcessor(self._api, self.config.api_page_size)
+
+        self._api_rate_limiter = RateLimiter(
+            calls_per_second=self.config.api_calls_per_second,
+        )
 
     @classmethod
     def create(
@@ -93,11 +98,12 @@ class BackupManager:
 
     def get_user_data_filters(self, ws_id: str) -> dict:
         """Returns the user data filters for the specified workspace."""
-        response: requests.Response = self._api.get_user_data_filters(ws_id)
-        if response.ok:
-            return response.json()
-        else:
-            raise RuntimeError(f"{response.status_code}: {response.text}")
+        with self._api_rate_limiter:
+            response: requests.Response = self._api.get_user_data_filters(ws_id)
+            if response.ok:
+                return response.json()
+            else:
+                raise RuntimeError(f"{response.status_code}: {response.text}")
 
     def _store_user_data_filters(
         self,
@@ -142,14 +148,17 @@ class BackupManager:
 
     def _get_automations_from_api(self, workspace_id: str) -> Any:
         """Returns automations for the workspace as JSON."""
-        response: requests.Response = self._api.get_automations(workspace_id)
-        if response.ok:
-            return response.json()
-        else:
-            raise RuntimeError(
-                f"Failed to get automations for {workspace_id}. "
-                + f"{response.status_code}: {response.text}"
+        with self._api_rate_limiter:
+            response: requests.Response = self._api.get_automations(
+                workspace_id
             )
+            if response.ok:
+                return response.json()
+            else:
+                raise RuntimeError(
+                    f"Failed to get automations for {workspace_id}. "
+                    + f"{response.status_code}: {response.text}"
+                )
 
     def _store_automations(self, export_path: Path, workspace_id: str) -> None:
         """Stores the automations in the specified export path."""
@@ -181,7 +190,8 @@ class BackupManager:
     ) -> None:
         """Stores the filter views in the specified export path."""
         # Get the filter views YAML files from the API
-        self._api.store_declarative_filter_views(workspace_id, export_path)
+        with self._api_rate_limiter:
+            self._api.store_declarative_filter_views(workspace_id, export_path)
 
         # Move filter views to the subfolder containing the analytics model
         self._move_folder(
@@ -229,7 +239,10 @@ class BackupManager:
                 # the SDK. That way we could save and package all the declarations
                 # directly instead of reorganizing the folder structures. That should
                 # be more transparent/readable and possibly safer for threading
-                self._api.store_declarative_workspace(workspace_id, export_path)
+                with self._api_rate_limiter:
+                    self._api.store_declarative_workspace(
+                        workspace_id, export_path
+                    )
                 self.store_declarative_filter_views(export_path, workspace_id)
                 self._store_automations(export_path, workspace_id)
 

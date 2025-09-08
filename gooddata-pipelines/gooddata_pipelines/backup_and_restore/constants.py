@@ -25,6 +25,7 @@ class DirNames:
 class ApiDefaults:
     DEFAULT_PAGE_SIZE = 100
     DEFAULT_BATCH_SIZE = 100
+    DEFAULT_API_CALLS_PER_SECOND = 1.0
 
 
 @dataclass(frozen=True)
