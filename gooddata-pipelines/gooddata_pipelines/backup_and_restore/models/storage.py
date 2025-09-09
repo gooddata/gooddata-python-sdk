@@ -83,14 +83,13 @@ class BackupRestoreConfig(BaseModel):
             description="Batch size must be greater than 0",
         ),
     ] = Field(default=BackupSettings.DEFAULT_BATCH_SIZE)
-    max_workers: Annotated[
-        int,
+    api_calls_per_second: Annotated[
+        float,
         Field(
             gt=0,
-            lt=3,
-            description="Max workers must be greater than 0 and less than 3",
+            description="Maximum API calls per second (rate limiting)",
         ),
-    ] = Field(default=BackupSettings.MAX_WORKERS)
+    ] = Field(default=BackupSettings.DEFAULT_API_CALLS_PER_SECOND)
 
     @classmethod
     def from_yaml(cls, conf_path: str) -> "BackupRestoreConfig":

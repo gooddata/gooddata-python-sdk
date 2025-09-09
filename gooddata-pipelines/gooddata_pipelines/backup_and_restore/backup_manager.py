@@ -4,10 +4,8 @@ import json
 import os
 import shutil
 import tempfile
-import threading
 import time
 import traceback
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Type
@@ -39,6 +37,7 @@ from gooddata_pipelines.backup_and_restore.storage.s3_storage import (
     S3Storage,
 )
 from gooddata_pipelines.logger import LogObserver
+from gooddata_pipelines.utils.rate_limiter import RateLimiter
 
 
 @dataclass
@@ -59,6 +58,10 @@ class BackupManager:
         self.org_id = self._api.get_organization_id()
 
         self.loader = BackupInputProcessor(self._api, self.config.api_page_size)
+
+        self._api_rate_limiter = RateLimiter(
+            calls_per_second=self.config.api_calls_per_second,
+        )
 
     @classmethod
     def create(
@@ -95,11 +98,12 @@ class BackupManager:
 
     def get_user_data_filters(self, ws_id: str) -> dict:
         """Returns the user data filters for the specified workspace."""
-        response: requests.Response = self._api.get_user_data_filters(ws_id)
-        if response.ok:
-            return response.json()
-        else:
-            raise RuntimeError(f"{response.status_code}: {response.text}")
+        with self._api_rate_limiter:
+            response: requests.Response = self._api.get_user_data_filters(ws_id)
+            if response.ok:
+                return response.json()
+            else:
+                raise RuntimeError(f"{response.status_code}: {response.text}")
 
     def _store_user_data_filters(
         self,
@@ -144,14 +148,17 @@ class BackupManager:
 
     def _get_automations_from_api(self, workspace_id: str) -> Any:
         """Returns automations for the workspace as JSON."""
-        response: requests.Response = self._api.get_automations(workspace_id)
-        if response.ok:
-            return response.json()
-        else:
-            raise RuntimeError(
-                f"Failed to get automations for {workspace_id}. "
-                + f"{response.status_code}: {response.text}"
+        with self._api_rate_limiter:
+            response: requests.Response = self._api.get_automations(
+                workspace_id
             )
+            if response.ok:
+                return response.json()
+            else:
+                raise RuntimeError(
+                    f"Failed to get automations for {workspace_id}. "
+                    + f"{response.status_code}: {response.text}"
+                )
 
     def _store_automations(self, export_path: Path, workspace_id: str) -> None:
         """Stores the automations in the specified export path."""
@@ -183,7 +190,8 @@ class BackupManager:
     ) -> None:
         """Stores the filter views in the specified export path."""
         # Get the filter views YAML files from the API
-        self._api.store_declarative_filter_views(workspace_id, export_path)
+        with self._api_rate_limiter:
+            self._api.store_declarative_filter_views(workspace_id, export_path)
 
         # Move filter views to the subfolder containing the analytics model
         self._move_folder(
@@ -231,7 +239,10 @@ class BackupManager:
                 # the SDK. That way we could save and package all the declarations
                 # directly instead of reorganizing the folder structures. That should
                 # be more transparent/readable and possibly safer for threading
-                self._api.store_declarative_workspace(workspace_id, export_path)
+                with self._api_rate_limiter:
+                    self._api.store_declarative_workspace(
+                        workspace_id, export_path
+                    )
                 self.store_declarative_filter_views(export_path, workspace_id)
                 self._store_automations(export_path, workspace_id)
 
@@ -291,7 +302,6 @@ class BackupManager:
     def _process_batch(
         self,
         batch: BackupBatch,
-        stop_event: threading.Event,
         retry_count: int = 0,
     ) -> None:
         """Processes a single batch of workspaces for backup.
@@ -299,10 +309,6 @@ class BackupManager:
         and retry with exponential backoff up to BackupSettings.MAX_RETRIES.
         The base wait time is defined by BackupSettings.RETRY_DELAY.
         """
-        if stop_event.is_set():
-            # If the stop_event flag is set, return. This will terminate the thread
-            return
-
         try:
             with tempfile.TemporaryDirectory() as tmpdir:
                 self._get_workspace_export(tmpdir, batch.list_of_ids)
@@ -314,10 +320,7 @@ class BackupManager:
                 self.storage.export(tmpdir, self.org_id)
 
         except Exception as e:
-            if stop_event.is_set():
-                return
-
-            elif retry_count < BackupSettings.MAX_RETRIES:
+            if retry_count < BackupSettings.MAX_RETRIES:
                 # Retry with exponential backoff until MAX_RETRIES
                 next_retry = retry_count + 1
                 wait_time = BackupSettings.RETRY_DELAY**next_retry
@@ -328,52 +331,23 @@ class BackupManager:
                 )
 
                 time.sleep(wait_time)
-                self._process_batch(batch, stop_event, next_retry)
+                self._process_batch(batch, next_retry)
             else:
                 # If the batch fails after MAX_RETRIES, raise the error
                 self.logger.error(f"Batch failed: {e.__class__.__name__}: {e}")
                 raise
 
-    def _process_batches_in_parallel(
+    def _process_batches(
         self,
         batches: list[BackupBatch],
     ) -> None:
         """
-        Processes batches in parallel using concurrent.futures. Will stop the processing
-        if any one of the batches fails.
+        Processes batches sequentially to avoid overloading the API.
+        If any batch fails, the processing will stop.
         """
-
-        # Create a threading flag to control the threads that have already been started
-        stop_event = threading.Event()
-
-        with ThreadPoolExecutor(
-            max_workers=self.config.max_workers
-        ) as executor:
-            # Set the futures tasks.
-            futures = []
-            for batch in batches:
-                futures.append(
-                    executor.submit(
-                        self._process_batch,
-                        batch,
-                        stop_event,
-                    )
-                )
-
-            # Process futures as they complete
-            for future in as_completed(futures):
-                try:
-                    future.result()
-                except Exception:
-                    # On failure, set the flag to True - signal running processes to stop
-                    stop_event.set()
-
-                    # Cancel unstarted threads
-                    for f in futures:
-                        if not f.done():
-                            f.cancel()
-
-                    raise
+        for i, batch in enumerate(batches, 1):
+            self.logger.info(f"Processing batch {i}/{len(batches)}...")
+            self._process_batch(batch)
 
     def backup_workspaces(
         self,
@@ -440,7 +414,7 @@ class BackupManager:
                 f"Exporting {len(workspaces_to_export)} workspaces in {len(batches)} batches."
             )
 
-            self._process_batches_in_parallel(batches)
+            self._process_batches(batches)
 
             self.logger.info("Backup completed")
         except Exception as e:
