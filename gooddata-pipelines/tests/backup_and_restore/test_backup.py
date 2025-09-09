@@ -3,7 +3,6 @@
 import os
 import shutil
 import tempfile
-import threading
 from pathlib import Path
 from unittest import mock
 
@@ -325,7 +324,6 @@ def test_process_batch_success(
 
     backup_manager._process_batch(
         batch=batch,
-        stop_event=threading.Event(),
         retry_count=0,
     )
 
@@ -362,7 +360,6 @@ def test_process_batch_retries_on_exception(
 
     backup_manager._process_batch(
         batch=batch,
-        stop_event=threading.Event(),
     )
 
     assert get_workspace_export_mock.call_count == 2
@@ -392,7 +389,6 @@ def test_process_batch_raises_after_max_retries(
     with pytest.raises(Exception) as exc_info:
         backup_manager._process_batch(
             batch=batch,
-            stop_event=threading.Event(),
             retry_count=BackupSettings.MAX_RETRIES,
         )
     assert str(exc_info.value) == "fail"
