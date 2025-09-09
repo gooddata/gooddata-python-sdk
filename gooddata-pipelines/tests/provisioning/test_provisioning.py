@@ -1,4 +1,6 @@
 # (C) 2025 GoodData Corporation
+from pathlib import Path
+
 import pytest
 
 from gooddata_pipelines import (
@@ -14,6 +16,8 @@ from gooddata_pipelines import (
 from gooddata_pipelines.provisioning.entities.workspaces.models import (
     WorkspaceIncrementalLoad,
 )
+from gooddata_pipelines.provisioning.provisioning import Provisioning
+from tests.conftest import TEST_DATA_DIR
 
 WORKSPACE_DATA_TO_FAIL = [
     WorkspaceFullLoad(
@@ -102,3 +106,13 @@ def test_fail_type_validation(
         )
 
         assert "Not all elements in source data are instances of" in str(e)
+
+
+def test_create_from_profile() -> None:
+    """Test creating a provisioner from a profile."""
+    provisioner: Provisioning = Provisioning.create_from_profile(
+        profile="mock_profile",
+        profiles_path=Path(f"{TEST_DATA_DIR}/profiles.yaml"),
+    )
+    assert provisioner._api._domain == "http://localhost:3000"
+    assert provisioner._api._token == "some_user_token"

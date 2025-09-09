@@ -1,0 +1,4 @@
+# (C) 2025 GoodData Corporation
+mock_profile:
+  host: http://localhost:3000
+  token: some_user_token
