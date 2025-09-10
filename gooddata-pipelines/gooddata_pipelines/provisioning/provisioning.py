@@ -50,7 +50,7 @@ class Provisioning(Generic[TFullLoadSourceData, TIncrementalSourceData]):
     ) -> TProvisioning:
         """Creates a provisioner instance using a GoodData profile file."""
         content = profile_content(profile, profiles_path)
-        return cls(**content)
+        return cls(host=content["host"], token=content["token"])
 
     @staticmethod
     def _validate_credentials(host: str, token: str) -> None:
@@ -165,5 +165,4 @@ class Provisioning(Generic[TFullLoadSourceData, TIncrementalSourceData]):
 
         self.logger.error(exception_message)
 
-        if not self.logger.subscribers:
-            raise Exception(exception_message)
+        raise Exception(exception_message)
