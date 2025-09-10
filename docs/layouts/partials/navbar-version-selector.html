@@ -9,9 +9,9 @@
     {{ $.Scratch.Set "activeVersion" .version }}
   {{ end }}
 {{ end }}
-<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+<button class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 	{{ printf "%s" ($.Scratch.Get "docLabel") }}
-</a>
+</button>
 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
 	{{ range .Site.Params.versions }}
 	<a
