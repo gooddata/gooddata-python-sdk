@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	github.com/FortAwesome/Font-Awesome v0.0.0-20230327165841-0698449d50f2 // indirect
-	github.com/gooddata/gooddata-docs-theme v0.0.0-20250814105944-65486e0f9cfb // indirect
+	github.com/gooddata/gooddata-docs-theme v0.0.0-20250821103203-74c7725a1374 // indirect
 	github.com/google/docsy v0.7.1 // indirect
 	github.com/google/docsy/dependencies v0.7.1 // indirect
 	github.com/twbs/bootstrap v5.3.1+incompatible // indirect
