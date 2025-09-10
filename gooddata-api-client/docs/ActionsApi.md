@@ -30,6 +30,8 @@ Method | HTTP request | Description
 [**create_slides_export**](ActionsApi.md#create_slides_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/slides | (EXPERIMENTAL) Create slides export request
 [**create_tabular_export**](ActionsApi.md#create_tabular_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/tabular | Create tabular export request
 [**dashboard_permissions**](ActionsApi.md#dashboard_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/permissions | Get Dashboard Permissions
+[**delete_organization_automations**](ActionsApi.md#delete_organization_automations) | **POST** /api/v1/actions/organization/automations/delete | Delete selected automations across all workspaces
+[**delete_workspace_automations**](ActionsApi.md#delete_workspace_automations) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/delete | Delete selected automations in the workspace
 [**explain_afm**](ActionsApi.md#explain_afm) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/explain | AFM explain resource.
 [**forecast**](ActionsApi.md#forecast) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/{resultId} | (BETA) Smart functions - Forecast
 [**forecast_result**](ActionsApi.md#forecast_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/result/{resultId} | (BETA) Smart functions - Forecast Result
@@ -63,6 +65,8 @@ Method | HTTP request | Description
 [**metadata_sync_organization**](ActionsApi.md#metadata_sync_organization) | **POST** /api/v1/actions/organization/metadataSync | (BETA) Sync organization scope Metadata to other services
 [**overridden_child_entities**](ActionsApi.md#overridden_child_entities) | **GET** /api/v1/actions/workspaces/{workspaceId}/overriddenChildEntities | Finds identifier overrides in workspace hierarchy.
 [**particular_platform_usage**](ActionsApi.md#particular_platform_usage) | **POST** /api/v1/actions/collectUsage | Info about the platform usage for particular items.
+[**pause_organization_automations**](ActionsApi.md#pause_organization_automations) | **POST** /api/v1/actions/organization/automations/pause | Pause selected automations across all workspaces
+[**pause_workspace_automations**](ActionsApi.md#pause_workspace_automations) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/pause | Pause selected automations in the workspace
 [**register_upload_notification**](ActionsApi.md#register_upload_notification) | **POST** /api/v1/actions/dataSources/{dataSourceId}/uploadNotification | Register an upload notification
 [**resolve_all_entitlements**](ActionsApi.md#resolve_all_entitlements) | **GET** /api/v1/actions/resolveEntitlements | Values for all public entitlements.
 [**resolve_all_settings_without_workspace**](ActionsApi.md#resolve_all_settings_without_workspace) | **GET** /api/v1/actions/resolveSettings | Values for all settings without workspace.
@@ -82,10 +86,14 @@ Method | HTTP request | Description
 [**test_notification_channel**](ActionsApi.md#test_notification_channel) | **POST** /api/v1/actions/notificationChannels/test | Test notification channel.
 [**trigger_automation**](ActionsApi.md#trigger_automation) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/trigger | Trigger automation.
 [**trigger_existing_automation**](ActionsApi.md#trigger_existing_automation) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/{automationId}/trigger | Trigger existing automation.
+[**unpause_organization_automations**](ActionsApi.md#unpause_organization_automations) | **POST** /api/v1/actions/organization/automations/unpause | Unpause selected automations across all workspaces
+[**unpause_workspace_automations**](ActionsApi.md#unpause_workspace_automations) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/unpause | Unpause selected automations in the workspace
 [**unsubscribe_all_automations**](ActionsApi.md#unsubscribe_all_automations) | **DELETE** /api/v1/actions/organization/automations/unsubscribe | Unsubscribe from all automations in all workspaces
 [**unsubscribe_automation**](ActionsApi.md#unsubscribe_automation) | **DELETE** /api/v1/actions/workspaces/{workspaceId}/automations/{automationId}/unsubscribe | Unsubscribe from an automation
+[**unsubscribe_selected_workspace_automations**](ActionsApi.md#unsubscribe_selected_workspace_automations) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/unsubscribe | Unsubscribe from selected automations in the workspace
 [**unsubscribe_workspace_automations**](ActionsApi.md#unsubscribe_workspace_automations) | **DELETE** /api/v1/actions/workspaces/{workspaceId}/automations/unsubscribe | Unsubscribe from all automations in the workspace
-[**validate_llm_endpoint**](ActionsApi.md#validate_llm_endpoint) | **POST** /api/v1/actions/ai/validateLlmEndpoint | Validate LLM Endpoint
+[**validate_llm_endpoint**](ActionsApi.md#validate_llm_endpoint) | **POST** /api/v1/actions/ai/llmEndpoint/test | Validate LLM Endpoint
+[**validate_llm_endpoint_by_id**](ActionsApi.md#validate_llm_endpoint_by_id) | **POST** /api/v1/actions/ai/llmEndpoint/{llmEndpointId}/test | Validate LLM Endpoint By Id
 [**workspace_resolve_all_settings**](ActionsApi.md#workspace_resolve_all_settings) | **GET** /api/v1/actions/workspaces/{workspaceId}/resolveSettings | Values for all settings.
 [**workspace_resolve_settings**](ActionsApi.md#workspace_resolve_settings) | **POST** /api/v1/actions/workspaces/{workspaceId}/resolveSettings | Values for selected settings.
 
@@ -1880,11 +1888,21 @@ with gooddata_api_client.ApiClient() as api_client:
         file_name="filename",
         metadata={},
     ) # VisualExportRequest | 
+    x_gdc_debug = False # bool |  (optional) if omitted the server will use the default value of False
 
     # example passing only required values which don't have defaults set
     try:
         # Create visual - pdf export request
         api_response = api_instance.create_pdf_export(workspace_id, visual_export_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->create_pdf_export: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Create visual - pdf export request
+        api_response = api_instance.create_pdf_export(workspace_id, visual_export_request, x_gdc_debug=x_gdc_debug)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling ActionsApi->create_pdf_export: %s\n" % e)
@@ -1897,6 +1915,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
  **visual_export_request** | [**VisualExportRequest**](VisualExportRequest.md)|  |
+ **x_gdc_debug** | **bool**|  | [optional] if omitted the server will use the default value of False
 
 ### Return type
 
@@ -2080,11 +2099,21 @@ with gooddata_api_client.ApiClient() as api_client:
             "widget_ids_example",
         ],
     ) # SlidesExportRequest | 
+    x_gdc_debug = False # bool |  (optional) if omitted the server will use the default value of False
 
     # example passing only required values which don't have defaults set
     try:
         # (EXPERIMENTAL) Create slides export request
         api_response = api_instance.create_slides_export(workspace_id, slides_export_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->create_slides_export: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # (EXPERIMENTAL) Create slides export request
+        api_response = api_instance.create_slides_export(workspace_id, slides_export_request, x_gdc_debug=x_gdc_debug)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling ActionsApi->create_slides_export: %s\n" % e)
@@ -2097,6 +2126,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
  **slides_export_request** | [**SlidesExportRequest**](SlidesExportRequest.md)|  |
+ **x_gdc_debug** | **bool**|  | [optional] if omitted the server will use the default value of False
 
 ### Return type
 
@@ -2171,6 +2201,8 @@ with gooddata_api_client.ApiClient() as api_client:
         settings=Settings(
             export_info=True,
             merge_headers=True,
+            page_orientation="PORTRAIT",
+            page_size="A4",
             pdf_page_size="a4 landscape",
             pdf_table_style=[
                 PdfTableStyle(
@@ -2186,6 +2218,7 @@ with gooddata_api_client.ApiClient() as api_client:
             pdf_top_left_content="Good",
             pdf_top_right_content="Morning",
             show_filters=False,
+            show_info_page=False,
         ),
         visualization_object="f7c359bc-c230-4487-b15b-ad9685bcb537",
         visualization_object_custom_filters=[
@@ -2296,6 +2329,149 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **delete_organization_automations**
+> delete_organization_automations(organization_automation_management_bulk_request)
+
+Delete selected automations across all workspaces
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.organization_automation_management_bulk_request import OrganizationAutomationManagementBulkRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    organization_automation_management_bulk_request = OrganizationAutomationManagementBulkRequest(
+        automations=[
+            OrganizationAutomationIdentifier(
+                id="id_example",
+                workspace_id="workspace_id_example",
+            ),
+        ],
+    ) # OrganizationAutomationManagementBulkRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Delete selected automations across all workspaces
+        api_instance.delete_organization_automations(organization_automation_management_bulk_request)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->delete_organization_automations: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **organization_automation_management_bulk_request** | [**OrganizationAutomationManagementBulkRequest**](OrganizationAutomationManagementBulkRequest.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **delete_workspace_automations**
+> delete_workspace_automations(workspace_id, workspace_automation_management_bulk_request)
+
+Delete selected automations in the workspace
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.workspace_automation_management_bulk_request import WorkspaceAutomationManagementBulkRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    workspace_automation_management_bulk_request = WorkspaceAutomationManagementBulkRequest(
+        automations=[
+            WorkspaceAutomationIdentifier(
+                id="id_example",
+            ),
+        ],
+    ) # WorkspaceAutomationManagementBulkRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Delete selected automations in the workspace
+        api_instance.delete_workspace_automations(workspace_id, workspace_automation_management_bulk_request)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->delete_workspace_automations: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **workspace_automation_management_bulk_request** | [**WorkspaceAutomationManagementBulkRequest**](WorkspaceAutomationManagementBulkRequest.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -2947,7 +3123,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_exported_file**
-> get_exported_file(workspace_id, export_id)
+> file_type get_exported_file(workspace_id, export_id)
 
 Retrieve exported files
 
@@ -2978,7 +3154,8 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     try:
         # Retrieve exported files
-        api_instance.get_exported_file(workspace_id, export_id)
+        api_response = api_instance.get_exported_file(workspace_id, export_id)
+        pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling ActionsApi->get_exported_file: %s\n" % e)
 ```
@@ -2993,7 +3170,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-void (empty response body)
+**file_type**
 
 ### Authorization
 
@@ -3015,7 +3192,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_image_export**
-> get_image_export(workspace_id, export_id)
+> file_type get_image_export(workspace_id, export_id)
 
 (EXPERIMENTAL) Retrieve exported files
 
@@ -3047,7 +3224,8 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     try:
         # (EXPERIMENTAL) Retrieve exported files
-        api_instance.get_image_export(workspace_id, export_id)
+        api_response = api_instance.get_image_export(workspace_id, export_id)
+        pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling ActionsApi->get_image_export: %s\n" % e)
 ```
@@ -3062,7 +3240,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-void (empty response body)
+**file_type**
 
 ### Authorization
 
@@ -3296,7 +3474,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_raw_export**
-> get_raw_export(workspace_id, export_id)
+> file_type get_raw_export(workspace_id, export_id)
 
 (EXPERIMENTAL) Retrieve exported files
 
@@ -3327,7 +3505,8 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     try:
         # (EXPERIMENTAL) Retrieve exported files
-        api_instance.get_raw_export(workspace_id, export_id)
+        api_response = api_instance.get_raw_export(workspace_id, export_id)
+        pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling ActionsApi->get_raw_export: %s\n" % e)
 ```
@@ -3342,7 +3521,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-void (empty response body)
+**file_type**
 
 ### Authorization
 
@@ -3364,7 +3543,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_slides_export**
-> get_slides_export(workspace_id, export_id)
+> file_type get_slides_export(workspace_id, export_id)
 
 (EXPERIMENTAL) Retrieve exported files
 
@@ -3396,7 +3575,8 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     try:
         # (EXPERIMENTAL) Retrieve exported files
-        api_instance.get_slides_export(workspace_id, export_id)
+        api_response = api_instance.get_slides_export(workspace_id, export_id)
+        pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling ActionsApi->get_slides_export: %s\n" % e)
 ```
@@ -3411,7 +3591,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-void (empty response body)
+**file_type**
 
 ### Authorization
 
@@ -3500,7 +3680,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_tabular_export**
-> get_tabular_export(workspace_id, export_id)
+> file_type get_tabular_export(workspace_id, export_id)
 
 Retrieve exported files
 
@@ -3531,7 +3711,8 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     try:
         # Retrieve exported files
-        api_instance.get_tabular_export(workspace_id, export_id)
+        api_response = api_instance.get_tabular_export(workspace_id, export_id)
+        pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling ActionsApi->get_tabular_export: %s\n" % e)
 ```
@@ -3546,7 +3727,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-void (empty response body)
+**file_type**
 
 ### Authorization
 
@@ -4795,6 +4976,149 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **pause_organization_automations**
+> pause_organization_automations(organization_automation_management_bulk_request)
+
+Pause selected automations across all workspaces
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.organization_automation_management_bulk_request import OrganizationAutomationManagementBulkRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    organization_automation_management_bulk_request = OrganizationAutomationManagementBulkRequest(
+        automations=[
+            OrganizationAutomationIdentifier(
+                id="id_example",
+                workspace_id="workspace_id_example",
+            ),
+        ],
+    ) # OrganizationAutomationManagementBulkRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Pause selected automations across all workspaces
+        api_instance.pause_organization_automations(organization_automation_management_bulk_request)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->pause_organization_automations: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **organization_automation_management_bulk_request** | [**OrganizationAutomationManagementBulkRequest**](OrganizationAutomationManagementBulkRequest.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **pause_workspace_automations**
+> pause_workspace_automations(workspace_id, workspace_automation_management_bulk_request)
+
+Pause selected automations in the workspace
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.workspace_automation_management_bulk_request import WorkspaceAutomationManagementBulkRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    workspace_automation_management_bulk_request = WorkspaceAutomationManagementBulkRequest(
+        automations=[
+            WorkspaceAutomationIdentifier(
+                id="id_example",
+            ),
+        ],
+    ) # WorkspaceAutomationManagementBulkRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Pause selected automations in the workspace
+        api_instance.pause_workspace_automations(workspace_id, workspace_automation_management_bulk_request)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->pause_workspace_automations: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **workspace_automation_management_bulk_request** | [**WorkspaceAutomationManagementBulkRequest**](WorkspaceAutomationManagementBulkRequest.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -6319,6 +6643,8 @@ with gooddata_api_client.ApiClient() as api_client:
                         settings=Settings(
                             export_info=True,
                             merge_headers=True,
+                            page_orientation="PORTRAIT",
+                            page_size="A4",
                             pdf_page_size="a4 landscape",
                             pdf_table_style=[
                                 PdfTableStyle(
@@ -6334,6 +6660,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             pdf_top_left_content="Good",
                             pdf_top_right_content="Morning",
                             show_filters=False,
+                            show_info_page=False,
                         ),
                         visualization_object="f7c359bc-c230-4487-b15b-ad9685bcb537",
                         visualization_object_custom_filters=[
@@ -6461,6 +6788,149 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **unpause_organization_automations**
+> unpause_organization_automations(organization_automation_management_bulk_request)
+
+Unpause selected automations across all workspaces
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.organization_automation_management_bulk_request import OrganizationAutomationManagementBulkRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    organization_automation_management_bulk_request = OrganizationAutomationManagementBulkRequest(
+        automations=[
+            OrganizationAutomationIdentifier(
+                id="id_example",
+                workspace_id="workspace_id_example",
+            ),
+        ],
+    ) # OrganizationAutomationManagementBulkRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Unpause selected automations across all workspaces
+        api_instance.unpause_organization_automations(organization_automation_management_bulk_request)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->unpause_organization_automations: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **organization_automation_management_bulk_request** | [**OrganizationAutomationManagementBulkRequest**](OrganizationAutomationManagementBulkRequest.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **unpause_workspace_automations**
+> unpause_workspace_automations(workspace_id, workspace_automation_management_bulk_request)
+
+Unpause selected automations in the workspace
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.workspace_automation_management_bulk_request import WorkspaceAutomationManagementBulkRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    workspace_automation_management_bulk_request = WorkspaceAutomationManagementBulkRequest(
+        automations=[
+            WorkspaceAutomationIdentifier(
+                id="id_example",
+            ),
+        ],
+    ) # WorkspaceAutomationManagementBulkRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Unpause selected automations in the workspace
+        api_instance.unpause_workspace_automations(workspace_id, workspace_automation_management_bulk_request)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->unpause_workspace_automations: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **workspace_automation_management_bulk_request** | [**WorkspaceAutomationManagementBulkRequest**](WorkspaceAutomationManagementBulkRequest.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **unsubscribe_all_automations**
 > unsubscribe_all_automations()
 
@@ -6574,6 +7044,78 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **unsubscribe_selected_workspace_automations**
+> unsubscribe_selected_workspace_automations(workspace_id, workspace_automation_management_bulk_request)
+
+Unsubscribe from selected automations in the workspace
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.workspace_automation_management_bulk_request import WorkspaceAutomationManagementBulkRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    workspace_automation_management_bulk_request = WorkspaceAutomationManagementBulkRequest(
+        automations=[
+            WorkspaceAutomationIdentifier(
+                id="id_example",
+            ),
+        ],
+    ) # WorkspaceAutomationManagementBulkRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Unsubscribe from selected automations in the workspace
+        api_instance.unsubscribe_selected_workspace_automations(workspace_id, workspace_automation_management_bulk_request)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->unsubscribe_selected_workspace_automations: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **workspace_automation_management_bulk_request** | [**WorkspaceAutomationManagementBulkRequest**](WorkspaceAutomationManagementBulkRequest.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
  - **Accept**: Not defined
 
 
@@ -6699,6 +7241,91 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **validate_llm_endpoint_request** | [**ValidateLLMEndpointRequest**](ValidateLLMEndpointRequest.md)|  |
+
+### Return type
+
+[**ValidateLLMEndpointResponse**](ValidateLLMEndpointResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **validate_llm_endpoint_by_id**
+> ValidateLLMEndpointResponse validate_llm_endpoint_by_id(llm_endpoint_id)
+
+Validate LLM Endpoint By Id
+
+Validates existing LLM endpoint with provided parameters and updates it if they are valid.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.validate_llm_endpoint_response import ValidateLLMEndpointResponse
+from gooddata_api_client.model.validate_llm_endpoint_by_id_request import ValidateLLMEndpointByIdRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    llm_endpoint_id = "llmEndpointId_example" # str | 
+    validate_llm_endpoint_by_id_request = ValidateLLMEndpointByIdRequest(
+        base_url="base_url_example",
+        llm_model="llm_model_example",
+        llm_organization="llm_organization_example",
+        provider="provider_example",
+        token="token_example",
+    ) # ValidateLLMEndpointByIdRequest |  (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Validate LLM Endpoint By Id
+        api_response = api_instance.validate_llm_endpoint_by_id(llm_endpoint_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->validate_llm_endpoint_by_id: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Validate LLM Endpoint By Id
+        api_response = api_instance.validate_llm_endpoint_by_id(llm_endpoint_id, validate_llm_endpoint_by_id_request=validate_llm_endpoint_by_id_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->validate_llm_endpoint_by_id: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **llm_endpoint_id** | **str**|  |
+ **validate_llm_endpoint_by_id_request** | [**ValidateLLMEndpointByIdRequest**](ValidateLLMEndpointByIdRequest.md)|  | [optional]
 
 ### Return type
 

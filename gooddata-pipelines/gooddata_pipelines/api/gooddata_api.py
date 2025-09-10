@@ -7,9 +7,6 @@ from typing import Any
 
 import requests
 
-# TODO: Limit the use of "typing.Any". Improve readability by using either models
-#  or typed dicts.
-
 TIMEOUT = 60
 REQUEST_PAGE_SIZE = 250
 API_VERSION = "v1"
@@ -54,42 +51,6 @@ class ApiMethods:
             str: The full URL for the API endpoint.
         """
         return f"{self.base_url}{endpoint}"
-
-    def get_custom_application_setting(
-        self, workspace_id: str, setting_id: str
-    ) -> requests.Response:
-        """Gets a custom application setting.
-
-        Args:
-            workspace_id (str): The ID of the workspace.
-            setting_id (str): The ID of the custom application setting.
-        Returns:
-            requests.Response: The response from the server containing the
-                custom application setting.
-        """
-        url = f"/entities/workspaces/{workspace_id}/customApplicationSettings/{setting_id}"
-        return self._get(url)
-
-    def put_custom_application_setting(
-        self, workspace_id: str, setting_id: str, data: dict[str, Any]
-    ) -> requests.Response:
-        url = f"/entities/workspaces/{workspace_id}/customApplicationSettings/{setting_id}"
-        return self._put(url, data, self.headers)
-
-    def post_custom_application_setting(
-        self, workspace_id: str, data: dict[str, Any]
-    ) -> requests.Response:
-        """Creates a custom application setting for a given workspace.
-
-        Args:
-            workspace_id (str): The ID of the workspace.
-            data (dict[str, Any]): The data for the custom application setting.
-        Returns:
-            requests.Response: The response from the server containing the
-                created custom application setting.
-        """
-        url = f"/entities/workspaces/{workspace_id}/customApplicationSettings/"
-        return self._post(url, data, self.headers)
 
     def get_all_workspace_data_filters(
         self, workspace_id: str
@@ -200,21 +161,6 @@ class ApiMethods:
         return self._delete(
             endpoint,
         )
-
-    def post_workspace_data_filter(
-        self, workspace_id: str, data: dict[str, Any]
-    ) -> requests.Response:
-        """Creates a workspace data filter for a given workspace.
-
-        Args:
-            workspace_id (str): The ID of the workspace.
-            data (dict[str, Any]): The data for the workspace data filter.
-        Returns:
-            requests.Response: The response from the server containing the
-                created workspace data filter.
-        """
-        endpoint = f"/entities/workspaces/{workspace_id}/workspaceDataFilters"
-        return self._post(endpoint, data, self.headers)
 
     def get_user_data_filters(self, workspace_id: str) -> requests.Response:
         """Gets the user data filters for a given workspace."""

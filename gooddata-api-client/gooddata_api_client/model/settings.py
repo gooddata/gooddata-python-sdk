@@ -60,6 +60,15 @@ class Settings(ModelNormal):
     """
 
     allowed_values = {
+        ('page_orientation',): {
+            'PORTRAIT': "PORTRAIT",
+            'LANDSCAPE': "LANDSCAPE",
+        },
+        ('page_size',): {
+            'A3': "A3",
+            'A4': "A4",
+            'LETTER': "LETTER",
+        },
     }
 
     validations = {
@@ -90,11 +99,14 @@ class Settings(ModelNormal):
         return {
             'export_info': (bool,),  # noqa: E501
             'merge_headers': (bool,),  # noqa: E501
+            'page_orientation': (str,),  # noqa: E501
+            'page_size': (str,),  # noqa: E501
             'pdf_page_size': (str,),  # noqa: E501
             'pdf_table_style': ([PdfTableStyle],),  # noqa: E501
             'pdf_top_left_content': (str,),  # noqa: E501
             'pdf_top_right_content': (str,),  # noqa: E501
             'show_filters': (bool,),  # noqa: E501
+            'show_info_page': (bool,),  # noqa: E501
         }
 
     @cached_property
@@ -105,11 +117,14 @@ class Settings(ModelNormal):
     attribute_map = {
         'export_info': 'exportInfo',  # noqa: E501
         'merge_headers': 'mergeHeaders',  # noqa: E501
+        'page_orientation': 'pageOrientation',  # noqa: E501
+        'page_size': 'pageSize',  # noqa: E501
         'pdf_page_size': 'pdfPageSize',  # noqa: E501
         'pdf_table_style': 'pdfTableStyle',  # noqa: E501
         'pdf_top_left_content': 'pdfTopLeftContent',  # noqa: E501
         'pdf_top_right_content': 'pdfTopRightContent',  # noqa: E501
         'show_filters': 'showFilters',  # noqa: E501
+        'show_info_page': 'showInfoPage',  # noqa: E501
     }
 
     read_only_vars = {
@@ -155,11 +170,14 @@ class Settings(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             export_info (bool): Include export info sheet in the exported file. Works only with `visualizationObject`. (XLSX). [optional] if omitted the server will use the default value of False  # noqa: E501
             merge_headers (bool): Merge equal headers in neighbouring cells. (XLSX). [optional]  # noqa: E501
+            page_orientation (str): Set page orientation. (PDF). [optional] if omitted the server will use the default value of "PORTRAIT"  # noqa: E501
+            page_size (str): Set page size. (PDF). [optional] if omitted the server will use the default value of "A4"  # noqa: E501
             pdf_page_size (str): Page size and orientation. (PDF). [optional]  # noqa: E501
             pdf_table_style ([PdfTableStyle]): Custom CSS styles for the table. (PDF, HTML). [optional]  # noqa: E501
             pdf_top_left_content (str): Top left header content. (PDF). [optional]  # noqa: E501
             pdf_top_right_content (str): Top right header content. (PDF). [optional]  # noqa: E501
             show_filters (bool): Print applied filters on top of the document. (PDF/HTML when visualizationObject is given). [optional]  # noqa: E501
+            show_info_page (bool): Show info page with export information.. [optional] if omitted the server will use the default value of False  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -247,11 +265,14 @@ class Settings(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             export_info (bool): Include export info sheet in the exported file. Works only with `visualizationObject`. (XLSX). [optional] if omitted the server will use the default value of False  # noqa: E501
             merge_headers (bool): Merge equal headers in neighbouring cells. (XLSX). [optional]  # noqa: E501
+            page_orientation (str): Set page orientation. (PDF). [optional] if omitted the server will use the default value of "PORTRAIT"  # noqa: E501
+            page_size (str): Set page size. (PDF). [optional] if omitted the server will use the default value of "A4"  # noqa: E501
             pdf_page_size (str): Page size and orientation. (PDF). [optional]  # noqa: E501
             pdf_table_style ([PdfTableStyle]): Custom CSS styles for the table. (PDF, HTML). [optional]  # noqa: E501
             pdf_top_left_content (str): Top left header content. (PDF). [optional]  # noqa: E501
             pdf_top_right_content (str): Top right header content. (PDF). [optional]  # noqa: E501
             show_filters (bool): Print applied filters on top of the document. (PDF/HTML when visualizationObject is given). [optional]  # noqa: E501
+            show_info_page (bool): Show info page with export information.. [optional] if omitted the server will use the default value of False  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

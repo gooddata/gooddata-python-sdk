@@ -6,6 +6,7 @@ from typing import Optional, Union
 
 from gooddata_sdk.catalog.types import ValidObjects
 from gooddata_sdk.catalog.workspace.entity_model.content_objects.dataset import (
+    CatalogAggregatedFact,
     CatalogAttribute,
     CatalogDataset,
     CatalogFact,
@@ -45,6 +46,10 @@ class CatalogWorkspaceContent:
     @property
     def facts(self) -> list[CatalogFact]:
         return [f for d in self._datasets for f in d.facts]
+
+    @property
+    def aggregated_facts(self) -> list[CatalogAggregatedFact]:
+        return [f for d in self._datasets for f in (d.aggregated_facts if d.aggregated_facts else [])]
 
     @property
     def attributes(self) -> list[CatalogAttribute]:

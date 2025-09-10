@@ -1,29 +1,27 @@
 # (C) 2025 GoodData Corporation
 """Module containing models related to workspace provisioning in GoodData Cloud."""
 
-from dataclasses import dataclass, field
 from typing import Literal
 
+import attrs
 from pydantic import BaseModel, ConfigDict
 
 
-@dataclass
+@attrs.define
 class WorkspaceDataMaps:
     """Dataclass to hold various mappings related to workspace data."""
 
-    child_to_parent_id_map: dict[str, str] = field(default_factory=dict)
-    workspace_id_to_wdf_map: dict[str, dict[str, list[str]]] = field(
-        default_factory=dict
+    child_to_parent_id_map: dict[str, str] = attrs.field(factory=dict)
+    workspace_id_to_wdf_map: dict[str, dict[str, list[str]]] = attrs.field(
+        factory=dict
     )
-    parent_ids: set[str] = field(default_factory=set)
-    source_ids: set[str] = field(default_factory=set)
-    workspace_id_to_name_map: dict[str, str] = field(default_factory=dict)
-    upstream_ids: set[str] = field(default_factory=set)
+    parent_ids: set[str] = attrs.field(factory=set)
+    source_ids: set[str] = attrs.field(factory=set)
+    workspace_id_to_name_map: dict[str, str] = attrs.field(factory=dict)
+    upstream_ids: set[str] = attrs.field(factory=set)
 
 
-class WorkspaceFullLoad(BaseModel):
-    """Model representing input for provisioning of workspaces in GoodData Cloud."""
-
+class WorkspaceBase(BaseModel):
     model_config = ConfigDict(coerce_numbers_to_str=True)
 
     parent_id: str
@@ -33,10 +31,13 @@ class WorkspaceFullLoad(BaseModel):
     workspace_data_filter_values: list[str] | None = None
 
 
-class WorkspaceIncrementalLoad(WorkspaceFullLoad):
-    """Model representing input for incremental provisioning of workspaces in GoodData Cloud."""
+class WorkspaceFullLoad(WorkspaceBase):
+    """Input validator for full load of workspace provisioning."""
 
-    # TODO: double check that the model loads the data correctly, write a test
+
+class WorkspaceIncrementalLoad(WorkspaceBase):
+    """Input validator for incremental load of workspace provisioning."""
+
     is_active: bool
 
 

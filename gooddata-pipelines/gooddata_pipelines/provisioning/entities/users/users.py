@@ -30,6 +30,9 @@ class UserProvisioner(Provisioning[UserFullLoad, UserIncrementalLoad]):
     source_group_incremental: list[UserIncrementalLoad]
     source_group_full: list[UserFullLoad]
 
+    FULL_LOAD_TYPE: type[UserFullLoad] = UserFullLoad
+    INCREMENTAL_LOAD_TYPE: type[UserIncrementalLoad] = UserIncrementalLoad
+
     def __init__(self, host: str, token: str) -> None:
         super().__init__(host, token)
         self.upstream_user_cache: dict[UserId, UserModel] = {}

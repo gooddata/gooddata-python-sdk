@@ -84,6 +84,7 @@ class AttributeFormat(ModelNormal):
         return {
             'locale': (str,),  # noqa: E501
             'pattern': (str,),  # noqa: E501
+            'timezone': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -94,6 +95,7 @@ class AttributeFormat(ModelNormal):
     attribute_map = {
         'locale': 'locale',  # noqa: E501
         'pattern': 'pattern',  # noqa: E501
+        'timezone': 'timezone',  # noqa: E501
     }
 
     read_only_vars = {
@@ -141,6 +143,7 @@ class AttributeFormat(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            timezone (str): Timezone for date formatting like 'America/New_York', 'Europe/Prague', etc.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -232,6 +235,7 @@ class AttributeFormat(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            timezone (str): Timezone for date formatting like 'America/New_York', 'Europe/Prague', etc.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

@@ -79,6 +79,7 @@ from gooddata_api_client.api.workspaces_declarative_apis_api import WorkspacesDe
 from gooddata_api_client.api.workspaces_entity_apis_api import WorkspacesEntityAPIsApi
 from gooddata_api_client.api.workspaces_settings_api import WorkspacesSettingsApi
 from gooddata_api_client.api.actions_api import ActionsApi
+from gooddata_api_client.api.automation_organization_view_controller_api import AutomationOrganizationViewControllerApi
 from gooddata_api_client.api.entities_api import EntitiesApi
 from gooddata_api_client.api.layout_api import LayoutApi
 from gooddata_api_client.api.organization_controller_api import OrganizationControllerApi

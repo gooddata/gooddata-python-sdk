@@ -21,12 +21,18 @@ class UserGroupProvisioner(
     """Provisioning class for user groups in GoodData workspaces.
 
     This class handles the creation, update, and deletion of user groups
-    based on the provided source data.
+    based on the provided source data. Use the `full_load` or `incremental_load`
+    methods to run the provisioning.
     """
 
     source_group_incremental: list[UserGroupIncrementalLoad]
     source_group_full: list[UserGroupFullLoad]
     upstream_user_groups: list[CatalogUserGroup]
+
+    FULL_LOAD_TYPE: type[UserGroupFullLoad] = UserGroupFullLoad
+    INCREMENTAL_LOAD_TYPE: type[UserGroupIncrementalLoad] = (
+        UserGroupIncrementalLoad
+    )
 
     @staticmethod
     def _is_changed(

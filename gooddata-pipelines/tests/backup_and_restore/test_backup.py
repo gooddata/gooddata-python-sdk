@@ -3,7 +3,6 @@
 import os
 import shutil
 import tempfile
-import threading
 from pathlib import Path
 from unittest import mock
 
@@ -106,13 +105,13 @@ def assert_not_called_with(target, *args, **kwargs):
 
 def test_get_s3_storage(backup_manager):
     """Test get_storage method with literal string as input."""
-    s3_storage = backup_manager.get_storage(S3_CONFIG)
+    s3_storage = backup_manager._get_storage(S3_CONFIG)
     assert isinstance(s3_storage, S3Storage)
 
 
 def test_get_local_storage(backup_manager):
     """Test get_storage method with literal string as input."""
-    local_storage = backup_manager.get_storage(LOCAL_CONFIG)
+    local_storage = backup_manager._get_storage(LOCAL_CONFIG)
     assert isinstance(local_storage, LocalStorage)
 
 
@@ -125,7 +124,7 @@ def test_archive_gooddata_layouts_to_zip(backup_manager):
             ),
             Path(tmpdir + "/services"),
         )
-        backup_manager.archive_gooddata_layouts_to_zip(
+        backup_manager._archive_gooddata_layouts_to_zip(
             str(Path(tmpdir, "services"))
         )
 
@@ -202,7 +201,7 @@ def test_store_user_data_filters(backup_manager):
         ]
     }
     user_data_filter_folderlocation = f"{TEST_DATA_SUBDIR}/test_exports/services/wsid1/20230713-132759-1_3_1_dev5/gooddata_layouts/services/workspaces/wsid1/user_data_filters"
-    backup_manager.store_user_data_filters(
+    backup_manager._store_user_data_filters(
         user_data_filters,
         Path(
             f"{TEST_DATA_SUBDIR}/test_exports/services/wsid1/20230713-132759-1_3_1_dev5",
@@ -245,7 +244,7 @@ def test_local_storage_export(backup_manager):
             ),
             org_store_location,
         )
-        local_storage = backup_manager.get_storage(LOCAL_CONFIG)
+        local_storage = backup_manager._get_storage(LOCAL_CONFIG)
 
         local_storage.export(
             folder=tmpdir,
@@ -301,7 +300,7 @@ def test_split_to_batches(backup_manager):
         BackupBatch(["ws5"]),
     ]
 
-    result = backup_manager.split_to_batches(workspaces, batch_size)
+    result = backup_manager._split_to_batches(workspaces, batch_size)
 
     for i, batch in enumerate(result):
         assert isinstance(batch, BackupBatch)
@@ -309,10 +308,10 @@ def test_split_to_batches(backup_manager):
 
 
 @mock.patch(
-    "gooddata_pipelines.backup_and_restore.backup_manager.BackupManager.get_workspace_export"
+    "gooddata_pipelines.backup_and_restore.backup_manager.BackupManager._get_workspace_export"
 )
 @mock.patch(
-    "gooddata_pipelines.backup_and_restore.backup_manager.BackupManager.archive_gooddata_layouts_to_zip"
+    "gooddata_pipelines.backup_and_restore.backup_manager.BackupManager._archive_gooddata_layouts_to_zip"
 )
 def test_process_batch_success(
     archive_gooddata_layouts_to_zip_mock,
@@ -323,9 +322,8 @@ def test_process_batch_success(
     backup_manager.storage = mock.Mock()
     batch = BackupBatch(["ws1", "ws2"])
 
-    backup_manager.process_batch(
+    backup_manager._process_batch(
         batch=batch,
-        stop_event=threading.Event(),
         retry_count=0,
     )
 
@@ -335,10 +333,10 @@ def test_process_batch_success(
 
 
 @mock.patch(
-    "gooddata_pipelines.backup_and_restore.backup_manager.BackupManager.get_workspace_export"
+    "gooddata_pipelines.backup_and_restore.backup_manager.BackupManager._get_workspace_export"
 )
 @mock.patch(
-    "gooddata_pipelines.backup_and_restore.backup_manager.BackupManager.archive_gooddata_layouts_to_zip"
+    "gooddata_pipelines.backup_and_restore.backup_manager.BackupManager._archive_gooddata_layouts_to_zip"
 )
 def test_process_batch_retries_on_exception(
     archive_gooddata_layouts_to_zip_mock,
@@ -360,9 +358,8 @@ def test_process_batch_retries_on_exception(
 
     get_workspace_export_mock.side_effect = fail_once
 
-    backup_manager.process_batch(
+    backup_manager._process_batch(
         batch=batch,
-        stop_event=threading.Event(),
     )
 
     assert get_workspace_export_mock.call_count == 2
@@ -374,10 +371,10 @@ def test_process_batch_retries_on_exception(
 
 
 @mock.patch(
-    "gooddata_pipelines.backup_and_restore.backup_manager.BackupManager.get_workspace_export"
+    "gooddata_pipelines.backup_and_restore.backup_manager.BackupManager._get_workspace_export"
 )
 @mock.patch(
-    "gooddata_pipelines.backup_and_restore.backup_manager.BackupManager.archive_gooddata_layouts_to_zip"
+    "gooddata_pipelines.backup_and_restore.backup_manager.BackupManager._archive_gooddata_layouts_to_zip"
 )
 def test_process_batch_raises_after_max_retries(
     archive_gooddata_layouts_to_zip_mock,
@@ -390,9 +387,8 @@ def test_process_batch_raises_after_max_retries(
     get_workspace_export_mock.side_effect = Exception("fail")
 
     with pytest.raises(Exception) as exc_info:
-        backup_manager.process_batch(
+        backup_manager._process_batch(
             batch=batch,
-            stop_event=threading.Event(),
             retry_count=BackupSettings.MAX_RETRIES,
         )
     assert str(exc_info.value) == "fail"

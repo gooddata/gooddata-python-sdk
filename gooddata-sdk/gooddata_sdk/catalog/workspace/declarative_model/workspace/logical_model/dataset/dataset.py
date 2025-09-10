@@ -43,6 +43,7 @@ class CatalogDeclarativeDataset(Base):
     attributes: Optional[list[CatalogDeclarativeAttribute]] = None
     facts: Optional[list[CatalogDeclarativeFact]] = None
     aggregated_facts: Optional[list[CatalogDeclarativeAggregatedFact]] = attrs.field(factory=list)
+    precedence: Optional[int] = None
     data_source_table_id: Optional[CatalogDataSourceTableIdentifier] = None
     sql: Optional[CatalogDeclarativeDatasetSql] = None
     tags: Optional[list[str]] = None

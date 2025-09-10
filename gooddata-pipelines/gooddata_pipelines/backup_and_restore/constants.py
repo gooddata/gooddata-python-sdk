@@ -1,3 +1,4 @@
+# (C) 2025 GoodData Corporation
 import datetime
 from dataclasses import dataclass
 
@@ -21,18 +22,14 @@ class DirNames:
 
 
 @dataclass(frozen=True)
-class ConcurrencyDefaults:
-    MAX_WORKERS = 2
-    DEFAULT_BATCH_SIZE = 100
-
-
-@dataclass(frozen=True)
 class ApiDefaults:
     DEFAULT_PAGE_SIZE = 100
+    DEFAULT_BATCH_SIZE = 100
+    DEFAULT_API_CALLS_PER_SECOND = 1.0
 
 
 @dataclass(frozen=True)
-class BackupSettings(ConcurrencyDefaults, ApiDefaults):
+class BackupSettings(ApiDefaults):
     MAX_RETRIES = 3
     RETRY_DELAY = 5  # seconds
     TIMESTAMP_SDK_FOLDER = (

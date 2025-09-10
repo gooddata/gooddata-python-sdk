@@ -67,6 +67,7 @@ from gooddata_api_client.model.key_drivers_result import KeyDriversResult
 from gooddata_api_client.model.locale_request import LocaleRequest
 from gooddata_api_client.model.manage_dashboard_permissions_request_inner import ManageDashboardPermissionsRequestInner
 from gooddata_api_client.model.notifications import Notifications
+from gooddata_api_client.model.organization_automation_management_bulk_request import OrganizationAutomationManagementBulkRequest
 from gooddata_api_client.model.organization_permission_assignment import OrganizationPermissionAssignment
 from gooddata_api_client.model.platform_usage import PlatformUsage
 from gooddata_api_client.model.platform_usage_request import PlatformUsageRequest
@@ -90,9 +91,11 @@ from gooddata_api_client.model.test_destination_request import TestDestinationRe
 from gooddata_api_client.model.test_request import TestRequest
 from gooddata_api_client.model.test_response import TestResponse
 from gooddata_api_client.model.trigger_automation_request import TriggerAutomationRequest
+from gooddata_api_client.model.validate_llm_endpoint_by_id_request import ValidateLLMEndpointByIdRequest
 from gooddata_api_client.model.validate_llm_endpoint_request import ValidateLLMEndpointRequest
 from gooddata_api_client.model.validate_llm_endpoint_response import ValidateLLMEndpointResponse
 from gooddata_api_client.model.visual_export_request import VisualExportRequest
+from gooddata_api_client.model.workspace_automation_management_bulk_request import WorkspaceAutomationManagementBulkRequest
 from gooddata_api_client.model.workspace_permission_assignment import WorkspacePermissionAssignment
 from gooddata_api_client.model.workspace_user_groups import WorkspaceUserGroups
 from gooddata_api_client.model.workspace_users import WorkspaceUsers
@@ -1456,6 +1459,7 @@ class ActionsApi(object):
                 'all': [
                     'workspace_id',
                     'visual_export_request',
+                    'x_gdc_debug',
                 ],
                 'required': [
                     'workspace_id',
@@ -1478,13 +1482,17 @@ class ActionsApi(object):
                         (str,),
                     'visual_export_request':
                         (VisualExportRequest,),
+                    'x_gdc_debug':
+                        (bool,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
+                    'x_gdc_debug': 'X-Gdc-Debug',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'visual_export_request': 'body',
+                    'x_gdc_debug': 'header',
                 },
                 'collection_format_map': {
                 }
@@ -1568,6 +1576,7 @@ class ActionsApi(object):
                 'all': [
                     'workspace_id',
                     'slides_export_request',
+                    'x_gdc_debug',
                 ],
                 'required': [
                     'workspace_id',
@@ -1590,13 +1599,17 @@ class ActionsApi(object):
                         (str,),
                     'slides_export_request':
                         (SlidesExportRequest,),
+                    'x_gdc_debug':
+                        (bool,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
+                    'x_gdc_debug': 'X-Gdc-Debug',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'slides_export_request': 'body',
+                    'x_gdc_debug': 'header',
                 },
                 'collection_format_map': {
                 }
@@ -1719,6 +1732,108 @@ class ActionsApi(object):
                     'application/json'
                 ],
                 'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.delete_organization_automations_endpoint = _Endpoint(
+            settings={
+                'response_type': None,
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/organization/automations/delete',
+                'operation_id': 'delete_organization_automations',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'organization_automation_management_bulk_request',
+                ],
+                'required': [
+                    'organization_automation_management_bulk_request',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'organization_automation_management_bulk_request':
+                        (OrganizationAutomationManagementBulkRequest,),
+                },
+                'attribute_map': {
+                },
+                'location_map': {
+                    'organization_automation_management_bulk_request': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [],
+                'content_type': [
+                    'application/json'
+                ]
+            },
+            api_client=api_client
+        )
+        self.delete_workspace_automations_endpoint = _Endpoint(
+            settings={
+                'response_type': None,
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/automations/delete',
+                'operation_id': 'delete_workspace_automations',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'workspace_automation_management_bulk_request',
+                ],
+                'required': [
+                    'workspace_id',
+                    'workspace_automation_management_bulk_request',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'workspace_automation_management_bulk_request':
+                        (WorkspaceAutomationManagementBulkRequest,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'workspace_automation_management_bulk_request': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [],
+                'content_type': [
+                    'application/json'
+                ]
             },
             api_client=api_client
         )
@@ -2173,7 +2288,7 @@ class ActionsApi(object):
         )
         self.get_exported_file_endpoint = _Endpoint(
             settings={
-                'response_type': None,
+                'response_type': (file_type,),
                 'auth': [],
                 'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId}',
                 'operation_id': 'get_exported_file',
@@ -2228,7 +2343,7 @@ class ActionsApi(object):
         )
         self.get_image_export_endpoint = _Endpoint(
             settings={
-                'response_type': None,
+                'response_type': (file_type,),
                 'auth': [],
                 'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/export/image/{exportId}',
                 'operation_id': 'get_image_export',
@@ -2479,7 +2594,7 @@ class ActionsApi(object):
         )
         self.get_raw_export_endpoint = _Endpoint(
             settings={
-                'response_type': None,
+                'response_type': (file_type,),
                 'auth': [],
                 'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/export/raw/{exportId}',
                 'operation_id': 'get_raw_export',
@@ -2536,7 +2651,7 @@ class ActionsApi(object):
         )
         self.get_slides_export_endpoint = _Endpoint(
             settings={
-                'response_type': None,
+                'response_type': (file_type,),
                 'auth': [],
                 'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/export/slides/{exportId}',
                 'operation_id': 'get_slides_export',
@@ -2647,7 +2762,7 @@ class ActionsApi(object):
         )
         self.get_tabular_export_endpoint = _Endpoint(
             settings={
-                'response_type': None,
+                'response_type': (file_type,),
                 'auth': [],
                 'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/export/tabular/{exportId}',
                 'operation_id': 'get_tabular_export',
@@ -3606,6 +3721,108 @@ class ActionsApi(object):
                 'accept': [
                     'application/json'
                 ],
+                'content_type': [
+                    'application/json'
+                ]
+            },
+            api_client=api_client
+        )
+        self.pause_organization_automations_endpoint = _Endpoint(
+            settings={
+                'response_type': None,
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/organization/automations/pause',
+                'operation_id': 'pause_organization_automations',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'organization_automation_management_bulk_request',
+                ],
+                'required': [
+                    'organization_automation_management_bulk_request',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'organization_automation_management_bulk_request':
+                        (OrganizationAutomationManagementBulkRequest,),
+                },
+                'attribute_map': {
+                },
+                'location_map': {
+                    'organization_automation_management_bulk_request': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [],
+                'content_type': [
+                    'application/json'
+                ]
+            },
+            api_client=api_client
+        )
+        self.pause_workspace_automations_endpoint = _Endpoint(
+            settings={
+                'response_type': None,
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/automations/pause',
+                'operation_id': 'pause_workspace_automations',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'workspace_automation_management_bulk_request',
+                ],
+                'required': [
+                    'workspace_id',
+                    'workspace_automation_management_bulk_request',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'workspace_automation_management_bulk_request':
+                        (WorkspaceAutomationManagementBulkRequest,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'workspace_automation_management_bulk_request': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [],
                 'content_type': [
                     'application/json'
                 ]
@@ -4655,6 +4872,108 @@ class ActionsApi(object):
             },
             api_client=api_client
         )
+        self.unpause_organization_automations_endpoint = _Endpoint(
+            settings={
+                'response_type': None,
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/organization/automations/unpause',
+                'operation_id': 'unpause_organization_automations',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'organization_automation_management_bulk_request',
+                ],
+                'required': [
+                    'organization_automation_management_bulk_request',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'organization_automation_management_bulk_request':
+                        (OrganizationAutomationManagementBulkRequest,),
+                },
+                'attribute_map': {
+                },
+                'location_map': {
+                    'organization_automation_management_bulk_request': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [],
+                'content_type': [
+                    'application/json'
+                ]
+            },
+            api_client=api_client
+        )
+        self.unpause_workspace_automations_endpoint = _Endpoint(
+            settings={
+                'response_type': None,
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/automations/unpause',
+                'operation_id': 'unpause_workspace_automations',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'workspace_automation_management_bulk_request',
+                ],
+                'required': [
+                    'workspace_id',
+                    'workspace_automation_management_bulk_request',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'workspace_automation_management_bulk_request':
+                        (WorkspaceAutomationManagementBulkRequest,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'workspace_automation_management_bulk_request': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [],
+                'content_type': [
+                    'application/json'
+                ]
+            },
+            api_client=api_client
+        )
         self.unsubscribe_all_automations_endpoint = _Endpoint(
             settings={
                 'response_type': None,
@@ -4748,6 +5067,60 @@ class ActionsApi(object):
             },
             api_client=api_client
         )
+        self.unsubscribe_selected_workspace_automations_endpoint = _Endpoint(
+            settings={
+                'response_type': None,
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/automations/unsubscribe',
+                'operation_id': 'unsubscribe_selected_workspace_automations',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'workspace_automation_management_bulk_request',
+                ],
+                'required': [
+                    'workspace_id',
+                    'workspace_automation_management_bulk_request',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'workspace_automation_management_bulk_request':
+                        (WorkspaceAutomationManagementBulkRequest,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'workspace_automation_management_bulk_request': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [],
+                'content_type': [
+                    'application/json'
+                ]
+            },
+            api_client=api_client
+        )
         self.unsubscribe_workspace_automations_endpoint = _Endpoint(
             settings={
                 'response_type': None,
@@ -4799,7 +5172,7 @@ class ActionsApi(object):
             settings={
                 'response_type': (ValidateLLMEndpointResponse,),
                 'auth': [],
-                'endpoint_path': '/api/v1/actions/ai/validateLlmEndpoint',
+                'endpoint_path': '/api/v1/actions/ai/llmEndpoint/test',
                 'operation_id': 'validate_llm_endpoint',
                 'http_method': 'POST',
                 'servers': None,
@@ -4831,6 +5204,61 @@ class ActionsApi(object):
                 },
                 'location_map': {
                     'validate_llm_endpoint_request': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [
+                    'application/json'
+                ]
+            },
+            api_client=api_client
+        )
+        self.validate_llm_endpoint_by_id_endpoint = _Endpoint(
+            settings={
+                'response_type': (ValidateLLMEndpointResponse,),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/ai/llmEndpoint/{llmEndpointId}/test',
+                'operation_id': 'validate_llm_endpoint_by_id',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'llm_endpoint_id',
+                    'validate_llm_endpoint_by_id_request',
+                ],
+                'required': [
+                    'llm_endpoint_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'llm_endpoint_id':
+                        (str,),
+                    'validate_llm_endpoint_by_id_request':
+                        (ValidateLLMEndpointByIdRequest,),
+                },
+                'attribute_map': {
+                    'llm_endpoint_id': 'llmEndpointId',
+                },
+                'location_map': {
+                    'llm_endpoint_id': 'path',
+                    'validate_llm_endpoint_by_id_request': 'body',
                 },
                 'collection_format_map': {
                 }
@@ -6807,6 +7235,7 @@ class ActionsApi(object):
             visual_export_request (VisualExportRequest):
 
         Keyword Args:
+            x_gdc_debug (bool): [optional] if omitted the server will use the default value of False
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -6981,6 +7410,7 @@ class ActionsApi(object):
             slides_export_request (SlidesExportRequest):
 
         Keyword Args:
+            x_gdc_debug (bool): [optional] if omitted the server will use the default value of False
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -7220,6 +7650,174 @@ class ActionsApi(object):
         kwargs['dashboard_id'] = \
             dashboard_id
         return self.dashboard_permissions_endpoint.call_with_http_info(**kwargs)
+
+    def delete_organization_automations(
+        self,
+        organization_automation_management_bulk_request,
+        **kwargs
+    ):
+        """Delete selected automations across all workspaces  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.delete_organization_automations(organization_automation_management_bulk_request, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            organization_automation_management_bulk_request (OrganizationAutomationManagementBulkRequest):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            None
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['organization_automation_management_bulk_request'] = \
+            organization_automation_management_bulk_request
+        return self.delete_organization_automations_endpoint.call_with_http_info(**kwargs)
+
+    def delete_workspace_automations(
+        self,
+        workspace_id,
+        workspace_automation_management_bulk_request,
+        **kwargs
+    ):
+        """Delete selected automations in the workspace  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.delete_workspace_automations(workspace_id, workspace_automation_management_bulk_request, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            workspace_automation_management_bulk_request (WorkspaceAutomationManagementBulkRequest):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            None
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['workspace_automation_management_bulk_request'] = \
+            workspace_automation_management_bulk_request
+        return self.delete_workspace_automations_endpoint.call_with_http_info(**kwargs)
 
     def explain_afm(
         self,
@@ -7882,7 +8480,7 @@ class ActionsApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            None
+            file_type
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -7969,7 +8567,7 @@ class ActionsApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            None
+            file_type
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -8313,7 +8911,7 @@ class ActionsApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            None
+            file_type
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -8400,7 +8998,7 @@ class ActionsApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            None
+            file_type
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -8574,7 +9172,7 @@ class ActionsApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            None
+            file_type
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -10040,6 +10638,174 @@ class ActionsApi(object):
         kwargs['platform_usage_request'] = \
             platform_usage_request
         return self.particular_platform_usage_endpoint.call_with_http_info(**kwargs)
+
+    def pause_organization_automations(
+        self,
+        organization_automation_management_bulk_request,
+        **kwargs
+    ):
+        """Pause selected automations across all workspaces  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.pause_organization_automations(organization_automation_management_bulk_request, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            organization_automation_management_bulk_request (OrganizationAutomationManagementBulkRequest):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            None
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['organization_automation_management_bulk_request'] = \
+            organization_automation_management_bulk_request
+        return self.pause_organization_automations_endpoint.call_with_http_info(**kwargs)
+
+    def pause_workspace_automations(
+        self,
+        workspace_id,
+        workspace_automation_management_bulk_request,
+        **kwargs
+    ):
+        """Pause selected automations in the workspace  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.pause_workspace_automations(workspace_id, workspace_automation_management_bulk_request, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            workspace_automation_management_bulk_request (WorkspaceAutomationManagementBulkRequest):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            None
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['workspace_automation_management_bulk_request'] = \
+            workspace_automation_management_bulk_request
+        return self.pause_workspace_automations_endpoint.call_with_http_info(**kwargs)
 
     def register_upload_notification(
         self,
@@ -11649,6 +12415,174 @@ class ActionsApi(object):
             automation_id
         return self.trigger_existing_automation_endpoint.call_with_http_info(**kwargs)
 
+    def unpause_organization_automations(
+        self,
+        organization_automation_management_bulk_request,
+        **kwargs
+    ):
+        """Unpause selected automations across all workspaces  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.unpause_organization_automations(organization_automation_management_bulk_request, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            organization_automation_management_bulk_request (OrganizationAutomationManagementBulkRequest):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            None
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['organization_automation_management_bulk_request'] = \
+            organization_automation_management_bulk_request
+        return self.unpause_organization_automations_endpoint.call_with_http_info(**kwargs)
+
+    def unpause_workspace_automations(
+        self,
+        workspace_id,
+        workspace_automation_management_bulk_request,
+        **kwargs
+    ):
+        """Unpause selected automations in the workspace  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.unpause_workspace_automations(workspace_id, workspace_automation_management_bulk_request, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            workspace_automation_management_bulk_request (WorkspaceAutomationManagementBulkRequest):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            None
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['workspace_automation_management_bulk_request'] = \
+            workspace_automation_management_bulk_request
+        return self.unpause_workspace_automations_endpoint.call_with_http_info(**kwargs)
+
     def unsubscribe_all_automations(
         self,
         **kwargs
@@ -11811,6 +12745,92 @@ class ActionsApi(object):
         kwargs['automation_id'] = \
             automation_id
         return self.unsubscribe_automation_endpoint.call_with_http_info(**kwargs)
+
+    def unsubscribe_selected_workspace_automations(
+        self,
+        workspace_id,
+        workspace_automation_management_bulk_request,
+        **kwargs
+    ):
+        """Unsubscribe from selected automations in the workspace  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.unsubscribe_selected_workspace_automations(workspace_id, workspace_automation_management_bulk_request, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            workspace_automation_management_bulk_request (WorkspaceAutomationManagementBulkRequest):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            None
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['workspace_automation_management_bulk_request'] = \
+            workspace_automation_management_bulk_request
+        return self.unsubscribe_selected_workspace_automations_endpoint.call_with_http_info(**kwargs)
 
     def unsubscribe_workspace_automations(
         self,
@@ -11976,6 +12996,90 @@ class ActionsApi(object):
         kwargs['validate_llm_endpoint_request'] = \
             validate_llm_endpoint_request
         return self.validate_llm_endpoint_endpoint.call_with_http_info(**kwargs)
+
+    def validate_llm_endpoint_by_id(
+        self,
+        llm_endpoint_id,
+        **kwargs
+    ):
+        """Validate LLM Endpoint By Id  # noqa: E501
+
+        Validates existing LLM endpoint with provided parameters and updates it if they are valid.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.validate_llm_endpoint_by_id(llm_endpoint_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            llm_endpoint_id (str):
+
+        Keyword Args:
+            validate_llm_endpoint_by_id_request (ValidateLLMEndpointByIdRequest): [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            ValidateLLMEndpointResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['llm_endpoint_id'] = \
+            llm_endpoint_id
+        return self.validate_llm_endpoint_by_id_endpoint.call_with_http_info(**kwargs)
 
     def workspace_resolve_all_settings(
         self,

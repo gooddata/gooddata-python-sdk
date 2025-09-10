@@ -37,6 +37,7 @@ from gooddata_api_client.model.resolved_llm_endpoints import ResolvedLlmEndpoint
 from gooddata_api_client.model.search_request import SearchRequest
 from gooddata_api_client.model.search_result import SearchResult
 from gooddata_api_client.model.smart_function_response import SmartFunctionResponse
+from gooddata_api_client.model.validate_llm_endpoint_by_id_request import ValidateLLMEndpointByIdRequest
 from gooddata_api_client.model.validate_llm_endpoint_request import ValidateLLMEndpointRequest
 from gooddata_api_client.model.validate_llm_endpoint_response import ValidateLLMEndpointResponse
 
@@ -858,7 +859,7 @@ class SmartFunctionsApi(object):
             settings={
                 'response_type': (ValidateLLMEndpointResponse,),
                 'auth': [],
-                'endpoint_path': '/api/v1/actions/ai/validateLlmEndpoint',
+                'endpoint_path': '/api/v1/actions/ai/llmEndpoint/test',
                 'operation_id': 'validate_llm_endpoint',
                 'http_method': 'POST',
                 'servers': None,
@@ -890,6 +891,61 @@ class SmartFunctionsApi(object):
                 },
                 'location_map': {
                     'validate_llm_endpoint_request': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [
+                    'application/json'
+                ]
+            },
+            api_client=api_client
+        )
+        self.validate_llm_endpoint_by_id_endpoint = _Endpoint(
+            settings={
+                'response_type': (ValidateLLMEndpointResponse,),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/ai/llmEndpoint/{llmEndpointId}/test',
+                'operation_id': 'validate_llm_endpoint_by_id',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'llm_endpoint_id',
+                    'validate_llm_endpoint_by_id_request',
+                ],
+                'required': [
+                    'llm_endpoint_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'llm_endpoint_id':
+                        (str,),
+                    'validate_llm_endpoint_by_id_request':
+                        (ValidateLLMEndpointByIdRequest,),
+                },
+                'attribute_map': {
+                    'llm_endpoint_id': 'llmEndpointId',
+                },
+                'location_map': {
+                    'llm_endpoint_id': 'path',
+                    'validate_llm_endpoint_by_id_request': 'body',
                 },
                 'collection_format_map': {
                 }
@@ -2044,4 +2100,88 @@ class SmartFunctionsApi(object):
         kwargs['validate_llm_endpoint_request'] = \
             validate_llm_endpoint_request
         return self.validate_llm_endpoint_endpoint.call_with_http_info(**kwargs)
+
+    def validate_llm_endpoint_by_id(
+        self,
+        llm_endpoint_id,
+        **kwargs
+    ):
+        """Validate LLM Endpoint By Id  # noqa: E501
+
+        Validates existing LLM endpoint with provided parameters and updates it if they are valid.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.validate_llm_endpoint_by_id(llm_endpoint_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            llm_endpoint_id (str):
+
+        Keyword Args:
+            validate_llm_endpoint_by_id_request (ValidateLLMEndpointByIdRequest): [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            ValidateLLMEndpointResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['llm_endpoint_id'] = \
+            llm_endpoint_id
+        return self.validate_llm_endpoint_by_id_endpoint.call_with_http_info(**kwargs)
 

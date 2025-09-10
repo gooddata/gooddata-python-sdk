@@ -51,6 +51,7 @@ class SlidesExportApi(object):
                 'all': [
                     'workspace_id',
                     'slides_export_request',
+                    'x_gdc_debug',
                 ],
                 'required': [
                     'workspace_id',
@@ -73,13 +74,17 @@ class SlidesExportApi(object):
                         (str,),
                     'slides_export_request':
                         (SlidesExportRequest,),
+                    'x_gdc_debug':
+                        (bool,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
+                    'x_gdc_debug': 'X-Gdc-Debug',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'slides_export_request': 'body',
+                    'x_gdc_debug': 'header',
                 },
                 'collection_format_map': {
                 }
@@ -96,7 +101,7 @@ class SlidesExportApi(object):
         )
         self.get_slides_export_endpoint = _Endpoint(
             settings={
-                'response_type': None,
+                'response_type': (file_type,),
                 'auth': [],
                 'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/export/slides/{exportId}',
                 'operation_id': 'get_slides_export',
@@ -226,6 +231,7 @@ class SlidesExportApi(object):
             slides_export_request (SlidesExportRequest):
 
         Keyword Args:
+            x_gdc_debug (bool): [optional] if omitted the server will use the default value of False
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -345,7 +351,7 @@ class SlidesExportApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            None
+            file_type
                 If the method is called asynchronously, returns the request
                 thread.
         """

@@ -12,9 +12,13 @@ dirpath = "dev"
 url = "/dev/"
 sitemapExclude = true
 [[versions]]
-version = "1.49"
+version = "1.50"
 dirpath = "latest"
 url = "/latest/"
+[[versions]]
+version = "1.49"
+dirpath = "1.49"
+url = "/1.49/"
 [[versions]]
 version = "1.48"
 dirpath = "1.48"
@@ -23,7 +27,3 @@ url = "/1.48/"
 version = "1.47"
 dirpath = "1.47"
 url = "/1.47/"
-[[versions]]
-version = "1.46"
-dirpath = "1.46"
-url = "/1.46/"

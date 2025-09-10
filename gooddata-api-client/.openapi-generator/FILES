@@ -71,6 +71,7 @@ docs/AutomationImageExport.md
 docs/AutomationMetadata.md
 docs/AutomationNotification.md
 docs/AutomationNotificationAllOf.md
+docs/AutomationOrganizationViewControllerApi.md
 docs/AutomationRawExport.md
 docs/AutomationSchedule.md
 docs/AutomationSlidesExport.md
@@ -407,7 +408,7 @@ docs/JsonApiAutomationOutDocument.md
 docs/JsonApiAutomationOutIncludes.md
 docs/JsonApiAutomationOutList.md
 docs/JsonApiAutomationOutRelationships.md
-docs/JsonApiAutomationOutRelationshipsAutomationResult.md
+docs/JsonApiAutomationOutRelationshipsAutomationResults.md
 docs/JsonApiAutomationOutWithLinks.md
 docs/JsonApiAutomationPatch.md
 docs/JsonApiAutomationPatchDocument.md
@@ -764,6 +765,10 @@ docs/JsonApiVisualizationObjectPostOptionalId.md
 docs/JsonApiVisualizationObjectPostOptionalIdDocument.md
 docs/JsonApiVisualizationObjectToManyLinkage.md
 docs/JsonApiVisualizationObjectToOneLinkage.md
+docs/JsonApiWorkspaceAutomationOut.md
+docs/JsonApiWorkspaceAutomationOutAttributes.md
+docs/JsonApiWorkspaceAutomationOutList.md
+docs/JsonApiWorkspaceAutomationOutWithLinks.md
 docs/JsonApiWorkspaceDataFilterIn.md
 docs/JsonApiWorkspaceDataFilterInAttributes.md
 docs/JsonApiWorkspaceDataFilterInDocument.md
@@ -864,6 +869,8 @@ docs/ObjectLinks.md
 docs/ObjectLinksContainer.md
 docs/OptionsApi.md
 docs/OrganizationApi.md
+docs/OrganizationAutomationIdentifier.md
+docs/OrganizationAutomationManagementBulkRequest.md
 docs/OrganizationControllerApi.md
 docs/OrganizationDeclarativeAPIsApi.md
 docs/OrganizationEntityAPIsApi.md
@@ -1006,6 +1013,7 @@ docs/UserSettingsApi.md
 docs/UsersDeclarativeAPIsApi.md
 docs/UsersEntityAPIsApi.md
 docs/ValidateByItem.md
+docs/ValidateLLMEndpointByIdRequest.md
 docs/ValidateLLMEndpointRequest.md
 docs/ValidateLLMEndpointResponse.md
 docs/Value.md
@@ -1020,6 +1028,8 @@ docs/WebhookMessage.md
 docs/WebhookMessageData.md
 docs/WebhookRecipient.md
 docs/WidgetSlidesTemplate.md
+docs/WorkspaceAutomationIdentifier.md
+docs/WorkspaceAutomationManagementBulkRequest.md
 docs/WorkspaceDataSource.md
 docs/WorkspaceIdentifier.md
 docs/WorkspaceObjectControllerApi.md
@@ -1041,6 +1051,7 @@ gooddata_api_client/api/api_tokens_api.py
 gooddata_api_client/api/appearance_api.py
 gooddata_api_client/api/attribute_hierarchies_api.py
 gooddata_api_client/api/attributes_api.py
+gooddata_api_client/api/automation_organization_view_controller_api.py
 gooddata_api_client/api/automations_api.py
 gooddata_api_client/api/available_drivers_api.py
 gooddata_api_client/api/computation_api.py
@@ -1486,7 +1497,7 @@ gooddata_api_client/model/json_api_automation_out_document.py
 gooddata_api_client/model/json_api_automation_out_includes.py
 gooddata_api_client/model/json_api_automation_out_list.py
 gooddata_api_client/model/json_api_automation_out_relationships.py
-gooddata_api_client/model/json_api_automation_out_relationships_automation_result.py
+gooddata_api_client/model/json_api_automation_out_relationships_automation_results.py
 gooddata_api_client/model/json_api_automation_out_with_links.py
 gooddata_api_client/model/json_api_automation_patch.py
 gooddata_api_client/model/json_api_automation_patch_document.py
@@ -1843,6 +1854,10 @@ gooddata_api_client/model/json_api_visualization_object_post_optional_id.py
 gooddata_api_client/model/json_api_visualization_object_post_optional_id_document.py
 gooddata_api_client/model/json_api_visualization_object_to_many_linkage.py
 gooddata_api_client/model/json_api_visualization_object_to_one_linkage.py
+gooddata_api_client/model/json_api_workspace_automation_out.py
+gooddata_api_client/model/json_api_workspace_automation_out_attributes.py
+gooddata_api_client/model/json_api_workspace_automation_out_list.py
+gooddata_api_client/model/json_api_workspace_automation_out_with_links.py
 gooddata_api_client/model/json_api_workspace_data_filter_in.py
 gooddata_api_client/model/json_api_workspace_data_filter_in_attributes.py
 gooddata_api_client/model/json_api_workspace_data_filter_in_document.py
@@ -1933,6 +1948,8 @@ gooddata_api_client/model/notifications_meta.py
 gooddata_api_client/model/notifications_meta_total.py
 gooddata_api_client/model/object_links.py
 gooddata_api_client/model/object_links_container.py
+gooddata_api_client/model/organization_automation_identifier.py
+gooddata_api_client/model/organization_automation_management_bulk_request.py
 gooddata_api_client/model/organization_permission_assignment.py
 gooddata_api_client/model/over.py
 gooddata_api_client/model/page_metadata.py
@@ -2051,6 +2068,7 @@ gooddata_api_client/model/user_management_users_item.py
 gooddata_api_client/model/user_management_workspace_permission_assignment.py
 gooddata_api_client/model/user_permission.py
 gooddata_api_client/model/validate_by_item.py
+gooddata_api_client/model/validate_llm_endpoint_by_id_request.py
 gooddata_api_client/model/validate_llm_endpoint_request.py
 gooddata_api_client/model/validate_llm_endpoint_response.py
 gooddata_api_client/model/value.py
@@ -2063,6 +2081,8 @@ gooddata_api_client/model/webhook_message.py
 gooddata_api_client/model/webhook_message_data.py
 gooddata_api_client/model/webhook_recipient.py
 gooddata_api_client/model/widget_slides_template.py
+gooddata_api_client/model/workspace_automation_identifier.py
+gooddata_api_client/model/workspace_automation_management_bulk_request.py
 gooddata_api_client/model/workspace_data_source.py
 gooddata_api_client/model/workspace_identifier.py
 gooddata_api_client/model/workspace_permission_assignment.py

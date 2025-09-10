@@ -437,11 +437,13 @@ class DataFrameMetadata:
                                     | AVG     |    150
                           SUM       |         |    450
 
+      column_totals_indexes: Similar to row_totals_indexes but for column headers.
       execution_response: An instance of BareExecutionResponse representing the
                           execution response.
     """
 
     row_totals_indexes: list[list[int]]
+    column_totals_indexes: list[list[int]]
     execution_response: BareExecutionResponse
     primary_labels_from_index: dict[int, dict[str, str]]
     primary_labels_from_columns: dict[int, dict[str, str]]
@@ -460,16 +462,24 @@ class DataFrameMetadata:
             A tuple containing data headers. execution_response (BareExecutionResponse): An ExecutionResponse object.
 
         Returns: DataFrameMetadata: An initialized DataFrameMetadata object."""
-        row_totals_indexes = [
-            [idx for idx, hdr in enumerate(dim) if hdr is not None and hdr.get("totalHeader") is not None]
-            for dim in headers[0]
-        ]
+        row_totals_indexes = cls._get_totals_indexes(headers[0])
+        column_totals_indexes = cls._get_totals_indexes(headers[1])
         return cls(
             row_totals_indexes=row_totals_indexes,
+            column_totals_indexes=column_totals_indexes,
             execution_response=execution_response,
             primary_labels_from_index=primary_labels_from_index,
             primary_labels_from_columns=primary_labels_from_columns,
         )
+
+    @staticmethod
+    def _get_totals_indexes(headers: Optional[Any]) -> list[list[int]]:
+        if headers is None:
+            return []
+        return [
+            [idx for idx, hdr in enumerate(dim) if hdr is not None and hdr.get("totalHeader") is not None]
+            for dim in headers
+        ]
 
 
 def _read_complete_execution_result(

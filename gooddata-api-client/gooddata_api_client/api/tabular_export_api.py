@@ -158,7 +158,7 @@ class TabularExportApi(object):
         )
         self.get_tabular_export_endpoint = _Endpoint(
             settings={
-                'response_type': None,
+                'response_type': (file_type,),
                 'auth': [],
                 'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/export/tabular/{exportId}',
                 'operation_id': 'get_tabular_export',
@@ -445,7 +445,7 @@ class TabularExportApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            None
+            file_type
                 If the method is called asynchronously, returns the request
                 thread.
         """
