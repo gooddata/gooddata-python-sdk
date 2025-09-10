@@ -6,6 +6,8 @@ from ._version import __version__
 from .backup_and_restore.backup_manager import BackupManager
 from .backup_and_restore.models.storage import (
     BackupRestoreConfig,
+    LocalStorageConfig,
+    S3StorageConfig,
     StorageType,
 )
 from .backup_and_restore.storage.local_storage import LocalStorage
@@ -51,6 +53,8 @@ __all__ = [
     "UserIncrementalLoad",
     "UserGroupIncrementalLoad",
     "PermissionFullLoad",
+    "LocalStorageConfig",
+    "S3StorageConfig",
     "PermissionIncrementalLoad",
     "UserFullLoad",
     "UserGroupFullLoad",
