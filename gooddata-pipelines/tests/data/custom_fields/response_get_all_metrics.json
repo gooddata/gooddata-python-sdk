@@ -1,0 +1,78 @@
+{
+  "data": [
+    {
+      "id": "metric_id_1",
+      "type": "metric",
+      "attributes": {
+        "title": "metric title 1",
+        "description": "",
+        "areRelationsValid": true,
+        "createdAt": "2025-06-12 13:26",
+        "content": {
+          "format": "#,##0.00",
+          "maql": "select AVG({fact/some_fact})"
+        }
+      },
+      "links": {
+        "self": "https://link-to-self.com"
+      },
+      "meta": {
+        "origin": {
+          "originType": "NATIVE",
+          "originId": "workspace_id_1"
+        }
+      }
+    },
+    {
+      "id": "metric_id_2",
+      "type": "metric",
+      "attributes": {
+        "title": "metric title 2",
+        "description": "",
+        "areRelationsValid": true,
+        "createdAt": "2025-06-13 08:12",
+        "content": {
+          "format": "#,##0.00",
+          "maql": "select AVG({fact/some_other_fact})"
+        }
+      },
+      "links": {
+        "self": "https://link-to-self.com"
+      },
+      "meta": {
+        "origin": {
+          "originType": "NATIVE",
+          "originId": "workspace_id_1"
+        }
+      }
+    },
+    {
+      "id": "metric_id_3",
+      "type": "metric",
+      "attributes": {
+        "title": "metric title 3",
+        "description": "",
+        "areRelationsValid": false,
+        "createdAt": "2025-06-13 08:12",
+        "modifiedAt": "2025-06-13 08:16",
+        "content": {
+          "format": "#,##0.00",
+          "maql": "SELECT SUM( {fact/some_fact}* {fact/some_other_fact} )"
+        }
+      },
+      "links": {
+        "self": "https://link-to-self.com"
+      },
+      "meta": {
+        "origin": {
+          "originType": "NATIVE",
+          "originId": "custom_field_child"
+        }
+      }
+    }
+  ],
+  "links": {
+    "self": "https://link-to-self.com",
+    "next": "https://link-to-self.com"
+  }
+}

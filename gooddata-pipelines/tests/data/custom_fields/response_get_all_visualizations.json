@@ -1,0 +1,143 @@
+{
+  "data": [
+    {
+      "id": "visualization_id_1",
+      "type": "visualizationObject",
+      "attributes": {
+        "title": "chart title 1",
+        "description": "",
+        "areRelationsValid": true,
+        "content": {
+          "buckets": [
+            {
+              "items": [
+                {
+                  "measure": {
+                    "localIdentifier": "f3be64be0d3a49019088462bfe87d31f",
+                    "definition": {
+                      "measureDefinition": {
+                        "item": {
+                          "identifier": {
+                            "id": "metric_id_1",
+                            "type": "metric"
+                          }
+                        },
+                        "filters": []
+                      }
+                    },
+                    "title": "item title 1"
+                  }
+                }
+              ],
+              "localIdentifier": "measures"
+            },
+            {
+              "items": [
+                {
+                  "attribute": {
+                    "localIdentifier": "a5a36aa84014410aaaa2f16ade7d3808",
+                    "displayForm": {
+                      "identifier": { "id": "attribute id", "type": "label" }
+                    }
+                  }
+                }
+              ],
+              "localIdentifier": "attribute"
+            }
+          ],
+          "filters": [],
+          "sorts": [
+            {
+              "attributeSortItem": {
+                "attributeIdentifier": "a5a36aa84014410aaaa2f16ade7d3808",
+                "direction": "asc"
+              }
+            }
+          ],
+          "properties": {},
+          "visualizationUrl": "local:table",
+          "version": "2"
+        },
+        "createdAt": "2025-06-12 13:28"
+      },
+      "links": {
+        "self": "http://link-to-self.com"
+      },
+      "meta": {
+        "origin": { "originType": "NATIVE", "originId": "workspace_id_1" }
+      }
+    },
+    {
+      "id": "visualization_id_2",
+      "type": "visualizationObject",
+      "attributes": {
+        "title": "chart title 2",
+        "description": "",
+        "areRelationsValid": true,
+        "content": {
+          "buckets": [
+            {
+              "items": [
+                {
+                  "measure": {
+                    "localIdentifier": "91afbe18dca94984bc0ebb42b6b9f814",
+                    "definition": {
+                      "measureDefinition": {
+                        "item": {
+                          "identifier": {
+                            "id": "metric_id_2",
+                            "type": "metric"
+                          }
+                        },
+                        "filters": []
+                      }
+                    },
+                    "title": "item title 2"
+                  }
+                }
+              ],
+              "localIdentifier": "measures"
+            },
+            {
+              "items": [
+                {
+                  "attribute": {
+                    "localIdentifier": "5c5a83f5b5194fed9d4de1170acf3fef",
+                    "displayForm": {
+                      "identifier": { "id": "attribute id_1", "type": "label" }
+                    }
+                  }
+                },
+                {
+                  "attribute": {
+                    "localIdentifier": "f80144be70944ea0be6b12d130f8ef0e",
+                    "displayForm": {
+                      "identifier": { "id": "attribute id_2", "type": "label" }
+                    }
+                  }
+                }
+              ],
+              "localIdentifier": "view"
+            }
+          ],
+          "filters": [],
+          "sorts": [],
+          "properties": {},
+          "visualizationUrl": "local:column",
+          "version": "2"
+        },
+        "createdAt": "2025-06-16 21:12"
+      },
+      "links": {
+        "self": "https://link-to-self.com"
+      },
+      "meta": {
+        "origin": { "originType": "NATIVE", "originId": "workspace_id_1" }
+      }
+    }
+  ],
+  "links": {
+    "self": "https://link-to-self.com",
+    "next": "https://link-to-next.com"
+  }
+}
