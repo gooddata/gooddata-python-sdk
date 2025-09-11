@@ -18,7 +18,11 @@
         <ul class="gd-docs-menu-section gd-docs-menu-section__root">
         <li class="gd-docs-menu-page{{ if or $isCurrent $active }} active{{ end }}">
             <div class="gd-docs-menu-page__title">
+            {{- if and .RelPermalink (ne .RelPermalink "") -}}
             <a href="{{ .RelPermalink }}" class="gd-docs-menu-page__link">{{ .LinkTitle }}</a>
+            {{- else -}}
+            <span class="gd-docs-menu-page__link">{{ .LinkTitle }}</span>
+            {{- end }}
             </div>
         </li>
         </ul>
@@ -49,11 +53,13 @@
                 <span class="gd-docs-menu-page__label">{{ $page.LinkTitle }}</span>
             {{ else }}
                 <div class="gd-docs-menu-page__title">
-                {{ if $page.Params.externalLink }}
+                {{- if and $page.Params.externalLink (ne $page.Params.externalLink "") -}}
                     <a href="{{ $page.Params.externalLink }}" class="gd-docs-menu-page__link" target="_blank">{{ $page.LinkTitle }}</a>
-                {{ else }}
+                {{- else if and $page.Permalink (ne $page.Permalink "") -}}
                     <a href="{{ $page.Permalink }}" class="gd-docs-menu-page__link">{{ $page.LinkTitle }}</a>
-                {{ end }}
+                {{- else -}}
+                    <span class="gd-docs-menu-page__link">{{ $page.LinkTitle }}</span>
+                {{- end }}
 
                 {{ if $page.Pages }}
                     <button

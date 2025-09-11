@@ -8,6 +8,7 @@
     {{ $links := . }}
 
     {{ range $name, $data := $links }}
+        {{ if and $data.path (ne $data.path "") }}
         {{ $path := $data.path }}
         {{ $kind := $data.kind }}
         {{/* I don't think there is any other way to include literal backtick inside a raw-string */}}
@@ -28,6 +29,7 @@
         {{ if gt (len $matches) 0 }}
             {{ $a_html := (printf "$1<a href=\"%s/\">%s</a>$3" $path $name) }}
             {{ $paragraph = replaceRE $pattern $a_html $paragraph | safeHTML}}
+        {{ end }}
         {{ end }}
     {{ end }}
 
