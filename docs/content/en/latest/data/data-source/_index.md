@@ -33,6 +33,7 @@ See [Connect Data](https://www.gooddata.com/docs/cloud/connect-data/) to learn h
 * [generate_logical_model](./generate_logical_model/)
 * [register_upload_notification](./register_upload_notification/)
 * [scan_data_source](./scan_data_source/)
+* [scan_pdm_and_generate_logical_model](./scan_pdm_and_generate_logical_model/)
 * [scan_schemata](./scan_schemata/)
 * [scan_sql](./scan_sql/)
 
