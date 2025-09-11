@@ -9,11 +9,14 @@
     {{ $.Scratch.Set "activeVersion" .version }}
   {{ end }}
 {{ end }}
+
+{{ if .Site.Params.versions }}
 <button class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 	{{ printf "%s" ($.Scratch.Get "docLabel") }}
 </button>
 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
 	{{ range .Site.Params.versions }}
+	{{ if and .url (ne .url "") }}
 	<a
 		class="dropdown-item{{ if eq ( $.Scratch.Get "activeVersion" ) ( printf "%s" .version ) }} active{{ end }}"
 		href="{{ cond (gt (len (findRE "^http(s)?://" .url)) 0) .url (relURL .url) }}"
@@ -21,4 +24,6 @@
 		{{ .version }}
 	</a>
 	{{ end }}
+	{{ end }}
 </div>
+{{ end }}
