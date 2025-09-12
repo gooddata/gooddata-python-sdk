@@ -174,6 +174,70 @@ class ApiMethods:
         )
         return self._get(endpoint)
 
+    def get_all_metrics(self, workspace_id: str) -> requests.Response:
+        """Get all metrics from the specified workspace.
+
+        Args:
+            workspace_id (str): The ID of the workspace to retrieve metrics from.
+        Returns:
+            requests.Response: The response containing the metrics.
+        """
+        endpoint = f"/entities/workspaces/{workspace_id}/metrics"
+        headers = {**self.headers, "X-GDC-VALIDATE-RELATIONS": "true"}
+        return self._get(endpoint, headers=headers)
+
+    def get_all_visualization_objects(
+        self, workspace_id: str
+    ) -> requests.Response:
+        """Get all visualizations from the specified workspace.
+
+        Args:
+            workspace_id (str): The ID of the workspace to retrieve visualizations from.
+        Returns:
+            requests.Response: The response containing the visualizations.
+        """
+        endpoint = f"/entities/workspaces/{workspace_id}/visualizationObjects"
+        headers = {**self.headers, "X-GDC-VALIDATE-RELATIONS": "true"}
+        return self._get(endpoint, headers=headers)
+
+    def get_all_dashboards(self, workspace_id: str) -> requests.Response:
+        """Get all dashboards from the specified workspace.
+
+        Args:
+            workspace_id (str): The ID of the workspace to retrieve dashboards from.
+        Returns:
+            requests.Response: The response containing the dashboards.
+        """
+        endpoint = f"/entities/workspaces/{workspace_id}/analyticalDashboards"
+        headers = {**self.headers, "X-GDC-VALIDATE-RELATIONS": "true"}
+        return self._get(endpoint, headers=headers)
+
+    def get_workspace_layout(self, workspace_id: str) -> requests.Response:
+        """Get the layout of the specified workspace.
+
+        Args:
+            workspace_id (str): The ID of the workspace to retrieve the layout for.
+        Returns:
+            requests.Response: The response containing the workspace layout.
+        """
+        endpoint = f"/layout/workspaces/{workspace_id}"
+        return self._get(endpoint)
+
+    def put_workspace_layout(
+        self, workspace_id: str, layout: dict[str, Any]
+    ) -> requests.Response:
+        """Update the layout of the specified workspace.
+
+        Args:
+            workspace_id (str): The ID of the workspace to update.
+            layout (dict[str, Any]): The new layout to set for the workspace.
+        Returns:
+            requests.Response: The response from the server after updating the layout.
+        """
+        endpoint = f"/layout/workspaces/{workspace_id}"
+        headers = {**self.headers, "Content-Type": "application/json"}
+        return self._put(endpoint, data=layout, headers=headers)
+
     def _get(
         self, endpoint: str, headers: dict[str, str] | None = None
     ) -> requests.Response:
@@ -253,3 +317,15 @@ class ApiMethods:
         url = self._get_url(endpoint)
 
         return requests.delete(url, headers=self.headers, timeout=TIMEOUT)
+
+    @staticmethod
+    def raise_if_response_not_ok(*responses: requests.Response) -> None:
+        """Check if responses from API calls are OK.
+
+        Raises ValueError if any response is not OK (status code not 2xx).
+        """
+        for response in responses:
+            if not response.ok:
+                raise ValueError(
+                    f"Request to {response.url} failed with status code {response.status_code}: {response.text}"
+                )

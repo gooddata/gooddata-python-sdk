@@ -1,0 +1,72 @@
+{
+  "data": [
+    {
+      "id": "dashboard_id_1",
+      "type": "analyticalDashboard",
+      "attributes": {
+        "title": "Custom Dashboard",
+        "areRelationsValid": true,
+        "content": {
+          "layout": {
+            "type": "IDashboardLayout",
+            "sections": [
+              {
+                "type": "IDashboardLayoutSection",
+                "items": [
+                  {
+                    "type": "IDashboardLayoutItem",
+                    "size": {
+                      "xl": {
+                        "gridWidth": 12,
+                        "gridHeight": 12
+                      }
+                    },
+                    "widget": {
+                      "insight": {
+                        "identifier": {
+                          "id": "visualization_id_1",
+                          "type": "visualizationObject"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "IDashboardLayoutItem",
+                    "size": {
+                      "xl": {
+                        "gridWidth": 12,
+                        "gridHeight": 12
+                      }
+                    },
+                    "widget": {
+                      "insight": {
+                        "identifier": {
+                          "id": "visualization_id_2",
+                          "type": "visualizationObject"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "createdAt": "2025-06-17 13:13"
+      },
+      "links": {
+        "self": "https://link-to-self.com"
+      },
+      "meta": {
+        "origin": {
+          "originType": "NATIVE",
+          "originId": "workspace_id_1"
+        }
+      }
+    }
+  ],
+  "links": {
+    "self": "https://link-to-self.com",
+    "next": "https://link-to-next.com"
+  }
+}
