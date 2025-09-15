@@ -42,13 +42,18 @@ Start integrating GoodData into your Python application right now.
     profiles.yaml file structure example:
 
     ```yaml
-    default:
-        host: http://localhost:3000
-        token: YWRtaW46Ym9vdHN0cmFwOmFkbWluMTIz
-        custom_headers: #optional
-            Host: localhost
-        extra_user_agent: xyz #optional
+    profiles:
+        dev:
+            host: http://localhost:3000
+            token: $GOODDATA_API_TOKEN_DEV
+            custom_headers: #optional
+                Host: localhost
+            extra_user_agent: xyz #optional
+    default_profile: dev
+    access: {}
     ```
+
+    The `token` field should reference an environment variable that holds your personal access token. The `access` field can include references to environment variables with data source secrets, or it can be left empty if not needed.
 
 1. Start using Python SDK! For example, get a list of all workspaces:
 

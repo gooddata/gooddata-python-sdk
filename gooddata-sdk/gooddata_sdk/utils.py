@@ -283,12 +283,14 @@ def _create_profile_aac(profile: str, content: dict) -> dict:
 def _get_profile(profile: str, content: dict) -> dict[str, Any]:
     is_aac_config = AacConfig.can_structure(content)
     if not is_aac_config and profile not in content:
-        raise ValueError("Configuration is invalid. Please check the documentation for the valid configuration.")
+        raise ValueError(
+            "Configuration is invalid. Please check the documentation for the valid configuration: https://www.gooddata.com/docs/python-sdk/latest/getting-started/"
+        )
     if is_aac_config:
         return _create_profile_aac(profile, content)
     else:
         warn(
-            "Used configuration is deprecated and will be removed in the future. Please use the new configuration.",
+            "Used configuration is deprecated and will be removed in the future. Please use the new configuration: https://www.gooddata.com/docs/python-sdk/latest/getting-started/",
             DeprecationWarning,
             stacklevel=2,
         )
