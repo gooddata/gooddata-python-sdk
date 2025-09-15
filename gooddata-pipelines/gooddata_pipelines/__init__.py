@@ -13,6 +13,15 @@ from .backup_and_restore.models.storage import (
 from .backup_and_restore.storage.local_storage import LocalStorage
 from .backup_and_restore.storage.s3_storage import S3Storage
 
+# -------- LDM Extension --------
+from .ldm_extension.ldm_extension_manager import LdmExtensionManager
+from .ldm_extension.models.custom_data_object import (
+    ColumnDataType,
+    CustomDatasetDefinition,
+    CustomFieldDefinition,
+    CustomFieldType,
+)
+
 # -------- Provisioning --------
 from .provisioning.entities.user_data_filters.models.udf_models import (
     UserDataFilterFullLoad,
@@ -65,5 +74,10 @@ __all__ = [
     "UserDataFilterProvisioner",
     "UserDataFilterFullLoad",
     "EntityType",
+    "LdmExtensionManager",
+    "CustomDatasetDefinition",
+    "CustomFieldDefinition",
+    "ColumnDataType",
+    "CustomFieldType",
     "__version__",
 ]

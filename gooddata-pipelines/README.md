@@ -57,4 +57,12 @@ full_load_data: list[UserFullLoad] = UserFullLoad.from_list_of_dicts(
 provisioner.full_load(full_load_data)
 ```
 
-Ready-made scripts covering the basic use cases can be found here in the [GoodData Productivity Tools](https://github.com/gooddata/gooddata-productivity-tools) repository
+## Bugs & Requests
+
+Please use the [GitHub issue tracker](https://github.com/gooddata/gooddata-python-sdk/issues) to submit bugs
+or request features.
+
+## Changelog
+
+See  [Github releases](https://github.com/gooddata/gooddata-python-sdk/releases) for released versions
+and a list of changes.
