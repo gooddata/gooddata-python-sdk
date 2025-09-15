@@ -17,3 +17,5 @@ docs/resources/_gen
 docs/tmp/
 docs/versioned_docs
 docs/.hugo_build.lock
+
+integration_tests/**/__pycache__

@@ -1,0 +1,10 @@
+[
+    {
+        "question": "What is number of order id, show as HEADLINE chart?",
+        "expected_objects_file": "headline_count_of_order.json"
+    },
+    {
+        "question": "What is total returns per month? show as COLUMN chart",
+        "expected_objects_file": "column_total_returns_by_month.json"
+    }
+]
