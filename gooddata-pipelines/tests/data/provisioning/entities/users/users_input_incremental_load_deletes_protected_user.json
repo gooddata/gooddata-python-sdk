@@ -1,0 +1,47 @@
+[
+  {
+    "user_id": "user_1",
+    "firstname": "John",
+    "lastname": "Doe",
+    "email": "john.doe@example.com",
+    "auth_id": "auth_1",
+    "user_groups": ["group_1", "group_2"],
+    "is_active": true
+  },
+  {
+    "user_id": "user_2",
+    "firstname": "Jane",
+    "lastname": "Doe",
+    "email": "jane.doe@example.com",
+    "auth_id": "auth_2",
+    "user_groups": ["group_2", "group_3"],
+    "is_active": true
+  },
+  {
+    "user_id": "user_3",
+    "firstname": "Jim",
+    "lastname": "Rock",
+    "email": "jim.rock@example.com",
+    "auth_id": "auth_3",
+    "user_groups": ["group_3", "group_4"],
+    "is_active": true
+  },
+  {
+    "user_id": "user_4",
+    "firstname": "Jack",
+    "lastname": "Cliff",
+    "email": "jack.cliff@example.com",
+    "auth_id": "auth_4",
+    "user_groups": ["group_4", "group_5"],
+    "is_active": false
+  },
+  {
+    "user_id": "protected_user_id",
+    "firstname": "Some",
+    "lastname": "New",
+    "email": "values.that@should.not",
+    "auth_id": "take",
+    "user_groups": ["effect"],
+    "is_active": false
+  }
+]
