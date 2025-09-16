@@ -22,5 +22,13 @@
     "email": "jack.cliff@example.com",
     "authentication_id": "auth_4",
     "user_groups": ["group_4", "group_5"]
+  },
+  {
+    "user_id": "protected_user_id",
+    "firstname": "Protected",
+    "lastname": "User",
+    "email": "protected.user@example.com",
+    "authentication_id": "auth_protected",
+    "user_groups": ["group_protected"]
   }
 ]

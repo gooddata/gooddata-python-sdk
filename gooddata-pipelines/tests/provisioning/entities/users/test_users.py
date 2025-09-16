@@ -15,6 +15,7 @@ from gooddata_sdk.catalog.user.entity_model.user_group import (
     CatalogUserGroup,
 )
 from pytest_mock import MockerFixture
+from requests import Response
 
 from gooddata_pipelines.provisioning.entities.users.models.users import (
     UserFullLoad,
@@ -195,6 +196,21 @@ def parse_user_data(user_data: list[dict]) -> list[CatalogUser]:
             "users_expected_incremental_load.json",
             "incremental_load",
         ),
+        (
+            "users_input_full_load_modifies_protected_user.json",
+            "users_expected_full_load.json",
+            "full_load",
+        ),
+        (
+            "users_input_incremental_load_modifies_protected_user.json",
+            "users_expected_incremental_load.json",
+            "incremental_load",
+        ),
+        (
+            "users_input_incremental_load_deletes_protected_user.json",
+            "users_expected_incremental_load.json",
+            "incremental_load",
+        ),
     ],
 )
 def test_user_provisioning(
@@ -225,6 +241,26 @@ def test_user_provisioning(
         user_provisioner._api,
         "list_users",
         return_value=upstream_users,
+    )
+
+    def mock_get_profile(*args, **kwargs) -> Response:
+        """Mock the get_profile method by creating a response object with sample
+        response from the API reference.
+        """
+        with open(
+            f"{TEST_DATA_SUBDIR}/profile_response_content.json", "r"
+        ) as f:
+            profile_response = f.read()
+        response = Response()
+        response.status_code = 200
+        response._content = profile_response.encode("utf-8")
+        response.headers["Content-Type"] = "application/json"
+        return response
+
+    mocker.patch.object(
+        user_provisioner._api,
+        "get_profile",
+        side_effect=mock_get_profile,
     )
 
     upstream_user_cache = {user.id: user for user in upstream_users}

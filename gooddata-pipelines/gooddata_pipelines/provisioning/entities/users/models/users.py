@@ -3,7 +3,16 @@
 from typing import Any
 
 from gooddata_sdk.catalog.user.entity_model.user import CatalogUser
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+
+
+class UserProfile(BaseModel):
+    """Minimal model of api/v1/profile response.
+
+    Does not contain all fields from the response.
+    """
+
+    user_id: str = Field(alias="userId")
 
 
 class BaseUser(BaseModel):

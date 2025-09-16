@@ -212,6 +212,11 @@ class ApiMethods:
         headers = {**self.headers, "X-GDC-VALIDATE-RELATIONS": "true"}
         return self._get(endpoint, headers=headers)
 
+    def get_profile(self) -> requests.Response:
+        """Returns organization and current user information."""
+        endpoint = "/profile"
+        return self._get(endpoint)
+
     def _get(
         self, endpoint: str, headers: dict[str, str] | None = None
     ) -> requests.Response:
