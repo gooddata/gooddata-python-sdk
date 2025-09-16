@@ -1,4 +1,5 @@
 # (C) 2025 GoodData Corporation
+import os
 from pathlib import Path
 
 import pytest
@@ -110,9 +111,11 @@ def test_fail_type_validation(
 
 def test_create_from_profile() -> None:
     """Test creating a provisioner from a profile."""
+
+    os.environ["MOCK_TOKEN"] = "some_user_token"
     provisioner: Provisioning = Provisioning.create_from_profile(
         profile="mock_profile",
         profiles_path=Path(f"{TEST_DATA_DIR}/profiles.yaml"),
     )
     assert provisioner._api._domain == "http://localhost:3000"
-    assert provisioner._api._token == "some_user_token"
+    assert provisioner._api._token == os.environ.pop("MOCK_TOKEN")

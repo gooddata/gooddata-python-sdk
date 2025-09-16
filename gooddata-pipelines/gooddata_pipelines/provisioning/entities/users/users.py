@@ -11,6 +11,7 @@ from gooddata_sdk.catalog.user.entity_model.user_group import CatalogUserGroup
 from gooddata_pipelines.provisioning.entities.users.models.users import (
     UserFullLoad,
     UserIncrementalLoad,
+    UserProfile,
 )
 from gooddata_pipelines.provisioning.provisioning import Provisioning
 from gooddata_pipelines.provisioning.utils.context_objects import UserContext
@@ -30,12 +31,27 @@ class UserProvisioner(Provisioning[UserFullLoad, UserIncrementalLoad]):
     source_group_incremental: list[UserIncrementalLoad]
     source_group_full: list[UserFullLoad]
 
+    current_user_id: str
+
     FULL_LOAD_TYPE: type[UserFullLoad] = UserFullLoad
     INCREMENTAL_LOAD_TYPE: type[UserIncrementalLoad] = UserIncrementalLoad
 
     def __init__(self, host: str, token: str) -> None:
         super().__init__(host, token)
         self.upstream_user_cache: dict[UserId, UserModel] = {}
+
+    def _get_current_user_id(self) -> str:
+        """Gets the current user ID."""
+
+        profile_response = self._api.get_profile()
+
+        if not profile_response.ok:
+            raise Exception("Failed to get current user profile")
+
+        profile_json = profile_response.json()
+        profile = UserProfile.model_validate(profile_json)
+
+        return profile.user_id
 
     def _try_get_user(
         self, user: UserModel, model: type[UserModel]
@@ -99,6 +115,14 @@ class UserProvisioner(Provisioning[UserFullLoad, UserIncrementalLoad]):
         for its existence and create it if needed.
 
         """
+
+        if user.user_id == self.current_user_id:
+            self.logger.warning(
+                f"Skipping creation/update of current user: {user.user_id}. "
+                + "Current user should not be modified.",
+            )
+            return
+
         user_context = UserContext(
             user_id=user.user_id,
             user_groups=user.user_groups,
@@ -118,6 +142,13 @@ class UserProvisioner(Provisioning[UserFullLoad, UserIncrementalLoad]):
 
     def _delete_user(self, user_id: str) -> None:
         """Deletes user from the project."""
+        if user_id == self.current_user_id:
+            self.logger.warning(
+                f"Skipping deletion of current user: {user_id}."
+                + " Current user should not be deleted.",
+            )
+            return
+
         try:
             self._api._sdk.catalog_user.get_user(user_id)
         except NotFoundException:
@@ -135,6 +166,9 @@ class UserProvisioner(Provisioning[UserFullLoad, UserIncrementalLoad]):
 
     def _provision_incremental_load(self) -> None:
         """Runs the incremental provisioning logic."""
+        # Set the current user ID
+        self.current_user_id = self._get_current_user_id()
+
         for user in self.source_group_incremental:
             # Attempt to process each user. On failure, log the error and continue
             try:
@@ -146,6 +180,10 @@ class UserProvisioner(Provisioning[UserFullLoad, UserIncrementalLoad]):
 
     def _provision_full_load(self) -> None:
         """Runs the full load provisioning logic."""
+
+        # Set the current user ID
+        self.current_user_id = self._get_current_user_id()
+
         # Get all upstream users
         catalog_upstream_users: list[CatalogUser] = self._api.list_users()
 

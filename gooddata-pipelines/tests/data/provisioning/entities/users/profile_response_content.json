@@ -1,0 +1,54 @@
+{
+  "entitlements": [
+    {
+      "expiry": "2019-08-24",
+      "name": "CacheStrategy",
+      "value": "string"
+    }
+  ],
+  "features": {
+    "live": {
+      "context": {
+        "earlyAccess": "string",
+        "earlyAccessValues": ["string"]
+      },
+      "configuration": {
+        "host": "string",
+        "key": "string"
+      }
+    }
+  },
+  "links": {
+    "organization": "string",
+    "self": "string",
+    "user": "string"
+  },
+  "name": "string",
+  "organizationId": "string",
+  "organizationName": "string",
+  "permissions": ["MANAGE"],
+  "telemetryConfig": {
+    "context": {
+      "deploymentId": "string",
+      "organizationHash": "string",
+      "userHash": "string"
+    },
+    "services": {
+      "amplitude": {
+        "aiProjectApiKey": "string",
+        "endpoint": "string",
+        "gdCommonApiKey": "string",
+        "reportingEndpoint": "string"
+      },
+      "matomo": {
+        "host": "string",
+        "reportingEndpoint": "string",
+        "siteId": 0
+      },
+      "openTelemetry": {
+        "host": "string"
+      }
+    }
+  },
+  "userId": "protected_user_id"
+}
