@@ -18,6 +18,7 @@
   <div class="gd-docs-header-nav__center">
     <div id="adds-container" class="gd-docs-header-nav__search"></div>
   </div>
+  {{ partial "ask-ai-button.html" . }}
   {{ if  .Site.Params.versions }}
   <div class="gd-docs-header-nav__right">
     {{ partial "navbar-version-selector.html" . }}
