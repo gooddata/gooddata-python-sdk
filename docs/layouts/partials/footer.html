@@ -18,12 +18,14 @@
         >
           {{ $link.title }}
         </label>
-        {{ if $link.items }}
+        {{ if and $link.items (gt (len $link.items) 0) }}
           <ul class="gd-footer-banner-sublinks gd-footer-sublinks">
             {{ range $sublink := $link.items }}
-              <li class="gd-footer-banner-sublinks-item gd-footer-sublinks-item">
-                {{ template "absolute-link" (dict "url" $sublink.link "text" $sublink.title "class" "gd-footer-sublinks-item-link" "idPrefix" "footer-link-") }}
-              </li>
+              {{ if and $sublink.link $sublink.title }}
+                <li class="gd-footer-banner-sublinks-item gd-footer-sublinks-item">
+                  {{ template "absolute-link" (dict "url" $sublink.link "text" $sublink.title "class" "gd-footer-sublinks-item-link" "idPrefix" "footer-link-") }}
+                </li>
+              {{ end }}
             {{ end }}
           </ul>
         {{ end }}
@@ -48,12 +50,14 @@
         >
           {{ $link.title }}
         </label>
-        {{ if $link.items }}
+        {{ if and $link.items (gt (len $link.items) 0) }}
           <ul class="gd-footer-sublinks">
             {{ range $sublink := $link.items }}
-              <li class="gd-footer-sublinks-item">
-                {{ template "absolute-link" (dict "url" $sublink.link "text" $sublink.title "class" "gd-footer-sublinks-item-link" "idPrefix" "footer-link-") }}
-              </li>
+              {{ if and $sublink.link $sublink.title }}
+                <li class="gd-footer-sublinks-item">
+                  {{ template "absolute-link" (dict "url" $sublink.link "text" $sublink.title "class" "gd-footer-sublinks-item-link" "idPrefix" "footer-link-") }}
+                </li>
+              {{ end }}
             {{ end }}
           </ul>
         {{ end }}
