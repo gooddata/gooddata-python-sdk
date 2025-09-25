@@ -31,14 +31,14 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_automation_out_relationships import JsonApiAutomationOutRelationships
+    from gooddata_api_client.model.json_api_automation_out_attributes import JsonApiAutomationOutAttributes
     from gooddata_api_client.model.json_api_workspace_automation_out import JsonApiWorkspaceAutomationOut
-    from gooddata_api_client.model.json_api_workspace_automation_out_attributes import JsonApiWorkspaceAutomationOutAttributes
+    from gooddata_api_client.model.json_api_workspace_automation_out_relationships import JsonApiWorkspaceAutomationOutRelationships
     from gooddata_api_client.model.object_links import ObjectLinks
     from gooddata_api_client.model.object_links_container import ObjectLinksContainer
-    globals()['JsonApiAutomationOutRelationships'] = JsonApiAutomationOutRelationships
+    globals()['JsonApiAutomationOutAttributes'] = JsonApiAutomationOutAttributes
     globals()['JsonApiWorkspaceAutomationOut'] = JsonApiWorkspaceAutomationOut
-    globals()['JsonApiWorkspaceAutomationOutAttributes'] = JsonApiWorkspaceAutomationOutAttributes
+    globals()['JsonApiWorkspaceAutomationOutRelationships'] = JsonApiWorkspaceAutomationOutRelationships
     globals()['ObjectLinks'] = ObjectLinks
     globals()['ObjectLinksContainer'] = ObjectLinksContainer
 
@@ -104,10 +104,10 @@ class JsonApiWorkspaceAutomationOutWithLinks(ModelComposed):
         """
         lazy_import()
         return {
-            'attributes': (JsonApiWorkspaceAutomationOutAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
-            'relationships': (JsonApiAutomationOutRelationships,),  # noqa: E501
+            'attributes': (JsonApiAutomationOutAttributes,),  # noqa: E501
+            'relationships': (JsonApiWorkspaceAutomationOutRelationships,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
         }
 
@@ -117,9 +117,9 @@ class JsonApiWorkspaceAutomationOutWithLinks(ModelComposed):
 
 
     attribute_map = {
-        'attributes': 'attributes',  # noqa: E501
         'id': 'id',  # noqa: E501
         'type': 'type',  # noqa: E501
+        'attributes': 'attributes',  # noqa: E501
         'relationships': 'relationships',  # noqa: E501
         'links': 'links',  # noqa: E501
     }
@@ -133,7 +133,6 @@ class JsonApiWorkspaceAutomationOutWithLinks(ModelComposed):
         """JsonApiWorkspaceAutomationOutWithLinks - a model defined in OpenAPI
 
         Keyword Args:
-            attributes (JsonApiWorkspaceAutomationOutAttributes):
             id (str): API identifier of an object
             type (str): Object type. defaults to "workspaceAutomation", must be one of ["workspaceAutomation", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
@@ -166,7 +165,8 @@ class JsonApiWorkspaceAutomationOutWithLinks(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            relationships (JsonApiAutomationOutRelationships): [optional]  # noqa: E501
+            attributes (JsonApiAutomationOutAttributes): [optional]  # noqa: E501
+            relationships (JsonApiWorkspaceAutomationOutRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """
 
@@ -242,7 +242,6 @@ class JsonApiWorkspaceAutomationOutWithLinks(ModelComposed):
         """JsonApiWorkspaceAutomationOutWithLinks - a model defined in OpenAPI
 
         Keyword Args:
-            attributes (JsonApiWorkspaceAutomationOutAttributes):
             id (str): API identifier of an object
             type (str): Object type. defaults to "workspaceAutomation", must be one of ["workspaceAutomation", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
@@ -275,7 +274,8 @@ class JsonApiWorkspaceAutomationOutWithLinks(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            relationships (JsonApiAutomationOutRelationships): [optional]  # noqa: E501
+            attributes (JsonApiAutomationOutAttributes): [optional]  # noqa: E501
+            relationships (JsonApiWorkspaceAutomationOutRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """
 

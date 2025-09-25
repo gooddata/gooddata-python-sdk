@@ -110,6 +110,7 @@ class JsonApiLabelOutAttributes(ModelNormal):
         return {
             'are_relations_valid': (bool,),  # noqa: E501
             'description': (str,),  # noqa: E501
+            'is_hidden': (bool,),  # noqa: E501
             'primary': (bool,),  # noqa: E501
             'source_column': (str,),  # noqa: E501
             'source_column_data_type': (str,),  # noqa: E501
@@ -126,6 +127,7 @@ class JsonApiLabelOutAttributes(ModelNormal):
     attribute_map = {
         'are_relations_valid': 'areRelationsValid',  # noqa: E501
         'description': 'description',  # noqa: E501
+        'is_hidden': 'isHidden',  # noqa: E501
         'primary': 'primary',  # noqa: E501
         'source_column': 'sourceColumn',  # noqa: E501
         'source_column_data_type': 'sourceColumnDataType',  # noqa: E501
@@ -177,6 +179,7 @@ class JsonApiLabelOutAttributes(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             are_relations_valid (bool): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
+            is_hidden (bool): [optional]  # noqa: E501
             primary (bool): [optional]  # noqa: E501
             source_column (str): [optional]  # noqa: E501
             source_column_data_type (str): [optional]  # noqa: E501
@@ -270,6 +273,7 @@ class JsonApiLabelOutAttributes(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             are_relations_valid (bool): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
+            is_hidden (bool): [optional]  # noqa: E501
             primary (bool): [optional]  # noqa: E501
             source_column (str): [optional]  # noqa: E501
             source_column_data_type (str): [optional]  # noqa: E501

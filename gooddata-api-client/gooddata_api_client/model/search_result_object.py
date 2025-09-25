@@ -90,6 +90,7 @@ class SearchResultObject(ModelNormal):
             'workspace_id': (str,),  # noqa: E501
             'created_at': (datetime,),  # noqa: E501
             'description': (str,),  # noqa: E501
+            'is_hidden': (bool,),  # noqa: E501
             'modified_at': (datetime,),  # noqa: E501
             'score': (float,),  # noqa: E501
             'score_descriptor': (float,),  # noqa: E501
@@ -111,6 +112,7 @@ class SearchResultObject(ModelNormal):
         'workspace_id': 'workspaceId',  # noqa: E501
         'created_at': 'createdAt',  # noqa: E501
         'description': 'description',  # noqa: E501
+        'is_hidden': 'isHidden',  # noqa: E501
         'modified_at': 'modifiedAt',  # noqa: E501
         'score': 'score',  # noqa: E501
         'score_descriptor': 'scoreDescriptor',  # noqa: E501
@@ -169,6 +171,7 @@ class SearchResultObject(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             created_at (datetime): Timestamp when object was created.. [optional]  # noqa: E501
             description (str): Object description.. [optional]  # noqa: E501
+            is_hidden (bool): If true, this object is hidden from AI search results by default.. [optional]  # noqa: E501
             modified_at (datetime): Timestamp when object was last modified.. [optional]  # noqa: E501
             score (float): Result score calculated by a similarity search algorithm (cosine_distance).. [optional]  # noqa: E501
             score_descriptor (float): Result score for descriptor containing(now) description and tags.. [optional]  # noqa: E501
@@ -273,6 +276,7 @@ class SearchResultObject(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             created_at (datetime): Timestamp when object was created.. [optional]  # noqa: E501
             description (str): Object description.. [optional]  # noqa: E501
+            is_hidden (bool): If true, this object is hidden from AI search results by default.. [optional]  # noqa: E501
             modified_at (datetime): Timestamp when object was last modified.. [optional]  # noqa: E501
             score (float): Result score calculated by a similarity search algorithm (cosine_distance).. [optional]  # noqa: E501
             score_descriptor (float): Result score for descriptor containing(now) description and tags.. [optional]  # noqa: E501

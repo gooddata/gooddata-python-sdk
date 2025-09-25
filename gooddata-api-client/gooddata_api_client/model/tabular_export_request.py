@@ -177,7 +177,7 @@ class TabularExportRequest(ModelNormal):
             related_dashboard_id (str): Analytical dashboard identifier. Optional identifier, which informs the system that the export is related to a specific dashboard.. [optional]  # noqa: E501
             settings (Settings): [optional]  # noqa: E501
             visualization_object (str): Visualization object identifier. Alternative to executionResult property.. [optional]  # noqa: E501
-            visualization_object_custom_filters ([{str: (bool, date, datetime, dict, float, int, list, str, none_type)}]): Optional custom filters (as array of IFilter objects defined in UI SDK) to be applied when visualizationObject is given.. [optional]  # noqa: E501
+            visualization_object_custom_filters ([{str: (bool, date, datetime, dict, float, int, list, str, none_type)}]): Optional custom filters (as array of IFilter objects defined in UI SDK) to be applied when visualizationObject is given. Those filters override the original filters defined in the visualization.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -275,7 +275,7 @@ class TabularExportRequest(ModelNormal):
             related_dashboard_id (str): Analytical dashboard identifier. Optional identifier, which informs the system that the export is related to a specific dashboard.. [optional]  # noqa: E501
             settings (Settings): [optional]  # noqa: E501
             visualization_object (str): Visualization object identifier. Alternative to executionResult property.. [optional]  # noqa: E501
-            visualization_object_custom_filters ([{str: (bool, date, datetime, dict, float, int, list, str, none_type)}]): Optional custom filters (as array of IFilter objects defined in UI SDK) to be applied when visualizationObject is given.. [optional]  # noqa: E501
+            visualization_object_custom_filters ([{str: (bool, date, datetime, dict, float, int, list, str, none_type)}]): Optional custom filters (as array of IFilter objects defined in UI SDK) to be applied when visualizationObject is given. Those filters override the original filters defined in the visualization.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

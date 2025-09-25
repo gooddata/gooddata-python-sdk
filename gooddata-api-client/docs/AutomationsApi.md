@@ -22,6 +22,7 @@ Method | HTTP request | Description
 [**unpause_workspace_automations**](AutomationsApi.md#unpause_workspace_automations) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/unpause | Unpause selected automations in the workspace
 [**unsubscribe_all_automations**](AutomationsApi.md#unsubscribe_all_automations) | **DELETE** /api/v1/actions/organization/automations/unsubscribe | Unsubscribe from all automations in all workspaces
 [**unsubscribe_automation**](AutomationsApi.md#unsubscribe_automation) | **DELETE** /api/v1/actions/workspaces/{workspaceId}/automations/{automationId}/unsubscribe | Unsubscribe from an automation
+[**unsubscribe_organization_automations**](AutomationsApi.md#unsubscribe_organization_automations) | **POST** /api/v1/actions/organization/automations/unsubscribe | Unsubscribe from selected automations across all workspaces
 [**unsubscribe_selected_workspace_automations**](AutomationsApi.md#unsubscribe_selected_workspace_automations) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/unsubscribe | Unsubscribe from selected automations in the workspace
 [**unsubscribe_workspace_automations**](AutomationsApi.md#unsubscribe_workspace_automations) | **DELETE** /api/v1/actions/workspaces/{workspaceId}/automations/unsubscribe | Unsubscribe from all automations in the workspace
 [**update_entity_automations**](AutomationsApi.md#update_entity_automations) | **PUT** /api/v1/entities/workspaces/{workspaceId}/automations/{objectId} | Put an Automation
@@ -103,6 +104,8 @@ with gooddata_api_client.ApiClient() as api_client:
                             settings=DashboardExportSettings(
                                 export_info=True,
                                 merge_headers=True,
+                                page_orientation="PORTRAIT",
+                                page_size="A4",
                             ),
                             widget_ids=[
                                 "widget_ids_example",
@@ -112,6 +115,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 ],
                 description="description_example",
                 details={},
+                evaluation_mode="SHARED",
                 external_recipients=[
                     JsonApiAutomationInAttributesExternalRecipientsInner(
                         email="email_example",
@@ -258,7 +262,6 @@ with gooddata_api_client.ApiClient() as api_client:
                                 pdf_top_left_content="Good",
                                 pdf_top_right_content="Morning",
                                 show_filters=False,
-                                show_info_page=False,
                             ),
                             visualization_object="f7c359bc-c230-4487-b15b-ad9685bcb537",
                             visualization_object_custom_filters=[
@@ -310,7 +313,7 @@ with gooddata_api_client.ApiClient() as api_client:
         ),
     ) # JsonApiAutomationInDocument | 
     include = [
-        "include=notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResults",
+        "notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResults",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
     meta_include = [
         "metaInclude=origin,all",
@@ -392,7 +395,7 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = automations_api.AutomationsApi(api_client)
     workspace_id = "workspaceId_example" # str | 
     object_id = "objectId_example" # str | 
-    filter = "filter=title==someString;description==someString;notificationChannel.id==321;analyticalDashboard.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "title==someString;description==someString;notificationChannel.id==321;analyticalDashboard.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -609,9 +612,9 @@ configuration = gooddata_api_client.Configuration(
 with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = automations_api.AutomationsApi(api_client)
-    filter = "filter=workspaceId==someString;title==someString;notificationChannel.id==321;analyticalDashboard.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "title==someString;description==someString;workspace.id==321;notificationChannel.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     include = [
-        "include=notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResults",
+        "workspace,notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResults",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
     page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
     size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
@@ -693,9 +696,9 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = automations_api.AutomationsApi(api_client)
     workspace_id = "workspaceId_example" # str | 
     origin = "ALL" # str |  (optional) if omitted the server will use the default value of "ALL"
-    filter = "filter=title==someString;description==someString;notificationChannel.id==321;analyticalDashboard.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "title==someString;description==someString;notificationChannel.id==321;analyticalDashboard.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     include = [
-        "include=notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResults",
+        "notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResults",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
     page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
     size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
@@ -869,9 +872,9 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = automations_api.AutomationsApi(api_client)
     workspace_id = "workspaceId_example" # str | 
     object_id = "objectId_example" # str | 
-    filter = "filter=title==someString;description==someString;notificationChannel.id==321;analyticalDashboard.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "title==someString;description==someString;notificationChannel.id==321;analyticalDashboard.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     include = [
-        "include=notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResults",
+        "notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResults",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
     meta_include = [
@@ -1007,6 +1010,8 @@ with gooddata_api_client.ApiClient() as api_client:
                             settings=DashboardExportSettings(
                                 export_info=True,
                                 merge_headers=True,
+                                page_orientation="PORTRAIT",
+                                page_size="A4",
                             ),
                             widget_ids=[
                                 "widget_ids_example",
@@ -1016,6 +1021,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 ],
                 description="description_example",
                 details={},
+                evaluation_mode="SHARED",
                 external_recipients=[
                     JsonApiAutomationInAttributesExternalRecipientsInner(
                         email="email_example",
@@ -1162,7 +1168,6 @@ with gooddata_api_client.ApiClient() as api_client:
                                 pdf_top_left_content="Good",
                                 pdf_top_right_content="Morning",
                                 show_filters=False,
-                                show_info_page=False,
                             ),
                             visualization_object="f7c359bc-c230-4487-b15b-ad9685bcb537",
                             visualization_object_custom_filters=[
@@ -1213,9 +1218,9 @@ with gooddata_api_client.ApiClient() as api_client:
             type="automation",
         ),
     ) # JsonApiAutomationPatchDocument | 
-    filter = "filter=title==someString;description==someString;notificationChannel.id==321;analyticalDashboard.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "title==someString;description==someString;notificationChannel.id==321;analyticalDashboard.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     include = [
-        "include=notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResults",
+        "notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResults",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
 
     # example passing only required values which don't have defaults set
@@ -1496,6 +1501,8 @@ with gooddata_api_client.ApiClient() as api_client:
                         settings=DashboardExportSettings(
                             export_info=True,
                             merge_headers=True,
+                            page_orientation="PORTRAIT",
+                            page_size="A4",
                         ),
                         widget_ids=[
                             "widget_ids_example",
@@ -1507,6 +1514,7 @@ with gooddata_api_client.ApiClient() as api_client:
             details={
                 "key": "key_example",
             },
+            evaluation_mode="PER_RECIPIENT",
             export_definitions=[
                 DeclarativeExportDefinitionIdentifier(
                     id="export123",
@@ -1675,7 +1683,6 @@ with gooddata_api_client.ApiClient() as api_client:
                             pdf_top_left_content="Good",
                             pdf_top_right_content="Morning",
                             show_filters=False,
-                            show_info_page=False,
                         ),
                         visualization_object="f7c359bc-c230-4487-b15b-ad9685bcb537",
                         visualization_object_custom_filters=[
@@ -1817,6 +1824,8 @@ with gooddata_api_client.ApiClient() as api_client:
                         settings=DashboardExportSettings(
                             export_info=True,
                             merge_headers=True,
+                            page_orientation="PORTRAIT",
+                            page_size="A4",
                         ),
                         widget_ids=[
                             "widget_ids_example",
@@ -1978,7 +1987,6 @@ with gooddata_api_client.ApiClient() as api_client:
                             pdf_top_left_content="Good",
                             pdf_top_right_content="Morning",
                             show_filters=False,
-                            show_info_page=False,
                         ),
                         visualization_object="f7c359bc-c230-4487-b15b-ad9685bcb537",
                         visualization_object_custom_filters=[
@@ -2373,6 +2381,77 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **unsubscribe_organization_automations**
+> unsubscribe_organization_automations(organization_automation_management_bulk_request)
+
+Unsubscribe from selected automations across all workspaces
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import automations_api
+from gooddata_api_client.model.organization_automation_management_bulk_request import OrganizationAutomationManagementBulkRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = automations_api.AutomationsApi(api_client)
+    organization_automation_management_bulk_request = OrganizationAutomationManagementBulkRequest(
+        automations=[
+            OrganizationAutomationIdentifier(
+                id="id_example",
+                workspace_id="workspace_id_example",
+            ),
+        ],
+    ) # OrganizationAutomationManagementBulkRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Unsubscribe from selected automations across all workspaces
+        api_instance.unsubscribe_organization_automations(organization_automation_management_bulk_request)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling AutomationsApi->unsubscribe_organization_automations: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **organization_automation_management_bulk_request** | [**OrganizationAutomationManagementBulkRequest**](OrganizationAutomationManagementBulkRequest.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **unsubscribe_selected_workspace_automations**
 > unsubscribe_selected_workspace_automations(workspace_id, workspace_automation_management_bulk_request)
 
@@ -2585,6 +2664,8 @@ with gooddata_api_client.ApiClient() as api_client:
                             settings=DashboardExportSettings(
                                 export_info=True,
                                 merge_headers=True,
+                                page_orientation="PORTRAIT",
+                                page_size="A4",
                             ),
                             widget_ids=[
                                 "widget_ids_example",
@@ -2594,6 +2675,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 ],
                 description="description_example",
                 details={},
+                evaluation_mode="SHARED",
                 external_recipients=[
                     JsonApiAutomationInAttributesExternalRecipientsInner(
                         email="email_example",
@@ -2740,7 +2822,6 @@ with gooddata_api_client.ApiClient() as api_client:
                                 pdf_top_left_content="Good",
                                 pdf_top_right_content="Morning",
                                 show_filters=False,
-                                show_info_page=False,
                             ),
                             visualization_object="f7c359bc-c230-4487-b15b-ad9685bcb537",
                             visualization_object_custom_filters=[
@@ -2791,9 +2872,9 @@ with gooddata_api_client.ApiClient() as api_client:
             type="automation",
         ),
     ) # JsonApiAutomationInDocument | 
-    filter = "filter=title==someString;description==someString;notificationChannel.id==321;analyticalDashboard.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "title==someString;description==someString;notificationChannel.id==321;analyticalDashboard.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     include = [
-        "include=notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResults",
+        "notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResults",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
 
     # example passing only required values which don't have defaults set

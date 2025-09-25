@@ -97,6 +97,7 @@ class SearchRequest(ModelNormal):
         return {
             'question': (str,),  # noqa: E501
             'deep_search': (bool,),  # noqa: E501
+            'include_hidden': (bool,),  # noqa: E501
             'limit': (int,),  # noqa: E501
             'object_types': ([str],),  # noqa: E501
             'relevant_score_threshold': (float,),  # noqa: E501
@@ -111,6 +112,7 @@ class SearchRequest(ModelNormal):
     attribute_map = {
         'question': 'question',  # noqa: E501
         'deep_search': 'deepSearch',  # noqa: E501
+        'include_hidden': 'includeHidden',  # noqa: E501
         'limit': 'limit',  # noqa: E501
         'object_types': 'objectTypes',  # noqa: E501
         'relevant_score_threshold': 'relevantScoreThreshold',  # noqa: E501
@@ -162,6 +164,7 @@ class SearchRequest(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             deep_search (bool): Turn on deep search. If true, content of complex objects will be searched as well, e.g. metrics in visualizations.. [optional] if omitted the server will use the default value of False  # noqa: E501
+            include_hidden (bool): If true, includes hidden objects in search results. If false (default), excludes objects where isHidden=true.. [optional] if omitted the server will use the default value of False  # noqa: E501
             limit (int): Maximum number of results to return. There is a hard limit and the actual number of returned results may be lower than what is requested.. [optional] if omitted the server will use the default value of 10  # noqa: E501
             object_types ([str]): List of object types to search for.. [optional]  # noqa: E501
             relevant_score_threshold (float): Score, above which we return found objects. Below this score objects are not relevant.. [optional] if omitted the server will use the default value of 0.3  # noqa: E501
@@ -256,6 +259,7 @@ class SearchRequest(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             deep_search (bool): Turn on deep search. If true, content of complex objects will be searched as well, e.g. metrics in visualizations.. [optional] if omitted the server will use the default value of False  # noqa: E501
+            include_hidden (bool): If true, includes hidden objects in search results. If false (default), excludes objects where isHidden=true.. [optional] if omitted the server will use the default value of False  # noqa: E501
             limit (int): Maximum number of results to return. There is a hard limit and the actual number of returned results may be lower than what is requested.. [optional] if omitted the server will use the default value of 10  # noqa: E501
             object_types ([str]): List of object types to search for.. [optional]  # noqa: E501
             relevant_score_threshold (float): Score, above which we return found objects. Below this score objects are not relevant.. [optional] if omitted the server will use the default value of 0.3  # noqa: E501

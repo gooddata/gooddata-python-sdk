@@ -98,6 +98,7 @@ class JsonApiMetricOutAttributes(ModelNormal):
             'are_relations_valid': (bool,),  # noqa: E501
             'created_at': (datetime,),  # noqa: E501
             'description': (str,),  # noqa: E501
+            'is_hidden': (bool,),  # noqa: E501
             'modified_at': (datetime,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
             'title': (str,),  # noqa: E501
@@ -113,6 +114,7 @@ class JsonApiMetricOutAttributes(ModelNormal):
         'are_relations_valid': 'areRelationsValid',  # noqa: E501
         'created_at': 'createdAt',  # noqa: E501
         'description': 'description',  # noqa: E501
+        'is_hidden': 'isHidden',  # noqa: E501
         'modified_at': 'modifiedAt',  # noqa: E501
         'tags': 'tags',  # noqa: E501
         'title': 'title',  # noqa: E501
@@ -165,6 +167,7 @@ class JsonApiMetricOutAttributes(ModelNormal):
             are_relations_valid (bool): [optional]  # noqa: E501
             created_at (datetime): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
+            is_hidden (bool): [optional]  # noqa: E501
             modified_at (datetime): [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
@@ -260,6 +263,7 @@ class JsonApiMetricOutAttributes(ModelNormal):
             are_relations_valid (bool): [optional]  # noqa: E501
             created_at (datetime): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
+            is_hidden (bool): [optional]  # noqa: E501
             modified_at (datetime): [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501

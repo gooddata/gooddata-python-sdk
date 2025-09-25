@@ -31,8 +31,8 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_workspace_in_relationships_parent import JsonApiWorkspaceInRelationshipsParent
-    globals()['JsonApiWorkspaceInRelationshipsParent'] = JsonApiWorkspaceInRelationshipsParent
+    from gooddata_api_client.model.json_api_workspace_automation_out_relationships_workspace import JsonApiWorkspaceAutomationOutRelationshipsWorkspace
+    globals()['JsonApiWorkspaceAutomationOutRelationshipsWorkspace'] = JsonApiWorkspaceAutomationOutRelationshipsWorkspace
 
 
 class JsonApiWorkspaceInRelationships(ModelNormal):
@@ -88,7 +88,7 @@ class JsonApiWorkspaceInRelationships(ModelNormal):
         """
         lazy_import()
         return {
-            'parent': (JsonApiWorkspaceInRelationshipsParent,),  # noqa: E501
+            'parent': (JsonApiWorkspaceAutomationOutRelationshipsWorkspace,),  # noqa: E501
         }
 
     @cached_property
@@ -141,7 +141,7 @@ class JsonApiWorkspaceInRelationships(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            parent (JsonApiWorkspaceInRelationshipsParent): [optional]  # noqa: E501
+            parent (JsonApiWorkspaceAutomationOutRelationshipsWorkspace): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -227,7 +227,7 @@ class JsonApiWorkspaceInRelationships(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            parent (JsonApiWorkspaceInRelationshipsParent): [optional]  # noqa: E501
+            parent (JsonApiWorkspaceAutomationOutRelationshipsWorkspace): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

@@ -32,15 +32,15 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.json_api_aggregated_fact_out_meta import JsonApiAggregatedFactOutMeta
-    from gooddata_api_client.model.json_api_analytical_dashboard_out_attributes import JsonApiAnalyticalDashboardOutAttributes
     from gooddata_api_client.model.json_api_metric_out_relationships import JsonApiMetricOutRelationships
     from gooddata_api_client.model.json_api_visualization_object_out import JsonApiVisualizationObjectOut
+    from gooddata_api_client.model.json_api_visualization_object_out_attributes import JsonApiVisualizationObjectOutAttributes
     from gooddata_api_client.model.object_links import ObjectLinks
     from gooddata_api_client.model.object_links_container import ObjectLinksContainer
     globals()['JsonApiAggregatedFactOutMeta'] = JsonApiAggregatedFactOutMeta
-    globals()['JsonApiAnalyticalDashboardOutAttributes'] = JsonApiAnalyticalDashboardOutAttributes
     globals()['JsonApiMetricOutRelationships'] = JsonApiMetricOutRelationships
     globals()['JsonApiVisualizationObjectOut'] = JsonApiVisualizationObjectOut
+    globals()['JsonApiVisualizationObjectOutAttributes'] = JsonApiVisualizationObjectOutAttributes
     globals()['ObjectLinks'] = ObjectLinks
     globals()['ObjectLinksContainer'] = ObjectLinksContainer
 
@@ -106,7 +106,7 @@ class JsonApiVisualizationObjectOutWithLinks(ModelComposed):
         """
         lazy_import()
         return {
-            'attributes': (JsonApiAnalyticalDashboardOutAttributes,),  # noqa: E501
+            'attributes': (JsonApiVisualizationObjectOutAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
             'meta': (JsonApiAggregatedFactOutMeta,),  # noqa: E501
@@ -137,7 +137,7 @@ class JsonApiVisualizationObjectOutWithLinks(ModelComposed):
         """JsonApiVisualizationObjectOutWithLinks - a model defined in OpenAPI
 
         Keyword Args:
-            attributes (JsonApiAnalyticalDashboardOutAttributes):
+            attributes (JsonApiVisualizationObjectOutAttributes):
             id (str): API identifier of an object
             type (str): Object type. defaults to "visualizationObject", must be one of ["visualizationObject", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
@@ -247,7 +247,7 @@ class JsonApiVisualizationObjectOutWithLinks(ModelComposed):
         """JsonApiVisualizationObjectOutWithLinks - a model defined in OpenAPI
 
         Keyword Args:
-            attributes (JsonApiAnalyticalDashboardOutAttributes):
+            attributes (JsonApiVisualizationObjectOutAttributes):
             id (str): API identifier of an object
             type (str): Object type. defaults to "visualizationObject", must be one of ["visualizationObject", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types

@@ -10,6 +10,7 @@ Name | Type | Description | Notes
 **dashboard_tabular_exports** | [**[JsonApiAutomationInAttributesDashboardTabularExportsInner]**](JsonApiAutomationInAttributesDashboardTabularExportsInner.md) |  | [optional] 
 **description** | **str** |  | [optional] 
 **details** | **{str: (bool, date, datetime, dict, float, int, list, str, none_type)}** | Additional details to be included in the automated message. | [optional] 
+**evaluation_mode** | **str** | Specify automation evaluation mode. | [optional] 
 **external_recipients** | [**[JsonApiAutomationInAttributesExternalRecipientsInner]**](JsonApiAutomationInAttributesExternalRecipientsInner.md) | External recipients of the automation action results. | [optional] 
 **image_exports** | [**[JsonApiAutomationInAttributesImageExportsInner]**](JsonApiAutomationInAttributesImageExportsInner.md) |  | [optional] 
 **metadata** | [**JsonApiAutomationInAttributesMetadata**](JsonApiAutomationInAttributesMetadata.md) |  | [optional] 
