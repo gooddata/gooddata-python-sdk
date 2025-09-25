@@ -122,6 +122,7 @@ class DeclarativeLabel(ModelNormal):
             'source_column': (str,),  # noqa: E501
             'title': (str,),  # noqa: E501
             'description': (str,),  # noqa: E501
+            'is_hidden': (bool,),  # noqa: E501
             'source_column_data_type': (str,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
             'value_type': (str,),  # noqa: E501
@@ -137,6 +138,7 @@ class DeclarativeLabel(ModelNormal):
         'source_column': 'sourceColumn',  # noqa: E501
         'title': 'title',  # noqa: E501
         'description': 'description',  # noqa: E501
+        'is_hidden': 'isHidden',  # noqa: E501
         'source_column_data_type': 'sourceColumnDataType',  # noqa: E501
         'tags': 'tags',  # noqa: E501
         'value_type': 'valueType',  # noqa: E501
@@ -189,6 +191,7 @@ class DeclarativeLabel(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             description (str): Label description.. [optional]  # noqa: E501
+            is_hidden (bool): Determines if the label is hidden from AI features.. [optional]  # noqa: E501
             source_column_data_type (str): A type of the source column. [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
             value_type (str): Specific type of label. [optional]  # noqa: E501
@@ -286,6 +289,7 @@ class DeclarativeLabel(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             description (str): Label description.. [optional]  # noqa: E501
+            is_hidden (bool): Determines if the label is hidden from AI features.. [optional]  # noqa: E501
             source_column_data_type (str): A type of the source column. [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
             value_type (str): Specific type of label. [optional]  # noqa: E501

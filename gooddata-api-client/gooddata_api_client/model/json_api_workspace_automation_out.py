@@ -31,10 +31,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_automation_out_relationships import JsonApiAutomationOutRelationships
-    from gooddata_api_client.model.json_api_workspace_automation_out_attributes import JsonApiWorkspaceAutomationOutAttributes
-    globals()['JsonApiAutomationOutRelationships'] = JsonApiAutomationOutRelationships
-    globals()['JsonApiWorkspaceAutomationOutAttributes'] = JsonApiWorkspaceAutomationOutAttributes
+    from gooddata_api_client.model.json_api_automation_out_attributes import JsonApiAutomationOutAttributes
+    from gooddata_api_client.model.json_api_workspace_automation_out_relationships import JsonApiWorkspaceAutomationOutRelationships
+    globals()['JsonApiAutomationOutAttributes'] = JsonApiAutomationOutAttributes
+    globals()['JsonApiWorkspaceAutomationOutRelationships'] = JsonApiWorkspaceAutomationOutRelationships
 
 
 class JsonApiWorkspaceAutomationOut(ModelNormal):
@@ -98,10 +98,10 @@ class JsonApiWorkspaceAutomationOut(ModelNormal):
         """
         lazy_import()
         return {
-            'attributes': (JsonApiWorkspaceAutomationOutAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
-            'relationships': (JsonApiAutomationOutRelationships,),  # noqa: E501
+            'attributes': (JsonApiAutomationOutAttributes,),  # noqa: E501
+            'relationships': (JsonApiWorkspaceAutomationOutRelationships,),  # noqa: E501
         }
 
     @cached_property
@@ -110,9 +110,9 @@ class JsonApiWorkspaceAutomationOut(ModelNormal):
 
 
     attribute_map = {
-        'attributes': 'attributes',  # noqa: E501
         'id': 'id',  # noqa: E501
         'type': 'type',  # noqa: E501
+        'attributes': 'attributes',  # noqa: E501
         'relationships': 'relationships',  # noqa: E501
     }
 
@@ -123,11 +123,10 @@ class JsonApiWorkspaceAutomationOut(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, attributes, id, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, id, *args, **kwargs):  # noqa: E501
         """JsonApiWorkspaceAutomationOut - a model defined in OpenAPI
 
         Args:
-            attributes (JsonApiWorkspaceAutomationOutAttributes):
             id (str): API identifier of an object
 
         Keyword Args:
@@ -162,7 +161,8 @@ class JsonApiWorkspaceAutomationOut(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            relationships (JsonApiAutomationOutRelationships): [optional]  # noqa: E501
+            attributes (JsonApiAutomationOutAttributes): [optional]  # noqa: E501
+            relationships (JsonApiWorkspaceAutomationOutRelationships): [optional]  # noqa: E501
         """
 
         type = kwargs.get('type', "workspaceAutomation")
@@ -195,7 +195,6 @@ class JsonApiWorkspaceAutomationOut(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.attributes = attributes
         self.id = id
         self.type = type
         for var_name, var_value in kwargs.items():
@@ -218,11 +217,10 @@ class JsonApiWorkspaceAutomationOut(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, attributes, id, *args, **kwargs):  # noqa: E501
+    def __init__(self, id, *args, **kwargs):  # noqa: E501
         """JsonApiWorkspaceAutomationOut - a model defined in OpenAPI
 
         Args:
-            attributes (JsonApiWorkspaceAutomationOutAttributes):
             id (str): API identifier of an object
 
         Keyword Args:
@@ -257,7 +255,8 @@ class JsonApiWorkspaceAutomationOut(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            relationships (JsonApiAutomationOutRelationships): [optional]  # noqa: E501
+            attributes (JsonApiAutomationOutAttributes): [optional]  # noqa: E501
+            relationships (JsonApiWorkspaceAutomationOutRelationships): [optional]  # noqa: E501
         """
 
         type = kwargs.get('type', "workspaceAutomation")
@@ -288,7 +287,6 @@ class JsonApiWorkspaceAutomationOut(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.attributes = attributes
         self.id = id
         self.type = type
         for var_name, var_value in kwargs.items():

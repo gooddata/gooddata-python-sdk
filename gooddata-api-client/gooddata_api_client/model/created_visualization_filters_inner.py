@@ -35,10 +35,14 @@ def lazy_import():
     from gooddata_api_client.model.attribute_positive_filter import AttributePositiveFilter
     from gooddata_api_client.model.date_absolute_filter import DateAbsoluteFilter
     from gooddata_api_client.model.date_relative_filter import DateRelativeFilter
+    from gooddata_api_client.model.ranking_filter import RankingFilter
+    from gooddata_api_client.model.ranking_filter_ranking_filter import RankingFilterRankingFilter
     globals()['AttributeNegativeFilter'] = AttributeNegativeFilter
     globals()['AttributePositiveFilter'] = AttributePositiveFilter
     globals()['DateAbsoluteFilter'] = DateAbsoluteFilter
     globals()['DateRelativeFilter'] = DateRelativeFilter
+    globals()['RankingFilter'] = RankingFilter
+    globals()['RankingFilterRankingFilter'] = RankingFilterRankingFilter
 
 
 class CreatedVisualizationFiltersInner(ModelComposed):
@@ -118,6 +122,7 @@ class CreatedVisualizationFiltersInner(ModelComposed):
             '_from': (int,),  # noqa: E501
             'to': (int,),  # noqa: E501
             'granularity': (str,),  # noqa: E501
+            'ranking_filter': (RankingFilterRankingFilter,),  # noqa: E501
         }
 
     @cached_property
@@ -132,6 +137,7 @@ class CreatedVisualizationFiltersInner(ModelComposed):
         '_from': 'from',  # noqa: E501
         'to': 'to',  # noqa: E501
         'granularity': 'granularity',  # noqa: E501
+        'ranking_filter': 'rankingFilter',  # noqa: E501
     }
 
     read_only_vars = {
@@ -179,6 +185,7 @@ class CreatedVisualizationFiltersInner(ModelComposed):
             _from (int): [optional]  # noqa: E501
             to (int): [optional]  # noqa: E501
             granularity (str): [optional]  # noqa: E501
+            ranking_filter (RankingFilterRankingFilter): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -288,6 +295,7 @@ class CreatedVisualizationFiltersInner(ModelComposed):
             _from (int): [optional]  # noqa: E501
             to (int): [optional]  # noqa: E501
             granularity (str): [optional]  # noqa: E501
+            ranking_filter (RankingFilterRankingFilter): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -363,5 +371,6 @@ class CreatedVisualizationFiltersInner(ModelComposed):
               AttributePositiveFilter,
               DateAbsoluteFilter,
               DateRelativeFilter,
+              RankingFilter,
           ],
         }

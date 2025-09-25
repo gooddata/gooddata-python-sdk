@@ -4,7 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**attributes** | [**JsonApiAnalyticalDashboardOutAttributes**](JsonApiAnalyticalDashboardOutAttributes.md) |  | 
+**attributes** | [**JsonApiVisualizationObjectOutAttributes**](JsonApiVisualizationObjectOutAttributes.md) |  | 
 **id** | **str** | API identifier of an object | 
 **type** | **str** | Object type | defaults to "visualizationObject"
 **meta** | [**JsonApiAggregatedFactOutMeta**](JsonApiAggregatedFactOutMeta.md) |  | [optional] 

@@ -11,6 +11,7 @@ Name | Type | Description | Notes
 **title** | **str** | Attribute title. | 
 **default_view** | [**LabelIdentifier**](LabelIdentifier.md) |  | [optional] 
 **description** | **str** | Attribute description. | [optional] 
+**is_hidden** | **bool** | If true, this attribute is hidden from AI search results. | [optional] 
 **sort_column** | **str** | Attribute sort column. | [optional] 
 **sort_direction** | **str** | Attribute sort direction. | [optional] 
 **source_column_data_type** | **str** | A type of the source column | [optional] 

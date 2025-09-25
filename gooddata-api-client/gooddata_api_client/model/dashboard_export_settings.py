@@ -56,6 +56,15 @@ class DashboardExportSettings(ModelNormal):
     """
 
     allowed_values = {
+        ('page_orientation',): {
+            'PORTRAIT': "PORTRAIT",
+            'LANDSCAPE': "LANDSCAPE",
+        },
+        ('page_size',): {
+            'A3': "A3",
+            'A4': "A4",
+            'LETTER': "LETTER",
+        },
     }
 
     validations = {
@@ -84,6 +93,8 @@ class DashboardExportSettings(ModelNormal):
         return {
             'export_info': (bool,),  # noqa: E501
             'merge_headers': (bool,),  # noqa: E501
+            'page_orientation': (str,),  # noqa: E501
+            'page_size': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -94,6 +105,8 @@ class DashboardExportSettings(ModelNormal):
     attribute_map = {
         'export_info': 'exportInfo',  # noqa: E501
         'merge_headers': 'mergeHeaders',  # noqa: E501
+        'page_orientation': 'pageOrientation',  # noqa: E501
+        'page_size': 'pageSize',  # noqa: E501
     }
 
     read_only_vars = {
@@ -137,8 +150,10 @@ class DashboardExportSettings(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            export_info (bool): If true, the export will contain the information about the exported date and dashboard filters.. [optional] if omitted the server will use the default value of False  # noqa: E501
+            export_info (bool): If true, the export will contain the information about the export – exported date, dashboard filters, etc.. [optional] if omitted the server will use the default value of False  # noqa: E501
             merge_headers (bool): Merge equal headers in neighbouring cells. Used for [XLSX] format only.. [optional] if omitted the server will use the default value of False  # noqa: E501
+            page_orientation (str): Set page orientation. (PDF). [optional] if omitted the server will use the default value of "PORTRAIT"  # noqa: E501
+            page_size (str): Set page size. (PDF). [optional] if omitted the server will use the default value of "A4"  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -224,8 +239,10 @@ class DashboardExportSettings(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            export_info (bool): If true, the export will contain the information about the exported date and dashboard filters.. [optional] if omitted the server will use the default value of False  # noqa: E501
+            export_info (bool): If true, the export will contain the information about the export – exported date, dashboard filters, etc.. [optional] if omitted the server will use the default value of False  # noqa: E501
             merge_headers (bool): Merge equal headers in neighbouring cells. Used for [XLSX] format only.. [optional] if omitted the server will use the default value of False  # noqa: E501
+            page_orientation (str): Set page orientation. (PDF). [optional] if omitted the server will use the default value of "PORTRAIT"  # noqa: E501
+            page_size (str): Set page size. (PDF). [optional] if omitted the server will use the default value of "A4"  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

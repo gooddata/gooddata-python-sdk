@@ -243,6 +243,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     ),
                     description="Simple number for total goods in current production.",
                     id="visualization-1",
+                    is_hidden=False,
                     modified_at="["2023-07-20 12:30"]",
                     modified_by=DeclarativeUserIdentifier(
                         id="employee123",

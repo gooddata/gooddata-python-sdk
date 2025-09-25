@@ -37,6 +37,7 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = generate_logical_data_model_api.GenerateLogicalDataModelApi(api_client)
     data_source_id = "dataSourceId_example" # str | 
     generate_ldm_request = GenerateLdmRequest(
+        aggregated_fact_prefix="aggr",
         date_granularities="all",
         denorm_prefix="dr",
         fact_prefix="f",

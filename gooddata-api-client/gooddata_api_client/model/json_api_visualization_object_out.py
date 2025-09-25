@@ -32,11 +32,11 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.json_api_aggregated_fact_out_meta import JsonApiAggregatedFactOutMeta
-    from gooddata_api_client.model.json_api_analytical_dashboard_out_attributes import JsonApiAnalyticalDashboardOutAttributes
     from gooddata_api_client.model.json_api_metric_out_relationships import JsonApiMetricOutRelationships
+    from gooddata_api_client.model.json_api_visualization_object_out_attributes import JsonApiVisualizationObjectOutAttributes
     globals()['JsonApiAggregatedFactOutMeta'] = JsonApiAggregatedFactOutMeta
-    globals()['JsonApiAnalyticalDashboardOutAttributes'] = JsonApiAnalyticalDashboardOutAttributes
     globals()['JsonApiMetricOutRelationships'] = JsonApiMetricOutRelationships
+    globals()['JsonApiVisualizationObjectOutAttributes'] = JsonApiVisualizationObjectOutAttributes
 
 
 class JsonApiVisualizationObjectOut(ModelNormal):
@@ -100,7 +100,7 @@ class JsonApiVisualizationObjectOut(ModelNormal):
         """
         lazy_import()
         return {
-            'attributes': (JsonApiAnalyticalDashboardOutAttributes,),  # noqa: E501
+            'attributes': (JsonApiVisualizationObjectOutAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
             'meta': (JsonApiAggregatedFactOutMeta,),  # noqa: E501
@@ -131,7 +131,7 @@ class JsonApiVisualizationObjectOut(ModelNormal):
         """JsonApiVisualizationObjectOut - a model defined in OpenAPI
 
         Args:
-            attributes (JsonApiAnalyticalDashboardOutAttributes):
+            attributes (JsonApiVisualizationObjectOutAttributes):
             id (str): API identifier of an object
 
         Keyword Args:
@@ -227,7 +227,7 @@ class JsonApiVisualizationObjectOut(ModelNormal):
         """JsonApiVisualizationObjectOut - a model defined in OpenAPI
 
         Args:
-            attributes (JsonApiAnalyticalDashboardOutAttributes):
+            attributes (JsonApiVisualizationObjectOutAttributes):
             id (str): API identifier of an object
 
         Keyword Args:

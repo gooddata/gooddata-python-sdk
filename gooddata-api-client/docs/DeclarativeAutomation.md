@@ -12,6 +12,7 @@ Name | Type | Description | Notes
 **dashboard_tabular_exports** | [**[AutomationDashboardTabularExport]**](AutomationDashboardTabularExport.md) |  | [optional] 
 **description** | **str** |  | [optional] 
 **details** | **{str: (str,)}** | TODO | [optional] 
+**evaluation_mode** | **str** | Specify automation evaluation mode. | [optional]  if omitted the server will use the default value of "PER_RECIPIENT"
 **export_definitions** | [**[DeclarativeExportDefinitionIdentifier]**](DeclarativeExportDefinitionIdentifier.md) |  | [optional] 
 **external_recipients** | [**[AutomationExternalRecipient]**](AutomationExternalRecipient.md) | External recipients of the automation action results. | [optional] 
 **image_exports** | [**[AutomationImageExport]**](AutomationImageExport.md) |  | [optional] 

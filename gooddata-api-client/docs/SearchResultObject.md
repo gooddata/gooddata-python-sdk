@@ -10,6 +10,7 @@ Name | Type | Description | Notes
 **workspace_id** | **str** | Workspace ID. | 
 **created_at** | **datetime** | Timestamp when object was created. | [optional] 
 **description** | **str** | Object description. | [optional] 
+**is_hidden** | **bool** | If true, this object is hidden from AI search results by default. | [optional] 
 **modified_at** | **datetime** | Timestamp when object was last modified. | [optional] 
 **score** | **float** | Result score calculated by a similarity search algorithm (cosine_distance). | [optional] 
 **score_descriptor** | **float** | Result score for descriptor containing(now) description and tags. | [optional] 

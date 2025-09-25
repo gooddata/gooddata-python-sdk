@@ -3981,12 +3981,14 @@ class EntitiesApi(object):
                 'allowed_values': {
                     ('include',): {
 
+                        "WORKSPACES": "workspaces",
                         "NOTIFICATIONCHANNELS": "notificationChannels",
                         "ANALYTICALDASHBOARDS": "analyticalDashboards",
                         "USERIDENTIFIERS": "userIdentifiers",
                         "EXPORTDEFINITIONS": "exportDefinitions",
                         "USERS": "users",
                         "AUTOMATIONRESULTS": "automationResults",
+                        "WORKSPACE": "workspace",
                         "NOTIFICATIONCHANNEL": "notificationChannel",
                         "ANALYTICALDASHBOARD": "analyticalDashboard",
                         "CREATEDBY": "createdBy",

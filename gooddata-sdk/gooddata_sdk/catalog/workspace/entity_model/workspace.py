@@ -4,11 +4,13 @@ from __future__ import annotations
 from typing import Any, Optional
 
 import attr
+from gooddata_api_client.model.json_api_workspace_automation_out_relationships_workspace import (
+    JsonApiWorkspaceAutomationOutRelationshipsWorkspace,
+)
 from gooddata_api_client.model.json_api_workspace_in import JsonApiWorkspaceIn
 from gooddata_api_client.model.json_api_workspace_in_attributes import JsonApiWorkspaceInAttributes
 from gooddata_api_client.model.json_api_workspace_in_document import JsonApiWorkspaceInDocument
 from gooddata_api_client.model.json_api_workspace_in_relationships import JsonApiWorkspaceInRelationships
-from gooddata_api_client.model.json_api_workspace_in_relationships_parent import JsonApiWorkspaceInRelationshipsParent
 from gooddata_api_client.model.json_api_workspace_to_one_linkage import JsonApiWorkspaceToOneLinkage
 
 from gooddata_sdk.catalog.base import Base
@@ -41,7 +43,7 @@ class CatalogWorkspace(Base):
         kwargs = dict()
         if self.parent_id:
             kwargs["relationships"] = JsonApiWorkspaceInRelationships(
-                parent=JsonApiWorkspaceInRelationshipsParent(
+                parent=JsonApiWorkspaceAutomationOutRelationshipsWorkspace(
                     data=JsonApiWorkspaceToOneLinkage(id=self.parent_id, type="workspace")
                 )
             )

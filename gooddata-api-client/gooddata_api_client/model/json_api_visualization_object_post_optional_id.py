@@ -31,8 +31,8 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_analytical_dashboard_in_attributes import JsonApiAnalyticalDashboardInAttributes
-    globals()['JsonApiAnalyticalDashboardInAttributes'] = JsonApiAnalyticalDashboardInAttributes
+    from gooddata_api_client.model.json_api_visualization_object_in_attributes import JsonApiVisualizationObjectInAttributes
+    globals()['JsonApiVisualizationObjectInAttributes'] = JsonApiVisualizationObjectInAttributes
 
 
 class JsonApiVisualizationObjectPostOptionalId(ModelNormal):
@@ -96,7 +96,7 @@ class JsonApiVisualizationObjectPostOptionalId(ModelNormal):
         """
         lazy_import()
         return {
-            'attributes': (JsonApiAnalyticalDashboardInAttributes,),  # noqa: E501
+            'attributes': (JsonApiVisualizationObjectInAttributes,),  # noqa: E501
             'type': (str,),  # noqa: E501
             'id': (str,),  # noqa: E501
         }
@@ -123,7 +123,7 @@ class JsonApiVisualizationObjectPostOptionalId(ModelNormal):
         """JsonApiVisualizationObjectPostOptionalId - a model defined in OpenAPI
 
         Args:
-            attributes (JsonApiAnalyticalDashboardInAttributes):
+            attributes (JsonApiVisualizationObjectInAttributes):
 
         Keyword Args:
             type (str): Object type. defaults to "visualizationObject", must be one of ["visualizationObject", ]  # noqa: E501
@@ -216,7 +216,7 @@ class JsonApiVisualizationObjectPostOptionalId(ModelNormal):
         """JsonApiVisualizationObjectPostOptionalId - a model defined in OpenAPI
 
         Args:
-            attributes (JsonApiAnalyticalDashboardInAttributes):
+            attributes (JsonApiVisualizationObjectInAttributes):
 
         Keyword Args:
             type (str): Object type. defaults to "visualizationObject", must be one of ["visualizationObject", ]  # noqa: E501

@@ -458,6 +458,8 @@ with gooddata_api_client.ApiClient() as api_client:
                                     settings=DashboardExportSettings(
                                         export_info=True,
                                         merge_headers=True,
+                                        page_orientation="PORTRAIT",
+                                        page_size="A4",
                                     ),
                                     widget_ids=[
                                         "widget_ids_example",
@@ -469,6 +471,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         details={
                             "key": "key_example",
                         },
+                        evaluation_mode="PER_RECIPIENT",
                         export_definitions=[
                             DeclarativeExportDefinitionIdentifier(
                                 id="export123",
@@ -637,7 +640,6 @@ with gooddata_api_client.ApiClient() as api_client:
                                         pdf_top_left_content="Good",
                                         pdf_top_right_content="Morning",
                                         show_filters=False,
-                                        show_info_page=False,
                                     ),
                                     visualization_object="f7c359bc-c230-4487-b15b-ad9685bcb537",
                                     visualization_object_custom_filters=[
@@ -837,6 +839,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                 ),
                                 description="Simple number for total goods in current production.",
                                 id="visualization-1",
+                                is_hidden=False,
                                 modified_at="["2023-07-20 12:30"]",
                                 modified_by=DeclarativeUserIdentifier(
                                     id="employee123",
@@ -889,10 +892,12 @@ with gooddata_api_client.ApiClient() as api_client:
                                         ),
                                         description="Customer name including first and last name.",
                                         id="attr.customers.customer_name",
+                                        is_hidden=False,
                                         labels=[
                                             DeclarativeLabel(
                                                 description="Customer name",
                                                 id="label.customer_name",
+                                                is_hidden=False,
                                                 source_column="customer_name",
                                                 source_column_data_type="STRING",
                                                 tags=["Customers"],
@@ -919,6 +924,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                     DeclarativeFact(
                                         description="A number of orders created by the customer - including all orders, even the non-delivered ones.",
                                         id="fact.customer_order_count",
+                                        is_hidden=False,
                                         source_column="customer_order_count",
                                         source_column_data_type="NUMERIC",
                                         tags=["Customers"],
