@@ -31,8 +31,8 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_analytical_dashboard_patch_attributes import JsonApiAnalyticalDashboardPatchAttributes
-    globals()['JsonApiAnalyticalDashboardPatchAttributes'] = JsonApiAnalyticalDashboardPatchAttributes
+    from gooddata_api_client.model.json_api_visualization_object_patch_attributes import JsonApiVisualizationObjectPatchAttributes
+    globals()['JsonApiVisualizationObjectPatchAttributes'] = JsonApiVisualizationObjectPatchAttributes
 
 
 class JsonApiVisualizationObjectPatch(ModelNormal):
@@ -96,7 +96,7 @@ class JsonApiVisualizationObjectPatch(ModelNormal):
         """
         lazy_import()
         return {
-            'attributes': (JsonApiAnalyticalDashboardPatchAttributes,),  # noqa: E501
+            'attributes': (JsonApiVisualizationObjectPatchAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
         }
@@ -123,7 +123,7 @@ class JsonApiVisualizationObjectPatch(ModelNormal):
         """JsonApiVisualizationObjectPatch - a model defined in OpenAPI
 
         Args:
-            attributes (JsonApiAnalyticalDashboardPatchAttributes):
+            attributes (JsonApiVisualizationObjectPatchAttributes):
             id (str): API identifier of an object
 
         Keyword Args:
@@ -217,7 +217,7 @@ class JsonApiVisualizationObjectPatch(ModelNormal):
         """JsonApiVisualizationObjectPatch - a model defined in OpenAPI
 
         Args:
-            attributes (JsonApiAnalyticalDashboardPatchAttributes):
+            attributes (JsonApiVisualizationObjectPatchAttributes):
             id (str): API identifier of an object
 
         Keyword Args:

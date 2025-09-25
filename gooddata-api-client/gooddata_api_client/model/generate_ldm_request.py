@@ -88,6 +88,7 @@ class GenerateLdmRequest(ModelNormal):
         """
         lazy_import()
         return {
+            'aggregated_fact_prefix': (str,),  # noqa: E501
             'date_granularities': (str,),  # noqa: E501
             'denorm_prefix': (str,),  # noqa: E501
             'fact_prefix': (str,),  # noqa: E501
@@ -113,6 +114,7 @@ class GenerateLdmRequest(ModelNormal):
 
 
     attribute_map = {
+        'aggregated_fact_prefix': 'aggregatedFactPrefix',  # noqa: E501
         'date_granularities': 'dateGranularities',  # noqa: E501
         'denorm_prefix': 'denormPrefix',  # noqa: E501
         'fact_prefix': 'factPrefix',  # noqa: E501
@@ -173,6 +175,7 @@ class GenerateLdmRequest(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            aggregated_fact_prefix (str): Columns starting with this prefix will be considered as aggregated facts. The prefix is then followed by the value of `separator` parameter. Given the aggregated fact prefix is `aggr` and separator is `__`, the columns with name like `aggr__sum__product__sold` will be considered as aggregated sold fact in the product table with SUM aggregate function.. [optional]  # noqa: E501
             date_granularities (str): Option to control date granularities for date datasets. Empty value enables common date granularities (DAY, WEEK, MONTH, QUARTER, YEAR). Default value is `all` which enables all available date granularities, including time granularities (like hours, minutes).. [optional]  # noqa: E501
             denorm_prefix (str): Columns starting with this prefix will be considered as denormalization references. The prefix is then followed by the value of `separator` parameter. Given the denormalization reference prefix is `dr` and separator is `__`, the columns with name like `dr__customer_name` will be considered as denormalization references.. [optional]  # noqa: E501
             fact_prefix (str): Columns starting with this prefix will be considered as facts. The prefix is then followed by the value of `separator` parameter. Given the fact prefix is `f` and separator is `__`, the columns with name like `f__sold` will be considered as facts.. [optional]  # noqa: E501
@@ -275,6 +278,7 @@ class GenerateLdmRequest(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            aggregated_fact_prefix (str): Columns starting with this prefix will be considered as aggregated facts. The prefix is then followed by the value of `separator` parameter. Given the aggregated fact prefix is `aggr` and separator is `__`, the columns with name like `aggr__sum__product__sold` will be considered as aggregated sold fact in the product table with SUM aggregate function.. [optional]  # noqa: E501
             date_granularities (str): Option to control date granularities for date datasets. Empty value enables common date granularities (DAY, WEEK, MONTH, QUARTER, YEAR). Default value is `all` which enables all available date granularities, including time granularities (like hours, minutes).. [optional]  # noqa: E501
             denorm_prefix (str): Columns starting with this prefix will be considered as denormalization references. The prefix is then followed by the value of `separator` parameter. Given the denormalization reference prefix is `dr` and separator is `__`, the columns with name like `dr__customer_name` will be considered as denormalization references.. [optional]  # noqa: E501
             fact_prefix (str): Columns starting with this prefix will be considered as facts. The prefix is then followed by the value of `separator` parameter. Given the fact prefix is `f` and separator is `__`, the columns with name like `f__sold` will be considered as facts.. [optional]  # noqa: E501

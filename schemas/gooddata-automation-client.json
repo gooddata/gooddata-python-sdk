@@ -1222,7 +1222,7 @@
         "properties": {
           "exportInfo": {
             "default": false,
-            "description": "If true, the export will contain the information about the exported date and dashboard filters.",
+            "description": "If true, the export will contain the information about the export – exported date, dashboard filters, etc.",
             "example": true,
             "type": "boolean"
           },
@@ -1231,6 +1231,25 @@
             "description": "Merge equal headers in neighbouring cells. Used for [XLSX] format only.",
             "example": true,
             "type": "boolean"
+          },
+          "pageOrientation": {
+            "default": "PORTRAIT",
+            "description": "Set page orientation. (PDF)",
+            "enum": [
+              "PORTRAIT",
+              "LANDSCAPE"
+            ],
+            "type": "string"
+          },
+          "pageSize": {
+            "default": "A4",
+            "description": "Set page size. (PDF)",
+            "enum": [
+              "A3",
+              "A4",
+              "LETTER"
+            ],
+            "type": "string"
           }
         },
         "type": "object"
@@ -1269,7 +1288,8 @@
           "format": {
             "description": "Requested tabular export type.",
             "enum": [
-              "XLSX"
+              "XLSX",
+              "PDF"
             ],
             "example": "XLSX",
             "type": "string"
@@ -2545,7 +2565,7 @@
         "properties": {
           "exportInfo": {
             "default": false,
-            "description": "Include export info sheet in the exported file. Works only with `visualizationObject`. (XLSX)",
+            "description": "If true, the export will contain the information about the export – exported date, filters, etc. Works only with `visualizationObject`. (XLSX, PDF)",
             "example": true,
             "type": "boolean"
           },
@@ -2614,11 +2634,6 @@
             "deprecated": true,
             "description": "Print applied filters on top of the document. (PDF/HTML when visualizationObject is given)",
             "example": false,
-            "type": "boolean"
-          },
-          "showInfoPage": {
-            "default": false,
-            "description": "Show info page with export information.",
             "type": "boolean"
           }
         },
@@ -2827,7 +2842,7 @@
             "type": "string"
           },
           "visualizationObjectCustomFilters": {
-            "description": "Optional custom filters (as array of IFilter objects defined in UI SDK) to be applied when visualizationObject is given.",
+            "description": "Optional custom filters (as array of IFilter objects defined in UI SDK) to be applied when visualizationObject is given. Those filters override the original filters defined in the visualization.",
             "example": "[{\"negativeAttributeFilter\":{\"displayForm\":{\"identifier\":{\"id\":\"products.category\",\"type\":\"label\"}},\"notIn\":{\"values\":[\"Books\"]}}}]",
             "items": {
               "type": "object"

@@ -119,6 +119,7 @@ class DeclarativeVisualizationObject(ModelNormal):
             'created_at': (str, none_type,),  # noqa: E501
             'created_by': (DeclarativeUserIdentifier,),  # noqa: E501
             'description': (str,),  # noqa: E501
+            'is_hidden': (bool,),  # noqa: E501
             'modified_at': (str, none_type,),  # noqa: E501
             'modified_by': (DeclarativeUserIdentifier,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
@@ -136,6 +137,7 @@ class DeclarativeVisualizationObject(ModelNormal):
         'created_at': 'createdAt',  # noqa: E501
         'created_by': 'createdBy',  # noqa: E501
         'description': 'description',  # noqa: E501
+        'is_hidden': 'isHidden',  # noqa: E501
         'modified_at': 'modifiedAt',  # noqa: E501
         'modified_by': 'modifiedBy',  # noqa: E501
         'tags': 'tags',  # noqa: E501
@@ -190,6 +192,7 @@ class DeclarativeVisualizationObject(ModelNormal):
             created_at (str, none_type): Time of the entity creation.. [optional]  # noqa: E501
             created_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
             description (str): Visualization object description.. [optional]  # noqa: E501
+            is_hidden (bool): If true, this visualization object is hidden from AI search results.. [optional]  # noqa: E501
             modified_at (str, none_type): Time of the last entity modification.. [optional]  # noqa: E501
             modified_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
@@ -289,6 +292,7 @@ class DeclarativeVisualizationObject(ModelNormal):
             created_at (str, none_type): Time of the entity creation.. [optional]  # noqa: E501
             created_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
             description (str): Visualization object description.. [optional]  # noqa: E501
+            is_hidden (bool): If true, this visualization object is hidden from AI search results.. [optional]  # noqa: E501
             modified_at (str, none_type): Time of the last entity modification.. [optional]  # noqa: E501
             modified_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501

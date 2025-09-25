@@ -10,6 +10,7 @@ Name | Type | Description | Notes
 **created_at** | **str, none_type** | Time of the entity creation. | [optional] 
 **created_by** | [**DeclarativeUserIdentifier**](DeclarativeUserIdentifier.md) |  | [optional] 
 **description** | **str** | Visualization object description. | [optional] 
+**is_hidden** | **bool** | If true, this visualization object is hidden from AI search results. | [optional] 
 **modified_at** | **str, none_type** | Time of the last entity modification. | [optional] 
 **modified_by** | [**DeclarativeUserIdentifier**](DeclarativeUserIdentifier.md) |  | [optional] 
 **tags** | **[str]** | A list of tags. | [optional] 

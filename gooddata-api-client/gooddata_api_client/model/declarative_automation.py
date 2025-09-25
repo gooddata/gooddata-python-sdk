@@ -86,6 +86,10 @@ class DeclarativeAutomation(ModelNormal):
     """
 
     allowed_values = {
+        ('evaluation_mode',): {
+            'SHARED': "SHARED",
+            'PER_RECIPIENT': "PER_RECIPIENT",
+        },
         ('state',): {
             'ACTIVE': "ACTIVE",
             'PAUSED': "PAUSED",
@@ -169,6 +173,7 @@ class DeclarativeAutomation(ModelNormal):
             'dashboard_tabular_exports': ([AutomationDashboardTabularExport],),  # noqa: E501
             'description': (str,),  # noqa: E501
             'details': ({str: (str,)},),  # noqa: E501
+            'evaluation_mode': (str,),  # noqa: E501
             'export_definitions': ([DeclarativeExportDefinitionIdentifier],),  # noqa: E501
             'external_recipients': ([AutomationExternalRecipient],),  # noqa: E501
             'image_exports': ([AutomationImageExport],),  # noqa: E501
@@ -201,6 +206,7 @@ class DeclarativeAutomation(ModelNormal):
         'dashboard_tabular_exports': 'dashboardTabularExports',  # noqa: E501
         'description': 'description',  # noqa: E501
         'details': 'details',  # noqa: E501
+        'evaluation_mode': 'evaluationMode',  # noqa: E501
         'export_definitions': 'exportDefinitions',  # noqa: E501
         'external_recipients': 'externalRecipients',  # noqa: E501
         'image_exports': 'imageExports',  # noqa: E501
@@ -270,6 +276,7 @@ class DeclarativeAutomation(ModelNormal):
             dashboard_tabular_exports ([AutomationDashboardTabularExport]): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             details ({str: (str,)}): TODO. [optional]  # noqa: E501
+            evaluation_mode (str): Specify automation evaluation mode.. [optional] if omitted the server will use the default value of "PER_RECIPIENT"  # noqa: E501
             export_definitions ([DeclarativeExportDefinitionIdentifier]): [optional]  # noqa: E501
             external_recipients ([AutomationExternalRecipient]): External recipients of the automation action results.. [optional]  # noqa: E501
             image_exports ([AutomationImageExport]): [optional]  # noqa: E501
@@ -382,6 +389,7 @@ class DeclarativeAutomation(ModelNormal):
             dashboard_tabular_exports ([AutomationDashboardTabularExport]): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             details ({str: (str,)}): TODO. [optional]  # noqa: E501
+            evaluation_mode (str): Specify automation evaluation mode.. [optional] if omitted the server will use the default value of "PER_RECIPIENT"  # noqa: E501
             export_definitions ([DeclarativeExportDefinitionIdentifier]): [optional]  # noqa: E501
             external_recipients ([AutomationExternalRecipient]): External recipients of the automation action results.. [optional]  # noqa: E501
             image_exports ([AutomationImageExport]): [optional]  # noqa: E501

@@ -32,11 +32,11 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.json_api_aggregated_fact_out_list_meta import JsonApiAggregatedFactOutListMeta
-    from gooddata_api_client.model.json_api_automation_out_includes import JsonApiAutomationOutIncludes
+    from gooddata_api_client.model.json_api_workspace_automation_out_includes import JsonApiWorkspaceAutomationOutIncludes
     from gooddata_api_client.model.json_api_workspace_automation_out_with_links import JsonApiWorkspaceAutomationOutWithLinks
     from gooddata_api_client.model.list_links import ListLinks
     globals()['JsonApiAggregatedFactOutListMeta'] = JsonApiAggregatedFactOutListMeta
-    globals()['JsonApiAutomationOutIncludes'] = JsonApiAutomationOutIncludes
+    globals()['JsonApiWorkspaceAutomationOutIncludes'] = JsonApiWorkspaceAutomationOutIncludes
     globals()['JsonApiWorkspaceAutomationOutWithLinks'] = JsonApiWorkspaceAutomationOutWithLinks
     globals()['ListLinks'] = ListLinks
 
@@ -99,7 +99,7 @@ class JsonApiWorkspaceAutomationOutList(ModelNormal):
         lazy_import()
         return {
             'data': ([JsonApiWorkspaceAutomationOutWithLinks],),  # noqa: E501
-            'included': ([JsonApiAutomationOutIncludes],),  # noqa: E501
+            'included': ([JsonApiWorkspaceAutomationOutIncludes],),  # noqa: E501
             'links': (ListLinks,),  # noqa: E501
             'meta': (JsonApiAggregatedFactOutListMeta,),  # noqa: E501
         }
@@ -160,7 +160,7 @@ class JsonApiWorkspaceAutomationOutList(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            included ([JsonApiAutomationOutIncludes]): Included resources. [optional]  # noqa: E501
+            included ([JsonApiWorkspaceAutomationOutIncludes]): Included resources. [optional]  # noqa: E501
             links (ListLinks): [optional]  # noqa: E501
             meta (JsonApiAggregatedFactOutListMeta): [optional]  # noqa: E501
         """
@@ -252,7 +252,7 @@ class JsonApiWorkspaceAutomationOutList(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            included ([JsonApiAutomationOutIncludes]): Included resources. [optional]  # noqa: E501
+            included ([JsonApiWorkspaceAutomationOutIncludes]): Included resources. [optional]  # noqa: E501
             links (ListLinks): [optional]  # noqa: E501
             meta (JsonApiAggregatedFactOutListMeta): [optional]  # noqa: E501
         """

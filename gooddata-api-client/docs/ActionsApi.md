@@ -25,6 +25,7 @@ Method | HTTP request | Description
 [**compute_valid_objects**](ActionsApi.md#compute_valid_objects) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidObjects | Valid objects
 [**create_dashboard_export_request**](ActionsApi.md#create_dashboard_export_request) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/export/tabular | (EXPERIMENTAL) Create dashboard tabular export request
 [**create_image_export**](ActionsApi.md#create_image_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/image | (EXPERIMENTAL) Create image export request
+[**create_memory_item**](ActionsApi.md#create_memory_item) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/memory | (EXPERIMENTAL) Create new memory item
 [**create_pdf_export**](ActionsApi.md#create_pdf_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/visual | Create visual - pdf export request
 [**create_raw_export**](ActionsApi.md#create_raw_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/raw | (EXPERIMENTAL) Create raw export request
 [**create_slides_export**](ActionsApi.md#create_slides_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/slides | (EXPERIMENTAL) Create slides export request
@@ -42,8 +43,10 @@ Method | HTTP request | Description
 [**get_exported_file**](ActionsApi.md#get_exported_file) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId} | Retrieve exported files
 [**get_image_export**](ActionsApi.md#get_image_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/image/{exportId} | (EXPERIMENTAL) Retrieve exported files
 [**get_image_export_metadata**](ActionsApi.md#get_image_export_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/image/{exportId}/metadata | (EXPERIMENTAL) Retrieve metadata context
+[**get_memory_item**](ActionsApi.md#get_memory_item) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/memory/{memoryId} | (EXPERIMENTAL) Get memory item
 [**get_metadata**](ActionsApi.md#get_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId}/metadata | Retrieve metadata context
 [**get_notifications**](ActionsApi.md#get_notifications) | **GET** /api/v1/actions/notifications | Get latest notifications.
+[**get_quality_issues**](ActionsApi.md#get_quality_issues) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/issues | Get Quality Issues
 [**get_raw_export**](ActionsApi.md#get_raw_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/raw/{exportId} | (EXPERIMENTAL) Retrieve exported files
 [**get_slides_export**](ActionsApi.md#get_slides_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/slides/{exportId} | (EXPERIMENTAL) Retrieve exported files
 [**get_slides_export_metadata**](ActionsApi.md#get_slides_export_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/slides/{exportId}/metadata | (EXPERIMENTAL) Retrieve metadata context
@@ -53,6 +56,7 @@ Method | HTTP request | Description
 [**inherited_entity_prefixes**](ActionsApi.md#inherited_entity_prefixes) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityPrefixes | Get used entity prefixes in hierarchy
 [**key_driver_analysis**](ActionsApi.md#key_driver_analysis) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/computeKeyDrivers | (EXPERIMENTAL) Compute key driver analysis
 [**key_driver_analysis_result**](ActionsApi.md#key_driver_analysis_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/computeKeyDrivers/result/{resultId} | (EXPERIMENTAL) Get key driver analysis result
+[**list_memory_items**](ActionsApi.md#list_memory_items) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/memory | (EXPERIMENTAL) List all memory items
 [**list_workspace_user_groups**](ActionsApi.md#list_workspace_user_groups) | **GET** /api/v1/actions/workspaces/{workspaceId}/userGroups | 
 [**list_workspace_users**](ActionsApi.md#list_workspace_users) | **GET** /api/v1/actions/workspaces/{workspaceId}/users | 
 [**manage_dashboard_permissions**](ActionsApi.md#manage_dashboard_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/managePermissions | Manage Permissions for a Dashboard
@@ -68,6 +72,7 @@ Method | HTTP request | Description
 [**pause_organization_automations**](ActionsApi.md#pause_organization_automations) | **POST** /api/v1/actions/organization/automations/pause | Pause selected automations across all workspaces
 [**pause_workspace_automations**](ActionsApi.md#pause_workspace_automations) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/pause | Pause selected automations in the workspace
 [**register_upload_notification**](ActionsApi.md#register_upload_notification) | **POST** /api/v1/actions/dataSources/{dataSourceId}/uploadNotification | Register an upload notification
+[**remove_memory_item**](ActionsApi.md#remove_memory_item) | **DELETE** /api/v1/actions/workspaces/{workspaceId}/ai/memory/{memoryId} | (EXPERIMENTAL) Remove memory item
 [**resolve_all_entitlements**](ActionsApi.md#resolve_all_entitlements) | **GET** /api/v1/actions/resolveEntitlements | Values for all public entitlements.
 [**resolve_all_settings_without_workspace**](ActionsApi.md#resolve_all_settings_without_workspace) | **GET** /api/v1/actions/resolveSettings | Values for all settings without workspace.
 [**resolve_llm_endpoints**](ActionsApi.md#resolve_llm_endpoints) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/resolveLlmEndpoints | Get Active LLM Endpoints for this workspace
@@ -80,6 +85,7 @@ Method | HTTP request | Description
 [**scan_sql**](ActionsApi.md#scan_sql) | **POST** /api/v1/actions/dataSources/{dataSourceId}/scanSql | Collect metadata about SQL query
 [**set_translations**](ActionsApi.md#set_translations) | **POST** /api/v1/actions/workspaces/{workspaceId}/translations/set | Set translations for entities.
 [**switch_active_identity_provider**](ActionsApi.md#switch_active_identity_provider) | **POST** /api/v1/actions/organization/switchActiveIdentityProvider | Switch Active Identity Provider
+[**tags**](ActionsApi.md#tags) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/tags | Get Analytics Catalog Tags
 [**test_data_source**](ActionsApi.md#test_data_source) | **POST** /api/v1/actions/dataSources/{dataSourceId}/test | Test data source connection by data source id
 [**test_data_source_definition**](ActionsApi.md#test_data_source_definition) | **POST** /api/v1/actions/dataSource/test | Test connection by data source definition
 [**test_existing_notification_channel**](ActionsApi.md#test_existing_notification_channel) | **POST** /api/v1/actions/notificationChannels/{notificationChannelId}/test | Test existing notification channel.
@@ -90,8 +96,10 @@ Method | HTTP request | Description
 [**unpause_workspace_automations**](ActionsApi.md#unpause_workspace_automations) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/unpause | Unpause selected automations in the workspace
 [**unsubscribe_all_automations**](ActionsApi.md#unsubscribe_all_automations) | **DELETE** /api/v1/actions/organization/automations/unsubscribe | Unsubscribe from all automations in all workspaces
 [**unsubscribe_automation**](ActionsApi.md#unsubscribe_automation) | **DELETE** /api/v1/actions/workspaces/{workspaceId}/automations/{automationId}/unsubscribe | Unsubscribe from an automation
+[**unsubscribe_organization_automations**](ActionsApi.md#unsubscribe_organization_automations) | **POST** /api/v1/actions/organization/automations/unsubscribe | Unsubscribe from selected automations across all workspaces
 [**unsubscribe_selected_workspace_automations**](ActionsApi.md#unsubscribe_selected_workspace_automations) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/unsubscribe | Unsubscribe from selected automations in the workspace
 [**unsubscribe_workspace_automations**](ActionsApi.md#unsubscribe_workspace_automations) | **DELETE** /api/v1/actions/workspaces/{workspaceId}/automations/unsubscribe | Unsubscribe from all automations in the workspace
+[**update_memory_item**](ActionsApi.md#update_memory_item) | **PUT** /api/v1/actions/workspaces/{workspaceId}/ai/memory/{memoryId} | (EXPERIMENTAL) Update memory item
 [**validate_llm_endpoint**](ActionsApi.md#validate_llm_endpoint) | **POST** /api/v1/actions/ai/llmEndpoint/test | Validate LLM Endpoint
 [**validate_llm_endpoint_by_id**](ActionsApi.md#validate_llm_endpoint_by_id) | **POST** /api/v1/actions/ai/llmEndpoint/{llmEndpointId}/test | Validate LLM Endpoint By Id
 [**workspace_resolve_all_settings**](ActionsApi.md#workspace_resolve_all_settings) | **GET** /api/v1/actions/workspaces/{workspaceId}/resolveSettings | Values for all settings.
@@ -447,6 +455,7 @@ with gooddata_api_client.ApiClient() as api_client:
     workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
     search_request = SearchRequest(
         deep_search=False,
+        include_hidden=False,
         limit=10,
         object_types=[
             "attribute",
@@ -1730,6 +1739,8 @@ with gooddata_api_client.ApiClient() as api_client:
         settings=DashboardExportSettings(
             export_info=True,
             merge_headers=True,
+            page_orientation="PORTRAIT",
+            page_size="A4",
         ),
         widget_ids=[
             "widget_ids_example",
@@ -1851,6 +1862,92 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **201** | Image export request created successfully. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **create_memory_item**
+> MemoryItem create_memory_item(workspace_id, memory_item)
+
+(EXPERIMENTAL) Create new memory item
+
+(EXPERIMENTAL) Creates a new memory item and returns it
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.memory_item import MemoryItem
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    memory_item = MemoryItem(
+        id="id_example",
+        instruction="instruction_example",
+        keywords=[
+            "keywords_example",
+        ],
+        strategy="MEMORY_ITEM_STRATEGY_ALLWAYS",
+        use_cases=MemoryItemUseCases(
+            general=True,
+            howto=True,
+            keywords=True,
+            metric=True,
+            normalize=True,
+            router=True,
+            search=True,
+            visualization=True,
+        ),
+    ) # MemoryItem | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (EXPERIMENTAL) Create new memory item
+        api_response = api_instance.create_memory_item(workspace_id, memory_item)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->create_memory_item: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **memory_item** | [**MemoryItem**](MemoryItem.md)|  |
+
+### Return type
+
+[**MemoryItem**](MemoryItem.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -2218,7 +2315,6 @@ with gooddata_api_client.ApiClient() as api_client:
             pdf_top_left_content="Good",
             pdf_top_right_content="Morning",
             show_filters=False,
-            show_info_page=False,
         ),
         visualization_object="f7c359bc-c230-4487-b15b-ad9685bcb537",
         visualization_object_custom_filters=[
@@ -2810,6 +2906,7 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = actions_api.ActionsApi(api_client)
     data_source_id = "dataSourceId_example" # str | 
     generate_ldm_request = GenerateLdmRequest(
+        aggregated_fact_prefix="aggr",
         date_granularities="all",
         denorm_prefix="dr",
         fact_prefix="f",
@@ -3328,6 +3425,75 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **get_memory_item**
+> MemoryItem get_memory_item(workspace_id, memory_id)
+
+(EXPERIMENTAL) Get memory item
+
+(EXPERIMENTAL) Get memory item by id
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.memory_item import MemoryItem
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    memory_id = "memoryId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (EXPERIMENTAL) Get memory item
+        api_response = api_instance.get_memory_item(workspace_id, memory_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->get_memory_item: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **memory_id** | **str**|  |
+
+### Return type
+
+[**MemoryItem**](MemoryItem.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **get_metadata**
 > get_metadata(workspace_id, export_id)
 
@@ -3454,6 +3620,73 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**Notifications**](Notifications.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_quality_issues**
+> GetQualityIssuesResponse get_quality_issues(workspace_id)
+
+Get Quality Issues
+
+Returns metadata quality issues detected by the platform linter.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.get_quality_issues_response import GetQualityIssuesResponse
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get Quality Issues
+        api_response = api_instance.get_quality_issues(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->get_quality_issues: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+
+### Return type
+
+[**GetQualityIssuesResponse**](GetQualityIssuesResponse.md)
 
 ### Authorization
 
@@ -4103,6 +4336,73 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**KeyDriversResult**](KeyDriversResult.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **list_memory_items**
+> [MemoryItem] list_memory_items(workspace_id)
+
+(EXPERIMENTAL) List all memory items
+
+(EXPERIMENTAL) Returns a list of memory items
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.memory_item import MemoryItem
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (EXPERIMENTAL) List all memory items
+        api_response = api_instance.list_memory_items(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->list_memory_items: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+
+### Return type
+
+[**[MemoryItem]**](MemoryItem.md)
 
 ### Authorization
 
@@ -5187,6 +5487,73 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **remove_memory_item**
+> remove_memory_item(workspace_id, memory_id)
+
+(EXPERIMENTAL) Remove memory item
+
+(EXPERIMENTAL) Removes memory item
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    memory_id = "memoryId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (EXPERIMENTAL) Remove memory item
+        api_instance.remove_memory_item(workspace_id, memory_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->remove_memory_item: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **memory_id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **resolve_all_entitlements**
 > [ApiEntitlement] resolve_all_entitlements()
 
@@ -6088,6 +6455,73 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **tags**
+> AnalyticsCatalogTags tags(workspace_id)
+
+Get Analytics Catalog Tags
+
+Returns a list of tags for this workspace
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.analytics_catalog_tags import AnalyticsCatalogTags
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get Analytics Catalog Tags
+        api_response = api_instance.tags(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->tags: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+
+### Return type
+
+[**AnalyticsCatalogTags**](AnalyticsCatalogTags.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **test_data_source**
 > TestResponse test_data_source(data_source_id, test_request)
 
@@ -6499,6 +6933,8 @@ with gooddata_api_client.ApiClient() as api_client:
                         settings=DashboardExportSettings(
                             export_info=True,
                             merge_headers=True,
+                            page_orientation="PORTRAIT",
+                            page_size="A4",
                         ),
                         widget_ids=[
                             "widget_ids_example",
@@ -6660,7 +7096,6 @@ with gooddata_api_client.ApiClient() as api_client:
                             pdf_top_left_content="Good",
                             pdf_top_right_content="Morning",
                             show_filters=False,
-                            show_info_page=False,
                         ),
                         visualization_object="f7c359bc-c230-4487-b15b-ad9685bcb537",
                         visualization_object_custom_filters=[
@@ -7055,6 +7490,77 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **unsubscribe_organization_automations**
+> unsubscribe_organization_automations(organization_automation_management_bulk_request)
+
+Unsubscribe from selected automations across all workspaces
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.organization_automation_management_bulk_request import OrganizationAutomationManagementBulkRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    organization_automation_management_bulk_request = OrganizationAutomationManagementBulkRequest(
+        automations=[
+            OrganizationAutomationIdentifier(
+                id="id_example",
+                workspace_id="workspace_id_example",
+            ),
+        ],
+    ) # OrganizationAutomationManagementBulkRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Unsubscribe from selected automations across all workspaces
+        api_instance.unsubscribe_organization_automations(organization_automation_management_bulk_request)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->unsubscribe_organization_automations: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **organization_automation_management_bulk_request** | [**OrganizationAutomationManagementBulkRequest**](OrganizationAutomationManagementBulkRequest.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **unsubscribe_selected_workspace_automations**
 > unsubscribe_selected_workspace_automations(workspace_id, workspace_automation_management_bulk_request)
 
@@ -7187,6 +7693,94 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **update_memory_item**
+> MemoryItem update_memory_item(workspace_id, memory_id, memory_item)
+
+(EXPERIMENTAL) Update memory item
+
+(EXPERIMENTAL) Updates memory item and returns it
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.memory_item import MemoryItem
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    memory_id = "memoryId_example" # str | 
+    memory_item = MemoryItem(
+        id="id_example",
+        instruction="instruction_example",
+        keywords=[
+            "keywords_example",
+        ],
+        strategy="MEMORY_ITEM_STRATEGY_ALLWAYS",
+        use_cases=MemoryItemUseCases(
+            general=True,
+            howto=True,
+            keywords=True,
+            metric=True,
+            normalize=True,
+            router=True,
+            search=True,
+            visualization=True,
+        ),
+    ) # MemoryItem | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (EXPERIMENTAL) Update memory item
+        api_response = api_instance.update_memory_item(workspace_id, memory_id, memory_item)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->update_memory_item: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **memory_id** | **str**|  |
+ **memory_item** | [**MemoryItem**](MemoryItem.md)|  |
+
+### Return type
+
+[**MemoryItem**](MemoryItem.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

@@ -78,6 +78,10 @@ class JsonApiAutomationInAttributes(ModelNormal):
     """
 
     allowed_values = {
+        ('evaluation_mode',): {
+            'SHARED': "SHARED",
+            'PER_RECIPIENT': "PER_RECIPIENT",
+        },
         ('state',): {
             'ACTIVE': "ACTIVE",
             'PAUSED': "PAUSED",
@@ -123,6 +127,7 @@ class JsonApiAutomationInAttributes(ModelNormal):
             'dashboard_tabular_exports': ([JsonApiAutomationInAttributesDashboardTabularExportsInner],),  # noqa: E501
             'description': (str,),  # noqa: E501
             'details': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),  # noqa: E501
+            'evaluation_mode': (str,),  # noqa: E501
             'external_recipients': ([JsonApiAutomationInAttributesExternalRecipientsInner],),  # noqa: E501
             'image_exports': ([JsonApiAutomationInAttributesImageExportsInner],),  # noqa: E501
             'metadata': (JsonApiAutomationInAttributesMetadata,),  # noqa: E501
@@ -147,6 +152,7 @@ class JsonApiAutomationInAttributes(ModelNormal):
         'dashboard_tabular_exports': 'dashboardTabularExports',  # noqa: E501
         'description': 'description',  # noqa: E501
         'details': 'details',  # noqa: E501
+        'evaluation_mode': 'evaluationMode',  # noqa: E501
         'external_recipients': 'externalRecipients',  # noqa: E501
         'image_exports': 'imageExports',  # noqa: E501
         'metadata': 'metadata',  # noqa: E501
@@ -206,6 +212,7 @@ class JsonApiAutomationInAttributes(ModelNormal):
             dashboard_tabular_exports ([JsonApiAutomationInAttributesDashboardTabularExportsInner]): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             details ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Additional details to be included in the automated message.. [optional]  # noqa: E501
+            evaluation_mode (str): Specify automation evaluation mode.. [optional]  # noqa: E501
             external_recipients ([JsonApiAutomationInAttributesExternalRecipientsInner]): External recipients of the automation action results.. [optional]  # noqa: E501
             image_exports ([JsonApiAutomationInAttributesImageExportsInner]): [optional]  # noqa: E501
             metadata (JsonApiAutomationInAttributesMetadata): [optional]  # noqa: E501
@@ -307,6 +314,7 @@ class JsonApiAutomationInAttributes(ModelNormal):
             dashboard_tabular_exports ([JsonApiAutomationInAttributesDashboardTabularExportsInner]): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             details ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Additional details to be included in the automated message.. [optional]  # noqa: E501
+            evaluation_mode (str): Specify automation evaluation mode.. [optional]  # noqa: E501
             external_recipients ([JsonApiAutomationInAttributesExternalRecipientsInner]): External recipients of the automation action results.. [optional]  # noqa: E501
             image_exports ([JsonApiAutomationInAttributesImageExportsInner]): [optional]  # noqa: E501
             metadata (JsonApiAutomationInAttributesMetadata): [optional]  # noqa: E501

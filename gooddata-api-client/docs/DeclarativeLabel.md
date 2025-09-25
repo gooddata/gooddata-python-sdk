@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **source_column** | **str** | A name of the source column in the table. | 
 **title** | **str** | Label title. | 
 **description** | **str** | Label description. | [optional] 
+**is_hidden** | **bool** | Determines if the label is hidden from AI features. | [optional] 
 **source_column_data_type** | **str** | A type of the source column | [optional] 
 **tags** | **[str]** | A list of tags. | [optional] 
 **value_type** | **str** | Specific type of label | [optional] 

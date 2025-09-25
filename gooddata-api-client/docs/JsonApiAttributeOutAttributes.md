@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 **are_relations_valid** | **bool** |  | [optional] 
 **description** | **str** |  | [optional] 
 **granularity** | **str** |  | [optional] 
+**is_hidden** | **bool** |  | [optional] 
 **sort_column** | **str** |  | [optional] 
 **sort_direction** | **str** |  | [optional] 
 **source_column** | **str** |  | [optional] 

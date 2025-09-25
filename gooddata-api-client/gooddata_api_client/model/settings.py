@@ -106,7 +106,6 @@ class Settings(ModelNormal):
             'pdf_top_left_content': (str,),  # noqa: E501
             'pdf_top_right_content': (str,),  # noqa: E501
             'show_filters': (bool,),  # noqa: E501
-            'show_info_page': (bool,),  # noqa: E501
         }
 
     @cached_property
@@ -124,7 +123,6 @@ class Settings(ModelNormal):
         'pdf_top_left_content': 'pdfTopLeftContent',  # noqa: E501
         'pdf_top_right_content': 'pdfTopRightContent',  # noqa: E501
         'show_filters': 'showFilters',  # noqa: E501
-        'show_info_page': 'showInfoPage',  # noqa: E501
     }
 
     read_only_vars = {
@@ -168,7 +166,7 @@ class Settings(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            export_info (bool): Include export info sheet in the exported file. Works only with `visualizationObject`. (XLSX). [optional] if omitted the server will use the default value of False  # noqa: E501
+            export_info (bool): If true, the export will contain the information about the export – exported date, filters, etc. Works only with `visualizationObject`. (XLSX, PDF). [optional] if omitted the server will use the default value of False  # noqa: E501
             merge_headers (bool): Merge equal headers in neighbouring cells. (XLSX). [optional]  # noqa: E501
             page_orientation (str): Set page orientation. (PDF). [optional] if omitted the server will use the default value of "PORTRAIT"  # noqa: E501
             page_size (str): Set page size. (PDF). [optional] if omitted the server will use the default value of "A4"  # noqa: E501
@@ -177,7 +175,6 @@ class Settings(ModelNormal):
             pdf_top_left_content (str): Top left header content. (PDF). [optional]  # noqa: E501
             pdf_top_right_content (str): Top right header content. (PDF). [optional]  # noqa: E501
             show_filters (bool): Print applied filters on top of the document. (PDF/HTML when visualizationObject is given). [optional]  # noqa: E501
-            show_info_page (bool): Show info page with export information.. [optional] if omitted the server will use the default value of False  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -263,7 +260,7 @@ class Settings(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            export_info (bool): Include export info sheet in the exported file. Works only with `visualizationObject`. (XLSX). [optional] if omitted the server will use the default value of False  # noqa: E501
+            export_info (bool): If true, the export will contain the information about the export – exported date, filters, etc. Works only with `visualizationObject`. (XLSX, PDF). [optional] if omitted the server will use the default value of False  # noqa: E501
             merge_headers (bool): Merge equal headers in neighbouring cells. (XLSX). [optional]  # noqa: E501
             page_orientation (str): Set page orientation. (PDF). [optional] if omitted the server will use the default value of "PORTRAIT"  # noqa: E501
             page_size (str): Set page size. (PDF). [optional] if omitted the server will use the default value of "A4"  # noqa: E501
@@ -272,7 +269,6 @@ class Settings(ModelNormal):
             pdf_top_left_content (str): Top left header content. (PDF). [optional]  # noqa: E501
             pdf_top_right_content (str): Top right header content. (PDF). [optional]  # noqa: E501
             show_filters (bool): Print applied filters on top of the document. (PDF/HTML when visualizationObject is given). [optional]  # noqa: E501
-            show_info_page (bool): Show info page with export information.. [optional] if omitted the server will use the default value of False  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

@@ -7,7 +7,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **dashboard_id** | **str** | Dashboard identifier | 
 **file_name** | **str** | Filename of downloaded file without extension. | 
-**format** | **str** | Requested tabular export type. | defaults to "XLSX"
+**format** | **str** | Requested tabular export type. | 
 **dashboard_filters_override** | [**[DashboardFilter]**](DashboardFilter.md) | List of filters that will be used instead of the default dashboard filters. | [optional] 
 **settings** | [**DashboardExportSettings**](DashboardExportSettings.md) |  | [optional] 
 **widget_ids** | **[str]** | List of widget identifiers to be exported. Note that only one widget is currently supported. | [optional] 
