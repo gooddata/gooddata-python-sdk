@@ -179,5 +179,5 @@ class PopDatasetMeasureDefinition(
             **kwargs,
         )
 
-from gooddata_api_client.model.afm_local_identifier import AfmLocalIdentifier
-from gooddata_api_client.model.pop_dataset import PopDataset
+from gooddata_api_client.models.afm_local_identifier import AfmLocalIdentifier
+from gooddata_api_client.models.pop_dataset import PopDataset

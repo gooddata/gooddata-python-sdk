@@ -199,4 +199,4 @@ class DeclarativeAnalyticalDashboard(
             **kwargs,
         )
 
-from gooddata_api_client.model.declarative_analytical_dashboard_permission import DeclarativeAnalyticalDashboardPermission
+from gooddata_api_client.models.declarative_analytical_dashboard_permission import DeclarativeAnalyticalDashboardPermission

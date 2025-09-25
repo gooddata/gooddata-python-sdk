@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Optional
 
 import attr
-from gooddata_api_client.model.declarative_table import DeclarativeTable
+from gooddata_api_client.models.declarative_table import DeclarativeTable
 
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.catalog.data_source.declarative_model.physical_model.column import CatalogDeclarativeColumn

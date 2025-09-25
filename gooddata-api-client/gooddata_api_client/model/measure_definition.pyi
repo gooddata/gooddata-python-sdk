@@ -38,7 +38,7 @@ class MeasureDefinition(
 
 
     class MetaOapg:
-        
+
         @classmethod
         @functools.lru_cache()
         def one_of(cls):
@@ -70,7 +70,7 @@ class MeasureDefinition(
             **kwargs,
         )
 
-from gooddata_api_client.model.arithmetic_measure_definition import ArithmeticMeasureDefinition
-from gooddata_api_client.model.inline_measure_definition import InlineMeasureDefinition
-from gooddata_api_client.model.pop_measure_definition import PopMeasureDefinition
-from gooddata_api_client.model.simple_measure_definition import SimpleMeasureDefinition
+from gooddata_api_client.models.arithmetic_measure_definition import ArithmeticMeasureDefinition
+from gooddata_api_client.models.inline_measure_definition import InlineMeasureDefinition
+from gooddata_api_client.models.pop_measure_definition import PopMeasureDefinition
+from gooddata_api_client.models.simple_measure_definition import SimpleMeasureDefinition

@@ -39,14 +39,14 @@ class AttributeItem(
             "localIdentifier",
             "label",
         }
-        
+
         class properties:
-        
+
             @staticmethod
             def label() -> typing.Type['AfmObjectIdentifierLabel']:
                 return AfmObjectIdentifierLabel
-            
-            
+
+
             class localIdentifier(
                 schemas.StrSchema
             ):
@@ -57,42 +57,42 @@ class AttributeItem(
                 "localIdentifier": localIdentifier,
                 "showAllValues": showAllValues,
             }
-    
+
     localIdentifier: MetaOapg.properties.localIdentifier
     label: 'AfmObjectIdentifierLabel'
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["label"]) -> 'AfmObjectIdentifierLabel': ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["localIdentifier"]) -> MetaOapg.properties.localIdentifier: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["showAllValues"]) -> MetaOapg.properties.showAllValues: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["label", "localIdentifier", "showAllValues", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["label"]) -> 'AfmObjectIdentifierLabel': ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["localIdentifier"]) -> MetaOapg.properties.localIdentifier: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["showAllValues"]) -> typing.Union[MetaOapg.properties.showAllValues, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["label", "localIdentifier", "showAllValues", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -113,4 +113,4 @@ class AttributeItem(
             **kwargs,
         )
 
-from gooddata_api_client.model.afm_object_identifier_label import AfmObjectIdentifierLabel
+from gooddata_api_client.models.afm_object_identifier_label import AfmObjectIdentifierLabel

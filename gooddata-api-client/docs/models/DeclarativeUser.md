@@ -1,4 +1,4 @@
-# gooddata_api_client.model.declarative_user.DeclarativeUser
+# gooddata_api_client.models.declarative_user.DeclarativeUser
 
 A user and its properties
 
@@ -59,4 +59,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**UserGroupIdentifier**](UserGroupIdentifier.md) | [**UserGroupIdentifier**](UserGroupIdentifier.md) | [**UserGroupIdentifier**](UserGroupIdentifier.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

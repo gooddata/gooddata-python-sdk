@@ -2,35 +2,52 @@
 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **str** |  | 
 **alert** | [**AutomationAlert**](AutomationAlert.md) |  | [optional] 
 **analytical_dashboard** | [**DeclarativeAnalyticalDashboardIdentifier**](DeclarativeAnalyticalDashboardIdentifier.md) |  | [optional] 
-**created_at** | **str, none_type** | Time of the entity creation. | [optional] 
+**created_at** | **str** | Time of the entity creation. | [optional] 
 **created_by** | [**DeclarativeUserIdentifier**](DeclarativeUserIdentifier.md) |  | [optional] 
-**dashboard_tabular_exports** | [**[AutomationDashboardTabularExport]**](AutomationDashboardTabularExport.md) |  | [optional] 
+**dashboard_tabular_exports** | [**List[AutomationDashboardTabularExport]**](AutomationDashboardTabularExport.md) |  | [optional] 
 **description** | **str** |  | [optional] 
-**details** | **{str: (str,)}** | TODO | [optional] 
-**evaluation_mode** | **str** | Specify automation evaluation mode. | [optional]  if omitted the server will use the default value of "PER_RECIPIENT"
-**export_definitions** | [**[DeclarativeExportDefinitionIdentifier]**](DeclarativeExportDefinitionIdentifier.md) |  | [optional] 
-**external_recipients** | [**[AutomationExternalRecipient]**](AutomationExternalRecipient.md) | External recipients of the automation action results. | [optional] 
-**image_exports** | [**[AutomationImageExport]**](AutomationImageExport.md) |  | [optional] 
+**details** | **Dict[str, str]** | TODO | [optional] 
+**evaluation_mode** | **str** | Specify automation evaluation mode. | [optional] [default to 'PER_RECIPIENT']
+**export_definitions** | [**List[DeclarativeExportDefinitionIdentifier]**](DeclarativeExportDefinitionIdentifier.md) |  | [optional] 
+**external_recipients** | [**List[AutomationExternalRecipient]**](AutomationExternalRecipient.md) | External recipients of the automation action results. | [optional] 
+**id** | **str** |  | 
+**image_exports** | [**List[AutomationImageExport]**](AutomationImageExport.md) |  | [optional] 
 **metadata** | [**AutomationMetadata**](AutomationMetadata.md) |  | [optional] 
-**modified_at** | **str, none_type** | Time of the last entity modification. | [optional] 
+**modified_at** | **str** | Time of the last entity modification. | [optional] 
 **modified_by** | [**DeclarativeUserIdentifier**](DeclarativeUserIdentifier.md) |  | [optional] 
 **notification_channel** | [**DeclarativeNotificationChannelIdentifier**](DeclarativeNotificationChannelIdentifier.md) |  | [optional] 
-**raw_exports** | [**[AutomationRawExport]**](AutomationRawExport.md) |  | [optional] 
-**recipients** | [**[DeclarativeUserIdentifier]**](DeclarativeUserIdentifier.md) |  | [optional] 
+**raw_exports** | [**List[AutomationRawExport]**](AutomationRawExport.md) |  | [optional] 
+**recipients** | [**List[DeclarativeUserIdentifier]**](DeclarativeUserIdentifier.md) |  | [optional] 
 **schedule** | [**AutomationSchedule**](AutomationSchedule.md) |  | [optional] 
-**slides_exports** | [**[AutomationSlidesExport]**](AutomationSlidesExport.md) |  | [optional] 
-**state** | **str** | Current state of the automation. | [optional]  if omitted the server will use the default value of "ACTIVE"
-**tabular_exports** | [**[AutomationTabularExport]**](AutomationTabularExport.md) |  | [optional] 
-**tags** | **[str]** |  | [optional] 
+**slides_exports** | [**List[AutomationSlidesExport]**](AutomationSlidesExport.md) |  | [optional] 
+**state** | **str** | Current state of the automation. | [optional] [default to 'ACTIVE']
+**tabular_exports** | [**List[AutomationTabularExport]**](AutomationTabularExport.md) |  | [optional] 
+**tags** | **List[str]** |  | [optional] 
 **title** | **str** |  | [optional] 
-**visual_exports** | [**[AutomationVisualExport]**](AutomationVisualExport.md) |  | [optional] 
-**any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
+**visual_exports** | [**List[AutomationVisualExport]**](AutomationVisualExport.md) |  | [optional] 
 
+## Example
+
+```python
+from gooddata_api_client.models.declarative_automation import DeclarativeAutomation
+
+# TODO update the JSON string below
+json = "{}"
+# create an instance of DeclarativeAutomation from a JSON string
+declarative_automation_instance = DeclarativeAutomation.from_json(json)
+# print the JSON string representation of the object
+print(DeclarativeAutomation.to_json())
+
+# convert the object into a dict
+declarative_automation_dict = declarative_automation_instance.to_dict()
+# create an instance of DeclarativeAutomation from a dict
+declarative_automation_from_dict = DeclarativeAutomation.from_dict(declarative_automation_dict)
+```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
 

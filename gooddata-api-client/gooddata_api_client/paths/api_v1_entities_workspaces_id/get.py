@@ -25,7 +25,7 @@ import frozendict  # noqa: F401
 
 from gooddata_api_client import schemas  # noqa: F401
 
-from gooddata_api_client.model.json_api_workspace_out_document import JsonApiWorkspaceOutDocument
+from gooddata_api_client.models.json_api_workspace_out_document import JsonApiWorkspaceOutDocument
 
 from . import path
 
@@ -39,29 +39,29 @@ class IncludeSchema(
 
 
     class MetaOapg:
-        
-        
+
+
         class items(
             schemas.EnumBase,
             schemas.StrSchema
         ):
-        
-        
+
+
             class MetaOapg:
                 enum_value_to_name = {
                     "workspaces": "WORKSPACES",
                     "parent": "PARENT",
                     "ALL": "ALL",
                 }
-            
+
             @schemas.classproperty
             def WORKSPACES(cls):
                 return cls("workspaces")
-            
+
             @schemas.classproperty
             def PARENT(cls):
                 return cls("parent")
-            
+
             @schemas.classproperty
             def ALL(cls):
                 return cls("ALL")
@@ -88,14 +88,14 @@ class MetaIncludeSchema(
 
     class MetaOapg:
         unique_items = True
-        
-        
+
+
         class items(
             schemas.EnumBase,
             schemas.StrSchema
         ):
-        
-        
+
+
             class MetaOapg:
                 enum_value_to_name = {
                     "config": "CONFIG",
@@ -103,19 +103,19 @@ class MetaIncludeSchema(
                     "all": "ALL",
                     "ALL": "ALL",
                 }
-            
+
             @schemas.classproperty
             def CONFIG(cls):
                 return cls("config")
-            
+
             @schemas.classproperty
             def PERMISSIONS(cls):
                 return cls("permissions")
-            
+
             @schemas.classproperty
             def ALL(cls):
                 return cls("all")
-            
+
             @schemas.classproperty
             def ALL(cls):
                 return cls("ALL")
@@ -469,5 +469,3 @@ class ApiForget(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
-
-

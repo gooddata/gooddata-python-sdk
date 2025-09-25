@@ -41,21 +41,21 @@ class TableWarning(
             "columns",
             "name",
         }
-        
+
         class properties:
-            
-            
+
+
             class columns(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['ColumnWarning']:
                         return ColumnWarning
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['ColumnWarning'], typing.List['ColumnWarning']],
@@ -66,19 +66,19 @@ class TableWarning(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'ColumnWarning':
                     return super().__getitem__(i)
-            
-            
+
+
             class name(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
                     items = schemas.StrSchema
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, str, ]], typing.List[typing.Union[MetaOapg.items, str, ]]],
@@ -89,19 +89,19 @@ class TableWarning(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
-            
-            
+
+
             class message(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
                     items = schemas.StrSchema
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, str, ]], typing.List[typing.Union[MetaOapg.items, str, ]]],
@@ -112,7 +112,7 @@ class TableWarning(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
             __annotations__ = {
@@ -120,42 +120,42 @@ class TableWarning(
                 "name": name,
                 "message": message,
             }
-    
+
     columns: MetaOapg.properties.columns
     name: MetaOapg.properties.name
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["columns"]) -> MetaOapg.properties.columns: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["message"]) -> MetaOapg.properties.message: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["columns", "name", "message", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["columns"]) -> MetaOapg.properties.columns: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["message"]) -> typing.Union[MetaOapg.properties.message, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["columns", "name", "message", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -176,4 +176,4 @@ class TableWarning(
             **kwargs,
         )
 
-from gooddata_api_client.model.column_warning import ColumnWarning
+from gooddata_api_client.models.column_warning import ColumnWarning

@@ -1,4 +1,4 @@
-# gooddata_api_client.model.json_api_label_to_many_linkage.JsonApiLabelToManyLinkage
+# gooddata_api_client.models.json_api_label_to_many_linkage.JsonApiLabelToManyLinkage
 
 References to other resource objects in a to-many (\\\"relationship\\\"). Relationships can be specified by including a member in a resource's links object.
 
@@ -13,4 +13,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**JsonApiLabelLinkage**](JsonApiLabelLinkage.md) | [**JsonApiLabelLinkage**](JsonApiLabelLinkage.md) | [**JsonApiLabelLinkage**](JsonApiLabelLinkage.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

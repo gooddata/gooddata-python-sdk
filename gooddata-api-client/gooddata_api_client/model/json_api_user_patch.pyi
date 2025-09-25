@@ -336,4 +336,4 @@ class JsonApiUserPatch(
             **kwargs,
         )
 
-from gooddata_api_client.model.json_api_user_group_to_many_linkage import JsonApiUserGroupToManyLinkage
+from gooddata_api_client.models.json_api_user_group_to_many_linkage import JsonApiUserGroupToManyLinkage

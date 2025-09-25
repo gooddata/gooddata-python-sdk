@@ -1,4 +1,4 @@
-# gooddata_api_client.model.afm_object_identifier.AfmObjectIdentifier
+# gooddata_api_client.models.afm_object_identifier.AfmObjectIdentifier
 
 ObjectIdentifier with `identifier` wrapper. This serves to distinguish MD object identifiers in AFM request from local identifiers.
 
@@ -28,4 +28,3 @@ Key | Input Type | Accessed Type | Description | Notes
 **any_string_name** | dict, frozendict.frozendict, str, date, datetime, int, float, bool, decimal.Decimal, None, list, tuple, bytes, io.FileIO, io.BufferedReader | frozendict.frozendict, str, BoolClass, decimal.Decimal, NoneClass, tuple, bytes, FileIO | any string name can be used but the value must be the correct type | [optional]
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

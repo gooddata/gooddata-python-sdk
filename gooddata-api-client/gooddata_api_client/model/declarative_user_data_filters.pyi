@@ -40,21 +40,21 @@ class DeclarativeUserDataFilters(
         required = {
             "userDataFilters",
         }
-        
+
         class properties:
-            
-            
+
+
             class userDataFilters(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeUserDataFilter']:
                         return DeclarativeUserDataFilter
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeUserDataFilter'], typing.List['DeclarativeUserDataFilter']],
@@ -65,35 +65,35 @@ class DeclarativeUserDataFilters(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeUserDataFilter':
                     return super().__getitem__(i)
             __annotations__ = {
                 "userDataFilters": userDataFilters,
             }
-    
+
     userDataFilters: MetaOapg.properties.userDataFilters
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["userDataFilters"]) -> MetaOapg.properties.userDataFilters: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["userDataFilters", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["userDataFilters"]) -> MetaOapg.properties.userDataFilters: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["userDataFilters", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -110,4 +110,4 @@ class DeclarativeUserDataFilters(
             **kwargs,
         )
 
-from gooddata_api_client.model.declarative_user_data_filter import DeclarativeUserDataFilter
+from gooddata_api_client.models.declarative_user_data_filter import DeclarativeUserDataFilter

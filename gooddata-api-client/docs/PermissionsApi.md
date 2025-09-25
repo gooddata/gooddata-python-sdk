@@ -29,11 +29,11 @@ Get Available Assignees
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import permissions_api
-from gooddata_api_client.model.available_assignees import AvailableAssignees
+from gooddata_api_client.models.available_assignees import AvailableAssignees
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -42,28 +42,30 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = permissions_api.PermissionsApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
-    dashboard_id = "dashboardId_example" # str | 
+    api_instance = gooddata_api_client.PermissionsApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
+    dashboard_id = 'dashboard_id_example' # str | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Get Available Assignees
         api_response = api_instance.available_assignees(workspace_id, dashboard_id)
+        print("The response of PermissionsApi->available_assignees:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling PermissionsApi->available_assignees: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
- **dashboard_id** | **str**|  |
+ **workspace_id** | **str**|  | 
+ **dashboard_id** | **str**|  | 
 
 ### Return type
 
@@ -77,7 +79,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
-
 
 ### HTTP response details
 
@@ -96,11 +97,11 @@ Get Dashboard Permissions
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import permissions_api
-from gooddata_api_client.model.dashboard_permissions import DashboardPermissions
+from gooddata_api_client.models.dashboard_permissions import DashboardPermissions
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -109,28 +110,30 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = permissions_api.PermissionsApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
-    dashboard_id = "dashboardId_example" # str | 
+    api_instance = gooddata_api_client.PermissionsApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
+    dashboard_id = 'dashboard_id_example' # str | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Get Dashboard Permissions
         api_response = api_instance.dashboard_permissions(workspace_id, dashboard_id)
+        print("The response of PermissionsApi->dashboard_permissions:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling PermissionsApi->dashboard_permissions: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
- **dashboard_id** | **str**|  |
+ **workspace_id** | **str**|  | 
+ **dashboard_id** | **str**|  | 
 
 ### Return type
 
@@ -145,7 +148,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -155,7 +157,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_organization_permissions**
-> [DeclarativeOrganizationPermission] get_organization_permissions()
+> List[DeclarativeOrganizationPermission] get_organization_permissions()
 
 Get organization permissions
 
@@ -165,11 +167,11 @@ Retrieve organization permissions
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import permissions_api
-from gooddata_api_client.model.declarative_organization_permission import DeclarativeOrganizationPermission
+from gooddata_api_client.models.declarative_organization_permission import DeclarativeOrganizationPermission
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -178,26 +180,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = permissions_api.PermissionsApi(api_client)
+    api_instance = gooddata_api_client.PermissionsApi(api_client)
 
-    # example, this endpoint has no required or optional parameters
     try:
         # Get organization permissions
         api_response = api_instance.get_organization_permissions()
+        print("The response of PermissionsApi->get_organization_permissions:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling PermissionsApi->get_organization_permissions: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 This endpoint does not need any parameter.
 
 ### Return type
 
-[**[DeclarativeOrganizationPermission]**](DeclarativeOrganizationPermission.md)
+[**List[DeclarativeOrganizationPermission]**](DeclarativeOrganizationPermission.md)
 
 ### Authorization
 
@@ -207,7 +211,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
-
 
 ### HTTP response details
 
@@ -228,11 +231,11 @@ Retrieve current set of permissions of the user-group in a declarative form.
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import permissions_api
-from gooddata_api_client.model.declarative_user_group_permissions import DeclarativeUserGroupPermissions
+from gooddata_api_client.models.declarative_user_group_permissions import DeclarativeUserGroupPermissions
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -241,26 +244,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = permissions_api.PermissionsApi(api_client)
-    user_group_id = "userGroupId_example" # str | 
+    api_instance = gooddata_api_client.PermissionsApi(api_client)
+    user_group_id = 'user_group_id_example' # str | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Get permissions for the user-group
         api_response = api_instance.get_user_group_permissions(user_group_id)
+        print("The response of PermissionsApi->get_user_group_permissions:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling PermissionsApi->get_user_group_permissions: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **user_group_id** | **str**|  |
+ **user_group_id** | **str**|  | 
 
 ### Return type
 
@@ -274,7 +279,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
-
 
 ### HTTP response details
 
@@ -295,11 +299,11 @@ Retrieve current set of permissions of the user in a declarative form.
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import permissions_api
-from gooddata_api_client.model.declarative_user_permissions import DeclarativeUserPermissions
+from gooddata_api_client.models.declarative_user_permissions import DeclarativeUserPermissions
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -308,26 +312,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = permissions_api.PermissionsApi(api_client)
-    user_id = "userId_example" # str | 
+    api_instance = gooddata_api_client.PermissionsApi(api_client)
+    user_id = 'user_id_example' # str | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Get permissions for the user
         api_response = api_instance.get_user_permissions(user_id)
+        print("The response of PermissionsApi->get_user_permissions:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling PermissionsApi->get_user_permissions: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **user_id** | **str**|  |
+ **user_id** | **str**|  | 
 
 ### Return type
 
@@ -341,7 +347,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
-
 
 ### HTTP response details
 
@@ -362,11 +367,11 @@ Retrieve current set of permissions of the workspace in a declarative form.
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import permissions_api
-from gooddata_api_client.model.declarative_workspace_permissions import DeclarativeWorkspacePermissions
+from gooddata_api_client.models.declarative_workspace_permissions import DeclarativeWorkspacePermissions
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -375,26 +380,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = permissions_api.PermissionsApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
+    api_instance = gooddata_api_client.PermissionsApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Get permissions for the workspace
         api_response = api_instance.get_workspace_permissions(workspace_id)
+        print("The response of PermissionsApi->get_workspace_permissions:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling PermissionsApi->get_workspace_permissions: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
+ **workspace_id** | **str**|  | 
 
 ### Return type
 
@@ -408,7 +415,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
-
 
 ### HTTP response details
 
@@ -427,11 +433,11 @@ Manage Permissions for a Dashboard
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import permissions_api
-from gooddata_api_client.model.manage_dashboard_permissions_request_inner import ManageDashboardPermissionsRequestInner
+from gooddata_api_client.models.manage_dashboard_permissions_request_inner import ManageDashboardPermissionsRequestInner
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -440,31 +446,30 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = permissions_api.PermissionsApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
-    dashboard_id = "dashboardId_example" # str | 
-    manage_dashboard_permissions_request_inner = [
-        ManageDashboardPermissionsRequestInner(None),
-    ] # [ManageDashboardPermissionsRequestInner] | 
+    api_instance = gooddata_api_client.PermissionsApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
+    dashboard_id = 'dashboard_id_example' # str | 
+    manage_dashboard_permissions_request_inner = [gooddata_api_client.ManageDashboardPermissionsRequestInner()] # List[ManageDashboardPermissionsRequestInner] | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Manage Permissions for a Dashboard
         api_instance.manage_dashboard_permissions(workspace_id, dashboard_id, manage_dashboard_permissions_request_inner)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling PermissionsApi->manage_dashboard_permissions: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
- **dashboard_id** | **str**|  |
- **manage_dashboard_permissions_request_inner** | [**[ManageDashboardPermissionsRequestInner]**](ManageDashboardPermissionsRequestInner.md)|  |
+ **workspace_id** | **str**|  | 
+ **dashboard_id** | **str**|  | 
+ **manage_dashboard_permissions_request_inner** | [**List[ManageDashboardPermissionsRequestInner]**](ManageDashboardPermissionsRequestInner.md)|  | 
 
 ### Return type
 
@@ -478,7 +483,6 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: Not defined
-
 
 ### HTTP response details
 
@@ -499,11 +503,11 @@ Manage Permissions for a Data Source
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import permissions_api
-from gooddata_api_client.model.data_source_permission_assignment import DataSourcePermissionAssignment
+from gooddata_api_client.models.data_source_permission_assignment import DataSourcePermissionAssignment
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -512,37 +516,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = permissions_api.PermissionsApi(api_client)
-    data_source_id = "dataSourceId_example" # str | 
-    data_source_permission_assignment = [
-        DataSourcePermissionAssignment(
-            assignee_identifier=AssigneeIdentifier(
-                id="id_example",
-                type="user",
-            ),
-            permissions=[
-                "MANAGE",
-            ],
-        ),
-    ] # [DataSourcePermissionAssignment] | 
+    api_instance = gooddata_api_client.PermissionsApi(api_client)
+    data_source_id = 'data_source_id_example' # str | 
+    data_source_permission_assignment = [gooddata_api_client.DataSourcePermissionAssignment()] # List[DataSourcePermissionAssignment] | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Manage Permissions for a Data Source
         api_instance.manage_data_source_permissions(data_source_id, data_source_permission_assignment)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling PermissionsApi->manage_data_source_permissions: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **data_source_id** | **str**|  |
- **data_source_permission_assignment** | [**[DataSourcePermissionAssignment]**](DataSourcePermissionAssignment.md)|  |
+ **data_source_id** | **str**|  | 
+ **data_source_permission_assignment** | [**List[DataSourcePermissionAssignment]**](DataSourcePermissionAssignment.md)|  | 
 
 ### Return type
 
@@ -556,7 +551,6 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: Not defined
-
 
 ### HTTP response details
 
@@ -577,11 +571,11 @@ Manage Permissions for a Organization
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import permissions_api
-from gooddata_api_client.model.organization_permission_assignment import OrganizationPermissionAssignment
+from gooddata_api_client.models.organization_permission_assignment import OrganizationPermissionAssignment
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -590,35 +584,26 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = permissions_api.PermissionsApi(api_client)
-    organization_permission_assignment = [
-        OrganizationPermissionAssignment(
-            assignee_identifier=AssigneeIdentifier(
-                id="id_example",
-                type="user",
-            ),
-            permissions=[
-                "MANAGE",
-            ],
-        ),
-    ] # [OrganizationPermissionAssignment] | 
+    api_instance = gooddata_api_client.PermissionsApi(api_client)
+    organization_permission_assignment = [gooddata_api_client.OrganizationPermissionAssignment()] # List[OrganizationPermissionAssignment] | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Manage Permissions for a Organization
         api_instance.manage_organization_permissions(organization_permission_assignment)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling PermissionsApi->manage_organization_permissions: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **organization_permission_assignment** | [**[OrganizationPermissionAssignment]**](OrganizationPermissionAssignment.md)|  |
+ **organization_permission_assignment** | [**List[OrganizationPermissionAssignment]**](OrganizationPermissionAssignment.md)|  | 
 
 ### Return type
 
@@ -632,7 +617,6 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: Not defined
-
 
 ### HTTP response details
 
@@ -653,11 +637,11 @@ Manage Permissions for a Workspace and its Workspace Hierarchy
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import permissions_api
-from gooddata_api_client.model.workspace_permission_assignment import WorkspacePermissionAssignment
+from gooddata_api_client.models.workspace_permission_assignment import WorkspacePermissionAssignment
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -666,40 +650,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = permissions_api.PermissionsApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
-    workspace_permission_assignment = [
-        WorkspacePermissionAssignment(
-            assignee_identifier=AssigneeIdentifier(
-                id="id_example",
-                type="user",
-            ),
-            hierarchy_permissions=[
-                "MANAGE",
-            ],
-            permissions=[
-                "MANAGE",
-            ],
-        ),
-    ] # [WorkspacePermissionAssignment] | 
+    api_instance = gooddata_api_client.PermissionsApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
+    workspace_permission_assignment = [gooddata_api_client.WorkspacePermissionAssignment()] # List[WorkspacePermissionAssignment] | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Manage Permissions for a Workspace
         api_instance.manage_workspace_permissions(workspace_id, workspace_permission_assignment)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling PermissionsApi->manage_workspace_permissions: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
- **workspace_permission_assignment** | [**[WorkspacePermissionAssignment]**](WorkspacePermissionAssignment.md)|  |
+ **workspace_id** | **str**|  | 
+ **workspace_permission_assignment** | [**List[WorkspacePermissionAssignment]**](WorkspacePermissionAssignment.md)|  | 
 
 ### Return type
 
@@ -713,7 +685,6 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: Not defined
-
 
 ### HTTP response details
 
@@ -734,11 +705,11 @@ Sets organization permissions
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import permissions_api
-from gooddata_api_client.model.declarative_organization_permission import DeclarativeOrganizationPermission
+from gooddata_api_client.models.declarative_organization_permission import DeclarativeOrganizationPermission
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -747,33 +718,26 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = permissions_api.PermissionsApi(api_client)
-    declarative_organization_permission = [
-        DeclarativeOrganizationPermission(
-            assignee=AssigneeIdentifier(
-                id="id_example",
-                type="user",
-            ),
-            name="MANAGE",
-        ),
-    ] # [DeclarativeOrganizationPermission] | 
+    api_instance = gooddata_api_client.PermissionsApi(api_client)
+    declarative_organization_permission = [gooddata_api_client.DeclarativeOrganizationPermission()] # List[DeclarativeOrganizationPermission] | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Set organization permissions
         api_instance.set_organization_permissions(declarative_organization_permission)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling PermissionsApi->set_organization_permissions: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **declarative_organization_permission** | [**[DeclarativeOrganizationPermission]**](DeclarativeOrganizationPermission.md)|  |
+ **declarative_organization_permission** | [**List[DeclarativeOrganizationPermission]**](DeclarativeOrganizationPermission.md)|  | 
 
 ### Return type
 
@@ -787,7 +751,6 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: Not defined
-
 
 ### HTTP response details
 
@@ -808,11 +771,11 @@ Set effective permissions for the user-group
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import permissions_api
-from gooddata_api_client.model.declarative_user_group_permissions import DeclarativeUserGroupPermissions
+from gooddata_api_client.models.declarative_user_group_permissions import DeclarativeUserGroupPermissions
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -821,37 +784,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = permissions_api.PermissionsApi(api_client)
-    user_group_id = "userGroupId_example" # str | 
-    declarative_user_group_permissions = DeclarativeUserGroupPermissions(
-        permissions=[
-            DeclarativeUserGroupPermission(
-                assignee=AssigneeIdentifier(
-                    id="id_example",
-                    type="user",
-                ),
-                name="SEE",
-            ),
-        ],
-    ) # DeclarativeUserGroupPermissions | 
+    api_instance = gooddata_api_client.PermissionsApi(api_client)
+    user_group_id = 'user_group_id_example' # str | 
+    declarative_user_group_permissions = gooddata_api_client.DeclarativeUserGroupPermissions() # DeclarativeUserGroupPermissions | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Set permissions for the user-group
         api_instance.set_user_group_permissions(user_group_id, declarative_user_group_permissions)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling PermissionsApi->set_user_group_permissions: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **user_group_id** | **str**|  |
- **declarative_user_group_permissions** | [**DeclarativeUserGroupPermissions**](DeclarativeUserGroupPermissions.md)|  |
+ **user_group_id** | **str**|  | 
+ **declarative_user_group_permissions** | [**DeclarativeUserGroupPermissions**](DeclarativeUserGroupPermissions.md)|  | 
 
 ### Return type
 
@@ -865,7 +819,6 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: Not defined
-
 
 ### HTTP response details
 
@@ -886,11 +839,11 @@ Set effective permissions for the user
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import permissions_api
-from gooddata_api_client.model.declarative_user_permissions import DeclarativeUserPermissions
+from gooddata_api_client.models.declarative_user_permissions import DeclarativeUserPermissions
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -899,37 +852,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = permissions_api.PermissionsApi(api_client)
-    user_id = "userId_example" # str | 
-    declarative_user_permissions = DeclarativeUserPermissions(
-        permissions=[
-            DeclarativeUserPermission(
-                assignee=AssigneeIdentifier(
-                    id="id_example",
-                    type="user",
-                ),
-                name="SEE",
-            ),
-        ],
-    ) # DeclarativeUserPermissions | 
+    api_instance = gooddata_api_client.PermissionsApi(api_client)
+    user_id = 'user_id_example' # str | 
+    declarative_user_permissions = gooddata_api_client.DeclarativeUserPermissions() # DeclarativeUserPermissions | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Set permissions for the user
         api_instance.set_user_permissions(user_id, declarative_user_permissions)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling PermissionsApi->set_user_permissions: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **user_id** | **str**|  |
- **declarative_user_permissions** | [**DeclarativeUserPermissions**](DeclarativeUserPermissions.md)|  |
+ **user_id** | **str**|  | 
+ **declarative_user_permissions** | [**DeclarativeUserPermissions**](DeclarativeUserPermissions.md)|  | 
 
 ### Return type
 
@@ -943,7 +887,6 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: Not defined
-
 
 ### HTTP response details
 
@@ -964,11 +907,11 @@ Set effective permissions for the workspace
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import permissions_api
-from gooddata_api_client.model.declarative_workspace_permissions import DeclarativeWorkspacePermissions
+from gooddata_api_client.models.declarative_workspace_permissions import DeclarativeWorkspacePermissions
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -977,46 +920,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = permissions_api.PermissionsApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
-    declarative_workspace_permissions = DeclarativeWorkspacePermissions(
-        hierarchy_permissions=[
-            DeclarativeWorkspaceHierarchyPermission(
-                assignee=AssigneeIdentifier(
-                    id="id_example",
-                    type="user",
-                ),
-                name="MANAGE",
-            ),
-        ],
-        permissions=[
-            DeclarativeSingleWorkspacePermission(
-                assignee=AssigneeIdentifier(
-                    id="id_example",
-                    type="user",
-                ),
-                name="MANAGE",
-            ),
-        ],
-    ) # DeclarativeWorkspacePermissions | 
+    api_instance = gooddata_api_client.PermissionsApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
+    declarative_workspace_permissions = gooddata_api_client.DeclarativeWorkspacePermissions() # DeclarativeWorkspacePermissions | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Set permissions for the workspace
         api_instance.set_workspace_permissions(workspace_id, declarative_workspace_permissions)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling PermissionsApi->set_workspace_permissions: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
- **declarative_workspace_permissions** | [**DeclarativeWorkspacePermissions**](DeclarativeWorkspacePermissions.md)|  |
+ **workspace_id** | **str**|  | 
+ **declarative_workspace_permissions** | [**DeclarativeWorkspacePermissions**](DeclarativeWorkspacePermissions.md)|  | 
 
 ### Return type
 
@@ -1030,7 +955,6 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: Not defined
-
 
 ### HTTP response details
 

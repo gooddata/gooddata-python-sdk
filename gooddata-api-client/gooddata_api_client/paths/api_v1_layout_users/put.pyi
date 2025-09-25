@@ -25,7 +25,7 @@ import frozendict  # noqa: F401
 
 from gooddata_api_client import schemas  # noqa: F401
 
-from gooddata_api_client.model.declarative_users import DeclarativeUsers
+from gooddata_api_client.models.declarative_users import DeclarativeUsers
 
 # body param
 SchemaForRequestBodyApplicationJson = DeclarativeUsers
@@ -294,5 +294,3 @@ class ApiForput(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
-
-

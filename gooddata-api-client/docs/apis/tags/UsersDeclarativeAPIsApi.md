@@ -21,7 +21,7 @@ Retrieve all users including authentication properties.
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import users_declarative_apis_api
-from gooddata_api_client.model.declarative_users import DeclarativeUsers
+from gooddata_api_client.models.declarative_users import DeclarativeUsers
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -84,7 +84,7 @@ Set all users and their authentication properties.
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import users_declarative_apis_api
-from gooddata_api_client.model.declarative_users import DeclarativeUsers
+from gooddata_api_client.models.declarative_users import DeclarativeUsers
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -176,4 +176,3 @@ headers | Unset | headers were not defined |
 No authorization required
 
 [[Back to top]](#__pageTop) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
-

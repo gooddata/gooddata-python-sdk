@@ -1,4 +1,4 @@
-# gooddata_api_client.model.json_api_dataset_out_document.JsonApiDatasetOutDocument
+# gooddata_api_client.models.json_api_dataset_out_document.JsonApiDatasetOutDocument
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes
@@ -28,4 +28,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**JsonApiDatasetOutIncludes**](JsonApiDatasetOutIncludes.md) | [**JsonApiDatasetOutIncludes**](JsonApiDatasetOutIncludes.md) | [**JsonApiDatasetOutIncludes**](JsonApiDatasetOutIncludes.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

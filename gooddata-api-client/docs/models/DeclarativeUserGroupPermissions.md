@@ -1,4 +1,4 @@
-# gooddata_api_client.model.declarative_user_group_permissions.DeclarativeUserGroupPermissions
+# gooddata_api_client.models.declarative_user_group_permissions.DeclarativeUserGroupPermissions
 
 Definition of permissions associated with a user-group.
 
@@ -26,4 +26,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**DeclarativeUserGroupPermission**](DeclarativeUserGroupPermission.md) | [**DeclarativeUserGroupPermission**](DeclarativeUserGroupPermission.md) | [**DeclarativeUserGroupPermission**](DeclarativeUserGroupPermission.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

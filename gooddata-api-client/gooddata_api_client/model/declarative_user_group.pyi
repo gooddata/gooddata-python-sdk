@@ -40,33 +40,33 @@ class DeclarativeUserGroup(
         required = {
             "id",
         }
-        
+
         class properties:
-            
-            
+
+
             class id(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class name(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class parents(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeUserGroupIdentifier']:
                         return DeclarativeUserGroupIdentifier
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeUserGroupIdentifier'], typing.List['DeclarativeUserGroupIdentifier']],
@@ -77,22 +77,22 @@ class DeclarativeUserGroup(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeUserGroupIdentifier':
                     return super().__getitem__(i)
-            
-            
+
+
             class permissions(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeUserGroupPermission']:
                         return DeclarativeUserGroupPermission
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeUserGroupPermission'], typing.List['DeclarativeUserGroupPermission']],
@@ -103,7 +103,7 @@ class DeclarativeUserGroup(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeUserGroupPermission':
                     return super().__getitem__(i)
             __annotations__ = {
@@ -112,47 +112,47 @@ class DeclarativeUserGroup(
                 "parents": parents,
                 "permissions": permissions,
             }
-    
+
     id: MetaOapg.properties.id
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["parents"]) -> MetaOapg.properties.parents: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["permissions"]) -> MetaOapg.properties.permissions: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["id", "name", "parents", "permissions", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["name"]) -> typing.Union[MetaOapg.properties.name, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["parents"]) -> typing.Union[MetaOapg.properties.parents, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["permissions"]) -> typing.Union[MetaOapg.properties.permissions, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["id", "name", "parents", "permissions", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -175,5 +175,5 @@ class DeclarativeUserGroup(
             **kwargs,
         )
 
-from gooddata_api_client.model.declarative_user_group_permission import DeclarativeUserGroupPermission
-from gooddata_api_client.model.user_group_identifier import DeclarativeUserGroupIdentifier
+from gooddata_api_client.models.declarative_user_group_permission import DeclarativeUserGroupPermission
+from gooddata_api_client.models.user_group_identifier import DeclarativeUserGroupIdentifier

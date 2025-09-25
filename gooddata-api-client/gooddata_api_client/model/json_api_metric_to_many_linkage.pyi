@@ -37,7 +37,7 @@ class JsonApiMetricToManyLinkage(
 
 
     class MetaOapg:
-        
+
         @staticmethod
         def items() -> typing.Type['JsonApiMetricLinkage']:
             return JsonApiMetricLinkage
@@ -56,4 +56,4 @@ class JsonApiMetricToManyLinkage(
     def __getitem__(self, i: int) -> 'JsonApiMetricLinkage':
         return super().__getitem__(i)
 
-from gooddata_api_client.model.json_api_metric_linkage import JsonApiMetricLinkage
+from gooddata_api_client.models.json_api_metric_linkage import JsonApiMetricLinkage

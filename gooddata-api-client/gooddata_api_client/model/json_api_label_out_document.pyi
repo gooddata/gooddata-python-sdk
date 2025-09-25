@@ -134,6 +134,6 @@ class JsonApiLabelOutDocument(
             **kwargs,
         )
 
-from gooddata_api_client.model.json_api_attribute_out_with_links import JsonApiAttributeOutWithLinks
-from gooddata_api_client.model.json_api_label_out import JsonApiLabelOut
-from gooddata_api_client.model.object_links import ObjectLinks
+from gooddata_api_client.models.json_api_attribute_out_with_links import JsonApiAttributeOutWithLinks
+from gooddata_api_client.models.json_api_label_out import JsonApiLabelOut
+from gooddata_api_client.models.object_links import ObjectLinks

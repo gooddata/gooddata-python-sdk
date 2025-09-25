@@ -23,8 +23,8 @@ Post Plugins
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import plugins_api
-from gooddata_api_client.model.json_api_dashboard_plugin_post_optional_id_document import JsonApiDashboardPluginPostOptionalIdDocument
-from gooddata_api_client.model.json_api_dashboard_plugin_out_document import JsonApiDashboardPluginOutDocument
+from gooddata_api_client.models.json_api_dashboard_plugin_post_optional_id_document import JsonApiDashboardPluginPostOptionalIdDocument
+from gooddata_api_client.models.json_api_dashboard_plugin_out_document import JsonApiDashboardPluginOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -321,7 +321,7 @@ Get all Plugins
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import plugins_api
-from gooddata_api_client.model.json_api_dashboard_plugin_out_list import JsonApiDashboardPluginOutList
+from gooddata_api_client.models.json_api_dashboard_plugin_out_list import JsonApiDashboardPluginOutList
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -529,7 +529,7 @@ Get a Plugin
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import plugins_api
-from gooddata_api_client.model.json_api_dashboard_plugin_out_document import JsonApiDashboardPluginOutDocument
+from gooddata_api_client.models.json_api_dashboard_plugin_out_document import JsonApiDashboardPluginOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -702,8 +702,8 @@ Patch a Plugin
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import plugins_api
-from gooddata_api_client.model.json_api_dashboard_plugin_out_document import JsonApiDashboardPluginOutDocument
-from gooddata_api_client.model.json_api_dashboard_plugin_patch_document import JsonApiDashboardPluginPatchDocument
+from gooddata_api_client.models.json_api_dashboard_plugin_out_document import JsonApiDashboardPluginOutDocument
+from gooddata_api_client.models.json_api_dashboard_plugin_patch_document import JsonApiDashboardPluginPatchDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -878,8 +878,8 @@ Put a Plugin
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import plugins_api
-from gooddata_api_client.model.json_api_dashboard_plugin_out_document import JsonApiDashboardPluginOutDocument
-from gooddata_api_client.model.json_api_dashboard_plugin_in_document import JsonApiDashboardPluginInDocument
+from gooddata_api_client.models.json_api_dashboard_plugin_out_document import JsonApiDashboardPluginOutDocument
+from gooddata_api_client.models.json_api_dashboard_plugin_in_document import JsonApiDashboardPluginInDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1042,4 +1042,3 @@ Type | Description  | Notes
 No authorization required
 
 [[Back to top]](#__pageTop) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
-

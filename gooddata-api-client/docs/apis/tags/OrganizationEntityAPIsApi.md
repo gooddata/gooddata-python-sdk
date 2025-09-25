@@ -27,8 +27,8 @@ Post Organization Setting entities
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import organization_entity_apis_api
-from gooddata_api_client.model.json_api_organization_setting_in_document import JsonApiOrganizationSettingInDocument
-from gooddata_api_client.model.json_api_organization_setting_out_document import JsonApiOrganizationSettingOutDocument
+from gooddata_api_client.models.json_api_organization_setting_in_document import JsonApiOrganizationSettingInDocument
+from gooddata_api_client.models.json_api_organization_setting_out_document import JsonApiOrganizationSettingOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -230,7 +230,7 @@ Get Organization entities
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import organization_entity_apis_api
-from gooddata_api_client.model.json_api_organization_setting_out_list import JsonApiOrganizationSettingOutList
+from gooddata_api_client.models.json_api_organization_setting_out_list import JsonApiOrganizationSettingOutList
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -352,7 +352,7 @@ Get Organization entity
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import organization_entity_apis_api
-from gooddata_api_client.model.json_api_organization_setting_out_document import JsonApiOrganizationSettingOutDocument
+from gooddata_api_client.models.json_api_organization_setting_out_document import JsonApiOrganizationSettingOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -475,7 +475,7 @@ Get Organizations
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import organization_entity_apis_api
-from gooddata_api_client.model.json_api_organization_out_document import JsonApiOrganizationOutDocument
+from gooddata_api_client.models.json_api_organization_out_document import JsonApiOrganizationOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -720,8 +720,8 @@ Patch Organization entity
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import organization_entity_apis_api
-from gooddata_api_client.model.json_api_organization_setting_out_document import JsonApiOrganizationSettingOutDocument
-from gooddata_api_client.model.json_api_organization_setting_patch_document import JsonApiOrganizationSettingPatchDocument
+from gooddata_api_client.models.json_api_organization_setting_out_document import JsonApiOrganizationSettingOutDocument
+from gooddata_api_client.models.json_api_organization_setting_patch_document import JsonApiOrganizationSettingPatchDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -876,8 +876,8 @@ Patch Organization
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import organization_entity_apis_api
-from gooddata_api_client.model.json_api_organization_out_document import JsonApiOrganizationOutDocument
-from gooddata_api_client.model.json_api_organization_patch_document import JsonApiOrganizationPatchDocument
+from gooddata_api_client.models.json_api_organization_out_document import JsonApiOrganizationOutDocument
+from gooddata_api_client.models.json_api_organization_patch_document import JsonApiOrganizationPatchDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1064,8 +1064,8 @@ Put Organization entity
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import organization_entity_apis_api
-from gooddata_api_client.model.json_api_organization_setting_in_document import JsonApiOrganizationSettingInDocument
-from gooddata_api_client.model.json_api_organization_setting_out_document import JsonApiOrganizationSettingOutDocument
+from gooddata_api_client.models.json_api_organization_setting_in_document import JsonApiOrganizationSettingInDocument
+from gooddata_api_client.models.json_api_organization_setting_out_document import JsonApiOrganizationSettingOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1220,8 +1220,8 @@ Put Organization
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import organization_entity_apis_api
-from gooddata_api_client.model.json_api_organization_out_document import JsonApiOrganizationOutDocument
-from gooddata_api_client.model.json_api_organization_in_document import JsonApiOrganizationInDocument
+from gooddata_api_client.models.json_api_organization_out_document import JsonApiOrganizationOutDocument
+from gooddata_api_client.models.json_api_organization_in_document import JsonApiOrganizationInDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1396,4 +1396,3 @@ Type | Description  | Notes
 No authorization required
 
 [[Back to top]](#__pageTop) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
-

@@ -40,21 +40,21 @@ class DeclarativeTables(
         required = {
             "tables",
         }
-        
+
         class properties:
-            
-            
+
+
             class tables(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeTable']:
                         return DeclarativeTable
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeTable'], typing.List['DeclarativeTable']],
@@ -65,35 +65,35 @@ class DeclarativeTables(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeTable':
                     return super().__getitem__(i)
             __annotations__ = {
                 "tables": tables,
             }
-    
+
     tables: MetaOapg.properties.tables
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["tables"]) -> MetaOapg.properties.tables: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["tables", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["tables"]) -> MetaOapg.properties.tables: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["tables", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -110,4 +110,4 @@ class DeclarativeTables(
             **kwargs,
         )
 
-from gooddata_api_client.model.declarative_table import DeclarativeTable
+from gooddata_api_client.models.declarative_table import DeclarativeTable

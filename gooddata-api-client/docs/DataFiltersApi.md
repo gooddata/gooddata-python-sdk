@@ -27,7 +27,7 @@ Method | HTTP request | Description
 
 
 # **create_entity_user_data_filters**
-> JsonApiUserDataFilterOutDocument create_entity_user_data_filters(workspace_id, json_api_user_data_filter_post_optional_id_document)
+> JsonApiUserDataFilterOutDocument create_entity_user_data_filters(workspace_id, json_api_user_data_filter_post_optional_id_document, include=include, meta_include=meta_include)
 
 Post User Data Filters
 
@@ -35,12 +35,12 @@ Post User Data Filters
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import data_filters_api
-from gooddata_api_client.model.json_api_user_data_filter_out_document import JsonApiUserDataFilterOutDocument
-from gooddata_api_client.model.json_api_user_data_filter_post_optional_id_document import JsonApiUserDataFilterPostOptionalIdDocument
+from gooddata_api_client.models.json_api_user_data_filter_out_document import JsonApiUserDataFilterOutDocument
+from gooddata_api_client.models.json_api_user_data_filter_post_optional_id_document import JsonApiUserDataFilterPostOptionalIdDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -49,67 +49,34 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = data_filters_api.DataFiltersApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
-    json_api_user_data_filter_post_optional_id_document = JsonApiUserDataFilterPostOptionalIdDocument(
-        data=JsonApiUserDataFilterPostOptionalId(
-            attributes=JsonApiUserDataFilterInAttributes(
-                are_relations_valid=True,
-                description="description_example",
-                maql="maql_example",
-                tags=[
-                    "tags_example",
-                ],
-                title="title_example",
-            ),
-            id="id1",
-            relationships=JsonApiUserDataFilterInRelationships(
-                user=JsonApiFilterViewInRelationshipsUser(
-                    data=JsonApiUserToOneLinkage(None),
-                ),
-                user_group=JsonApiOrganizationOutRelationshipsBootstrapUserGroup(
-                    data=JsonApiUserGroupToOneLinkage(None),
-                ),
-            ),
-            type="userDataFilter",
-        ),
-    ) # JsonApiUserDataFilterPostOptionalIdDocument | 
-    include = [
-        "user,userGroup,facts,attributes,labels,metrics,datasets",
-    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
-    meta_include = [
-        "metaInclude=origin,all",
-    ] # [str] | Include Meta objects. (optional)
+    api_instance = gooddata_api_client.DataFiltersApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
+    json_api_user_data_filter_post_optional_id_document = gooddata_api_client.JsonApiUserDataFilterPostOptionalIdDocument() # JsonApiUserDataFilterPostOptionalIdDocument | 
+    include = ['user,userGroup,facts,attributes,labels,metrics,datasets'] # List[str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    meta_include = ['metaInclude=origin,all'] # List[str] | Include Meta objects. (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Post User Data Filters
-        api_response = api_instance.create_entity_user_data_filters(workspace_id, json_api_user_data_filter_post_optional_id_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling DataFiltersApi->create_entity_user_data_filters: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Post User Data Filters
         api_response = api_instance.create_entity_user_data_filters(workspace_id, json_api_user_data_filter_post_optional_id_document, include=include, meta_include=meta_include)
+        print("The response of DataFiltersApi->create_entity_user_data_filters:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling DataFiltersApi->create_entity_user_data_filters: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
- **json_api_user_data_filter_post_optional_id_document** | [**JsonApiUserDataFilterPostOptionalIdDocument**](JsonApiUserDataFilterPostOptionalIdDocument.md)|  |
- **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
- **meta_include** | **[str]**| Include Meta objects. | [optional]
+ **workspace_id** | **str**|  | 
+ **json_api_user_data_filter_post_optional_id_document** | [**JsonApiUserDataFilterPostOptionalIdDocument**](JsonApiUserDataFilterPostOptionalIdDocument.md)|  | 
+ **include** | [**List[str]**](str.md)| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional] 
+ **meta_include** | [**List[str]**](str.md)| Include Meta objects. | [optional] 
 
 ### Return type
 
@@ -124,7 +91,6 @@ No authorization required
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -134,7 +100,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **create_entity_workspace_data_filter_settings**
-> JsonApiWorkspaceDataFilterSettingOutDocument create_entity_workspace_data_filter_settings(workspace_id, json_api_workspace_data_filter_setting_in_document)
+> JsonApiWorkspaceDataFilterSettingOutDocument create_entity_workspace_data_filter_settings(workspace_id, json_api_workspace_data_filter_setting_in_document, include=include, meta_include=meta_include)
 
 Post Settings for Workspace Data Filters
 
@@ -142,12 +108,12 @@ Post Settings for Workspace Data Filters
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import data_filters_api
-from gooddata_api_client.model.json_api_workspace_data_filter_setting_in_document import JsonApiWorkspaceDataFilterSettingInDocument
-from gooddata_api_client.model.json_api_workspace_data_filter_setting_out_document import JsonApiWorkspaceDataFilterSettingOutDocument
+from gooddata_api_client.models.json_api_workspace_data_filter_setting_in_document import JsonApiWorkspaceDataFilterSettingInDocument
+from gooddata_api_client.models.json_api_workspace_data_filter_setting_out_document import JsonApiWorkspaceDataFilterSettingOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -156,62 +122,34 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = data_filters_api.DataFiltersApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
-    json_api_workspace_data_filter_setting_in_document = JsonApiWorkspaceDataFilterSettingInDocument(
-        data=JsonApiWorkspaceDataFilterSettingIn(
-            attributes=JsonApiWorkspaceDataFilterSettingInAttributes(
-                description="description_example",
-                filter_values=[
-                    "filter_values_example",
-                ],
-                title="title_example",
-            ),
-            id="id1",
-            relationships=JsonApiWorkspaceDataFilterSettingInRelationships(
-                workspace_data_filter=JsonApiWorkspaceDataFilterSettingInRelationshipsWorkspaceDataFilter(
-                    data=JsonApiWorkspaceDataFilterToOneLinkage(None),
-                ),
-            ),
-            type="workspaceDataFilterSetting",
-        ),
-    ) # JsonApiWorkspaceDataFilterSettingInDocument | 
-    include = [
-        "workspaceDataFilter",
-    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
-    meta_include = [
-        "metaInclude=origin,all",
-    ] # [str] | Include Meta objects. (optional)
+    api_instance = gooddata_api_client.DataFiltersApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
+    json_api_workspace_data_filter_setting_in_document = gooddata_api_client.JsonApiWorkspaceDataFilterSettingInDocument() # JsonApiWorkspaceDataFilterSettingInDocument | 
+    include = ['workspaceDataFilter'] # List[str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    meta_include = ['metaInclude=origin,all'] # List[str] | Include Meta objects. (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Post Settings for Workspace Data Filters
-        api_response = api_instance.create_entity_workspace_data_filter_settings(workspace_id, json_api_workspace_data_filter_setting_in_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling DataFiltersApi->create_entity_workspace_data_filter_settings: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Post Settings for Workspace Data Filters
         api_response = api_instance.create_entity_workspace_data_filter_settings(workspace_id, json_api_workspace_data_filter_setting_in_document, include=include, meta_include=meta_include)
+        print("The response of DataFiltersApi->create_entity_workspace_data_filter_settings:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling DataFiltersApi->create_entity_workspace_data_filter_settings: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
- **json_api_workspace_data_filter_setting_in_document** | [**JsonApiWorkspaceDataFilterSettingInDocument**](JsonApiWorkspaceDataFilterSettingInDocument.md)|  |
- **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
- **meta_include** | **[str]**| Include Meta objects. | [optional]
+ **workspace_id** | **str**|  | 
+ **json_api_workspace_data_filter_setting_in_document** | [**JsonApiWorkspaceDataFilterSettingInDocument**](JsonApiWorkspaceDataFilterSettingInDocument.md)|  | 
+ **include** | [**List[str]**](str.md)| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional] 
+ **meta_include** | [**List[str]**](str.md)| Include Meta objects. | [optional] 
 
 ### Return type
 
@@ -226,7 +164,6 @@ No authorization required
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -236,7 +173,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **create_entity_workspace_data_filters**
-> JsonApiWorkspaceDataFilterOutDocument create_entity_workspace_data_filters(workspace_id, json_api_workspace_data_filter_in_document)
+> JsonApiWorkspaceDataFilterOutDocument create_entity_workspace_data_filters(workspace_id, json_api_workspace_data_filter_in_document, include=include, meta_include=meta_include)
 
 Post Workspace Data Filters
 
@@ -244,12 +181,12 @@ Post Workspace Data Filters
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import data_filters_api
-from gooddata_api_client.model.json_api_workspace_data_filter_out_document import JsonApiWorkspaceDataFilterOutDocument
-from gooddata_api_client.model.json_api_workspace_data_filter_in_document import JsonApiWorkspaceDataFilterInDocument
+from gooddata_api_client.models.json_api_workspace_data_filter_in_document import JsonApiWorkspaceDataFilterInDocument
+from gooddata_api_client.models.json_api_workspace_data_filter_out_document import JsonApiWorkspaceDataFilterOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -258,65 +195,34 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = data_filters_api.DataFiltersApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
-    json_api_workspace_data_filter_in_document = JsonApiWorkspaceDataFilterInDocument(
-        data=JsonApiWorkspaceDataFilterIn(
-            attributes=JsonApiWorkspaceDataFilterInAttributes(
-                column_name="column_name_example",
-                description="description_example",
-                title="title_example",
-            ),
-            id="id1",
-            relationships=JsonApiWorkspaceDataFilterInRelationships(
-                filter_settings=JsonApiWorkspaceDataFilterInRelationshipsFilterSettings(
-                    data=JsonApiWorkspaceDataFilterSettingToManyLinkage([
-                        JsonApiWorkspaceDataFilterSettingLinkage(
-                            id="id_example",
-                            type="workspaceDataFilterSetting",
-                        ),
-                    ]),
-                ),
-            ),
-            type="workspaceDataFilter",
-        ),
-    ) # JsonApiWorkspaceDataFilterInDocument | 
-    include = [
-        "filterSettings",
-    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
-    meta_include = [
-        "metaInclude=origin,all",
-    ] # [str] | Include Meta objects. (optional)
+    api_instance = gooddata_api_client.DataFiltersApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
+    json_api_workspace_data_filter_in_document = gooddata_api_client.JsonApiWorkspaceDataFilterInDocument() # JsonApiWorkspaceDataFilterInDocument | 
+    include = ['filterSettings'] # List[str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    meta_include = ['metaInclude=origin,all'] # List[str] | Include Meta objects. (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Post Workspace Data Filters
-        api_response = api_instance.create_entity_workspace_data_filters(workspace_id, json_api_workspace_data_filter_in_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling DataFiltersApi->create_entity_workspace_data_filters: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Post Workspace Data Filters
         api_response = api_instance.create_entity_workspace_data_filters(workspace_id, json_api_workspace_data_filter_in_document, include=include, meta_include=meta_include)
+        print("The response of DataFiltersApi->create_entity_workspace_data_filters:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling DataFiltersApi->create_entity_workspace_data_filters: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
- **json_api_workspace_data_filter_in_document** | [**JsonApiWorkspaceDataFilterInDocument**](JsonApiWorkspaceDataFilterInDocument.md)|  |
- **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
- **meta_include** | **[str]**| Include Meta objects. | [optional]
+ **workspace_id** | **str**|  | 
+ **json_api_workspace_data_filter_in_document** | [**JsonApiWorkspaceDataFilterInDocument**](JsonApiWorkspaceDataFilterInDocument.md)|  | 
+ **include** | [**List[str]**](str.md)| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional] 
+ **meta_include** | [**List[str]**](str.md)| Include Meta objects. | [optional] 
 
 ### Return type
 
@@ -331,7 +237,6 @@ No authorization required
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -341,7 +246,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **delete_entity_user_data_filters**
-> delete_entity_user_data_filters(workspace_id, object_id)
+> delete_entity_user_data_filters(workspace_id, object_id, filter=filter)
 
 Delete a User Data Filter
 
@@ -349,10 +254,10 @@ Delete a User Data Filter
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import data_filters_api
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -361,37 +266,30 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = data_filters_api.DataFiltersApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
-    object_id = "objectId_example" # str | 
-    filter = "title==someString;description==someString;user.id==321;userGroup.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.DataFiltersApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
+    object_id = 'object_id_example' # str | 
+    filter = 'title==someString;description==someString;user.id==321;userGroup.id==321' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Delete a User Data Filter
-        api_instance.delete_entity_user_data_filters(workspace_id, object_id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling DataFiltersApi->delete_entity_user_data_filters: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Delete a User Data Filter
         api_instance.delete_entity_user_data_filters(workspace_id, object_id, filter=filter)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling DataFiltersApi->delete_entity_user_data_filters: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
- **object_id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **workspace_id** | **str**|  | 
+ **object_id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -405,7 +303,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: Not defined
-
 
 ### HTTP response details
 
@@ -416,7 +313,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **delete_entity_workspace_data_filter_settings**
-> delete_entity_workspace_data_filter_settings(workspace_id, object_id)
+> delete_entity_workspace_data_filter_settings(workspace_id, object_id, filter=filter)
 
 Delete a Settings for Workspace Data Filter
 
@@ -424,10 +321,10 @@ Delete a Settings for Workspace Data Filter
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import data_filters_api
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -436,37 +333,30 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = data_filters_api.DataFiltersApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
-    object_id = "objectId_example" # str | 
-    filter = "title==someString;description==someString;workspaceDataFilter.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.DataFiltersApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
+    object_id = 'object_id_example' # str | 
+    filter = 'title==someString;description==someString;workspaceDataFilter.id==321' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Delete a Settings for Workspace Data Filter
-        api_instance.delete_entity_workspace_data_filter_settings(workspace_id, object_id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling DataFiltersApi->delete_entity_workspace_data_filter_settings: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Delete a Settings for Workspace Data Filter
         api_instance.delete_entity_workspace_data_filter_settings(workspace_id, object_id, filter=filter)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling DataFiltersApi->delete_entity_workspace_data_filter_settings: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
- **object_id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **workspace_id** | **str**|  | 
+ **object_id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -480,7 +370,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: Not defined
-
 
 ### HTTP response details
 
@@ -491,7 +380,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **delete_entity_workspace_data_filters**
-> delete_entity_workspace_data_filters(workspace_id, object_id)
+> delete_entity_workspace_data_filters(workspace_id, object_id, filter=filter)
 
 Delete a Workspace Data Filter
 
@@ -499,10 +388,10 @@ Delete a Workspace Data Filter
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import data_filters_api
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -511,37 +400,30 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = data_filters_api.DataFiltersApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
-    object_id = "objectId_example" # str | 
-    filter = "title==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.DataFiltersApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
+    object_id = 'object_id_example' # str | 
+    filter = 'title==someString;description==someString' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Delete a Workspace Data Filter
-        api_instance.delete_entity_workspace_data_filters(workspace_id, object_id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling DataFiltersApi->delete_entity_workspace_data_filters: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Delete a Workspace Data Filter
         api_instance.delete_entity_workspace_data_filters(workspace_id, object_id, filter=filter)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling DataFiltersApi->delete_entity_workspace_data_filters: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
- **object_id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **workspace_id** | **str**|  | 
+ **object_id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -556,7 +438,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: Not defined
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -566,7 +447,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_all_entities_user_data_filters**
-> JsonApiUserDataFilterOutList get_all_entities_user_data_filters(workspace_id)
+> JsonApiUserDataFilterOutList get_all_entities_user_data_filters(workspace_id, origin=origin, filter=filter, include=include, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
 
 Get all User Data Filters
 
@@ -574,11 +455,11 @@ Get all User Data Filters
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import data_filters_api
-from gooddata_api_client.model.json_api_user_data_filter_out_list import JsonApiUserDataFilterOutList
+from gooddata_api_client.models.json_api_user_data_filter_out_list import JsonApiUserDataFilterOutList
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -587,57 +468,44 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = data_filters_api.DataFiltersApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
-    origin = "ALL" # str |  (optional) if omitted the server will use the default value of "ALL"
-    filter = "title==someString;description==someString;user.id==321;userGroup.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    include = [
-        "user,userGroup,facts,attributes,labels,metrics,datasets",
-    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
-    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
-    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
-    sort = [
-        "sort_example",
-    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
-    x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
-    meta_include = [
-        "metaInclude=origin,page,all",
-    ] # [str] | Include Meta objects. (optional)
+    api_instance = gooddata_api_client.DataFiltersApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
+    origin = ALL # str |  (optional) (default to ALL)
+    filter = 'title==someString;description==someString;user.id==321;userGroup.id==321' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = ['user,userGroup,facts,attributes,labels,metrics,datasets'] # List[str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) (default to 0)
+    size = 20 # int | The size of the page to be returned (optional) (default to 20)
+    sort = ['sort_example'] # List[str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    x_gdc_validate_relations = False # bool |  (optional) (default to False)
+    meta_include = ['metaInclude=origin,page,all'] # List[str] | Include Meta objects. (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Get all User Data Filters
-        api_response = api_instance.get_all_entities_user_data_filters(workspace_id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling DataFiltersApi->get_all_entities_user_data_filters: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get all User Data Filters
         api_response = api_instance.get_all_entities_user_data_filters(workspace_id, origin=origin, filter=filter, include=include, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
+        print("The response of DataFiltersApi->get_all_entities_user_data_filters:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling DataFiltersApi->get_all_entities_user_data_filters: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
- **origin** | **str**|  | [optional] if omitted the server will use the default value of "ALL"
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
- **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
- **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
- **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
- **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
- **meta_include** | **[str]**| Include Meta objects. | [optional]
+ **workspace_id** | **str**|  | 
+ **origin** | **str**|  | [optional] [default to ALL]
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **include** | [**List[str]**](str.md)| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional] 
+ **page** | **int**| Zero-based page index (0..N) | [optional] [default to 0]
+ **size** | **int**| The size of the page to be returned | [optional] [default to 20]
+ **sort** | [**List[str]**](str.md)| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional] 
+ **x_gdc_validate_relations** | **bool**|  | [optional] [default to False]
+ **meta_include** | [**List[str]**](str.md)| Include Meta objects. | [optional] 
 
 ### Return type
 
@@ -652,7 +520,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -662,7 +529,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_all_entities_workspace_data_filter_settings**
-> JsonApiWorkspaceDataFilterSettingOutList get_all_entities_workspace_data_filter_settings(workspace_id)
+> JsonApiWorkspaceDataFilterSettingOutList get_all_entities_workspace_data_filter_settings(workspace_id, origin=origin, filter=filter, include=include, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
 
 Get all Settings for Workspace Data Filters
 
@@ -670,11 +537,11 @@ Get all Settings for Workspace Data Filters
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import data_filters_api
-from gooddata_api_client.model.json_api_workspace_data_filter_setting_out_list import JsonApiWorkspaceDataFilterSettingOutList
+from gooddata_api_client.models.json_api_workspace_data_filter_setting_out_list import JsonApiWorkspaceDataFilterSettingOutList
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -683,57 +550,44 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = data_filters_api.DataFiltersApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
-    origin = "ALL" # str |  (optional) if omitted the server will use the default value of "ALL"
-    filter = "title==someString;description==someString;workspaceDataFilter.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    include = [
-        "workspaceDataFilter",
-    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
-    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
-    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
-    sort = [
-        "sort_example",
-    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
-    x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
-    meta_include = [
-        "metaInclude=origin,page,all",
-    ] # [str] | Include Meta objects. (optional)
+    api_instance = gooddata_api_client.DataFiltersApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
+    origin = ALL # str |  (optional) (default to ALL)
+    filter = 'title==someString;description==someString;workspaceDataFilter.id==321' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = ['workspaceDataFilter'] # List[str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) (default to 0)
+    size = 20 # int | The size of the page to be returned (optional) (default to 20)
+    sort = ['sort_example'] # List[str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    x_gdc_validate_relations = False # bool |  (optional) (default to False)
+    meta_include = ['metaInclude=origin,page,all'] # List[str] | Include Meta objects. (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Get all Settings for Workspace Data Filters
-        api_response = api_instance.get_all_entities_workspace_data_filter_settings(workspace_id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling DataFiltersApi->get_all_entities_workspace_data_filter_settings: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get all Settings for Workspace Data Filters
         api_response = api_instance.get_all_entities_workspace_data_filter_settings(workspace_id, origin=origin, filter=filter, include=include, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
+        print("The response of DataFiltersApi->get_all_entities_workspace_data_filter_settings:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling DataFiltersApi->get_all_entities_workspace_data_filter_settings: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
- **origin** | **str**|  | [optional] if omitted the server will use the default value of "ALL"
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
- **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
- **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
- **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
- **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
- **meta_include** | **[str]**| Include Meta objects. | [optional]
+ **workspace_id** | **str**|  | 
+ **origin** | **str**|  | [optional] [default to ALL]
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **include** | [**List[str]**](str.md)| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional] 
+ **page** | **int**| Zero-based page index (0..N) | [optional] [default to 0]
+ **size** | **int**| The size of the page to be returned | [optional] [default to 20]
+ **sort** | [**List[str]**](str.md)| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional] 
+ **x_gdc_validate_relations** | **bool**|  | [optional] [default to False]
+ **meta_include** | [**List[str]**](str.md)| Include Meta objects. | [optional] 
 
 ### Return type
 
@@ -748,7 +602,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -758,7 +611,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_all_entities_workspace_data_filters**
-> JsonApiWorkspaceDataFilterOutList get_all_entities_workspace_data_filters(workspace_id)
+> JsonApiWorkspaceDataFilterOutList get_all_entities_workspace_data_filters(workspace_id, origin=origin, filter=filter, include=include, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
 
 Get all Workspace Data Filters
 
@@ -766,11 +619,11 @@ Get all Workspace Data Filters
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import data_filters_api
-from gooddata_api_client.model.json_api_workspace_data_filter_out_list import JsonApiWorkspaceDataFilterOutList
+from gooddata_api_client.models.json_api_workspace_data_filter_out_list import JsonApiWorkspaceDataFilterOutList
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -779,57 +632,44 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = data_filters_api.DataFiltersApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
-    origin = "ALL" # str |  (optional) if omitted the server will use the default value of "ALL"
-    filter = "title==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    include = [
-        "filterSettings",
-    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
-    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
-    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
-    sort = [
-        "sort_example",
-    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
-    x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
-    meta_include = [
-        "metaInclude=origin,page,all",
-    ] # [str] | Include Meta objects. (optional)
+    api_instance = gooddata_api_client.DataFiltersApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
+    origin = ALL # str |  (optional) (default to ALL)
+    filter = 'title==someString;description==someString' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = ['filterSettings'] # List[str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) (default to 0)
+    size = 20 # int | The size of the page to be returned (optional) (default to 20)
+    sort = ['sort_example'] # List[str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    x_gdc_validate_relations = False # bool |  (optional) (default to False)
+    meta_include = ['metaInclude=origin,page,all'] # List[str] | Include Meta objects. (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Get all Workspace Data Filters
-        api_response = api_instance.get_all_entities_workspace_data_filters(workspace_id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling DataFiltersApi->get_all_entities_workspace_data_filters: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get all Workspace Data Filters
         api_response = api_instance.get_all_entities_workspace_data_filters(workspace_id, origin=origin, filter=filter, include=include, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
+        print("The response of DataFiltersApi->get_all_entities_workspace_data_filters:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling DataFiltersApi->get_all_entities_workspace_data_filters: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
- **origin** | **str**|  | [optional] if omitted the server will use the default value of "ALL"
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
- **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
- **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
- **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
- **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
- **meta_include** | **[str]**| Include Meta objects. | [optional]
+ **workspace_id** | **str**|  | 
+ **origin** | **str**|  | [optional] [default to ALL]
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **include** | [**List[str]**](str.md)| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional] 
+ **page** | **int**| Zero-based page index (0..N) | [optional] [default to 0]
+ **size** | **int**| The size of the page to be returned | [optional] [default to 20]
+ **sort** | [**List[str]**](str.md)| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional] 
+ **x_gdc_validate_relations** | **bool**|  | [optional] [default to False]
+ **meta_include** | [**List[str]**](str.md)| Include Meta objects. | [optional] 
 
 ### Return type
 
@@ -844,7 +684,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -854,7 +693,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_entity_user_data_filters**
-> JsonApiUserDataFilterOutDocument get_entity_user_data_filters(workspace_id, object_id)
+> JsonApiUserDataFilterOutDocument get_entity_user_data_filters(workspace_id, object_id, filter=filter, include=include, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
 
 Get a User Data Filter
 
@@ -862,11 +701,11 @@ Get a User Data Filter
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import data_filters_api
-from gooddata_api_client.model.json_api_user_data_filter_out_document import JsonApiUserDataFilterOutDocument
+from gooddata_api_client.models.json_api_user_data_filter_out_document import JsonApiUserDataFilterOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -875,49 +714,38 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = data_filters_api.DataFiltersApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
-    object_id = "objectId_example" # str | 
-    filter = "title==someString;description==someString;user.id==321;userGroup.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    include = [
-        "user,userGroup,facts,attributes,labels,metrics,datasets",
-    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
-    x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
-    meta_include = [
-        "metaInclude=origin,all",
-    ] # [str] | Include Meta objects. (optional)
+    api_instance = gooddata_api_client.DataFiltersApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
+    object_id = 'object_id_example' # str | 
+    filter = 'title==someString;description==someString;user.id==321;userGroup.id==321' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = ['user,userGroup,facts,attributes,labels,metrics,datasets'] # List[str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    x_gdc_validate_relations = False # bool |  (optional) (default to False)
+    meta_include = ['metaInclude=origin,all'] # List[str] | Include Meta objects. (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Get a User Data Filter
-        api_response = api_instance.get_entity_user_data_filters(workspace_id, object_id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling DataFiltersApi->get_entity_user_data_filters: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get a User Data Filter
         api_response = api_instance.get_entity_user_data_filters(workspace_id, object_id, filter=filter, include=include, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
+        print("The response of DataFiltersApi->get_entity_user_data_filters:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling DataFiltersApi->get_entity_user_data_filters: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
- **object_id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
- **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
- **meta_include** | **[str]**| Include Meta objects. | [optional]
+ **workspace_id** | **str**|  | 
+ **object_id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **include** | [**List[str]**](str.md)| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional] 
+ **x_gdc_validate_relations** | **bool**|  | [optional] [default to False]
+ **meta_include** | [**List[str]**](str.md)| Include Meta objects. | [optional] 
 
 ### Return type
 
@@ -932,7 +760,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -942,7 +769,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_entity_workspace_data_filter_settings**
-> JsonApiWorkspaceDataFilterSettingOutDocument get_entity_workspace_data_filter_settings(workspace_id, object_id)
+> JsonApiWorkspaceDataFilterSettingOutDocument get_entity_workspace_data_filter_settings(workspace_id, object_id, filter=filter, include=include, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
 
 Get a Setting for Workspace Data Filter
 
@@ -950,11 +777,11 @@ Get a Setting for Workspace Data Filter
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import data_filters_api
-from gooddata_api_client.model.json_api_workspace_data_filter_setting_out_document import JsonApiWorkspaceDataFilterSettingOutDocument
+from gooddata_api_client.models.json_api_workspace_data_filter_setting_out_document import JsonApiWorkspaceDataFilterSettingOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -963,49 +790,38 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = data_filters_api.DataFiltersApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
-    object_id = "objectId_example" # str | 
-    filter = "title==someString;description==someString;workspaceDataFilter.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    include = [
-        "workspaceDataFilter",
-    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
-    x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
-    meta_include = [
-        "metaInclude=origin,all",
-    ] # [str] | Include Meta objects. (optional)
+    api_instance = gooddata_api_client.DataFiltersApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
+    object_id = 'object_id_example' # str | 
+    filter = 'title==someString;description==someString;workspaceDataFilter.id==321' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = ['workspaceDataFilter'] # List[str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    x_gdc_validate_relations = False # bool |  (optional) (default to False)
+    meta_include = ['metaInclude=origin,all'] # List[str] | Include Meta objects. (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Get a Setting for Workspace Data Filter
-        api_response = api_instance.get_entity_workspace_data_filter_settings(workspace_id, object_id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling DataFiltersApi->get_entity_workspace_data_filter_settings: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get a Setting for Workspace Data Filter
         api_response = api_instance.get_entity_workspace_data_filter_settings(workspace_id, object_id, filter=filter, include=include, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
+        print("The response of DataFiltersApi->get_entity_workspace_data_filter_settings:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling DataFiltersApi->get_entity_workspace_data_filter_settings: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
- **object_id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
- **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
- **meta_include** | **[str]**| Include Meta objects. | [optional]
+ **workspace_id** | **str**|  | 
+ **object_id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **include** | [**List[str]**](str.md)| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional] 
+ **x_gdc_validate_relations** | **bool**|  | [optional] [default to False]
+ **meta_include** | [**List[str]**](str.md)| Include Meta objects. | [optional] 
 
 ### Return type
 
@@ -1020,7 +836,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -1030,7 +845,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_entity_workspace_data_filters**
-> JsonApiWorkspaceDataFilterOutDocument get_entity_workspace_data_filters(workspace_id, object_id)
+> JsonApiWorkspaceDataFilterOutDocument get_entity_workspace_data_filters(workspace_id, object_id, filter=filter, include=include, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
 
 Get a Workspace Data Filter
 
@@ -1038,11 +853,11 @@ Get a Workspace Data Filter
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import data_filters_api
-from gooddata_api_client.model.json_api_workspace_data_filter_out_document import JsonApiWorkspaceDataFilterOutDocument
+from gooddata_api_client.models.json_api_workspace_data_filter_out_document import JsonApiWorkspaceDataFilterOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -1051,49 +866,38 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = data_filters_api.DataFiltersApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
-    object_id = "objectId_example" # str | 
-    filter = "title==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    include = [
-        "filterSettings",
-    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
-    x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
-    meta_include = [
-        "metaInclude=origin,all",
-    ] # [str] | Include Meta objects. (optional)
+    api_instance = gooddata_api_client.DataFiltersApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
+    object_id = 'object_id_example' # str | 
+    filter = 'title==someString;description==someString' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = ['filterSettings'] # List[str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    x_gdc_validate_relations = False # bool |  (optional) (default to False)
+    meta_include = ['metaInclude=origin,all'] # List[str] | Include Meta objects. (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Get a Workspace Data Filter
-        api_response = api_instance.get_entity_workspace_data_filters(workspace_id, object_id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling DataFiltersApi->get_entity_workspace_data_filters: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get a Workspace Data Filter
         api_response = api_instance.get_entity_workspace_data_filters(workspace_id, object_id, filter=filter, include=include, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
+        print("The response of DataFiltersApi->get_entity_workspace_data_filters:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling DataFiltersApi->get_entity_workspace_data_filters: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
- **object_id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
- **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
- **meta_include** | **[str]**| Include Meta objects. | [optional]
+ **workspace_id** | **str**|  | 
+ **object_id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **include** | [**List[str]**](str.md)| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional] 
+ **x_gdc_validate_relations** | **bool**|  | [optional] [default to False]
+ **meta_include** | [**List[str]**](str.md)| Include Meta objects. | [optional] 
 
 ### Return type
 
@@ -1107,7 +911,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
-
 
 ### HTTP response details
 
@@ -1128,11 +931,11 @@ Retrieve all workspaces and related workspace data filters (and their settings /
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import data_filters_api
-from gooddata_api_client.model.declarative_workspace_data_filters import DeclarativeWorkspaceDataFilters
+from gooddata_api_client.models.declarative_workspace_data_filters import DeclarativeWorkspaceDataFilters
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -1141,21 +944,23 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = data_filters_api.DataFiltersApi(api_client)
+    api_instance = gooddata_api_client.DataFiltersApi(api_client)
 
-    # example, this endpoint has no required or optional parameters
     try:
         # Get workspace data filters for all workspaces
         api_response = api_instance.get_workspace_data_filters_layout()
+        print("The response of DataFiltersApi->get_workspace_data_filters_layout:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling DataFiltersApi->get_workspace_data_filters_layout: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 This endpoint does not need any parameter.
 
 ### Return type
@@ -1171,7 +976,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -1181,7 +985,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **patch_entity_user_data_filters**
-> JsonApiUserDataFilterOutDocument patch_entity_user_data_filters(workspace_id, object_id, json_api_user_data_filter_patch_document)
+> JsonApiUserDataFilterOutDocument patch_entity_user_data_filters(workspace_id, object_id, json_api_user_data_filter_patch_document, filter=filter, include=include)
 
 Patch a User Data Filter
 
@@ -1189,12 +993,12 @@ Patch a User Data Filter
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import data_filters_api
-from gooddata_api_client.model.json_api_user_data_filter_out_document import JsonApiUserDataFilterOutDocument
-from gooddata_api_client.model.json_api_user_data_filter_patch_document import JsonApiUserDataFilterPatchDocument
+from gooddata_api_client.models.json_api_user_data_filter_out_document import JsonApiUserDataFilterOutDocument
+from gooddata_api_client.models.json_api_user_data_filter_patch_document import JsonApiUserDataFilterPatchDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -1203,67 +1007,36 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = data_filters_api.DataFiltersApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
-    object_id = "objectId_example" # str | 
-    json_api_user_data_filter_patch_document = JsonApiUserDataFilterPatchDocument(
-        data=JsonApiUserDataFilterPatch(
-            attributes=JsonApiUserDataFilterPatchAttributes(
-                are_relations_valid=True,
-                description="description_example",
-                maql="maql_example",
-                tags=[
-                    "tags_example",
-                ],
-                title="title_example",
-            ),
-            id="id1",
-            relationships=JsonApiUserDataFilterInRelationships(
-                user=JsonApiFilterViewInRelationshipsUser(
-                    data=JsonApiUserToOneLinkage(None),
-                ),
-                user_group=JsonApiOrganizationOutRelationshipsBootstrapUserGroup(
-                    data=JsonApiUserGroupToOneLinkage(None),
-                ),
-            ),
-            type="userDataFilter",
-        ),
-    ) # JsonApiUserDataFilterPatchDocument | 
-    filter = "title==someString;description==someString;user.id==321;userGroup.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    include = [
-        "user,userGroup,facts,attributes,labels,metrics,datasets",
-    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    api_instance = gooddata_api_client.DataFiltersApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
+    object_id = 'object_id_example' # str | 
+    json_api_user_data_filter_patch_document = gooddata_api_client.JsonApiUserDataFilterPatchDocument() # JsonApiUserDataFilterPatchDocument | 
+    filter = 'title==someString;description==someString;user.id==321;userGroup.id==321' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = ['user,userGroup,facts,attributes,labels,metrics,datasets'] # List[str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Patch a User Data Filter
-        api_response = api_instance.patch_entity_user_data_filters(workspace_id, object_id, json_api_user_data_filter_patch_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling DataFiltersApi->patch_entity_user_data_filters: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Patch a User Data Filter
         api_response = api_instance.patch_entity_user_data_filters(workspace_id, object_id, json_api_user_data_filter_patch_document, filter=filter, include=include)
+        print("The response of DataFiltersApi->patch_entity_user_data_filters:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling DataFiltersApi->patch_entity_user_data_filters: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
- **object_id** | **str**|  |
- **json_api_user_data_filter_patch_document** | [**JsonApiUserDataFilterPatchDocument**](JsonApiUserDataFilterPatchDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+ **workspace_id** | **str**|  | 
+ **object_id** | **str**|  | 
+ **json_api_user_data_filter_patch_document** | [**JsonApiUserDataFilterPatchDocument**](JsonApiUserDataFilterPatchDocument.md)|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **include** | [**List[str]**](str.md)| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional] 
 
 ### Return type
 
@@ -1278,7 +1051,6 @@ No authorization required
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -1288,7 +1060,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **patch_entity_workspace_data_filter_settings**
-> JsonApiWorkspaceDataFilterSettingOutDocument patch_entity_workspace_data_filter_settings(workspace_id, object_id, json_api_workspace_data_filter_setting_patch_document)
+> JsonApiWorkspaceDataFilterSettingOutDocument patch_entity_workspace_data_filter_settings(workspace_id, object_id, json_api_workspace_data_filter_setting_patch_document, filter=filter, include=include)
 
 Patch a Settings for Workspace Data Filter
 
@@ -1296,12 +1068,12 @@ Patch a Settings for Workspace Data Filter
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import data_filters_api
-from gooddata_api_client.model.json_api_workspace_data_filter_setting_patch_document import JsonApiWorkspaceDataFilterSettingPatchDocument
-from gooddata_api_client.model.json_api_workspace_data_filter_setting_out_document import JsonApiWorkspaceDataFilterSettingOutDocument
+from gooddata_api_client.models.json_api_workspace_data_filter_setting_out_document import JsonApiWorkspaceDataFilterSettingOutDocument
+from gooddata_api_client.models.json_api_workspace_data_filter_setting_patch_document import JsonApiWorkspaceDataFilterSettingPatchDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -1310,62 +1082,36 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = data_filters_api.DataFiltersApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
-    object_id = "objectId_example" # str | 
-    json_api_workspace_data_filter_setting_patch_document = JsonApiWorkspaceDataFilterSettingPatchDocument(
-        data=JsonApiWorkspaceDataFilterSettingPatch(
-            attributes=JsonApiWorkspaceDataFilterSettingInAttributes(
-                description="description_example",
-                filter_values=[
-                    "filter_values_example",
-                ],
-                title="title_example",
-            ),
-            id="id1",
-            relationships=JsonApiWorkspaceDataFilterSettingInRelationships(
-                workspace_data_filter=JsonApiWorkspaceDataFilterSettingInRelationshipsWorkspaceDataFilter(
-                    data=JsonApiWorkspaceDataFilterToOneLinkage(None),
-                ),
-            ),
-            type="workspaceDataFilterSetting",
-        ),
-    ) # JsonApiWorkspaceDataFilterSettingPatchDocument | 
-    filter = "title==someString;description==someString;workspaceDataFilter.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    include = [
-        "workspaceDataFilter",
-    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    api_instance = gooddata_api_client.DataFiltersApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
+    object_id = 'object_id_example' # str | 
+    json_api_workspace_data_filter_setting_patch_document = gooddata_api_client.JsonApiWorkspaceDataFilterSettingPatchDocument() # JsonApiWorkspaceDataFilterSettingPatchDocument | 
+    filter = 'title==someString;description==someString;workspaceDataFilter.id==321' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = ['workspaceDataFilter'] # List[str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Patch a Settings for Workspace Data Filter
-        api_response = api_instance.patch_entity_workspace_data_filter_settings(workspace_id, object_id, json_api_workspace_data_filter_setting_patch_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling DataFiltersApi->patch_entity_workspace_data_filter_settings: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Patch a Settings for Workspace Data Filter
         api_response = api_instance.patch_entity_workspace_data_filter_settings(workspace_id, object_id, json_api_workspace_data_filter_setting_patch_document, filter=filter, include=include)
+        print("The response of DataFiltersApi->patch_entity_workspace_data_filter_settings:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling DataFiltersApi->patch_entity_workspace_data_filter_settings: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
- **object_id** | **str**|  |
- **json_api_workspace_data_filter_setting_patch_document** | [**JsonApiWorkspaceDataFilterSettingPatchDocument**](JsonApiWorkspaceDataFilterSettingPatchDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+ **workspace_id** | **str**|  | 
+ **object_id** | **str**|  | 
+ **json_api_workspace_data_filter_setting_patch_document** | [**JsonApiWorkspaceDataFilterSettingPatchDocument**](JsonApiWorkspaceDataFilterSettingPatchDocument.md)|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **include** | [**List[str]**](str.md)| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional] 
 
 ### Return type
 
@@ -1380,7 +1126,6 @@ No authorization required
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -1390,7 +1135,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **patch_entity_workspace_data_filters**
-> JsonApiWorkspaceDataFilterOutDocument patch_entity_workspace_data_filters(workspace_id, object_id, json_api_workspace_data_filter_patch_document)
+> JsonApiWorkspaceDataFilterOutDocument patch_entity_workspace_data_filters(workspace_id, object_id, json_api_workspace_data_filter_patch_document, filter=filter, include=include)
 
 Patch a Workspace Data Filter
 
@@ -1398,12 +1143,12 @@ Patch a Workspace Data Filter
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import data_filters_api
-from gooddata_api_client.model.json_api_workspace_data_filter_out_document import JsonApiWorkspaceDataFilterOutDocument
-from gooddata_api_client.model.json_api_workspace_data_filter_patch_document import JsonApiWorkspaceDataFilterPatchDocument
+from gooddata_api_client.models.json_api_workspace_data_filter_out_document import JsonApiWorkspaceDataFilterOutDocument
+from gooddata_api_client.models.json_api_workspace_data_filter_patch_document import JsonApiWorkspaceDataFilterPatchDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -1412,65 +1157,36 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = data_filters_api.DataFiltersApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
-    object_id = "objectId_example" # str | 
-    json_api_workspace_data_filter_patch_document = JsonApiWorkspaceDataFilterPatchDocument(
-        data=JsonApiWorkspaceDataFilterPatch(
-            attributes=JsonApiWorkspaceDataFilterInAttributes(
-                column_name="column_name_example",
-                description="description_example",
-                title="title_example",
-            ),
-            id="id1",
-            relationships=JsonApiWorkspaceDataFilterInRelationships(
-                filter_settings=JsonApiWorkspaceDataFilterInRelationshipsFilterSettings(
-                    data=JsonApiWorkspaceDataFilterSettingToManyLinkage([
-                        JsonApiWorkspaceDataFilterSettingLinkage(
-                            id="id_example",
-                            type="workspaceDataFilterSetting",
-                        ),
-                    ]),
-                ),
-            ),
-            type="workspaceDataFilter",
-        ),
-    ) # JsonApiWorkspaceDataFilterPatchDocument | 
-    filter = "title==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    include = [
-        "filterSettings",
-    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    api_instance = gooddata_api_client.DataFiltersApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
+    object_id = 'object_id_example' # str | 
+    json_api_workspace_data_filter_patch_document = gooddata_api_client.JsonApiWorkspaceDataFilterPatchDocument() # JsonApiWorkspaceDataFilterPatchDocument | 
+    filter = 'title==someString;description==someString' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = ['filterSettings'] # List[str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Patch a Workspace Data Filter
-        api_response = api_instance.patch_entity_workspace_data_filters(workspace_id, object_id, json_api_workspace_data_filter_patch_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling DataFiltersApi->patch_entity_workspace_data_filters: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Patch a Workspace Data Filter
         api_response = api_instance.patch_entity_workspace_data_filters(workspace_id, object_id, json_api_workspace_data_filter_patch_document, filter=filter, include=include)
+        print("The response of DataFiltersApi->patch_entity_workspace_data_filters:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling DataFiltersApi->patch_entity_workspace_data_filters: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
- **object_id** | **str**|  |
- **json_api_workspace_data_filter_patch_document** | [**JsonApiWorkspaceDataFilterPatchDocument**](JsonApiWorkspaceDataFilterPatchDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+ **workspace_id** | **str**|  | 
+ **object_id** | **str**|  | 
+ **json_api_workspace_data_filter_patch_document** | [**JsonApiWorkspaceDataFilterPatchDocument**](JsonApiWorkspaceDataFilterPatchDocument.md)|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **include** | [**List[str]**](str.md)| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional] 
 
 ### Return type
 
@@ -1484,7 +1200,6 @@ No authorization required
 
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
-
 
 ### HTTP response details
 
@@ -1505,11 +1220,11 @@ Sets workspace data filters in all workspaces in entire organization.
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import data_filters_api
-from gooddata_api_client.model.declarative_workspace_data_filters import DeclarativeWorkspaceDataFilters
+from gooddata_api_client.models.declarative_workspace_data_filters import DeclarativeWorkspaceDataFilters
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -1518,50 +1233,26 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = data_filters_api.DataFiltersApi(api_client)
-    declarative_workspace_data_filters = DeclarativeWorkspaceDataFilters(
-        workspace_data_filters=[
-            DeclarativeWorkspaceDataFilter(
-                column_name="country_id",
-                description="ID of country",
-                id="country_id",
-                title="Country ID",
-                workspace=WorkspaceIdentifier(
-                    id="alpha.sales",
-                    type="workspace",
-                ),
-                workspace_data_filter_settings=[
-                    DeclarativeWorkspaceDataFilterSetting(
-                        description="ID of country setting",
-                        filter_values=["US"],
-                        id="country_id_setting",
-                        title="Country ID setting",
-                        workspace=WorkspaceIdentifier(
-                            id="alpha.sales",
-                            type="workspace",
-                        ),
-                    ),
-                ],
-            ),
-        ],
-    ) # DeclarativeWorkspaceDataFilters | 
+    api_instance = gooddata_api_client.DataFiltersApi(api_client)
+    declarative_workspace_data_filters = gooddata_api_client.DeclarativeWorkspaceDataFilters() # DeclarativeWorkspaceDataFilters | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Set all workspace data filters
         api_instance.set_workspace_data_filters_layout(declarative_workspace_data_filters)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling DataFiltersApi->set_workspace_data_filters_layout: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **declarative_workspace_data_filters** | [**DeclarativeWorkspaceDataFilters**](DeclarativeWorkspaceDataFilters.md)|  |
+ **declarative_workspace_data_filters** | [**DeclarativeWorkspaceDataFilters**](DeclarativeWorkspaceDataFilters.md)|  | 
 
 ### Return type
 
@@ -1576,7 +1267,6 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: Not defined
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -1586,7 +1276,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **update_entity_user_data_filters**
-> JsonApiUserDataFilterOutDocument update_entity_user_data_filters(workspace_id, object_id, json_api_user_data_filter_in_document)
+> JsonApiUserDataFilterOutDocument update_entity_user_data_filters(workspace_id, object_id, json_api_user_data_filter_in_document, filter=filter, include=include)
 
 Put a User Data Filter
 
@@ -1594,12 +1284,12 @@ Put a User Data Filter
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import data_filters_api
-from gooddata_api_client.model.json_api_user_data_filter_out_document import JsonApiUserDataFilterOutDocument
-from gooddata_api_client.model.json_api_user_data_filter_in_document import JsonApiUserDataFilterInDocument
+from gooddata_api_client.models.json_api_user_data_filter_in_document import JsonApiUserDataFilterInDocument
+from gooddata_api_client.models.json_api_user_data_filter_out_document import JsonApiUserDataFilterOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -1608,67 +1298,36 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = data_filters_api.DataFiltersApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
-    object_id = "objectId_example" # str | 
-    json_api_user_data_filter_in_document = JsonApiUserDataFilterInDocument(
-        data=JsonApiUserDataFilterIn(
-            attributes=JsonApiUserDataFilterInAttributes(
-                are_relations_valid=True,
-                description="description_example",
-                maql="maql_example",
-                tags=[
-                    "tags_example",
-                ],
-                title="title_example",
-            ),
-            id="id1",
-            relationships=JsonApiUserDataFilterInRelationships(
-                user=JsonApiFilterViewInRelationshipsUser(
-                    data=JsonApiUserToOneLinkage(None),
-                ),
-                user_group=JsonApiOrganizationOutRelationshipsBootstrapUserGroup(
-                    data=JsonApiUserGroupToOneLinkage(None),
-                ),
-            ),
-            type="userDataFilter",
-        ),
-    ) # JsonApiUserDataFilterInDocument | 
-    filter = "title==someString;description==someString;user.id==321;userGroup.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    include = [
-        "user,userGroup,facts,attributes,labels,metrics,datasets",
-    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    api_instance = gooddata_api_client.DataFiltersApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
+    object_id = 'object_id_example' # str | 
+    json_api_user_data_filter_in_document = gooddata_api_client.JsonApiUserDataFilterInDocument() # JsonApiUserDataFilterInDocument | 
+    filter = 'title==someString;description==someString;user.id==321;userGroup.id==321' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = ['user,userGroup,facts,attributes,labels,metrics,datasets'] # List[str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Put a User Data Filter
-        api_response = api_instance.update_entity_user_data_filters(workspace_id, object_id, json_api_user_data_filter_in_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling DataFiltersApi->update_entity_user_data_filters: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Put a User Data Filter
         api_response = api_instance.update_entity_user_data_filters(workspace_id, object_id, json_api_user_data_filter_in_document, filter=filter, include=include)
+        print("The response of DataFiltersApi->update_entity_user_data_filters:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling DataFiltersApi->update_entity_user_data_filters: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
- **object_id** | **str**|  |
- **json_api_user_data_filter_in_document** | [**JsonApiUserDataFilterInDocument**](JsonApiUserDataFilterInDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+ **workspace_id** | **str**|  | 
+ **object_id** | **str**|  | 
+ **json_api_user_data_filter_in_document** | [**JsonApiUserDataFilterInDocument**](JsonApiUserDataFilterInDocument.md)|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **include** | [**List[str]**](str.md)| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional] 
 
 ### Return type
 
@@ -1683,7 +1342,6 @@ No authorization required
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -1693,7 +1351,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **update_entity_workspace_data_filter_settings**
-> JsonApiWorkspaceDataFilterSettingOutDocument update_entity_workspace_data_filter_settings(workspace_id, object_id, json_api_workspace_data_filter_setting_in_document)
+> JsonApiWorkspaceDataFilterSettingOutDocument update_entity_workspace_data_filter_settings(workspace_id, object_id, json_api_workspace_data_filter_setting_in_document, filter=filter, include=include)
 
 Put a Settings for Workspace Data Filter
 
@@ -1701,12 +1359,12 @@ Put a Settings for Workspace Data Filter
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import data_filters_api
-from gooddata_api_client.model.json_api_workspace_data_filter_setting_in_document import JsonApiWorkspaceDataFilterSettingInDocument
-from gooddata_api_client.model.json_api_workspace_data_filter_setting_out_document import JsonApiWorkspaceDataFilterSettingOutDocument
+from gooddata_api_client.models.json_api_workspace_data_filter_setting_in_document import JsonApiWorkspaceDataFilterSettingInDocument
+from gooddata_api_client.models.json_api_workspace_data_filter_setting_out_document import JsonApiWorkspaceDataFilterSettingOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -1715,62 +1373,36 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = data_filters_api.DataFiltersApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
-    object_id = "objectId_example" # str | 
-    json_api_workspace_data_filter_setting_in_document = JsonApiWorkspaceDataFilterSettingInDocument(
-        data=JsonApiWorkspaceDataFilterSettingIn(
-            attributes=JsonApiWorkspaceDataFilterSettingInAttributes(
-                description="description_example",
-                filter_values=[
-                    "filter_values_example",
-                ],
-                title="title_example",
-            ),
-            id="id1",
-            relationships=JsonApiWorkspaceDataFilterSettingInRelationships(
-                workspace_data_filter=JsonApiWorkspaceDataFilterSettingInRelationshipsWorkspaceDataFilter(
-                    data=JsonApiWorkspaceDataFilterToOneLinkage(None),
-                ),
-            ),
-            type="workspaceDataFilterSetting",
-        ),
-    ) # JsonApiWorkspaceDataFilterSettingInDocument | 
-    filter = "title==someString;description==someString;workspaceDataFilter.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    include = [
-        "workspaceDataFilter",
-    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    api_instance = gooddata_api_client.DataFiltersApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
+    object_id = 'object_id_example' # str | 
+    json_api_workspace_data_filter_setting_in_document = gooddata_api_client.JsonApiWorkspaceDataFilterSettingInDocument() # JsonApiWorkspaceDataFilterSettingInDocument | 
+    filter = 'title==someString;description==someString;workspaceDataFilter.id==321' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = ['workspaceDataFilter'] # List[str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Put a Settings for Workspace Data Filter
-        api_response = api_instance.update_entity_workspace_data_filter_settings(workspace_id, object_id, json_api_workspace_data_filter_setting_in_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling DataFiltersApi->update_entity_workspace_data_filter_settings: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Put a Settings for Workspace Data Filter
         api_response = api_instance.update_entity_workspace_data_filter_settings(workspace_id, object_id, json_api_workspace_data_filter_setting_in_document, filter=filter, include=include)
+        print("The response of DataFiltersApi->update_entity_workspace_data_filter_settings:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling DataFiltersApi->update_entity_workspace_data_filter_settings: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
- **object_id** | **str**|  |
- **json_api_workspace_data_filter_setting_in_document** | [**JsonApiWorkspaceDataFilterSettingInDocument**](JsonApiWorkspaceDataFilterSettingInDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+ **workspace_id** | **str**|  | 
+ **object_id** | **str**|  | 
+ **json_api_workspace_data_filter_setting_in_document** | [**JsonApiWorkspaceDataFilterSettingInDocument**](JsonApiWorkspaceDataFilterSettingInDocument.md)|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **include** | [**List[str]**](str.md)| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional] 
 
 ### Return type
 
@@ -1785,7 +1417,6 @@ No authorization required
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -1795,7 +1426,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **update_entity_workspace_data_filters**
-> JsonApiWorkspaceDataFilterOutDocument update_entity_workspace_data_filters(workspace_id, object_id, json_api_workspace_data_filter_in_document)
+> JsonApiWorkspaceDataFilterOutDocument update_entity_workspace_data_filters(workspace_id, object_id, json_api_workspace_data_filter_in_document, filter=filter, include=include)
 
 Put a Workspace Data Filter
 
@@ -1803,12 +1434,12 @@ Put a Workspace Data Filter
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import data_filters_api
-from gooddata_api_client.model.json_api_workspace_data_filter_out_document import JsonApiWorkspaceDataFilterOutDocument
-from gooddata_api_client.model.json_api_workspace_data_filter_in_document import JsonApiWorkspaceDataFilterInDocument
+from gooddata_api_client.models.json_api_workspace_data_filter_in_document import JsonApiWorkspaceDataFilterInDocument
+from gooddata_api_client.models.json_api_workspace_data_filter_out_document import JsonApiWorkspaceDataFilterOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -1817,65 +1448,36 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = data_filters_api.DataFiltersApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
-    object_id = "objectId_example" # str | 
-    json_api_workspace_data_filter_in_document = JsonApiWorkspaceDataFilterInDocument(
-        data=JsonApiWorkspaceDataFilterIn(
-            attributes=JsonApiWorkspaceDataFilterInAttributes(
-                column_name="column_name_example",
-                description="description_example",
-                title="title_example",
-            ),
-            id="id1",
-            relationships=JsonApiWorkspaceDataFilterInRelationships(
-                filter_settings=JsonApiWorkspaceDataFilterInRelationshipsFilterSettings(
-                    data=JsonApiWorkspaceDataFilterSettingToManyLinkage([
-                        JsonApiWorkspaceDataFilterSettingLinkage(
-                            id="id_example",
-                            type="workspaceDataFilterSetting",
-                        ),
-                    ]),
-                ),
-            ),
-            type="workspaceDataFilter",
-        ),
-    ) # JsonApiWorkspaceDataFilterInDocument | 
-    filter = "title==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    include = [
-        "filterSettings",
-    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    api_instance = gooddata_api_client.DataFiltersApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
+    object_id = 'object_id_example' # str | 
+    json_api_workspace_data_filter_in_document = gooddata_api_client.JsonApiWorkspaceDataFilterInDocument() # JsonApiWorkspaceDataFilterInDocument | 
+    filter = 'title==someString;description==someString' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = ['filterSettings'] # List[str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Put a Workspace Data Filter
-        api_response = api_instance.update_entity_workspace_data_filters(workspace_id, object_id, json_api_workspace_data_filter_in_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling DataFiltersApi->update_entity_workspace_data_filters: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Put a Workspace Data Filter
         api_response = api_instance.update_entity_workspace_data_filters(workspace_id, object_id, json_api_workspace_data_filter_in_document, filter=filter, include=include)
+        print("The response of DataFiltersApi->update_entity_workspace_data_filters:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling DataFiltersApi->update_entity_workspace_data_filters: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
- **object_id** | **str**|  |
- **json_api_workspace_data_filter_in_document** | [**JsonApiWorkspaceDataFilterInDocument**](JsonApiWorkspaceDataFilterInDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+ **workspace_id** | **str**|  | 
+ **object_id** | **str**|  | 
+ **json_api_workspace_data_filter_in_document** | [**JsonApiWorkspaceDataFilterInDocument**](JsonApiWorkspaceDataFilterInDocument.md)|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **include** | [**List[str]**](str.md)| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional] 
 
 ### Return type
 
@@ -1889,7 +1491,6 @@ No authorization required
 
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
-
 
 ### HTTP response details
 

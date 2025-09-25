@@ -1,4 +1,4 @@
-# gooddata_api_client.model.declarative_workspace_data_filters.DeclarativeWorkspaceDataFilters
+# gooddata_api_client.models.declarative_workspace_data_filters.DeclarativeWorkspaceDataFilters
 
 Declarative form of data filters.
 
@@ -26,4 +26,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**DeclarativeWorkspaceDataFilter**](DeclarativeWorkspaceDataFilter.md) | [**DeclarativeWorkspaceDataFilter**](DeclarativeWorkspaceDataFilter.md) | [**DeclarativeWorkspaceDataFilter**](DeclarativeWorkspaceDataFilter.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

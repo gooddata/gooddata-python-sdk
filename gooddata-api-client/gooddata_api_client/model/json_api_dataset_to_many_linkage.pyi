@@ -37,7 +37,7 @@ class JsonApiDatasetToManyLinkage(
 
 
     class MetaOapg:
-        
+
         @staticmethod
         def items() -> typing.Type['JsonApiDatasetLinkage']:
             return JsonApiDatasetLinkage
@@ -56,4 +56,4 @@ class JsonApiDatasetToManyLinkage(
     def __getitem__(self, i: int) -> 'JsonApiDatasetLinkage':
         return super().__getitem__(i)
 
-from gooddata_api_client.model.json_api_dataset_linkage import JsonApiDatasetLinkage
+from gooddata_api_client.models.json_api_dataset_linkage import JsonApiDatasetLinkage

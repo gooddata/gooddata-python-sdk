@@ -1,4 +1,4 @@
-# gooddata_api_client.model.declarative_user_permissions.DeclarativeUserPermissions
+# gooddata_api_client.models.declarative_user_permissions.DeclarativeUserPermissions
 
 Definition of permissions associated with a user.
 
@@ -26,4 +26,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**DeclarativeUserPermission**](DeclarativeUserPermission.md) | [**DeclarativeUserPermission**](DeclarativeUserPermission.md) | [**DeclarativeUserPermission**](DeclarativeUserPermission.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

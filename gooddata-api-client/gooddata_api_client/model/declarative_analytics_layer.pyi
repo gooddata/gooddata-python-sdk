@@ -35,21 +35,21 @@ class DeclarativeAnalyticsLayer(
 
 
     class MetaOapg:
-        
+
         class properties:
-            
-            
+
+
             class analyticalDashboardExtensions(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeAnalyticalDashboardExtension']:
                         return DeclarativeAnalyticalDashboardExtension
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeAnalyticalDashboardExtension'], typing.List['DeclarativeAnalyticalDashboardExtension']],
@@ -60,22 +60,22 @@ class DeclarativeAnalyticsLayer(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeAnalyticalDashboardExtension':
                     return super().__getitem__(i)
-            
-            
+
+
             class analyticalDashboards(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeAnalyticalDashboard']:
                         return DeclarativeAnalyticalDashboard
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeAnalyticalDashboard'], typing.List['DeclarativeAnalyticalDashboard']],
@@ -86,22 +86,22 @@ class DeclarativeAnalyticsLayer(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeAnalyticalDashboard':
                     return super().__getitem__(i)
-            
-            
+
+
             class dashboardPlugins(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeDashboardPlugin']:
                         return DeclarativeDashboardPlugin
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeDashboardPlugin'], typing.List['DeclarativeDashboardPlugin']],
@@ -112,22 +112,22 @@ class DeclarativeAnalyticsLayer(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeDashboardPlugin':
                     return super().__getitem__(i)
-            
-            
+
+
             class filterContexts(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeFilterContext']:
                         return DeclarativeFilterContext
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeFilterContext'], typing.List['DeclarativeFilterContext']],
@@ -138,22 +138,22 @@ class DeclarativeAnalyticsLayer(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeFilterContext':
                     return super().__getitem__(i)
-            
-            
+
+
             class metrics(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeMetric']:
                         return DeclarativeMetric
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeMetric'], typing.List['DeclarativeMetric']],
@@ -164,22 +164,22 @@ class DeclarativeAnalyticsLayer(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeMetric':
                     return super().__getitem__(i)
-            
-            
+
+
             class visualizationObjects(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeVisualizationObject']:
                         return DeclarativeVisualizationObject
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeVisualizationObject'], typing.List['DeclarativeVisualizationObject']],
@@ -190,7 +190,7 @@ class DeclarativeAnalyticsLayer(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeVisualizationObject':
                     return super().__getitem__(i)
             __annotations__ = {
@@ -201,57 +201,57 @@ class DeclarativeAnalyticsLayer(
                 "metrics": metrics,
                 "visualizationObjects": visualizationObjects,
             }
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["analyticalDashboardExtensions"]) -> MetaOapg.properties.analyticalDashboardExtensions: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["analyticalDashboards"]) -> MetaOapg.properties.analyticalDashboards: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["dashboardPlugins"]) -> MetaOapg.properties.dashboardPlugins: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["filterContexts"]) -> MetaOapg.properties.filterContexts: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["metrics"]) -> MetaOapg.properties.metrics: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["visualizationObjects"]) -> MetaOapg.properties.visualizationObjects: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["analyticalDashboardExtensions", "analyticalDashboards", "dashboardPlugins", "filterContexts", "metrics", "visualizationObjects", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["analyticalDashboardExtensions"]) -> typing.Union[MetaOapg.properties.analyticalDashboardExtensions, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["analyticalDashboards"]) -> typing.Union[MetaOapg.properties.analyticalDashboards, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["dashboardPlugins"]) -> typing.Union[MetaOapg.properties.dashboardPlugins, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["filterContexts"]) -> typing.Union[MetaOapg.properties.filterContexts, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["metrics"]) -> typing.Union[MetaOapg.properties.metrics, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["visualizationObjects"]) -> typing.Union[MetaOapg.properties.visualizationObjects, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["analyticalDashboardExtensions", "analyticalDashboards", "dashboardPlugins", "filterContexts", "metrics", "visualizationObjects", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -278,9 +278,9 @@ class DeclarativeAnalyticsLayer(
             **kwargs,
         )
 
-from gooddata_api_client.model.declarative_analytical_dashboard import DeclarativeAnalyticalDashboard
-from gooddata_api_client.model.declarative_analytical_dashboard_extension import DeclarativeAnalyticalDashboardExtension
-from gooddata_api_client.model.declarative_dashboard_plugin import DeclarativeDashboardPlugin
-from gooddata_api_client.model.declarative_filter_context import DeclarativeFilterContext
-from gooddata_api_client.model.declarative_metric import DeclarativeMetric
-from gooddata_api_client.model.declarative_visualization_object import DeclarativeVisualizationObject
+from gooddata_api_client.models.declarative_analytical_dashboard import DeclarativeAnalyticalDashboard
+from gooddata_api_client.models.declarative_analytical_dashboard_extension import DeclarativeAnalyticalDashboardExtension
+from gooddata_api_client.models.declarative_dashboard_plugin import DeclarativeDashboardPlugin
+from gooddata_api_client.models.declarative_filter_context import DeclarativeFilterContext
+from gooddata_api_client.models.declarative_metric import DeclarativeMetric
+from gooddata_api_client.models.declarative_visualization_object import DeclarativeVisualizationObject

@@ -40,24 +40,24 @@ class UserPermission(
         required = {
             "id",
         }
-        
+
         class properties:
             id = schemas.StrSchema
             email = schemas.StrSchema
             name = schemas.StrSchema
-            
-            
+
+
             class permissions(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['GrantedPermission']:
                         return GrantedPermission
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['GrantedPermission'], typing.List['GrantedPermission']],
@@ -68,7 +68,7 @@ class UserPermission(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'GrantedPermission':
                     return super().__getitem__(i)
             __annotations__ = {
@@ -77,47 +77,47 @@ class UserPermission(
                 "name": name,
                 "permissions": permissions,
             }
-    
+
     id: MetaOapg.properties.id
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["email"]) -> MetaOapg.properties.email: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["permissions"]) -> MetaOapg.properties.permissions: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["id", "email", "name", "permissions", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["email"]) -> typing.Union[MetaOapg.properties.email, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["name"]) -> typing.Union[MetaOapg.properties.name, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["permissions"]) -> typing.Union[MetaOapg.properties.permissions, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["id", "email", "name", "permissions", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -140,4 +140,4 @@ class UserPermission(
             **kwargs,
         )
 
-from gooddata_api_client.model.granted_permission import GrantedPermission
+from gooddata_api_client.models.granted_permission import GrantedPermission

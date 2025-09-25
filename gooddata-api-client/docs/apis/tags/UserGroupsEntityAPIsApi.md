@@ -25,8 +25,8 @@ User Group - creates tree-like structure for categorizing users
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import user_groups_entity_apis_api
-from gooddata_api_client.model.json_api_user_group_in_document import JsonApiUserGroupInDocument
-from gooddata_api_client.model.json_api_user_group_out_document import JsonApiUserGroupOutDocument
+from gooddata_api_client.models.json_api_user_group_in_document import JsonApiUserGroupInDocument
+from gooddata_api_client.models.json_api_user_group_out_document import JsonApiUserGroupOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -300,7 +300,7 @@ User Group - creates tree-like structure for categorizing users
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import user_groups_entity_apis_api
-from gooddata_api_client.model.json_api_user_group_out_list import JsonApiUserGroupOutList
+from gooddata_api_client.models.json_api_user_group_out_list import JsonApiUserGroupOutList
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -440,7 +440,7 @@ User Group - creates tree-like structure for categorizing users
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import user_groups_entity_apis_api
-from gooddata_api_client.model.json_api_user_group_out_document import JsonApiUserGroupOutDocument
+from gooddata_api_client.models.json_api_user_group_out_document import JsonApiUserGroupOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -581,8 +581,8 @@ User Group - creates tree-like structure for categorizing users
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import user_groups_entity_apis_api
-from gooddata_api_client.model.json_api_user_group_out_document import JsonApiUserGroupOutDocument
-from gooddata_api_client.model.json_api_user_group_patch_document import JsonApiUserGroupPatchDocument
+from gooddata_api_client.models.json_api_user_group_out_document import JsonApiUserGroupOutDocument
+from gooddata_api_client.models.json_api_user_group_patch_document import JsonApiUserGroupPatchDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -773,8 +773,8 @@ User Group - creates tree-like structure for categorizing users
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import user_groups_entity_apis_api
-from gooddata_api_client.model.json_api_user_group_in_document import JsonApiUserGroupInDocument
-from gooddata_api_client.model.json_api_user_group_out_document import JsonApiUserGroupOutDocument
+from gooddata_api_client.models.json_api_user_group_in_document import JsonApiUserGroupInDocument
+from gooddata_api_client.models.json_api_user_group_out_document import JsonApiUserGroupOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -951,4 +951,3 @@ Type | Description  | Notes
 No authorization required
 
 [[Back to top]](#__pageTop) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
-

@@ -25,8 +25,8 @@ import frozendict  # noqa: F401
 
 from gooddata_api_client import schemas  # noqa: F401
 
-from gooddata_api_client.model.afm_valid_objects_query import AfmValidObjectsQuery
-from gooddata_api_client.model.afm_valid_objects_response import AfmValidObjectsResponse
+from gooddata_api_client.models.afm_valid_objects_query import AfmValidObjectsQuery
+from gooddata_api_client.models.afm_valid_objects_response import AfmValidObjectsResponse
 
 # Path params
 
@@ -387,5 +387,3 @@ class ApiForpost(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
-
-

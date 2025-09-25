@@ -41,48 +41,48 @@ class JsonApiWorkspaceDataFilterIn(
             "id",
             "type",
         }
-        
+
         class properties:
-            
-            
+
+
             class id(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class type(
                 schemas.EnumBase,
                 schemas.StrSchema
             ):
-                
+
                 @schemas.classproperty
                 def WORKSPACE_DATA_FILTER(cls):
                     return cls("workspaceDataFilter")
-            
-            
+
+
             class attributes(
                 schemas.DictSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     class properties:
-                        
-                        
+
+
                         class columnName(
                             schemas.StrSchema
                         ):
                             pass
-                        
-                        
+
+
                         class description(
                             schemas.StrSchema
                         ):
                             pass
-                        
-                        
+
+
                         class title(
                             schemas.StrSchema
                         ):
@@ -92,40 +92,40 @@ class JsonApiWorkspaceDataFilterIn(
                             "description": description,
                             "title": title,
                         }
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["columnName"]) -> MetaOapg.properties.columnName: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["description"]) -> MetaOapg.properties.description: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["title"]) -> MetaOapg.properties.title: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-                
+
                 def __getitem__(self, name: typing.Union[typing_extensions.Literal["columnName", "description", "title", ], str]):
                     # dict_instance[name] accessor
                     return super().__getitem__(name)
-                
-                
+
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["columnName"]) -> typing.Union[MetaOapg.properties.columnName, schemas.Unset]: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["description"]) -> typing.Union[MetaOapg.properties.description, schemas.Unset]: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["title"]) -> typing.Union[MetaOapg.properties.title, schemas.Unset]: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-                
+
                 def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["columnName", "description", "title", ], str]):
                     return super().get_item_oapg(name)
-                
-            
+
+
                 def __new__(
                     cls,
                     *_args: typing.Union[dict, frozendict.frozendict, ],
@@ -144,60 +144,60 @@ class JsonApiWorkspaceDataFilterIn(
                         _configuration=_configuration,
                         **kwargs,
                     )
-            
-            
+
+
             class relationships(
                 schemas.DictSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     class properties:
-                        
-                        
+
+
                         class filterSettings(
                             schemas.DictSchema
                         ):
-                        
-                        
+
+
                             class MetaOapg:
                                 required = {
                                     "data",
                                 }
-                                
+
                                 class properties:
-                                
+
                                     @staticmethod
                                     def data() -> typing.Type['JsonApiWorkspaceDataFilterSettingToManyLinkage']:
                                         return JsonApiWorkspaceDataFilterSettingToManyLinkage
                                     __annotations__ = {
                                         "data": data,
                                     }
-                            
+
                             data: 'JsonApiWorkspaceDataFilterSettingToManyLinkage'
-                            
+
                             @typing.overload
                             def __getitem__(self, name: typing_extensions.Literal["data"]) -> 'JsonApiWorkspaceDataFilterSettingToManyLinkage': ...
-                            
+
                             @typing.overload
                             def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-                            
+
                             def __getitem__(self, name: typing.Union[typing_extensions.Literal["data", ], str]):
                                 # dict_instance[name] accessor
                                 return super().__getitem__(name)
-                            
-                            
+
+
                             @typing.overload
                             def get_item_oapg(self, name: typing_extensions.Literal["data"]) -> 'JsonApiWorkspaceDataFilterSettingToManyLinkage': ...
-                            
+
                             @typing.overload
                             def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-                            
+
                             def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["data", ], str]):
                                 return super().get_item_oapg(name)
-                            
-                        
+
+
                             def __new__(
                                 cls,
                                 *_args: typing.Union[dict, frozendict.frozendict, ],
@@ -215,28 +215,28 @@ class JsonApiWorkspaceDataFilterIn(
                         __annotations__ = {
                             "filterSettings": filterSettings,
                         }
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["filterSettings"]) -> MetaOapg.properties.filterSettings: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-                
+
                 def __getitem__(self, name: typing.Union[typing_extensions.Literal["filterSettings", ], str]):
                     # dict_instance[name] accessor
                     return super().__getitem__(name)
-                
-                
+
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["filterSettings"]) -> typing.Union[MetaOapg.properties.filterSettings, schemas.Unset]: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-                
+
                 def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["filterSettings", ], str]):
                     return super().get_item_oapg(name)
-                
-            
+
+
                 def __new__(
                     cls,
                     *_args: typing.Union[dict, frozendict.frozendict, ],
@@ -257,48 +257,48 @@ class JsonApiWorkspaceDataFilterIn(
                 "attributes": attributes,
                 "relationships": relationships,
             }
-    
+
     id: MetaOapg.properties.id
     type: MetaOapg.properties.type
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["type"]) -> MetaOapg.properties.type: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["attributes"]) -> MetaOapg.properties.attributes: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["relationships"]) -> MetaOapg.properties.relationships: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["id", "type", "attributes", "relationships", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["type"]) -> MetaOapg.properties.type: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["attributes"]) -> typing.Union[MetaOapg.properties.attributes, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["relationships"]) -> typing.Union[MetaOapg.properties.relationships, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["id", "type", "attributes", "relationships", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -321,4 +321,4 @@ class JsonApiWorkspaceDataFilterIn(
             **kwargs,
         )
 
-from gooddata_api_client.model.json_api_workspace_data_filter_setting_to_many_linkage import JsonApiWorkspaceDataFilterSettingToManyLinkage
+from gooddata_api_client.models.json_api_workspace_data_filter_setting_to_many_linkage import JsonApiWorkspaceDataFilterSettingToManyLinkage

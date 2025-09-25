@@ -41,33 +41,33 @@ class DeclarativeWorkspace(
             "name",
             "id",
         }
-        
+
         class properties:
-            
-            
+
+
             class id(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class name(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class customApplicationSettings(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeCustomApplicationSetting']:
                         return DeclarativeCustomApplicationSetting
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeCustomApplicationSetting'], typing.List['DeclarativeCustomApplicationSetting']],
@@ -78,34 +78,34 @@ class DeclarativeWorkspace(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeCustomApplicationSetting':
                     return super().__getitem__(i)
-            
-            
+
+
             class description(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class earlyAccess(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class hierarchyPermissions(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeWorkspaceHierarchyPermission']:
                         return DeclarativeWorkspaceHierarchyPermission
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeWorkspaceHierarchyPermission'], typing.List['DeclarativeWorkspaceHierarchyPermission']],
@@ -116,30 +116,30 @@ class DeclarativeWorkspace(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeWorkspaceHierarchyPermission':
                     return super().__getitem__(i)
-        
+
             @staticmethod
             def model() -> typing.Type['DeclarativeWorkspaceModel']:
                 return DeclarativeWorkspaceModel
-        
+
             @staticmethod
             def parent() -> typing.Type['WorkspaceIdentifier']:
                 return WorkspaceIdentifier
-            
-            
+
+
             class permissions(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeSingleWorkspacePermission']:
                         return DeclarativeSingleWorkspacePermission
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeSingleWorkspacePermission'], typing.List['DeclarativeSingleWorkspacePermission']],
@@ -150,28 +150,28 @@ class DeclarativeWorkspace(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeSingleWorkspacePermission':
                     return super().__getitem__(i)
-            
-            
+
+
             class prefix(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class settings(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeSetting']:
                         return DeclarativeSetting
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeSetting'], typing.List['DeclarativeSetting']],
@@ -182,22 +182,22 @@ class DeclarativeWorkspace(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeSetting':
                     return super().__getitem__(i)
-            
-            
+
+
             class userDataFilters(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeUserDataFilter']:
                         return DeclarativeUserDataFilter
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeUserDataFilter'], typing.List['DeclarativeUserDataFilter']],
@@ -208,7 +208,7 @@ class DeclarativeWorkspace(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeUserDataFilter':
                     return super().__getitem__(i)
             __annotations__ = {
@@ -225,96 +225,96 @@ class DeclarativeWorkspace(
                 "settings": settings,
                 "userDataFilters": userDataFilters,
             }
-    
+
     name: MetaOapg.properties.name
     id: MetaOapg.properties.id
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["customApplicationSettings"]) -> MetaOapg.properties.customApplicationSettings: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["description"]) -> MetaOapg.properties.description: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["earlyAccess"]) -> MetaOapg.properties.earlyAccess: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["hierarchyPermissions"]) -> MetaOapg.properties.hierarchyPermissions: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["model"]) -> 'DeclarativeWorkspaceModel': ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["parent"]) -> 'WorkspaceIdentifier': ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["permissions"]) -> MetaOapg.properties.permissions: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["prefix"]) -> MetaOapg.properties.prefix: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["settings"]) -> MetaOapg.properties.settings: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["userDataFilters"]) -> MetaOapg.properties.userDataFilters: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["id", "name", "customApplicationSettings", "description", "earlyAccess", "hierarchyPermissions", "model", "parent", "permissions", "prefix", "settings", "userDataFilters", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["customApplicationSettings"]) -> typing.Union[MetaOapg.properties.customApplicationSettings, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["description"]) -> typing.Union[MetaOapg.properties.description, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["earlyAccess"]) -> typing.Union[MetaOapg.properties.earlyAccess, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["hierarchyPermissions"]) -> typing.Union[MetaOapg.properties.hierarchyPermissions, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["model"]) -> typing.Union['DeclarativeWorkspaceModel', schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["parent"]) -> typing.Union['WorkspaceIdentifier', schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["permissions"]) -> typing.Union[MetaOapg.properties.permissions, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["prefix"]) -> typing.Union[MetaOapg.properties.prefix, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["settings"]) -> typing.Union[MetaOapg.properties.settings, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["userDataFilters"]) -> typing.Union[MetaOapg.properties.userDataFilters, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["id", "name", "customApplicationSettings", "description", "earlyAccess", "hierarchyPermissions", "model", "parent", "permissions", "prefix", "settings", "userDataFilters", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -353,10 +353,10 @@ class DeclarativeWorkspace(
             **kwargs,
         )
 
-from gooddata_api_client.model.declarative_custom_application_setting import DeclarativeCustomApplicationSetting
-from gooddata_api_client.model.declarative_setting import DeclarativeSetting
-from gooddata_api_client.model.declarative_single_workspace_permission import DeclarativeSingleWorkspacePermission
-from gooddata_api_client.model.declarative_user_data_filter import DeclarativeUserDataFilter
-from gooddata_api_client.model.declarative_workspace_hierarchy_permission import DeclarativeWorkspaceHierarchyPermission
-from gooddata_api_client.model.declarative_workspace_model import DeclarativeWorkspaceModel
-from gooddata_api_client.model.workspace_identifier import WorkspaceIdentifier
+from gooddata_api_client.models.declarative_custom_application_setting import DeclarativeCustomApplicationSetting
+from gooddata_api_client.models.declarative_setting import DeclarativeSetting
+from gooddata_api_client.models.declarative_single_workspace_permission import DeclarativeSingleWorkspacePermission
+from gooddata_api_client.models.declarative_user_data_filter import DeclarativeUserDataFilter
+from gooddata_api_client.models.declarative_workspace_hierarchy_permission import DeclarativeWorkspaceHierarchyPermission
+from gooddata_api_client.models.declarative_workspace_model import DeclarativeWorkspaceModel
+from gooddata_api_client.models.workspace_identifier import WorkspaceIdentifier

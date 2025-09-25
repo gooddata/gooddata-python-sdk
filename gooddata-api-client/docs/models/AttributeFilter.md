@@ -1,4 +1,4 @@
-# gooddata_api_client.model.attribute_filter.AttributeFilter
+# gooddata_api_client.models.attribute_filter.AttributeFilter
 
 Abstract filter definition type attributes
 
@@ -15,4 +15,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [PositiveAttributeFilter](PositiveAttributeFilter.md) | [**PositiveAttributeFilter**](PositiveAttributeFilter.md) | [**PositiveAttributeFilter**](PositiveAttributeFilter.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

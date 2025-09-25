@@ -4,7 +4,7 @@ from __future__ import annotations
 from typing import Optional
 
 import attr
-from gooddata_api_client.model.declarative_column import DeclarativeColumn
+from gooddata_api_client.models.declarative_column import DeclarativeColumn
 
 from gooddata_sdk.catalog.base import Base
 

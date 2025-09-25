@@ -22,7 +22,7 @@ Get Available Assignees
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import permissions_api
-from gooddata_api_client.model.available_assignees import AvailableAssignees
+from gooddata_api_client.models.available_assignees import AvailableAssignees
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -118,7 +118,7 @@ Get Dashboard Permissions
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import permissions_api
-from gooddata_api_client.model.dashboard_permissions import DashboardPermissions
+from gooddata_api_client.models.dashboard_permissions import DashboardPermissions
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -216,7 +216,7 @@ Retrieve current set of permissions of the workspace in a declarative form.
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import permissions_api
-from gooddata_api_client.model.declarative_workspace_permissions import DeclarativeWorkspacePermissions
+from gooddata_api_client.models.declarative_workspace_permissions import DeclarativeWorkspacePermissions
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -303,7 +303,7 @@ Manage Permissions for a Dashboard
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import permissions_api
-from gooddata_api_client.model.permissions_for_assignee import PermissionsForAssignee
+from gooddata_api_client.models.permissions_for_assignee import PermissionsForAssignee
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -423,7 +423,7 @@ Set effective permissions for the workspace
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import permissions_api
-from gooddata_api_client.model.declarative_workspace_permissions import DeclarativeWorkspacePermissions
+from gooddata_api_client.models.declarative_workspace_permissions import DeclarativeWorkspacePermissions
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -515,4 +515,3 @@ headers | Unset | headers were not defined |
 No authorization required
 
 [[Back to top]](#__pageTop) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
-

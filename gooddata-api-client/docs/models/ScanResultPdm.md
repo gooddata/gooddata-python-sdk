@@ -1,4 +1,4 @@
-# gooddata_api_client.model.scan_result_pdm.ScanResultPdm
+# gooddata_api_client.models.scan_result_pdm.ScanResultPdm
 
 Result of scan of data source physical model.
 
@@ -27,4 +27,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**TableWarning**](TableWarning.md) | [**TableWarning**](TableWarning.md) | [**TableWarning**](TableWarning.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

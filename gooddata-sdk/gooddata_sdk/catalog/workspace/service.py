@@ -15,7 +15,7 @@ from xml.etree import ElementTree as ET
 import attrs
 from gooddata_api_client.api.translations_api import LocaleRequest
 from gooddata_api_client.exceptions import NotFoundException
-from gooddata_api_client.model.resolve_settings_request import ResolveSettingsRequest
+from gooddata_api_client.models.resolve_settings_request import ResolveSettingsRequest
 
 from gooddata_sdk import CatalogDeclarativeAutomation
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
@@ -140,7 +140,6 @@ class CatalogWorkspaceService(CatalogServiceBase):
         get_workspaces = functools.partial(
             self._entities_api.get_all_entities_workspaces,
             include=["workspaces"],
-            _check_return_type=False,
         )
         workspaces = load_all_entities(get_workspaces)
         return [CatalogWorkspace.from_api(w) for w in workspaces.data]
@@ -185,7 +184,6 @@ class CatalogWorkspaceService(CatalogServiceBase):
         get_workspace_settings = functools.partial(
             self._entities_api.get_all_entities_workspace_settings,
             workspace_id,
-            _check_return_type=False,
         )
         workspace_settings = load_all_entities(get_workspace_settings).data
         return [CatalogWorkspaceSetting.from_api(ws) for ws in workspace_settings]
@@ -202,11 +200,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
         # note: in case some settings were recently added and the API client was not regenerated it can fail on
         #       invalid value when validating allowed types on the client side before request is sent to the server
         resolved_workspace_settings = [
-            setting.to_dict()
-            for setting in self._client.actions_api.workspace_resolve_all_settings(
-                workspace_id,
-                _check_return_type=False,
-            )
+            setting.to_dict() for setting in self._client.actions_api.workspace_resolve_all_settings(workspace_id)
         ]
         return {setting["type"]: setting for setting in resolved_workspace_settings}
 
@@ -223,9 +217,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
         resolved_workspace_settings = [
             setting.to_dict()
             for setting in self._client.actions_api.workspace_resolve_settings(
-                workspace_id,
-                ResolveSettingsRequest(settings=settings),
-                _check_return_type=False,
+                workspace_id, ResolveSettingsRequest(settings=settings)
             )
         ]
         return {setting["type"]: setting for setting in resolved_workspace_settings}
@@ -1115,10 +1107,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
                 List of user data filter entities.
         """
         get_user_data_filters = functools.partial(
-            self._entities_api.get_all_entities_user_data_filters,
-            workspace_id,
-            _check_return_type=False,
-            include=["ALL"],
+            self._entities_api.get_all_entities_user_data_filters, workspace_id, include=["ALL"]
         )
         user_data_filters = load_all_entities_dict(get_user_data_filters, camel_case=False)
         return [CatalogUserDataFilter.from_dict(v, camel_case=False) for v in user_data_filters["data"]]
@@ -1169,10 +1158,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
                 UserDataFilter entity object.
         """
         user_data_filter_dict = self._entities_api.get_entity_user_data_filters(
-            workspace_id=workspace_id,
-            object_id=user_data_filter_id,
-            include=["ALL"],
-            _check_return_type=False,
+            workspace_id=workspace_id, object_id=user_data_filter_id, include=["ALL"]
         ).data
 
         return CatalogUserDataFilter.from_dict(user_data_filter_dict, camel_case=True)
@@ -1317,10 +1303,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
                 List of filter view entities.
         """
         get_filter_views = functools.partial(
-            self._entities_api.get_all_entities_filter_views,
-            workspace_id,
-            _check_return_type=False,
-            include=["ALL"],
+            self._entities_api.get_all_entities_filter_views, workspace_id, include=["ALL"]
         )
         filter_views = load_all_entities_dict(get_filter_views, camel_case=False)
         return [CatalogFilterView.from_dict(v, camel_case=False) for v in filter_views["data"]]
@@ -1371,10 +1354,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
                 FilterView entity object.
         """
         filter_view_dict = self._entities_api.get_entity_filter_views(
-            workspace_id=workspace_id,
-            object_id=filter_view_id,
-            include=["ALL"],
-            _check_return_type=False,
+            workspace_id=workspace_id, object_id=filter_view_id, include=["ALL"]
         ).data
 
         return CatalogFilterView.from_dict(filter_view_dict, camel_case=True)

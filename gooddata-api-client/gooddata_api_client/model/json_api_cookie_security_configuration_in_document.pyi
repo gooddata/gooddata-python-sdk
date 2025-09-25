@@ -86,4 +86,4 @@ class JsonApiCookieSecurityConfigurationInDocument(
             **kwargs,
         )
 
-from gooddata_api_client.model.json_api_cookie_security_configuration_in import JsonApiCookieSecurityConfigurationIn
+from gooddata_api_client.models.json_api_cookie_security_configuration_in import JsonApiCookieSecurityConfigurationIn

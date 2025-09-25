@@ -1,4 +1,4 @@
-# gooddata_api_client.model.declarative_tables.DeclarativeTables
+# gooddata_api_client.models.declarative_tables.DeclarativeTables
 
 A physical data model (PDM) tables.
 
@@ -28,4 +28,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**DeclarativeTable**](DeclarativeTable.md) | [**DeclarativeTable**](DeclarativeTable.md) | [**DeclarativeTable**](DeclarativeTable.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

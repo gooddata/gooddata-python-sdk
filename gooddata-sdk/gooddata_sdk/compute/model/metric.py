@@ -4,7 +4,7 @@ from __future__ import annotations
 from typing import Optional, Union
 
 import gooddata_api_client.models as afm_models
-from gooddata_api_client.model_utils import OpenApiModel
+from pydantic import BaseModel
 
 from gooddata_sdk.compute.model.attribute import Attribute
 from gooddata_sdk.compute.model.base import ExecModelEntity, Filter, ObjId
@@ -32,7 +32,7 @@ class Metric(ExecModelEntity):
 
         return afm_models.MeasureItem(local_identifier=self._local_id, definition=definition)
 
-    def _body_as_api_model(self) -> OpenApiModel:
+    def _body_as_api_model(self) -> BaseModel:
         raise NotImplementedError()
 
 
@@ -103,21 +103,19 @@ class SimpleMetric(Metric):
         # aggregation is optional yet the model bombs if None is sent :(
         if self.aggregation is not None:
             return afm_models.SimpleMeasureDefinition(
-                afm_models.SimpleMeasureDefinitionMeasure(
-                    item=self.item.as_afm_id(),
+                measure=afm_models.SimpleMeasureDefinitionMeasure(
+                    item=self.item.as_afm_id_core(),
                     aggregation=self.aggregation,
                     compute_ratio=self.compute_ratio,
                     filters=_filters,
-                    _check_type=False,
                 )
             )
         else:
             return afm_models.SimpleMeasureDefinition(
-                afm_models.SimpleMeasureDefinitionMeasure(
-                    item=self.item.as_afm_id(),
+                measure=afm_models.SimpleMeasureDefinitionMeasure(
+                    item=self.item.as_afm_id_core(),
                     compute_ratio=self.compute_ratio,
                     filters=_filters,
-                    _check_type=False,
                 )
             )
 

@@ -1,4 +1,4 @@
-# gooddata_api_client.model.total.Total
+# gooddata_api_client.models.total.Total
 
 Definition of a total. There are two types of totals: grand totals and subtotals. Grand total data will be returned in a separate section of the result structure while subtotals are fully integrated into the main result data. The mechanism for this distinction is automatic and it's described in `TotalDimension`
 
@@ -29,4 +29,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**TotalDimension**](TotalDimension.md) | [**TotalDimension**](TotalDimension.md) | [**TotalDimension**](TotalDimension.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

@@ -37,7 +37,7 @@ class JsonApiWorkspaceToOneLinkage(
 
 
     class MetaOapg:
-        
+
         @classmethod
         @functools.lru_cache()
         def one_of(cls):
@@ -66,4 +66,4 @@ class JsonApiWorkspaceToOneLinkage(
             **kwargs,
         )
 
-from gooddata_api_client.model.json_api_workspace_linkage import JsonApiWorkspaceLinkage
+from gooddata_api_client.models.json_api_workspace_linkage import JsonApiWorkspaceLinkage

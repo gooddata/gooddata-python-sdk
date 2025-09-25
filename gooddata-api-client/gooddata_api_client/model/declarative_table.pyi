@@ -43,21 +43,21 @@ class DeclarativeTable(
             "id",
             "type",
         }
-        
+
         class properties:
-            
-            
+
+
             class columns(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeColumn']:
                         return DeclarativeColumn
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeColumn'], typing.List['DeclarativeColumn']],
@@ -68,25 +68,25 @@ class DeclarativeTable(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeColumn':
                     return super().__getitem__(i)
-            
-            
+
+
             class id(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class path(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
                     items = schemas.StrSchema
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, str, ]], typing.List[typing.Union[MetaOapg.items, str, ]]],
@@ -97,12 +97,12 @@ class DeclarativeTable(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
             type = schemas.StrSchema
-            
-            
+
+
             class namePrefix(
                 schemas.StrSchema
             ):
@@ -114,56 +114,56 @@ class DeclarativeTable(
                 "type": type,
                 "namePrefix": namePrefix,
             }
-    
+
     path: MetaOapg.properties.path
     columns: MetaOapg.properties.columns
     id: MetaOapg.properties.id
     type: MetaOapg.properties.type
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["columns"]) -> MetaOapg.properties.columns: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["path"]) -> MetaOapg.properties.path: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["type"]) -> MetaOapg.properties.type: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["namePrefix"]) -> MetaOapg.properties.namePrefix: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["columns", "id", "path", "type", "namePrefix", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["columns"]) -> MetaOapg.properties.columns: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["path"]) -> MetaOapg.properties.path: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["type"]) -> MetaOapg.properties.type: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["namePrefix"]) -> typing.Union[MetaOapg.properties.namePrefix, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["columns", "id", "path", "type", "namePrefix", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -188,4 +188,4 @@ class DeclarativeTable(
             **kwargs,
         )
 
-from gooddata_api_client.model.declarative_column import DeclarativeColumn
+from gooddata_api_client.models.declarative_column import DeclarativeColumn

@@ -38,73 +38,73 @@ class SimpleMeasureDefinition(
         required = {
             "measure",
         }
-        
+
         class properties:
-            
-            
+
+
             class measure(
                 schemas.DictSchema
             ):
-            
-            
+
+
                 class MetaOapg:
                     required = {
                         "item",
                     }
-                    
+
                     class properties:
-                        
-                        
+
+
                         class aggregation(
                             schemas.EnumBase,
                             schemas.StrSchema
                         ):
-                            
+
                             @schemas.classproperty
                             def SUM(cls):
                                 return cls("SUM")
-                            
+
                             @schemas.classproperty
                             def COUNT(cls):
                                 return cls("COUNT")
-                            
+
                             @schemas.classproperty
                             def AVG(cls):
                                 return cls("AVG")
-                            
+
                             @schemas.classproperty
                             def MIN(cls):
                                 return cls("MIN")
-                            
+
                             @schemas.classproperty
                             def MAX(cls):
                                 return cls("MAX")
-                            
+
                             @schemas.classproperty
                             def MEDIAN(cls):
                                 return cls("MEDIAN")
-                            
+
                             @schemas.classproperty
                             def RUNSUM(cls):
                                 return cls("RUNSUM")
-                            
+
                             @schemas.classproperty
                             def APPROXIMATE_COUNT(cls):
                                 return cls("APPROXIMATE_COUNT")
                         computeRatio = schemas.BoolSchema
-                        
-                        
+
+
                         class filters(
                             schemas.ListSchema
                         ):
-                        
-                        
+
+
                             class MetaOapg:
-                                
+
                                 @staticmethod
                                 def items() -> typing.Type['FilterDefinitionForSimpleMeasure']:
                                     return FilterDefinitionForSimpleMeasure
-                        
+
                             def __new__(
                                 cls,
                                 _arg: typing.Union[typing.Tuple['FilterDefinitionForSimpleMeasure'], typing.List['FilterDefinitionForSimpleMeasure']],
@@ -115,10 +115,10 @@ class SimpleMeasureDefinition(
                                     _arg,
                                     _configuration=_configuration,
                                 )
-                        
+
                             def __getitem__(self, i: int) -> 'FilterDefinitionForSimpleMeasure':
                                 return super().__getitem__(i)
-                    
+
                         @staticmethod
                         def item() -> typing.Type['AfmObjectIdentifierCore']:
                             return AfmObjectIdentifierCore
@@ -128,48 +128,48 @@ class SimpleMeasureDefinition(
                             "filters": filters,
                             "item": item,
                         }
-                
+
                 item: 'AfmObjectIdentifierCore'
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["aggregation"]) -> MetaOapg.properties.aggregation: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["computeRatio"]) -> MetaOapg.properties.computeRatio: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["filters"]) -> MetaOapg.properties.filters: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["item"]) -> 'AfmObjectIdentifierCore': ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-                
+
                 def __getitem__(self, name: typing.Union[typing_extensions.Literal["aggregation", "computeRatio", "filters", "item", ], str]):
                     # dict_instance[name] accessor
                     return super().__getitem__(name)
-                
-                
+
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["aggregation"]) -> typing.Union[MetaOapg.properties.aggregation, schemas.Unset]: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["computeRatio"]) -> typing.Union[MetaOapg.properties.computeRatio, schemas.Unset]: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["filters"]) -> typing.Union[MetaOapg.properties.filters, schemas.Unset]: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["item"]) -> 'AfmObjectIdentifierCore': ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-                
+
                 def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["aggregation", "computeRatio", "filters", "item", ], str]):
                     return super().get_item_oapg(name)
-                
-            
+
+
                 def __new__(
                     cls,
                     *_args: typing.Union[dict, frozendict.frozendict, ],
@@ -193,29 +193,29 @@ class SimpleMeasureDefinition(
             __annotations__ = {
                 "measure": measure,
             }
-    
+
     measure: MetaOapg.properties.measure
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["measure"]) -> MetaOapg.properties.measure: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["measure", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["measure"]) -> MetaOapg.properties.measure: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["measure", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -232,5 +232,5 @@ class SimpleMeasureDefinition(
             **kwargs,
         )
 
-from gooddata_api_client.model.afm_object_identifier_core import AfmObjectIdentifierCore
-from gooddata_api_client.model.filter_definition_for_simple_measure import FilterDefinitionForSimpleMeasure
+from gooddata_api_client.models.afm_object_identifier_core import AfmObjectIdentifierCore
+from gooddata_api_client.models.filter_definition_for_simple_measure import FilterDefinitionForSimpleMeasure

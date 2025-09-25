@@ -86,4 +86,4 @@ class JsonApiCustomApplicationSettingPostOptionalIdDocument(
             **kwargs,
         )
 
-from gooddata_api_client.model.json_api_custom_application_setting_post_optional_id import JsonApiCustomApplicationSettingPostOptionalId
+from gooddata_api_client.models.json_api_custom_application_setting_post_optional_id import JsonApiCustomApplicationSettingPostOptionalId

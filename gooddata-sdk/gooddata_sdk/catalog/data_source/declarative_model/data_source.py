@@ -7,9 +7,9 @@ from typing import Any, Optional, Union
 from warnings import warn
 
 import attr
-from gooddata_api_client.model.declarative_data_source import DeclarativeDataSource
-from gooddata_api_client.model.declarative_data_sources import DeclarativeDataSources
-from gooddata_api_client.model.test_definition_request import TestDefinitionRequest
+from gooddata_api_client.models.declarative_data_source import DeclarativeDataSource
+from gooddata_api_client.models.declarative_data_sources import DeclarativeDataSources
+from gooddata_api_client.models.test_definition_request import TestDefinitionRequest
 
 from gooddata_sdk.catalog.base import Base, value_in_allowed
 from gooddata_sdk.catalog.entity import ClientSecretCredentialsFromFile, TokenCredentialsFromFile

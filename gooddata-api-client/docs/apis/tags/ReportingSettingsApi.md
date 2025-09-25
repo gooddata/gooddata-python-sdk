@@ -21,7 +21,7 @@ Resolves values for all settings without workspace by current user, organization
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import reporting_settings_api
-from gooddata_api_client.model.resolved_setting import ResolvedSetting
+from gooddata_api_client.models.resolved_setting import ResolvedSetting
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -90,8 +90,8 @@ Resolves values for selected settings without workspace by current user, organiz
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import reporting_settings_api
-from gooddata_api_client.model.resolved_setting import ResolvedSetting
-from gooddata_api_client.model.resolve_settings_request import ResolveSettingsRequest
+from gooddata_api_client.models.resolved_setting import ResolvedSetting
+from gooddata_api_client.models.resolve_settings_request import ResolveSettingsRequest
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -167,4 +167,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 No authorization required
 
 [[Back to top]](#__pageTop) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
-

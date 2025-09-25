@@ -5,16 +5,16 @@ import functools
 from typing import Any, Optional
 
 from gooddata_api_client.exceptions import NotFoundException
-from gooddata_api_client.model.declarative_export_templates import DeclarativeExportTemplates
-from gooddata_api_client.model.declarative_notification_channels import DeclarativeNotificationChannels
-from gooddata_api_client.model.json_api_csp_directive_in_document import JsonApiCspDirectiveInDocument
-from gooddata_api_client.model.json_api_export_template_in_document import JsonApiExportTemplateInDocument
-from gooddata_api_client.model.json_api_export_template_post_optional_id_document import (
+from gooddata_api_client.models.declarative_export_templates import DeclarativeExportTemplates
+from gooddata_api_client.models.declarative_notification_channels import DeclarativeNotificationChannels
+from gooddata_api_client.models.json_api_csp_directive_in_document import JsonApiCspDirectiveInDocument
+from gooddata_api_client.models.json_api_export_template_in_document import JsonApiExportTemplateInDocument
+from gooddata_api_client.models.json_api_export_template_post_optional_id_document import (
     JsonApiExportTemplatePostOptionalIdDocument,
 )
-from gooddata_api_client.model.json_api_identity_provider_in_document import JsonApiIdentityProviderInDocument
-from gooddata_api_client.model.json_api_organization_setting_in_document import JsonApiOrganizationSettingInDocument
-from gooddata_api_client.model.switch_identity_provider_request import SwitchIdentityProviderRequest
+from gooddata_api_client.models.json_api_identity_provider_in_document import JsonApiIdentityProviderInDocument
+from gooddata_api_client.models.json_api_organization_setting_in_document import JsonApiOrganizationSettingInDocument
+from gooddata_api_client.models.switch_identity_provider_request import SwitchIdentityProviderRequest
 
 from gooddata_sdk import CatalogDeclarativeExportTemplate, CatalogExportTemplate
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
@@ -165,8 +165,7 @@ class CatalogOrganizationService(CatalogServiceBase):
             list[CatalogJwk]:
                 List of jwks in the current organization.
         """
-        get_jwks = functools.partial(self._entities_api.get_all_entities_jwks, _check_return_type=False)
-        jwks = load_all_entities(get_jwks)
+        jwks = load_all_entities(self._entities_api.get_all_entities_jwks)
         return [CatalogJwk.from_api(jwk) for jwk in jwks.data]
 
     def list_organization_settings(self) -> list[CatalogOrganizationSetting]:
@@ -176,10 +175,7 @@ class CatalogOrganizationService(CatalogServiceBase):
             list[CatalogOrganizationSettings]:
                 List of organization settings in the current organization.
         """
-        get_organization_settings = functools.partial(
-            self._entities_api.get_all_entities_organization_settings, _check_return_type=False
-        )
-        organization_settings = load_all_entities(get_organization_settings)
+        organization_settings = load_all_entities(self._entities_api.get_all_entities_organization_settings)
         return [
             CatalogOrganizationSetting.from_api(organization_settings)
             for organization_settings in organization_settings.data
@@ -268,9 +264,7 @@ class CatalogOrganizationService(CatalogServiceBase):
             list[CatalogCspDirective]:
                 List of csp directives in the current organization.
         """
-        get_csp_directives = functools.partial(
-            self._entities_api.get_all_entities_csp_directives, _check_return_type=False
-        )
+        get_csp_directives = functools.partial(self._entities_api.get_all_entities_csp_directives)
         csp_directives = load_all_entities(get_csp_directives)
         return [CatalogCspDirective.from_api(csp_directive) for csp_directive in csp_directives.data]
 
@@ -347,11 +341,9 @@ class CatalogOrganizationService(CatalogServiceBase):
             list[CatalogIdentityProvider]:
                 List of identity providers in the current organization.
         """
-        get_identity_providers = functools.partial(
-            self._entities_api.get_all_entities_identity_providers,
-            _check_return_type=False,
+        identity_providers = load_all_entities_dict(
+            self._entities_api.get_all_entities_identity_providers, camel_case=False
         )
-        identity_providers = load_all_entities_dict(get_identity_providers, camel_case=False)
         return [
             CatalogIdentityProvider.from_dict(identity_provider, camel_case=False)
             for identity_provider in identity_providers["data"]
@@ -507,11 +499,9 @@ class CatalogOrganizationService(CatalogServiceBase):
             list[CatalogExportTemplate]:
                 List of export templates in the current organization.
         """
-        get_export_templates = functools.partial(
-            self._entities_api.get_all_entities_export_templates,
-            _check_return_type=False,
+        export_templates = load_all_entities_dict(
+            self._entities_api.get_all_entities_export_templates, camel_case=False
         )
-        export_templates = load_all_entities_dict(get_export_templates, camel_case=False)
         return [
             CatalogExportTemplate.from_dict(export_template, camel_case=False)
             for export_template in export_templates["data"]
@@ -527,7 +517,7 @@ class CatalogOrganizationService(CatalogServiceBase):
         Returns:
             CatalogLlmEndpoint: Retrieved LLM endpoint
         """
-        response = self._entities_api.get_entity_llm_endpoints(id, _check_return_type=False)
+        response = self._entities_api.get_entity_llm_endpoints(id)
         return CatalogLlmEndpoint.from_api(response.data)
 
     def list_llm_endpoints(
@@ -565,7 +555,6 @@ class CatalogOrganizationService(CatalogServiceBase):
             kwargs["sort"] = sort
         if meta_include is not None:
             kwargs["meta_include"] = meta_include
-        kwargs["_check_return_type"] = False
 
         response = self._entities_api.get_all_entities_llm_endpoints(**kwargs)
         return [CatalogLlmEndpoint.from_api(endpoint) for endpoint in response.data]
@@ -606,7 +595,7 @@ class CatalogOrganizationService(CatalogServiceBase):
         )
         llm_endpoint_document = CatalogLlmEndpointDocument(data=llm_endpoint)
         response = self._entities_api.create_entity_llm_endpoints(
-            json_api_llm_endpoint_in_document=llm_endpoint_document.to_api(), _check_return_type=False
+            json_api_llm_endpoint_in_document=llm_endpoint_document.to_api()
         )
         return CatalogLlmEndpoint.from_api(response.data)
 
@@ -645,9 +634,7 @@ class CatalogOrganizationService(CatalogServiceBase):
             llm_model=llm_model,
         )
         llm_endpoint_patch_document = CatalogLlmEndpointPatchDocument(data=llm_endpoint_patch)
-        response = self._entities_api.patch_entity_llm_endpoints(
-            id, llm_endpoint_patch_document.to_api(), _check_return_type=False
-        )
+        response = self._entities_api.patch_entity_llm_endpoints(id, llm_endpoint_patch_document.to_api())
         return CatalogLlmEndpoint.from_api(response.data)
 
     def delete_llm_endpoint(self, id: str) -> None:
@@ -657,7 +644,7 @@ class CatalogOrganizationService(CatalogServiceBase):
         Args:
             id: LLM endpoint identifier
         """
-        self._entities_api.delete_entity_llm_endpoints(id, _check_return_type=False)
+        self._entities_api.delete_entity_llm_endpoints(id)
 
     # Layout APIs
 
@@ -765,7 +752,7 @@ class CatalogOrganizationService(CatalogServiceBase):
         """
         try:
             request = SwitchIdentityProviderRequest(idp_id=identity_provider_id)
-            self._actions_api.switch_active_identity_provider(request, _check_return_type=False)
+            self._actions_api.switch_active_identity_provider(request)
 
         except NotFoundException:
             raise ValueError(

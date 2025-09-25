@@ -1,4 +1,4 @@
-# gooddata_api_client.model.result_spec.ResultSpec
+# gooddata_api_client.models.result_spec.ResultSpec
 
 Specifies how the result data will be formatted (```dimensions```) and which additional data shall be computed (```totals```).
 
@@ -39,4 +39,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**Total**](Total.md) | [**Total**](Total.md) | [**Total**](Total.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

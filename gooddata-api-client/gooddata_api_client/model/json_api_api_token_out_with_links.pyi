@@ -65,5 +65,5 @@ class JsonApiApiTokenOutWithLinks(
             **kwargs,
         )
 
-from gooddata_api_client.model.json_api_api_token_out import JsonApiApiTokenOut
-from gooddata_api_client.model.object_links_container import ObjectLinksContainer
+from gooddata_api_client.models.json_api_api_token_out import JsonApiApiTokenOut
+from gooddata_api_client.models.object_links_container import ObjectLinksContainer

@@ -7,7 +7,7 @@ from unittest import mock
 from unittest.mock import MagicMock
 
 import pytest
-from gooddata_api_client.model.json_api_data_source_in_attributes import JsonApiDataSourceInAttributes
+from gooddata_api_client.models.json_api_data_source_in_attributes import JsonApiDataSourceInAttributes
 from gooddata_sdk import (
     BasicCredentials,
     CatalogDataSource,

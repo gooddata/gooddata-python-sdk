@@ -3,12 +3,12 @@
 from typing import Optional
 
 import attrs
-from gooddata_api_client.model.permissions_assignment import PermissionsAssignment
-from gooddata_api_client.model.user_management_data_source_permission_assignment import (
+from gooddata_api_client.models.permissions_assignment import PermissionsAssignment
+from gooddata_api_client.models.user_management_data_source_permission_assignment import (
     UserManagementDataSourcePermissionAssignment,
 )
-from gooddata_api_client.model.user_management_permission_assignments import UserManagementPermissionAssignments
-from gooddata_api_client.model.user_management_workspace_permission_assignment import (
+from gooddata_api_client.models.user_management_permission_assignments import UserManagementPermissionAssignments
+from gooddata_api_client.models.user_management_workspace_permission_assignment import (
     UserManagementWorkspacePermissionAssignment,
 )
 

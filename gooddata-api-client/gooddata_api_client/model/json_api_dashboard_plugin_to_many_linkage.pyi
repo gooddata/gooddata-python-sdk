@@ -37,7 +37,7 @@ class JsonApiDashboardPluginToManyLinkage(
 
 
     class MetaOapg:
-        
+
         @staticmethod
         def items() -> typing.Type['JsonApiDashboardPluginLinkage']:
             return JsonApiDashboardPluginLinkage
@@ -56,4 +56,4 @@ class JsonApiDashboardPluginToManyLinkage(
     def __getitem__(self, i: int) -> 'JsonApiDashboardPluginLinkage':
         return super().__getitem__(i)
 
-from gooddata_api_client.model.json_api_dashboard_plugin_linkage import JsonApiDashboardPluginLinkage
+from gooddata_api_client.models.json_api_dashboard_plugin_linkage import JsonApiDashboardPluginLinkage

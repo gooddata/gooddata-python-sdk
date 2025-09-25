@@ -43,18 +43,18 @@ class DeclarativeWorkspaceDataFilterSetting(
             "id",
             "title",
         }
-        
+
         class properties:
-            
-            
+
+
             class filterValues(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
                     items = schemas.StrSchema
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, str, ]], typing.List[typing.Union[MetaOapg.items, str, ]]],
@@ -65,27 +65,27 @@ class DeclarativeWorkspaceDataFilterSetting(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
-            
-            
+
+
             class id(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class title(
                 schemas.StrSchema
             ):
                 pass
-        
+
             @staticmethod
             def workspace() -> typing.Type['WorkspaceIdentifier']:
                 return WorkspaceIdentifier
-            
-            
+
+
             class description(
                 schemas.StrSchema
             ):
@@ -97,56 +97,56 @@ class DeclarativeWorkspaceDataFilterSetting(
                 "workspace": workspace,
                 "description": description,
             }
-    
+
     filterValues: MetaOapg.properties.filterValues
     workspace: 'WorkspaceIdentifier'
     id: MetaOapg.properties.id
     title: MetaOapg.properties.title
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["filterValues"]) -> MetaOapg.properties.filterValues: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["title"]) -> MetaOapg.properties.title: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["workspace"]) -> 'WorkspaceIdentifier': ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["description"]) -> MetaOapg.properties.description: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["filterValues", "id", "title", "workspace", "description", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["filterValues"]) -> MetaOapg.properties.filterValues: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["title"]) -> MetaOapg.properties.title: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["workspace"]) -> 'WorkspaceIdentifier': ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["description"]) -> typing.Union[MetaOapg.properties.description, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["filterValues", "id", "title", "workspace", "description", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -171,4 +171,4 @@ class DeclarativeWorkspaceDataFilterSetting(
             **kwargs,
         )
 
-from gooddata_api_client.model.workspace_identifier import WorkspaceIdentifier
+from gooddata_api_client.models.workspace_identifier import WorkspaceIdentifier

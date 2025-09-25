@@ -38,38 +38,38 @@ class TotalExecutionResultHeader(
         required = {
             "totalHeader",
         }
-        
+
         class properties:
-        
+
             @staticmethod
             def totalHeader() -> typing.Type['TotalResultHeader']:
                 return TotalResultHeader
             __annotations__ = {
                 "totalHeader": totalHeader,
             }
-    
+
     totalHeader: 'TotalResultHeader'
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["totalHeader"]) -> 'TotalResultHeader': ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["totalHeader", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["totalHeader"]) -> 'TotalResultHeader': ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["totalHeader", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -86,4 +86,4 @@ class TotalExecutionResultHeader(
             **kwargs,
         )
 
-from gooddata_api_client.model.total_result_header import TotalResultHeader
+from gooddata_api_client.models.total_result_header import TotalResultHeader

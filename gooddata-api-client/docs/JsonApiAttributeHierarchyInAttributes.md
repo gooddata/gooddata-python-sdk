@@ -2,15 +2,32 @@
 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **are_relations_valid** | **bool** |  | [optional] 
-**content** | **{str: (bool, date, datetime, dict, float, int, list, str, none_type)}** | Free-form JSON content. Maximum supported length is 15000 characters. | [optional] 
+**content** | **object** | Free-form JSON content. Maximum supported length is 15000 characters. | [optional] 
 **description** | **str** |  | [optional] 
-**tags** | **[str]** |  | [optional] 
+**tags** | **List[str]** |  | [optional] 
 **title** | **str** |  | [optional] 
-**any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 
+## Example
+
+```python
+from gooddata_api_client.models.json_api_attribute_hierarchy_in_attributes import JsonApiAttributeHierarchyInAttributes
+
+# TODO update the JSON string below
+json = "{}"
+# create an instance of JsonApiAttributeHierarchyInAttributes from a JSON string
+json_api_attribute_hierarchy_in_attributes_instance = JsonApiAttributeHierarchyInAttributes.from_json(json)
+# print the JSON string representation of the object
+print(JsonApiAttributeHierarchyInAttributes.to_json())
+
+# convert the object into a dict
+json_api_attribute_hierarchy_in_attributes_dict = json_api_attribute_hierarchy_in_attributes_instance.to_dict()
+# create an instance of JsonApiAttributeHierarchyInAttributes from a dict
+json_api_attribute_hierarchy_in_attributes_from_dict = JsonApiAttributeHierarchyInAttributes.from_dict(json_api_attribute_hierarchy_in_attributes_dict)
+```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
 

@@ -158,6 +158,6 @@ class JsonApiFactOutList(
             **kwargs,
         )
 
-from gooddata_api_client.model.json_api_dataset_out_with_links import JsonApiDatasetOutWithLinks
-from gooddata_api_client.model.json_api_fact_out_with_links import JsonApiFactOutWithLinks
-from gooddata_api_client.model.list_links import ListLinks
+from gooddata_api_client.models.json_api_dataset_out_with_links import JsonApiDatasetOutWithLinks
+from gooddata_api_client.models.json_api_fact_out_with_links import JsonApiFactOutWithLinks
+from gooddata_api_client.models.list_links import ListLinks

@@ -1,4 +1,4 @@
-# gooddata_api_client.model.json_api_user_data_filter_out_includes.JsonApiUserDataFilterOutIncludes
+# gooddata_api_client.models.json_api_user_data_filter_out_includes.JsonApiUserDataFilterOutIncludes
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes
@@ -18,4 +18,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [JsonApiDatasetOutWithLinks](JsonApiDatasetOutWithLinks.md) | [**JsonApiDatasetOutWithLinks**](JsonApiDatasetOutWithLinks.md) | [**JsonApiDatasetOutWithLinks**](JsonApiDatasetOutWithLinks.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

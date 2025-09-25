@@ -1,4 +1,4 @@
-# gooddata_api_client.model.declarative_ldm.DeclarativeLdm
+# gooddata_api_client.models.declarative_ldm.DeclarativeLdm
 
 A logical data model (LDM) representation.
 
@@ -43,4 +43,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**DeclarativeDateDataset**](DeclarativeDateDataset.md) | [**DeclarativeDateDataset**](DeclarativeDateDataset.md) | [**DeclarativeDateDataset**](DeclarativeDateDataset.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

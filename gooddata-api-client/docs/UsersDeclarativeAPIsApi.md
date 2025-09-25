@@ -19,11 +19,11 @@ Retrieve all users including authentication properties.
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import users_declarative_apis_api
-from gooddata_api_client.model.declarative_users import DeclarativeUsers
+from gooddata_api_client.models.declarative_users import DeclarativeUsers
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -32,21 +32,23 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = users_declarative_apis_api.UsersDeclarativeAPIsApi(api_client)
+    api_instance = gooddata_api_client.UsersDeclarativeAPIsApi(api_client)
 
-    # example, this endpoint has no required or optional parameters
     try:
         # Get all users
         api_response = api_instance.get_users_layout()
+        print("The response of UsersDeclarativeAPIsApi->get_users_layout:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling UsersDeclarativeAPIsApi->get_users_layout: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 This endpoint does not need any parameter.
 
 ### Return type
@@ -61,7 +63,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
-
 
 ### HTTP response details
 
@@ -82,11 +83,11 @@ Set all users and their authentication properties.
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import users_declarative_apis_api
-from gooddata_api_client.model.declarative_users import DeclarativeUsers
+from gooddata_api_client.models.declarative_users import DeclarativeUsers
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -95,57 +96,26 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = users_declarative_apis_api.UsersDeclarativeAPIsApi(api_client)
-    declarative_users = DeclarativeUsers(
-        users=[
-            DeclarativeUser(
-                auth_id="auth_id_example",
-                email="user@example.com",
-                firstname="John",
-                id="employee123",
-                lastname="Wick",
-                permissions=[
-                    DeclarativeUserPermission(
-                        assignee=AssigneeIdentifier(
-                            id="id_example",
-                            type="user",
-                        ),
-                        name="SEE",
-                    ),
-                ],
-                settings=[
-                    DeclarativeSetting(
-                        content=JsonNode(),
-                        id="/6bUUGjjNSwg0_bs",
-                        type="TIMEZONE",
-                    ),
-                ],
-                user_groups=[
-                    DeclarativeUserGroupIdentifier(
-                        id="group.admins",
-                        type="userGroup",
-                    ),
-                ],
-            ),
-        ],
-    ) # DeclarativeUsers | 
+    api_instance = gooddata_api_client.UsersDeclarativeAPIsApi(api_client)
+    declarative_users = gooddata_api_client.DeclarativeUsers() # DeclarativeUsers | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Put all users
         api_instance.put_users_layout(declarative_users)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling UsersDeclarativeAPIsApi->put_users_layout: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **declarative_users** | [**DeclarativeUsers**](DeclarativeUsers.md)|  |
+ **declarative_users** | [**DeclarativeUsers**](DeclarativeUsers.md)|  | 
 
 ### Return type
 
@@ -159,7 +129,6 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: Not defined
-
 
 ### HTTP response details
 

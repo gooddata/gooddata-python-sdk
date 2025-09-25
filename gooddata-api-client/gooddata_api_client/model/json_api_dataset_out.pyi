@@ -1162,7 +1162,7 @@ class JsonApiDatasetOut(
             **kwargs,
         )
 
-from gooddata_api_client.model.dataset_reference_identifier import DatasetReferenceIdentifier
-from gooddata_api_client.model.json_api_attribute_to_many_linkage import JsonApiAttributeToManyLinkage
-from gooddata_api_client.model.json_api_dataset_to_many_linkage import JsonApiDatasetToManyLinkage
-from gooddata_api_client.model.json_api_fact_to_many_linkage import JsonApiFactToManyLinkage
+from gooddata_api_client.models.dataset_reference_identifier import DatasetReferenceIdentifier
+from gooddata_api_client.models.json_api_attribute_to_many_linkage import JsonApiAttributeToManyLinkage
+from gooddata_api_client.models.json_api_dataset_to_many_linkage import JsonApiDatasetToManyLinkage
+from gooddata_api_client.models.json_api_fact_to_many_linkage import JsonApiFactToManyLinkage

@@ -4,7 +4,7 @@ from __future__ import annotations
 from typing import Optional
 
 import attr
-from gooddata_api_client.model.filter_by import FilterBy
+from gooddata_api_client.models.filter_by import FilterBy
 
 from gooddata_sdk.catalog.base import Base
 

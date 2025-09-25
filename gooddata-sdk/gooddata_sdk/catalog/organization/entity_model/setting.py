@@ -5,8 +5,10 @@ import builtins
 from typing import Any, Optional
 
 import attr
-from gooddata_api_client.model.json_api_organization_setting_in import JsonApiOrganizationSettingIn
-from gooddata_api_client.model.json_api_organization_setting_in_attributes import JsonApiOrganizationSettingInAttributes
+from gooddata_api_client.models.json_api_organization_setting_in import JsonApiOrganizationSettingIn
+from gooddata_api_client.models.json_api_organization_setting_in_attributes import (
+    JsonApiOrganizationSettingInAttributes,
+)
 
 from gooddata_sdk.catalog.base import Base
 

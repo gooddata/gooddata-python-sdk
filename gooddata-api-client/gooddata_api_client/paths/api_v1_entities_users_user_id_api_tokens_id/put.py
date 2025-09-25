@@ -25,8 +25,8 @@ import frozendict  # noqa: F401
 
 from gooddata_api_client import schemas  # noqa: F401
 
-from gooddata_api_client.model.json_api_api_token_out_document import JsonApiApiTokenOutDocument
-from gooddata_api_client.model.json_api_api_token_in_document import JsonApiApiTokenInDocument
+from gooddata_api_client.models.json_api_api_token_out_document import JsonApiApiTokenOutDocument
+from gooddata_api_client.models.json_api_api_token_in_document import JsonApiApiTokenInDocument
 
 from . import path
 
@@ -463,5 +463,3 @@ class ApiForput(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
-
-

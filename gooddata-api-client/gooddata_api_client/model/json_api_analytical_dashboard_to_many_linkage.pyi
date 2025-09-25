@@ -37,7 +37,7 @@ class JsonApiAnalyticalDashboardToManyLinkage(
 
 
     class MetaOapg:
-        
+
         @staticmethod
         def items() -> typing.Type['JsonApiAnalyticalDashboardLinkage']:
             return JsonApiAnalyticalDashboardLinkage
@@ -56,4 +56,4 @@ class JsonApiAnalyticalDashboardToManyLinkage(
     def __getitem__(self, i: int) -> 'JsonApiAnalyticalDashboardLinkage':
         return super().__getitem__(i)
 
-from gooddata_api_client.model.json_api_analytical_dashboard_linkage import JsonApiAnalyticalDashboardLinkage
+from gooddata_api_client.models.json_api_analytical_dashboard_linkage import JsonApiAnalyticalDashboardLinkage

@@ -99,5 +99,5 @@ class JsonApiWorkspaceSettingOutDocument(
             **kwargs,
         )
 
-from gooddata_api_client.model.json_api_workspace_setting_out import JsonApiWorkspaceSettingOut
-from gooddata_api_client.model.object_links import ObjectLinks
+from gooddata_api_client.models.json_api_workspace_setting_out import JsonApiWorkspaceSettingOut
+from gooddata_api_client.models.object_links import ObjectLinks

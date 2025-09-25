@@ -39,14 +39,14 @@ class MeasureItem(
             "localIdentifier",
             "definition",
         }
-        
+
         class properties:
-        
+
             @staticmethod
             def definition() -> typing.Type['MeasureDefinition']:
                 return MeasureDefinition
-            
-            
+
+
             class localIdentifier(
                 schemas.StrSchema
             ):
@@ -55,36 +55,36 @@ class MeasureItem(
                 "definition": definition,
                 "localIdentifier": localIdentifier,
             }
-    
+
     localIdentifier: MetaOapg.properties.localIdentifier
     definition: 'MeasureDefinition'
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["definition"]) -> 'MeasureDefinition': ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["localIdentifier"]) -> MetaOapg.properties.localIdentifier: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["definition", "localIdentifier", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["definition"]) -> 'MeasureDefinition': ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["localIdentifier"]) -> MetaOapg.properties.localIdentifier: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["definition", "localIdentifier", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -103,4 +103,4 @@ class MeasureItem(
             **kwargs,
         )
 
-from gooddata_api_client.model.measure_definition import MeasureDefinition
+from gooddata_api_client.models.measure_definition import MeasureDefinition

@@ -1,4 +1,4 @@
-# gooddata_api_client.model.arithmetic_measure_definition.ArithmeticMeasureDefinition
+# gooddata_api_client.models.arithmetic_measure_definition.ArithmeticMeasureDefinition
 
 Metric representing arithmetics between metrics.
 
@@ -42,4 +42,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**AfmLocalIdentifier**](AfmLocalIdentifier.md) | [**AfmLocalIdentifier**](AfmLocalIdentifier.md) | [**AfmLocalIdentifier**](AfmLocalIdentifier.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

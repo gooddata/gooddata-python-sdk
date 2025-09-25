@@ -86,4 +86,4 @@ class JsonApiThemePatchDocument(
             **kwargs,
         )
 
-from gooddata_api_client.model.json_api_theme_patch import JsonApiThemePatch
+from gooddata_api_client.models.json_api_theme_patch import JsonApiThemePatch

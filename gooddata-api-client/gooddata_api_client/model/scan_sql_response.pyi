@@ -40,21 +40,21 @@ class ScanSqlResponse(
         required = {
             "columns",
         }
-        
+
         class properties:
-            
-            
+
+
             class columns(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['SqlColumn']:
                         return SqlColumn
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['SqlColumn'], typing.List['SqlColumn']],
@@ -65,35 +65,35 @@ class ScanSqlResponse(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'SqlColumn':
                     return super().__getitem__(i)
-            
-            
+
+
             class dataPreview(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
-                    
+
+
                     class items(
                         schemas.ListSchema
                     ):
-                    
-                    
+
+
                         class MetaOapg:
-                            
-                            
+
+
                             class items(
                                 schemas.StrBase,
                                 schemas.NoneBase,
                                 schemas.Schema,
                                 schemas.NoneStrMixin
                             ):
-                            
-                            
+
+
                                 def __new__(
                                     cls,
                                     *_args: typing.Union[None, str, ],
@@ -104,7 +104,7 @@ class ScanSqlResponse(
                                         *_args,
                                         _configuration=_configuration,
                                     )
-                    
+
                         def __new__(
                             cls,
                             _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, None, str, ]], typing.List[typing.Union[MetaOapg.items, None, str, ]]],
@@ -115,10 +115,10 @@ class ScanSqlResponse(
                                 _arg,
                                 _configuration=_configuration,
                             )
-                    
+
                         def __getitem__(self, i: int) -> MetaOapg.items:
                             return super().__getitem__(i)
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, list, tuple, ]], typing.List[typing.Union[MetaOapg.items, list, tuple, ]]],
@@ -129,42 +129,42 @@ class ScanSqlResponse(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
             __annotations__ = {
                 "columns": columns,
                 "dataPreview": dataPreview,
             }
-    
+
     columns: MetaOapg.properties.columns
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["columns"]) -> MetaOapg.properties.columns: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["dataPreview"]) -> MetaOapg.properties.dataPreview: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["columns", "dataPreview", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["columns"]) -> MetaOapg.properties.columns: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["dataPreview"]) -> typing.Union[MetaOapg.properties.dataPreview, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["columns", "dataPreview", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -183,4 +183,4 @@ class ScanSqlResponse(
             **kwargs,
         )
 
-from gooddata_api_client.model.sql_column import SqlColumn
+from gooddata_api_client.models.sql_column import SqlColumn

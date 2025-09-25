@@ -86,4 +86,4 @@ class JsonApiCspDirectivePatchDocument(
             **kwargs,
         )
 
-from gooddata_api_client.model.json_api_csp_directive_patch import JsonApiCspDirectivePatch
+from gooddata_api_client.models.json_api_csp_directive_patch import JsonApiCspDirectivePatch

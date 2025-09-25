@@ -25,7 +25,7 @@ import frozendict  # noqa: F401
 
 from gooddata_api_client import schemas  # noqa: F401
 
-from gooddata_api_client.model.json_api_analytical_dashboard_out_list import JsonApiAnalyticalDashboardOutList
+from gooddata_api_client.models.json_api_analytical_dashboard_out_list import JsonApiAnalyticalDashboardOutList
 
 # Query params
 
@@ -34,15 +34,15 @@ class OriginSchema(
     schemas.EnumBase,
     schemas.StrSchema
 ):
-    
+
     @schemas.classproperty
     def ALL(cls):
         return cls("ALL")
-    
+
     @schemas.classproperty
     def PARENTS(cls):
         return cls("PARENTS")
-    
+
     @schemas.classproperty
     def NATIVE(cls):
         return cls("NATIVE")
@@ -55,41 +55,41 @@ class IncludeSchema(
 
 
     class MetaOapg:
-        
-        
+
+
         class items(
             schemas.EnumBase,
             schemas.StrSchema
         ):
-            
+
             @schemas.classproperty
             def VISUALIZATION_OBJECTS(cls):
                 return cls("visualizationObjects")
-            
+
             @schemas.classproperty
             def ANALYTICAL_DASHBOARDS(cls):
                 return cls("analyticalDashboards")
-            
+
             @schemas.classproperty
             def LABELS(cls):
                 return cls("labels")
-            
+
             @schemas.classproperty
             def METRICS(cls):
                 return cls("metrics")
-            
+
             @schemas.classproperty
             def DATASETS(cls):
                 return cls("datasets")
-            
+
             @schemas.classproperty
             def FILTER_CONTEXTS(cls):
                 return cls("filterContexts")
-            
+
             @schemas.classproperty
             def DASHBOARD_PLUGINS(cls):
                 return cls("dashboardPlugins")
-            
+
             @schemas.classproperty
             def ALL(cls):
                 return cls("ALL")
@@ -140,29 +140,29 @@ class MetaIncludeSchema(
 
 
     class MetaOapg:
-        
-        
+
+
         class items(
             schemas.EnumBase,
             schemas.StrSchema
         ):
-            
+
             @schemas.classproperty
             def PERMISSIONS(cls):
                 return cls("permissions")
-            
+
             @schemas.classproperty
             def ORIGIN(cls):
                 return cls("origin")
-            
+
             @schemas.classproperty
             def ACCESS_INFO(cls):
                 return cls("accessInfo")
-            
+
             @schemas.classproperty
             def ALL(cls):
                 return cls("all")
-            
+
             @schemas.classproperty
             def ALL(cls):
                 return cls("ALL")
@@ -583,5 +583,3 @@ class ApiForget(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
-
-

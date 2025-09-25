@@ -38,38 +38,38 @@ class DependentEntitiesResponse(
         required = {
             "graph",
         }
-        
+
         class properties:
-        
+
             @staticmethod
             def graph() -> typing.Type['DependentEntitiesGraph']:
                 return DependentEntitiesGraph
             __annotations__ = {
                 "graph": graph,
             }
-    
+
     graph: 'DependentEntitiesGraph'
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["graph"]) -> 'DependentEntitiesGraph': ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["graph", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["graph"]) -> 'DependentEntitiesGraph': ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["graph", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -86,4 +86,4 @@ class DependentEntitiesResponse(
             **kwargs,
         )
 
-from gooddata_api_client.model.dependent_entities_graph import DependentEntitiesGraph
+from gooddata_api_client.models.dependent_entities_graph import DependentEntitiesGraph

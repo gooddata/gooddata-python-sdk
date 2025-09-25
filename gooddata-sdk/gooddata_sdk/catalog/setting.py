@@ -5,8 +5,8 @@ import builtins
 from typing import Any, Optional
 
 import attr
-from gooddata_api_client.model.declarative_custom_application_setting import DeclarativeCustomApplicationSetting
-from gooddata_api_client.model.declarative_setting import DeclarativeSetting
+from gooddata_api_client.models.declarative_custom_application_setting import DeclarativeCustomApplicationSetting
+from gooddata_api_client.models.declarative_setting import DeclarativeSetting
 
 from gooddata_sdk.catalog.base import Base, value_in_allowed
 

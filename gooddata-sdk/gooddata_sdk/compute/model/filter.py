@@ -6,13 +6,13 @@ from importlib.util import find_spec
 from typing import Any, Optional, Union
 
 import attrs
-from gooddata_api_client.model.inline_filter_definition_inline import InlineFilterDefinitionInline
+from gooddata_api_client.models.inline_filter_definition_inline import InlineFilterDefinitionInline
+from pydantic import BaseModel
 
 if find_spec("icu") is not None:
     from icu import Locale, SimpleDateFormat  # type: ignore[import-not-found]
 
 import gooddata_api_client.models as afm_models
-from gooddata_api_client.model_utils import OpenApiModel
 from gooddata_api_client.models import AbsoluteDateFilterAbsoluteDateFilter as AbsoluteDateFilterBody
 from gooddata_api_client.models import (
     ComparisonMeasureValueFilterComparisonMeasureValueFilter as ComparisonMeasureValueFilterBody,
@@ -99,7 +99,7 @@ class AttributeFilter(Filter):
     def is_noop(self) -> bool:
         return False
 
-    def as_api_model(self) -> OpenApiModel:
+    def as_api_model(self) -> BaseModel:
         raise NotImplementedError()
 
     def __eq__(self, other: object) -> bool:
@@ -110,8 +110,8 @@ class PositiveAttributeFilter(AttributeFilter):
     def as_api_model(self) -> afm_models.PositiveAttributeFilter:
         label_id = _to_identifier(self._label)
         elements = afm_models.AttributeFilterElements(values=self.values)
-        body = PositiveAttributeFilterBody(label=label_id, _in=elements, _check_type=False)
-        return afm_models.PositiveAttributeFilter(body, _check_type=False)
+        body = PositiveAttributeFilterBody(label=label_id, _in=elements)
+        return afm_models.PositiveAttributeFilter(body)
 
     def description(self, labels: dict[str, str], format_locale: Optional[str] = None) -> str:
         label_id = self.label.id if isinstance(self.label, ObjId) else self.label
@@ -126,7 +126,7 @@ class NegativeAttributeFilter(AttributeFilter):
     def as_api_model(self) -> afm_models.NegativeAttributeFilter:
         label_id = _to_identifier(self._label)
         elements = afm_models.AttributeFilterElements(values=self.values)
-        body = NegativeAttributeFilterBody(label=label_id, not_in=elements, _check_type=False)
+        body = NegativeAttributeFilterBody(label=label_id, not_in=elements)
         return afm_models.NegativeAttributeFilter(body)
 
     def description(self, labels: dict[str, str], format_locale: Optional[str] = None) -> str:
@@ -168,9 +168,8 @@ class BoundedFilter:
     def as_api_model(self) -> afm_models.BoundedFilter:
         return afm_models.BoundedFilter(
             granularity=self.granularity,
-            _from=self.from_shift,
+            var_from=self.from_shift,
             to=self.to_shift,
-            _check_type=False,
         )
 
 
@@ -223,9 +222,8 @@ class RelativeDateFilter(Filter):
         body_params = {
             "dataset": self.dataset.as_afm_id(),
             "granularity": self.granularity,
-            "_from": self.from_shift,
+            "var_from": self.from_shift,
             "to": self.to_shift,
-            "_check_type": False,
         }
 
         if self.bounded_filter is not None:
@@ -327,9 +325,8 @@ class AbsoluteDateFilter(Filter):
     def as_api_model(self) -> afm_models.AbsoluteDateFilter:
         body = AbsoluteDateFilterBody(
             dataset=self.dataset.as_afm_id(),
-            _from=self._from_date,
+            var_from=self._from_date,
             to=self._to_date,
-            _check_type=False,
         )
         return afm_models.AbsoluteDateFilter(body)
 
@@ -450,7 +447,6 @@ class MetricValueFilter(Filter):
         kwargs = dict(
             measure=measure,
             operator=self.operator,
-            _check_type=False,
         )
         if self.treat_nulls_as is not None:
             kwargs["treat_null_values_as"] = self.treat_nulls_as
@@ -461,7 +457,7 @@ class MetricValueFilter(Filter):
             body = ComparisonMeasureValueFilterBody(**kwargs)
             return afm_models.ComparisonMeasureValueFilter(body)
         else:
-            kwargs["_from"] = min(self.values)
+            kwargs["var_from"] = min(self.values)
             kwargs["to"] = max(self.values)
 
             body = RangeMeasureValueFilterBody(**kwargs)
@@ -526,9 +522,7 @@ class RankingFilter(Filter):
         dimensionality = {}
         if self.dimensionality:
             dimensionality["dimensionality"] = [_to_identifier(d) for d in self.dimensionality]
-        body = RankingFilterBody(
-            measures=measures, operator=self.operator, value=self.value, _check_type=False, **dimensionality
-        )
+        body = RankingFilterBody(measures=measures, operator=self.operator, value=self.value, **dimensionality)
         return afm_models.RankingFilter(body)
 
     def description(self, labels: dict[str, str], format_locale: Optional[str] = None) -> str:
@@ -585,4 +579,4 @@ class InlineFilter(Filter):
         if self.local_identifier is not None:
             kwargs["local_identifier"] = str(self.local_identifier)
         body = InlineFilterDefinitionInline(self.maql, **kwargs)
-        return afm_models.InlineFilterDefinition(body, _check_type=False)
+        return afm_models.InlineFilterDefinition(body)

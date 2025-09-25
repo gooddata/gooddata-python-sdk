@@ -110,4 +110,4 @@ class HeaderGroup(
             **kwargs,
         )
 
-from gooddata_api_client.model.execution_result_header import ExecutionResultHeader
+from gooddata_api_client.models.execution_result_header import ExecutionResultHeader

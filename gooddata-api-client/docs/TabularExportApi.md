@@ -20,12 +20,12 @@ Note: This API is an experimental and is going to change. Please, use it accordi
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import tabular_export_api
-from gooddata_api_client.model.export_response import ExportResponse
-from gooddata_api_client.model.dashboard_tabular_export_request import DashboardTabularExportRequest
+from gooddata_api_client.models.dashboard_tabular_export_request import DashboardTabularExportRequest
+from gooddata_api_client.models.export_response import ExportResponse
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -34,45 +34,32 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = tabular_export_api.TabularExportApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
-    dashboard_id = "dashboardId_example" # str | 
-    dashboard_tabular_export_request = DashboardTabularExportRequest(
-        dashboard_filters_override=[
-            DashboardFilter(),
-        ],
-        file_name="result",
-        format="XLSX",
-        settings=DashboardExportSettings(
-            export_info=True,
-            merge_headers=True,
-            page_orientation="PORTRAIT",
-            page_size="A4",
-        ),
-        widget_ids=[
-            "widget_ids_example",
-        ],
-    ) # DashboardTabularExportRequest | 
+    api_instance = gooddata_api_client.TabularExportApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
+    dashboard_id = 'dashboard_id_example' # str | 
+    dashboard_tabular_export_request = gooddata_api_client.DashboardTabularExportRequest() # DashboardTabularExportRequest | 
 
-    # example passing only required values which don't have defaults set
     try:
         # (EXPERIMENTAL) Create dashboard tabular export request
         api_response = api_instance.create_dashboard_export_request(workspace_id, dashboard_id, dashboard_tabular_export_request)
+        print("The response of TabularExportApi->create_dashboard_export_request:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling TabularExportApi->create_dashboard_export_request: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
- **dashboard_id** | **str**|  |
- **dashboard_tabular_export_request** | [**DashboardTabularExportRequest**](DashboardTabularExportRequest.md)|  |
+ **workspace_id** | **str**|  | 
+ **dashboard_id** | **str**|  | 
+ **dashboard_tabular_export_request** | [**DashboardTabularExportRequest**](DashboardTabularExportRequest.md)|  | 
 
 ### Return type
 
@@ -86,7 +73,6 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: application/json
-
 
 ### HTTP response details
 
@@ -107,12 +93,12 @@ An tabular export job will be created based on the export request and put to que
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import tabular_export_api
-from gooddata_api_client.model.export_response import ExportResponse
-from gooddata_api_client.model.tabular_export_request import TabularExportRequest
+from gooddata_api_client.models.export_response import ExportResponse
+from gooddata_api_client.models.tabular_export_request import TabularExportRequest
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -121,72 +107,30 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = tabular_export_api.TabularExportApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
-    tabular_export_request = TabularExportRequest(
-        custom_override=CustomOverride(
-            labels={
-                "key": CustomLabel(
-                    title="title_example",
-                ),
-            },
-            metrics={
-                "key": CustomMetric(
-                    format="format_example",
-                    title="title_example",
-                ),
-            },
-        ),
-        execution_result="ff483727196c9dc862c7fd3a5a84df55c96d61a4",
-        file_name="result",
-        format="CSV",
-        metadata=JsonNode(),
-        related_dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
-        settings=Settings(
-            export_info=True,
-            merge_headers=True,
-            page_orientation="PORTRAIT",
-            page_size="A4",
-            pdf_page_size="a4 landscape",
-            pdf_table_style=[
-                PdfTableStyle(
-                    properties=[
-                        PdfTableStyleProperty(
-                            key="key_example",
-                            value="value_example",
-                        ),
-                    ],
-                    selector="selector_example",
-                ),
-            ],
-            pdf_top_left_content="Good",
-            pdf_top_right_content="Morning",
-            show_filters=False,
-        ),
-        visualization_object="f7c359bc-c230-4487-b15b-ad9685bcb537",
-        visualization_object_custom_filters=[
-            {},
-        ],
-    ) # TabularExportRequest | 
+    api_instance = gooddata_api_client.TabularExportApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
+    tabular_export_request = gooddata_api_client.TabularExportRequest() # TabularExportRequest | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Create tabular export request
         api_response = api_instance.create_tabular_export(workspace_id, tabular_export_request)
+        print("The response of TabularExportApi->create_tabular_export:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling TabularExportApi->create_tabular_export: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
- **tabular_export_request** | [**TabularExportRequest**](TabularExportRequest.md)|  |
+ **workspace_id** | **str**|  | 
+ **tabular_export_request** | [**TabularExportRequest**](TabularExportRequest.md)|  | 
 
 ### Return type
 
@@ -201,7 +145,6 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -211,7 +154,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_tabular_export**
-> file_type get_tabular_export(workspace_id, export_id)
+> bytearray get_tabular_export(workspace_id, export_id)
 
 Retrieve exported files
 
@@ -221,10 +164,10 @@ After clients creates a POST export request, the processing of it will start sho
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import tabular_export_api
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -233,32 +176,34 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = tabular_export_api.TabularExportApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
-    export_id = "exportId_example" # str | 
+    api_instance = gooddata_api_client.TabularExportApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
+    export_id = 'export_id_example' # str | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Retrieve exported files
         api_response = api_instance.get_tabular_export(workspace_id, export_id)
+        print("The response of TabularExportApi->get_tabular_export:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling TabularExportApi->get_tabular_export: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
- **export_id** | **str**|  |
+ **workspace_id** | **str**|  | 
+ **export_id** | **str**|  | 
 
 ### Return type
 
-**file_type**
+**bytearray**
 
 ### Authorization
 
@@ -268,7 +213,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, text/csv, text/html
-
 
 ### HTTP response details
 

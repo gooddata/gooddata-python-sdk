@@ -1,3 +1,4 @@
 jsonschema~=4.23.0
 pytest~=8.3.4
 pytest-cov~=6.0.0
+pydantic >= 2

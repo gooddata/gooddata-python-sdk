@@ -1,4 +1,4 @@
-# gooddata_api_client.model.test_definition_request.TestDefinitionRequest
+# gooddata_api_client.models.test_definition_request.TestDefinitionRequest
 
 A request containing all information for testing data source definition.
 
@@ -32,4 +32,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**DataSourceParameter**](DataSourceParameter.md) | [**DataSourceParameter**](DataSourceParameter.md) | [**DataSourceParameter**](DataSourceParameter.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

@@ -1,4 +1,4 @@
-# gooddata_api_client.model.afm.AFM
+# gooddata_api_client.models.afm.AFM
 
 Top level executable entity. Combination of [A]ttributes, [F]ilters & [M]etrics.
 
@@ -73,4 +73,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**MeasureItem**](MeasureItem.md) | [**MeasureItem**](MeasureItem.md) | [**MeasureItem**](MeasureItem.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

@@ -2,8 +2,8 @@
 from __future__ import annotations
 
 import attr
-from gooddata_api_client.model.json_api_csp_directive_in import JsonApiCspDirectiveIn
-from gooddata_api_client.model.json_api_csp_directive_in_attributes import JsonApiCspDirectiveInAttributes
+from gooddata_api_client.models.json_api_csp_directive_in import JsonApiCspDirectiveIn
+from gooddata_api_client.models.json_api_csp_directive_in_attributes import JsonApiCspDirectiveInAttributes
 
 from gooddata_sdk.catalog.base import Base
 

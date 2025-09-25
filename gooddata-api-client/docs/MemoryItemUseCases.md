@@ -3,6 +3,7 @@
 Defines the prompts where the given instruction should be applied.
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **general** | **bool** | Apply this memory item to the general answer prompt. | 
@@ -13,8 +14,24 @@ Name | Type | Description | Notes
 **router** | **bool** | Appy this memory item to the router prompt. | 
 **search** | **bool** | Apply this memory item to the search prompt. | 
 **visualization** | **bool** | Apply this memory item to the visualization prompt. | 
-**any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 
+## Example
+
+```python
+from gooddata_api_client.models.memory_item_use_cases import MemoryItemUseCases
+
+# TODO update the JSON string below
+json = "{}"
+# create an instance of MemoryItemUseCases from a JSON string
+memory_item_use_cases_instance = MemoryItemUseCases.from_json(json)
+# print the JSON string representation of the object
+print(MemoryItemUseCases.to_json())
+
+# convert the object into a dict
+memory_item_use_cases_dict = memory_item_use_cases_instance.to_dict()
+# create an instance of MemoryItemUseCases from a dict
+memory_item_use_cases_from_dict = MemoryItemUseCases.from_dict(memory_item_use_cases_dict)
+```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
 

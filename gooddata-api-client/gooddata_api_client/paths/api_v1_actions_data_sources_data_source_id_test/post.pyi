@@ -25,8 +25,8 @@ import frozendict  # noqa: F401
 
 from gooddata_api_client import schemas  # noqa: F401
 
-from gooddata_api_client.model.test_response import TestResponse
-from gooddata_api_client.model.test_request import TestRequest
+from gooddata_api_client.models.test_response import TestResponse
+from gooddata_api_client.models.test_request import TestRequest
 
 # Path params
 
@@ -387,5 +387,3 @@ class ApiForpost(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
-
-

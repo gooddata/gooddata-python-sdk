@@ -25,7 +25,7 @@ import frozendict  # noqa: F401
 
 from gooddata_api_client import schemas  # noqa: F401
 
-from gooddata_api_client.model.json_api_workspace_data_filter_out_document import JsonApiWorkspaceDataFilterOutDocument
+from gooddata_api_client.models.json_api_workspace_data_filter_out_document import JsonApiWorkspaceDataFilterOutDocument
 
 from . import path
 
@@ -39,29 +39,29 @@ class IncludeSchema(
 
 
     class MetaOapg:
-        
-        
+
+
         class items(
             schemas.EnumBase,
             schemas.StrSchema
         ):
-        
-        
+
+
             class MetaOapg:
                 enum_value_to_name = {
                     "workspaceDataFilterSettings": "WORKSPACE_DATA_FILTER_SETTINGS",
                     "filterSettings": "FILTER_SETTINGS",
                     "ALL": "ALL",
                 }
-            
+
             @schemas.classproperty
             def WORKSPACE_DATA_FILTER_SETTINGS(cls):
                 return cls("workspaceDataFilterSettings")
-            
+
             @schemas.classproperty
             def FILTER_SETTINGS(cls):
                 return cls("filterSettings")
-            
+
             @schemas.classproperty
             def ALL(cls):
                 return cls("ALL")
@@ -455,5 +455,3 @@ class ApiForget(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
-
-

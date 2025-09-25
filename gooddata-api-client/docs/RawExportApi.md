@@ -19,12 +19,12 @@ Note: This API is an experimental and is going to change. Please, use it accordi
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import raw_export_api
-from gooddata_api_client.model.export_response import ExportResponse
-from gooddata_api_client.model.raw_export_request import RawExportRequest
+from gooddata_api_client.models.export_response import ExportResponse
+from gooddata_api_client.models.raw_export_request import RawExportRequest
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -33,76 +33,30 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = raw_export_api.RawExportApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
-    raw_export_request = RawExportRequest(
-        custom_override=RawCustomOverride(
-            labels={
-                "key": RawCustomLabel(
-                    title="title_example",
-                ),
-            },
-            metrics={
-                "key": RawCustomMetric(
-                    title="title_example",
-                ),
-            },
-        ),
-        execution=AFM(
-            attributes=[
-                AttributeItem(
-                    label=AfmObjectIdentifierLabel(
-                        identifier=AfmObjectIdentifierLabelIdentifier(
-                            id="sample_item.price",
-                            type="label",
-                        ),
-                    ),
-                    local_identifier="attribute_1",
-                    show_all_values=False,
-                ),
-            ],
-            aux_measures=[
-                MeasureItem(
-                    definition=MeasureDefinition(),
-                    local_identifier="metric_1",
-                ),
-            ],
-            filters=[
-                FilterDefinition(),
-            ],
-            measures=[
-                MeasureItem(
-                    definition=MeasureDefinition(),
-                    local_identifier="metric_1",
-                ),
-            ],
-        ),
-        execution_settings=ExecutionSettings(
-            data_sampling_percentage=0,
-            timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
-        ),
-        file_name="result",
-        format="CSV",
-    ) # RawExportRequest | 
+    api_instance = gooddata_api_client.RawExportApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
+    raw_export_request = gooddata_api_client.RawExportRequest() # RawExportRequest | 
 
-    # example passing only required values which don't have defaults set
     try:
         # (EXPERIMENTAL) Create raw export request
         api_response = api_instance.create_raw_export(workspace_id, raw_export_request)
+        print("The response of RawExportApi->create_raw_export:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling RawExportApi->create_raw_export: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
- **raw_export_request** | [**RawExportRequest**](RawExportRequest.md)|  |
+ **workspace_id** | **str**|  | 
+ **raw_export_request** | [**RawExportRequest**](RawExportRequest.md)|  | 
 
 ### Return type
 
@@ -117,7 +71,6 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -127,7 +80,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_raw_export**
-> file_type get_raw_export(workspace_id, export_id)
+> bytearray get_raw_export(workspace_id, export_id)
 
 (EXPERIMENTAL) Retrieve exported files
 
@@ -137,10 +90,10 @@ Note: This API is an experimental and is going to change. Please, use it accordi
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import raw_export_api
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -149,32 +102,34 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = raw_export_api.RawExportApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
-    export_id = "exportId_example" # str | 
+    api_instance = gooddata_api_client.RawExportApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
+    export_id = 'export_id_example' # str | 
 
-    # example passing only required values which don't have defaults set
     try:
         # (EXPERIMENTAL) Retrieve exported files
         api_response = api_instance.get_raw_export(workspace_id, export_id)
+        print("The response of RawExportApi->get_raw_export:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling RawExportApi->get_raw_export: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
- **export_id** | **str**|  |
+ **workspace_id** | **str**|  | 
+ **export_id** | **str**|  | 
 
 ### Return type
 
-**file_type**
+**bytearray**
 
 ### Authorization
 
@@ -184,7 +139,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.apache.arrow.file, application/vnd.apache.arrow.stream, text/csv
-
 
 ### HTTP response details
 

@@ -1,4 +1,4 @@
-# gooddata_api_client.model.execution_result_paging.ExecutionResultPaging
+# gooddata_api_client.models.execution_result_paging.ExecutionResultPaging
 
 A paging information related to the data presented in the execution result. These paging information are multi-dimensional.
 
@@ -58,4 +58,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 items | decimal.Decimal, int,  | decimal.Decimal,  |  | value must be a 32 bit integer
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

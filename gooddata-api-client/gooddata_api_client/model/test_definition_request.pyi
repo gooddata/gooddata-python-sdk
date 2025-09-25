@@ -231,4 +231,4 @@ class TestDefinitionRequest(
             **kwargs,
         )
 
-from gooddata_api_client.model.data_source_parameter import DataSourceParameter
+from gooddata_api_client.models.data_source_parameter import DataSourceParameter

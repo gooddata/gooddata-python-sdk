@@ -40,18 +40,18 @@ class Dimension(
         required = {
             "itemIdentifiers",
         }
-        
+
         class properties:
-            
-            
+
+
             class itemIdentifiers(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
                     items = schemas.StrSchema
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, str, ]], typing.List[typing.Union[MetaOapg.items, str, ]]],
@@ -62,28 +62,28 @@ class Dimension(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
-            
-            
+
+
             class localIdentifier(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class sorting(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['SortKey']:
                         return SortKey
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['SortKey'], typing.List['SortKey']],
@@ -94,7 +94,7 @@ class Dimension(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'SortKey':
                     return super().__getitem__(i)
             __annotations__ = {
@@ -102,41 +102,41 @@ class Dimension(
                 "localIdentifier": localIdentifier,
                 "sorting": sorting,
             }
-    
+
     itemIdentifiers: MetaOapg.properties.itemIdentifiers
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["itemIdentifiers"]) -> MetaOapg.properties.itemIdentifiers: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["localIdentifier"]) -> MetaOapg.properties.localIdentifier: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["sorting"]) -> MetaOapg.properties.sorting: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["itemIdentifiers", "localIdentifier", "sorting", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["itemIdentifiers"]) -> MetaOapg.properties.itemIdentifiers: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["localIdentifier"]) -> typing.Union[MetaOapg.properties.localIdentifier, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["sorting"]) -> typing.Union[MetaOapg.properties.sorting, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["itemIdentifiers", "localIdentifier", "sorting", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -157,4 +157,4 @@ class Dimension(
             **kwargs,
         )
 
-from gooddata_api_client.model.sort_key import SortKey
+from gooddata_api_client.models.sort_key import SortKey

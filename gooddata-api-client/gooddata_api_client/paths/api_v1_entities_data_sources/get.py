@@ -25,7 +25,7 @@ import frozendict  # noqa: F401
 
 from gooddata_api_client import schemas  # noqa: F401
 
-from gooddata_api_client.model.json_api_data_source_out_list import JsonApiDataSourceOutList
+from gooddata_api_client.models.json_api_data_source_out_list import JsonApiDataSourceOutList
 
 from . import path
 
@@ -65,29 +65,29 @@ class MetaIncludeSchema(
 
     class MetaOapg:
         unique_items = True
-        
-        
+
+
         class items(
             schemas.EnumBase,
             schemas.StrSchema
         ):
-        
-        
+
+
             class MetaOapg:
                 enum_value_to_name = {
                     "permissions": "PERMISSIONS",
                     "all": "ALL",
                     "ALL": "ALL",
                 }
-            
+
             @schemas.classproperty
             def PERMISSIONS(cls):
                 return cls("permissions")
-            
+
             @schemas.classproperty
             def ALL(cls):
                 return cls("all")
-            
+
             @schemas.classproperty
             def ALL(cls):
                 return cls("ALL")
@@ -394,5 +394,3 @@ class ApiForget(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
-
-

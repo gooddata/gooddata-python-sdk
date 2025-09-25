@@ -43,21 +43,21 @@ class DeclarativeDataset(
             "id",
             "title",
         }
-        
+
         class properties:
-            
-            
+
+
             class grain(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['GrainIdentifier']:
                         return GrainIdentifier
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['GrainIdentifier'], typing.List['GrainIdentifier']],
@@ -68,28 +68,28 @@ class DeclarativeDataset(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'GrainIdentifier':
                     return super().__getitem__(i)
-            
-            
+
+
             class id(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class references(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeReference']:
                         return DeclarativeReference
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeReference'], typing.List['DeclarativeReference']],
@@ -100,28 +100,28 @@ class DeclarativeDataset(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeReference':
                     return super().__getitem__(i)
-            
-            
+
+
             class title(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class attributes(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeAttribute']:
                         return DeclarativeAttribute
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeAttribute'], typing.List['DeclarativeAttribute']],
@@ -132,32 +132,32 @@ class DeclarativeDataset(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeAttribute':
                     return super().__getitem__(i)
-        
+
             @staticmethod
             def dataSourceTableId() -> typing.Type['DataSourceTableIdentifier']:
                 return DataSourceTableIdentifier
-            
-            
+
+
             class description(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class facts(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeFact']:
                         return DeclarativeFact
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeFact'], typing.List['DeclarativeFact']],
@@ -168,23 +168,23 @@ class DeclarativeDataset(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeFact':
                     return super().__getitem__(i)
-        
+
             @staticmethod
             def sql() -> typing.Type['DeclarativeDatasetSql']:
                 return DeclarativeDatasetSql
-            
-            
+
+
             class tags(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
                     items = schemas.StrSchema
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, str, ]], typing.List[typing.Union[MetaOapg.items, str, ]]],
@@ -195,22 +195,22 @@ class DeclarativeDataset(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
-            
-            
+
+
             class workspaceDataFilterColumns(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeWorkspaceDataFilterColumn']:
                         return DeclarativeWorkspaceDataFilterColumn
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeWorkspaceDataFilterColumn'], typing.List['DeclarativeWorkspaceDataFilterColumn']],
@@ -221,7 +221,7 @@ class DeclarativeDataset(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeWorkspaceDataFilterColumn':
                     return super().__getitem__(i)
             __annotations__ = {
@@ -237,92 +237,92 @@ class DeclarativeDataset(
                 "tags": tags,
                 "workspaceDataFilterColumns": workspaceDataFilterColumns,
             }
-    
+
     references: MetaOapg.properties.references
     grain: MetaOapg.properties.grain
     id: MetaOapg.properties.id
     title: MetaOapg.properties.title
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["grain"]) -> MetaOapg.properties.grain: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["references"]) -> MetaOapg.properties.references: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["title"]) -> MetaOapg.properties.title: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["attributes"]) -> MetaOapg.properties.attributes: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["dataSourceTableId"]) -> 'DataSourceTableIdentifier': ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["description"]) -> MetaOapg.properties.description: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["facts"]) -> MetaOapg.properties.facts: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["sql"]) -> 'DeclarativeDatasetSql': ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["tags"]) -> MetaOapg.properties.tags: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["workspaceDataFilterColumns"]) -> MetaOapg.properties.workspaceDataFilterColumns: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["grain", "id", "references", "title", "attributes", "dataSourceTableId", "description", "facts", "sql", "tags", "workspaceDataFilterColumns", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["grain"]) -> MetaOapg.properties.grain: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["references"]) -> MetaOapg.properties.references: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["title"]) -> MetaOapg.properties.title: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["attributes"]) -> typing.Union[MetaOapg.properties.attributes, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["dataSourceTableId"]) -> typing.Union['DataSourceTableIdentifier', schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["description"]) -> typing.Union[MetaOapg.properties.description, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["facts"]) -> typing.Union[MetaOapg.properties.facts, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["sql"]) -> typing.Union['DeclarativeDatasetSql', schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["tags"]) -> typing.Union[MetaOapg.properties.tags, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["workspaceDataFilterColumns"]) -> typing.Union[MetaOapg.properties.workspaceDataFilterColumns, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["grain", "id", "references", "title", "attributes", "dataSourceTableId", "description", "facts", "sql", "tags", "workspaceDataFilterColumns", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -359,10 +359,10 @@ class DeclarativeDataset(
             **kwargs,
         )
 
-from gooddata_api_client.model.data_source_table_identifier import DataSourceTableIdentifier
-from gooddata_api_client.model.declarative_attribute import DeclarativeAttribute
-from gooddata_api_client.model.declarative_dataset_sql import DeclarativeDatasetSql
-from gooddata_api_client.model.declarative_fact import DeclarativeFact
-from gooddata_api_client.model.declarative_reference import DeclarativeReference
-from gooddata_api_client.model.declarative_workspace_data_filter_column import DeclarativeWorkspaceDataFilterColumn
-from gooddata_api_client.model.grain_identifier import GrainIdentifier
+from gooddata_api_client.models.data_source_table_identifier import DataSourceTableIdentifier
+from gooddata_api_client.models.declarative_attribute import DeclarativeAttribute
+from gooddata_api_client.models.declarative_dataset_sql import DeclarativeDatasetSql
+from gooddata_api_client.models.declarative_fact import DeclarativeFact
+from gooddata_api_client.models.declarative_reference import DeclarativeReference
+from gooddata_api_client.models.declarative_workspace_data_filter_column import DeclarativeWorkspaceDataFilterColumn
+from gooddata_api_client.models.grain_identifier import GrainIdentifier

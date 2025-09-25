@@ -25,8 +25,8 @@ import frozendict  # noqa: F401
 
 from gooddata_api_client import schemas  # noqa: F401
 
-from gooddata_api_client.model.afm_execution_response import AfmExecutionResponse
-from gooddata_api_client.model.afm_execution import AfmExecution
+from gooddata_api_client.models.afm_execution_response import AfmExecutionResponse
+from gooddata_api_client.models.afm_execution import AfmExecution
 
 # Header params
 SkipCacheSchema = schemas.BoolSchema
@@ -446,5 +446,3 @@ class ApiForpost(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
-
-

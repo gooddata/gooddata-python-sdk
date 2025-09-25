@@ -1,4 +1,4 @@
-# gooddata_api_client.model.declarative_workspace.DeclarativeWorkspace
+# gooddata_api_client.models.declarative_workspace.DeclarativeWorkspace
 
 A declarative form of a particular workspace.
 
@@ -91,4 +91,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**DeclarativeUserDataFilter**](DeclarativeUserDataFilter.md) | [**DeclarativeUserDataFilter**](DeclarativeUserDataFilter.md) | [**DeclarativeUserDataFilter**](DeclarativeUserDataFilter.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

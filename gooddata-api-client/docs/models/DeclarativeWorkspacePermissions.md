@@ -1,4 +1,4 @@
-# gooddata_api_client.model.declarative_workspace_permissions.DeclarativeWorkspacePermissions
+# gooddata_api_client.models.declarative_workspace_permissions.DeclarativeWorkspacePermissions
 
 Definition of permissions associated with a workspace.
 
@@ -39,4 +39,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**DeclarativeSingleWorkspacePermission**](DeclarativeSingleWorkspacePermission.md) | [**DeclarativeSingleWorkspacePermission**](DeclarativeSingleWorkspacePermission.md) | [**DeclarativeSingleWorkspacePermission**](DeclarativeSingleWorkspacePermission.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

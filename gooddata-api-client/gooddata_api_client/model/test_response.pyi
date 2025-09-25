@@ -108,4 +108,4 @@ class TestResponse(
             **kwargs,
         )
 
-from gooddata_api_client.model.test_query_duration import TestQueryDuration
+from gooddata_api_client.models.test_query_duration import TestQueryDuration

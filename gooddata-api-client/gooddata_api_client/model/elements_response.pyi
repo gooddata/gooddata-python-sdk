@@ -228,7 +228,7 @@ class ElementsResponse(
             **kwargs,
         )
 
-from gooddata_api_client.model.attribute_format import AttributeFormat
-from gooddata_api_client.model.element import Element
-from gooddata_api_client.model.paging import Paging
-from gooddata_api_client.model.rest_api_identifier import RestApiIdentifier
+from gooddata_api_client.models.attribute_format import AttributeFormat
+from gooddata_api_client.models.element import Element
+from gooddata_api_client.models.paging import Paging
+from gooddata_api_client.models.rest_api_identifier import RestApiIdentifier

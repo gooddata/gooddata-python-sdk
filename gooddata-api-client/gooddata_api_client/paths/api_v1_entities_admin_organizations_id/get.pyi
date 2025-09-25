@@ -25,7 +25,7 @@ import frozendict  # noqa: F401
 
 from gooddata_api_client import schemas  # noqa: F401
 
-from gooddata_api_client.model.json_api_organization_out_document import JsonApiOrganizationOutDocument
+from gooddata_api_client.models.json_api_organization_out_document import JsonApiOrganizationOutDocument
 
 # Query params
 FilterSchema = schemas.StrSchema
@@ -37,29 +37,29 @@ class IncludeSchema(
 
 
     class MetaOapg:
-        
-        
+
+
         class items(
             schemas.EnumBase,
             schemas.StrSchema
         ):
-            
+
             @schemas.classproperty
             def USERS(cls):
                 return cls("users")
-            
+
             @schemas.classproperty
             def USER_GROUPS(cls):
                 return cls("userGroups")
-            
+
             @schemas.classproperty
             def BOOTSTRAP_USER(cls):
                 return cls("bootstrapUser")
-            
+
             @schemas.classproperty
             def BOOTSTRAP_USER_GROUP(cls):
                 return cls("bootstrapUserGroup")
-            
+
             @schemas.classproperty
             def ALL(cls):
                 return cls("ALL")
@@ -85,21 +85,21 @@ class MetaIncludeSchema(
 
 
     class MetaOapg:
-        
-        
+
+
         class items(
             schemas.EnumBase,
             schemas.StrSchema
         ):
-            
+
             @schemas.classproperty
             def PERMISSIONS(cls):
                 return cls("permissions")
-            
+
             @schemas.classproperty
             def ALL(cls):
                 return cls("all")
-            
+
             @schemas.classproperty
             def ALL(cls):
                 return cls("ALL")
@@ -445,5 +445,3 @@ class ApiForget(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
-
-

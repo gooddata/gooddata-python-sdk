@@ -1,4 +1,4 @@
-# gooddata_api_client.model.test_request.TestRequest
+# gooddata_api_client.models.test_request.TestRequest
 
 A request containing all information for testing existing data source.
 
@@ -45,4 +45,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**DataSourceParameter**](DataSourceParameter.md) | [**DataSourceParameter**](DataSourceParameter.md) | [**DataSourceParameter**](DataSourceParameter.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

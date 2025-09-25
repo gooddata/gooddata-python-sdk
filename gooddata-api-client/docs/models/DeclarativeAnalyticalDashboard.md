@@ -1,4 +1,4 @@
-# gooddata_api_client.model.declarative_analytical_dashboard.DeclarativeAnalyticalDashboard
+# gooddata_api_client.models.declarative_analytical_dashboard.DeclarativeAnalyticalDashboard
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes
@@ -54,4 +54,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 items | str,  | str,  | A list of tags. | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

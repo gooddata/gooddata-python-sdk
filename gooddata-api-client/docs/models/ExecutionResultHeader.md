@@ -1,4 +1,4 @@
-# gooddata_api_client.model.execution_result_header.ExecutionResultHeader
+# gooddata_api_client.models.execution_result_header.ExecutionResultHeader
 
 Abstract execution result header
 
@@ -16,4 +16,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [TotalExecutionResultHeader](TotalExecutionResultHeader.md) | [**TotalExecutionResultHeader**](TotalExecutionResultHeader.md) | [**TotalExecutionResultHeader**](TotalExecutionResultHeader.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

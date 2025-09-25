@@ -101,12 +101,12 @@ Post Color Pallettes
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_color_palette_in_document import JsonApiColorPaletteInDocument
-from gooddata_api_client.model.json_api_color_palette_out_document import JsonApiColorPaletteOutDocument
+from gooddata_api_client.models.json_api_color_palette_in_document import JsonApiColorPaletteInDocument
+from gooddata_api_client.models.json_api_color_palette_out_document import JsonApiColorPaletteOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -115,35 +115,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    json_api_color_palette_in_document = JsonApiColorPaletteInDocument(
-        data=JsonApiColorPaletteIn(
-            attributes=JsonApiColorPaletteInAttributes(
-                content={},
-                name="name_example",
-            ),
-            id="id1",
-            type="colorPalette",
-        ),
-    ) # JsonApiColorPaletteInDocument | 
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    json_api_color_palette_in_document = gooddata_api_client.JsonApiColorPaletteInDocument() # JsonApiColorPaletteInDocument | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Post Color Pallettes
         api_response = api_instance.create_entity_color_palettes(json_api_color_palette_in_document)
+        print("The response of OrganizationModelControllerApi->create_entity_color_palettes:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->create_entity_color_palettes: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **json_api_color_palette_in_document** | [**JsonApiColorPaletteInDocument**](JsonApiColorPaletteInDocument.md)|  |
+ **json_api_color_palette_in_document** | [**JsonApiColorPaletteInDocument**](JsonApiColorPaletteInDocument.md)|  | 
 
 ### Return type
 
@@ -157,7 +150,6 @@ No authorization required
 
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
-
 
 ### HTTP response details
 
@@ -178,12 +170,12 @@ Post CSP Directives
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_csp_directive_out_document import JsonApiCspDirectiveOutDocument
-from gooddata_api_client.model.json_api_csp_directive_in_document import JsonApiCspDirectiveInDocument
+from gooddata_api_client.models.json_api_csp_directive_in_document import JsonApiCspDirectiveInDocument
+from gooddata_api_client.models.json_api_csp_directive_out_document import JsonApiCspDirectiveOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -192,36 +184,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    json_api_csp_directive_in_document = JsonApiCspDirectiveInDocument(
-        data=JsonApiCspDirectiveIn(
-            attributes=JsonApiCspDirectiveInAttributes(
-                sources=[
-                    "sources_example",
-                ],
-            ),
-            id="id1",
-            type="cspDirective",
-        ),
-    ) # JsonApiCspDirectiveInDocument | 
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    json_api_csp_directive_in_document = gooddata_api_client.JsonApiCspDirectiveInDocument() # JsonApiCspDirectiveInDocument | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Post CSP Directives
         api_response = api_instance.create_entity_csp_directives(json_api_csp_directive_in_document)
+        print("The response of OrganizationModelControllerApi->create_entity_csp_directives:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->create_entity_csp_directives: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **json_api_csp_directive_in_document** | [**JsonApiCspDirectiveInDocument**](JsonApiCspDirectiveInDocument.md)|  |
+ **json_api_csp_directive_in_document** | [**JsonApiCspDirectiveInDocument**](JsonApiCspDirectiveInDocument.md)|  | 
 
 ### Return type
 
@@ -236,7 +220,6 @@ No authorization required
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -246,7 +229,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **create_entity_data_sources**
-> JsonApiDataSourceOutDocument create_entity_data_sources(json_api_data_source_in_document)
+> JsonApiDataSourceOutDocument create_entity_data_sources(json_api_data_source_in_document, meta_include=meta_include)
 
 Post Data Sources
 
@@ -256,12 +239,12 @@ Data Source - represents data source for the workspace
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_data_source_in_document import JsonApiDataSourceInDocument
-from gooddata_api_client.model.json_api_data_source_out_document import JsonApiDataSourceOutDocument
+from gooddata_api_client.models.json_api_data_source_in_document import JsonApiDataSourceInDocument
+from gooddata_api_client.models.json_api_data_source_out_document import JsonApiDataSourceOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -270,64 +253,30 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    json_api_data_source_in_document = JsonApiDataSourceInDocument(
-        data=JsonApiDataSourceIn(
-            attributes=JsonApiDataSourceInAttributes(
-                cache_strategy="ALWAYS",
-                client_id="client_id_example",
-                client_secret="client_secret_example",
-                name="name_example",
-                parameters=[
-                    JsonApiDataSourceInAttributesParametersInner(
-                        name="name_example",
-                        value="value_example",
-                    ),
-                ],
-                password="password_example",
-                private_key="private_key_example",
-                private_key_passphrase="private_key_passphrase_example",
-                schema="schema_example",
-                token="token_example",
-                type="POSTGRESQL",
-                url="url_example",
-                username="username_example",
-            ),
-            id="id1",
-            type="dataSource",
-        ),
-    ) # JsonApiDataSourceInDocument | 
-    meta_include = [
-        "metaInclude=permissions,all",
-    ] # [str] | Include Meta objects. (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    json_api_data_source_in_document = gooddata_api_client.JsonApiDataSourceInDocument() # JsonApiDataSourceInDocument | 
+    meta_include = ['metaInclude=permissions,all'] # List[str] | Include Meta objects. (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Post Data Sources
-        api_response = api_instance.create_entity_data_sources(json_api_data_source_in_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->create_entity_data_sources: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Post Data Sources
         api_response = api_instance.create_entity_data_sources(json_api_data_source_in_document, meta_include=meta_include)
+        print("The response of OrganizationModelControllerApi->create_entity_data_sources:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->create_entity_data_sources: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **json_api_data_source_in_document** | [**JsonApiDataSourceInDocument**](JsonApiDataSourceInDocument.md)|  |
- **meta_include** | **[str]**| Include Meta objects. | [optional]
+ **json_api_data_source_in_document** | [**JsonApiDataSourceInDocument**](JsonApiDataSourceInDocument.md)|  | 
+ **meta_include** | [**List[str]**](str.md)| Include Meta objects. | [optional] 
 
 ### Return type
 
@@ -341,7 +290,6 @@ No authorization required
 
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
-
 
 ### HTTP response details
 
@@ -360,12 +308,12 @@ Post Export Template entities
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_export_template_post_optional_id_document import JsonApiExportTemplatePostOptionalIdDocument
-from gooddata_api_client.model.json_api_export_template_out_document import JsonApiExportTemplateOutDocument
+from gooddata_api_client.models.json_api_export_template_out_document import JsonApiExportTemplateOutDocument
+from gooddata_api_client.models.json_api_export_template_post_optional_id_document import JsonApiExportTemplatePostOptionalIdDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -374,101 +322,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    json_api_export_template_post_optional_id_document = JsonApiExportTemplatePostOptionalIdDocument(
-        data=JsonApiExportTemplatePostOptionalId(
-            attributes=JsonApiExportTemplateInAttributes(
-                dashboard_slides_template=JsonApiExportTemplateInAttributesDashboardSlidesTemplate(
-                    applied_on=["PDF","PPTX"],
-                    content_slide=ContentSlideTemplate(
-                        description_field="{{dashboardFilters}}",
-                        footer=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                        header=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                    ),
-                    cover_slide=CoverSlideTemplate(
-                        background_image=True,
-                        description_field="Exported at: {{exportedAt}}",
-                        footer=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                        header=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                    ),
-                    intro_slide=IntroSlideTemplate(
-                        background_image=True,
-                        description_field='''About:
-{{dashboardDescription}}
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    json_api_export_template_post_optional_id_document = gooddata_api_client.JsonApiExportTemplatePostOptionalIdDocument() # JsonApiExportTemplatePostOptionalIdDocument | 
 
-{{dashboardFilters}}''',
-                        footer=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                        header=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                        title_field="Introduction",
-                    ),
-                    section_slide=SectionSlideTemplate(
-                        background_image=True,
-                        footer=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                        header=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                    ),
-                ),
-                name="name_example",
-                widget_slides_template=JsonApiExportTemplateInAttributesWidgetSlidesTemplate(
-                    applied_on=["PDF","PPTX"],
-                    content_slide=ContentSlideTemplate(
-                        description_field="{{dashboardFilters}}",
-                        footer=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                        header=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                    ),
-                ),
-            ),
-            id="id1",
-            type="exportTemplate",
-        ),
-    ) # JsonApiExportTemplatePostOptionalIdDocument | 
-
-    # example passing only required values which don't have defaults set
     try:
         # Post Export Template entities
         api_response = api_instance.create_entity_export_templates(json_api_export_template_post_optional_id_document)
+        print("The response of OrganizationModelControllerApi->create_entity_export_templates:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->create_entity_export_templates: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **json_api_export_template_post_optional_id_document** | [**JsonApiExportTemplatePostOptionalIdDocument**](JsonApiExportTemplatePostOptionalIdDocument.md)|  |
+ **json_api_export_template_post_optional_id_document** | [**JsonApiExportTemplatePostOptionalIdDocument**](JsonApiExportTemplatePostOptionalIdDocument.md)|  | 
 
 ### Return type
 
@@ -482,7 +357,6 @@ No authorization required
 
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
-
 
 ### HTTP response details
 
@@ -501,12 +375,12 @@ Post Identity Providers
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_identity_provider_out_document import JsonApiIdentityProviderOutDocument
-from gooddata_api_client.model.json_api_identity_provider_in_document import JsonApiIdentityProviderInDocument
+from gooddata_api_client.models.json_api_identity_provider_in_document import JsonApiIdentityProviderInDocument
+from gooddata_api_client.models.json_api_identity_provider_out_document import JsonApiIdentityProviderOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -515,50 +389,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    json_api_identity_provider_in_document = JsonApiIdentityProviderInDocument(
-        data=JsonApiIdentityProviderIn(
-            attributes=JsonApiIdentityProviderInAttributes(
-                custom_claim_mapping={
-                    "key": "key_example",
-                },
-                identifiers=["gooddata.com"],
-                idp_type="MANAGED_IDP",
-                oauth_client_id="oauth_client_id_example",
-                oauth_client_secret="oauth_client_secret_example",
-                oauth_custom_auth_attributes={
-                    "key": "key_example",
-                },
-                oauth_custom_scopes=[
-                    "oauth_custom_scopes_example",
-                ],
-                oauth_issuer_id="myOidcProvider",
-                oauth_issuer_location="oauth_issuer_location_example",
-                oauth_subject_id_claim="oid",
-                saml_metadata="saml_metadata_example",
-            ),
-            id="id1",
-            type="identityProvider",
-        ),
-    ) # JsonApiIdentityProviderInDocument | 
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    json_api_identity_provider_in_document = gooddata_api_client.JsonApiIdentityProviderInDocument() # JsonApiIdentityProviderInDocument | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Post Identity Providers
         api_response = api_instance.create_entity_identity_providers(json_api_identity_provider_in_document)
+        print("The response of OrganizationModelControllerApi->create_entity_identity_providers:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->create_entity_identity_providers: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **json_api_identity_provider_in_document** | [**JsonApiIdentityProviderInDocument**](JsonApiIdentityProviderInDocument.md)|  |
+ **json_api_identity_provider_in_document** | [**JsonApiIdentityProviderInDocument**](JsonApiIdentityProviderInDocument.md)|  | 
 
 ### Return type
 
@@ -572,7 +424,6 @@ No authorization required
 
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
-
 
 ### HTTP response details
 
@@ -593,12 +444,12 @@ Creates JSON web key - used to verify JSON web tokens (Jwts)
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_jwk_in_document import JsonApiJwkInDocument
-from gooddata_api_client.model.json_api_jwk_out_document import JsonApiJwkOutDocument
+from gooddata_api_client.models.json_api_jwk_in_document import JsonApiJwkInDocument
+from gooddata_api_client.models.json_api_jwk_out_document import JsonApiJwkOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -607,34 +458,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    json_api_jwk_in_document = JsonApiJwkInDocument(
-        data=JsonApiJwkIn(
-            attributes=JsonApiJwkInAttributes(
-                content=JsonApiJwkInAttributesContent(),
-            ),
-            id="id1",
-            type="jwk",
-        ),
-    ) # JsonApiJwkInDocument | 
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    json_api_jwk_in_document = gooddata_api_client.JsonApiJwkInDocument() # JsonApiJwkInDocument | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Post Jwks
         api_response = api_instance.create_entity_jwks(json_api_jwk_in_document)
+        print("The response of OrganizationModelControllerApi->create_entity_jwks:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->create_entity_jwks: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **json_api_jwk_in_document** | [**JsonApiJwkInDocument**](JsonApiJwkInDocument.md)|  |
+ **json_api_jwk_in_document** | [**JsonApiJwkInDocument**](JsonApiJwkInDocument.md)|  | 
 
 ### Return type
 
@@ -648,7 +493,6 @@ No authorization required
 
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
-
 
 ### HTTP response details
 
@@ -667,12 +511,12 @@ Post LLM endpoint entities
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_llm_endpoint_in_document import JsonApiLlmEndpointInDocument
-from gooddata_api_client.model.json_api_llm_endpoint_out_document import JsonApiLlmEndpointOutDocument
+from gooddata_api_client.models.json_api_llm_endpoint_in_document import JsonApiLlmEndpointInDocument
+from gooddata_api_client.models.json_api_llm_endpoint_out_document import JsonApiLlmEndpointOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -681,39 +525,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    json_api_llm_endpoint_in_document = JsonApiLlmEndpointInDocument(
-        data=JsonApiLlmEndpointIn(
-            attributes=JsonApiLlmEndpointInAttributes(
-                base_url="base_url_example",
-                llm_model="llm_model_example",
-                llm_organization="llm_organization_example",
-                provider="OPENAI",
-                title="title_example",
-                token="token_example",
-            ),
-            id="id1",
-            type="llmEndpoint",
-        ),
-    ) # JsonApiLlmEndpointInDocument | 
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    json_api_llm_endpoint_in_document = gooddata_api_client.JsonApiLlmEndpointInDocument() # JsonApiLlmEndpointInDocument | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Post LLM endpoint entities
         api_response = api_instance.create_entity_llm_endpoints(json_api_llm_endpoint_in_document)
+        print("The response of OrganizationModelControllerApi->create_entity_llm_endpoints:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->create_entity_llm_endpoints: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **json_api_llm_endpoint_in_document** | [**JsonApiLlmEndpointInDocument**](JsonApiLlmEndpointInDocument.md)|  |
+ **json_api_llm_endpoint_in_document** | [**JsonApiLlmEndpointInDocument**](JsonApiLlmEndpointInDocument.md)|  | 
 
 ### Return type
 
@@ -727,7 +560,6 @@ No authorization required
 
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
-
 
 ### HTTP response details
 
@@ -746,12 +578,12 @@ Post Notification Channel entities
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_notification_channel_out_document import JsonApiNotificationChannelOutDocument
-from gooddata_api_client.model.json_api_notification_channel_post_optional_id_document import JsonApiNotificationChannelPostOptionalIdDocument
+from gooddata_api_client.models.json_api_notification_channel_out_document import JsonApiNotificationChannelOutDocument
+from gooddata_api_client.models.json_api_notification_channel_post_optional_id_document import JsonApiNotificationChannelPostOptionalIdDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -760,41 +592,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    json_api_notification_channel_post_optional_id_document = JsonApiNotificationChannelPostOptionalIdDocument(
-        data=JsonApiNotificationChannelPostOptionalId(
-            attributes=JsonApiNotificationChannelInAttributes(
-                allowed_recipients="CREATOR",
-                custom_dashboard_url="custom_dashboard_url_example",
-                dashboard_link_visibility="HIDDEN",
-                description="description_example",
-                destination=JsonApiNotificationChannelInAttributesDestination(None),
-                in_platform_notification="DISABLED",
-                name="name_example",
-                notification_source="notification_source_example",
-            ),
-            id="id1",
-            type="notificationChannel",
-        ),
-    ) # JsonApiNotificationChannelPostOptionalIdDocument | 
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    json_api_notification_channel_post_optional_id_document = gooddata_api_client.JsonApiNotificationChannelPostOptionalIdDocument() # JsonApiNotificationChannelPostOptionalIdDocument | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Post Notification Channel entities
         api_response = api_instance.create_entity_notification_channels(json_api_notification_channel_post_optional_id_document)
+        print("The response of OrganizationModelControllerApi->create_entity_notification_channels:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->create_entity_notification_channels: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **json_api_notification_channel_post_optional_id_document** | [**JsonApiNotificationChannelPostOptionalIdDocument**](JsonApiNotificationChannelPostOptionalIdDocument.md)|  |
+ **json_api_notification_channel_post_optional_id_document** | [**JsonApiNotificationChannelPostOptionalIdDocument**](JsonApiNotificationChannelPostOptionalIdDocument.md)|  | 
 
 ### Return type
 
@@ -808,7 +627,6 @@ No authorization required
 
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
-
 
 ### HTTP response details
 
@@ -827,12 +645,12 @@ Post Organization Setting entities
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_organization_setting_in_document import JsonApiOrganizationSettingInDocument
-from gooddata_api_client.model.json_api_organization_setting_out_document import JsonApiOrganizationSettingOutDocument
+from gooddata_api_client.models.json_api_organization_setting_in_document import JsonApiOrganizationSettingInDocument
+from gooddata_api_client.models.json_api_organization_setting_out_document import JsonApiOrganizationSettingOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -841,35 +659,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    json_api_organization_setting_in_document = JsonApiOrganizationSettingInDocument(
-        data=JsonApiOrganizationSettingIn(
-            attributes=JsonApiOrganizationSettingInAttributes(
-                content={},
-                type="TIMEZONE",
-            ),
-            id="id1",
-            type="organizationSetting",
-        ),
-    ) # JsonApiOrganizationSettingInDocument | 
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    json_api_organization_setting_in_document = gooddata_api_client.JsonApiOrganizationSettingInDocument() # JsonApiOrganizationSettingInDocument | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Post Organization Setting entities
         api_response = api_instance.create_entity_organization_settings(json_api_organization_setting_in_document)
+        print("The response of OrganizationModelControllerApi->create_entity_organization_settings:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->create_entity_organization_settings: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **json_api_organization_setting_in_document** | [**JsonApiOrganizationSettingInDocument**](JsonApiOrganizationSettingInDocument.md)|  |
+ **json_api_organization_setting_in_document** | [**JsonApiOrganizationSettingInDocument**](JsonApiOrganizationSettingInDocument.md)|  | 
 
 ### Return type
 
@@ -883,7 +694,6 @@ No authorization required
 
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
-
 
 ### HTTP response details
 
@@ -902,12 +712,12 @@ Post Theming
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_theme_in_document import JsonApiThemeInDocument
-from gooddata_api_client.model.json_api_theme_out_document import JsonApiThemeOutDocument
+from gooddata_api_client.models.json_api_theme_in_document import JsonApiThemeInDocument
+from gooddata_api_client.models.json_api_theme_out_document import JsonApiThemeOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -916,35 +726,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    json_api_theme_in_document = JsonApiThemeInDocument(
-        data=JsonApiThemeIn(
-            attributes=JsonApiColorPaletteInAttributes(
-                content={},
-                name="name_example",
-            ),
-            id="id1",
-            type="theme",
-        ),
-    ) # JsonApiThemeInDocument | 
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    json_api_theme_in_document = gooddata_api_client.JsonApiThemeInDocument() # JsonApiThemeInDocument | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Post Theming
         api_response = api_instance.create_entity_themes(json_api_theme_in_document)
+        print("The response of OrganizationModelControllerApi->create_entity_themes:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->create_entity_themes: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **json_api_theme_in_document** | [**JsonApiThemeInDocument**](JsonApiThemeInDocument.md)|  |
+ **json_api_theme_in_document** | [**JsonApiThemeInDocument**](JsonApiThemeInDocument.md)|  | 
 
 ### Return type
 
@@ -959,7 +762,6 @@ No authorization required
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -969,7 +771,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **create_entity_user_groups**
-> JsonApiUserGroupOutDocument create_entity_user_groups(json_api_user_group_in_document)
+> JsonApiUserGroupOutDocument create_entity_user_groups(json_api_user_group_in_document, include=include)
 
 Post User Group entities
 
@@ -979,12 +781,12 @@ User Group - creates tree-like structure for categorizing users
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_user_group_in_document import JsonApiUserGroupInDocument
-from gooddata_api_client.model.json_api_user_group_out_document import JsonApiUserGroupOutDocument
+from gooddata_api_client.models.json_api_user_group_in_document import JsonApiUserGroupInDocument
+from gooddata_api_client.models.json_api_user_group_out_document import JsonApiUserGroupOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -993,57 +795,30 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    json_api_user_group_in_document = JsonApiUserGroupInDocument(
-        data=JsonApiUserGroupIn(
-            attributes=JsonApiUserGroupInAttributes(
-                name="name_example",
-            ),
-            id="id1",
-            relationships=JsonApiUserGroupInRelationships(
-                parents=JsonApiUserGroupInRelationshipsParents(
-                    data=JsonApiUserGroupToManyLinkage([
-                        JsonApiUserGroupLinkage(
-                            id="id_example",
-                            type="userGroup",
-                        ),
-                    ]),
-                ),
-            ),
-            type="userGroup",
-        ),
-    ) # JsonApiUserGroupInDocument | 
-    include = [
-        "parents",
-    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    json_api_user_group_in_document = gooddata_api_client.JsonApiUserGroupInDocument() # JsonApiUserGroupInDocument | 
+    include = ['parents'] # List[str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Post User Group entities
-        api_response = api_instance.create_entity_user_groups(json_api_user_group_in_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->create_entity_user_groups: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Post User Group entities
         api_response = api_instance.create_entity_user_groups(json_api_user_group_in_document, include=include)
+        print("The response of OrganizationModelControllerApi->create_entity_user_groups:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->create_entity_user_groups: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **json_api_user_group_in_document** | [**JsonApiUserGroupInDocument**](JsonApiUserGroupInDocument.md)|  |
- **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+ **json_api_user_group_in_document** | [**JsonApiUserGroupInDocument**](JsonApiUserGroupInDocument.md)|  | 
+ **include** | [**List[str]**](str.md)| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional] 
 
 ### Return type
 
@@ -1058,7 +833,6 @@ No authorization required
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -1068,7 +842,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **create_entity_users**
-> JsonApiUserOutDocument create_entity_users(json_api_user_in_document)
+> JsonApiUserOutDocument create_entity_users(json_api_user_in_document, include=include)
 
 Post User entities
 
@@ -1078,12 +852,12 @@ User - represents entity interacting with platform
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_user_in_document import JsonApiUserInDocument
-from gooddata_api_client.model.json_api_user_out_document import JsonApiUserOutDocument
+from gooddata_api_client.models.json_api_user_in_document import JsonApiUserInDocument
+from gooddata_api_client.models.json_api_user_out_document import JsonApiUserOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -1092,60 +866,30 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    json_api_user_in_document = JsonApiUserInDocument(
-        data=JsonApiUserIn(
-            attributes=JsonApiUserInAttributes(
-                authentication_id="authentication_id_example",
-                email="email_example",
-                firstname="firstname_example",
-                lastname="lastname_example",
-            ),
-            id="id1",
-            relationships=JsonApiUserInRelationships(
-                user_groups=JsonApiUserGroupInRelationshipsParents(
-                    data=JsonApiUserGroupToManyLinkage([
-                        JsonApiUserGroupLinkage(
-                            id="id_example",
-                            type="userGroup",
-                        ),
-                    ]),
-                ),
-            ),
-            type="user",
-        ),
-    ) # JsonApiUserInDocument | 
-    include = [
-        "userGroups",
-    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    json_api_user_in_document = gooddata_api_client.JsonApiUserInDocument() # JsonApiUserInDocument | 
+    include = ['userGroups'] # List[str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Post User entities
-        api_response = api_instance.create_entity_users(json_api_user_in_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->create_entity_users: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Post User entities
         api_response = api_instance.create_entity_users(json_api_user_in_document, include=include)
+        print("The response of OrganizationModelControllerApi->create_entity_users:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->create_entity_users: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **json_api_user_in_document** | [**JsonApiUserInDocument**](JsonApiUserInDocument.md)|  |
- **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+ **json_api_user_in_document** | [**JsonApiUserInDocument**](JsonApiUserInDocument.md)|  | 
+ **include** | [**List[str]**](str.md)| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional] 
 
 ### Return type
 
@@ -1160,7 +904,6 @@ No authorization required
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -1170,7 +913,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **create_entity_workspaces**
-> JsonApiWorkspaceOutDocument create_entity_workspaces(json_api_workspace_in_document)
+> JsonApiWorkspaceOutDocument create_entity_workspaces(json_api_workspace_in_document, include=include, meta_include=meta_include)
 
 Post Workspace entities
 
@@ -1180,12 +923,12 @@ Space of the shared interest
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_workspace_out_document import JsonApiWorkspaceOutDocument
-from gooddata_api_client.model.json_api_workspace_in_document import JsonApiWorkspaceInDocument
+from gooddata_api_client.models.json_api_workspace_in_document import JsonApiWorkspaceInDocument
+from gooddata_api_client.models.json_api_workspace_out_document import JsonApiWorkspaceOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -1194,69 +937,32 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    json_api_workspace_in_document = JsonApiWorkspaceInDocument(
-        data=JsonApiWorkspaceIn(
-            attributes=JsonApiWorkspaceInAttributes(
-                cache_extra_limit=1,
-                data_source=JsonApiWorkspaceInAttributesDataSource(
-                    id="snowflake.instance.1",
-                    schema_path=[
-                        "subPath",
-                    ],
-                ),
-                description="description_example",
-                early_access="early_access_example",
-                early_access_values=[
-                    "early_access_values_example",
-                ],
-                name="name_example",
-                prefix="/6bUUGjjNSwg0_bs",
-            ),
-            id="id1",
-            relationships=JsonApiWorkspaceInRelationships(
-                parent=JsonApiWorkspaceAutomationOutRelationshipsWorkspace(
-                    data=JsonApiWorkspaceToOneLinkage(None),
-                ),
-            ),
-            type="workspace",
-        ),
-    ) # JsonApiWorkspaceInDocument | 
-    include = [
-        "parent",
-    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
-    meta_include = [
-        "metaInclude=config,permissions,hierarchy,dataModelDatasets,all",
-    ] # [str] | Include Meta objects. (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    json_api_workspace_in_document = gooddata_api_client.JsonApiWorkspaceInDocument() # JsonApiWorkspaceInDocument | 
+    include = ['parent'] # List[str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    meta_include = ['metaInclude=config,permissions,hierarchy,dataModelDatasets,all'] # List[str] | Include Meta objects. (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Post Workspace entities
-        api_response = api_instance.create_entity_workspaces(json_api_workspace_in_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->create_entity_workspaces: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Post Workspace entities
         api_response = api_instance.create_entity_workspaces(json_api_workspace_in_document, include=include, meta_include=meta_include)
+        print("The response of OrganizationModelControllerApi->create_entity_workspaces:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->create_entity_workspaces: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **json_api_workspace_in_document** | [**JsonApiWorkspaceInDocument**](JsonApiWorkspaceInDocument.md)|  |
- **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
- **meta_include** | **[str]**| Include Meta objects. | [optional]
+ **json_api_workspace_in_document** | [**JsonApiWorkspaceInDocument**](JsonApiWorkspaceInDocument.md)|  | 
+ **include** | [**List[str]**](str.md)| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional] 
+ **meta_include** | [**List[str]**](str.md)| Include Meta objects. | [optional] 
 
 ### Return type
 
@@ -1271,7 +977,6 @@ No authorization required
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -1281,7 +986,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **delete_entity_color_palettes**
-> delete_entity_color_palettes(id)
+> delete_entity_color_palettes(id, filter=filter)
 
 Delete a Color Pallette
 
@@ -1289,10 +994,10 @@ Delete a Color Pallette
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -1301,35 +1006,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "name==someString;content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    filter = 'name==someString;content==JsonNodeValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Delete a Color Pallette
-        api_instance.delete_entity_color_palettes(id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->delete_entity_color_palettes: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Delete a Color Pallette
         api_instance.delete_entity_color_palettes(id, filter=filter)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->delete_entity_color_palettes: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -1343,7 +1041,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: Not defined
-
 
 ### HTTP response details
 
@@ -1354,7 +1051,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **delete_entity_csp_directives**
-> delete_entity_csp_directives(id)
+> delete_entity_csp_directives(id, filter=filter)
 
 Delete CSP Directives
 
@@ -1364,10 +1061,10 @@ Delete CSP Directives
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -1376,35 +1073,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "sources==v1,v2,v3" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    filter = 'sources==v1,v2,v3' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Delete CSP Directives
-        api_instance.delete_entity_csp_directives(id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->delete_entity_csp_directives: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Delete CSP Directives
         api_instance.delete_entity_csp_directives(id, filter=filter)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->delete_entity_csp_directives: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -1418,7 +1108,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: Not defined
-
 
 ### HTTP response details
 
@@ -1429,7 +1118,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **delete_entity_data_sources**
-> delete_entity_data_sources(id)
+> delete_entity_data_sources(id, filter=filter)
 
 Delete Data Source entity
 
@@ -1439,10 +1128,10 @@ Data Source - represents data source for the workspace
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -1451,35 +1140,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "name==someString;type==DatabaseTypeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    filter = 'name==someString;type==DatabaseTypeValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Delete Data Source entity
-        api_instance.delete_entity_data_sources(id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->delete_entity_data_sources: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Delete Data Source entity
         api_instance.delete_entity_data_sources(id, filter=filter)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->delete_entity_data_sources: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -1493,7 +1175,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: Not defined
-
 
 ### HTTP response details
 
@@ -1504,7 +1185,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **delete_entity_export_templates**
-> delete_entity_export_templates(id)
+> delete_entity_export_templates(id, filter=filter)
 
 Delete Export Template entity
 
@@ -1512,10 +1193,10 @@ Delete Export Template entity
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -1524,35 +1205,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "name==someString;dashboardSlidesTemplate==DashboardSlidesTemplateValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    filter = 'name==someString;dashboardSlidesTemplate==DashboardSlidesTemplateValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Delete Export Template entity
-        api_instance.delete_entity_export_templates(id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->delete_entity_export_templates: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Delete Export Template entity
         api_instance.delete_entity_export_templates(id, filter=filter)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->delete_entity_export_templates: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -1566,7 +1240,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: Not defined
-
 
 ### HTTP response details
 
@@ -1577,7 +1250,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **delete_entity_identity_providers**
-> delete_entity_identity_providers(id)
+> delete_entity_identity_providers(id, filter=filter)
 
 Delete Identity Provider
 
@@ -1585,10 +1258,10 @@ Delete Identity Provider
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -1597,35 +1270,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "identifiers==v1,v2,v3;customClaimMapping==MapValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    filter = 'identifiers==v1,v2,v3;customClaimMapping==MapValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Delete Identity Provider
-        api_instance.delete_entity_identity_providers(id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->delete_entity_identity_providers: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Delete Identity Provider
         api_instance.delete_entity_identity_providers(id, filter=filter)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->delete_entity_identity_providers: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -1639,7 +1305,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: Not defined
-
 
 ### HTTP response details
 
@@ -1650,7 +1315,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **delete_entity_jwks**
-> delete_entity_jwks(id)
+> delete_entity_jwks(id, filter=filter)
 
 Delete Jwk
 
@@ -1660,10 +1325,10 @@ Deletes JSON web key - used to verify JSON web tokens (Jwts)
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -1672,35 +1337,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "content==JwkSpecificationValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    filter = 'content==JwkSpecificationValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Delete Jwk
-        api_instance.delete_entity_jwks(id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->delete_entity_jwks: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Delete Jwk
         api_instance.delete_entity_jwks(id, filter=filter)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->delete_entity_jwks: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -1714,7 +1372,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: Not defined
-
 
 ### HTTP response details
 
@@ -1725,7 +1382,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **delete_entity_llm_endpoints**
-> delete_entity_llm_endpoints(id)
+> delete_entity_llm_endpoints(id, filter=filter)
 
 
 
@@ -1733,10 +1390,10 @@ No authorization required
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -1745,33 +1402,27 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "title==someString;provider==LLMProviderValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    filter = 'title==someString;provider==LLMProviderValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        api_instance.delete_entity_llm_endpoints(id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->delete_entity_llm_endpoints: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         api_instance.delete_entity_llm_endpoints(id, filter=filter)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->delete_entity_llm_endpoints: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -1785,7 +1436,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: Not defined
-
 
 ### HTTP response details
 
@@ -1796,7 +1446,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **delete_entity_notification_channels**
-> delete_entity_notification_channels(id)
+> delete_entity_notification_channels(id, filter=filter)
 
 Delete Notification Channel entity
 
@@ -1804,10 +1454,10 @@ Delete Notification Channel entity
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -1816,35 +1466,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "name==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    filter = 'name==someString;description==someString' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Delete Notification Channel entity
-        api_instance.delete_entity_notification_channels(id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->delete_entity_notification_channels: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Delete Notification Channel entity
         api_instance.delete_entity_notification_channels(id, filter=filter)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->delete_entity_notification_channels: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -1858,7 +1501,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: Not defined
-
 
 ### HTTP response details
 
@@ -1869,7 +1511,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **delete_entity_organization_settings**
-> delete_entity_organization_settings(id)
+> delete_entity_organization_settings(id, filter=filter)
 
 Delete Organization entity
 
@@ -1877,10 +1519,10 @@ Delete Organization entity
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -1889,35 +1531,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "content==JsonNodeValue;type==SettingTypeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    filter = 'content==JsonNodeValue;type==SettingTypeValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Delete Organization entity
-        api_instance.delete_entity_organization_settings(id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->delete_entity_organization_settings: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Delete Organization entity
         api_instance.delete_entity_organization_settings(id, filter=filter)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->delete_entity_organization_settings: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -1931,7 +1566,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: Not defined
-
 
 ### HTTP response details
 
@@ -1942,7 +1576,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **delete_entity_themes**
-> delete_entity_themes(id)
+> delete_entity_themes(id, filter=filter)
 
 Delete Theming
 
@@ -1950,10 +1584,10 @@ Delete Theming
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -1962,35 +1596,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "name==someString;content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    filter = 'name==someString;content==JsonNodeValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Delete Theming
-        api_instance.delete_entity_themes(id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->delete_entity_themes: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Delete Theming
         api_instance.delete_entity_themes(id, filter=filter)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->delete_entity_themes: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -2004,7 +1631,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: Not defined
-
 
 ### HTTP response details
 
@@ -2015,7 +1641,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **delete_entity_user_groups**
-> delete_entity_user_groups(id)
+> delete_entity_user_groups(id, filter=filter)
 
 Delete UserGroup entity
 
@@ -2025,10 +1651,10 @@ User Group - creates tree-like structure for categorizing users
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -2037,35 +1663,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "name==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    filter = 'name==someString' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Delete UserGroup entity
-        api_instance.delete_entity_user_groups(id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->delete_entity_user_groups: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Delete UserGroup entity
         api_instance.delete_entity_user_groups(id, filter=filter)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->delete_entity_user_groups: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -2079,7 +1698,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: Not defined
-
 
 ### HTTP response details
 
@@ -2090,7 +1708,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **delete_entity_users**
-> delete_entity_users(id)
+> delete_entity_users(id, filter=filter)
 
 Delete User entity
 
@@ -2100,10 +1718,10 @@ User - represents entity interacting with platform
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -2112,35 +1730,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "authenticationId==someString;firstname==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    filter = 'authenticationId==someString;firstname==someString' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Delete User entity
-        api_instance.delete_entity_users(id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->delete_entity_users: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Delete User entity
         api_instance.delete_entity_users(id, filter=filter)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->delete_entity_users: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -2154,7 +1765,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: Not defined
-
 
 ### HTTP response details
 
@@ -2165,7 +1775,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **delete_entity_workspaces**
-> delete_entity_workspaces(id)
+> delete_entity_workspaces(id, filter=filter)
 
 Delete Workspace entity
 
@@ -2175,10 +1785,10 @@ Space of the shared interest
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -2187,35 +1797,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "name==someString;earlyAccess==someString;parent.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    filter = 'name==someString;earlyAccess==someString;parent.id==321' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Delete Workspace entity
-        api_instance.delete_entity_workspaces(id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->delete_entity_workspaces: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Delete Workspace entity
         api_instance.delete_entity_workspaces(id, filter=filter)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->delete_entity_workspaces: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -2230,7 +1833,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: Not defined
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -2240,7 +1842,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_all_entities_color_palettes**
-> JsonApiColorPaletteOutList get_all_entities_color_palettes()
+> JsonApiColorPaletteOutList get_all_entities_color_palettes(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
 
 Get all Color Pallettes
 
@@ -2248,11 +1850,11 @@ Get all Color Pallettes
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_color_palette_out_list import JsonApiColorPaletteOutList
+from gooddata_api_client.models.json_api_color_palette_out_list import JsonApiColorPaletteOutList
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -2261,39 +1863,36 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    filter = "name==someString;content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
-    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
-    sort = [
-        "sort_example",
-    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
-    meta_include = [
-        "metaInclude=page,all",
-    ] # [str] | Include Meta objects. (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    filter = 'name==someString;content==JsonNodeValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) (default to 0)
+    size = 20 # int | The size of the page to be returned (optional) (default to 20)
+    sort = ['sort_example'] # List[str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = ['metaInclude=page,all'] # List[str] | Include Meta objects. (optional)
 
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get all Color Pallettes
         api_response = api_instance.get_all_entities_color_palettes(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
+        print("The response of OrganizationModelControllerApi->get_all_entities_color_palettes:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->get_all_entities_color_palettes: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
- **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
- **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
- **meta_include** | **[str]**| Include Meta objects. | [optional]
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **page** | **int**| Zero-based page index (0..N) | [optional] [default to 0]
+ **size** | **int**| The size of the page to be returned | [optional] [default to 20]
+ **sort** | [**List[str]**](str.md)| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional] 
+ **meta_include** | [**List[str]**](str.md)| Include Meta objects. | [optional] 
 
 ### Return type
 
@@ -2308,7 +1907,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -2318,7 +1916,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_all_entities_csp_directives**
-> JsonApiCspDirectiveOutList get_all_entities_csp_directives()
+> JsonApiCspDirectiveOutList get_all_entities_csp_directives(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
 
 Get CSP Directives
 
@@ -2328,11 +1926,11 @@ Get CSP Directives
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_csp_directive_out_list import JsonApiCspDirectiveOutList
+from gooddata_api_client.models.json_api_csp_directive_out_list import JsonApiCspDirectiveOutList
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -2341,39 +1939,36 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    filter = "sources==v1,v2,v3" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
-    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
-    sort = [
-        "sort_example",
-    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
-    meta_include = [
-        "metaInclude=page,all",
-    ] # [str] | Include Meta objects. (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    filter = 'sources==v1,v2,v3' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) (default to 0)
+    size = 20 # int | The size of the page to be returned (optional) (default to 20)
+    sort = ['sort_example'] # List[str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = ['metaInclude=page,all'] # List[str] | Include Meta objects. (optional)
 
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get CSP Directives
         api_response = api_instance.get_all_entities_csp_directives(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
+        print("The response of OrganizationModelControllerApi->get_all_entities_csp_directives:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->get_all_entities_csp_directives: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
- **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
- **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
- **meta_include** | **[str]**| Include Meta objects. | [optional]
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **page** | **int**| Zero-based page index (0..N) | [optional] [default to 0]
+ **size** | **int**| The size of the page to be returned | [optional] [default to 20]
+ **sort** | [**List[str]**](str.md)| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional] 
+ **meta_include** | [**List[str]**](str.md)| Include Meta objects. | [optional] 
 
 ### Return type
 
@@ -2388,7 +1983,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -2398,7 +1992,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_all_entities_data_source_identifiers**
-> JsonApiDataSourceIdentifierOutList get_all_entities_data_source_identifiers()
+> JsonApiDataSourceIdentifierOutList get_all_entities_data_source_identifiers(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
 
 Get all Data Source Identifiers
 
@@ -2406,11 +2000,11 @@ Get all Data Source Identifiers
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_data_source_identifier_out_list import JsonApiDataSourceIdentifierOutList
+from gooddata_api_client.models.json_api_data_source_identifier_out_list import JsonApiDataSourceIdentifierOutList
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -2419,39 +2013,36 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    filter = "name==someString;schema==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
-    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
-    sort = [
-        "sort_example",
-    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
-    meta_include = [
-        "metaInclude=permissions,page,all",
-    ] # [str] | Include Meta objects. (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    filter = 'name==someString;schema==someString' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) (default to 0)
+    size = 20 # int | The size of the page to be returned (optional) (default to 20)
+    sort = ['sort_example'] # List[str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = ['metaInclude=permissions,page,all'] # List[str] | Include Meta objects. (optional)
 
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get all Data Source Identifiers
         api_response = api_instance.get_all_entities_data_source_identifiers(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
+        print("The response of OrganizationModelControllerApi->get_all_entities_data_source_identifiers:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->get_all_entities_data_source_identifiers: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
- **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
- **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
- **meta_include** | **[str]**| Include Meta objects. | [optional]
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **page** | **int**| Zero-based page index (0..N) | [optional] [default to 0]
+ **size** | **int**| The size of the page to be returned | [optional] [default to 20]
+ **sort** | [**List[str]**](str.md)| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional] 
+ **meta_include** | [**List[str]**](str.md)| Include Meta objects. | [optional] 
 
 ### Return type
 
@@ -2466,7 +2057,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -2476,7 +2066,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_all_entities_data_sources**
-> JsonApiDataSourceOutList get_all_entities_data_sources()
+> JsonApiDataSourceOutList get_all_entities_data_sources(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
 
 Get Data Source entities
 
@@ -2486,11 +2076,11 @@ Data Source - represents data source for the workspace
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_data_source_out_list import JsonApiDataSourceOutList
+from gooddata_api_client.models.json_api_data_source_out_list import JsonApiDataSourceOutList
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -2499,39 +2089,36 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    filter = "name==someString;type==DatabaseTypeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
-    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
-    sort = [
-        "sort_example",
-    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
-    meta_include = [
-        "metaInclude=permissions,page,all",
-    ] # [str] | Include Meta objects. (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    filter = 'name==someString;type==DatabaseTypeValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) (default to 0)
+    size = 20 # int | The size of the page to be returned (optional) (default to 20)
+    sort = ['sort_example'] # List[str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = ['metaInclude=permissions,page,all'] # List[str] | Include Meta objects. (optional)
 
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get Data Source entities
         api_response = api_instance.get_all_entities_data_sources(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
+        print("The response of OrganizationModelControllerApi->get_all_entities_data_sources:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->get_all_entities_data_sources: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
- **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
- **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
- **meta_include** | **[str]**| Include Meta objects. | [optional]
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **page** | **int**| Zero-based page index (0..N) | [optional] [default to 0]
+ **size** | **int**| The size of the page to be returned | [optional] [default to 20]
+ **sort** | [**List[str]**](str.md)| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional] 
+ **meta_include** | [**List[str]**](str.md)| Include Meta objects. | [optional] 
 
 ### Return type
 
@@ -2546,7 +2133,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -2556,7 +2142,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_all_entities_entitlements**
-> JsonApiEntitlementOutList get_all_entities_entitlements()
+> JsonApiEntitlementOutList get_all_entities_entitlements(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
 
 Get Entitlements
 
@@ -2566,11 +2152,11 @@ Space of the shared interest
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_entitlement_out_list import JsonApiEntitlementOutList
+from gooddata_api_client.models.json_api_entitlement_out_list import JsonApiEntitlementOutList
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -2579,39 +2165,36 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    filter = "value==someString;expiry==LocalDateValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
-    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
-    sort = [
-        "sort_example",
-    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
-    meta_include = [
-        "metaInclude=page,all",
-    ] # [str] | Include Meta objects. (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    filter = 'value==someString;expiry==LocalDateValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) (default to 0)
+    size = 20 # int | The size of the page to be returned (optional) (default to 20)
+    sort = ['sort_example'] # List[str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = ['metaInclude=page,all'] # List[str] | Include Meta objects. (optional)
 
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get Entitlements
         api_response = api_instance.get_all_entities_entitlements(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
+        print("The response of OrganizationModelControllerApi->get_all_entities_entitlements:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->get_all_entities_entitlements: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
- **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
- **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
- **meta_include** | **[str]**| Include Meta objects. | [optional]
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **page** | **int**| Zero-based page index (0..N) | [optional] [default to 0]
+ **size** | **int**| The size of the page to be returned | [optional] [default to 20]
+ **sort** | [**List[str]**](str.md)| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional] 
+ **meta_include** | [**List[str]**](str.md)| Include Meta objects. | [optional] 
 
 ### Return type
 
@@ -2626,7 +2209,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -2636,7 +2218,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_all_entities_export_templates**
-> JsonApiExportTemplateOutList get_all_entities_export_templates()
+> JsonApiExportTemplateOutList get_all_entities_export_templates(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
 
 GET all Export Template entities
 
@@ -2644,11 +2226,11 @@ GET all Export Template entities
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_export_template_out_list import JsonApiExportTemplateOutList
+from gooddata_api_client.models.json_api_export_template_out_list import JsonApiExportTemplateOutList
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -2657,39 +2239,36 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    filter = "name==someString;dashboardSlidesTemplate==DashboardSlidesTemplateValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
-    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
-    sort = [
-        "sort_example",
-    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
-    meta_include = [
-        "metaInclude=page,all",
-    ] # [str] | Include Meta objects. (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    filter = 'name==someString;dashboardSlidesTemplate==DashboardSlidesTemplateValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) (default to 0)
+    size = 20 # int | The size of the page to be returned (optional) (default to 20)
+    sort = ['sort_example'] # List[str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = ['metaInclude=page,all'] # List[str] | Include Meta objects. (optional)
 
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # GET all Export Template entities
         api_response = api_instance.get_all_entities_export_templates(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
+        print("The response of OrganizationModelControllerApi->get_all_entities_export_templates:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->get_all_entities_export_templates: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
- **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
- **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
- **meta_include** | **[str]**| Include Meta objects. | [optional]
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **page** | **int**| Zero-based page index (0..N) | [optional] [default to 0]
+ **size** | **int**| The size of the page to be returned | [optional] [default to 20]
+ **sort** | [**List[str]**](str.md)| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional] 
+ **meta_include** | [**List[str]**](str.md)| Include Meta objects. | [optional] 
 
 ### Return type
 
@@ -2704,7 +2283,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -2714,7 +2292,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_all_entities_identity_providers**
-> JsonApiIdentityProviderOutList get_all_entities_identity_providers()
+> JsonApiIdentityProviderOutList get_all_entities_identity_providers(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
 
 Get all Identity Providers
 
@@ -2722,11 +2300,11 @@ Get all Identity Providers
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_identity_provider_out_list import JsonApiIdentityProviderOutList
+from gooddata_api_client.models.json_api_identity_provider_out_list import JsonApiIdentityProviderOutList
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -2735,39 +2313,36 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    filter = "identifiers==v1,v2,v3;customClaimMapping==MapValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
-    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
-    sort = [
-        "sort_example",
-    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
-    meta_include = [
-        "metaInclude=page,all",
-    ] # [str] | Include Meta objects. (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    filter = 'identifiers==v1,v2,v3;customClaimMapping==MapValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) (default to 0)
+    size = 20 # int | The size of the page to be returned (optional) (default to 20)
+    sort = ['sort_example'] # List[str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = ['metaInclude=page,all'] # List[str] | Include Meta objects. (optional)
 
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get all Identity Providers
         api_response = api_instance.get_all_entities_identity_providers(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
+        print("The response of OrganizationModelControllerApi->get_all_entities_identity_providers:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->get_all_entities_identity_providers: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
- **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
- **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
- **meta_include** | **[str]**| Include Meta objects. | [optional]
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **page** | **int**| Zero-based page index (0..N) | [optional] [default to 0]
+ **size** | **int**| The size of the page to be returned | [optional] [default to 20]
+ **sort** | [**List[str]**](str.md)| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional] 
+ **meta_include** | [**List[str]**](str.md)| Include Meta objects. | [optional] 
 
 ### Return type
 
@@ -2782,7 +2357,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -2792,7 +2366,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_all_entities_jwks**
-> JsonApiJwkOutList get_all_entities_jwks()
+> JsonApiJwkOutList get_all_entities_jwks(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
 
 Get all Jwks
 
@@ -2802,11 +2376,11 @@ Returns all JSON web keys - used to verify JSON web tokens (Jwts)
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_jwk_out_list import JsonApiJwkOutList
+from gooddata_api_client.models.json_api_jwk_out_list import JsonApiJwkOutList
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -2815,39 +2389,36 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    filter = "content==JwkSpecificationValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
-    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
-    sort = [
-        "sort_example",
-    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
-    meta_include = [
-        "metaInclude=page,all",
-    ] # [str] | Include Meta objects. (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    filter = 'content==JwkSpecificationValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) (default to 0)
+    size = 20 # int | The size of the page to be returned (optional) (default to 20)
+    sort = ['sort_example'] # List[str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = ['metaInclude=page,all'] # List[str] | Include Meta objects. (optional)
 
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get all Jwks
         api_response = api_instance.get_all_entities_jwks(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
+        print("The response of OrganizationModelControllerApi->get_all_entities_jwks:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->get_all_entities_jwks: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
- **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
- **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
- **meta_include** | **[str]**| Include Meta objects. | [optional]
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **page** | **int**| Zero-based page index (0..N) | [optional] [default to 0]
+ **size** | **int**| The size of the page to be returned | [optional] [default to 20]
+ **sort** | [**List[str]**](str.md)| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional] 
+ **meta_include** | [**List[str]**](str.md)| Include Meta objects. | [optional] 
 
 ### Return type
 
@@ -2862,7 +2433,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -2872,7 +2442,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_all_entities_llm_endpoints**
-> JsonApiLlmEndpointOutList get_all_entities_llm_endpoints()
+> JsonApiLlmEndpointOutList get_all_entities_llm_endpoints(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
 
 Get all LLM endpoint entities
 
@@ -2880,11 +2450,11 @@ Get all LLM endpoint entities
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_llm_endpoint_out_list import JsonApiLlmEndpointOutList
+from gooddata_api_client.models.json_api_llm_endpoint_out_list import JsonApiLlmEndpointOutList
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -2893,39 +2463,36 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    filter = "title==someString;provider==LLMProviderValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
-    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
-    sort = [
-        "sort_example",
-    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
-    meta_include = [
-        "metaInclude=page,all",
-    ] # [str] | Include Meta objects. (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    filter = 'title==someString;provider==LLMProviderValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) (default to 0)
+    size = 20 # int | The size of the page to be returned (optional) (default to 20)
+    sort = ['sort_example'] # List[str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = ['metaInclude=page,all'] # List[str] | Include Meta objects. (optional)
 
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get all LLM endpoint entities
         api_response = api_instance.get_all_entities_llm_endpoints(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
+        print("The response of OrganizationModelControllerApi->get_all_entities_llm_endpoints:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->get_all_entities_llm_endpoints: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
- **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
- **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
- **meta_include** | **[str]**| Include Meta objects. | [optional]
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **page** | **int**| Zero-based page index (0..N) | [optional] [default to 0]
+ **size** | **int**| The size of the page to be returned | [optional] [default to 20]
+ **sort** | [**List[str]**](str.md)| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional] 
+ **meta_include** | [**List[str]**](str.md)| Include Meta objects. | [optional] 
 
 ### Return type
 
@@ -2940,7 +2507,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -2950,7 +2516,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_all_entities_notification_channel_identifiers**
-> JsonApiNotificationChannelIdentifierOutList get_all_entities_notification_channel_identifiers()
+> JsonApiNotificationChannelIdentifierOutList get_all_entities_notification_channel_identifiers(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
 
 
 
@@ -2958,11 +2524,11 @@ No authorization required
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_notification_channel_identifier_out_list import JsonApiNotificationChannelIdentifierOutList
+from gooddata_api_client.models.json_api_notification_channel_identifier_out_list import JsonApiNotificationChannelIdentifierOutList
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -2971,38 +2537,35 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    filter = "name==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
-    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
-    sort = [
-        "sort_example",
-    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
-    meta_include = [
-        "metaInclude=page,all",
-    ] # [str] | Include Meta objects. (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    filter = 'name==someString;description==someString' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) (default to 0)
+    size = 20 # int | The size of the page to be returned (optional) (default to 20)
+    sort = ['sort_example'] # List[str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = ['metaInclude=page,all'] # List[str] | Include Meta objects. (optional)
 
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         api_response = api_instance.get_all_entities_notification_channel_identifiers(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
+        print("The response of OrganizationModelControllerApi->get_all_entities_notification_channel_identifiers:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->get_all_entities_notification_channel_identifiers: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
- **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
- **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
- **meta_include** | **[str]**| Include Meta objects. | [optional]
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **page** | **int**| Zero-based page index (0..N) | [optional] [default to 0]
+ **size** | **int**| The size of the page to be returned | [optional] [default to 20]
+ **sort** | [**List[str]**](str.md)| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional] 
+ **meta_include** | [**List[str]**](str.md)| Include Meta objects. | [optional] 
 
 ### Return type
 
@@ -3017,7 +2580,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -3027,7 +2589,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_all_entities_notification_channels**
-> JsonApiNotificationChannelOutList get_all_entities_notification_channels()
+> JsonApiNotificationChannelOutList get_all_entities_notification_channels(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
 
 Get all Notification Channel entities
 
@@ -3035,11 +2597,11 @@ Get all Notification Channel entities
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_notification_channel_out_list import JsonApiNotificationChannelOutList
+from gooddata_api_client.models.json_api_notification_channel_out_list import JsonApiNotificationChannelOutList
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -3048,39 +2610,36 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    filter = "name==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
-    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
-    sort = [
-        "sort_example",
-    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
-    meta_include = [
-        "metaInclude=page,all",
-    ] # [str] | Include Meta objects. (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    filter = 'name==someString;description==someString' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) (default to 0)
+    size = 20 # int | The size of the page to be returned (optional) (default to 20)
+    sort = ['sort_example'] # List[str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = ['metaInclude=page,all'] # List[str] | Include Meta objects. (optional)
 
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get all Notification Channel entities
         api_response = api_instance.get_all_entities_notification_channels(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
+        print("The response of OrganizationModelControllerApi->get_all_entities_notification_channels:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->get_all_entities_notification_channels: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
- **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
- **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
- **meta_include** | **[str]**| Include Meta objects. | [optional]
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **page** | **int**| Zero-based page index (0..N) | [optional] [default to 0]
+ **size** | **int**| The size of the page to be returned | [optional] [default to 20]
+ **sort** | [**List[str]**](str.md)| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional] 
+ **meta_include** | [**List[str]**](str.md)| Include Meta objects. | [optional] 
 
 ### Return type
 
@@ -3095,7 +2654,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -3105,7 +2663,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_all_entities_organization_settings**
-> JsonApiOrganizationSettingOutList get_all_entities_organization_settings()
+> JsonApiOrganizationSettingOutList get_all_entities_organization_settings(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
 
 Get Organization entities
 
@@ -3113,11 +2671,11 @@ Get Organization entities
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_organization_setting_out_list import JsonApiOrganizationSettingOutList
+from gooddata_api_client.models.json_api_organization_setting_out_list import JsonApiOrganizationSettingOutList
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -3126,39 +2684,36 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    filter = "content==JsonNodeValue;type==SettingTypeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
-    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
-    sort = [
-        "sort_example",
-    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
-    meta_include = [
-        "metaInclude=page,all",
-    ] # [str] | Include Meta objects. (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    filter = 'content==JsonNodeValue;type==SettingTypeValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) (default to 0)
+    size = 20 # int | The size of the page to be returned (optional) (default to 20)
+    sort = ['sort_example'] # List[str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = ['metaInclude=page,all'] # List[str] | Include Meta objects. (optional)
 
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get Organization entities
         api_response = api_instance.get_all_entities_organization_settings(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
+        print("The response of OrganizationModelControllerApi->get_all_entities_organization_settings:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->get_all_entities_organization_settings: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
- **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
- **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
- **meta_include** | **[str]**| Include Meta objects. | [optional]
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **page** | **int**| Zero-based page index (0..N) | [optional] [default to 0]
+ **size** | **int**| The size of the page to be returned | [optional] [default to 20]
+ **sort** | [**List[str]**](str.md)| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional] 
+ **meta_include** | [**List[str]**](str.md)| Include Meta objects. | [optional] 
 
 ### Return type
 
@@ -3173,7 +2728,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -3183,7 +2737,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_all_entities_themes**
-> JsonApiThemeOutList get_all_entities_themes()
+> JsonApiThemeOutList get_all_entities_themes(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
 
 Get all Theming entities
 
@@ -3191,11 +2745,11 @@ Get all Theming entities
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_theme_out_list import JsonApiThemeOutList
+from gooddata_api_client.models.json_api_theme_out_list import JsonApiThemeOutList
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -3204,39 +2758,36 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    filter = "name==someString;content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
-    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
-    sort = [
-        "sort_example",
-    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
-    meta_include = [
-        "metaInclude=page,all",
-    ] # [str] | Include Meta objects. (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    filter = 'name==someString;content==JsonNodeValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) (default to 0)
+    size = 20 # int | The size of the page to be returned (optional) (default to 20)
+    sort = ['sort_example'] # List[str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = ['metaInclude=page,all'] # List[str] | Include Meta objects. (optional)
 
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get all Theming entities
         api_response = api_instance.get_all_entities_themes(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
+        print("The response of OrganizationModelControllerApi->get_all_entities_themes:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->get_all_entities_themes: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
- **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
- **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
- **meta_include** | **[str]**| Include Meta objects. | [optional]
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **page** | **int**| Zero-based page index (0..N) | [optional] [default to 0]
+ **size** | **int**| The size of the page to be returned | [optional] [default to 20]
+ **sort** | [**List[str]**](str.md)| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional] 
+ **meta_include** | [**List[str]**](str.md)| Include Meta objects. | [optional] 
 
 ### Return type
 
@@ -3251,7 +2802,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -3261,7 +2811,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_all_entities_user_groups**
-> JsonApiUserGroupOutList get_all_entities_user_groups()
+> JsonApiUserGroupOutList get_all_entities_user_groups(filter=filter, include=include, page=page, size=size, sort=sort, meta_include=meta_include)
 
 Get UserGroup entities
 
@@ -3271,11 +2821,11 @@ User Group - creates tree-like structure for categorizing users
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_user_group_out_list import JsonApiUserGroupOutList
+from gooddata_api_client.models.json_api_user_group_out_list import JsonApiUserGroupOutList
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -3284,43 +2834,38 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    filter = "name==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    include = [
-        "parents",
-    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
-    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
-    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
-    sort = [
-        "sort_example",
-    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
-    meta_include = [
-        "metaInclude=page,all",
-    ] # [str] | Include Meta objects. (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    filter = 'name==someString' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = ['parents'] # List[str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) (default to 0)
+    size = 20 # int | The size of the page to be returned (optional) (default to 20)
+    sort = ['sort_example'] # List[str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = ['metaInclude=page,all'] # List[str] | Include Meta objects. (optional)
 
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get UserGroup entities
         api_response = api_instance.get_all_entities_user_groups(filter=filter, include=include, page=page, size=size, sort=sort, meta_include=meta_include)
+        print("The response of OrganizationModelControllerApi->get_all_entities_user_groups:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->get_all_entities_user_groups: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
- **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
- **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
- **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
- **meta_include** | **[str]**| Include Meta objects. | [optional]
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **include** | [**List[str]**](str.md)| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional] 
+ **page** | **int**| Zero-based page index (0..N) | [optional] [default to 0]
+ **size** | **int**| The size of the page to be returned | [optional] [default to 20]
+ **sort** | [**List[str]**](str.md)| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional] 
+ **meta_include** | [**List[str]**](str.md)| Include Meta objects. | [optional] 
 
 ### Return type
 
@@ -3335,7 +2880,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -3345,7 +2889,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_all_entities_user_identifiers**
-> JsonApiUserIdentifierOutList get_all_entities_user_identifiers()
+> JsonApiUserIdentifierOutList get_all_entities_user_identifiers(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
 
 Get UserIdentifier entities
 
@@ -3355,11 +2899,11 @@ UserIdentifier - represents entity interacting with platform
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_user_identifier_out_list import JsonApiUserIdentifierOutList
+from gooddata_api_client.models.json_api_user_identifier_out_list import JsonApiUserIdentifierOutList
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -3368,39 +2912,36 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    filter = "firstname==someString;lastname==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
-    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
-    sort = [
-        "sort_example",
-    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
-    meta_include = [
-        "metaInclude=page,all",
-    ] # [str] | Include Meta objects. (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    filter = 'firstname==someString;lastname==someString' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) (default to 0)
+    size = 20 # int | The size of the page to be returned (optional) (default to 20)
+    sort = ['sort_example'] # List[str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = ['metaInclude=page,all'] # List[str] | Include Meta objects. (optional)
 
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get UserIdentifier entities
         api_response = api_instance.get_all_entities_user_identifiers(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
+        print("The response of OrganizationModelControllerApi->get_all_entities_user_identifiers:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->get_all_entities_user_identifiers: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
- **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
- **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
- **meta_include** | **[str]**| Include Meta objects. | [optional]
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **page** | **int**| Zero-based page index (0..N) | [optional] [default to 0]
+ **size** | **int**| The size of the page to be returned | [optional] [default to 20]
+ **sort** | [**List[str]**](str.md)| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional] 
+ **meta_include** | [**List[str]**](str.md)| Include Meta objects. | [optional] 
 
 ### Return type
 
@@ -3415,7 +2956,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -3425,7 +2965,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_all_entities_users**
-> JsonApiUserOutList get_all_entities_users()
+> JsonApiUserOutList get_all_entities_users(filter=filter, include=include, page=page, size=size, sort=sort, meta_include=meta_include)
 
 Get User entities
 
@@ -3435,11 +2975,11 @@ User - represents entity interacting with platform
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_user_out_list import JsonApiUserOutList
+from gooddata_api_client.models.json_api_user_out_list import JsonApiUserOutList
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -3448,43 +2988,38 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    filter = "authenticationId==someString;firstname==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    include = [
-        "userGroups",
-    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
-    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
-    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
-    sort = [
-        "sort_example",
-    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
-    meta_include = [
-        "metaInclude=page,all",
-    ] # [str] | Include Meta objects. (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    filter = 'authenticationId==someString;firstname==someString' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = ['userGroups'] # List[str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) (default to 0)
+    size = 20 # int | The size of the page to be returned (optional) (default to 20)
+    sort = ['sort_example'] # List[str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = ['metaInclude=page,all'] # List[str] | Include Meta objects. (optional)
 
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get User entities
         api_response = api_instance.get_all_entities_users(filter=filter, include=include, page=page, size=size, sort=sort, meta_include=meta_include)
+        print("The response of OrganizationModelControllerApi->get_all_entities_users:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->get_all_entities_users: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
- **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
- **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
- **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
- **meta_include** | **[str]**| Include Meta objects. | [optional]
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **include** | [**List[str]**](str.md)| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional] 
+ **page** | **int**| Zero-based page index (0..N) | [optional] [default to 0]
+ **size** | **int**| The size of the page to be returned | [optional] [default to 20]
+ **sort** | [**List[str]**](str.md)| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional] 
+ **meta_include** | [**List[str]**](str.md)| Include Meta objects. | [optional] 
 
 ### Return type
 
@@ -3499,7 +3034,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -3509,7 +3043,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_all_entities_workspaces**
-> JsonApiWorkspaceOutList get_all_entities_workspaces()
+> JsonApiWorkspaceOutList get_all_entities_workspaces(filter=filter, include=include, page=page, size=size, sort=sort, meta_include=meta_include)
 
 Get Workspace entities
 
@@ -3519,11 +3053,11 @@ Space of the shared interest
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_workspace_out_list import JsonApiWorkspaceOutList
+from gooddata_api_client.models.json_api_workspace_out_list import JsonApiWorkspaceOutList
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -3532,43 +3066,38 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    filter = "name==someString;earlyAccess==someString;parent.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    include = [
-        "parent",
-    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
-    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
-    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
-    sort = [
-        "sort_example",
-    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
-    meta_include = [
-        "metaInclude=config,permissions,hierarchy,dataModelDatasets,page,all",
-    ] # [str] | Include Meta objects. (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    filter = 'name==someString;earlyAccess==someString;parent.id==321' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = ['parent'] # List[str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) (default to 0)
+    size = 20 # int | The size of the page to be returned (optional) (default to 20)
+    sort = ['sort_example'] # List[str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = ['metaInclude=config,permissions,hierarchy,dataModelDatasets,page,all'] # List[str] | Include Meta objects. (optional)
 
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get Workspace entities
         api_response = api_instance.get_all_entities_workspaces(filter=filter, include=include, page=page, size=size, sort=sort, meta_include=meta_include)
+        print("The response of OrganizationModelControllerApi->get_all_entities_workspaces:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->get_all_entities_workspaces: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
- **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
- **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
- **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
- **meta_include** | **[str]**| Include Meta objects. | [optional]
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **include** | [**List[str]**](str.md)| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional] 
+ **page** | **int**| Zero-based page index (0..N) | [optional] [default to 0]
+ **size** | **int**| The size of the page to be returned | [optional] [default to 20]
+ **sort** | [**List[str]**](str.md)| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional] 
+ **meta_include** | [**List[str]**](str.md)| Include Meta objects. | [optional] 
 
 ### Return type
 
@@ -3583,7 +3112,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -3593,7 +3121,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_entity_color_palettes**
-> JsonApiColorPaletteOutDocument get_entity_color_palettes(id)
+> JsonApiColorPaletteOutDocument get_entity_color_palettes(id, filter=filter)
 
 Get Color Pallette
 
@@ -3601,11 +3129,11 @@ Get Color Pallette
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_color_palette_out_document import JsonApiColorPaletteOutDocument
+from gooddata_api_client.models.json_api_color_palette_out_document import JsonApiColorPaletteOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -3614,37 +3142,30 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "name==someString;content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    filter = 'name==someString;content==JsonNodeValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Get Color Pallette
-        api_response = api_instance.get_entity_color_palettes(id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->get_entity_color_palettes: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get Color Pallette
         api_response = api_instance.get_entity_color_palettes(id, filter=filter)
+        print("The response of OrganizationModelControllerApi->get_entity_color_palettes:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->get_entity_color_palettes: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -3659,7 +3180,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -3669,7 +3189,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_entity_csp_directives**
-> JsonApiCspDirectiveOutDocument get_entity_csp_directives(id)
+> JsonApiCspDirectiveOutDocument get_entity_csp_directives(id, filter=filter)
 
 Get CSP Directives
 
@@ -3679,11 +3199,11 @@ Get CSP Directives
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_csp_directive_out_document import JsonApiCspDirectiveOutDocument
+from gooddata_api_client.models.json_api_csp_directive_out_document import JsonApiCspDirectiveOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -3692,37 +3212,30 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "sources==v1,v2,v3" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    filter = 'sources==v1,v2,v3' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Get CSP Directives
-        api_response = api_instance.get_entity_csp_directives(id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->get_entity_csp_directives: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get CSP Directives
         api_response = api_instance.get_entity_csp_directives(id, filter=filter)
+        print("The response of OrganizationModelControllerApi->get_entity_csp_directives:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->get_entity_csp_directives: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -3737,7 +3250,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -3747,7 +3259,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_entity_data_source_identifiers**
-> JsonApiDataSourceIdentifierOutDocument get_entity_data_source_identifiers(id)
+> JsonApiDataSourceIdentifierOutDocument get_entity_data_source_identifiers(id, filter=filter, meta_include=meta_include)
 
 Get Data Source Identifier
 
@@ -3755,11 +3267,11 @@ Get Data Source Identifier
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_data_source_identifier_out_document import JsonApiDataSourceIdentifierOutDocument
+from gooddata_api_client.models.json_api_data_source_identifier_out_document import JsonApiDataSourceIdentifierOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -3768,41 +3280,32 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "name==someString;schema==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    meta_include = [
-        "metaInclude=permissions,all",
-    ] # [str] | Include Meta objects. (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    filter = 'name==someString;schema==someString' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    meta_include = ['metaInclude=permissions,all'] # List[str] | Include Meta objects. (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Get Data Source Identifier
-        api_response = api_instance.get_entity_data_source_identifiers(id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->get_entity_data_source_identifiers: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get Data Source Identifier
         api_response = api_instance.get_entity_data_source_identifiers(id, filter=filter, meta_include=meta_include)
+        print("The response of OrganizationModelControllerApi->get_entity_data_source_identifiers:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->get_entity_data_source_identifiers: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **meta_include** | **[str]**| Include Meta objects. | [optional]
+ **id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **meta_include** | [**List[str]**](str.md)| Include Meta objects. | [optional] 
 
 ### Return type
 
@@ -3817,7 +3320,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -3827,7 +3329,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_entity_data_sources**
-> JsonApiDataSourceOutDocument get_entity_data_sources(id)
+> JsonApiDataSourceOutDocument get_entity_data_sources(id, filter=filter, meta_include=meta_include)
 
 Get Data Source entity
 
@@ -3837,11 +3339,11 @@ Data Source - represents data source for the workspace
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_data_source_out_document import JsonApiDataSourceOutDocument
+from gooddata_api_client.models.json_api_data_source_out_document import JsonApiDataSourceOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -3850,41 +3352,32 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "name==someString;type==DatabaseTypeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    meta_include = [
-        "metaInclude=permissions,all",
-    ] # [str] | Include Meta objects. (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    filter = 'name==someString;type==DatabaseTypeValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    meta_include = ['metaInclude=permissions,all'] # List[str] | Include Meta objects. (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Get Data Source entity
-        api_response = api_instance.get_entity_data_sources(id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->get_entity_data_sources: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get Data Source entity
         api_response = api_instance.get_entity_data_sources(id, filter=filter, meta_include=meta_include)
+        print("The response of OrganizationModelControllerApi->get_entity_data_sources:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->get_entity_data_sources: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **meta_include** | **[str]**| Include Meta objects. | [optional]
+ **id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **meta_include** | [**List[str]**](str.md)| Include Meta objects. | [optional] 
 
 ### Return type
 
@@ -3899,7 +3392,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -3909,7 +3401,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_entity_entitlements**
-> JsonApiEntitlementOutDocument get_entity_entitlements(id)
+> JsonApiEntitlementOutDocument get_entity_entitlements(id, filter=filter)
 
 Get Entitlement
 
@@ -3919,11 +3411,11 @@ Space of the shared interest
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_entitlement_out_document import JsonApiEntitlementOutDocument
+from gooddata_api_client.models.json_api_entitlement_out_document import JsonApiEntitlementOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -3932,37 +3424,30 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "value==someString;expiry==LocalDateValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    filter = 'value==someString;expiry==LocalDateValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Get Entitlement
-        api_response = api_instance.get_entity_entitlements(id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->get_entity_entitlements: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get Entitlement
         api_response = api_instance.get_entity_entitlements(id, filter=filter)
+        print("The response of OrganizationModelControllerApi->get_entity_entitlements:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->get_entity_entitlements: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -3977,7 +3462,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -3987,7 +3471,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_entity_export_templates**
-> JsonApiExportTemplateOutDocument get_entity_export_templates(id)
+> JsonApiExportTemplateOutDocument get_entity_export_templates(id, filter=filter)
 
 GET Export Template entity
 
@@ -3995,11 +3479,11 @@ GET Export Template entity
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_export_template_out_document import JsonApiExportTemplateOutDocument
+from gooddata_api_client.models.json_api_export_template_out_document import JsonApiExportTemplateOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -4008,37 +3492,30 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "name==someString;dashboardSlidesTemplate==DashboardSlidesTemplateValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    filter = 'name==someString;dashboardSlidesTemplate==DashboardSlidesTemplateValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # GET Export Template entity
-        api_response = api_instance.get_entity_export_templates(id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->get_entity_export_templates: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # GET Export Template entity
         api_response = api_instance.get_entity_export_templates(id, filter=filter)
+        print("The response of OrganizationModelControllerApi->get_entity_export_templates:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->get_entity_export_templates: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -4053,7 +3530,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -4063,7 +3539,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_entity_identity_providers**
-> JsonApiIdentityProviderOutDocument get_entity_identity_providers(id)
+> JsonApiIdentityProviderOutDocument get_entity_identity_providers(id, filter=filter)
 
 Get Identity Provider
 
@@ -4071,11 +3547,11 @@ Get Identity Provider
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_identity_provider_out_document import JsonApiIdentityProviderOutDocument
+from gooddata_api_client.models.json_api_identity_provider_out_document import JsonApiIdentityProviderOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -4084,37 +3560,30 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "identifiers==v1,v2,v3;customClaimMapping==MapValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    filter = 'identifiers==v1,v2,v3;customClaimMapping==MapValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Get Identity Provider
-        api_response = api_instance.get_entity_identity_providers(id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->get_entity_identity_providers: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get Identity Provider
         api_response = api_instance.get_entity_identity_providers(id, filter=filter)
+        print("The response of OrganizationModelControllerApi->get_entity_identity_providers:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->get_entity_identity_providers: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -4129,7 +3598,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -4139,7 +3607,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_entity_jwks**
-> JsonApiJwkOutDocument get_entity_jwks(id)
+> JsonApiJwkOutDocument get_entity_jwks(id, filter=filter)
 
 Get Jwk
 
@@ -4149,11 +3617,11 @@ Returns JSON web key - used to verify JSON web tokens (Jwts)
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_jwk_out_document import JsonApiJwkOutDocument
+from gooddata_api_client.models.json_api_jwk_out_document import JsonApiJwkOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -4162,37 +3630,30 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "content==JwkSpecificationValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    filter = 'content==JwkSpecificationValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Get Jwk
-        api_response = api_instance.get_entity_jwks(id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->get_entity_jwks: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get Jwk
         api_response = api_instance.get_entity_jwks(id, filter=filter)
+        print("The response of OrganizationModelControllerApi->get_entity_jwks:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->get_entity_jwks: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -4207,7 +3668,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -4217,7 +3677,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_entity_llm_endpoints**
-> JsonApiLlmEndpointOutDocument get_entity_llm_endpoints(id)
+> JsonApiLlmEndpointOutDocument get_entity_llm_endpoints(id, filter=filter)
 
 Get LLM endpoint entity
 
@@ -4225,11 +3685,11 @@ Get LLM endpoint entity
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_llm_endpoint_out_document import JsonApiLlmEndpointOutDocument
+from gooddata_api_client.models.json_api_llm_endpoint_out_document import JsonApiLlmEndpointOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -4238,37 +3698,30 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "title==someString;provider==LLMProviderValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    filter = 'title==someString;provider==LLMProviderValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Get LLM endpoint entity
-        api_response = api_instance.get_entity_llm_endpoints(id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->get_entity_llm_endpoints: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get LLM endpoint entity
         api_response = api_instance.get_entity_llm_endpoints(id, filter=filter)
+        print("The response of OrganizationModelControllerApi->get_entity_llm_endpoints:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->get_entity_llm_endpoints: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -4283,7 +3736,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -4293,7 +3745,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_entity_notification_channel_identifiers**
-> JsonApiNotificationChannelIdentifierOutDocument get_entity_notification_channel_identifiers(id)
+> JsonApiNotificationChannelIdentifierOutDocument get_entity_notification_channel_identifiers(id, filter=filter)
 
 
 
@@ -4301,11 +3753,11 @@ No authorization required
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_notification_channel_identifier_out_document import JsonApiNotificationChannelIdentifierOutDocument
+from gooddata_api_client.models.json_api_notification_channel_identifier_out_document import JsonApiNotificationChannelIdentifierOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -4314,35 +3766,29 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "name==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    filter = 'name==someString;description==someString' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        api_response = api_instance.get_entity_notification_channel_identifiers(id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->get_entity_notification_channel_identifiers: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         api_response = api_instance.get_entity_notification_channel_identifiers(id, filter=filter)
+        print("The response of OrganizationModelControllerApi->get_entity_notification_channel_identifiers:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->get_entity_notification_channel_identifiers: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -4357,7 +3803,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -4367,7 +3812,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_entity_notification_channels**
-> JsonApiNotificationChannelOutDocument get_entity_notification_channels(id)
+> JsonApiNotificationChannelOutDocument get_entity_notification_channels(id, filter=filter)
 
 Get Notification Channel entity
 
@@ -4375,11 +3820,11 @@ Get Notification Channel entity
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_notification_channel_out_document import JsonApiNotificationChannelOutDocument
+from gooddata_api_client.models.json_api_notification_channel_out_document import JsonApiNotificationChannelOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -4388,37 +3833,30 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "name==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    filter = 'name==someString;description==someString' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Get Notification Channel entity
-        api_response = api_instance.get_entity_notification_channels(id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->get_entity_notification_channels: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get Notification Channel entity
         api_response = api_instance.get_entity_notification_channels(id, filter=filter)
+        print("The response of OrganizationModelControllerApi->get_entity_notification_channels:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->get_entity_notification_channels: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -4433,7 +3871,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -4443,7 +3880,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_entity_organization_settings**
-> JsonApiOrganizationSettingOutDocument get_entity_organization_settings(id)
+> JsonApiOrganizationSettingOutDocument get_entity_organization_settings(id, filter=filter)
 
 Get Organization entity
 
@@ -4451,11 +3888,11 @@ Get Organization entity
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_organization_setting_out_document import JsonApiOrganizationSettingOutDocument
+from gooddata_api_client.models.json_api_organization_setting_out_document import JsonApiOrganizationSettingOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -4464,37 +3901,30 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "content==JsonNodeValue;type==SettingTypeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    filter = 'content==JsonNodeValue;type==SettingTypeValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Get Organization entity
-        api_response = api_instance.get_entity_organization_settings(id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->get_entity_organization_settings: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get Organization entity
         api_response = api_instance.get_entity_organization_settings(id, filter=filter)
+        print("The response of OrganizationModelControllerApi->get_entity_organization_settings:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->get_entity_organization_settings: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -4509,7 +3939,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -4519,7 +3948,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_entity_themes**
-> JsonApiThemeOutDocument get_entity_themes(id)
+> JsonApiThemeOutDocument get_entity_themes(id, filter=filter)
 
 Get Theming
 
@@ -4527,11 +3956,11 @@ Get Theming
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_theme_out_document import JsonApiThemeOutDocument
+from gooddata_api_client.models.json_api_theme_out_document import JsonApiThemeOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -4540,37 +3969,30 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "name==someString;content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    filter = 'name==someString;content==JsonNodeValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Get Theming
-        api_response = api_instance.get_entity_themes(id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->get_entity_themes: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get Theming
         api_response = api_instance.get_entity_themes(id, filter=filter)
+        print("The response of OrganizationModelControllerApi->get_entity_themes:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->get_entity_themes: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -4585,7 +4007,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -4595,7 +4016,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_entity_user_groups**
-> JsonApiUserGroupOutDocument get_entity_user_groups(id)
+> JsonApiUserGroupOutDocument get_entity_user_groups(id, filter=filter, include=include)
 
 Get UserGroup entity
 
@@ -4605,11 +4026,11 @@ User Group - creates tree-like structure for categorizing users
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_user_group_out_document import JsonApiUserGroupOutDocument
+from gooddata_api_client.models.json_api_user_group_out_document import JsonApiUserGroupOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -4618,41 +4039,32 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "name==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    include = [
-        "parents",
-    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    filter = 'name==someString' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = ['parents'] # List[str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Get UserGroup entity
-        api_response = api_instance.get_entity_user_groups(id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->get_entity_user_groups: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get UserGroup entity
         api_response = api_instance.get_entity_user_groups(id, filter=filter, include=include)
+        print("The response of OrganizationModelControllerApi->get_entity_user_groups:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->get_entity_user_groups: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+ **id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **include** | [**List[str]**](str.md)| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional] 
 
 ### Return type
 
@@ -4667,7 +4079,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -4677,7 +4088,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_entity_user_identifiers**
-> JsonApiUserIdentifierOutDocument get_entity_user_identifiers(id)
+> JsonApiUserIdentifierOutDocument get_entity_user_identifiers(id, filter=filter)
 
 Get UserIdentifier entity
 
@@ -4687,11 +4098,11 @@ UserIdentifier - represents basic information about entity interacting with plat
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_user_identifier_out_document import JsonApiUserIdentifierOutDocument
+from gooddata_api_client.models.json_api_user_identifier_out_document import JsonApiUserIdentifierOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -4700,37 +4111,30 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "firstname==someString;lastname==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    filter = 'firstname==someString;lastname==someString' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Get UserIdentifier entity
-        api_response = api_instance.get_entity_user_identifiers(id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->get_entity_user_identifiers: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get UserIdentifier entity
         api_response = api_instance.get_entity_user_identifiers(id, filter=filter)
+        print("The response of OrganizationModelControllerApi->get_entity_user_identifiers:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->get_entity_user_identifiers: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -4745,7 +4149,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -4755,7 +4158,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_entity_users**
-> JsonApiUserOutDocument get_entity_users(id)
+> JsonApiUserOutDocument get_entity_users(id, filter=filter, include=include)
 
 Get User entity
 
@@ -4765,11 +4168,11 @@ User - represents entity interacting with platform
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_user_out_document import JsonApiUserOutDocument
+from gooddata_api_client.models.json_api_user_out_document import JsonApiUserOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -4778,41 +4181,32 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "authenticationId==someString;firstname==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    include = [
-        "userGroups",
-    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    filter = 'authenticationId==someString;firstname==someString' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = ['userGroups'] # List[str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Get User entity
-        api_response = api_instance.get_entity_users(id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->get_entity_users: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get User entity
         api_response = api_instance.get_entity_users(id, filter=filter, include=include)
+        print("The response of OrganizationModelControllerApi->get_entity_users:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->get_entity_users: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+ **id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **include** | [**List[str]**](str.md)| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional] 
 
 ### Return type
 
@@ -4826,7 +4220,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
-
 
 ### HTTP response details
 
@@ -4837,7 +4230,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_entity_workspaces**
-> JsonApiWorkspaceOutDocument get_entity_workspaces(id)
+> JsonApiWorkspaceOutDocument get_entity_workspaces(id, filter=filter, include=include, meta_include=meta_include)
 
 Get Workspace entity
 
@@ -4847,11 +4240,11 @@ Space of the shared interest
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_workspace_out_document import JsonApiWorkspaceOutDocument
+from gooddata_api_client.models.json_api_workspace_out_document import JsonApiWorkspaceOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -4860,45 +4253,34 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "name==someString;earlyAccess==someString;parent.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    include = [
-        "parent",
-    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
-    meta_include = [
-        "metaInclude=config,permissions,hierarchy,dataModelDatasets,all",
-    ] # [str] | Include Meta objects. (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    filter = 'name==someString;earlyAccess==someString;parent.id==321' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = ['parent'] # List[str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    meta_include = ['metaInclude=config,permissions,hierarchy,dataModelDatasets,all'] # List[str] | Include Meta objects. (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Get Workspace entity
-        api_response = api_instance.get_entity_workspaces(id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->get_entity_workspaces: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get Workspace entity
         api_response = api_instance.get_entity_workspaces(id, filter=filter, include=include, meta_include=meta_include)
+        print("The response of OrganizationModelControllerApi->get_entity_workspaces:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->get_entity_workspaces: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
- **meta_include** | **[str]**| Include Meta objects. | [optional]
+ **id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **include** | [**List[str]**](str.md)| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional] 
+ **meta_include** | [**List[str]**](str.md)| Include Meta objects. | [optional] 
 
 ### Return type
 
@@ -4913,7 +4295,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -4923,7 +4304,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **patch_entity_color_palettes**
-> JsonApiColorPaletteOutDocument patch_entity_color_palettes(id, json_api_color_palette_patch_document)
+> JsonApiColorPaletteOutDocument patch_entity_color_palettes(id, json_api_color_palette_patch_document, filter=filter)
 
 Patch Color Pallette
 
@@ -4931,12 +4312,12 @@ Patch Color Pallette
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_color_palette_patch_document import JsonApiColorPalettePatchDocument
-from gooddata_api_client.model.json_api_color_palette_out_document import JsonApiColorPaletteOutDocument
+from gooddata_api_client.models.json_api_color_palette_out_document import JsonApiColorPaletteOutDocument
+from gooddata_api_client.models.json_api_color_palette_patch_document import JsonApiColorPalettePatchDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -4945,48 +4326,32 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    json_api_color_palette_patch_document = JsonApiColorPalettePatchDocument(
-        data=JsonApiColorPalettePatch(
-            attributes=JsonApiColorPalettePatchAttributes(
-                content={},
-                name="name_example",
-            ),
-            id="id1",
-            type="colorPalette",
-        ),
-    ) # JsonApiColorPalettePatchDocument | 
-    filter = "name==someString;content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    json_api_color_palette_patch_document = gooddata_api_client.JsonApiColorPalettePatchDocument() # JsonApiColorPalettePatchDocument | 
+    filter = 'name==someString;content==JsonNodeValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Patch Color Pallette
-        api_response = api_instance.patch_entity_color_palettes(id, json_api_color_palette_patch_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->patch_entity_color_palettes: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Patch Color Pallette
         api_response = api_instance.patch_entity_color_palettes(id, json_api_color_palette_patch_document, filter=filter)
+        print("The response of OrganizationModelControllerApi->patch_entity_color_palettes:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->patch_entity_color_palettes: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **json_api_color_palette_patch_document** | [**JsonApiColorPalettePatchDocument**](JsonApiColorPalettePatchDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **json_api_color_palette_patch_document** | [**JsonApiColorPalettePatchDocument**](JsonApiColorPalettePatchDocument.md)|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -5000,7 +4365,6 @@ No authorization required
 
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
-
 
 ### HTTP response details
 
@@ -5011,7 +4375,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **patch_entity_csp_directives**
-> JsonApiCspDirectiveOutDocument patch_entity_csp_directives(id, json_api_csp_directive_patch_document)
+> JsonApiCspDirectiveOutDocument patch_entity_csp_directives(id, json_api_csp_directive_patch_document, filter=filter)
 
 Patch CSP Directives
 
@@ -5021,12 +4385,12 @@ Patch CSP Directives
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_csp_directive_out_document import JsonApiCspDirectiveOutDocument
-from gooddata_api_client.model.json_api_csp_directive_patch_document import JsonApiCspDirectivePatchDocument
+from gooddata_api_client.models.json_api_csp_directive_out_document import JsonApiCspDirectiveOutDocument
+from gooddata_api_client.models.json_api_csp_directive_patch_document import JsonApiCspDirectivePatchDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -5035,49 +4399,32 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    json_api_csp_directive_patch_document = JsonApiCspDirectivePatchDocument(
-        data=JsonApiCspDirectivePatch(
-            attributes=JsonApiCspDirectivePatchAttributes(
-                sources=[
-                    "sources_example",
-                ],
-            ),
-            id="id1",
-            type="cspDirective",
-        ),
-    ) # JsonApiCspDirectivePatchDocument | 
-    filter = "sources==v1,v2,v3" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    json_api_csp_directive_patch_document = gooddata_api_client.JsonApiCspDirectivePatchDocument() # JsonApiCspDirectivePatchDocument | 
+    filter = 'sources==v1,v2,v3' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Patch CSP Directives
-        api_response = api_instance.patch_entity_csp_directives(id, json_api_csp_directive_patch_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->patch_entity_csp_directives: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Patch CSP Directives
         api_response = api_instance.patch_entity_csp_directives(id, json_api_csp_directive_patch_document, filter=filter)
+        print("The response of OrganizationModelControllerApi->patch_entity_csp_directives:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->patch_entity_csp_directives: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **json_api_csp_directive_patch_document** | [**JsonApiCspDirectivePatchDocument**](JsonApiCspDirectivePatchDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **json_api_csp_directive_patch_document** | [**JsonApiCspDirectivePatchDocument**](JsonApiCspDirectivePatchDocument.md)|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -5092,7 +4439,6 @@ No authorization required
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -5102,7 +4448,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **patch_entity_data_sources**
-> JsonApiDataSourceOutDocument patch_entity_data_sources(id, json_api_data_source_patch_document)
+> JsonApiDataSourceOutDocument patch_entity_data_sources(id, json_api_data_source_patch_document, filter=filter)
 
 Patch Data Source entity
 
@@ -5112,12 +4458,12 @@ Data Source - represents data source for the workspace
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_data_source_patch_document import JsonApiDataSourcePatchDocument
-from gooddata_api_client.model.json_api_data_source_out_document import JsonApiDataSourceOutDocument
+from gooddata_api_client.models.json_api_data_source_out_document import JsonApiDataSourceOutDocument
+from gooddata_api_client.models.json_api_data_source_patch_document import JsonApiDataSourcePatchDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -5126,64 +4472,32 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    json_api_data_source_patch_document = JsonApiDataSourcePatchDocument(
-        data=JsonApiDataSourcePatch(
-            attributes=JsonApiDataSourcePatchAttributes(
-                cache_strategy="ALWAYS",
-                client_id="client_id_example",
-                client_secret="client_secret_example",
-                name="name_example",
-                parameters=[
-                    JsonApiDataSourceInAttributesParametersInner(
-                        name="name_example",
-                        value="value_example",
-                    ),
-                ],
-                password="password_example",
-                private_key="private_key_example",
-                private_key_passphrase="private_key_passphrase_example",
-                schema="schema_example",
-                token="token_example",
-                type="POSTGRESQL",
-                url="url_example",
-                username="username_example",
-            ),
-            id="id1",
-            type="dataSource",
-        ),
-    ) # JsonApiDataSourcePatchDocument | 
-    filter = "name==someString;type==DatabaseTypeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    json_api_data_source_patch_document = gooddata_api_client.JsonApiDataSourcePatchDocument() # JsonApiDataSourcePatchDocument | 
+    filter = 'name==someString;type==DatabaseTypeValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Patch Data Source entity
-        api_response = api_instance.patch_entity_data_sources(id, json_api_data_source_patch_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->patch_entity_data_sources: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Patch Data Source entity
         api_response = api_instance.patch_entity_data_sources(id, json_api_data_source_patch_document, filter=filter)
+        print("The response of OrganizationModelControllerApi->patch_entity_data_sources:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->patch_entity_data_sources: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **json_api_data_source_patch_document** | [**JsonApiDataSourcePatchDocument**](JsonApiDataSourcePatchDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **json_api_data_source_patch_document** | [**JsonApiDataSourcePatchDocument**](JsonApiDataSourcePatchDocument.md)|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -5198,7 +4512,6 @@ No authorization required
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -5208,7 +4521,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **patch_entity_export_templates**
-> JsonApiExportTemplateOutDocument patch_entity_export_templates(id, json_api_export_template_patch_document)
+> JsonApiExportTemplateOutDocument patch_entity_export_templates(id, json_api_export_template_patch_document, filter=filter)
 
 Patch Export Template entity
 
@@ -5216,12 +4529,12 @@ Patch Export Template entity
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_export_template_out_document import JsonApiExportTemplateOutDocument
-from gooddata_api_client.model.json_api_export_template_patch_document import JsonApiExportTemplatePatchDocument
+from gooddata_api_client.models.json_api_export_template_out_document import JsonApiExportTemplateOutDocument
+from gooddata_api_client.models.json_api_export_template_patch_document import JsonApiExportTemplatePatchDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -5230,114 +4543,32 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    json_api_export_template_patch_document = JsonApiExportTemplatePatchDocument(
-        data=JsonApiExportTemplatePatch(
-            attributes=JsonApiExportTemplatePatchAttributes(
-                dashboard_slides_template=JsonApiExportTemplateInAttributesDashboardSlidesTemplate(
-                    applied_on=["PDF","PPTX"],
-                    content_slide=ContentSlideTemplate(
-                        description_field="{{dashboardFilters}}",
-                        footer=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                        header=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                    ),
-                    cover_slide=CoverSlideTemplate(
-                        background_image=True,
-                        description_field="Exported at: {{exportedAt}}",
-                        footer=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                        header=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                    ),
-                    intro_slide=IntroSlideTemplate(
-                        background_image=True,
-                        description_field='''About:
-{{dashboardDescription}}
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    json_api_export_template_patch_document = gooddata_api_client.JsonApiExportTemplatePatchDocument() # JsonApiExportTemplatePatchDocument | 
+    filter = 'name==someString;dashboardSlidesTemplate==DashboardSlidesTemplateValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-{{dashboardFilters}}''',
-                        footer=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                        header=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                        title_field="Introduction",
-                    ),
-                    section_slide=SectionSlideTemplate(
-                        background_image=True,
-                        footer=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                        header=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                    ),
-                ),
-                name="name_example",
-                widget_slides_template=JsonApiExportTemplateInAttributesWidgetSlidesTemplate(
-                    applied_on=["PDF","PPTX"],
-                    content_slide=ContentSlideTemplate(
-                        description_field="{{dashboardFilters}}",
-                        footer=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                        header=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                    ),
-                ),
-            ),
-            id="id1",
-            type="exportTemplate",
-        ),
-    ) # JsonApiExportTemplatePatchDocument | 
-    filter = "name==someString;dashboardSlidesTemplate==DashboardSlidesTemplateValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-
-    # example passing only required values which don't have defaults set
-    try:
-        # Patch Export Template entity
-        api_response = api_instance.patch_entity_export_templates(id, json_api_export_template_patch_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->patch_entity_export_templates: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Patch Export Template entity
         api_response = api_instance.patch_entity_export_templates(id, json_api_export_template_patch_document, filter=filter)
+        print("The response of OrganizationModelControllerApi->patch_entity_export_templates:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->patch_entity_export_templates: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **json_api_export_template_patch_document** | [**JsonApiExportTemplatePatchDocument**](JsonApiExportTemplatePatchDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **json_api_export_template_patch_document** | [**JsonApiExportTemplatePatchDocument**](JsonApiExportTemplatePatchDocument.md)|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -5352,7 +4583,6 @@ No authorization required
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -5362,7 +4592,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **patch_entity_identity_providers**
-> JsonApiIdentityProviderOutDocument patch_entity_identity_providers(id, json_api_identity_provider_patch_document)
+> JsonApiIdentityProviderOutDocument patch_entity_identity_providers(id, json_api_identity_provider_patch_document, filter=filter)
 
 Patch Identity Provider
 
@@ -5370,12 +4600,12 @@ Patch Identity Provider
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_identity_provider_patch_document import JsonApiIdentityProviderPatchDocument
-from gooddata_api_client.model.json_api_identity_provider_out_document import JsonApiIdentityProviderOutDocument
+from gooddata_api_client.models.json_api_identity_provider_out_document import JsonApiIdentityProviderOutDocument
+from gooddata_api_client.models.json_api_identity_provider_patch_document import JsonApiIdentityProviderPatchDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -5384,63 +4614,32 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    json_api_identity_provider_patch_document = JsonApiIdentityProviderPatchDocument(
-        data=JsonApiIdentityProviderPatch(
-            attributes=JsonApiIdentityProviderInAttributes(
-                custom_claim_mapping={
-                    "key": "key_example",
-                },
-                identifiers=["gooddata.com"],
-                idp_type="MANAGED_IDP",
-                oauth_client_id="oauth_client_id_example",
-                oauth_client_secret="oauth_client_secret_example",
-                oauth_custom_auth_attributes={
-                    "key": "key_example",
-                },
-                oauth_custom_scopes=[
-                    "oauth_custom_scopes_example",
-                ],
-                oauth_issuer_id="myOidcProvider",
-                oauth_issuer_location="oauth_issuer_location_example",
-                oauth_subject_id_claim="oid",
-                saml_metadata="saml_metadata_example",
-            ),
-            id="id1",
-            type="identityProvider",
-        ),
-    ) # JsonApiIdentityProviderPatchDocument | 
-    filter = "identifiers==v1,v2,v3;customClaimMapping==MapValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    json_api_identity_provider_patch_document = gooddata_api_client.JsonApiIdentityProviderPatchDocument() # JsonApiIdentityProviderPatchDocument | 
+    filter = 'identifiers==v1,v2,v3;customClaimMapping==MapValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Patch Identity Provider
-        api_response = api_instance.patch_entity_identity_providers(id, json_api_identity_provider_patch_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->patch_entity_identity_providers: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Patch Identity Provider
         api_response = api_instance.patch_entity_identity_providers(id, json_api_identity_provider_patch_document, filter=filter)
+        print("The response of OrganizationModelControllerApi->patch_entity_identity_providers:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->patch_entity_identity_providers: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **json_api_identity_provider_patch_document** | [**JsonApiIdentityProviderPatchDocument**](JsonApiIdentityProviderPatchDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **json_api_identity_provider_patch_document** | [**JsonApiIdentityProviderPatchDocument**](JsonApiIdentityProviderPatchDocument.md)|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -5455,7 +4654,6 @@ No authorization required
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -5465,7 +4663,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **patch_entity_jwks**
-> JsonApiJwkOutDocument patch_entity_jwks(id, json_api_jwk_patch_document)
+> JsonApiJwkOutDocument patch_entity_jwks(id, json_api_jwk_patch_document, filter=filter)
 
 Patch Jwk
 
@@ -5475,12 +4673,12 @@ Patches JSON web key - used to verify JSON web tokens (Jwts)
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_jwk_patch_document import JsonApiJwkPatchDocument
-from gooddata_api_client.model.json_api_jwk_out_document import JsonApiJwkOutDocument
+from gooddata_api_client.models.json_api_jwk_out_document import JsonApiJwkOutDocument
+from gooddata_api_client.models.json_api_jwk_patch_document import JsonApiJwkPatchDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -5489,47 +4687,32 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    json_api_jwk_patch_document = JsonApiJwkPatchDocument(
-        data=JsonApiJwkPatch(
-            attributes=JsonApiJwkInAttributes(
-                content=JsonApiJwkInAttributesContent(),
-            ),
-            id="id1",
-            type="jwk",
-        ),
-    ) # JsonApiJwkPatchDocument | 
-    filter = "content==JwkSpecificationValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    json_api_jwk_patch_document = gooddata_api_client.JsonApiJwkPatchDocument() # JsonApiJwkPatchDocument | 
+    filter = 'content==JwkSpecificationValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Patch Jwk
-        api_response = api_instance.patch_entity_jwks(id, json_api_jwk_patch_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->patch_entity_jwks: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Patch Jwk
         api_response = api_instance.patch_entity_jwks(id, json_api_jwk_patch_document, filter=filter)
+        print("The response of OrganizationModelControllerApi->patch_entity_jwks:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->patch_entity_jwks: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **json_api_jwk_patch_document** | [**JsonApiJwkPatchDocument**](JsonApiJwkPatchDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **json_api_jwk_patch_document** | [**JsonApiJwkPatchDocument**](JsonApiJwkPatchDocument.md)|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -5544,7 +4727,6 @@ No authorization required
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -5554,7 +4736,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **patch_entity_llm_endpoints**
-> JsonApiLlmEndpointOutDocument patch_entity_llm_endpoints(id, json_api_llm_endpoint_patch_document)
+> JsonApiLlmEndpointOutDocument patch_entity_llm_endpoints(id, json_api_llm_endpoint_patch_document, filter=filter)
 
 Patch LLM endpoint entity
 
@@ -5562,12 +4744,12 @@ Patch LLM endpoint entity
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_llm_endpoint_out_document import JsonApiLlmEndpointOutDocument
-from gooddata_api_client.model.json_api_llm_endpoint_patch_document import JsonApiLlmEndpointPatchDocument
+from gooddata_api_client.models.json_api_llm_endpoint_out_document import JsonApiLlmEndpointOutDocument
+from gooddata_api_client.models.json_api_llm_endpoint_patch_document import JsonApiLlmEndpointPatchDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -5576,52 +4758,32 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    json_api_llm_endpoint_patch_document = JsonApiLlmEndpointPatchDocument(
-        data=JsonApiLlmEndpointPatch(
-            attributes=JsonApiLlmEndpointPatchAttributes(
-                base_url="base_url_example",
-                llm_model="llm_model_example",
-                llm_organization="llm_organization_example",
-                provider="OPENAI",
-                title="title_example",
-                token="token_example",
-            ),
-            id="id1",
-            type="llmEndpoint",
-        ),
-    ) # JsonApiLlmEndpointPatchDocument | 
-    filter = "title==someString;provider==LLMProviderValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    json_api_llm_endpoint_patch_document = gooddata_api_client.JsonApiLlmEndpointPatchDocument() # JsonApiLlmEndpointPatchDocument | 
+    filter = 'title==someString;provider==LLMProviderValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Patch LLM endpoint entity
-        api_response = api_instance.patch_entity_llm_endpoints(id, json_api_llm_endpoint_patch_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->patch_entity_llm_endpoints: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Patch LLM endpoint entity
         api_response = api_instance.patch_entity_llm_endpoints(id, json_api_llm_endpoint_patch_document, filter=filter)
+        print("The response of OrganizationModelControllerApi->patch_entity_llm_endpoints:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->patch_entity_llm_endpoints: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **json_api_llm_endpoint_patch_document** | [**JsonApiLlmEndpointPatchDocument**](JsonApiLlmEndpointPatchDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **json_api_llm_endpoint_patch_document** | [**JsonApiLlmEndpointPatchDocument**](JsonApiLlmEndpointPatchDocument.md)|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -5636,7 +4798,6 @@ No authorization required
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -5646,7 +4807,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **patch_entity_notification_channels**
-> JsonApiNotificationChannelOutDocument patch_entity_notification_channels(id, json_api_notification_channel_patch_document)
+> JsonApiNotificationChannelOutDocument patch_entity_notification_channels(id, json_api_notification_channel_patch_document, filter=filter)
 
 Patch Notification Channel entity
 
@@ -5654,12 +4815,12 @@ Patch Notification Channel entity
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_notification_channel_out_document import JsonApiNotificationChannelOutDocument
-from gooddata_api_client.model.json_api_notification_channel_patch_document import JsonApiNotificationChannelPatchDocument
+from gooddata_api_client.models.json_api_notification_channel_out_document import JsonApiNotificationChannelOutDocument
+from gooddata_api_client.models.json_api_notification_channel_patch_document import JsonApiNotificationChannelPatchDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -5668,54 +4829,32 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    json_api_notification_channel_patch_document = JsonApiNotificationChannelPatchDocument(
-        data=JsonApiNotificationChannelPatch(
-            attributes=JsonApiNotificationChannelInAttributes(
-                allowed_recipients="CREATOR",
-                custom_dashboard_url="custom_dashboard_url_example",
-                dashboard_link_visibility="HIDDEN",
-                description="description_example",
-                destination=JsonApiNotificationChannelInAttributesDestination(None),
-                in_platform_notification="DISABLED",
-                name="name_example",
-                notification_source="notification_source_example",
-            ),
-            id="id1",
-            type="notificationChannel",
-        ),
-    ) # JsonApiNotificationChannelPatchDocument | 
-    filter = "name==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    json_api_notification_channel_patch_document = gooddata_api_client.JsonApiNotificationChannelPatchDocument() # JsonApiNotificationChannelPatchDocument | 
+    filter = 'name==someString;description==someString' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Patch Notification Channel entity
-        api_response = api_instance.patch_entity_notification_channels(id, json_api_notification_channel_patch_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->patch_entity_notification_channels: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Patch Notification Channel entity
         api_response = api_instance.patch_entity_notification_channels(id, json_api_notification_channel_patch_document, filter=filter)
+        print("The response of OrganizationModelControllerApi->patch_entity_notification_channels:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->patch_entity_notification_channels: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **json_api_notification_channel_patch_document** | [**JsonApiNotificationChannelPatchDocument**](JsonApiNotificationChannelPatchDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **json_api_notification_channel_patch_document** | [**JsonApiNotificationChannelPatchDocument**](JsonApiNotificationChannelPatchDocument.md)|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -5730,7 +4869,6 @@ No authorization required
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -5740,7 +4878,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **patch_entity_organization_settings**
-> JsonApiOrganizationSettingOutDocument patch_entity_organization_settings(id, json_api_organization_setting_patch_document)
+> JsonApiOrganizationSettingOutDocument patch_entity_organization_settings(id, json_api_organization_setting_patch_document, filter=filter)
 
 Patch Organization entity
 
@@ -5748,12 +4886,12 @@ Patch Organization entity
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_organization_setting_out_document import JsonApiOrganizationSettingOutDocument
-from gooddata_api_client.model.json_api_organization_setting_patch_document import JsonApiOrganizationSettingPatchDocument
+from gooddata_api_client.models.json_api_organization_setting_out_document import JsonApiOrganizationSettingOutDocument
+from gooddata_api_client.models.json_api_organization_setting_patch_document import JsonApiOrganizationSettingPatchDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -5762,48 +4900,32 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    json_api_organization_setting_patch_document = JsonApiOrganizationSettingPatchDocument(
-        data=JsonApiOrganizationSettingPatch(
-            attributes=JsonApiOrganizationSettingInAttributes(
-                content={},
-                type="TIMEZONE",
-            ),
-            id="id1",
-            type="organizationSetting",
-        ),
-    ) # JsonApiOrganizationSettingPatchDocument | 
-    filter = "content==JsonNodeValue;type==SettingTypeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    json_api_organization_setting_patch_document = gooddata_api_client.JsonApiOrganizationSettingPatchDocument() # JsonApiOrganizationSettingPatchDocument | 
+    filter = 'content==JsonNodeValue;type==SettingTypeValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Patch Organization entity
-        api_response = api_instance.patch_entity_organization_settings(id, json_api_organization_setting_patch_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->patch_entity_organization_settings: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Patch Organization entity
         api_response = api_instance.patch_entity_organization_settings(id, json_api_organization_setting_patch_document, filter=filter)
+        print("The response of OrganizationModelControllerApi->patch_entity_organization_settings:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->patch_entity_organization_settings: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **json_api_organization_setting_patch_document** | [**JsonApiOrganizationSettingPatchDocument**](JsonApiOrganizationSettingPatchDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **json_api_organization_setting_patch_document** | [**JsonApiOrganizationSettingPatchDocument**](JsonApiOrganizationSettingPatchDocument.md)|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -5818,7 +4940,6 @@ No authorization required
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -5828,7 +4949,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **patch_entity_themes**
-> JsonApiThemeOutDocument patch_entity_themes(id, json_api_theme_patch_document)
+> JsonApiThemeOutDocument patch_entity_themes(id, json_api_theme_patch_document, filter=filter)
 
 Patch Theming
 
@@ -5836,12 +4957,12 @@ Patch Theming
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_theme_patch_document import JsonApiThemePatchDocument
-from gooddata_api_client.model.json_api_theme_out_document import JsonApiThemeOutDocument
+from gooddata_api_client.models.json_api_theme_out_document import JsonApiThemeOutDocument
+from gooddata_api_client.models.json_api_theme_patch_document import JsonApiThemePatchDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -5850,48 +4971,32 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    json_api_theme_patch_document = JsonApiThemePatchDocument(
-        data=JsonApiThemePatch(
-            attributes=JsonApiColorPalettePatchAttributes(
-                content={},
-                name="name_example",
-            ),
-            id="id1",
-            type="theme",
-        ),
-    ) # JsonApiThemePatchDocument | 
-    filter = "name==someString;content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    json_api_theme_patch_document = gooddata_api_client.JsonApiThemePatchDocument() # JsonApiThemePatchDocument | 
+    filter = 'name==someString;content==JsonNodeValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Patch Theming
-        api_response = api_instance.patch_entity_themes(id, json_api_theme_patch_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->patch_entity_themes: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Patch Theming
         api_response = api_instance.patch_entity_themes(id, json_api_theme_patch_document, filter=filter)
+        print("The response of OrganizationModelControllerApi->patch_entity_themes:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->patch_entity_themes: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **json_api_theme_patch_document** | [**JsonApiThemePatchDocument**](JsonApiThemePatchDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **json_api_theme_patch_document** | [**JsonApiThemePatchDocument**](JsonApiThemePatchDocument.md)|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -5906,7 +5011,6 @@ No authorization required
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -5916,7 +5020,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **patch_entity_user_groups**
-> JsonApiUserGroupOutDocument patch_entity_user_groups(id, json_api_user_group_patch_document)
+> JsonApiUserGroupOutDocument patch_entity_user_groups(id, json_api_user_group_patch_document, filter=filter, include=include)
 
 Patch UserGroup entity
 
@@ -5926,12 +5030,12 @@ User Group - creates tree-like structure for categorizing users
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_user_group_out_document import JsonApiUserGroupOutDocument
-from gooddata_api_client.model.json_api_user_group_patch_document import JsonApiUserGroupPatchDocument
+from gooddata_api_client.models.json_api_user_group_out_document import JsonApiUserGroupOutDocument
+from gooddata_api_client.models.json_api_user_group_patch_document import JsonApiUserGroupPatchDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -5940,61 +5044,34 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    json_api_user_group_patch_document = JsonApiUserGroupPatchDocument(
-        data=JsonApiUserGroupPatch(
-            attributes=JsonApiUserGroupInAttributes(
-                name="name_example",
-            ),
-            id="id1",
-            relationships=JsonApiUserGroupInRelationships(
-                parents=JsonApiUserGroupInRelationshipsParents(
-                    data=JsonApiUserGroupToManyLinkage([
-                        JsonApiUserGroupLinkage(
-                            id="id_example",
-                            type="userGroup",
-                        ),
-                    ]),
-                ),
-            ),
-            type="userGroup",
-        ),
-    ) # JsonApiUserGroupPatchDocument | 
-    filter = "name==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    include = [
-        "parents",
-    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    json_api_user_group_patch_document = gooddata_api_client.JsonApiUserGroupPatchDocument() # JsonApiUserGroupPatchDocument | 
+    filter = 'name==someString' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = ['parents'] # List[str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Patch UserGroup entity
-        api_response = api_instance.patch_entity_user_groups(id, json_api_user_group_patch_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->patch_entity_user_groups: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Patch UserGroup entity
         api_response = api_instance.patch_entity_user_groups(id, json_api_user_group_patch_document, filter=filter, include=include)
+        print("The response of OrganizationModelControllerApi->patch_entity_user_groups:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->patch_entity_user_groups: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **json_api_user_group_patch_document** | [**JsonApiUserGroupPatchDocument**](JsonApiUserGroupPatchDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+ **id** | **str**|  | 
+ **json_api_user_group_patch_document** | [**JsonApiUserGroupPatchDocument**](JsonApiUserGroupPatchDocument.md)|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **include** | [**List[str]**](str.md)| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional] 
 
 ### Return type
 
@@ -6009,7 +5086,6 @@ No authorization required
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -6019,7 +5095,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **patch_entity_users**
-> JsonApiUserOutDocument patch_entity_users(id, json_api_user_patch_document)
+> JsonApiUserOutDocument patch_entity_users(id, json_api_user_patch_document, filter=filter, include=include)
 
 Patch User entity
 
@@ -6029,12 +5105,12 @@ User - represents entity interacting with platform
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_user_out_document import JsonApiUserOutDocument
-from gooddata_api_client.model.json_api_user_patch_document import JsonApiUserPatchDocument
+from gooddata_api_client.models.json_api_user_out_document import JsonApiUserOutDocument
+from gooddata_api_client.models.json_api_user_patch_document import JsonApiUserPatchDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -6043,64 +5119,34 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    json_api_user_patch_document = JsonApiUserPatchDocument(
-        data=JsonApiUserPatch(
-            attributes=JsonApiUserInAttributes(
-                authentication_id="authentication_id_example",
-                email="email_example",
-                firstname="firstname_example",
-                lastname="lastname_example",
-            ),
-            id="id1",
-            relationships=JsonApiUserInRelationships(
-                user_groups=JsonApiUserGroupInRelationshipsParents(
-                    data=JsonApiUserGroupToManyLinkage([
-                        JsonApiUserGroupLinkage(
-                            id="id_example",
-                            type="userGroup",
-                        ),
-                    ]),
-                ),
-            ),
-            type="user",
-        ),
-    ) # JsonApiUserPatchDocument | 
-    filter = "authenticationId==someString;firstname==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    include = [
-        "userGroups",
-    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    json_api_user_patch_document = gooddata_api_client.JsonApiUserPatchDocument() # JsonApiUserPatchDocument | 
+    filter = 'authenticationId==someString;firstname==someString' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = ['userGroups'] # List[str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Patch User entity
-        api_response = api_instance.patch_entity_users(id, json_api_user_patch_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->patch_entity_users: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Patch User entity
         api_response = api_instance.patch_entity_users(id, json_api_user_patch_document, filter=filter, include=include)
+        print("The response of OrganizationModelControllerApi->patch_entity_users:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->patch_entity_users: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **json_api_user_patch_document** | [**JsonApiUserPatchDocument**](JsonApiUserPatchDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+ **id** | **str**|  | 
+ **json_api_user_patch_document** | [**JsonApiUserPatchDocument**](JsonApiUserPatchDocument.md)|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **include** | [**List[str]**](str.md)| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional] 
 
 ### Return type
 
@@ -6115,7 +5161,6 @@ No authorization required
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -6125,7 +5170,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **patch_entity_workspaces**
-> JsonApiWorkspaceOutDocument patch_entity_workspaces(id, json_api_workspace_patch_document)
+> JsonApiWorkspaceOutDocument patch_entity_workspaces(id, json_api_workspace_patch_document, filter=filter, include=include)
 
 Patch Workspace entity
 
@@ -6135,12 +5180,12 @@ Space of the shared interest
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_workspace_out_document import JsonApiWorkspaceOutDocument
-from gooddata_api_client.model.json_api_workspace_patch_document import JsonApiWorkspacePatchDocument
+from gooddata_api_client.models.json_api_workspace_out_document import JsonApiWorkspaceOutDocument
+from gooddata_api_client.models.json_api_workspace_patch_document import JsonApiWorkspacePatchDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -6149,69 +5194,34 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    json_api_workspace_patch_document = JsonApiWorkspacePatchDocument(
-        data=JsonApiWorkspacePatch(
-            attributes=JsonApiWorkspaceInAttributes(
-                cache_extra_limit=1,
-                data_source=JsonApiWorkspaceInAttributesDataSource(
-                    id="snowflake.instance.1",
-                    schema_path=[
-                        "subPath",
-                    ],
-                ),
-                description="description_example",
-                early_access="early_access_example",
-                early_access_values=[
-                    "early_access_values_example",
-                ],
-                name="name_example",
-                prefix="/6bUUGjjNSwg0_bs",
-            ),
-            id="id1",
-            relationships=JsonApiWorkspaceInRelationships(
-                parent=JsonApiWorkspaceAutomationOutRelationshipsWorkspace(
-                    data=JsonApiWorkspaceToOneLinkage(None),
-                ),
-            ),
-            type="workspace",
-        ),
-    ) # JsonApiWorkspacePatchDocument | 
-    filter = "name==someString;earlyAccess==someString;parent.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    include = [
-        "parent",
-    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    json_api_workspace_patch_document = gooddata_api_client.JsonApiWorkspacePatchDocument() # JsonApiWorkspacePatchDocument | 
+    filter = 'name==someString;earlyAccess==someString;parent.id==321' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = ['parent'] # List[str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Patch Workspace entity
-        api_response = api_instance.patch_entity_workspaces(id, json_api_workspace_patch_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->patch_entity_workspaces: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Patch Workspace entity
         api_response = api_instance.patch_entity_workspaces(id, json_api_workspace_patch_document, filter=filter, include=include)
+        print("The response of OrganizationModelControllerApi->patch_entity_workspaces:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->patch_entity_workspaces: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **json_api_workspace_patch_document** | [**JsonApiWorkspacePatchDocument**](JsonApiWorkspacePatchDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+ **id** | **str**|  | 
+ **json_api_workspace_patch_document** | [**JsonApiWorkspacePatchDocument**](JsonApiWorkspacePatchDocument.md)|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **include** | [**List[str]**](str.md)| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional] 
 
 ### Return type
 
@@ -6226,7 +5236,6 @@ No authorization required
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -6236,7 +5245,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **update_entity_color_palettes**
-> JsonApiColorPaletteOutDocument update_entity_color_palettes(id, json_api_color_palette_in_document)
+> JsonApiColorPaletteOutDocument update_entity_color_palettes(id, json_api_color_palette_in_document, filter=filter)
 
 Put Color Pallette
 
@@ -6244,12 +5253,12 @@ Put Color Pallette
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_color_palette_in_document import JsonApiColorPaletteInDocument
-from gooddata_api_client.model.json_api_color_palette_out_document import JsonApiColorPaletteOutDocument
+from gooddata_api_client.models.json_api_color_palette_in_document import JsonApiColorPaletteInDocument
+from gooddata_api_client.models.json_api_color_palette_out_document import JsonApiColorPaletteOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -6258,48 +5267,32 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    json_api_color_palette_in_document = JsonApiColorPaletteInDocument(
-        data=JsonApiColorPaletteIn(
-            attributes=JsonApiColorPaletteInAttributes(
-                content={},
-                name="name_example",
-            ),
-            id="id1",
-            type="colorPalette",
-        ),
-    ) # JsonApiColorPaletteInDocument | 
-    filter = "name==someString;content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    json_api_color_palette_in_document = gooddata_api_client.JsonApiColorPaletteInDocument() # JsonApiColorPaletteInDocument | 
+    filter = 'name==someString;content==JsonNodeValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Put Color Pallette
-        api_response = api_instance.update_entity_color_palettes(id, json_api_color_palette_in_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->update_entity_color_palettes: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Put Color Pallette
         api_response = api_instance.update_entity_color_palettes(id, json_api_color_palette_in_document, filter=filter)
+        print("The response of OrganizationModelControllerApi->update_entity_color_palettes:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->update_entity_color_palettes: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **json_api_color_palette_in_document** | [**JsonApiColorPaletteInDocument**](JsonApiColorPaletteInDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **json_api_color_palette_in_document** | [**JsonApiColorPaletteInDocument**](JsonApiColorPaletteInDocument.md)|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -6314,7 +5307,6 @@ No authorization required
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -6324,7 +5316,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **update_entity_csp_directives**
-> JsonApiCspDirectiveOutDocument update_entity_csp_directives(id, json_api_csp_directive_in_document)
+> JsonApiCspDirectiveOutDocument update_entity_csp_directives(id, json_api_csp_directive_in_document, filter=filter)
 
 Put CSP Directives
 
@@ -6334,12 +5326,12 @@ Put CSP Directives
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_csp_directive_out_document import JsonApiCspDirectiveOutDocument
-from gooddata_api_client.model.json_api_csp_directive_in_document import JsonApiCspDirectiveInDocument
+from gooddata_api_client.models.json_api_csp_directive_in_document import JsonApiCspDirectiveInDocument
+from gooddata_api_client.models.json_api_csp_directive_out_document import JsonApiCspDirectiveOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -6348,49 +5340,32 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    json_api_csp_directive_in_document = JsonApiCspDirectiveInDocument(
-        data=JsonApiCspDirectiveIn(
-            attributes=JsonApiCspDirectiveInAttributes(
-                sources=[
-                    "sources_example",
-                ],
-            ),
-            id="id1",
-            type="cspDirective",
-        ),
-    ) # JsonApiCspDirectiveInDocument | 
-    filter = "sources==v1,v2,v3" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    json_api_csp_directive_in_document = gooddata_api_client.JsonApiCspDirectiveInDocument() # JsonApiCspDirectiveInDocument | 
+    filter = 'sources==v1,v2,v3' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Put CSP Directives
-        api_response = api_instance.update_entity_csp_directives(id, json_api_csp_directive_in_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->update_entity_csp_directives: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Put CSP Directives
         api_response = api_instance.update_entity_csp_directives(id, json_api_csp_directive_in_document, filter=filter)
+        print("The response of OrganizationModelControllerApi->update_entity_csp_directives:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->update_entity_csp_directives: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **json_api_csp_directive_in_document** | [**JsonApiCspDirectiveInDocument**](JsonApiCspDirectiveInDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **json_api_csp_directive_in_document** | [**JsonApiCspDirectiveInDocument**](JsonApiCspDirectiveInDocument.md)|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -6405,7 +5380,6 @@ No authorization required
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -6415,7 +5389,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **update_entity_data_sources**
-> JsonApiDataSourceOutDocument update_entity_data_sources(id, json_api_data_source_in_document)
+> JsonApiDataSourceOutDocument update_entity_data_sources(id, json_api_data_source_in_document, filter=filter)
 
 Put Data Source entity
 
@@ -6425,12 +5399,12 @@ Data Source - represents data source for the workspace
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_data_source_in_document import JsonApiDataSourceInDocument
-from gooddata_api_client.model.json_api_data_source_out_document import JsonApiDataSourceOutDocument
+from gooddata_api_client.models.json_api_data_source_in_document import JsonApiDataSourceInDocument
+from gooddata_api_client.models.json_api_data_source_out_document import JsonApiDataSourceOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -6439,64 +5413,32 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    json_api_data_source_in_document = JsonApiDataSourceInDocument(
-        data=JsonApiDataSourceIn(
-            attributes=JsonApiDataSourceInAttributes(
-                cache_strategy="ALWAYS",
-                client_id="client_id_example",
-                client_secret="client_secret_example",
-                name="name_example",
-                parameters=[
-                    JsonApiDataSourceInAttributesParametersInner(
-                        name="name_example",
-                        value="value_example",
-                    ),
-                ],
-                password="password_example",
-                private_key="private_key_example",
-                private_key_passphrase="private_key_passphrase_example",
-                schema="schema_example",
-                token="token_example",
-                type="POSTGRESQL",
-                url="url_example",
-                username="username_example",
-            ),
-            id="id1",
-            type="dataSource",
-        ),
-    ) # JsonApiDataSourceInDocument | 
-    filter = "name==someString;type==DatabaseTypeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    json_api_data_source_in_document = gooddata_api_client.JsonApiDataSourceInDocument() # JsonApiDataSourceInDocument | 
+    filter = 'name==someString;type==DatabaseTypeValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Put Data Source entity
-        api_response = api_instance.update_entity_data_sources(id, json_api_data_source_in_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->update_entity_data_sources: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Put Data Source entity
         api_response = api_instance.update_entity_data_sources(id, json_api_data_source_in_document, filter=filter)
+        print("The response of OrganizationModelControllerApi->update_entity_data_sources:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->update_entity_data_sources: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **json_api_data_source_in_document** | [**JsonApiDataSourceInDocument**](JsonApiDataSourceInDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **json_api_data_source_in_document** | [**JsonApiDataSourceInDocument**](JsonApiDataSourceInDocument.md)|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -6511,7 +5453,6 @@ No authorization required
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -6521,7 +5462,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **update_entity_export_templates**
-> JsonApiExportTemplateOutDocument update_entity_export_templates(id, json_api_export_template_in_document)
+> JsonApiExportTemplateOutDocument update_entity_export_templates(id, json_api_export_template_in_document, filter=filter)
 
 PUT Export Template entity
 
@@ -6529,12 +5470,12 @@ PUT Export Template entity
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_export_template_in_document import JsonApiExportTemplateInDocument
-from gooddata_api_client.model.json_api_export_template_out_document import JsonApiExportTemplateOutDocument
+from gooddata_api_client.models.json_api_export_template_in_document import JsonApiExportTemplateInDocument
+from gooddata_api_client.models.json_api_export_template_out_document import JsonApiExportTemplateOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -6543,114 +5484,32 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    json_api_export_template_in_document = JsonApiExportTemplateInDocument(
-        data=JsonApiExportTemplateIn(
-            attributes=JsonApiExportTemplateInAttributes(
-                dashboard_slides_template=JsonApiExportTemplateInAttributesDashboardSlidesTemplate(
-                    applied_on=["PDF","PPTX"],
-                    content_slide=ContentSlideTemplate(
-                        description_field="{{dashboardFilters}}",
-                        footer=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                        header=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                    ),
-                    cover_slide=CoverSlideTemplate(
-                        background_image=True,
-                        description_field="Exported at: {{exportedAt}}",
-                        footer=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                        header=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                    ),
-                    intro_slide=IntroSlideTemplate(
-                        background_image=True,
-                        description_field='''About:
-{{dashboardDescription}}
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    json_api_export_template_in_document = gooddata_api_client.JsonApiExportTemplateInDocument() # JsonApiExportTemplateInDocument | 
+    filter = 'name==someString;dashboardSlidesTemplate==DashboardSlidesTemplateValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-{{dashboardFilters}}''',
-                        footer=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                        header=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                        title_field="Introduction",
-                    ),
-                    section_slide=SectionSlideTemplate(
-                        background_image=True,
-                        footer=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                        header=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                    ),
-                ),
-                name="name_example",
-                widget_slides_template=JsonApiExportTemplateInAttributesWidgetSlidesTemplate(
-                    applied_on=["PDF","PPTX"],
-                    content_slide=ContentSlideTemplate(
-                        description_field="{{dashboardFilters}}",
-                        footer=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                        header=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                    ),
-                ),
-            ),
-            id="id1",
-            type="exportTemplate",
-        ),
-    ) # JsonApiExportTemplateInDocument | 
-    filter = "name==someString;dashboardSlidesTemplate==DashboardSlidesTemplateValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-
-    # example passing only required values which don't have defaults set
-    try:
-        # PUT Export Template entity
-        api_response = api_instance.update_entity_export_templates(id, json_api_export_template_in_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->update_entity_export_templates: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # PUT Export Template entity
         api_response = api_instance.update_entity_export_templates(id, json_api_export_template_in_document, filter=filter)
+        print("The response of OrganizationModelControllerApi->update_entity_export_templates:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->update_entity_export_templates: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **json_api_export_template_in_document** | [**JsonApiExportTemplateInDocument**](JsonApiExportTemplateInDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **json_api_export_template_in_document** | [**JsonApiExportTemplateInDocument**](JsonApiExportTemplateInDocument.md)|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -6665,7 +5524,6 @@ No authorization required
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -6675,7 +5533,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **update_entity_identity_providers**
-> JsonApiIdentityProviderOutDocument update_entity_identity_providers(id, json_api_identity_provider_in_document)
+> JsonApiIdentityProviderOutDocument update_entity_identity_providers(id, json_api_identity_provider_in_document, filter=filter)
 
 Put Identity Provider
 
@@ -6683,12 +5541,12 @@ Put Identity Provider
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_identity_provider_out_document import JsonApiIdentityProviderOutDocument
-from gooddata_api_client.model.json_api_identity_provider_in_document import JsonApiIdentityProviderInDocument
+from gooddata_api_client.models.json_api_identity_provider_in_document import JsonApiIdentityProviderInDocument
+from gooddata_api_client.models.json_api_identity_provider_out_document import JsonApiIdentityProviderOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -6697,63 +5555,32 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    json_api_identity_provider_in_document = JsonApiIdentityProviderInDocument(
-        data=JsonApiIdentityProviderIn(
-            attributes=JsonApiIdentityProviderInAttributes(
-                custom_claim_mapping={
-                    "key": "key_example",
-                },
-                identifiers=["gooddata.com"],
-                idp_type="MANAGED_IDP",
-                oauth_client_id="oauth_client_id_example",
-                oauth_client_secret="oauth_client_secret_example",
-                oauth_custom_auth_attributes={
-                    "key": "key_example",
-                },
-                oauth_custom_scopes=[
-                    "oauth_custom_scopes_example",
-                ],
-                oauth_issuer_id="myOidcProvider",
-                oauth_issuer_location="oauth_issuer_location_example",
-                oauth_subject_id_claim="oid",
-                saml_metadata="saml_metadata_example",
-            ),
-            id="id1",
-            type="identityProvider",
-        ),
-    ) # JsonApiIdentityProviderInDocument | 
-    filter = "identifiers==v1,v2,v3;customClaimMapping==MapValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    json_api_identity_provider_in_document = gooddata_api_client.JsonApiIdentityProviderInDocument() # JsonApiIdentityProviderInDocument | 
+    filter = 'identifiers==v1,v2,v3;customClaimMapping==MapValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Put Identity Provider
-        api_response = api_instance.update_entity_identity_providers(id, json_api_identity_provider_in_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->update_entity_identity_providers: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Put Identity Provider
         api_response = api_instance.update_entity_identity_providers(id, json_api_identity_provider_in_document, filter=filter)
+        print("The response of OrganizationModelControllerApi->update_entity_identity_providers:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->update_entity_identity_providers: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **json_api_identity_provider_in_document** | [**JsonApiIdentityProviderInDocument**](JsonApiIdentityProviderInDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **json_api_identity_provider_in_document** | [**JsonApiIdentityProviderInDocument**](JsonApiIdentityProviderInDocument.md)|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -6768,7 +5595,6 @@ No authorization required
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -6778,7 +5604,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **update_entity_jwks**
-> JsonApiJwkOutDocument update_entity_jwks(id, json_api_jwk_in_document)
+> JsonApiJwkOutDocument update_entity_jwks(id, json_api_jwk_in_document, filter=filter)
 
 Put Jwk
 
@@ -6788,12 +5614,12 @@ Updates JSON web key - used to verify JSON web tokens (Jwts)
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_jwk_in_document import JsonApiJwkInDocument
-from gooddata_api_client.model.json_api_jwk_out_document import JsonApiJwkOutDocument
+from gooddata_api_client.models.json_api_jwk_in_document import JsonApiJwkInDocument
+from gooddata_api_client.models.json_api_jwk_out_document import JsonApiJwkOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -6802,47 +5628,32 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    json_api_jwk_in_document = JsonApiJwkInDocument(
-        data=JsonApiJwkIn(
-            attributes=JsonApiJwkInAttributes(
-                content=JsonApiJwkInAttributesContent(),
-            ),
-            id="id1",
-            type="jwk",
-        ),
-    ) # JsonApiJwkInDocument | 
-    filter = "content==JwkSpecificationValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    json_api_jwk_in_document = gooddata_api_client.JsonApiJwkInDocument() # JsonApiJwkInDocument | 
+    filter = 'content==JwkSpecificationValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Put Jwk
-        api_response = api_instance.update_entity_jwks(id, json_api_jwk_in_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->update_entity_jwks: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Put Jwk
         api_response = api_instance.update_entity_jwks(id, json_api_jwk_in_document, filter=filter)
+        print("The response of OrganizationModelControllerApi->update_entity_jwks:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->update_entity_jwks: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **json_api_jwk_in_document** | [**JsonApiJwkInDocument**](JsonApiJwkInDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **json_api_jwk_in_document** | [**JsonApiJwkInDocument**](JsonApiJwkInDocument.md)|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -6857,7 +5668,6 @@ No authorization required
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -6867,7 +5677,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **update_entity_llm_endpoints**
-> JsonApiLlmEndpointOutDocument update_entity_llm_endpoints(id, json_api_llm_endpoint_in_document)
+> JsonApiLlmEndpointOutDocument update_entity_llm_endpoints(id, json_api_llm_endpoint_in_document, filter=filter)
 
 PUT LLM endpoint entity
 
@@ -6875,12 +5685,12 @@ PUT LLM endpoint entity
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_llm_endpoint_in_document import JsonApiLlmEndpointInDocument
-from gooddata_api_client.model.json_api_llm_endpoint_out_document import JsonApiLlmEndpointOutDocument
+from gooddata_api_client.models.json_api_llm_endpoint_in_document import JsonApiLlmEndpointInDocument
+from gooddata_api_client.models.json_api_llm_endpoint_out_document import JsonApiLlmEndpointOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -6889,52 +5699,32 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    json_api_llm_endpoint_in_document = JsonApiLlmEndpointInDocument(
-        data=JsonApiLlmEndpointIn(
-            attributes=JsonApiLlmEndpointInAttributes(
-                base_url="base_url_example",
-                llm_model="llm_model_example",
-                llm_organization="llm_organization_example",
-                provider="OPENAI",
-                title="title_example",
-                token="token_example",
-            ),
-            id="id1",
-            type="llmEndpoint",
-        ),
-    ) # JsonApiLlmEndpointInDocument | 
-    filter = "title==someString;provider==LLMProviderValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    json_api_llm_endpoint_in_document = gooddata_api_client.JsonApiLlmEndpointInDocument() # JsonApiLlmEndpointInDocument | 
+    filter = 'title==someString;provider==LLMProviderValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # PUT LLM endpoint entity
-        api_response = api_instance.update_entity_llm_endpoints(id, json_api_llm_endpoint_in_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->update_entity_llm_endpoints: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # PUT LLM endpoint entity
         api_response = api_instance.update_entity_llm_endpoints(id, json_api_llm_endpoint_in_document, filter=filter)
+        print("The response of OrganizationModelControllerApi->update_entity_llm_endpoints:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->update_entity_llm_endpoints: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **json_api_llm_endpoint_in_document** | [**JsonApiLlmEndpointInDocument**](JsonApiLlmEndpointInDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **json_api_llm_endpoint_in_document** | [**JsonApiLlmEndpointInDocument**](JsonApiLlmEndpointInDocument.md)|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -6949,7 +5739,6 @@ No authorization required
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -6959,7 +5748,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **update_entity_notification_channels**
-> JsonApiNotificationChannelOutDocument update_entity_notification_channels(id, json_api_notification_channel_in_document)
+> JsonApiNotificationChannelOutDocument update_entity_notification_channels(id, json_api_notification_channel_in_document, filter=filter)
 
 Put Notification Channel entity
 
@@ -6967,12 +5756,12 @@ Put Notification Channel entity
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_notification_channel_in_document import JsonApiNotificationChannelInDocument
-from gooddata_api_client.model.json_api_notification_channel_out_document import JsonApiNotificationChannelOutDocument
+from gooddata_api_client.models.json_api_notification_channel_in_document import JsonApiNotificationChannelInDocument
+from gooddata_api_client.models.json_api_notification_channel_out_document import JsonApiNotificationChannelOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -6981,54 +5770,32 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    json_api_notification_channel_in_document = JsonApiNotificationChannelInDocument(
-        data=JsonApiNotificationChannelIn(
-            attributes=JsonApiNotificationChannelInAttributes(
-                allowed_recipients="CREATOR",
-                custom_dashboard_url="custom_dashboard_url_example",
-                dashboard_link_visibility="HIDDEN",
-                description="description_example",
-                destination=JsonApiNotificationChannelInAttributesDestination(None),
-                in_platform_notification="DISABLED",
-                name="name_example",
-                notification_source="notification_source_example",
-            ),
-            id="id1",
-            type="notificationChannel",
-        ),
-    ) # JsonApiNotificationChannelInDocument | 
-    filter = "name==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    json_api_notification_channel_in_document = gooddata_api_client.JsonApiNotificationChannelInDocument() # JsonApiNotificationChannelInDocument | 
+    filter = 'name==someString;description==someString' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Put Notification Channel entity
-        api_response = api_instance.update_entity_notification_channels(id, json_api_notification_channel_in_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->update_entity_notification_channels: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Put Notification Channel entity
         api_response = api_instance.update_entity_notification_channels(id, json_api_notification_channel_in_document, filter=filter)
+        print("The response of OrganizationModelControllerApi->update_entity_notification_channels:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->update_entity_notification_channels: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **json_api_notification_channel_in_document** | [**JsonApiNotificationChannelInDocument**](JsonApiNotificationChannelInDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **json_api_notification_channel_in_document** | [**JsonApiNotificationChannelInDocument**](JsonApiNotificationChannelInDocument.md)|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -7043,7 +5810,6 @@ No authorization required
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -7053,7 +5819,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **update_entity_organization_settings**
-> JsonApiOrganizationSettingOutDocument update_entity_organization_settings(id, json_api_organization_setting_in_document)
+> JsonApiOrganizationSettingOutDocument update_entity_organization_settings(id, json_api_organization_setting_in_document, filter=filter)
 
 Put Organization entity
 
@@ -7061,12 +5827,12 @@ Put Organization entity
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_organization_setting_in_document import JsonApiOrganizationSettingInDocument
-from gooddata_api_client.model.json_api_organization_setting_out_document import JsonApiOrganizationSettingOutDocument
+from gooddata_api_client.models.json_api_organization_setting_in_document import JsonApiOrganizationSettingInDocument
+from gooddata_api_client.models.json_api_organization_setting_out_document import JsonApiOrganizationSettingOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -7075,48 +5841,32 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    json_api_organization_setting_in_document = JsonApiOrganizationSettingInDocument(
-        data=JsonApiOrganizationSettingIn(
-            attributes=JsonApiOrganizationSettingInAttributes(
-                content={},
-                type="TIMEZONE",
-            ),
-            id="id1",
-            type="organizationSetting",
-        ),
-    ) # JsonApiOrganizationSettingInDocument | 
-    filter = "content==JsonNodeValue;type==SettingTypeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    json_api_organization_setting_in_document = gooddata_api_client.JsonApiOrganizationSettingInDocument() # JsonApiOrganizationSettingInDocument | 
+    filter = 'content==JsonNodeValue;type==SettingTypeValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Put Organization entity
-        api_response = api_instance.update_entity_organization_settings(id, json_api_organization_setting_in_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->update_entity_organization_settings: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Put Organization entity
         api_response = api_instance.update_entity_organization_settings(id, json_api_organization_setting_in_document, filter=filter)
+        print("The response of OrganizationModelControllerApi->update_entity_organization_settings:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->update_entity_organization_settings: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **json_api_organization_setting_in_document** | [**JsonApiOrganizationSettingInDocument**](JsonApiOrganizationSettingInDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **json_api_organization_setting_in_document** | [**JsonApiOrganizationSettingInDocument**](JsonApiOrganizationSettingInDocument.md)|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -7131,7 +5881,6 @@ No authorization required
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -7141,7 +5890,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **update_entity_themes**
-> JsonApiThemeOutDocument update_entity_themes(id, json_api_theme_in_document)
+> JsonApiThemeOutDocument update_entity_themes(id, json_api_theme_in_document, filter=filter)
 
 Put Theming
 
@@ -7149,12 +5898,12 @@ Put Theming
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_theme_in_document import JsonApiThemeInDocument
-from gooddata_api_client.model.json_api_theme_out_document import JsonApiThemeOutDocument
+from gooddata_api_client.models.json_api_theme_in_document import JsonApiThemeInDocument
+from gooddata_api_client.models.json_api_theme_out_document import JsonApiThemeOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -7163,48 +5912,32 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    json_api_theme_in_document = JsonApiThemeInDocument(
-        data=JsonApiThemeIn(
-            attributes=JsonApiColorPaletteInAttributes(
-                content={},
-                name="name_example",
-            ),
-            id="id1",
-            type="theme",
-        ),
-    ) # JsonApiThemeInDocument | 
-    filter = "name==someString;content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    json_api_theme_in_document = gooddata_api_client.JsonApiThemeInDocument() # JsonApiThemeInDocument | 
+    filter = 'name==someString;content==JsonNodeValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Put Theming
-        api_response = api_instance.update_entity_themes(id, json_api_theme_in_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->update_entity_themes: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Put Theming
         api_response = api_instance.update_entity_themes(id, json_api_theme_in_document, filter=filter)
+        print("The response of OrganizationModelControllerApi->update_entity_themes:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->update_entity_themes: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **json_api_theme_in_document** | [**JsonApiThemeInDocument**](JsonApiThemeInDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **json_api_theme_in_document** | [**JsonApiThemeInDocument**](JsonApiThemeInDocument.md)|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -7219,7 +5952,6 @@ No authorization required
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -7229,7 +5961,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **update_entity_user_groups**
-> JsonApiUserGroupOutDocument update_entity_user_groups(id, json_api_user_group_in_document)
+> JsonApiUserGroupOutDocument update_entity_user_groups(id, json_api_user_group_in_document, filter=filter, include=include)
 
 Put UserGroup entity
 
@@ -7239,12 +5971,12 @@ User Group - creates tree-like structure for categorizing users
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_user_group_in_document import JsonApiUserGroupInDocument
-from gooddata_api_client.model.json_api_user_group_out_document import JsonApiUserGroupOutDocument
+from gooddata_api_client.models.json_api_user_group_in_document import JsonApiUserGroupInDocument
+from gooddata_api_client.models.json_api_user_group_out_document import JsonApiUserGroupOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -7253,61 +5985,34 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    json_api_user_group_in_document = JsonApiUserGroupInDocument(
-        data=JsonApiUserGroupIn(
-            attributes=JsonApiUserGroupInAttributes(
-                name="name_example",
-            ),
-            id="id1",
-            relationships=JsonApiUserGroupInRelationships(
-                parents=JsonApiUserGroupInRelationshipsParents(
-                    data=JsonApiUserGroupToManyLinkage([
-                        JsonApiUserGroupLinkage(
-                            id="id_example",
-                            type="userGroup",
-                        ),
-                    ]),
-                ),
-            ),
-            type="userGroup",
-        ),
-    ) # JsonApiUserGroupInDocument | 
-    filter = "name==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    include = [
-        "parents",
-    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    json_api_user_group_in_document = gooddata_api_client.JsonApiUserGroupInDocument() # JsonApiUserGroupInDocument | 
+    filter = 'name==someString' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = ['parents'] # List[str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Put UserGroup entity
-        api_response = api_instance.update_entity_user_groups(id, json_api_user_group_in_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->update_entity_user_groups: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Put UserGroup entity
         api_response = api_instance.update_entity_user_groups(id, json_api_user_group_in_document, filter=filter, include=include)
+        print("The response of OrganizationModelControllerApi->update_entity_user_groups:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->update_entity_user_groups: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **json_api_user_group_in_document** | [**JsonApiUserGroupInDocument**](JsonApiUserGroupInDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+ **id** | **str**|  | 
+ **json_api_user_group_in_document** | [**JsonApiUserGroupInDocument**](JsonApiUserGroupInDocument.md)|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **include** | [**List[str]**](str.md)| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional] 
 
 ### Return type
 
@@ -7322,7 +6027,6 @@ No authorization required
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -7332,7 +6036,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **update_entity_users**
-> JsonApiUserOutDocument update_entity_users(id, json_api_user_in_document)
+> JsonApiUserOutDocument update_entity_users(id, json_api_user_in_document, filter=filter, include=include)
 
 Put User entity
 
@@ -7342,12 +6046,12 @@ User - represents entity interacting with platform
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_user_in_document import JsonApiUserInDocument
-from gooddata_api_client.model.json_api_user_out_document import JsonApiUserOutDocument
+from gooddata_api_client.models.json_api_user_in_document import JsonApiUserInDocument
+from gooddata_api_client.models.json_api_user_out_document import JsonApiUserOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -7356,64 +6060,34 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    json_api_user_in_document = JsonApiUserInDocument(
-        data=JsonApiUserIn(
-            attributes=JsonApiUserInAttributes(
-                authentication_id="authentication_id_example",
-                email="email_example",
-                firstname="firstname_example",
-                lastname="lastname_example",
-            ),
-            id="id1",
-            relationships=JsonApiUserInRelationships(
-                user_groups=JsonApiUserGroupInRelationshipsParents(
-                    data=JsonApiUserGroupToManyLinkage([
-                        JsonApiUserGroupLinkage(
-                            id="id_example",
-                            type="userGroup",
-                        ),
-                    ]),
-                ),
-            ),
-            type="user",
-        ),
-    ) # JsonApiUserInDocument | 
-    filter = "authenticationId==someString;firstname==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    include = [
-        "userGroups",
-    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    json_api_user_in_document = gooddata_api_client.JsonApiUserInDocument() # JsonApiUserInDocument | 
+    filter = 'authenticationId==someString;firstname==someString' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = ['userGroups'] # List[str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Put User entity
-        api_response = api_instance.update_entity_users(id, json_api_user_in_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->update_entity_users: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Put User entity
         api_response = api_instance.update_entity_users(id, json_api_user_in_document, filter=filter, include=include)
+        print("The response of OrganizationModelControllerApi->update_entity_users:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->update_entity_users: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **json_api_user_in_document** | [**JsonApiUserInDocument**](JsonApiUserInDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+ **id** | **str**|  | 
+ **json_api_user_in_document** | [**JsonApiUserInDocument**](JsonApiUserInDocument.md)|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **include** | [**List[str]**](str.md)| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional] 
 
 ### Return type
 
@@ -7428,7 +6102,6 @@ No authorization required
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -7438,7 +6111,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **update_entity_workspaces**
-> JsonApiWorkspaceOutDocument update_entity_workspaces(id, json_api_workspace_in_document)
+> JsonApiWorkspaceOutDocument update_entity_workspaces(id, json_api_workspace_in_document, filter=filter, include=include)
 
 Put Workspace entity
 
@@ -7448,12 +6121,12 @@ Space of the shared interest
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_model_controller_api
-from gooddata_api_client.model.json_api_workspace_out_document import JsonApiWorkspaceOutDocument
-from gooddata_api_client.model.json_api_workspace_in_document import JsonApiWorkspaceInDocument
+from gooddata_api_client.models.json_api_workspace_in_document import JsonApiWorkspaceInDocument
+from gooddata_api_client.models.json_api_workspace_out_document import JsonApiWorkspaceOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -7462,69 +6135,34 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    json_api_workspace_in_document = JsonApiWorkspaceInDocument(
-        data=JsonApiWorkspaceIn(
-            attributes=JsonApiWorkspaceInAttributes(
-                cache_extra_limit=1,
-                data_source=JsonApiWorkspaceInAttributesDataSource(
-                    id="snowflake.instance.1",
-                    schema_path=[
-                        "subPath",
-                    ],
-                ),
-                description="description_example",
-                early_access="early_access_example",
-                early_access_values=[
-                    "early_access_values_example",
-                ],
-                name="name_example",
-                prefix="/6bUUGjjNSwg0_bs",
-            ),
-            id="id1",
-            relationships=JsonApiWorkspaceInRelationships(
-                parent=JsonApiWorkspaceAutomationOutRelationshipsWorkspace(
-                    data=JsonApiWorkspaceToOneLinkage(None),
-                ),
-            ),
-            type="workspace",
-        ),
-    ) # JsonApiWorkspaceInDocument | 
-    filter = "name==someString;earlyAccess==someString;parent.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    include = [
-        "parent",
-    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    api_instance = gooddata_api_client.OrganizationModelControllerApi(api_client)
+    id = 'id_example' # str | 
+    json_api_workspace_in_document = gooddata_api_client.JsonApiWorkspaceInDocument() # JsonApiWorkspaceInDocument | 
+    filter = 'name==someString;earlyAccess==someString;parent.id==321' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = ['parent'] # List[str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Put Workspace entity
-        api_response = api_instance.update_entity_workspaces(id, json_api_workspace_in_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationModelControllerApi->update_entity_workspaces: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Put Workspace entity
         api_response = api_instance.update_entity_workspaces(id, json_api_workspace_in_document, filter=filter, include=include)
+        print("The response of OrganizationModelControllerApi->update_entity_workspaces:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationModelControllerApi->update_entity_workspaces: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **json_api_workspace_in_document** | [**JsonApiWorkspaceInDocument**](JsonApiWorkspaceInDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+ **id** | **str**|  | 
+ **json_api_workspace_in_document** | [**JsonApiWorkspaceInDocument**](JsonApiWorkspaceInDocument.md)|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **include** | [**List[str]**](str.md)| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional] 
 
 ### Return type
 
@@ -7538,7 +6176,6 @@ No authorization required
 
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
-
 
 ### HTTP response details
 

@@ -35,7 +35,7 @@ class JsonApiDataSourceOutWithLinks(
 
 
     class MetaOapg:
-        
+
         @classmethod
         @functools.lru_cache()
         def all_of(cls):
@@ -65,5 +65,5 @@ class JsonApiDataSourceOutWithLinks(
             **kwargs,
         )
 
-from gooddata_api_client.model.json_api_data_source_out import JsonApiDataSourceOut
-from gooddata_api_client.model.object_links_container import ObjectLinksContainer
+from gooddata_api_client.models.json_api_data_source_out import JsonApiDataSourceOut
+from gooddata_api_client.models.object_links_container import ObjectLinksContainer

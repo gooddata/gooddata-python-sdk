@@ -1,4 +1,4 @@
-# gooddata_api_client.model.json_api_organization_in.JsonApiOrganizationIn
+# gooddata_api_client.models.json_api_organization_in.JsonApiOrganizationIn
 
 JSON:API representation of organization entity.
 
@@ -48,4 +48,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 items | str,  | str,  |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

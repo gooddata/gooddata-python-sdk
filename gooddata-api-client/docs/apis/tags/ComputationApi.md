@@ -27,8 +27,8 @@ Returns paged list of elements (values) of given label satisfying given filterin
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import computation_api
-from gooddata_api_client.model.elements_request import ElementsRequest
-from gooddata_api_client.model.elements_response import ElementsResponse
+from gooddata_api_client.models.elements_request import ElementsRequest
+from gooddata_api_client.models.elements_response import ElementsResponse
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -224,8 +224,8 @@ AFM is a combination of attributes, measures and filters that describe a query y
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import computation_api
-from gooddata_api_client.model.afm_execution_response import AfmExecutionResponse
-from gooddata_api_client.model.afm_execution import AfmExecution
+from gooddata_api_client.models.afm_execution_response import AfmExecutionResponse
+from gooddata_api_client.models.afm_execution import AfmExecution
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -480,8 +480,8 @@ Returns list containing attributes, facts, or metrics, which can be added to giv
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import computation_api
-from gooddata_api_client.model.afm_valid_objects_query import AfmValidObjectsQuery
-from gooddata_api_client.model.afm_valid_objects_response import AfmValidObjectsResponse
+from gooddata_api_client.models.afm_valid_objects_query import AfmValidObjectsQuery
+from gooddata_api_client.models.afm_valid_objects_response import AfmValidObjectsResponse
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -612,8 +612,8 @@ An tabular export job will be created based on the export request and put to que
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import computation_api
-from gooddata_api_client.model.export_response import ExportResponse
-from gooddata_api_client.model.tabular_export_request import TabularExportRequest
+from gooddata_api_client.models.export_response import ExportResponse
+from gooddata_api_client.models.tabular_export_request import TabularExportRequest
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -735,7 +735,7 @@ The resource provides static structures needed for investigation of a problem wi
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import computation_api
-from gooddata_api_client.model.afm_execution import AfmExecution
+from gooddata_api_client.models.afm_execution import AfmExecution
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1108,7 +1108,7 @@ The resource provides execution result's metadata as AFM and resultSpec used in 
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import computation_api
-from gooddata_api_client.model.result_cache_metadata import ResultCacheMetadata
+from gooddata_api_client.models.result_cache_metadata import ResultCacheMetadata
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1206,7 +1206,7 @@ Gets a single execution result.
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import computation_api
-from gooddata_api_client.model.execution_result import ExecutionResult
+from gooddata_api_client.models.execution_result import ExecutionResult
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1366,4 +1366,3 @@ Type | Description  | Notes
 No authorization required
 
 [[Back to top]](#__pageTop) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
-

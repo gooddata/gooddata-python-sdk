@@ -1,7 +1,6 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-import functools
 from pathlib import Path
 from typing import Any, Optional, Union
 
@@ -129,11 +128,7 @@ class CatalogDataSourceService(CatalogServiceBase):
             list[CatalogDataSource]:
                 List of all Data Sources in the whole organization.
         """
-        get_data_sources = functools.partial(
-            self._entities_api.get_all_entities_data_sources,
-            _check_return_type=False,
-        )
-        data_sources = load_all_entities_dict(get_data_sources)
+        data_sources = load_all_entities_dict(self._entities_api.get_all_entities_data_sources)
         return [CatalogDataSource.from_api(ds) for ds in data_sources["data"]]
 
     # Declarative methods are listed below

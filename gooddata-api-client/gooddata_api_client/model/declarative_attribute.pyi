@@ -43,27 +43,27 @@ class DeclarativeAttribute(
             "labels",
             "sourceColumn",
         }
-        
+
         class properties:
-            
-            
+
+
             class id(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class labels(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeLabel']:
                         return DeclarativeLabel
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeLabel'], typing.List['DeclarativeLabel']],
@@ -74,95 +74,95 @@ class DeclarativeAttribute(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeLabel':
                     return super().__getitem__(i)
-            
-            
+
+
             class sourceColumn(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class title(
                 schemas.StrSchema
             ):
                 pass
-        
+
             @staticmethod
             def defaultView() -> typing.Type['LabelIdentifier']:
                 return LabelIdentifier
-            
-            
+
+
             class description(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class sortColumn(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class sortDirection(
                 schemas.EnumBase,
                 schemas.StrSchema
             ):
-                
+
                 @schemas.classproperty
                 def ASC(cls):
                     return cls("ASC")
-                
+
                 @schemas.classproperty
                 def DESC(cls):
                     return cls("DESC")
-            
-            
+
+
             class sourceColumnDataType(
                 schemas.EnumBase,
                 schemas.StrSchema
             ):
-                
+
                 @schemas.classproperty
                 def INT(cls):
                     return cls("INT")
-                
+
                 @schemas.classproperty
                 def STRING(cls):
                     return cls("STRING")
-                
+
                 @schemas.classproperty
                 def DATE(cls):
                     return cls("DATE")
-                
+
                 @schemas.classproperty
                 def NUMERIC(cls):
                     return cls("NUMERIC")
-                
+
                 @schemas.classproperty
                 def TIMESTAMP(cls):
                     return cls("TIMESTAMP")
-                
+
                 @schemas.classproperty
                 def TIMESTAMP_TZ(cls):
                     return cls("TIMESTAMP_TZ")
-                
+
                 @schemas.classproperty
                 def BOOLEAN(cls):
                     return cls("BOOLEAN")
-            
-            
+
+
             class tags(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
                     items = schemas.StrSchema
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, str, ]], typing.List[typing.Union[MetaOapg.items, str, ]]],
@@ -173,7 +173,7 @@ class DeclarativeAttribute(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
             __annotations__ = {
@@ -188,86 +188,86 @@ class DeclarativeAttribute(
                 "sourceColumnDataType": sourceColumnDataType,
                 "tags": tags,
             }
-    
+
     id: MetaOapg.properties.id
     title: MetaOapg.properties.title
     labels: MetaOapg.properties.labels
     sourceColumn: MetaOapg.properties.sourceColumn
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["labels"]) -> MetaOapg.properties.labels: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["sourceColumn"]) -> MetaOapg.properties.sourceColumn: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["title"]) -> MetaOapg.properties.title: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["defaultView"]) -> 'LabelIdentifier': ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["description"]) -> MetaOapg.properties.description: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["sortColumn"]) -> MetaOapg.properties.sortColumn: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["sortDirection"]) -> MetaOapg.properties.sortDirection: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["sourceColumnDataType"]) -> MetaOapg.properties.sourceColumnDataType: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["tags"]) -> MetaOapg.properties.tags: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["id", "labels", "sourceColumn", "title", "defaultView", "description", "sortColumn", "sortDirection", "sourceColumnDataType", "tags", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["labels"]) -> MetaOapg.properties.labels: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["sourceColumn"]) -> MetaOapg.properties.sourceColumn: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["title"]) -> MetaOapg.properties.title: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["defaultView"]) -> typing.Union['LabelIdentifier', schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["description"]) -> typing.Union[MetaOapg.properties.description, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["sortColumn"]) -> typing.Union[MetaOapg.properties.sortColumn, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["sortDirection"]) -> typing.Union[MetaOapg.properties.sortDirection, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["sourceColumnDataType"]) -> typing.Union[MetaOapg.properties.sourceColumnDataType, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["tags"]) -> typing.Union[MetaOapg.properties.tags, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["id", "labels", "sourceColumn", "title", "defaultView", "description", "sortColumn", "sortDirection", "sourceColumnDataType", "tags", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -302,5 +302,5 @@ class DeclarativeAttribute(
             **kwargs,
         )
 
-from gooddata_api_client.model.declarative_label import DeclarativeLabel
-from gooddata_api_client.model.label_identifier import LabelIdentifier
+from gooddata_api_client.models.declarative_label import DeclarativeLabel
+from gooddata_api_client.models.label_identifier import LabelIdentifier

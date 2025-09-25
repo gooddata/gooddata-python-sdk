@@ -66,5 +66,5 @@ class PopMeasureDefinition(
             **kwargs,
         )
 
-from gooddata_api_client.model.pop_dataset_measure_definition import PopDatasetMeasureDefinition
-from gooddata_api_client.model.pop_date_measure_definition import PopDateMeasureDefinition
+from gooddata_api_client.models.pop_dataset_measure_definition import PopDatasetMeasureDefinition
+from gooddata_api_client.models.pop_date_measure_definition import PopDateMeasureDefinition

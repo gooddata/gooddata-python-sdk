@@ -37,21 +37,21 @@ class DeclarativeUserPermissions(
 
 
     class MetaOapg:
-        
+
         class properties:
-            
-            
+
+
             class permissions(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeUserPermission']:
                         return DeclarativeUserPermission
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeUserPermission'], typing.List['DeclarativeUserPermission']],
@@ -62,33 +62,33 @@ class DeclarativeUserPermissions(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeUserPermission':
                     return super().__getitem__(i)
             __annotations__ = {
                 "permissions": permissions,
             }
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["permissions"]) -> MetaOapg.properties.permissions: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["permissions", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["permissions"]) -> typing.Union[MetaOapg.properties.permissions, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["permissions", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -105,4 +105,4 @@ class DeclarativeUserPermissions(
             **kwargs,
         )
 
-from gooddata_api_client.model.declarative_user_permission import DeclarativeUserPermission
+from gooddata_api_client.models.declarative_user_permission import DeclarativeUserPermission

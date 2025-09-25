@@ -40,37 +40,37 @@ class RankingFilter(
         required = {
             "rankingFilter",
         }
-        
+
         class properties:
-            
-            
+
+
             class rankingFilter(
                 schemas.DictSchema
             ):
-            
-            
+
+
                 class MetaOapg:
                     required = {
                         "measures",
                         "value",
                         "operator",
                     }
-                    
+
                     class properties:
                         applyOnResult = schemas.BoolSchema
-                        
-                        
+
+
                         class measures(
                             schemas.ListSchema
                         ):
-                        
-                        
+
+
                             class MetaOapg:
-                                
+
                                 @staticmethod
                                 def items() -> typing.Type['AfmIdentifier']:
                                     return AfmIdentifier
-                        
+
                             def __new__(
                                 cls,
                                 _arg: typing.Union[typing.Tuple['AfmIdentifier'], typing.List['AfmIdentifier']],
@@ -81,20 +81,20 @@ class RankingFilter(
                                     _arg,
                                     _configuration=_configuration,
                                 )
-                        
+
                             def __getitem__(self, i: int) -> 'AfmIdentifier':
                                 return super().__getitem__(i)
-                        
-                        
+
+
                         class operator(
                             schemas.EnumBase,
                             schemas.StrSchema
                         ):
-                            
+
                             @schemas.classproperty
                             def TOP(cls):
                                 return cls("TOP")
-                            
+
                             @schemas.classproperty
                             def BOTTOM(cls):
                                 return cls("BOTTOM")
@@ -105,50 +105,50 @@ class RankingFilter(
                             "operator": operator,
                             "value": value,
                         }
-                
+
                 measures: MetaOapg.properties.measures
                 value: MetaOapg.properties.value
                 operator: MetaOapg.properties.operator
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["applyOnResult"]) -> MetaOapg.properties.applyOnResult: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["measures"]) -> MetaOapg.properties.measures: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["operator"]) -> MetaOapg.properties.operator: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["value"]) -> MetaOapg.properties.value: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-                
+
                 def __getitem__(self, name: typing.Union[typing_extensions.Literal["applyOnResult", "measures", "operator", "value", ], str]):
                     # dict_instance[name] accessor
                     return super().__getitem__(name)
-                
-                
+
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["applyOnResult"]) -> typing.Union[MetaOapg.properties.applyOnResult, schemas.Unset]: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["measures"]) -> MetaOapg.properties.measures: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["operator"]) -> MetaOapg.properties.operator: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["value"]) -> MetaOapg.properties.value: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-                
+
                 def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["applyOnResult", "measures", "operator", "value", ], str]):
                     return super().get_item_oapg(name)
-                
-            
+
+
                 def __new__(
                     cls,
                     *_args: typing.Union[dict, frozendict.frozendict, ],
@@ -172,29 +172,29 @@ class RankingFilter(
             __annotations__ = {
                 "rankingFilter": rankingFilter,
             }
-    
+
     rankingFilter: MetaOapg.properties.rankingFilter
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["rankingFilter"]) -> MetaOapg.properties.rankingFilter: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["rankingFilter", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["rankingFilter"]) -> MetaOapg.properties.rankingFilter: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["rankingFilter", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -211,4 +211,4 @@ class RankingFilter(
             **kwargs,
         )
 
-from gooddata_api_client.model.afm_identifier import AfmIdentifier
+from gooddata_api_client.models.afm_identifier import AfmIdentifier

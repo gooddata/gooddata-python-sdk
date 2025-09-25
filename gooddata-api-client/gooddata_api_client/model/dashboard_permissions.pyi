@@ -39,21 +39,21 @@ class DashboardPermissions(
             "userGroups",
             "users",
         }
-        
+
         class properties:
-            
-            
+
+
             class userGroups(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['UserGroupPermission']:
                         return UserGroupPermission
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['UserGroupPermission'], typing.List['UserGroupPermission']],
@@ -64,22 +64,22 @@ class DashboardPermissions(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'UserGroupPermission':
                     return super().__getitem__(i)
-            
-            
+
+
             class users(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['UserPermission']:
                         return UserPermission
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['UserPermission'], typing.List['UserPermission']],
@@ -90,43 +90,43 @@ class DashboardPermissions(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'UserPermission':
                     return super().__getitem__(i)
             __annotations__ = {
                 "userGroups": userGroups,
                 "users": users,
             }
-    
+
     userGroups: MetaOapg.properties.userGroups
     users: MetaOapg.properties.users
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["userGroups"]) -> MetaOapg.properties.userGroups: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["users"]) -> MetaOapg.properties.users: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["userGroups", "users", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["userGroups"]) -> MetaOapg.properties.userGroups: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["users"]) -> MetaOapg.properties.users: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["userGroups", "users", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -145,5 +145,5 @@ class DashboardPermissions(
             **kwargs,
         )
 
-from gooddata_api_client.model.user_group_permission import UserGroupPermission
-from gooddata_api_client.model.user_permission import UserPermission
+from gooddata_api_client.models.user_group_permission import UserGroupPermission
+from gooddata_api_client.models.user_permission import UserPermission

@@ -1,4 +1,4 @@
-# gooddata_api_client.model.entitlements_request.EntitlementsRequest
+# gooddata_api_client.models.entitlements_request.EntitlementsRequest
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes
@@ -24,4 +24,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 items | str,  | str,  |  | must be one of ["Contract", "CustomTheming", "PdfExports", "ManagedOIDC", "UiLocalization", "Tier", "UserCount", "UnlimitedUsers", "UnlimitedWorkspaces", "WhiteLabeling", "WorkspaceCount", ] 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

@@ -1,4 +1,4 @@
-# gooddata_api_client.model.json_api_user_out_document.JsonApiUserOutDocument
+# gooddata_api_client.models.json_api_user_out_document.JsonApiUserOutDocument
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes
@@ -28,4 +28,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**JsonApiUserGroupOutWithLinks**](JsonApiUserGroupOutWithLinks.md) | [**JsonApiUserGroupOutWithLinks**](JsonApiUserGroupOutWithLinks.md) | [**JsonApiUserGroupOutWithLinks**](JsonApiUserGroupOutWithLinks.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

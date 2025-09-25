@@ -1,4 +1,4 @@
-# gooddata_api_client.model.date_filter.DateFilter
+# gooddata_api_client.models.date_filter.DateFilter
 
 Abstract filter definition type for dates
 
@@ -15,4 +15,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [RelativeDateFilter](RelativeDateFilter.md) | [**RelativeDateFilter**](RelativeDateFilter.md) | [**RelativeDateFilter**](RelativeDateFilter.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

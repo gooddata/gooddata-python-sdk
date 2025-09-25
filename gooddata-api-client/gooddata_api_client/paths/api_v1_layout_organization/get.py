@@ -25,7 +25,7 @@ import frozendict  # noqa: F401
 
 from gooddata_api_client import schemas  # noqa: F401
 
-from gooddata_api_client.model.declarative_organization import DeclarativeOrganization
+from gooddata_api_client.models.declarative_organization import DeclarativeOrganization
 
 from . import path
 
@@ -235,5 +235,3 @@ class ApiForget(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
-
-

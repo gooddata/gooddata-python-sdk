@@ -1,4 +1,4 @@
-# gooddata_api_client.model.declarative_dataset.DeclarativeDataset
+# gooddata_api_client.models.declarative_dataset.DeclarativeDataset
 
 A dataset defined by its properties.
 
@@ -108,4 +108,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**DeclarativeWorkspaceDataFilterColumn**](DeclarativeWorkspaceDataFilterColumn.md) | [**DeclarativeWorkspaceDataFilterColumn**](DeclarativeWorkspaceDataFilterColumn.md) | [**DeclarativeWorkspaceDataFilterColumn**](DeclarativeWorkspaceDataFilterColumn.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

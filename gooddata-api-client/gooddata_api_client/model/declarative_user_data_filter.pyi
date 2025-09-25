@@ -42,42 +42,42 @@ class DeclarativeUserDataFilter(
             "maql",
             "title",
         }
-        
+
         class properties:
-            
-            
+
+
             class id(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class maql(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class title(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class description(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class tags(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
                     items = schemas.StrSchema
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, str, ]], typing.List[typing.Union[MetaOapg.items, str, ]]],
@@ -88,14 +88,14 @@ class DeclarativeUserDataFilter(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
-        
+
             @staticmethod
             def user() -> typing.Type['UserIdentifier']:
                 return UserIdentifier
-        
+
             @staticmethod
             def userGroup() -> typing.Type['DeclarativeUserGroupIdentifier']:
                 return DeclarativeUserGroupIdentifier
@@ -108,67 +108,67 @@ class DeclarativeUserDataFilter(
                 "user": user,
                 "userGroup": userGroup,
             }
-    
+
     id: MetaOapg.properties.id
     maql: MetaOapg.properties.maql
     title: MetaOapg.properties.title
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["maql"]) -> MetaOapg.properties.maql: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["title"]) -> MetaOapg.properties.title: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["description"]) -> MetaOapg.properties.description: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["tags"]) -> MetaOapg.properties.tags: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["user"]) -> 'UserIdentifier': ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["userGroup"]) -> 'DeclarativeUserGroupIdentifier': ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["id", "maql", "title", "description", "tags", "user", "userGroup", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["maql"]) -> MetaOapg.properties.maql: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["title"]) -> MetaOapg.properties.title: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["description"]) -> typing.Union[MetaOapg.properties.description, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["tags"]) -> typing.Union[MetaOapg.properties.tags, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["user"]) -> typing.Union['UserIdentifier', schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["userGroup"]) -> typing.Union['DeclarativeUserGroupIdentifier', schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["id", "maql", "title", "description", "tags", "user", "userGroup", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -197,5 +197,5 @@ class DeclarativeUserDataFilter(
             **kwargs,
         )
 
-from gooddata_api_client.model.user_group_identifier import DeclarativeUserGroupIdentifier
-from gooddata_api_client.model.user_identifier import UserIdentifier
+from gooddata_api_client.models.user_group_identifier import DeclarativeUserGroupIdentifier
+from gooddata_api_client.models.user_identifier import UserIdentifier

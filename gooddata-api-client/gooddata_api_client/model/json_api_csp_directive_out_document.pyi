@@ -38,13 +38,13 @@ class JsonApiCspDirectiveOutDocument(
         required = {
             "data",
         }
-        
+
         class properties:
-        
+
             @staticmethod
             def data() -> typing.Type['JsonApiCspDirectiveOut']:
                 return JsonApiCspDirectiveOut
-        
+
             @staticmethod
             def links() -> typing.Type['ObjectLinks']:
                 return ObjectLinks
@@ -52,35 +52,35 @@ class JsonApiCspDirectiveOutDocument(
                 "data": data,
                 "links": links,
             }
-    
+
     data: 'JsonApiCspDirectiveOut'
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["data"]) -> 'JsonApiCspDirectiveOut': ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["links"]) -> 'ObjectLinks': ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["data", "links", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["data"]) -> 'JsonApiCspDirectiveOut': ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["links"]) -> typing.Union['ObjectLinks', schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["data", "links", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -99,5 +99,5 @@ class JsonApiCspDirectiveOutDocument(
             **kwargs,
         )
 
-from gooddata_api_client.model.json_api_csp_directive_out import JsonApiCspDirectiveOut
-from gooddata_api_client.model.object_links import ObjectLinks
+from gooddata_api_client.models.json_api_csp_directive_out import JsonApiCspDirectiveOut
+from gooddata_api_client.models.object_links import ObjectLinks

@@ -38,7 +38,7 @@ class FilterDefinitionForSimpleMeasure(
 
 
     class MetaOapg:
-        
+
         @classmethod
         @functools.lru_cache()
         def one_of(cls):
@@ -68,5 +68,5 @@ class FilterDefinitionForSimpleMeasure(
             **kwargs,
         )
 
-from gooddata_api_client.model.attribute_filter import AttributeFilter
-from gooddata_api_client.model.date_filter import DateFilter
+from gooddata_api_client.models.attribute_filter import AttributeFilter
+from gooddata_api_client.models.date_filter import DateFilter

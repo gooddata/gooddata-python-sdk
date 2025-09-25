@@ -1,4 +1,4 @@
-# gooddata_api_client.model.execution_result.ExecutionResult
+# gooddata_api_client.models.execution_result.ExecutionResult
 
 Contains the result of an AFM execution.
 
@@ -64,4 +64,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**ExecutionResultGrandTotal**](ExecutionResultGrandTotal.md) | [**ExecutionResultGrandTotal**](ExecutionResultGrandTotal.md) | [**ExecutionResultGrandTotal**](ExecutionResultGrandTotal.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

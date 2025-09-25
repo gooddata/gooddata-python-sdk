@@ -42,23 +42,23 @@ class DeclarativeReference(
             "sourceColumns",
             "multivalue",
         }
-        
+
         class properties:
-        
+
             @staticmethod
             def identifier() -> typing.Type['ReferenceIdentifier']:
                 return ReferenceIdentifier
             multivalue = schemas.BoolSchema
-            
-            
+
+
             class sourceColumns(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
                     items = schemas.StrSchema
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, str, ]], typing.List[typing.Union[MetaOapg.items, str, ]]],
@@ -69,19 +69,19 @@ class DeclarativeReference(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
-            
-            
+
+
             class sourceColumnDataTypes(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
                     items = schemas.StrSchema
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, str, ]], typing.List[typing.Union[MetaOapg.items, str, ]]],
@@ -92,7 +92,7 @@ class DeclarativeReference(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
             __annotations__ = {
@@ -101,49 +101,49 @@ class DeclarativeReference(
                 "sourceColumns": sourceColumns,
                 "sourceColumnDataTypes": sourceColumnDataTypes,
             }
-    
+
     identifier: 'ReferenceIdentifier'
     sourceColumns: MetaOapg.properties.sourceColumns
     multivalue: MetaOapg.properties.multivalue
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["identifier"]) -> 'ReferenceIdentifier': ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["multivalue"]) -> MetaOapg.properties.multivalue: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["sourceColumns"]) -> MetaOapg.properties.sourceColumns: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["sourceColumnDataTypes"]) -> MetaOapg.properties.sourceColumnDataTypes: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["identifier", "multivalue", "sourceColumns", "sourceColumnDataTypes", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["identifier"]) -> 'ReferenceIdentifier': ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["multivalue"]) -> MetaOapg.properties.multivalue: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["sourceColumns"]) -> MetaOapg.properties.sourceColumns: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["sourceColumnDataTypes"]) -> typing.Union[MetaOapg.properties.sourceColumnDataTypes, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["identifier", "multivalue", "sourceColumns", "sourceColumnDataTypes", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -166,4 +166,4 @@ class DeclarativeReference(
             **kwargs,
         )
 
-from gooddata_api_client.model.reference_identifier import ReferenceIdentifier
+from gooddata_api_client.models.reference_identifier import ReferenceIdentifier

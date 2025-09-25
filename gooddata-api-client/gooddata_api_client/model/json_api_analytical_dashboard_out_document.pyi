@@ -134,6 +134,6 @@ class JsonApiAnalyticalDashboardOutDocument(
             **kwargs,
         )
 
-from gooddata_api_client.model.json_api_analytical_dashboard_out import JsonApiAnalyticalDashboardOut
-from gooddata_api_client.model.json_api_analytical_dashboard_out_includes import JsonApiAnalyticalDashboardOutIncludes
-from gooddata_api_client.model.object_links import ObjectLinks
+from gooddata_api_client.models.json_api_analytical_dashboard_out import JsonApiAnalyticalDashboardOut
+from gooddata_api_client.models.json_api_analytical_dashboard_out_includes import JsonApiAnalyticalDashboardOutIncludes
+from gooddata_api_client.models.object_links import ObjectLinks

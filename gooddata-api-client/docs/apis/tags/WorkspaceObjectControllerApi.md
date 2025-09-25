@@ -81,8 +81,8 @@ Post Dashboards
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_analytical_dashboard_post_optional_id_document import JsonApiAnalyticalDashboardPostOptionalIdDocument
-from gooddata_api_client.model.json_api_analytical_dashboard_out_document import JsonApiAnalyticalDashboardOutDocument
+from gooddata_api_client.models.json_api_analytical_dashboard_post_optional_id_document import JsonApiAnalyticalDashboardPostOptionalIdDocument
+from gooddata_api_client.models.json_api_analytical_dashboard_out_document import JsonApiAnalyticalDashboardOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -272,8 +272,8 @@ Post Custom Application Settings
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_custom_application_setting_out_document import JsonApiCustomApplicationSettingOutDocument
-from gooddata_api_client.model.json_api_custom_application_setting_post_optional_id_document import JsonApiCustomApplicationSettingPostOptionalIdDocument
+from gooddata_api_client.models.json_api_custom_application_setting_out_document import JsonApiCustomApplicationSettingOutDocument
+from gooddata_api_client.models.json_api_custom_application_setting_post_optional_id_document import JsonApiCustomApplicationSettingPostOptionalIdDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -437,8 +437,8 @@ Post Plugins
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_dashboard_plugin_post_optional_id_document import JsonApiDashboardPluginPostOptionalIdDocument
-from gooddata_api_client.model.json_api_dashboard_plugin_out_document import JsonApiDashboardPluginOutDocument
+from gooddata_api_client.models.json_api_dashboard_plugin_post_optional_id_document import JsonApiDashboardPluginPostOptionalIdDocument
+from gooddata_api_client.models.json_api_dashboard_plugin_out_document import JsonApiDashboardPluginOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -612,8 +612,8 @@ Post Context Filters
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_filter_context_post_optional_id_document import JsonApiFilterContextPostOptionalIdDocument
-from gooddata_api_client.model.json_api_filter_context_out_document import JsonApiFilterContextOutDocument
+from gooddata_api_client.models.json_api_filter_context_post_optional_id_document import JsonApiFilterContextPostOptionalIdDocument
+from gooddata_api_client.models.json_api_filter_context_out_document import JsonApiFilterContextOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -803,8 +803,8 @@ Post Metrics
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_metric_post_optional_id_document import JsonApiMetricPostOptionalIdDocument
-from gooddata_api_client.model.json_api_metric_out_document import JsonApiMetricOutDocument
+from gooddata_api_client.models.json_api_metric_post_optional_id_document import JsonApiMetricPostOptionalIdDocument
+from gooddata_api_client.models.json_api_metric_out_document import JsonApiMetricOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1000,8 +1000,8 @@ Post User Data Filters
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_user_data_filter_out_document import JsonApiUserDataFilterOutDocument
-from gooddata_api_client.model.json_api_user_data_filter_post_optional_id_document import JsonApiUserDataFilterPostOptionalIdDocument
+from gooddata_api_client.models.json_api_user_data_filter_out_document import JsonApiUserDataFilterOutDocument
+from gooddata_api_client.models.json_api_user_data_filter_post_optional_id_document import JsonApiUserDataFilterPostOptionalIdDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1207,8 +1207,8 @@ Post Visualization Objects
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_visualization_object_out_document import JsonApiVisualizationObjectOutDocument
-from gooddata_api_client.model.json_api_visualization_object_post_optional_id_document import JsonApiVisualizationObjectPostOptionalIdDocument
+from gooddata_api_client.models.json_api_visualization_object_out_document import JsonApiVisualizationObjectOutDocument
+from gooddata_api_client.models.json_api_visualization_object_post_optional_id_document import JsonApiVisualizationObjectPostOptionalIdDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1398,8 +1398,8 @@ Post Workspace Data Filters
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_workspace_data_filter_out_document import JsonApiWorkspaceDataFilterOutDocument
-from gooddata_api_client.model.json_api_workspace_data_filter_in_document import JsonApiWorkspaceDataFilterInDocument
+from gooddata_api_client.models.json_api_workspace_data_filter_out_document import JsonApiWorkspaceDataFilterOutDocument
+from gooddata_api_client.models.json_api_workspace_data_filter_in_document import JsonApiWorkspaceDataFilterInDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1583,8 +1583,8 @@ Post Settings for Workspaces
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_workspace_setting_post_optional_id_document import JsonApiWorkspaceSettingPostOptionalIdDocument
-from gooddata_api_client.model.json_api_workspace_setting_out_document import JsonApiWorkspaceSettingOutDocument
+from gooddata_api_client.models.json_api_workspace_setting_post_optional_id_document import JsonApiWorkspaceSettingPostOptionalIdDocument
+from gooddata_api_client.models.json_api_workspace_setting_out_document import JsonApiWorkspaceSettingOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -2855,7 +2855,7 @@ Get all Dashboards
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_analytical_dashboard_out_list import JsonApiAnalyticalDashboardOutList
+from gooddata_api_client.models.json_api_analytical_dashboard_out_list import JsonApiAnalyticalDashboardOutList
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -3079,7 +3079,7 @@ Get all Attributes
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_attribute_out_list import JsonApiAttributeOutList
+from gooddata_api_client.models.json_api_attribute_out_list import JsonApiAttributeOutList
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -3303,7 +3303,7 @@ Get all Custom Application Settings
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_custom_application_setting_out_list import JsonApiCustomApplicationSettingOutList
+from gooddata_api_client.models.json_api_custom_application_setting_out_list import JsonApiCustomApplicationSettingOutList
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -3511,7 +3511,7 @@ Get all Plugins
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_dashboard_plugin_out_list import JsonApiDashboardPluginOutList
+from gooddata_api_client.models.json_api_dashboard_plugin_out_list import JsonApiDashboardPluginOutList
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -3719,7 +3719,7 @@ Get all Datasets
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_dataset_out_list import JsonApiDatasetOutList
+from gooddata_api_client.models.json_api_dataset_out_list import JsonApiDatasetOutList
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -3943,7 +3943,7 @@ Get all Facts
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_fact_out_list import JsonApiFactOutList
+from gooddata_api_client.models.json_api_fact_out_list import JsonApiFactOutList
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -4167,7 +4167,7 @@ Get all Context Filters
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_filter_context_out_list import JsonApiFilterContextOutList
+from gooddata_api_client.models.json_api_filter_context_out_list import JsonApiFilterContextOutList
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -4391,7 +4391,7 @@ Get all Labels
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_label_out_list import JsonApiLabelOutList
+from gooddata_api_client.models.json_api_label_out_list import JsonApiLabelOutList
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -4615,7 +4615,7 @@ Get all Metrics
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_metric_out_list import JsonApiMetricOutList
+from gooddata_api_client.models.json_api_metric_out_list import JsonApiMetricOutList
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -4839,7 +4839,7 @@ Get all User Data Filters
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_user_data_filter_out_list import JsonApiUserDataFilterOutList
+from gooddata_api_client.models.json_api_user_data_filter_out_list import JsonApiUserDataFilterOutList
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -5063,7 +5063,7 @@ Get all Visualization Objects
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_visualization_object_out_list import JsonApiVisualizationObjectOutList
+from gooddata_api_client.models.json_api_visualization_object_out_list import JsonApiVisualizationObjectOutList
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -5287,7 +5287,7 @@ Get all Settings for Workspace Data Filters
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_workspace_data_filter_setting_out_list import JsonApiWorkspaceDataFilterSettingOutList
+from gooddata_api_client.models.json_api_workspace_data_filter_setting_out_list import JsonApiWorkspaceDataFilterSettingOutList
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -5493,7 +5493,7 @@ Get all Workspace Data Filters
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_workspace_data_filter_out_list import JsonApiWorkspaceDataFilterOutList
+from gooddata_api_client.models.json_api_workspace_data_filter_out_list import JsonApiWorkspaceDataFilterOutList
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -5699,7 +5699,7 @@ Get all Setting for Workspaces
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_workspace_setting_out_list import JsonApiWorkspaceSettingOutList
+from gooddata_api_client.models.json_api_workspace_setting_out_list import JsonApiWorkspaceSettingOutList
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -5907,7 +5907,7 @@ Get a Dashboard
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_analytical_dashboard_out_document import JsonApiAnalyticalDashboardOutDocument
+from gooddata_api_client.models.json_api_analytical_dashboard_out_document import JsonApiAnalyticalDashboardOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -6096,7 +6096,7 @@ Get a Attribute
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_attribute_out_document import JsonApiAttributeOutDocument
+from gooddata_api_client.models.json_api_attribute_out_document import JsonApiAttributeOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -6285,7 +6285,7 @@ Get a Custom Application Setting
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_custom_application_setting_out_document import JsonApiCustomApplicationSettingOutDocument
+from gooddata_api_client.models.json_api_custom_application_setting_out_document import JsonApiCustomApplicationSettingOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -6458,7 +6458,7 @@ Get a Plugin
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_dashboard_plugin_out_document import JsonApiDashboardPluginOutDocument
+from gooddata_api_client.models.json_api_dashboard_plugin_out_document import JsonApiDashboardPluginOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -6631,7 +6631,7 @@ Get a Dataset
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_dataset_out_document import JsonApiDatasetOutDocument
+from gooddata_api_client.models.json_api_dataset_out_document import JsonApiDatasetOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -6820,7 +6820,7 @@ Get a Fact
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_fact_out_document import JsonApiFactOutDocument
+from gooddata_api_client.models.json_api_fact_out_document import JsonApiFactOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -7009,7 +7009,7 @@ Get a Context Filter
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_filter_context_out_document import JsonApiFilterContextOutDocument
+from gooddata_api_client.models.json_api_filter_context_out_document import JsonApiFilterContextOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -7198,7 +7198,7 @@ Get a Label
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_label_out_document import JsonApiLabelOutDocument
+from gooddata_api_client.models.json_api_label_out_document import JsonApiLabelOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -7387,7 +7387,7 @@ Get a Metric
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_metric_out_document import JsonApiMetricOutDocument
+from gooddata_api_client.models.json_api_metric_out_document import JsonApiMetricOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -7576,7 +7576,7 @@ Get a User Data Filter
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_user_data_filter_out_document import JsonApiUserDataFilterOutDocument
+from gooddata_api_client.models.json_api_user_data_filter_out_document import JsonApiUserDataFilterOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -7765,7 +7765,7 @@ Get a Visualization Object
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_visualization_object_out_document import JsonApiVisualizationObjectOutDocument
+from gooddata_api_client.models.json_api_visualization_object_out_document import JsonApiVisualizationObjectOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -7954,7 +7954,7 @@ Get a Setting for Workspace Data Filter
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_workspace_data_filter_setting_out_document import JsonApiWorkspaceDataFilterSettingOutDocument
+from gooddata_api_client.models.json_api_workspace_data_filter_setting_out_document import JsonApiWorkspaceDataFilterSettingOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -8125,7 +8125,7 @@ Get a Workspace Data Filter
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_workspace_data_filter_out_document import JsonApiWorkspaceDataFilterOutDocument
+from gooddata_api_client.models.json_api_workspace_data_filter_out_document import JsonApiWorkspaceDataFilterOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -8296,7 +8296,7 @@ Get a Setting for Workspace
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_workspace_setting_out_document import JsonApiWorkspaceSettingOutDocument
+from gooddata_api_client.models.json_api_workspace_setting_out_document import JsonApiWorkspaceSettingOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -8469,8 +8469,8 @@ Patch a Dashboard
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_analytical_dashboard_patch_document import JsonApiAnalyticalDashboardPatchDocument
-from gooddata_api_client.model.json_api_analytical_dashboard_out_document import JsonApiAnalyticalDashboardOutDocument
+from gooddata_api_client.models.json_api_analytical_dashboard_patch_document import JsonApiAnalyticalDashboardPatchDocument
+from gooddata_api_client.models.json_api_analytical_dashboard_out_document import JsonApiAnalyticalDashboardOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -8661,8 +8661,8 @@ Patch a Custom Application Setting
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_custom_application_setting_patch_document import JsonApiCustomApplicationSettingPatchDocument
-from gooddata_api_client.model.json_api_custom_application_setting_out_document import JsonApiCustomApplicationSettingOutDocument
+from gooddata_api_client.models.json_api_custom_application_setting_patch_document import JsonApiCustomApplicationSettingPatchDocument
+from gooddata_api_client.models.json_api_custom_application_setting_out_document import JsonApiCustomApplicationSettingOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -8827,8 +8827,8 @@ Patch a Plugin
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_dashboard_plugin_out_document import JsonApiDashboardPluginOutDocument
-from gooddata_api_client.model.json_api_dashboard_plugin_patch_document import JsonApiDashboardPluginPatchDocument
+from gooddata_api_client.models.json_api_dashboard_plugin_out_document import JsonApiDashboardPluginOutDocument
+from gooddata_api_client.models.json_api_dashboard_plugin_patch_document import JsonApiDashboardPluginPatchDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -9003,8 +9003,8 @@ Patch a Context Filter
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_filter_context_patch_document import JsonApiFilterContextPatchDocument
-from gooddata_api_client.model.json_api_filter_context_out_document import JsonApiFilterContextOutDocument
+from gooddata_api_client.models.json_api_filter_context_patch_document import JsonApiFilterContextPatchDocument
+from gooddata_api_client.models.json_api_filter_context_out_document import JsonApiFilterContextOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -9195,8 +9195,8 @@ Patch a Metric
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_metric_patch_document import JsonApiMetricPatchDocument
-from gooddata_api_client.model.json_api_metric_out_document import JsonApiMetricOutDocument
+from gooddata_api_client.models.json_api_metric_patch_document import JsonApiMetricPatchDocument
+from gooddata_api_client.models.json_api_metric_out_document import JsonApiMetricOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -9393,8 +9393,8 @@ Patch a User Data Filter
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_user_data_filter_out_document import JsonApiUserDataFilterOutDocument
-from gooddata_api_client.model.json_api_user_data_filter_patch_document import JsonApiUserDataFilterPatchDocument
+from gooddata_api_client.models.json_api_user_data_filter_out_document import JsonApiUserDataFilterOutDocument
+from gooddata_api_client.models.json_api_user_data_filter_patch_document import JsonApiUserDataFilterPatchDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -9601,8 +9601,8 @@ Patch a Visualization Object
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_visualization_object_out_document import JsonApiVisualizationObjectOutDocument
-from gooddata_api_client.model.json_api_visualization_object_patch_document import JsonApiVisualizationObjectPatchDocument
+from gooddata_api_client.models.json_api_visualization_object_out_document import JsonApiVisualizationObjectOutDocument
+from gooddata_api_client.models.json_api_visualization_object_patch_document import JsonApiVisualizationObjectPatchDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -9793,8 +9793,8 @@ Patch a Workspace Data Filter
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_workspace_data_filter_out_document import JsonApiWorkspaceDataFilterOutDocument
-from gooddata_api_client.model.json_api_workspace_data_filter_patch_document import JsonApiWorkspaceDataFilterPatchDocument
+from gooddata_api_client.models.json_api_workspace_data_filter_out_document import JsonApiWorkspaceDataFilterOutDocument
+from gooddata_api_client.models.json_api_workspace_data_filter_patch_document import JsonApiWorkspaceDataFilterPatchDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -9997,8 +9997,8 @@ Patch a Setting for Workspace
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_workspace_setting_out_document import JsonApiWorkspaceSettingOutDocument
-from gooddata_api_client.model.json_api_workspace_setting_patch_document import JsonApiWorkspaceSettingPatchDocument
+from gooddata_api_client.models.json_api_workspace_setting_out_document import JsonApiWorkspaceSettingOutDocument
+from gooddata_api_client.models.json_api_workspace_setting_patch_document import JsonApiWorkspaceSettingPatchDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -10163,8 +10163,8 @@ Put Dashboards
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_analytical_dashboard_in_document import JsonApiAnalyticalDashboardInDocument
-from gooddata_api_client.model.json_api_analytical_dashboard_out_document import JsonApiAnalyticalDashboardOutDocument
+from gooddata_api_client.models.json_api_analytical_dashboard_in_document import JsonApiAnalyticalDashboardInDocument
+from gooddata_api_client.models.json_api_analytical_dashboard_out_document import JsonApiAnalyticalDashboardOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -10355,8 +10355,8 @@ Put a Custom Application Setting
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_custom_application_setting_in_document import JsonApiCustomApplicationSettingInDocument
-from gooddata_api_client.model.json_api_custom_application_setting_out_document import JsonApiCustomApplicationSettingOutDocument
+from gooddata_api_client.models.json_api_custom_application_setting_in_document import JsonApiCustomApplicationSettingInDocument
+from gooddata_api_client.models.json_api_custom_application_setting_out_document import JsonApiCustomApplicationSettingOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -10521,8 +10521,8 @@ Put a Plugin
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_dashboard_plugin_out_document import JsonApiDashboardPluginOutDocument
-from gooddata_api_client.model.json_api_dashboard_plugin_in_document import JsonApiDashboardPluginInDocument
+from gooddata_api_client.models.json_api_dashboard_plugin_out_document import JsonApiDashboardPluginOutDocument
+from gooddata_api_client.models.json_api_dashboard_plugin_in_document import JsonApiDashboardPluginInDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -10697,8 +10697,8 @@ Put a Context Filter
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_filter_context_in_document import JsonApiFilterContextInDocument
-from gooddata_api_client.model.json_api_filter_context_out_document import JsonApiFilterContextOutDocument
+from gooddata_api_client.models.json_api_filter_context_in_document import JsonApiFilterContextInDocument
+from gooddata_api_client.models.json_api_filter_context_out_document import JsonApiFilterContextOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -10889,8 +10889,8 @@ Put a Metric
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_metric_in_document import JsonApiMetricInDocument
-from gooddata_api_client.model.json_api_metric_out_document import JsonApiMetricOutDocument
+from gooddata_api_client.models.json_api_metric_in_document import JsonApiMetricInDocument
+from gooddata_api_client.models.json_api_metric_out_document import JsonApiMetricOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -11087,8 +11087,8 @@ Put a User Data Filter
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_user_data_filter_out_document import JsonApiUserDataFilterOutDocument
-from gooddata_api_client.model.json_api_user_data_filter_in_document import JsonApiUserDataFilterInDocument
+from gooddata_api_client.models.json_api_user_data_filter_out_document import JsonApiUserDataFilterOutDocument
+from gooddata_api_client.models.json_api_user_data_filter_in_document import JsonApiUserDataFilterInDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -11295,8 +11295,8 @@ Put a Visualization Object
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_visualization_object_out_document import JsonApiVisualizationObjectOutDocument
-from gooddata_api_client.model.json_api_visualization_object_in_document import JsonApiVisualizationObjectInDocument
+from gooddata_api_client.models.json_api_visualization_object_out_document import JsonApiVisualizationObjectOutDocument
+from gooddata_api_client.models.json_api_visualization_object_in_document import JsonApiVisualizationObjectInDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -11487,8 +11487,8 @@ Put a Workspace Data Filter
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_workspace_data_filter_out_document import JsonApiWorkspaceDataFilterOutDocument
-from gooddata_api_client.model.json_api_workspace_data_filter_in_document import JsonApiWorkspaceDataFilterInDocument
+from gooddata_api_client.models.json_api_workspace_data_filter_out_document import JsonApiWorkspaceDataFilterOutDocument
+from gooddata_api_client.models.json_api_workspace_data_filter_in_document import JsonApiWorkspaceDataFilterInDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -11691,8 +11691,8 @@ Put a Setting for a Workspace
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspace_object_controller_api
-from gooddata_api_client.model.json_api_workspace_setting_in_document import JsonApiWorkspaceSettingInDocument
-from gooddata_api_client.model.json_api_workspace_setting_out_document import JsonApiWorkspaceSettingOutDocument
+from gooddata_api_client.models.json_api_workspace_setting_in_document import JsonApiWorkspaceSettingInDocument
+from gooddata_api_client.models.json_api_workspace_setting_out_document import JsonApiWorkspaceSettingOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -11845,4 +11845,3 @@ Type | Description  | Notes
 No authorization required
 
 [[Back to top]](#__pageTop) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
-

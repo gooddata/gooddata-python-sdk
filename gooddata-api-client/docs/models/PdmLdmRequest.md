@@ -1,4 +1,4 @@
-# gooddata_api_client.model.pdm_ldm_request.PdmLdmRequest
+# gooddata_api_client.models.pdm_ldm_request.PdmLdmRequest
 
 PDM additions wrapper.
 
@@ -28,4 +28,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**PdmSql**](PdmSql.md) | [**PdmSql**](PdmSql.md) | [**PdmSql**](PdmSql.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

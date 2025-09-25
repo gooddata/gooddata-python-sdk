@@ -1,4 +1,4 @@
-# gooddata_api_client.model.pop_dataset_measure_definition.PopDatasetMeasureDefinition
+# gooddata_api_client.models.pop_dataset_measure_definition.PopDatasetMeasureDefinition
 
 Previous period type of metric.
 
@@ -40,4 +40,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**PopDataset**](PopDataset.md) | [**PopDataset**](PopDataset.md) | [**PopDataset**](PopDataset.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

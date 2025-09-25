@@ -25,8 +25,8 @@ import frozendict  # noqa: F401
 
 from gooddata_api_client import schemas  # noqa: F401
 
-from gooddata_api_client.model.json_api_theme_in_document import JsonApiThemeInDocument
-from gooddata_api_client.model.json_api_theme_out_document import JsonApiThemeOutDocument
+from gooddata_api_client.models.json_api_theme_in_document import JsonApiThemeInDocument
+from gooddata_api_client.models.json_api_theme_out_document import JsonApiThemeOutDocument
 
 # body param
 SchemaForRequestBodyApplicationVndGooddataApijson = JsonApiThemeInDocument
@@ -325,5 +325,3 @@ class ApiForpost(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
-
-

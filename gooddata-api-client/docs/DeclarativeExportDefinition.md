@@ -2,19 +2,36 @@
 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **str** | Export definition id. | 
-**title** | **str** | Export definition object title. | 
-**created_at** | **str, none_type** | Time of the entity creation. | [optional] 
+**created_at** | **str** | Time of the entity creation. | [optional] 
 **created_by** | [**DeclarativeUserIdentifier**](DeclarativeUserIdentifier.md) |  | [optional] 
 **description** | **str** | Export definition object description. | [optional] 
-**modified_at** | **str, none_type** | Time of the last entity modification. | [optional] 
+**id** | **str** | Export definition id. | 
+**modified_at** | **str** | Time of the last entity modification. | [optional] 
 **modified_by** | [**DeclarativeUserIdentifier**](DeclarativeUserIdentifier.md) |  | [optional] 
 **request_payload** | [**DeclarativeExportDefinitionRequestPayload**](DeclarativeExportDefinitionRequestPayload.md) |  | [optional] 
-**tags** | **[str]** | A list of tags. | [optional] 
-**any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
+**tags** | **List[str]** | A list of tags. | [optional] 
+**title** | **str** | Export definition object title. | 
 
+## Example
+
+```python
+from gooddata_api_client.models.declarative_export_definition import DeclarativeExportDefinition
+
+# TODO update the JSON string below
+json = "{}"
+# create an instance of DeclarativeExportDefinition from a JSON string
+declarative_export_definition_instance = DeclarativeExportDefinition.from_json(json)
+# print the JSON string representation of the object
+print(DeclarativeExportDefinition.to_json())
+
+# convert the object into a dict
+declarative_export_definition_dict = declarative_export_definition_instance.to_dict()
+# create an instance of DeclarativeExportDefinition from a dict
+declarative_export_definition_from_dict = DeclarativeExportDefinition.from_dict(declarative_export_definition_dict)
+```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
 

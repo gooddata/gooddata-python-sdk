@@ -43,83 +43,83 @@ class DeclarativeDateDataset(
             "title",
             "granularities",
         }
-        
+
         class properties:
-            
-            
+
+
             class granularities(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
-                    
+
+
                     class items(
                         schemas.EnumBase,
                         schemas.StrSchema
                     ):
-                        
+
                         @schemas.classproperty
                         def MINUTE(cls):
                             return cls("MINUTE")
-                        
+
                         @schemas.classproperty
                         def HOUR(cls):
                             return cls("HOUR")
-                        
+
                         @schemas.classproperty
                         def DAY(cls):
                             return cls("DAY")
-                        
+
                         @schemas.classproperty
                         def WEEK(cls):
                             return cls("WEEK")
-                        
+
                         @schemas.classproperty
                         def MONTH(cls):
                             return cls("MONTH")
-                        
+
                         @schemas.classproperty
                         def QUARTER(cls):
                             return cls("QUARTER")
-                        
+
                         @schemas.classproperty
                         def YEAR(cls):
                             return cls("YEAR")
-                        
+
                         @schemas.classproperty
                         def MINUTE_OF_HOUR(cls):
                             return cls("MINUTE_OF_HOUR")
-                        
+
                         @schemas.classproperty
                         def HOUR_OF_DAY(cls):
                             return cls("HOUR_OF_DAY")
-                        
+
                         @schemas.classproperty
                         def DAY_OF_WEEK(cls):
                             return cls("DAY_OF_WEEK")
-                        
+
                         @schemas.classproperty
                         def DAY_OF_MONTH(cls):
                             return cls("DAY_OF_MONTH")
-                        
+
                         @schemas.classproperty
                         def DAY_OF_YEAR(cls):
                             return cls("DAY_OF_YEAR")
-                        
+
                         @schemas.classproperty
                         def WEEK_OF_YEAR(cls):
                             return cls("WEEK_OF_YEAR")
-                        
+
                         @schemas.classproperty
                         def MONTH_OF_YEAR(cls):
                             return cls("MONTH_OF_YEAR")
-                        
+
                         @schemas.classproperty
                         def QUARTER_OF_YEAR(cls):
                             return cls("QUARTER_OF_YEAR")
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, str, ]], typing.List[typing.Union[MetaOapg.items, str, ]]],
@@ -130,41 +130,41 @@ class DeclarativeDateDataset(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
-        
+
             @staticmethod
             def granularitiesFormatting() -> typing.Type['GranularitiesFormatting']:
                 return GranularitiesFormatting
-            
-            
+
+
             class id(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class title(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class description(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class tags(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
                     items = schemas.StrSchema
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, str, ]], typing.List[typing.Union[MetaOapg.items, str, ]]],
@@ -175,7 +175,7 @@ class DeclarativeDateDataset(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
             __annotations__ = {
@@ -186,62 +186,62 @@ class DeclarativeDateDataset(
                 "description": description,
                 "tags": tags,
             }
-    
+
     granularitiesFormatting: 'GranularitiesFormatting'
     id: MetaOapg.properties.id
     title: MetaOapg.properties.title
     granularities: MetaOapg.properties.granularities
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["granularities"]) -> MetaOapg.properties.granularities: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["granularitiesFormatting"]) -> 'GranularitiesFormatting': ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["title"]) -> MetaOapg.properties.title: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["description"]) -> MetaOapg.properties.description: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["tags"]) -> MetaOapg.properties.tags: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["granularities", "granularitiesFormatting", "id", "title", "description", "tags", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["granularities"]) -> MetaOapg.properties.granularities: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["granularitiesFormatting"]) -> 'GranularitiesFormatting': ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["title"]) -> MetaOapg.properties.title: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["description"]) -> typing.Union[MetaOapg.properties.description, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["tags"]) -> typing.Union[MetaOapg.properties.tags, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["granularities", "granularitiesFormatting", "id", "title", "description", "tags", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -268,4 +268,4 @@ class DeclarativeDateDataset(
             **kwargs,
         )
 
-from gooddata_api_client.model.granularities_formatting import GranularitiesFormatting
+from gooddata_api_client.models.granularities_formatting import GranularitiesFormatting

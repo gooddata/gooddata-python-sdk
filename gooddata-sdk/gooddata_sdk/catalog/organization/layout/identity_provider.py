@@ -3,7 +3,7 @@ import builtins
 from typing import Optional
 
 import attr
-from gooddata_api_client.model.declarative_identity_provider import DeclarativeIdentityProvider
+from gooddata_api_client.models.declarative_identity_provider import DeclarativeIdentityProvider
 
 from gooddata_sdk.catalog.base import Base
 

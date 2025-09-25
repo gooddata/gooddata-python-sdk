@@ -40,55 +40,55 @@ class ComparisonMeasureValueFilter(
         required = {
             "comparisonMeasureValueFilter",
         }
-        
+
         class properties:
-            
-            
+
+
             class comparisonMeasureValueFilter(
                 schemas.DictSchema
             ):
-            
-            
+
+
                 class MetaOapg:
                     required = {
                         "measure",
                         "value",
                         "operator",
                     }
-                    
+
                     class properties:
                         applyOnResult = schemas.BoolSchema
-                    
+
                         @staticmethod
                         def measure() -> typing.Type['AfmIdentifier']:
                             return AfmIdentifier
-                        
-                        
+
+
                         class operator(
                             schemas.EnumBase,
                             schemas.StrSchema
                         ):
-                            
+
                             @schemas.classproperty
                             def GREATER_THAN(cls):
                                 return cls("GREATER_THAN")
-                            
+
                             @schemas.classproperty
                             def GREATER_THAN_OR_EQUAL_TO(cls):
                                 return cls("GREATER_THAN_OR_EQUAL_TO")
-                            
+
                             @schemas.classproperty
                             def LESS_THAN(cls):
                                 return cls("LESS_THAN")
-                            
+
                             @schemas.classproperty
                             def LESS_THAN_OR_EQUAL_TO(cls):
                                 return cls("LESS_THAN_OR_EQUAL_TO")
-                            
+
                             @schemas.classproperty
                             def EQUAL_TO(cls):
                                 return cls("EQUAL_TO")
-                            
+
                             @schemas.classproperty
                             def NOT_EQUAL_TO(cls):
                                 return cls("NOT_EQUAL_TO")
@@ -101,56 +101,56 @@ class ComparisonMeasureValueFilter(
                             "treatNullValuesAs": treatNullValuesAs,
                             "value": value,
                         }
-                
+
                 measure: 'AfmIdentifier'
                 value: MetaOapg.properties.value
                 operator: MetaOapg.properties.operator
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["applyOnResult"]) -> MetaOapg.properties.applyOnResult: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["measure"]) -> 'AfmIdentifier': ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["operator"]) -> MetaOapg.properties.operator: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["treatNullValuesAs"]) -> MetaOapg.properties.treatNullValuesAs: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["value"]) -> MetaOapg.properties.value: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-                
+
                 def __getitem__(self, name: typing.Union[typing_extensions.Literal["applyOnResult", "measure", "operator", "treatNullValuesAs", "value", ], str]):
                     # dict_instance[name] accessor
                     return super().__getitem__(name)
-                
-                
+
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["applyOnResult"]) -> typing.Union[MetaOapg.properties.applyOnResult, schemas.Unset]: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["measure"]) -> 'AfmIdentifier': ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["operator"]) -> MetaOapg.properties.operator: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["treatNullValuesAs"]) -> typing.Union[MetaOapg.properties.treatNullValuesAs, schemas.Unset]: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["value"]) -> MetaOapg.properties.value: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-                
+
                 def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["applyOnResult", "measure", "operator", "treatNullValuesAs", "value", ], str]):
                     return super().get_item_oapg(name)
-                
-            
+
+
                 def __new__(
                     cls,
                     *_args: typing.Union[dict, frozendict.frozendict, ],
@@ -176,29 +176,29 @@ class ComparisonMeasureValueFilter(
             __annotations__ = {
                 "comparisonMeasureValueFilter": comparisonMeasureValueFilter,
             }
-    
+
     comparisonMeasureValueFilter: MetaOapg.properties.comparisonMeasureValueFilter
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["comparisonMeasureValueFilter"]) -> MetaOapg.properties.comparisonMeasureValueFilter: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["comparisonMeasureValueFilter", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["comparisonMeasureValueFilter"]) -> MetaOapg.properties.comparisonMeasureValueFilter: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["comparisonMeasureValueFilter", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -215,4 +215,4 @@ class ComparisonMeasureValueFilter(
             **kwargs,
         )
 
-from gooddata_api_client.model.afm_identifier import AfmIdentifier
+from gooddata_api_client.models.afm_identifier import AfmIdentifier

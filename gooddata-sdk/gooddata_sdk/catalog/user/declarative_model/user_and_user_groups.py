@@ -4,7 +4,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import attr
-from gooddata_api_client.model.declarative_users_user_groups import DeclarativeUsersUserGroups
+from gooddata_api_client.models.declarative_users_user_groups import DeclarativeUsersUserGroups
 
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.catalog.user.declarative_model.user import CatalogDeclarativeUser, CatalogDeclarativeUsers

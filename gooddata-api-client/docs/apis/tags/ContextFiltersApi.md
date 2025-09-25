@@ -23,8 +23,8 @@ Post Context Filters
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import context_filters_api
-from gooddata_api_client.model.json_api_filter_context_post_optional_id_document import JsonApiFilterContextPostOptionalIdDocument
-from gooddata_api_client.model.json_api_filter_context_out_document import JsonApiFilterContextOutDocument
+from gooddata_api_client.models.json_api_filter_context_post_optional_id_document import JsonApiFilterContextPostOptionalIdDocument
+from gooddata_api_client.models.json_api_filter_context_out_document import JsonApiFilterContextOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -337,7 +337,7 @@ Get all Context Filters
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import context_filters_api
-from gooddata_api_client.model.json_api_filter_context_out_list import JsonApiFilterContextOutList
+from gooddata_api_client.models.json_api_filter_context_out_list import JsonApiFilterContextOutList
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -561,7 +561,7 @@ Get a Context Filter
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import context_filters_api
-from gooddata_api_client.model.json_api_filter_context_out_document import JsonApiFilterContextOutDocument
+from gooddata_api_client.models.json_api_filter_context_out_document import JsonApiFilterContextOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -750,8 +750,8 @@ Patch a Context Filter
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import context_filters_api
-from gooddata_api_client.model.json_api_filter_context_patch_document import JsonApiFilterContextPatchDocument
-from gooddata_api_client.model.json_api_filter_context_out_document import JsonApiFilterContextOutDocument
+from gooddata_api_client.models.json_api_filter_context_patch_document import JsonApiFilterContextPatchDocument
+from gooddata_api_client.models.json_api_filter_context_out_document import JsonApiFilterContextOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -942,8 +942,8 @@ Put a Context Filter
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import context_filters_api
-from gooddata_api_client.model.json_api_filter_context_in_document import JsonApiFilterContextInDocument
-from gooddata_api_client.model.json_api_filter_context_out_document import JsonApiFilterContextOutDocument
+from gooddata_api_client.models.json_api_filter_context_in_document import JsonApiFilterContextInDocument
+from gooddata_api_client.models.json_api_filter_context_out_document import JsonApiFilterContextOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1122,4 +1122,3 @@ Type | Description  | Notes
 No authorization required
 
 [[Back to top]](#__pageTop) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
-

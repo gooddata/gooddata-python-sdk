@@ -37,21 +37,21 @@ class DeclarativeLdm(
 
 
     class MetaOapg:
-        
+
         class properties:
-            
-            
+
+
             class datasets(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeDataset']:
                         return DeclarativeDataset
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeDataset'], typing.List['DeclarativeDataset']],
@@ -62,22 +62,22 @@ class DeclarativeLdm(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeDataset':
                     return super().__getitem__(i)
-            
-            
+
+
             class dateInstances(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeDateDataset']:
                         return DeclarativeDateDataset
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeDateDataset'], typing.List['DeclarativeDateDataset']],
@@ -88,40 +88,40 @@ class DeclarativeLdm(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeDateDataset':
                     return super().__getitem__(i)
             __annotations__ = {
                 "datasets": datasets,
                 "dateInstances": dateInstances,
             }
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["datasets"]) -> MetaOapg.properties.datasets: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["dateInstances"]) -> MetaOapg.properties.dateInstances: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["datasets", "dateInstances", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["datasets"]) -> typing.Union[MetaOapg.properties.datasets, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["dateInstances"]) -> typing.Union[MetaOapg.properties.dateInstances, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["datasets", "dateInstances", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -140,5 +140,5 @@ class DeclarativeLdm(
             **kwargs,
         )
 
-from gooddata_api_client.model.declarative_dataset import DeclarativeDataset
-from gooddata_api_client.model.declarative_date_dataset import DeclarativeDateDataset
+from gooddata_api_client.models.declarative_dataset import DeclarativeDataset
+from gooddata_api_client.models.declarative_date_dataset import DeclarativeDateDataset

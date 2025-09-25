@@ -25,7 +25,7 @@ import frozendict  # noqa: F401
 
 from gooddata_api_client import schemas  # noqa: F401
 
-from gooddata_api_client.model.declarative_model import DeclarativeModel
+from gooddata_api_client.models.declarative_model import DeclarativeModel
 
 # Path params
 WorkspaceIdSchema = schemas.StrSchema
@@ -351,5 +351,3 @@ class ApiForput(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
-
-

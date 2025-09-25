@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 
 # **create_slides_export**
-> ExportResponse create_slides_export(workspace_id, slides_export_request)
+> ExportResponse create_slides_export(workspace_id, slides_export_request, x_gdc_debug=x_gdc_debug)
 
 (EXPERIMENTAL) Create slides export request
 
@@ -20,12 +20,12 @@ Note: This API is an experimental and is going to change. Please, use it accordi
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import slides_export_api
-from gooddata_api_client.model.export_response import ExportResponse
-from gooddata_api_client.model.slides_export_request import SlidesExportRequest
+from gooddata_api_client.models.export_response import ExportResponse
+from gooddata_api_client.models.slides_export_request import SlidesExportRequest
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -34,51 +34,32 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = slides_export_api.SlidesExportApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
-    slides_export_request = SlidesExportRequest(
-        dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
-        file_name="filename",
-        format="PDF",
-        metadata=JsonNode(),
-        template_id="template_id_example",
-        visualization_ids=[
-            "visualization_ids_example",
-        ],
-        widget_ids=[
-            "widget_ids_example",
-        ],
-    ) # SlidesExportRequest | 
-    x_gdc_debug = False # bool |  (optional) if omitted the server will use the default value of False
+    api_instance = gooddata_api_client.SlidesExportApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
+    slides_export_request = gooddata_api_client.SlidesExportRequest() # SlidesExportRequest | 
+    x_gdc_debug = False # bool |  (optional) (default to False)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # (EXPERIMENTAL) Create slides export request
-        api_response = api_instance.create_slides_export(workspace_id, slides_export_request)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling SlidesExportApi->create_slides_export: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # (EXPERIMENTAL) Create slides export request
         api_response = api_instance.create_slides_export(workspace_id, slides_export_request, x_gdc_debug=x_gdc_debug)
+        print("The response of SlidesExportApi->create_slides_export:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling SlidesExportApi->create_slides_export: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
- **slides_export_request** | [**SlidesExportRequest**](SlidesExportRequest.md)|  |
- **x_gdc_debug** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **workspace_id** | **str**|  | 
+ **slides_export_request** | [**SlidesExportRequest**](SlidesExportRequest.md)|  | 
+ **x_gdc_debug** | **bool**|  | [optional] [default to False]
 
 ### Return type
 
@@ -93,7 +74,6 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -103,7 +83,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_slides_export**
-> file_type get_slides_export(workspace_id, export_id)
+> bytearray get_slides_export(workspace_id, export_id)
 
 (EXPERIMENTAL) Retrieve exported files
 
@@ -113,11 +93,10 @@ Note: This API is an experimental and is going to change. Please, use it accordi
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import slides_export_api
-from gooddata_api_client.model.get_image_export202_response_inner import GetImageExport202ResponseInner
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -126,32 +105,34 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = slides_export_api.SlidesExportApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
-    export_id = "exportId_example" # str | 
+    api_instance = gooddata_api_client.SlidesExportApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
+    export_id = 'export_id_example' # str | 
 
-    # example passing only required values which don't have defaults set
     try:
         # (EXPERIMENTAL) Retrieve exported files
         api_response = api_instance.get_slides_export(workspace_id, export_id)
+        print("The response of SlidesExportApi->get_slides_export:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling SlidesExportApi->get_slides_export: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
- **export_id** | **str**|  |
+ **workspace_id** | **str**|  | 
+ **export_id** | **str**|  | 
 
 ### Return type
 
-**file_type**
+**bytearray**
 
 ### Authorization
 
@@ -161,7 +142,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/pdf, application/vnd.openxmlformats-officedocument.presentationml.presentation
-
 
 ### HTTP response details
 
@@ -183,10 +163,10 @@ Note: This API is an experimental and is going to change. Please, use it accordi
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import slides_export_api
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -195,27 +175,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = slides_export_api.SlidesExportApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
-    export_id = "exportId_example" # str | 
+    api_instance = gooddata_api_client.SlidesExportApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
+    export_id = 'export_id_example' # str | 
 
-    # example passing only required values which don't have defaults set
     try:
         # (EXPERIMENTAL) Retrieve metadata context
         api_instance.get_slides_export_metadata(workspace_id, export_id)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling SlidesExportApi->get_slides_export_metadata: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
- **export_id** | **str**|  |
+ **workspace_id** | **str**|  | 
+ **export_id** | **str**|  | 
 
 ### Return type
 
@@ -229,7 +210,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
-
 
 ### HTTP response details
 

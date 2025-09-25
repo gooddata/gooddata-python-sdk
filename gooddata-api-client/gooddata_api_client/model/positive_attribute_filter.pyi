@@ -40,28 +40,28 @@ class PositiveAttributeFilter(
         required = {
             "positiveAttributeFilter",
         }
-        
+
         class properties:
-            
-            
+
+
             class positiveAttributeFilter(
                 schemas.DictSchema
             ):
-            
-            
+
+
                 class MetaOapg:
                     required = {
                         "in",
                         "label",
                     }
-                    
+
                     class properties:
                         applyOnResult = schemas.BoolSchema
-                    
+
                         @staticmethod
                         def _in() -> typing.Type['AttributeFilterElements']:
                             return AttributeFilterElements
-                    
+
                         @staticmethod
                         def label() -> typing.Type['AfmIdentifier']:
                             return AfmIdentifier
@@ -70,42 +70,42 @@ class PositiveAttributeFilter(
                             "in": _in,
                             "label": label,
                         }
-                
+
                 label: 'AfmIdentifier'
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["applyOnResult"]) -> MetaOapg.properties.applyOnResult: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["in"]) -> 'AttributeFilterElements': ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["label"]) -> 'AfmIdentifier': ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-                
+
                 def __getitem__(self, name: typing.Union[typing_extensions.Literal["applyOnResult", "in", "label", ], str]):
                     # dict_instance[name] accessor
                     return super().__getitem__(name)
-                
-                
+
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["applyOnResult"]) -> typing.Union[MetaOapg.properties.applyOnResult, schemas.Unset]: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["in"]) -> 'AttributeFilterElements': ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["label"]) -> 'AfmIdentifier': ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-                
+
                 def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["applyOnResult", "in", "label", ], str]):
                     return super().get_item_oapg(name)
-                
-            
+
+
                 def __new__(
                     cls,
                     *_args: typing.Union[dict, frozendict.frozendict, ],
@@ -125,29 +125,29 @@ class PositiveAttributeFilter(
             __annotations__ = {
                 "positiveAttributeFilter": positiveAttributeFilter,
             }
-    
+
     positiveAttributeFilter: MetaOapg.properties.positiveAttributeFilter
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["positiveAttributeFilter"]) -> MetaOapg.properties.positiveAttributeFilter: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["positiveAttributeFilter", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["positiveAttributeFilter"]) -> MetaOapg.properties.positiveAttributeFilter: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["positiveAttributeFilter", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -164,5 +164,5 @@ class PositiveAttributeFilter(
             **kwargs,
         )
 
-from gooddata_api_client.model.afm_identifier import AfmIdentifier
-from gooddata_api_client.model.attribute_filter_elements import AttributeFilterElements
+from gooddata_api_client.models.afm_identifier import AfmIdentifier
+from gooddata_api_client.models.attribute_filter_elements import AttributeFilterElements

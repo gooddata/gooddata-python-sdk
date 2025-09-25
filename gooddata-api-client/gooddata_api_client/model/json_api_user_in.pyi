@@ -41,54 +41,54 @@ class JsonApiUserIn(
             "id",
             "type",
         }
-        
+
         class properties:
-            
-            
+
+
             class id(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class type(
                 schemas.EnumBase,
                 schemas.StrSchema
             ):
-                
+
                 @schemas.classproperty
                 def USER(cls):
                     return cls("user")
-            
-            
+
+
             class attributes(
                 schemas.DictSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     class properties:
-                        
-                        
+
+
                         class authenticationId(
                             schemas.StrSchema
                         ):
                             pass
-                        
-                        
+
+
                         class email(
                             schemas.StrSchema
                         ):
                             pass
-                        
-                        
+
+
                         class firstname(
                             schemas.StrSchema
                         ):
                             pass
-                        
-                        
+
+
                         class lastname(
                             schemas.StrSchema
                         ):
@@ -99,46 +99,46 @@ class JsonApiUserIn(
                             "firstname": firstname,
                             "lastname": lastname,
                         }
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["authenticationId"]) -> MetaOapg.properties.authenticationId: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["email"]) -> MetaOapg.properties.email: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["firstname"]) -> MetaOapg.properties.firstname: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["lastname"]) -> MetaOapg.properties.lastname: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-                
+
                 def __getitem__(self, name: typing.Union[typing_extensions.Literal["authenticationId", "email", "firstname", "lastname", ], str]):
                     # dict_instance[name] accessor
                     return super().__getitem__(name)
-                
-                
+
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["authenticationId"]) -> typing.Union[MetaOapg.properties.authenticationId, schemas.Unset]: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["email"]) -> typing.Union[MetaOapg.properties.email, schemas.Unset]: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["firstname"]) -> typing.Union[MetaOapg.properties.firstname, schemas.Unset]: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["lastname"]) -> typing.Union[MetaOapg.properties.lastname, schemas.Unset]: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-                
+
                 def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["authenticationId", "email", "firstname", "lastname", ], str]):
                     return super().get_item_oapg(name)
-                
-            
+
+
                 def __new__(
                     cls,
                     *_args: typing.Union[dict, frozendict.frozendict, ],
@@ -159,60 +159,60 @@ class JsonApiUserIn(
                         _configuration=_configuration,
                         **kwargs,
                     )
-            
-            
+
+
             class relationships(
                 schemas.DictSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     class properties:
-                        
-                        
+
+
                         class userGroups(
                             schemas.DictSchema
                         ):
-                        
-                        
+
+
                             class MetaOapg:
                                 required = {
                                     "data",
                                 }
-                                
+
                                 class properties:
-                                
+
                                     @staticmethod
                                     def data() -> typing.Type['JsonApiUserGroupToManyLinkage']:
                                         return JsonApiUserGroupToManyLinkage
                                     __annotations__ = {
                                         "data": data,
                                     }
-                            
+
                             data: 'JsonApiUserGroupToManyLinkage'
-                            
+
                             @typing.overload
                             def __getitem__(self, name: typing_extensions.Literal["data"]) -> 'JsonApiUserGroupToManyLinkage': ...
-                            
+
                             @typing.overload
                             def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-                            
+
                             def __getitem__(self, name: typing.Union[typing_extensions.Literal["data", ], str]):
                                 # dict_instance[name] accessor
                                 return super().__getitem__(name)
-                            
-                            
+
+
                             @typing.overload
                             def get_item_oapg(self, name: typing_extensions.Literal["data"]) -> 'JsonApiUserGroupToManyLinkage': ...
-                            
+
                             @typing.overload
                             def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-                            
+
                             def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["data", ], str]):
                                 return super().get_item_oapg(name)
-                            
-                        
+
+
                             def __new__(
                                 cls,
                                 *_args: typing.Union[dict, frozendict.frozendict, ],
@@ -230,28 +230,28 @@ class JsonApiUserIn(
                         __annotations__ = {
                             "userGroups": userGroups,
                         }
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["userGroups"]) -> MetaOapg.properties.userGroups: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-                
+
                 def __getitem__(self, name: typing.Union[typing_extensions.Literal["userGroups", ], str]):
                     # dict_instance[name] accessor
                     return super().__getitem__(name)
-                
-                
+
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["userGroups"]) -> typing.Union[MetaOapg.properties.userGroups, schemas.Unset]: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-                
+
                 def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["userGroups", ], str]):
                     return super().get_item_oapg(name)
-                
-            
+
+
                 def __new__(
                     cls,
                     *_args: typing.Union[dict, frozendict.frozendict, ],
@@ -272,48 +272,48 @@ class JsonApiUserIn(
                 "attributes": attributes,
                 "relationships": relationships,
             }
-    
+
     id: MetaOapg.properties.id
     type: MetaOapg.properties.type
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["type"]) -> MetaOapg.properties.type: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["attributes"]) -> MetaOapg.properties.attributes: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["relationships"]) -> MetaOapg.properties.relationships: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["id", "type", "attributes", "relationships", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["type"]) -> MetaOapg.properties.type: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["attributes"]) -> typing.Union[MetaOapg.properties.attributes, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["relationships"]) -> typing.Union[MetaOapg.properties.relationships, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["id", "type", "attributes", "relationships", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -336,4 +336,4 @@ class JsonApiUserIn(
             **kwargs,
         )
 
-from gooddata_api_client.model.json_api_user_group_to_many_linkage import JsonApiUserGroupToManyLinkage
+from gooddata_api_client.models.json_api_user_group_to_many_linkage import JsonApiUserGroupToManyLinkage

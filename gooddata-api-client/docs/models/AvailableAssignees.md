@@ -1,4 +1,4 @@
-# gooddata_api_client.model.available_assignees.AvailableAssignees
+# gooddata_api_client.models.available_assignees.AvailableAssignees
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes
@@ -41,4 +41,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**UserAssignee**](UserAssignee.md) | [**UserAssignee**](UserAssignee.md) | [**UserAssignee**](UserAssignee.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

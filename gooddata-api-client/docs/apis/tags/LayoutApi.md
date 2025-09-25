@@ -49,7 +49,7 @@ Retrieve current analytics model of the workspace.
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import layout_api
-from gooddata_api_client.model.declarative_analytics import DeclarativeAnalytics
+from gooddata_api_client.models.declarative_analytics import DeclarativeAnalytics
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -138,7 +138,7 @@ Retrieve all data sources including related physical model.
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import layout_api
-from gooddata_api_client.model.declarative_data_sources import DeclarativeDataSources
+from gooddata_api_client.models.declarative_data_sources import DeclarativeDataSources
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -201,7 +201,7 @@ Retrieve current logical model of the workspace in declarative form.
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import layout_api
-from gooddata_api_client.model.declarative_model import DeclarativeModel
+from gooddata_api_client.models.declarative_model import DeclarativeModel
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -326,7 +326,7 @@ Retrieve complete layout of organization, workspaces, user-groups, etc.
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import layout_api
-from gooddata_api_client.model.declarative_organization import DeclarativeOrganization
+from gooddata_api_client.models.declarative_organization import DeclarativeOrganization
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -389,7 +389,7 @@ Retrieve complete layout of tables with their columns
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import layout_api
-from gooddata_api_client.model.declarative_pdm import DeclarativePdm
+from gooddata_api_client.models.declarative_pdm import DeclarativePdm
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -478,7 +478,7 @@ Retrieve current user data filters assigned to the workspace.
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import layout_api
-from gooddata_api_client.model.declarative_user_data_filters import DeclarativeUserDataFilters
+from gooddata_api_client.models.declarative_user_data_filters import DeclarativeUserDataFilters
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -567,7 +567,7 @@ Retrieve current set of permissions of the user-group in a declarative form.
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import layout_api
-from gooddata_api_client.model.declarative_user_group_permissions import DeclarativeUserGroupPermissions
+from gooddata_api_client.models.declarative_user_group_permissions import DeclarativeUserGroupPermissions
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -656,7 +656,7 @@ Retrieve all user-groups eventually with parent group.
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import layout_api
-from gooddata_api_client.model.declarative_user_groups import DeclarativeUserGroups
+from gooddata_api_client.models.declarative_user_groups import DeclarativeUserGroups
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -719,7 +719,7 @@ Retrieve current set of permissions of the user in a declarative form.
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import layout_api
-from gooddata_api_client.model.declarative_user_permissions import DeclarativeUserPermissions
+from gooddata_api_client.models.declarative_user_permissions import DeclarativeUserPermissions
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -808,7 +808,7 @@ Retrieve all users including authentication properties.
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import layout_api
-from gooddata_api_client.model.declarative_users import DeclarativeUsers
+from gooddata_api_client.models.declarative_users import DeclarativeUsers
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -871,7 +871,7 @@ Retrieve all users and user groups with theirs properties.
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import layout_api
-from gooddata_api_client.model.declarative_users_user_groups import DeclarativeUsersUserGroups
+from gooddata_api_client.models.declarative_users_user_groups import DeclarativeUsersUserGroups
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -934,7 +934,7 @@ Retrieve all workspaces and related workspace data filters (and their settings /
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import layout_api
-from gooddata_api_client.model.declarative_workspace_data_filters import DeclarativeWorkspaceDataFilters
+from gooddata_api_client.models.declarative_workspace_data_filters import DeclarativeWorkspaceDataFilters
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -997,7 +997,7 @@ Retrieve current model of the workspace in declarative form.
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import layout_api
-from gooddata_api_client.model.declarative_workspace_model import DeclarativeWorkspaceModel
+from gooddata_api_client.models.declarative_workspace_model import DeclarativeWorkspaceModel
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1086,7 +1086,7 @@ Retrieve current set of permissions of the workspace in a declarative form.
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import layout_api
-from gooddata_api_client.model.declarative_workspace_permissions import DeclarativeWorkspacePermissions
+from gooddata_api_client.models.declarative_workspace_permissions import DeclarativeWorkspacePermissions
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1175,7 +1175,7 @@ Gets complete layout of workspaces, their hierarchy, models.
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import layout_api
-from gooddata_api_client.model.declarative_workspaces import DeclarativeWorkspaces
+from gooddata_api_client.models.declarative_workspaces import DeclarativeWorkspaces
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1238,7 +1238,7 @@ Set all data sources including related physical model.
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import layout_api
-from gooddata_api_client.model.declarative_data_sources import DeclarativeDataSources
+from gooddata_api_client.models.declarative_data_sources import DeclarativeDataSources
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1364,7 +1364,7 @@ Define all user groups with their parents eventually.
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import layout_api
-from gooddata_api_client.model.declarative_user_groups import DeclarativeUserGroups
+from gooddata_api_client.models.declarative_user_groups import DeclarativeUserGroups
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1460,7 +1460,7 @@ Set all users and their authentication properties.
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import layout_api
-from gooddata_api_client.model.declarative_users import DeclarativeUsers
+from gooddata_api_client.models.declarative_users import DeclarativeUsers
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1566,7 +1566,7 @@ Define all users and user groups with theirs properties.
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import layout_api
-from gooddata_api_client.model.declarative_users_user_groups import DeclarativeUsersUserGroups
+from gooddata_api_client.models.declarative_users_user_groups import DeclarativeUsersUserGroups
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1685,7 +1685,7 @@ Set complete layout of workspace, like model, authorization, etc.
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import layout_api
-from gooddata_api_client.model.declarative_workspace_model import DeclarativeWorkspaceModel
+from gooddata_api_client.models.declarative_workspace_model import DeclarativeWorkspaceModel
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1937,7 +1937,7 @@ Set effective analytics model of the workspace.
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import layout_api
-from gooddata_api_client.model.declarative_analytics import DeclarativeAnalytics
+from gooddata_api_client.models.declarative_analytics import DeclarativeAnalytics
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -2093,7 +2093,7 @@ Set effective logical model of the workspace.
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import layout_api
-from gooddata_api_client.model.declarative_model import DeclarativeModel
+from gooddata_api_client.models.declarative_model import DeclarativeModel
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -2283,7 +2283,7 @@ Sets complete layout of organization, like workspaces, user-groups, etc.
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import layout_api
-from gooddata_api_client.model.declarative_organization import DeclarativeOrganization
+from gooddata_api_client.models.declarative_organization import DeclarativeOrganization
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -2712,7 +2712,7 @@ Sets complete layout of tables with their columns under corresponding Data Sourc
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import layout_api
-from gooddata_api_client.model.declarative_pdm import DeclarativePdm
+from gooddata_api_client.models.declarative_pdm import DeclarativePdm
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -2825,7 +2825,7 @@ Set user data filters assigned to the workspace.
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import layout_api
-from gooddata_api_client.model.declarative_user_data_filters import DeclarativeUserDataFilters
+from gooddata_api_client.models.declarative_user_data_filters import DeclarativeUserDataFilters
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -2936,7 +2936,7 @@ Set effective permissions for the user-group
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import layout_api
-from gooddata_api_client.model.declarative_user_group_permissions import DeclarativeUserGroupPermissions
+from gooddata_api_client.models.declarative_user_group_permissions import DeclarativeUserGroupPermissions
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -3039,7 +3039,7 @@ Set effective permissions for the user
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import layout_api
-from gooddata_api_client.model.declarative_user_permissions import DeclarativeUserPermissions
+from gooddata_api_client.models.declarative_user_permissions import DeclarativeUserPermissions
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -3142,7 +3142,7 @@ Sets workspace data filters in all workspaces in entire organization.
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import layout_api
-from gooddata_api_client.model.declarative_workspace_data_filters import DeclarativeWorkspaceDataFilters
+from gooddata_api_client.models.declarative_workspace_data_filters import DeclarativeWorkspaceDataFilters
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -3238,7 +3238,7 @@ Set effective permissions for the workspace
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import layout_api
-from gooddata_api_client.model.declarative_workspace_permissions import DeclarativeWorkspacePermissions
+from gooddata_api_client.models.declarative_workspace_permissions import DeclarativeWorkspacePermissions
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -3344,7 +3344,7 @@ Sets complete layout of workspaces, their hierarchy, models.
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import layout_api
-from gooddata_api_client.model.declarative_workspaces import DeclarativeWorkspaces
+from gooddata_api_client.models.declarative_workspaces import DeclarativeWorkspaces
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -3636,4 +3636,3 @@ headers | Unset | headers were not defined |
 No authorization required
 
 [[Back to top]](#__pageTop) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
-

@@ -21,7 +21,7 @@ Retrieve all data sources including related physical model.
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import data_source_declarative_apis_api
-from gooddata_api_client.model.declarative_data_sources import DeclarativeDataSources
+from gooddata_api_client.models.declarative_data_sources import DeclarativeDataSources
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -84,7 +84,7 @@ Set all data sources including related physical model.
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import data_source_declarative_apis_api
-from gooddata_api_client.model.declarative_data_sources import DeclarativeDataSources
+from gooddata_api_client.models.declarative_data_sources import DeclarativeDataSources
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -196,4 +196,3 @@ headers | Unset | headers were not defined |
 No authorization required
 
 [[Back to top]](#__pageTop) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
-

@@ -2,6 +2,7 @@
 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **source_object_id** | **str** | Source object ID. | 
@@ -12,8 +13,24 @@ Name | Type | Description | Notes
 **target_object_title** | **str** | Target object title. | 
 **target_object_type** | **str** | Target object type, e.g. visualization. | 
 **target_workspace_id** | **str** | Target workspace ID. If relationship is dashboard-&gt;visualization, this is the workspace where the visualization is located. | 
-**any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 
+## Example
+
+```python
+from gooddata_api_client.models.search_relationship_object import SearchRelationshipObject
+
+# TODO update the JSON string below
+json = "{}"
+# create an instance of SearchRelationshipObject from a JSON string
+search_relationship_object_instance = SearchRelationshipObject.from_json(json)
+# print the JSON string representation of the object
+print(SearchRelationshipObject.to_json())
+
+# convert the object into a dict
+search_relationship_object_dict = search_relationship_object_instance.to_dict()
+# create an instance of SearchRelationshipObject from a dict
+search_relationship_object_from_dict = SearchRelationshipObject.from_dict(search_relationship_object_dict)
+```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
 

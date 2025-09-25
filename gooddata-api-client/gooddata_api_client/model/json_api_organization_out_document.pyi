@@ -134,6 +134,6 @@ class JsonApiOrganizationOutDocument(
             **kwargs,
         )
 
-from gooddata_api_client.model.json_api_organization_out import JsonApiOrganizationOut
-from gooddata_api_client.model.json_api_organization_out_includes import JsonApiOrganizationOutIncludes
-from gooddata_api_client.model.object_links import ObjectLinks
+from gooddata_api_client.models.json_api_organization_out import JsonApiOrganizationOut
+from gooddata_api_client.models.json_api_organization_out_includes import JsonApiOrganizationOutIncludes
+from gooddata_api_client.models.object_links import ObjectLinks

@@ -36,7 +36,7 @@ class SortKey(
 
 
     class MetaOapg:
-        
+
         @classmethod
         @functools.lru_cache()
         def one_of(cls):
@@ -67,6 +67,6 @@ class SortKey(
             **kwargs,
         )
 
-from gooddata_api_client.model.sort_key_attribute import SortKeyAttribute
-from gooddata_api_client.model.sort_key_total import SortKeyTotal
-from gooddata_api_client.model.sort_key_value import SortKeyValue
+from gooddata_api_client.models.sort_key_attribute import SortKeyAttribute
+from gooddata_api_client.models.sort_key_total import SortKeyTotal
+from gooddata_api_client.models.sort_key_value import SortKeyValue

@@ -404,9 +404,7 @@ class DataFrameFactory:
             execution_response=BareExecutionResponse(
                 api_client=self._sdk.client,
                 workspace_id=self._workspace_id,
-                execution_response=models.AfmExecutionResponse(
-                    result_cache_metadata.execution_response, _check_type=False
-                ),
+                execution_response=models.AfmExecutionResponse(result_cache_metadata.execution_response),
             ),
             result_cache_metadata=result_cache_metadata,
             label_overrides=label_overrides,

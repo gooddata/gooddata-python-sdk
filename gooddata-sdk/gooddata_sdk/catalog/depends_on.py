@@ -4,9 +4,9 @@ from __future__ import annotations
 from typing import Union
 
 import attr
-from gooddata_api_client.model.absolute_date_filter import AbsoluteDateFilter as AbsoluteDateFilterAPI
-from gooddata_api_client.model.elements_request_depends_on_inner import ElementsRequestDependsOnInner
-from gooddata_api_client.model.relative_date_filter import RelativeDateFilter as RelativeDateFilterAPI
+from gooddata_api_client.models.absolute_date_filter import AbsoluteDateFilter as AbsoluteDateFilterAPI
+from gooddata_api_client.models.elements_request_depends_on_inner import ElementsRequestDependsOnInner
+from gooddata_api_client.models.relative_date_filter import RelativeDateFilter as RelativeDateFilterAPI
 
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.compute.model.filter import AbsoluteDateFilter, RelativeDateFilter

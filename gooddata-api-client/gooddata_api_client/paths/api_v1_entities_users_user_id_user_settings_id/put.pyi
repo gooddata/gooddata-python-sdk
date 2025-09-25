@@ -25,8 +25,8 @@ import frozendict  # noqa: F401
 
 from gooddata_api_client import schemas  # noqa: F401
 
-from gooddata_api_client.model.json_api_user_setting_out_document import JsonApiUserSettingOutDocument
-from gooddata_api_client.model.json_api_user_setting_in_document import JsonApiUserSettingInDocument
+from gooddata_api_client.models.json_api_user_setting_out_document import JsonApiUserSettingOutDocument
+from gooddata_api_client.models.json_api_user_setting_in_document import JsonApiUserSettingInDocument
 
 # Query params
 FilterSchema = schemas.StrSchema
@@ -453,5 +453,3 @@ class ApiForput(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
-
-

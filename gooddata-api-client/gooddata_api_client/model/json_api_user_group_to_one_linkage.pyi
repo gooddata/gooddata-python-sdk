@@ -37,7 +37,7 @@ class JsonApiUserGroupToOneLinkage(
 
 
     class MetaOapg:
-        
+
         @classmethod
         @functools.lru_cache()
         def one_of(cls):
@@ -66,4 +66,4 @@ class JsonApiUserGroupToOneLinkage(
             **kwargs,
         )
 
-from gooddata_api_client.model.json_api_user_group_linkage import JsonApiUserGroupLinkage
+from gooddata_api_client.models.json_api_user_group_linkage import JsonApiUserGroupLinkage

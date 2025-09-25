@@ -40,21 +40,21 @@ class JsonApiWorkspaceSettingOutList(
         required = {
             "data",
         }
-        
+
         class properties:
-            
-            
+
+
             class data(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['JsonApiWorkspaceSettingOutWithLinks']:
                         return JsonApiWorkspaceSettingOutWithLinks
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['JsonApiWorkspaceSettingOutWithLinks'], typing.List['JsonApiWorkspaceSettingOutWithLinks']],
@@ -65,10 +65,10 @@ class JsonApiWorkspaceSettingOutList(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'JsonApiWorkspaceSettingOutWithLinks':
                     return super().__getitem__(i)
-        
+
             @staticmethod
             def links() -> typing.Type['ListLinks']:
                 return ListLinks
@@ -76,35 +76,35 @@ class JsonApiWorkspaceSettingOutList(
                 "data": data,
                 "links": links,
             }
-    
+
     data: MetaOapg.properties.data
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["data"]) -> MetaOapg.properties.data: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["links"]) -> 'ListLinks': ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["data", "links", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["data"]) -> MetaOapg.properties.data: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["links"]) -> typing.Union['ListLinks', schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["data", "links", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -123,5 +123,5 @@ class JsonApiWorkspaceSettingOutList(
             **kwargs,
         )
 
-from gooddata_api_client.model.json_api_workspace_setting_out_with_links import JsonApiWorkspaceSettingOutWithLinks
-from gooddata_api_client.model.list_links import ListLinks
+from gooddata_api_client.models.json_api_workspace_setting_out_with_links import JsonApiWorkspaceSettingOutWithLinks
+from gooddata_api_client.models.list_links import ListLinks

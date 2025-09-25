@@ -534,4 +534,4 @@ class JsonApiWorkspaceOut(
             **kwargs,
         )
 
-from gooddata_api_client.model.json_api_workspace_to_one_linkage import JsonApiWorkspaceToOneLinkage
+from gooddata_api_client.models.json_api_workspace_to_one_linkage import JsonApiWorkspaceToOneLinkage

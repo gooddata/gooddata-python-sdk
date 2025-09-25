@@ -39,23 +39,23 @@ class DeclarativeDataSourcePermission(
             "name",
             "assignee",
         }
-        
+
         class properties:
-        
+
             @staticmethod
             def assignee() -> typing.Type['AssigneeIdentifier']:
                 return AssigneeIdentifier
-            
-            
+
+
             class name(
                 schemas.EnumBase,
                 schemas.StrSchema
             ):
-                
+
                 @schemas.classproperty
                 def MANAGE(cls):
                     return cls("MANAGE")
-                
+
                 @schemas.classproperty
                 def USE(cls):
                     return cls("USE")
@@ -63,36 +63,36 @@ class DeclarativeDataSourcePermission(
                 "assignee": assignee,
                 "name": name,
             }
-    
+
     name: MetaOapg.properties.name
     assignee: 'AssigneeIdentifier'
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["assignee"]) -> 'AssigneeIdentifier': ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["assignee", "name", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["assignee"]) -> 'AssigneeIdentifier': ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["assignee", "name", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -111,4 +111,4 @@ class DeclarativeDataSourcePermission(
             **kwargs,
         )
 
-from gooddata_api_client.model.assignee_identifier import AssigneeIdentifier
+from gooddata_api_client.models.assignee_identifier import AssigneeIdentifier

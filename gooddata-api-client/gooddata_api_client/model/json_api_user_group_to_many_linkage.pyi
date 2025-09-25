@@ -37,7 +37,7 @@ class JsonApiUserGroupToManyLinkage(
 
 
     class MetaOapg:
-        
+
         @staticmethod
         def items() -> typing.Type['JsonApiUserGroupLinkage']:
             return JsonApiUserGroupLinkage
@@ -56,4 +56,4 @@ class JsonApiUserGroupToManyLinkage(
     def __getitem__(self, i: int) -> 'JsonApiUserGroupLinkage':
         return super().__getitem__(i)
 
-from gooddata_api_client.model.json_api_user_group_linkage import JsonApiUserGroupLinkage
+from gooddata_api_client.models.json_api_user_group_linkage import JsonApiUserGroupLinkage

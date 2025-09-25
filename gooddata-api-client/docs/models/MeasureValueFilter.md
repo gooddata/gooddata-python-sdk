@@ -1,4 +1,4 @@
-# gooddata_api_client.model.measure_value_filter.MeasureValueFilter
+# gooddata_api_client.models.measure_value_filter.MeasureValueFilter
 
 Abstract filter definition type filtering by the value of the metric.
 
@@ -15,4 +15,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [RangeMeasureValueFilter](RangeMeasureValueFilter.md) | [**RangeMeasureValueFilter**](RangeMeasureValueFilter.md) | [**RangeMeasureValueFilter**](RangeMeasureValueFilter.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

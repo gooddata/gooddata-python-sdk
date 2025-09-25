@@ -1,4 +1,4 @@
-# gooddata_api_client.model.execution_result_grand_total.ExecutionResultGrandTotal
+# gooddata_api_client.models.execution_result_grand_total.ExecutionResultGrandTotal
 
 Contains the data of grand totals with the same dimensions.
 
@@ -65,4 +65,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 items | str,  | str,  | Dimensions of the grand totals. | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

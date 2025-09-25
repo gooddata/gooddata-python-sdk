@@ -20,8 +20,8 @@ Generate logical data model (LDM) from physical data model (PDM) stored in data 
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import generate_logical_data_model_api
-from gooddata_api_client.model.declarative_model import DeclarativeModel
-from gooddata_api_client.model.generate_ldm_request import GenerateLdmRequest
+from gooddata_api_client.models.declarative_model import DeclarativeModel
+from gooddata_api_client.models.generate_ldm_request import GenerateLdmRequest
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -125,4 +125,3 @@ Type | Description  | Notes
 No authorization required
 
 [[Back to top]](#__pageTop) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
-

@@ -35,7 +35,7 @@ class JsonApiAttributeOutIncludes(
 
 
     class MetaOapg:
-        
+
         @classmethod
         @functools.lru_cache()
         def one_of(cls):
@@ -65,5 +65,5 @@ class JsonApiAttributeOutIncludes(
             **kwargs,
         )
 
-from gooddata_api_client.model.json_api_dataset_out_with_links import JsonApiDatasetOutWithLinks
-from gooddata_api_client.model.json_api_label_out_with_links import JsonApiLabelOutWithLinks
+from gooddata_api_client.models.json_api_dataset_out_with_links import JsonApiDatasetOutWithLinks
+from gooddata_api_client.models.json_api_label_out_with_links import JsonApiLabelOutWithLinks

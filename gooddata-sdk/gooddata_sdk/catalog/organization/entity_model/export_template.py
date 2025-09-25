@@ -5,8 +5,8 @@ import builtins
 from typing import Optional
 
 from attrs import define
-from gooddata_api_client.model.json_api_export_template_in_attributes import JsonApiExportTemplateInAttributes
-from gooddata_api_client.model.json_api_export_template_post_optional_id import JsonApiExportTemplatePostOptionalId
+from gooddata_api_client.models.json_api_export_template_in_attributes import JsonApiExportTemplateInAttributes
+from gooddata_api_client.models.json_api_export_template_post_optional_id import JsonApiExportTemplatePostOptionalId
 
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.catalog.organization.common.dashboard_slides_template import CatalogDashboardSlidesTemplate

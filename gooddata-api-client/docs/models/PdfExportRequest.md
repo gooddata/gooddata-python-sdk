@@ -1,4 +1,4 @@
-# gooddata_api_client.model.pdf_export_request.PdfExportRequest
+# gooddata_api_client.models.pdf_export_request.PdfExportRequest
 
 Export request object describing the export properties and metadata for pdf exports.
 
@@ -25,4 +25,3 @@ Input Type | Accessed Type | Description | Notes
 dict, frozendict.frozendict,  | frozendict.frozendict,  | Custom setting content in JSON format. | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

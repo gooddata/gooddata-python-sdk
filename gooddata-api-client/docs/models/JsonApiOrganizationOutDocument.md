@@ -1,4 +1,4 @@
-# gooddata_api_client.model.json_api_organization_out_document.JsonApiOrganizationOutDocument
+# gooddata_api_client.models.json_api_organization_out_document.JsonApiOrganizationOutDocument
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes
@@ -28,4 +28,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**JsonApiOrganizationOutIncludes**](JsonApiOrganizationOutIncludes.md) | [**JsonApiOrganizationOutIncludes**](JsonApiOrganizationOutIncludes.md) | [**JsonApiOrganizationOutIncludes**](JsonApiOrganizationOutIncludes.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

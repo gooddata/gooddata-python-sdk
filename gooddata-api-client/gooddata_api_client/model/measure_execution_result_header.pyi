@@ -86,4 +86,4 @@ class MeasureExecutionResultHeader(
             **kwargs,
         )
 
-from gooddata_api_client.model.measure_result_header import MeasureResultHeader
+from gooddata_api_client.models.measure_result_header import MeasureResultHeader

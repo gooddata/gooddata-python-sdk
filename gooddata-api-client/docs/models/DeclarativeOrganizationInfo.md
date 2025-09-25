@@ -1,4 +1,4 @@
-# gooddata_api_client.model.declarative_organization_info.DeclarativeOrganizationInfo
+# gooddata_api_client.models.declarative_organization_info.DeclarativeOrganizationInfo
 
 Information available about an organization.
 
@@ -94,4 +94,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**DeclarativeTheme**](DeclarativeTheme.md) | [**DeclarativeTheme**](DeclarativeTheme.md) | [**DeclarativeTheme**](DeclarativeTheme.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

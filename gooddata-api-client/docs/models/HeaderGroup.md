@@ -1,4 +1,4 @@
-# gooddata_api_client.model.header_group.HeaderGroup
+# gooddata_api_client.models.header_group.HeaderGroup
 
 Contains the information specific for a group of headers. These groups correlate to attributes and metric groups.
 
@@ -28,4 +28,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**ExecutionResultHeader**](ExecutionResultHeader.md) | [**ExecutionResultHeader**](ExecutionResultHeader.md) | [**ExecutionResultHeader**](ExecutionResultHeader.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

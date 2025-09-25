@@ -40,21 +40,21 @@ class AfmValidObjectsResponse(
         required = {
             "items",
         }
-        
+
         class properties:
-            
-            
+
+
             class items(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['RestApiIdentifier']:
                         return RestApiIdentifier
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['RestApiIdentifier'], typing.List['RestApiIdentifier']],
@@ -65,35 +65,35 @@ class AfmValidObjectsResponse(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'RestApiIdentifier':
                     return super().__getitem__(i)
             __annotations__ = {
                 "items": items,
             }
-    
+
     items: MetaOapg.properties.items
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["items"]) -> MetaOapg.properties.items: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["items", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["items"]) -> MetaOapg.properties.items: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["items", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -110,4 +110,4 @@ class AfmValidObjectsResponse(
             **kwargs,
         )
 
-from gooddata_api_client.model.rest_api_identifier import RestApiIdentifier
+from gooddata_api_client.models.rest_api_identifier import RestApiIdentifier

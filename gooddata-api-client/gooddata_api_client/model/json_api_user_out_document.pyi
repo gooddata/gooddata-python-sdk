@@ -38,25 +38,25 @@ class JsonApiUserOutDocument(
         required = {
             "data",
         }
-        
+
         class properties:
-        
+
             @staticmethod
             def data() -> typing.Type['JsonApiUserOut']:
                 return JsonApiUserOut
-            
-            
+
+
             class included(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['JsonApiUserGroupOutWithLinks']:
                         return JsonApiUserGroupOutWithLinks
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['JsonApiUserGroupOutWithLinks'], typing.List['JsonApiUserGroupOutWithLinks']],
@@ -67,10 +67,10 @@ class JsonApiUserOutDocument(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'JsonApiUserGroupOutWithLinks':
                     return super().__getitem__(i)
-        
+
             @staticmethod
             def links() -> typing.Type['ObjectLinks']:
                 return ObjectLinks
@@ -79,41 +79,41 @@ class JsonApiUserOutDocument(
                 "included": included,
                 "links": links,
             }
-    
+
     data: 'JsonApiUserOut'
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["data"]) -> 'JsonApiUserOut': ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["included"]) -> MetaOapg.properties.included: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["links"]) -> 'ObjectLinks': ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["data", "included", "links", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["data"]) -> 'JsonApiUserOut': ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["included"]) -> typing.Union[MetaOapg.properties.included, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["links"]) -> typing.Union['ObjectLinks', schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["data", "included", "links", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -134,6 +134,6 @@ class JsonApiUserOutDocument(
             **kwargs,
         )
 
-from gooddata_api_client.model.json_api_user_group_out_with_links import JsonApiUserGroupOutWithLinks
-from gooddata_api_client.model.json_api_user_out import JsonApiUserOut
-from gooddata_api_client.model.object_links import ObjectLinks
+from gooddata_api_client.models.json_api_user_group_out_with_links import JsonApiUserGroupOutWithLinks
+from gooddata_api_client.models.json_api_user_out import JsonApiUserOut
+from gooddata_api_client.models.object_links import ObjectLinks

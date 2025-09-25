@@ -37,36 +37,36 @@ class DeclarativeAnalytics(
 
 
     class MetaOapg:
-        
+
         class properties:
-        
+
             @staticmethod
             def analytics() -> typing.Type['DeclarativeAnalyticsLayer']:
                 return DeclarativeAnalyticsLayer
             __annotations__ = {
                 "analytics": analytics,
             }
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["analytics"]) -> 'DeclarativeAnalyticsLayer': ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["analytics", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["analytics"]) -> typing.Union['DeclarativeAnalyticsLayer', schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["analytics", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -83,4 +83,4 @@ class DeclarativeAnalytics(
             **kwargs,
         )
 
-from gooddata_api_client.model.declarative_analytics_layer import DeclarativeAnalyticsLayer
+from gooddata_api_client.models.declarative_analytics_layer import DeclarativeAnalyticsLayer

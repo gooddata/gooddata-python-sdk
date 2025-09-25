@@ -37,21 +37,21 @@ class PdmLdmRequest(
 
 
     class MetaOapg:
-        
+
         class properties:
-            
-            
+
+
             class sqls(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['PdmSql']:
                         return PdmSql
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['PdmSql'], typing.List['PdmSql']],
@@ -62,33 +62,33 @@ class PdmLdmRequest(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'PdmSql':
                     return super().__getitem__(i)
             __annotations__ = {
                 "sqls": sqls,
             }
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["sqls"]) -> MetaOapg.properties.sqls: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["sqls", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["sqls"]) -> typing.Union[MetaOapg.properties.sqls, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["sqls", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -105,4 +105,4 @@ class PdmLdmRequest(
             **kwargs,
         )
 
-from gooddata_api_client.model.pdm_sql import PdmSql
+from gooddata_api_client.models.pdm_sql import PdmSql

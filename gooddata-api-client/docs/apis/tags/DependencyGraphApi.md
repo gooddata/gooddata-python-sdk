@@ -21,7 +21,7 @@ Computes the dependent entities graph
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import dependency_graph_api
-from gooddata_api_client.model.dependent_entities_response import DependentEntitiesResponse
+from gooddata_api_client.models.dependent_entities_response import DependentEntitiesResponse
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -110,8 +110,8 @@ Computes the dependent entities graph from given entry points
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import dependency_graph_api
-from gooddata_api_client.model.dependent_entities_request import DependentEntitiesRequest
-from gooddata_api_client.model.dependent_entities_response import DependentEntitiesResponse
+from gooddata_api_client.models.dependent_entities_request import DependentEntitiesRequest
+from gooddata_api_client.models.dependent_entities_response import DependentEntitiesResponse
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -205,4 +205,3 @@ Type | Description  | Notes
 No authorization required
 
 [[Back to top]](#__pageTop) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
-

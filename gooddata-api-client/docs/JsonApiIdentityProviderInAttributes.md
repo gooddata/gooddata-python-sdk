@@ -2,21 +2,38 @@
 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**custom_claim_mapping** | **{str: (str,)}** | Map of custom claim overrides. To be used when your Idp does not provide default claims (sub, email, name, given_name, family_name). Define the key pair for the claim you wish to override, where the key is the default name of the attribute and the value is your custom name for the given attribute. | [optional] 
-**identifiers** | **[str]** | List of identifiers for this IdP, where an identifier is a domain name. Users with email addresses belonging to these domains will be authenticated by this IdP. | [optional] 
+**custom_claim_mapping** | **Dict[str, str]** | Map of custom claim overrides. To be used when your Idp does not provide default claims (sub, email, name, given_name, family_name). Define the key pair for the claim you wish to override, where the key is the default name of the attribute and the value is your custom name for the given attribute. | [optional] 
+**identifiers** | **List[str]** | List of identifiers for this IdP, where an identifier is a domain name. Users with email addresses belonging to these domains will be authenticated by this IdP. | [optional] 
 **idp_type** | **str** | Type of IdP for management purposes. MANAGED_IDP represents a GoodData managed IdP used in single OIDC setup, which is protected from altering/deletion. FIM_IDP represents a GoodData managed IdP used in federated identity management setup, which is protected from altering/deletion. DEX_IDP represents internal Dex IdP which is protected from altering/deletion. CUSTOM_IDP represents customer&#39;s own IdP, protected from deletion if currently used by org for authentication, deletable otherwise. | [optional] 
 **oauth_client_id** | **str** | The OAuth client id of your OIDC provider. This field is mandatory for OIDC IdP. | [optional] 
 **oauth_client_secret** | **str** | The OAuth client secret of your OIDC provider. This field is mandatory for OIDC IdP. | [optional] 
-**oauth_custom_auth_attributes** | **{str: (str,)}** | Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute. | [optional] 
-**oauth_custom_scopes** | **[str], none_type** | List of additional OAuth scopes which may be required by other providers (e.g. Snowflake) | [optional] 
+**oauth_custom_auth_attributes** | **Dict[str, str]** | Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute. | [optional] 
+**oauth_custom_scopes** | **List[str]** | List of additional OAuth scopes which may be required by other providers (e.g. Snowflake) | [optional] 
 **oauth_issuer_id** | **str** | Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider. | [optional] 
 **oauth_issuer_location** | **str** | The location of your OIDC provider. This field is mandatory for OIDC IdP. | [optional] 
 **oauth_subject_id_claim** | **str** | Any string identifying the claim in ID token, that should be used for user identification. The default value is &#39;sub&#39;. | [optional] 
 **saml_metadata** | **str** | Base64 encoded xml document with SAML metadata. This document is issued by your SAML provider. It includes the issuer&#39;s name, expiration information, and keys that can be used to validate the response from the identity provider. This field is mandatory for SAML IdP. | [optional] 
-**any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 
+## Example
+
+```python
+from gooddata_api_client.models.json_api_identity_provider_in_attributes import JsonApiIdentityProviderInAttributes
+
+# TODO update the JSON string below
+json = "{}"
+# create an instance of JsonApiIdentityProviderInAttributes from a JSON string
+json_api_identity_provider_in_attributes_instance = JsonApiIdentityProviderInAttributes.from_json(json)
+# print the JSON string representation of the object
+print(JsonApiIdentityProviderInAttributes.to_json())
+
+# convert the object into a dict
+json_api_identity_provider_in_attributes_dict = json_api_identity_provider_in_attributes_instance.to_dict()
+# create an instance of JsonApiIdentityProviderInAttributes from a dict
+json_api_identity_provider_in_attributes_from_dict = JsonApiIdentityProviderInAttributes.from_dict(json_api_identity_provider_in_attributes_dict)
+```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
 

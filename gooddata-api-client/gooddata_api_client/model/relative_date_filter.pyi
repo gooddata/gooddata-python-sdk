@@ -40,15 +40,15 @@ class RelativeDateFilter(
         required = {
             "relativeDateFilter",
         }
-        
+
         class properties:
-            
-            
+
+
             class relativeDateFilter(
                 schemas.DictSchema
             ):
-            
-            
+
+
                 class MetaOapg:
                     required = {
                         "granularity",
@@ -56,77 +56,77 @@ class RelativeDateFilter(
                         "to",
                         "dataset",
                     }
-                    
+
                     class properties:
                         applyOnResult = schemas.BoolSchema
-                    
+
                         @staticmethod
                         def dataset() -> typing.Type['AfmObjectIdentifierDataset']:
                             return AfmObjectIdentifierDataset
                         _from = schemas.Int32Schema
-                        
-                        
+
+
                         class granularity(
                             schemas.EnumBase,
                             schemas.StrSchema
                         ):
-                            
+
                             @schemas.classproperty
                             def MINUTE(cls):
                                 return cls("MINUTE")
-                            
+
                             @schemas.classproperty
                             def HOUR(cls):
                                 return cls("HOUR")
-                            
+
                             @schemas.classproperty
                             def DAY(cls):
                                 return cls("DAY")
-                            
+
                             @schemas.classproperty
                             def WEEK(cls):
                                 return cls("WEEK")
-                            
+
                             @schemas.classproperty
                             def MONTH(cls):
                                 return cls("MONTH")
-                            
+
                             @schemas.classproperty
                             def QUARTER(cls):
                                 return cls("QUARTER")
-                            
+
                             @schemas.classproperty
                             def YEAR(cls):
                                 return cls("YEAR")
-                            
+
                             @schemas.classproperty
                             def MINUTE_OF_HOUR(cls):
                                 return cls("MINUTE_OF_HOUR")
-                            
+
                             @schemas.classproperty
                             def HOUR_OF_DAY(cls):
                                 return cls("HOUR_OF_DAY")
-                            
+
                             @schemas.classproperty
                             def DAY_OF_WEEK(cls):
                                 return cls("DAY_OF_WEEK")
-                            
+
                             @schemas.classproperty
                             def DAY_OF_MONTH(cls):
                                 return cls("DAY_OF_MONTH")
-                            
+
                             @schemas.classproperty
                             def DAY_OF_YEAR(cls):
                                 return cls("DAY_OF_YEAR")
-                            
+
                             @schemas.classproperty
                             def WEEK_OF_YEAR(cls):
                                 return cls("WEEK_OF_YEAR")
-                            
+
                             @schemas.classproperty
                             def MONTH_OF_YEAR(cls):
                                 return cls("MONTH_OF_YEAR")
-                            
+
                             @schemas.classproperty
                             def QUARTER_OF_YEAR(cls):
                                 return cls("QUARTER_OF_YEAR")
@@ -138,56 +138,56 @@ class RelativeDateFilter(
                             "granularity": granularity,
                             "to": to,
                         }
-                
+
                 granularity: MetaOapg.properties.granularity
                 to: MetaOapg.properties.to
                 dataset: 'AfmObjectIdentifierDataset'
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["applyOnResult"]) -> MetaOapg.properties.applyOnResult: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["dataset"]) -> 'AfmObjectIdentifierDataset': ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["from"]) -> MetaOapg.properties._from: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["granularity"]) -> MetaOapg.properties.granularity: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["to"]) -> MetaOapg.properties.to: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-                
+
                 def __getitem__(self, name: typing.Union[typing_extensions.Literal["applyOnResult", "dataset", "from", "granularity", "to", ], str]):
                     # dict_instance[name] accessor
                     return super().__getitem__(name)
-                
-                
+
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["applyOnResult"]) -> typing.Union[MetaOapg.properties.applyOnResult, schemas.Unset]: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["dataset"]) -> 'AfmObjectIdentifierDataset': ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["from"]) -> MetaOapg.properties._from: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["granularity"]) -> MetaOapg.properties.granularity: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["to"]) -> MetaOapg.properties.to: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-                
+
                 def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["applyOnResult", "dataset", "from", "granularity", "to", ], str]):
                     return super().get_item_oapg(name)
-                
-            
+
+
                 def __new__(
                     cls,
                     *_args: typing.Union[dict, frozendict.frozendict, ],
@@ -211,29 +211,29 @@ class RelativeDateFilter(
             __annotations__ = {
                 "relativeDateFilter": relativeDateFilter,
             }
-    
+
     relativeDateFilter: MetaOapg.properties.relativeDateFilter
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["relativeDateFilter"]) -> MetaOapg.properties.relativeDateFilter: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["relativeDateFilter", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["relativeDateFilter"]) -> MetaOapg.properties.relativeDateFilter: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["relativeDateFilter", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -250,4 +250,4 @@ class RelativeDateFilter(
             **kwargs,
         )
 
-from gooddata_api_client.model.afm_object_identifier_dataset import AfmObjectIdentifierDataset
+from gooddata_api_client.models.afm_object_identifier_dataset import AfmObjectIdentifierDataset

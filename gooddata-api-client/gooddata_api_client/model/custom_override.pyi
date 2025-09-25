@@ -37,28 +37,28 @@ class CustomOverride(
 
 
     class MetaOapg:
-        
+
         class properties:
-            
-            
+
+
             class labels(
                 schemas.DictSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def additional_properties() -> typing.Type['CustomLabel']:
                         return CustomLabel
-                
+
                 def __getitem__(self, name: typing.Union[str, ]) -> 'CustomLabel':
                     # dict_instance[name] accessor
                     return super().__getitem__(name)
-                
+
                 def get_item_oapg(self, name: typing.Union[str, ]) -> 'CustomLabel':
                     return super().get_item_oapg(name)
-            
+
                 def __new__(
                     cls,
                     *_args: typing.Union[dict, frozendict.frozendict, ],
@@ -71,26 +71,26 @@ class CustomOverride(
                         _configuration=_configuration,
                         **kwargs,
                     )
-            
-            
+
+
             class metrics(
                 schemas.DictSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def additional_properties() -> typing.Type['CustomMetric']:
                         return CustomMetric
-                
+
                 def __getitem__(self, name: typing.Union[str, ]) -> 'CustomMetric':
                     # dict_instance[name] accessor
                     return super().__getitem__(name)
-                
+
                 def get_item_oapg(self, name: typing.Union[str, ]) -> 'CustomMetric':
                     return super().get_item_oapg(name)
-            
+
                 def __new__(
                     cls,
                     *_args: typing.Union[dict, frozendict.frozendict, ],
@@ -107,33 +107,33 @@ class CustomOverride(
                 "labels": labels,
                 "metrics": metrics,
             }
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["labels"]) -> MetaOapg.properties.labels: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["metrics"]) -> MetaOapg.properties.metrics: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["labels", "metrics", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["labels"]) -> typing.Union[MetaOapg.properties.labels, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["metrics"]) -> typing.Union[MetaOapg.properties.metrics, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["labels", "metrics", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -152,5 +152,5 @@ class CustomOverride(
             **kwargs,
         )
 
-from gooddata_api_client.model.custom_label import CustomLabel
-from gooddata_api_client.model.custom_metric import CustomMetric
+from gooddata_api_client.models.custom_label import CustomLabel
+from gooddata_api_client.models.custom_metric import CustomMetric

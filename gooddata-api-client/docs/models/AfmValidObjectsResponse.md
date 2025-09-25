@@ -1,4 +1,4 @@
-# gooddata_api_client.model.afm_valid_objects_response.AfmValidObjectsResponse
+# gooddata_api_client.models.afm_valid_objects_response.AfmValidObjectsResponse
 
 All objects of specified types valid with respect to given AFM.
 
@@ -26,4 +26,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**RestApiIdentifier**](RestApiIdentifier.md) | [**RestApiIdentifier**](RestApiIdentifier.md) | [**RestApiIdentifier**](RestApiIdentifier.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

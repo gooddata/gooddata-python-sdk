@@ -1,4 +1,4 @@
-# gooddata_api_client.model.pdm_sql.PdmSql
+# gooddata_api_client.models.pdm_sql.PdmSql
 
 SQL dataset definition.
 
@@ -30,4 +30,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**SqlColumn**](SqlColumn.md) | [**SqlColumn**](SqlColumn.md) | [**SqlColumn**](SqlColumn.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

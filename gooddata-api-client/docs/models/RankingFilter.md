@@ -1,4 +1,4 @@
-# gooddata_api_client.model.ranking_filter.RankingFilter
+# gooddata_api_client.models.ranking_filter.RankingFilter
 
 Filter the result on top/bottom N values according to given metric(s).
 
@@ -42,4 +42,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**AfmIdentifier**](AfmIdentifier.md) | [**AfmIdentifier**](AfmIdentifier.md) | [**AfmIdentifier**](AfmIdentifier.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

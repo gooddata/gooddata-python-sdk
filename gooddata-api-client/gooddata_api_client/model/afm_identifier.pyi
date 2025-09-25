@@ -36,7 +36,7 @@ class AfmIdentifier(
 
 
     class MetaOapg:
-        
+
         @classmethod
         @functools.lru_cache()
         def one_of(cls):
@@ -66,5 +66,5 @@ class AfmIdentifier(
             **kwargs,
         )
 
-from gooddata_api_client.model.afm_local_identifier import AfmLocalIdentifier
-from gooddata_api_client.model.afm_object_identifier import AfmObjectIdentifier
+from gooddata_api_client.models.afm_local_identifier import AfmLocalIdentifier
+from gooddata_api_client.models.afm_object_identifier import AfmObjectIdentifier

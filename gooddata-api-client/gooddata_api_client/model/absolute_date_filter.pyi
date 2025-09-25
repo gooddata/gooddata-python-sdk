@@ -40,36 +40,36 @@ class AbsoluteDateFilter(
         required = {
             "absoluteDateFilter",
         }
-        
+
         class properties:
-            
-            
+
+
             class absoluteDateFilter(
                 schemas.DictSchema
             ):
-            
-            
+
+
                 class MetaOapg:
                     required = {
                         "from",
                         "to",
                         "dataset",
                     }
-                    
+
                     class properties:
                         applyOnResult = schemas.BoolSchema
-                    
+
                         @staticmethod
                         def dataset() -> typing.Type['AfmObjectIdentifierDataset']:
                             return AfmObjectIdentifierDataset
-                        
-                        
+
+
                         class _from(
                             schemas.StrSchema
                         ):
                             pass
-                        
-                        
+
+
                         class to(
                             schemas.StrSchema
                         ):
@@ -80,49 +80,49 @@ class AbsoluteDateFilter(
                             "from": _from,
                             "to": to,
                         }
-                
+
                 to: MetaOapg.properties.to
                 dataset: 'AfmObjectIdentifierDataset'
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["applyOnResult"]) -> MetaOapg.properties.applyOnResult: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["dataset"]) -> 'AfmObjectIdentifierDataset': ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["from"]) -> MetaOapg.properties._from: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["to"]) -> MetaOapg.properties.to: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-                
+
                 def __getitem__(self, name: typing.Union[typing_extensions.Literal["applyOnResult", "dataset", "from", "to", ], str]):
                     # dict_instance[name] accessor
                     return super().__getitem__(name)
-                
-                
+
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["applyOnResult"]) -> typing.Union[MetaOapg.properties.applyOnResult, schemas.Unset]: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["dataset"]) -> 'AfmObjectIdentifierDataset': ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["from"]) -> MetaOapg.properties._from: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["to"]) -> MetaOapg.properties.to: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-                
+
                 def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["applyOnResult", "dataset", "from", "to", ], str]):
                     return super().get_item_oapg(name)
-                
-            
+
+
                 def __new__(
                     cls,
                     *_args: typing.Union[dict, frozendict.frozendict, ],
@@ -144,29 +144,29 @@ class AbsoluteDateFilter(
             __annotations__ = {
                 "absoluteDateFilter": absoluteDateFilter,
             }
-    
+
     absoluteDateFilter: MetaOapg.properties.absoluteDateFilter
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["absoluteDateFilter"]) -> MetaOapg.properties.absoluteDateFilter: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["absoluteDateFilter", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["absoluteDateFilter"]) -> MetaOapg.properties.absoluteDateFilter: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["absoluteDateFilter", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -183,4 +183,4 @@ class AbsoluteDateFilter(
             **kwargs,
         )
 
-from gooddata_api_client.model.afm_object_identifier_dataset import AfmObjectIdentifierDataset
+from gooddata_api_client.models.afm_object_identifier_dataset import AfmObjectIdentifierDataset

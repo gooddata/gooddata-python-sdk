@@ -1,4 +1,4 @@
-# gooddata_api_client.model.json_api_data_source_out.JsonApiDataSourceOut
+# gooddata_api_client.models.json_api_data_source_out.JsonApiDataSourceOut
 
 JSON:API representation of dataSource entity.
 
@@ -129,4 +129,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 items | str,  | str,  |  | must be one of ["MANAGE", "USE", ] 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

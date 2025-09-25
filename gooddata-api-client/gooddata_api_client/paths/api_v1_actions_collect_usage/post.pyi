@@ -25,8 +25,8 @@ import frozendict  # noqa: F401
 
 from gooddata_api_client import schemas  # noqa: F401
 
-from gooddata_api_client.model.platform_usage_request import PlatformUsageRequest
-from gooddata_api_client.model.platform_usage import PlatformUsage
+from gooddata_api_client.models.platform_usage_request import PlatformUsageRequest
+from gooddata_api_client.models.platform_usage import PlatformUsage
 
 # body param
 SchemaForRequestBodyApplicationJson = PlatformUsageRequest
@@ -47,7 +47,7 @@ class SchemaFor200ResponseBodyApplicationJson(
 
 
     class MetaOapg:
-        
+
         @staticmethod
         def items() -> typing.Type['PlatformUsage']:
             return PlatformUsage
@@ -350,5 +350,3 @@ class ApiForpost(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
-
-

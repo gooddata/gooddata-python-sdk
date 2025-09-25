@@ -38,38 +38,38 @@ class JsonApiWorkspaceSettingPatchDocument(
         required = {
             "data",
         }
-        
+
         class properties:
-        
+
             @staticmethod
             def data() -> typing.Type['JsonApiWorkspaceSettingPatch']:
                 return JsonApiWorkspaceSettingPatch
             __annotations__ = {
                 "data": data,
             }
-    
+
     data: 'JsonApiWorkspaceSettingPatch'
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["data"]) -> 'JsonApiWorkspaceSettingPatch': ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["data", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["data"]) -> 'JsonApiWorkspaceSettingPatch': ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["data", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -86,4 +86,4 @@ class JsonApiWorkspaceSettingPatchDocument(
             **kwargs,
         )
 
-from gooddata_api_client.model.json_api_workspace_setting_patch import JsonApiWorkspaceSettingPatch
+from gooddata_api_client.models.json_api_workspace_setting_patch import JsonApiWorkspaceSettingPatch

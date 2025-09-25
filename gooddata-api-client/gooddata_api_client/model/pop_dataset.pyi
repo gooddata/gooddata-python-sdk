@@ -39,9 +39,9 @@ class PopDataset(
             "periodsAgo",
             "dataset",
         }
-        
+
         class properties:
-        
+
             @staticmethod
             def dataset() -> typing.Type['AfmObjectIdentifierDataset']:
                 return AfmObjectIdentifierDataset
@@ -50,36 +50,36 @@ class PopDataset(
                 "dataset": dataset,
                 "periodsAgo": periodsAgo,
             }
-    
+
     periodsAgo: MetaOapg.properties.periodsAgo
     dataset: 'AfmObjectIdentifierDataset'
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["dataset"]) -> 'AfmObjectIdentifierDataset': ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["periodsAgo"]) -> MetaOapg.properties.periodsAgo: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["dataset", "periodsAgo", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["dataset"]) -> 'AfmObjectIdentifierDataset': ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["periodsAgo"]) -> MetaOapg.properties.periodsAgo: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["dataset", "periodsAgo", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -98,4 +98,4 @@ class PopDataset(
             **kwargs,
         )
 
-from gooddata_api_client.model.afm_object_identifier_dataset import AfmObjectIdentifierDataset
+from gooddata_api_client.models.afm_object_identifier_dataset import AfmObjectIdentifierDataset

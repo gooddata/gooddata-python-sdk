@@ -25,8 +25,8 @@ Space of the shared interest
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspaces_entity_apis_api
-from gooddata_api_client.model.json_api_workspace_out_document import JsonApiWorkspaceOutDocument
-from gooddata_api_client.model.json_api_workspace_in_document import JsonApiWorkspaceInDocument
+from gooddata_api_client.models.json_api_workspace_out_document import JsonApiWorkspaceOutDocument
+from gooddata_api_client.models.json_api_workspace_in_document import JsonApiWorkspaceInDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -314,7 +314,7 @@ Space of the shared interest
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspaces_entity_apis_api
-from gooddata_api_client.model.json_api_workspace_out_list import JsonApiWorkspaceOutList
+from gooddata_api_client.models.json_api_workspace_out_list import JsonApiWorkspaceOutList
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -472,7 +472,7 @@ Space of the shared interest
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspaces_entity_apis_api
-from gooddata_api_client.model.json_api_workspace_out_document import JsonApiWorkspaceOutDocument
+from gooddata_api_client.models.json_api_workspace_out_document import JsonApiWorkspaceOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -631,8 +631,8 @@ Space of the shared interest
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspaces_entity_apis_api
-from gooddata_api_client.model.json_api_workspace_out_document import JsonApiWorkspaceOutDocument
-from gooddata_api_client.model.json_api_workspace_patch_document import JsonApiWorkspacePatchDocument
+from gooddata_api_client.models.json_api_workspace_out_document import JsonApiWorkspaceOutDocument
+from gooddata_api_client.models.json_api_workspace_patch_document import JsonApiWorkspacePatchDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -819,8 +819,8 @@ Space of the shared interest
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspaces_entity_apis_api
-from gooddata_api_client.model.json_api_workspace_out_document import JsonApiWorkspaceOutDocument
-from gooddata_api_client.model.json_api_workspace_in_document import JsonApiWorkspaceInDocument
+from gooddata_api_client.models.json_api_workspace_out_document import JsonApiWorkspaceOutDocument
+from gooddata_api_client.models.json_api_workspace_in_document import JsonApiWorkspaceInDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -993,4 +993,3 @@ Type | Description  | Notes
 No authorization required
 
 [[Back to top]](#__pageTop) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
-

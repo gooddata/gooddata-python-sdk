@@ -3,7 +3,7 @@ import builtins
 from typing import Optional
 
 from attrs import define
-from gooddata_api_client.model.declarative_export_template import DeclarativeExportTemplate
+from gooddata_api_client.models.declarative_export_template import DeclarativeExportTemplate
 
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.catalog.organization.common.dashboard_slides_template import CatalogDashboardSlidesTemplate

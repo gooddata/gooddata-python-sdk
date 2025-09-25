@@ -25,8 +25,8 @@ import frozendict  # noqa: F401
 
 from gooddata_api_client import schemas  # noqa: F401
 
-from gooddata_api_client.model.json_api_workspace_out_document import JsonApiWorkspaceOutDocument
-from gooddata_api_client.model.json_api_workspace_patch_document import JsonApiWorkspacePatchDocument
+from gooddata_api_client.models.json_api_workspace_out_document import JsonApiWorkspaceOutDocument
+from gooddata_api_client.models.json_api_workspace_patch_document import JsonApiWorkspacePatchDocument
 
 from . import path
 
@@ -40,29 +40,29 @@ class IncludeSchema(
 
 
     class MetaOapg:
-        
-        
+
+
         class items(
             schemas.EnumBase,
             schemas.StrSchema
         ):
-        
-        
+
+
             class MetaOapg:
                 enum_value_to_name = {
                     "workspaces": "WORKSPACES",
                     "parent": "PARENT",
                     "ALL": "ALL",
                 }
-            
+
             @schemas.classproperty
             def WORKSPACES(cls):
                 return cls("workspaces")
-            
+
             @schemas.classproperty
             def PARENT(cls):
                 return cls("parent")
-            
+
             @schemas.classproperty
             def ALL(cls):
                 return cls("ALL")
@@ -509,5 +509,3 @@ class ApiForpatch(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
-
-

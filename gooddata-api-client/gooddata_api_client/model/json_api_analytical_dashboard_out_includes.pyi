@@ -35,7 +35,7 @@ class JsonApiAnalyticalDashboardOutIncludes(
 
 
     class MetaOapg:
-        
+
         @classmethod
         @functools.lru_cache()
         def one_of(cls):
@@ -70,10 +70,10 @@ class JsonApiAnalyticalDashboardOutIncludes(
             **kwargs,
         )
 
-from gooddata_api_client.model.json_api_analytical_dashboard_out_with_links import JsonApiAnalyticalDashboardOutWithLinks
-from gooddata_api_client.model.json_api_dashboard_plugin_out_with_links import JsonApiDashboardPluginOutWithLinks
-from gooddata_api_client.model.json_api_dataset_out_with_links import JsonApiDatasetOutWithLinks
-from gooddata_api_client.model.json_api_filter_context_out_with_links import JsonApiFilterContextOutWithLinks
-from gooddata_api_client.model.json_api_label_out_with_links import JsonApiLabelOutWithLinks
-from gooddata_api_client.model.json_api_metric_out_with_links import JsonApiMetricOutWithLinks
-from gooddata_api_client.model.json_api_visualization_object_out_with_links import JsonApiVisualizationObjectOutWithLinks
+from gooddata_api_client.models.json_api_analytical_dashboard_out_with_links import JsonApiAnalyticalDashboardOutWithLinks
+from gooddata_api_client.models.json_api_dashboard_plugin_out_with_links import JsonApiDashboardPluginOutWithLinks
+from gooddata_api_client.models.json_api_dataset_out_with_links import JsonApiDatasetOutWithLinks
+from gooddata_api_client.models.json_api_filter_context_out_with_links import JsonApiFilterContextOutWithLinks
+from gooddata_api_client.models.json_api_label_out_with_links import JsonApiLabelOutWithLinks
+from gooddata_api_client.models.json_api_metric_out_with_links import JsonApiMetricOutWithLinks
+from gooddata_api_client.models.json_api_visualization_object_out_with_links import JsonApiVisualizationObjectOutWithLinks

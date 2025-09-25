@@ -25,7 +25,7 @@ import frozendict  # noqa: F401
 
 from gooddata_api_client import schemas  # noqa: F401
 
-from gooddata_api_client.model.identifier_duplications import IdentifierDuplications
+from gooddata_api_client.models.identifier_duplications import IdentifierDuplications
 
 # Path params
 WorkspaceIdSchema = schemas.StrSchema
@@ -61,7 +61,7 @@ class SchemaFor200ResponseBodyApplicationJson(
 
 
     class MetaOapg:
-        
+
         @staticmethod
         def items() -> typing.Type['IdentifierDuplications']:
             return IdentifierDuplications
@@ -309,5 +309,3 @@ class ApiForget(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
-
-

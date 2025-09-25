@@ -37,7 +37,7 @@ class JsonApiFactToManyLinkage(
 
 
     class MetaOapg:
-        
+
         @staticmethod
         def items() -> typing.Type['JsonApiFactLinkage']:
             return JsonApiFactLinkage
@@ -56,4 +56,4 @@ class JsonApiFactToManyLinkage(
     def __getitem__(self, i: int) -> 'JsonApiFactLinkage':
         return super().__getitem__(i)
 
-from gooddata_api_client.model.json_api_fact_linkage import JsonApiFactLinkage
+from gooddata_api_client.models.json_api_fact_linkage import JsonApiFactLinkage

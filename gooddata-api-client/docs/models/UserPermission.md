@@ -1,4 +1,4 @@
-# gooddata_api_client.model.user_permission.UserPermission
+# gooddata_api_client.models.user_permission.UserPermission
 
 List of users
 
@@ -31,4 +31,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**GrantedPermission**](GrantedPermission.md) | [**GrantedPermission**](GrantedPermission.md) | [**GrantedPermission**](GrantedPermission.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

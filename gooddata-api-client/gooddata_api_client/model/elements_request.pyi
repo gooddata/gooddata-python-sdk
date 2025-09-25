@@ -38,26 +38,26 @@ class ElementsRequest(
         required = {
             "label",
         }
-        
+
         class properties:
-            
-            
+
+
             class label(
                 schemas.StrSchema
             ):
                 pass
             complementFilter = schemas.BoolSchema
             dataSamplingPercentage = schemas.Float32Schema
-            
-            
+
+
             class exactFilter(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
                     items = schemas.StrSchema
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, str, ]], typing.List[typing.Union[MetaOapg.items, str, ]]],
@@ -68,26 +68,26 @@ class ElementsRequest(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
             excludePrimaryLabel = schemas.BoolSchema
-        
+
             @staticmethod
             def filterBy() -> typing.Type['FilterBy']:
                 return FilterBy
             patternFilter = schemas.StrSchema
-            
-            
+
+
             class sortOrder(
                 schemas.EnumBase,
                 schemas.StrSchema
             ):
-                
+
                 @schemas.classproperty
                 def ASC(cls):
                     return cls("ASC")
-                
+
                 @schemas.classproperty
                 def DESC(cls):
                     return cls("DESC")
@@ -101,71 +101,71 @@ class ElementsRequest(
                 "patternFilter": patternFilter,
                 "sortOrder": sortOrder,
             }
-    
+
     label: MetaOapg.properties.label
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["label"]) -> MetaOapg.properties.label: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["complementFilter"]) -> MetaOapg.properties.complementFilter: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["dataSamplingPercentage"]) -> MetaOapg.properties.dataSamplingPercentage: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["exactFilter"]) -> MetaOapg.properties.exactFilter: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["excludePrimaryLabel"]) -> MetaOapg.properties.excludePrimaryLabel: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["filterBy"]) -> 'FilterBy': ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["patternFilter"]) -> MetaOapg.properties.patternFilter: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["sortOrder"]) -> MetaOapg.properties.sortOrder: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["label", "complementFilter", "dataSamplingPercentage", "exactFilter", "excludePrimaryLabel", "filterBy", "patternFilter", "sortOrder", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["label"]) -> MetaOapg.properties.label: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["complementFilter"]) -> typing.Union[MetaOapg.properties.complementFilter, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["dataSamplingPercentage"]) -> typing.Union[MetaOapg.properties.dataSamplingPercentage, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["exactFilter"]) -> typing.Union[MetaOapg.properties.exactFilter, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["excludePrimaryLabel"]) -> typing.Union[MetaOapg.properties.excludePrimaryLabel, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["filterBy"]) -> typing.Union['FilterBy', schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["patternFilter"]) -> typing.Union[MetaOapg.properties.patternFilter, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["sortOrder"]) -> typing.Union[MetaOapg.properties.sortOrder, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["label", "complementFilter", "dataSamplingPercentage", "exactFilter", "excludePrimaryLabel", "filterBy", "patternFilter", "sortOrder", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -196,4 +196,4 @@ class ElementsRequest(
             **kwargs,
         )
 
-from gooddata_api_client.model.filter_by import FilterBy
+from gooddata_api_client.models.filter_by import FilterBy

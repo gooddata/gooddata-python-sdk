@@ -38,7 +38,7 @@ class FilterDefinition(
 
 
     class MetaOapg:
-        
+
         @classmethod
         @functools.lru_cache()
         def one_of(cls):
@@ -74,11 +74,11 @@ class FilterDefinition(
             **kwargs,
         )
 
-from gooddata_api_client.model.absolute_date_filter import AbsoluteDateFilter
-from gooddata_api_client.model.comparison_measure_value_filter import ComparisonMeasureValueFilter
-from gooddata_api_client.model.inline_filter_definition import InlineFilterDefinition
-from gooddata_api_client.model.negative_attribute_filter import NegativeAttributeFilter
-from gooddata_api_client.model.positive_attribute_filter import PositiveAttributeFilter
-from gooddata_api_client.model.range_measure_value_filter import RangeMeasureValueFilter
-from gooddata_api_client.model.ranking_filter import RankingFilter
-from gooddata_api_client.model.relative_date_filter import RelativeDateFilter
+from gooddata_api_client.models.absolute_date_filter import AbsoluteDateFilter
+from gooddata_api_client.models.comparison_measure_value_filter import ComparisonMeasureValueFilter
+from gooddata_api_client.models.inline_filter_definition import InlineFilterDefinition
+from gooddata_api_client.models.negative_attribute_filter import NegativeAttributeFilter
+from gooddata_api_client.models.positive_attribute_filter import PositiveAttributeFilter
+from gooddata_api_client.models.range_measure_value_filter import RangeMeasureValueFilter
+from gooddata_api_client.models.ranking_filter import RankingFilter
+from gooddata_api_client.models.relative_date_filter import RelativeDateFilter

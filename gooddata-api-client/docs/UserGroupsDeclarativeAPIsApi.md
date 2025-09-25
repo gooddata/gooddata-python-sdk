@@ -21,11 +21,11 @@ Retrieve all user-groups eventually with parent group.
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import user_groups_declarative_apis_api
-from gooddata_api_client.model.declarative_user_groups import DeclarativeUserGroups
+from gooddata_api_client.models.declarative_user_groups import DeclarativeUserGroups
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -34,21 +34,23 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = user_groups_declarative_apis_api.UserGroupsDeclarativeAPIsApi(api_client)
+    api_instance = gooddata_api_client.UserGroupsDeclarativeAPIsApi(api_client)
 
-    # example, this endpoint has no required or optional parameters
     try:
         # Get all user groups
         api_response = api_instance.get_user_groups_layout()
+        print("The response of UserGroupsDeclarativeAPIsApi->get_user_groups_layout:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling UserGroupsDeclarativeAPIsApi->get_user_groups_layout: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 This endpoint does not need any parameter.
 
 ### Return type
@@ -63,7 +65,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
-
 
 ### HTTP response details
 
@@ -84,11 +85,11 @@ Retrieve all users and user groups with theirs properties.
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import user_groups_declarative_apis_api
-from gooddata_api_client.model.declarative_users_user_groups import DeclarativeUsersUserGroups
+from gooddata_api_client.models.declarative_users_user_groups import DeclarativeUsersUserGroups
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -97,21 +98,23 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = user_groups_declarative_apis_api.UserGroupsDeclarativeAPIsApi(api_client)
+    api_instance = gooddata_api_client.UserGroupsDeclarativeAPIsApi(api_client)
 
-    # example, this endpoint has no required or optional parameters
     try:
         # Get all users and user groups
         api_response = api_instance.get_users_user_groups_layout()
+        print("The response of UserGroupsDeclarativeAPIsApi->get_users_user_groups_layout:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling UserGroupsDeclarativeAPIsApi->get_users_user_groups_layout: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 This endpoint does not need any parameter.
 
 ### Return type
@@ -126,7 +129,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
-
 
 ### HTTP response details
 
@@ -147,11 +149,11 @@ Define all user groups with their parents eventually.
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import user_groups_declarative_apis_api
-from gooddata_api_client.model.declarative_user_groups import DeclarativeUserGroups
+from gooddata_api_client.models.declarative_user_groups import DeclarativeUserGroups
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -160,47 +162,26 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = user_groups_declarative_apis_api.UserGroupsDeclarativeAPIsApi(api_client)
-    declarative_user_groups = DeclarativeUserGroups(
-        user_groups=[
-            DeclarativeUserGroup(
-                id="employees.all",
-                name="admins",
-                parents=[
-                    DeclarativeUserGroupIdentifier(
-                        id="group.admins",
-                        type="userGroup",
-                    ),
-                ],
-                permissions=[
-                    DeclarativeUserGroupPermission(
-                        assignee=AssigneeIdentifier(
-                            id="id_example",
-                            type="user",
-                        ),
-                        name="SEE",
-                    ),
-                ],
-            ),
-        ],
-    ) # DeclarativeUserGroups | 
+    api_instance = gooddata_api_client.UserGroupsDeclarativeAPIsApi(api_client)
+    declarative_user_groups = gooddata_api_client.DeclarativeUserGroups() # DeclarativeUserGroups | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Put all user groups
         api_instance.put_user_groups_layout(declarative_user_groups)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling UserGroupsDeclarativeAPIsApi->put_user_groups_layout: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **declarative_user_groups** | [**DeclarativeUserGroups**](DeclarativeUserGroups.md)|  |
+ **declarative_user_groups** | [**DeclarativeUserGroups**](DeclarativeUserGroups.md)|  | 
 
 ### Return type
 
@@ -214,7 +195,6 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: Not defined
-
 
 ### HTTP response details
 
@@ -235,11 +215,11 @@ Define all users and user groups with theirs properties.
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import user_groups_declarative_apis_api
-from gooddata_api_client.model.declarative_users_user_groups import DeclarativeUsersUserGroups
+from gooddata_api_client.models.declarative_users_user_groups import DeclarativeUsersUserGroups
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -248,78 +228,26 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = user_groups_declarative_apis_api.UserGroupsDeclarativeAPIsApi(api_client)
-    declarative_users_user_groups = DeclarativeUsersUserGroups(
-        user_groups=[
-            DeclarativeUserGroup(
-                id="employees.all",
-                name="admins",
-                parents=[
-                    DeclarativeUserGroupIdentifier(
-                        id="group.admins",
-                        type="userGroup",
-                    ),
-                ],
-                permissions=[
-                    DeclarativeUserGroupPermission(
-                        assignee=AssigneeIdentifier(
-                            id="id_example",
-                            type="user",
-                        ),
-                        name="SEE",
-                    ),
-                ],
-            ),
-        ],
-        users=[
-            DeclarativeUser(
-                auth_id="auth_id_example",
-                email="user@example.com",
-                firstname="John",
-                id="employee123",
-                lastname="Wick",
-                permissions=[
-                    DeclarativeUserPermission(
-                        assignee=AssigneeIdentifier(
-                            id="id_example",
-                            type="user",
-                        ),
-                        name="SEE",
-                    ),
-                ],
-                settings=[
-                    DeclarativeSetting(
-                        content=JsonNode(),
-                        id="/6bUUGjjNSwg0_bs",
-                        type="TIMEZONE",
-                    ),
-                ],
-                user_groups=[
-                    DeclarativeUserGroupIdentifier(
-                        id="group.admins",
-                        type="userGroup",
-                    ),
-                ],
-            ),
-        ],
-    ) # DeclarativeUsersUserGroups | 
+    api_instance = gooddata_api_client.UserGroupsDeclarativeAPIsApi(api_client)
+    declarative_users_user_groups = gooddata_api_client.DeclarativeUsersUserGroups() # DeclarativeUsersUserGroups | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Put all users and user groups
         api_instance.put_users_user_groups_layout(declarative_users_user_groups)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling UserGroupsDeclarativeAPIsApi->put_users_user_groups_layout: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **declarative_users_user_groups** | [**DeclarativeUsersUserGroups**](DeclarativeUsersUserGroups.md)|  |
+ **declarative_users_user_groups** | [**DeclarativeUsersUserGroups**](DeclarativeUsersUserGroups.md)|  | 
 
 ### Return type
 
@@ -333,7 +261,6 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: Not defined
-
 
 ### HTTP response details
 

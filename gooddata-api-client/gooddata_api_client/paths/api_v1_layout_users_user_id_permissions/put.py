@@ -25,7 +25,7 @@ import frozendict  # noqa: F401
 
 from gooddata_api_client import schemas  # noqa: F401
 
-from gooddata_api_client.model.declarative_user_permissions import DeclarativeUserPermissions
+from gooddata_api_client.models.declarative_user_permissions import DeclarativeUserPermissions
 
 from . import path
 
@@ -356,5 +356,3 @@ class ApiForput(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
-
-

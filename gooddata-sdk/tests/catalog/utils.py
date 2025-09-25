@@ -2,7 +2,7 @@
 import json
 from pathlib import Path
 
-from gooddata_api_client.model.declarative_workspaces import DeclarativeWorkspaces
+from gooddata_api_client.models.declarative_workspaces import DeclarativeWorkspaces
 from gooddata_sdk import GoodDataSdk
 
 _current_dir = Path(__file__).parent.absolute()

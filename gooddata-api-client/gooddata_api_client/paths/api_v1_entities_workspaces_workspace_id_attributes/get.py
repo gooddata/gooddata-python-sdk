@@ -25,7 +25,7 @@ import frozendict  # noqa: F401
 
 from gooddata_api_client import schemas  # noqa: F401
 
-from gooddata_api_client.model.json_api_attribute_out_list import JsonApiAttributeOutList
+from gooddata_api_client.models.json_api_attribute_out_list import JsonApiAttributeOutList
 
 from . import path
 
@@ -44,15 +44,15 @@ class OriginSchema(
             "PARENTS": "PARENTS",
             "NATIVE": "NATIVE",
         }
-    
+
     @schemas.classproperty
     def ALL(cls):
         return cls("ALL")
-    
+
     @schemas.classproperty
     def PARENTS(cls):
         return cls("PARENTS")
-    
+
     @schemas.classproperty
     def NATIVE(cls):
         return cls("NATIVE")
@@ -65,14 +65,14 @@ class IncludeSchema(
 
 
     class MetaOapg:
-        
-        
+
+
         class items(
             schemas.EnumBase,
             schemas.StrSchema
         ):
-        
-        
+
+
             class MetaOapg:
                 enum_value_to_name = {
                     "datasets": "DATASETS",
@@ -81,23 +81,23 @@ class IncludeSchema(
                     "defaultView": "DEFAULT_VIEW",
                     "ALL": "ALL",
                 }
-            
+
             @schemas.classproperty
             def DATASETS(cls):
                 return cls("datasets")
-            
+
             @schemas.classproperty
             def LABELS(cls):
                 return cls("labels")
-            
+
             @schemas.classproperty
             def DATASET(cls):
                 return cls("dataset")
-            
+
             @schemas.classproperty
             def DEFAULT_VIEW(cls):
                 return cls("defaultView")
-            
+
             @schemas.classproperty
             def ALL(cls):
                 return cls("ALL")
@@ -149,29 +149,29 @@ class MetaIncludeSchema(
 
     class MetaOapg:
         unique_items = True
-        
-        
+
+
         class items(
             schemas.EnumBase,
             schemas.StrSchema
         ):
-        
-        
+
+
             class MetaOapg:
                 enum_value_to_name = {
                     "origin": "ORIGIN",
                     "all": "ALL",
                     "ALL": "ALL",
                 }
-            
+
             @schemas.classproperty
             def ORIGIN(cls):
                 return cls("origin")
-            
+
             @schemas.classproperty
             def ALL(cls):
                 return cls("all")
-            
+
             @schemas.classproperty
             def ALL(cls):
                 return cls("ALL")
@@ -595,5 +595,3 @@ class ApiForget(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
-
-

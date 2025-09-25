@@ -1,4 +1,4 @@
-# gooddata_api_client.model.afm_valid_objects_query.AfmValidObjectsQuery
+# gooddata_api_client.models.afm_valid_objects_query.AfmValidObjectsQuery
 
 Entity holding AFM and list of object types whose validity should be computed.
 
@@ -27,4 +27,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 items | str,  | str,  |  | must be one of ["facts", "attributes", "measures", "UNRECOGNIZED", ] 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

@@ -39,21 +39,21 @@ class ResultDimension(
             "headers",
             "localIdentifier",
         }
-        
+
         class properties:
-            
-            
+
+
             class headers(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['ResultDimensionHeader']:
                         return ResultDimensionHeader
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['ResultDimensionHeader'], typing.List['ResultDimensionHeader']],
@@ -64,7 +64,7 @@ class ResultDimension(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'ResultDimensionHeader':
                     return super().__getitem__(i)
             localIdentifier = schemas.StrSchema
@@ -72,36 +72,36 @@ class ResultDimension(
                 "headers": headers,
                 "localIdentifier": localIdentifier,
             }
-    
+
     headers: MetaOapg.properties.headers
     localIdentifier: MetaOapg.properties.localIdentifier
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["headers"]) -> MetaOapg.properties.headers: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["localIdentifier"]) -> MetaOapg.properties.localIdentifier: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["headers", "localIdentifier", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["headers"]) -> MetaOapg.properties.headers: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["localIdentifier"]) -> MetaOapg.properties.localIdentifier: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["headers", "localIdentifier", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -120,4 +120,4 @@ class ResultDimension(
             **kwargs,
         )
 
-from gooddata_api_client.model.result_dimension_header import ResultDimensionHeader
+from gooddata_api_client.models.result_dimension_header import ResultDimensionHeader

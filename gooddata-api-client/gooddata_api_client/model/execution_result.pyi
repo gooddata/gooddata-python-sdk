@@ -43,18 +43,18 @@ class ExecutionResult(
             "paging",
             "grandTotals",
         }
-        
+
         class properties:
-            
-            
+
+
             class data(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
                     items = schemas.DictSchema
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, ]]],
@@ -65,22 +65,22 @@ class ExecutionResult(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
-            
-            
+
+
             class dimensionHeaders(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DimensionHeader']:
                         return DimensionHeader
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DimensionHeader'], typing.List['DimensionHeader']],
@@ -91,22 +91,22 @@ class ExecutionResult(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DimensionHeader':
                     return super().__getitem__(i)
-            
-            
+
+
             class grandTotals(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['ExecutionResultGrandTotal']:
                         return ExecutionResultGrandTotal
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['ExecutionResultGrandTotal'], typing.List['ExecutionResultGrandTotal']],
@@ -117,10 +117,10 @@ class ExecutionResult(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'ExecutionResultGrandTotal':
                     return super().__getitem__(i)
-        
+
             @staticmethod
             def paging() -> typing.Type['ExecutionResultPaging']:
                 return ExecutionResultPaging
@@ -130,50 +130,50 @@ class ExecutionResult(
                 "grandTotals": grandTotals,
                 "paging": paging,
             }
-    
+
     data: MetaOapg.properties.data
     dimensionHeaders: MetaOapg.properties.dimensionHeaders
     paging: 'ExecutionResultPaging'
     grandTotals: MetaOapg.properties.grandTotals
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["data"]) -> MetaOapg.properties.data: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["dimensionHeaders"]) -> MetaOapg.properties.dimensionHeaders: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["grandTotals"]) -> MetaOapg.properties.grandTotals: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["paging"]) -> 'ExecutionResultPaging': ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["data", "dimensionHeaders", "grandTotals", "paging", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["data"]) -> MetaOapg.properties.data: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["dimensionHeaders"]) -> MetaOapg.properties.dimensionHeaders: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["grandTotals"]) -> MetaOapg.properties.grandTotals: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["paging"]) -> 'ExecutionResultPaging': ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["data", "dimensionHeaders", "grandTotals", "paging", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -196,6 +196,6 @@ class ExecutionResult(
             **kwargs,
         )
 
-from gooddata_api_client.model.dimension_header import DimensionHeader
-from gooddata_api_client.model.execution_result_grand_total import ExecutionResultGrandTotal
-from gooddata_api_client.model.execution_result_paging import ExecutionResultPaging
+from gooddata_api_client.models.dimension_header import DimensionHeader
+from gooddata_api_client.models.execution_result_grand_total import ExecutionResultGrandTotal
+from gooddata_api_client.models.execution_result_paging import ExecutionResultPaging

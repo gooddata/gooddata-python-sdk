@@ -1,4 +1,4 @@
-# gooddata_api_client.model.dashboard_permissions.DashboardPermissions
+# gooddata_api_client.models.dashboard_permissions.DashboardPermissions
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes
@@ -41,4 +41,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**UserPermission**](UserPermission.md) | [**UserPermission**](UserPermission.md) | [**UserPermission**](UserPermission.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

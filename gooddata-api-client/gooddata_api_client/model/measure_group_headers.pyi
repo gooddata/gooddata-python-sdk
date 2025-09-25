@@ -103,4 +103,4 @@ class MeasureGroupHeaders(
             **kwargs,
         )
 
-from gooddata_api_client.model.measure_header_out import MeasureHeaderOut
+from gooddata_api_client.models.measure_header_out import MeasureHeaderOut

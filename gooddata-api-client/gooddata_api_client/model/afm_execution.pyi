@@ -39,17 +39,17 @@ class AfmExecution(
             "execution",
             "resultSpec",
         }
-        
+
         class properties:
-        
+
             @staticmethod
             def execution() -> typing.Type['AFM']:
                 return AFM
-        
+
             @staticmethod
             def resultSpec() -> typing.Type['ResultSpec']:
                 return ResultSpec
-        
+
             @staticmethod
             def settings() -> typing.Type['ExecutionSettings']:
                 return ExecutionSettings
@@ -58,42 +58,42 @@ class AfmExecution(
                 "resultSpec": resultSpec,
                 "settings": settings,
             }
-    
+
     execution: 'AFM'
     resultSpec: 'ResultSpec'
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["execution"]) -> 'AFM': ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["resultSpec"]) -> 'ResultSpec': ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["settings"]) -> 'ExecutionSettings': ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["execution", "resultSpec", "settings", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["execution"]) -> 'AFM': ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["resultSpec"]) -> 'ResultSpec': ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["settings"]) -> typing.Union['ExecutionSettings', schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["execution", "resultSpec", "settings", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -114,6 +114,6 @@ class AfmExecution(
             **kwargs,
         )
 
-from gooddata_api_client.model.afm import AFM
-from gooddata_api_client.model.execution_settings import ExecutionSettings
-from gooddata_api_client.model.result_spec import ResultSpec
+from gooddata_api_client.models.afm import AFM
+from gooddata_api_client.models.execution_settings import ExecutionSettings
+from gooddata_api_client.models.result_spec import ResultSpec

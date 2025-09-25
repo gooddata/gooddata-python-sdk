@@ -99,5 +99,5 @@ class JsonApiCustomApplicationSettingOutDocument(
             **kwargs,
         )
 
-from gooddata_api_client.model.json_api_custom_application_setting_out import JsonApiCustomApplicationSettingOut
-from gooddata_api_client.model.object_links import ObjectLinks
+from gooddata_api_client.models.json_api_custom_application_setting_out import JsonApiCustomApplicationSettingOut
+from gooddata_api_client.models.object_links import ObjectLinks

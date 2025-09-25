@@ -1,4 +1,4 @@
-# gooddata_api_client.model.declarative_analytics_layer.DeclarativeAnalyticsLayer
+# gooddata_api_client.models.declarative_analytics_layer.DeclarativeAnalyticsLayer
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes
@@ -101,4 +101,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**DeclarativeVisualizationObject**](DeclarativeVisualizationObject.md) | [**DeclarativeVisualizationObject**](DeclarativeVisualizationObject.md) | [**DeclarativeVisualizationObject**](DeclarativeVisualizationObject.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

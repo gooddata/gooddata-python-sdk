@@ -1,4 +1,4 @@
-# gooddata_api_client.model.measure_group_headers.MeasureGroupHeaders
+# gooddata_api_client.models.measure_group_headers.MeasureGroupHeaders
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes
@@ -24,4 +24,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**MeasureHeaderOut**](MeasureHeaderOut.md) | [**MeasureHeaderOut**](MeasureHeaderOut.md) | [**MeasureHeaderOut**](MeasureHeaderOut.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

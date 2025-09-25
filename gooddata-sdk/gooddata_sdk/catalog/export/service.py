@@ -4,9 +4,9 @@ from pathlib import Path
 from typing import Any, Callable, Optional, Union
 
 from gooddata_api_client.exceptions import NotFoundException
-from gooddata_api_client.model.slides_export_request import SlidesExportRequest as SlidesExportRequestApi
-from gooddata_api_client.model.tabular_export_request import TabularExportRequest
-from gooddata_api_client.model.visual_export_request import VisualExportRequest
+from gooddata_api_client.models.slides_export_request import SlidesExportRequest as SlidesExportRequestApi
+from gooddata_api_client.models.tabular_export_request import TabularExportRequest
+from gooddata_api_client.models.visual_export_request import VisualExportRequest
 
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.export.request import (
@@ -85,14 +85,14 @@ class ExportService(CatalogServiceBase):
         )
         assert timeout > retry, f"Retry value {retry} cannot be higher than timeout value {timeout}"
         assert retry <= max_retry, f"Retry value {retry} must be smaller or the same as max retry value {max_retry}"
-        response = get_func(workspace_id=workspace_id, export_id=export_id, _preload_content=False)
+        response = get_func(workspace_id=workspace_id, export_id=export_id)
         if response.status == 202:
             counter = 0
             while counter * retry <= timeout:
                 time.sleep(retry)
                 retry = min(retry * 2, max_retry)
                 counter += 1
-                response = get_func(workspace_id=workspace_id, export_id=export_id, _preload_content=False)
+                response = get_func(workspace_id=workspace_id, export_id=export_id)
                 if response.status != 202:
                     break
         if response.status != 200:
@@ -116,7 +116,7 @@ class ExportService(CatalogServiceBase):
             str: The export result from the response object.
         """
         response = create_func(workspace_id, request)
-        return response["export_result"]
+        return response.export_result
 
     def _dashboard_id_exists(self, workspace_id: str, dashboard_id: str) -> bool:
         """
@@ -222,7 +222,7 @@ class ExportService(CatalogServiceBase):
             request = VisualExportRequest(dashboard_id=dashboard_id, file_name=file_name, metadata=metadata)
         file_path = store_path / f"{file_name}.pdf"
         create_func = self._actions_api.create_pdf_export
-        get_func = self._actions_api.get_exported_file
+        get_func = self._actions_api.get_exported_file_without_preload_content
         self._export_common(workspace_id, request, file_path, create_func, get_func, timeout, retry, max_retry)
 
     def export_tabular(
@@ -253,7 +253,7 @@ class ExportService(CatalogServiceBase):
         store_path = store_path if isinstance(store_path, Path) else Path(store_path)
         file_path = store_path / export_request.file
         create_func = self._actions_api.create_tabular_export
-        get_func = self._actions_api.get_tabular_export
+        get_func = self._actions_api.get_tabular_export_without_preload_content
         self._export_common(
             workspace_id, export_request.to_api(), file_path, create_func, get_func, timeout, retry, max_retry
         )
@@ -344,5 +344,5 @@ class ExportService(CatalogServiceBase):
         store_path = store_path if isinstance(store_path, Path) else Path(store_path)
         file_path = store_path / f"{request.file_name}.{request.format.lower()}"
         create_func = self._actions_api.create_slides_export
-        get_func = self._actions_api.get_slides_export
+        get_func = self._actions_api.get_slides_export_without_preload_content
         self._export_common(workspace_id, request.to_api(), file_path, create_func, get_func, timeout, retry, max_retry)

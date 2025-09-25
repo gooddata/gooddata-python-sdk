@@ -25,7 +25,7 @@ import frozendict  # noqa: F401
 
 from gooddata_api_client import schemas  # noqa: F401
 
-from gooddata_api_client.model.permissions_for_assignee import PermissionsForAssignee
+from gooddata_api_client.models.permissions_for_assignee import PermissionsForAssignee
 
 from . import path
 
@@ -72,7 +72,7 @@ class SchemaForRequestBodyApplicationJson(
 
 
     class MetaOapg:
-        
+
         @staticmethod
         def items() -> typing.Type['PermissionsForAssignee']:
             return PermissionsForAssignee
@@ -390,5 +390,3 @@ class ApiForpost(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
-
-

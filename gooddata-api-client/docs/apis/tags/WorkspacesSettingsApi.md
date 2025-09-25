@@ -31,8 +31,8 @@ Post Custom Application Settings
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspaces_settings_api
-from gooddata_api_client.model.json_api_custom_application_setting_out_document import JsonApiCustomApplicationSettingOutDocument
-from gooddata_api_client.model.json_api_custom_application_setting_post_optional_id_document import JsonApiCustomApplicationSettingPostOptionalIdDocument
+from gooddata_api_client.models.json_api_custom_application_setting_out_document import JsonApiCustomApplicationSettingOutDocument
+from gooddata_api_client.models.json_api_custom_application_setting_post_optional_id_document import JsonApiCustomApplicationSettingPostOptionalIdDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -196,8 +196,8 @@ Post Settings for Workspaces
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspaces_settings_api
-from gooddata_api_client.model.json_api_workspace_setting_post_optional_id_document import JsonApiWorkspaceSettingPostOptionalIdDocument
-from gooddata_api_client.model.json_api_workspace_setting_out_document import JsonApiWorkspaceSettingOutDocument
+from gooddata_api_client.models.json_api_workspace_setting_post_optional_id_document import JsonApiWorkspaceSettingPostOptionalIdDocument
+from gooddata_api_client.models.json_api_workspace_setting_out_document import JsonApiWorkspaceSettingOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -607,7 +607,7 @@ Get all Custom Application Settings
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspaces_settings_api
-from gooddata_api_client.model.json_api_custom_application_setting_out_list import JsonApiCustomApplicationSettingOutList
+from gooddata_api_client.models.json_api_custom_application_setting_out_list import JsonApiCustomApplicationSettingOutList
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -815,7 +815,7 @@ Get all Setting for Workspaces
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspaces_settings_api
-from gooddata_api_client.model.json_api_workspace_setting_out_list import JsonApiWorkspaceSettingOutList
+from gooddata_api_client.models.json_api_workspace_setting_out_list import JsonApiWorkspaceSettingOutList
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1023,7 +1023,7 @@ Get a Custom Application Setting
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspaces_settings_api
-from gooddata_api_client.model.json_api_custom_application_setting_out_document import JsonApiCustomApplicationSettingOutDocument
+from gooddata_api_client.models.json_api_custom_application_setting_out_document import JsonApiCustomApplicationSettingOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1196,7 +1196,7 @@ Get a Setting for Workspace
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspaces_settings_api
-from gooddata_api_client.model.json_api_workspace_setting_out_document import JsonApiWorkspaceSettingOutDocument
+from gooddata_api_client.models.json_api_workspace_setting_out_document import JsonApiWorkspaceSettingOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1369,8 +1369,8 @@ Patch a Custom Application Setting
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspaces_settings_api
-from gooddata_api_client.model.json_api_custom_application_setting_patch_document import JsonApiCustomApplicationSettingPatchDocument
-from gooddata_api_client.model.json_api_custom_application_setting_out_document import JsonApiCustomApplicationSettingOutDocument
+from gooddata_api_client.models.json_api_custom_application_setting_patch_document import JsonApiCustomApplicationSettingPatchDocument
+from gooddata_api_client.models.json_api_custom_application_setting_out_document import JsonApiCustomApplicationSettingOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1535,8 +1535,8 @@ Patch a Setting for Workspace
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspaces_settings_api
-from gooddata_api_client.model.json_api_workspace_setting_out_document import JsonApiWorkspaceSettingOutDocument
-from gooddata_api_client.model.json_api_workspace_setting_patch_document import JsonApiWorkspaceSettingPatchDocument
+from gooddata_api_client.models.json_api_workspace_setting_out_document import JsonApiWorkspaceSettingOutDocument
+from gooddata_api_client.models.json_api_workspace_setting_patch_document import JsonApiWorkspaceSettingPatchDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1701,8 +1701,8 @@ Put a Custom Application Setting
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspaces_settings_api
-from gooddata_api_client.model.json_api_custom_application_setting_in_document import JsonApiCustomApplicationSettingInDocument
-from gooddata_api_client.model.json_api_custom_application_setting_out_document import JsonApiCustomApplicationSettingOutDocument
+from gooddata_api_client.models.json_api_custom_application_setting_in_document import JsonApiCustomApplicationSettingInDocument
+from gooddata_api_client.models.json_api_custom_application_setting_out_document import JsonApiCustomApplicationSettingOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1867,8 +1867,8 @@ Put a Setting for a Workspace
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspaces_settings_api
-from gooddata_api_client.model.json_api_workspace_setting_in_document import JsonApiWorkspaceSettingInDocument
-from gooddata_api_client.model.json_api_workspace_setting_out_document import JsonApiWorkspaceSettingOutDocument
+from gooddata_api_client.models.json_api_workspace_setting_in_document import JsonApiWorkspaceSettingInDocument
+from gooddata_api_client.models.json_api_workspace_setting_out_document import JsonApiWorkspaceSettingOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -2035,7 +2035,7 @@ Resolves values for all settings in a workspace by current user, workspace, orga
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspaces_settings_api
-from gooddata_api_client.model.resolved_setting import ResolvedSetting
+from gooddata_api_client.models.resolved_setting import ResolvedSetting
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -2130,8 +2130,8 @@ Resolves value for selected settings in a workspace by current user, workspace, 
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import workspaces_settings_api
-from gooddata_api_client.model.resolved_setting import ResolvedSetting
-from gooddata_api_client.model.resolve_settings_request import ResolveSettingsRequest
+from gooddata_api_client.models.resolved_setting import ResolvedSetting
+from gooddata_api_client.models.resolve_settings_request import ResolveSettingsRequest
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -2226,4 +2226,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 No authorization required
 
 [[Back to top]](#__pageTop) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
-

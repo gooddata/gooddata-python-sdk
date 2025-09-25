@@ -1,4 +1,4 @@
-# gooddata_api_client.model.platform_usage_request.PlatformUsageRequest
+# gooddata_api_client.models.platform_usage_request.PlatformUsageRequest
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes
@@ -24,4 +24,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 items | str,  | str,  |  | must be one of ["UserCount", "WorkspaceCount", ] 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

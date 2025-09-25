@@ -23,7 +23,7 @@ Space of the shared interest
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import entitlement_api
-from gooddata_api_client.model.json_api_entitlement_out_list import JsonApiEntitlementOutList
+from gooddata_api_client.models.json_api_entitlement_out_list import JsonApiEntitlementOutList
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -147,7 +147,7 @@ Space of the shared interest
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import entitlement_api
-from gooddata_api_client.model.json_api_entitlement_out_document import JsonApiEntitlementOutDocument
+from gooddata_api_client.models.json_api_entitlement_out_document import JsonApiEntitlementOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -272,7 +272,7 @@ Resolves values of available entitlements for the organization.
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import entitlement_api
-from gooddata_api_client.model.api_entitlement import ApiEntitlement
+from gooddata_api_client.models.api_entitlement import ApiEntitlement
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -341,8 +341,8 @@ Resolves values for requested entitlements in the organization.
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import entitlement_api
-from gooddata_api_client.model.api_entitlement import ApiEntitlement
-from gooddata_api_client.model.entitlements_request import EntitlementsRequest
+from gooddata_api_client.models.api_entitlement import ApiEntitlement
+from gooddata_api_client.models.entitlements_request import EntitlementsRequest
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -420,4 +420,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 No authorization required
 
 [[Back to top]](#__pageTop) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
-

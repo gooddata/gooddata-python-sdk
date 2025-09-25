@@ -1,4 +1,4 @@
-# gooddata_api_client.model.declarative_data_sources.DeclarativeDataSources
+# gooddata_api_client.models.declarative_data_sources.DeclarativeDataSources
 
 A data source and its properties.
 
@@ -26,4 +26,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**DeclarativeDataSource**](DeclarativeDataSource.md) | [**DeclarativeDataSource**](DeclarativeDataSource.md) | [**DeclarativeDataSource**](DeclarativeDataSource.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

@@ -39,9 +39,9 @@ class PopDate(
             "periodsAgo",
             "attribute",
         }
-        
+
         class properties:
-        
+
             @staticmethod
             def attribute() -> typing.Type['AfmObjectIdentifierAttribute']:
                 return AfmObjectIdentifierAttribute
@@ -50,36 +50,36 @@ class PopDate(
                 "attribute": attribute,
                 "periodsAgo": periodsAgo,
             }
-    
+
     periodsAgo: MetaOapg.properties.periodsAgo
     attribute: 'AfmObjectIdentifierAttribute'
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["attribute"]) -> 'AfmObjectIdentifierAttribute': ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["periodsAgo"]) -> MetaOapg.properties.periodsAgo: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["attribute", "periodsAgo", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["attribute"]) -> 'AfmObjectIdentifierAttribute': ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["periodsAgo"]) -> MetaOapg.properties.periodsAgo: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["attribute", "periodsAgo", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -98,4 +98,4 @@ class PopDate(
             **kwargs,
         )
 
-from gooddata_api_client.model.afm_object_identifier_attribute import AfmObjectIdentifierAttribute
+from gooddata_api_client.models.afm_object_identifier_attribute import AfmObjectIdentifierAttribute

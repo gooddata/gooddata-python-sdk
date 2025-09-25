@@ -1,4 +1,4 @@
-# gooddata_api_client.model.json_api_metric_post_optional_id.JsonApiMetricPostOptionalId
+# gooddata_api_client.models.json_api_metric_post_optional_id.JsonApiMetricPostOptionalId
 
 JSON:API representation of metric entity.
 
@@ -59,4 +59,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 items | str,  | str,  |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

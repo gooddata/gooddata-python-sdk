@@ -40,36 +40,36 @@ class SortKeyTotal(
         required = {
             "total",
         }
-        
+
         class properties:
-            
-            
+
+
             class total(
                 schemas.DictSchema
             ):
-            
-            
+
+
                 class MetaOapg:
                     required = {
                         "totalIdentifier",
                     }
-                    
+
                     class properties:
-                    
+
                         @staticmethod
                         def dataColumnLocators() -> typing.Type['DataColumnLocators']:
                             return DataColumnLocators
-                        
-                        
+
+
                         class direction(
                             schemas.EnumBase,
                             schemas.StrSchema
                         ):
-                            
+
                             @schemas.classproperty
                             def ASC(cls):
                                 return cls("ASC")
-                            
+
                             @schemas.classproperty
                             def DESC(cls):
                                 return cls("DESC")
@@ -79,42 +79,42 @@ class SortKeyTotal(
                             "direction": direction,
                             "totalIdentifier": totalIdentifier,
                         }
-                
+
                 totalIdentifier: MetaOapg.properties.totalIdentifier
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["dataColumnLocators"]) -> 'DataColumnLocators': ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["direction"]) -> MetaOapg.properties.direction: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["totalIdentifier"]) -> MetaOapg.properties.totalIdentifier: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-                
+
                 def __getitem__(self, name: typing.Union[typing_extensions.Literal["dataColumnLocators", "direction", "totalIdentifier", ], str]):
                     # dict_instance[name] accessor
                     return super().__getitem__(name)
-                
-                
+
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["dataColumnLocators"]) -> typing.Union['DataColumnLocators', schemas.Unset]: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["direction"]) -> typing.Union[MetaOapg.properties.direction, schemas.Unset]: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["totalIdentifier"]) -> MetaOapg.properties.totalIdentifier: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-                
+
                 def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["dataColumnLocators", "direction", "totalIdentifier", ], str]):
                     return super().get_item_oapg(name)
-                
-            
+
+
                 def __new__(
                     cls,
                     *_args: typing.Union[dict, frozendict.frozendict, ],
@@ -136,29 +136,29 @@ class SortKeyTotal(
             __annotations__ = {
                 "total": total,
             }
-    
+
     total: MetaOapg.properties.total
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["total"]) -> MetaOapg.properties.total: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["total", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["total"]) -> MetaOapg.properties.total: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["total", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -175,4 +175,4 @@ class SortKeyTotal(
             **kwargs,
         )
 
-from gooddata_api_client.model.data_column_locators import DataColumnLocators
+from gooddata_api_client.models.data_column_locators import DataColumnLocators

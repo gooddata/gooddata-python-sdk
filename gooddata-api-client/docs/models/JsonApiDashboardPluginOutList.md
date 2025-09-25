@@ -1,4 +1,4 @@
-# gooddata_api_client.model.json_api_dashboard_plugin_out_list.JsonApiDashboardPluginOutList
+# gooddata_api_client.models.json_api_dashboard_plugin_out_list.JsonApiDashboardPluginOutList
 
 A JSON:API document with a list of resources
 
@@ -27,4 +27,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**JsonApiDashboardPluginOutWithLinks**](JsonApiDashboardPluginOutWithLinks.md) | [**JsonApiDashboardPluginOutWithLinks**](JsonApiDashboardPluginOutWithLinks.md) | [**JsonApiDashboardPluginOutWithLinks**](JsonApiDashboardPluginOutWithLinks.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

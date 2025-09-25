@@ -25,7 +25,7 @@ import frozendict  # noqa: F401
 
 from gooddata_api_client import schemas  # noqa: F401
 
-from gooddata_api_client.model.api_entitlement import ApiEntitlement
+from gooddata_api_client.models.api_entitlement import ApiEntitlement
 
 from . import path
 
@@ -37,7 +37,7 @@ class SchemaFor200ResponseBodyApplicationJson(
 
 
     class MetaOapg:
-        
+
         @staticmethod
         def items() -> typing.Type['ApiEntitlement']:
             return ApiEntitlement
@@ -260,5 +260,3 @@ class ApiForget(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
-
-

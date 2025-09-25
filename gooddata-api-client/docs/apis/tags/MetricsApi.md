@@ -23,8 +23,8 @@ Post Metrics
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import metrics_api
-from gooddata_api_client.model.json_api_metric_post_optional_id_document import JsonApiMetricPostOptionalIdDocument
-from gooddata_api_client.model.json_api_metric_out_document import JsonApiMetricOutDocument
+from gooddata_api_client.models.json_api_metric_post_optional_id_document import JsonApiMetricPostOptionalIdDocument
+from gooddata_api_client.models.json_api_metric_out_document import JsonApiMetricOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -343,7 +343,7 @@ Get all Metrics
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import metrics_api
-from gooddata_api_client.model.json_api_metric_out_list import JsonApiMetricOutList
+from gooddata_api_client.models.json_api_metric_out_list import JsonApiMetricOutList
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -567,7 +567,7 @@ Get a Metric
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import metrics_api
-from gooddata_api_client.model.json_api_metric_out_document import JsonApiMetricOutDocument
+from gooddata_api_client.models.json_api_metric_out_document import JsonApiMetricOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -756,8 +756,8 @@ Patch a Metric
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import metrics_api
-from gooddata_api_client.model.json_api_metric_patch_document import JsonApiMetricPatchDocument
-from gooddata_api_client.model.json_api_metric_out_document import JsonApiMetricOutDocument
+from gooddata_api_client.models.json_api_metric_patch_document import JsonApiMetricPatchDocument
+from gooddata_api_client.models.json_api_metric_out_document import JsonApiMetricOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -954,8 +954,8 @@ Put a Metric
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import metrics_api
-from gooddata_api_client.model.json_api_metric_in_document import JsonApiMetricInDocument
-from gooddata_api_client.model.json_api_metric_out_document import JsonApiMetricOutDocument
+from gooddata_api_client.models.json_api_metric_in_document import JsonApiMetricInDocument
+from gooddata_api_client.models.json_api_metric_out_document import JsonApiMetricOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1140,4 +1140,3 @@ Type | Description  | Notes
 No authorization required
 
 [[Back to top]](#__pageTop) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
-

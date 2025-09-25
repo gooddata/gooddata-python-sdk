@@ -1,4 +1,4 @@
-# gooddata_api_client.model.declarative_user_groups.DeclarativeUserGroups
+# gooddata_api_client.models.declarative_user_groups.DeclarativeUserGroups
 
 Declarative form of userGroups and its properties.
 
@@ -26,4 +26,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**DeclarativeUserGroup**](DeclarativeUserGroup.md) | [**DeclarativeUserGroup**](DeclarativeUserGroup.md) | [**DeclarativeUserGroup**](DeclarativeUserGroup.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

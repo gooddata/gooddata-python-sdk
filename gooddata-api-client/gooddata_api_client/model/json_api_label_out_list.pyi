@@ -40,21 +40,21 @@ class JsonApiLabelOutList(
         required = {
             "data",
         }
-        
+
         class properties:
-            
-            
+
+
             class data(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['JsonApiLabelOutWithLinks']:
                         return JsonApiLabelOutWithLinks
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['JsonApiLabelOutWithLinks'], typing.List['JsonApiLabelOutWithLinks']],
@@ -65,22 +65,22 @@ class JsonApiLabelOutList(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'JsonApiLabelOutWithLinks':
                     return super().__getitem__(i)
-            
-            
+
+
             class included(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['JsonApiAttributeOutWithLinks']:
                         return JsonApiAttributeOutWithLinks
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['JsonApiAttributeOutWithLinks'], typing.List['JsonApiAttributeOutWithLinks']],
@@ -91,10 +91,10 @@ class JsonApiLabelOutList(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'JsonApiAttributeOutWithLinks':
                     return super().__getitem__(i)
-        
+
             @staticmethod
             def links() -> typing.Type['ListLinks']:
                 return ListLinks
@@ -103,41 +103,41 @@ class JsonApiLabelOutList(
                 "included": included,
                 "links": links,
             }
-    
+
     data: MetaOapg.properties.data
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["data"]) -> MetaOapg.properties.data: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["included"]) -> MetaOapg.properties.included: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["links"]) -> 'ListLinks': ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["data", "included", "links", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["data"]) -> MetaOapg.properties.data: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["included"]) -> typing.Union[MetaOapg.properties.included, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["links"]) -> typing.Union['ListLinks', schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["data", "included", "links", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -158,6 +158,6 @@ class JsonApiLabelOutList(
             **kwargs,
         )
 
-from gooddata_api_client.model.json_api_attribute_out_with_links import JsonApiAttributeOutWithLinks
-from gooddata_api_client.model.json_api_label_out_with_links import JsonApiLabelOutWithLinks
-from gooddata_api_client.model.list_links import ListLinks
+from gooddata_api_client.models.json_api_attribute_out_with_links import JsonApiAttributeOutWithLinks
+from gooddata_api_client.models.json_api_label_out_with_links import JsonApiLabelOutWithLinks
+from gooddata_api_client.models.list_links import ListLinks

@@ -56,4 +56,4 @@ class JsonApiLabelToManyLinkage(
     def __getitem__(self, i: int) -> 'JsonApiLabelLinkage':
         return super().__getitem__(i)
 
-from gooddata_api_client.model.json_api_label_linkage import JsonApiLabelLinkage
+from gooddata_api_client.models.json_api_label_linkage import JsonApiLabelLinkage

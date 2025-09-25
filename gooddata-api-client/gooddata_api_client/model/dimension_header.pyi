@@ -40,21 +40,21 @@ class DimensionHeader(
         required = {
             "headerGroups",
         }
-        
+
         class properties:
-            
-            
+
+
             class headerGroups(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['HeaderGroup']:
                         return HeaderGroup
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['HeaderGroup'], typing.List['HeaderGroup']],
@@ -65,35 +65,35 @@ class DimensionHeader(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'HeaderGroup':
                     return super().__getitem__(i)
             __annotations__ = {
                 "headerGroups": headerGroups,
             }
-    
+
     headerGroups: MetaOapg.properties.headerGroups
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["headerGroups"]) -> MetaOapg.properties.headerGroups: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["headerGroups", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["headerGroups"]) -> MetaOapg.properties.headerGroups: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["headerGroups", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -110,4 +110,4 @@ class DimensionHeader(
             **kwargs,
         )
 
-from gooddata_api_client.model.header_group import HeaderGroup
+from gooddata_api_client.models.header_group import HeaderGroup

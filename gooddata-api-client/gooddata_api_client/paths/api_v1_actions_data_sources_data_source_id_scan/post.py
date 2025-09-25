@@ -25,8 +25,8 @@ import frozendict  # noqa: F401
 
 from gooddata_api_client import schemas  # noqa: F401
 
-from gooddata_api_client.model.scan_request import ScanRequest
-from gooddata_api_client.model.scan_result_pdm import ScanResultPdm
+from gooddata_api_client.models.scan_request import ScanRequest
+from gooddata_api_client.models.scan_result_pdm import ScanResultPdm
 
 from . import path
 
@@ -397,5 +397,3 @@ class ApiForpost(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
-
-

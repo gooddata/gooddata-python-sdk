@@ -18,11 +18,11 @@ Switch the active identity provider for the organization. Requires MANAGE permis
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import organization_api
-from gooddata_api_client.model.switch_identity_provider_request import SwitchIdentityProviderRequest
+from gooddata_api_client.models.switch_identity_provider_request import SwitchIdentityProviderRequest
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -31,27 +31,26 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = organization_api.OrganizationApi(api_client)
-    switch_identity_provider_request = SwitchIdentityProviderRequest(
-        idp_id="my-idp-123",
-    ) # SwitchIdentityProviderRequest | 
+    api_instance = gooddata_api_client.OrganizationApi(api_client)
+    switch_identity_provider_request = gooddata_api_client.SwitchIdentityProviderRequest() # SwitchIdentityProviderRequest | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Switch Active Identity Provider
         api_instance.switch_active_identity_provider(switch_identity_provider_request)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OrganizationApi->switch_active_identity_provider: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **switch_identity_provider_request** | [**SwitchIdentityProviderRequest**](SwitchIdentityProviderRequest.md)|  |
+ **switch_identity_provider_request** | [**SwitchIdentityProviderRequest**](SwitchIdentityProviderRequest.md)|  | 
 
 ### Return type
 
@@ -65,7 +64,6 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: Not defined
-
 
 ### HTTP response details
 

@@ -42,21 +42,21 @@ class AFM(
             "attributes",
             "filters",
         }
-        
+
         class properties:
-            
-            
+
+
             class attributes(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['AttributeItem']:
                         return AttributeItem
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['AttributeItem'], typing.List['AttributeItem']],
@@ -67,22 +67,22 @@ class AFM(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'AttributeItem':
                     return super().__getitem__(i)
-            
-            
+
+
             class filters(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['FilterDefinition']:
                         return FilterDefinition
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['FilterDefinition'], typing.List['FilterDefinition']],
@@ -93,22 +93,22 @@ class AFM(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'FilterDefinition':
                     return super().__getitem__(i)
-            
-            
+
+
             class measures(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['MeasureItem']:
                         return MeasureItem
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['MeasureItem'], typing.List['MeasureItem']],
@@ -119,22 +119,22 @@ class AFM(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'MeasureItem':
                     return super().__getitem__(i)
-            
-            
+
+
             class auxMeasures(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['MeasureItem']:
                         return MeasureItem
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['MeasureItem'], typing.List['MeasureItem']],
@@ -145,7 +145,7 @@ class AFM(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'MeasureItem':
                     return super().__getitem__(i)
             __annotations__ = {
@@ -154,49 +154,49 @@ class AFM(
                 "measures": measures,
                 "auxMeasures": auxMeasures,
             }
-    
+
     measures: MetaOapg.properties.measures
     attributes: MetaOapg.properties.attributes
     filters: MetaOapg.properties.filters
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["attributes"]) -> MetaOapg.properties.attributes: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["filters"]) -> MetaOapg.properties.filters: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["measures"]) -> MetaOapg.properties.measures: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["auxMeasures"]) -> MetaOapg.properties.auxMeasures: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["attributes", "filters", "measures", "auxMeasures", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["attributes"]) -> MetaOapg.properties.attributes: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["filters"]) -> MetaOapg.properties.filters: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["measures"]) -> MetaOapg.properties.measures: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["auxMeasures"]) -> typing.Union[MetaOapg.properties.auxMeasures, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["attributes", "filters", "measures", "auxMeasures", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -219,6 +219,6 @@ class AFM(
             **kwargs,
         )
 
-from gooddata_api_client.model.attribute_item import AttributeItem
-from gooddata_api_client.model.filter_definition import FilterDefinition
-from gooddata_api_client.model.measure_item import MeasureItem
+from gooddata_api_client.models.attribute_item import AttributeItem
+from gooddata_api_client.models.filter_definition import FilterDefinition
+from gooddata_api_client.models.measure_item import MeasureItem

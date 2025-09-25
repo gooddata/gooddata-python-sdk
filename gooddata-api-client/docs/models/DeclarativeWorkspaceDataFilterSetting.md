@@ -1,4 +1,4 @@
-# gooddata_api_client.model.declarative_workspace_data_filter_setting.DeclarativeWorkspaceDataFilterSetting
+# gooddata_api_client.models.declarative_workspace_data_filter_setting.DeclarativeWorkspaceDataFilterSetting
 
 Workspace Data Filters serving the filtering of what data users can see in workspaces.
 
@@ -32,4 +32,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 items | str,  | str,  | Only those rows are returned, where columnName from filter matches those values. | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

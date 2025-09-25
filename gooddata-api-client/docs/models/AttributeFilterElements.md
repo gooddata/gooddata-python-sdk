@@ -1,4 +1,4 @@
-# gooddata_api_client.model.attribute_filter_elements.AttributeFilterElements
+# gooddata_api_client.models.attribute_filter_elements.AttributeFilterElements
 
 Filter on specific set of label values.
 
@@ -28,4 +28,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 items | str,  | str,  | Set of label values. | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

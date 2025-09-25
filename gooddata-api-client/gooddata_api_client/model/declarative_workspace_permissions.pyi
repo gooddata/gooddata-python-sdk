@@ -37,21 +37,21 @@ class DeclarativeWorkspacePermissions(
 
 
     class MetaOapg:
-        
+
         class properties:
-            
-            
+
+
             class hierarchyPermissions(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeWorkspaceHierarchyPermission']:
                         return DeclarativeWorkspaceHierarchyPermission
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeWorkspaceHierarchyPermission'], typing.List['DeclarativeWorkspaceHierarchyPermission']],
@@ -62,22 +62,22 @@ class DeclarativeWorkspacePermissions(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeWorkspaceHierarchyPermission':
                     return super().__getitem__(i)
-            
-            
+
+
             class permissions(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeSingleWorkspacePermission']:
                         return DeclarativeSingleWorkspacePermission
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeSingleWorkspacePermission'], typing.List['DeclarativeSingleWorkspacePermission']],
@@ -88,40 +88,40 @@ class DeclarativeWorkspacePermissions(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeSingleWorkspacePermission':
                     return super().__getitem__(i)
             __annotations__ = {
                 "hierarchyPermissions": hierarchyPermissions,
                 "permissions": permissions,
             }
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["hierarchyPermissions"]) -> MetaOapg.properties.hierarchyPermissions: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["permissions"]) -> MetaOapg.properties.permissions: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["hierarchyPermissions", "permissions", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["hierarchyPermissions"]) -> typing.Union[MetaOapg.properties.hierarchyPermissions, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["permissions"]) -> typing.Union[MetaOapg.properties.permissions, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["hierarchyPermissions", "permissions", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -140,5 +140,5 @@ class DeclarativeWorkspacePermissions(
             **kwargs,
         )
 
-from gooddata_api_client.model.declarative_single_workspace_permission import DeclarativeSingleWorkspacePermission
-from gooddata_api_client.model.declarative_workspace_hierarchy_permission import DeclarativeWorkspaceHierarchyPermission
+from gooddata_api_client.models.declarative_single_workspace_permission import DeclarativeSingleWorkspacePermission
+from gooddata_api_client.models.declarative_workspace_hierarchy_permission import DeclarativeWorkspaceHierarchyPermission

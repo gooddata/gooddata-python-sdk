@@ -4,7 +4,7 @@ from __future__ import annotations
 from typing import Optional, Union
 
 import gooddata_api_client.models as afm_models
-from gooddata_api_client.model_utils import OpenApiModel
+from pydantic import BaseModel
 
 
 class ObjId:
@@ -25,6 +25,11 @@ class ObjId:
             identifier=afm_models.AfmObjectIdentifierIdentifier(id=self._id, type=self._type)
         )
 
+    def as_afm_id_core(self) -> afm_models.AfmObjectIdentifierCore:
+        return afm_models.AfmObjectIdentifierCore(
+            identifier=afm_models.AfmObjectIdentifierCoreIdentifier(id=self._id, type=self._type)
+        )
+
     def as_afm_id_label(self) -> afm_models.AfmObjectIdentifierLabel:
         return afm_models.AfmObjectIdentifierLabel(
             identifier=afm_models.AfmObjectIdentifierLabelIdentifier(id=self._id)
@@ -43,7 +48,6 @@ class ObjId:
     def as_identifier(self) -> afm_models.AfmIdentifier:
         return afm_models.AfmIdentifier(
             identifier=afm_models.AfmObjectIdentifierIdentifier(id=self._id, type=self._type),
-            _check_type=False,
         )
 
     def __eq__(self, other: object) -> bool:
@@ -66,7 +70,7 @@ class ExecModelEntity:
     def __init__(self) -> None:
         pass
 
-    def as_api_model(self) -> OpenApiModel:
+    def as_api_model(self) -> BaseModel:
         raise NotImplementedError()
 
 
@@ -83,7 +87,7 @@ class Filter(ExecModelEntity):
     def is_noop(self) -> bool:
         raise NotImplementedError()
 
-    def as_api_model(self) -> OpenApiModel:
+    def as_api_model(self) -> BaseModel:
         raise NotImplementedError()
 
     def description(self, labels: dict[str, str], format_locale: Optional[str] = None) -> str:

@@ -1,4 +1,4 @@
-# gooddata_api_client.model.json_api_filter_context_out_document.JsonApiFilterContextOutDocument
+# gooddata_api_client.models.json_api_filter_context_out_document.JsonApiFilterContextOutDocument
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes
@@ -28,4 +28,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**JsonApiFilterContextOutIncludes**](JsonApiFilterContextOutIncludes.md) | [**JsonApiFilterContextOutIncludes**](JsonApiFilterContextOutIncludes.md) | [**JsonApiFilterContextOutIncludes**](JsonApiFilterContextOutIncludes.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

@@ -1,4 +1,4 @@
-# gooddata_api_client.model.resolve_settings_request.ResolveSettingsRequest
+# gooddata_api_client.models.resolve_settings_request.ResolveSettingsRequest
 
 A request containing setting IDs to resolve.
 
@@ -28,4 +28,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 items | str,  | str,  |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

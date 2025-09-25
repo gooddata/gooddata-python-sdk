@@ -40,28 +40,28 @@ class NegativeAttributeFilter(
         required = {
             "negativeAttributeFilter",
         }
-        
+
         class properties:
-            
-            
+
+
             class negativeAttributeFilter(
                 schemas.DictSchema
             ):
-            
-            
+
+
                 class MetaOapg:
                     required = {
                         "notIn",
                         "label",
                     }
-                    
+
                     class properties:
                         applyOnResult = schemas.BoolSchema
-                    
+
                         @staticmethod
                         def label() -> typing.Type['AfmIdentifier']:
                             return AfmIdentifier
-                    
+
                         @staticmethod
                         def notIn() -> typing.Type['AttributeFilterElements']:
                             return AttributeFilterElements
@@ -70,43 +70,43 @@ class NegativeAttributeFilter(
                             "label": label,
                             "notIn": notIn,
                         }
-                
+
                 notIn: 'AttributeFilterElements'
                 label: 'AfmIdentifier'
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["applyOnResult"]) -> MetaOapg.properties.applyOnResult: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["label"]) -> 'AfmIdentifier': ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["notIn"]) -> 'AttributeFilterElements': ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-                
+
                 def __getitem__(self, name: typing.Union[typing_extensions.Literal["applyOnResult", "label", "notIn", ], str]):
                     # dict_instance[name] accessor
                     return super().__getitem__(name)
-                
-                
+
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["applyOnResult"]) -> typing.Union[MetaOapg.properties.applyOnResult, schemas.Unset]: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["label"]) -> 'AfmIdentifier': ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["notIn"]) -> 'AttributeFilterElements': ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-                
+
                 def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["applyOnResult", "label", "notIn", ], str]):
                     return super().get_item_oapg(name)
-                
-            
+
+
                 def __new__(
                     cls,
                     *_args: typing.Union[dict, frozendict.frozendict, ],
@@ -128,29 +128,29 @@ class NegativeAttributeFilter(
             __annotations__ = {
                 "negativeAttributeFilter": negativeAttributeFilter,
             }
-    
+
     negativeAttributeFilter: MetaOapg.properties.negativeAttributeFilter
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["negativeAttributeFilter"]) -> MetaOapg.properties.negativeAttributeFilter: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["negativeAttributeFilter", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["negativeAttributeFilter"]) -> MetaOapg.properties.negativeAttributeFilter: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["negativeAttributeFilter", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -167,5 +167,5 @@ class NegativeAttributeFilter(
             **kwargs,
         )
 
-from gooddata_api_client.model.afm_identifier import AfmIdentifier
-from gooddata_api_client.model.attribute_filter_elements import AttributeFilterElements
+from gooddata_api_client.models.afm_identifier import AfmIdentifier
+from gooddata_api_client.models.attribute_filter_elements import AttributeFilterElements

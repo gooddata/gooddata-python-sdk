@@ -1,4 +1,4 @@
-# gooddata_api_client.model.permissions_for_assignee.PermissionsForAssignee
+# gooddata_api_client.models.permissions_for_assignee.PermissionsForAssignee
 
 Desired levels of permissions for an assignee.
 
@@ -27,4 +27,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 items | str,  | str,  |  | must be one of ["EDIT", "SHARE", "VIEW", ] 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

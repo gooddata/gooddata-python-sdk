@@ -19,11 +19,11 @@ Retrieve current user data filters assigned to the workspace.
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import user_data_filters_api
-from gooddata_api_client.model.declarative_user_data_filters import DeclarativeUserDataFilters
+from gooddata_api_client.models.declarative_user_data_filters import DeclarativeUserDataFilters
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -32,26 +32,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = user_data_filters_api.UserDataFiltersApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
+    api_instance = gooddata_api_client.UserDataFiltersApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Get user data filters
         api_response = api_instance.get_user_data_filters(workspace_id)
+        print("The response of UserDataFiltersApi->get_user_data_filters:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling UserDataFiltersApi->get_user_data_filters: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
+ **workspace_id** | **str**|  | 
 
 ### Return type
 
@@ -65,7 +67,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
-
 
 ### HTTP response details
 
@@ -86,11 +87,11 @@ Set user data filters assigned to the workspace.
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import user_data_filters_api
-from gooddata_api_client.model.declarative_user_data_filters import DeclarativeUserDataFilters
+from gooddata_api_client.models.declarative_user_data_filters import DeclarativeUserDataFilters
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -99,45 +100,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = user_data_filters_api.UserDataFiltersApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
-    declarative_user_data_filters = DeclarativeUserDataFilters(
-        user_data_filters=[
-            DeclarativeUserDataFilter(
-                description="ID of country setting",
-                id="country_id_setting",
-                maql="{label/country} = "USA" AND {label/date.year} = THIS(YEAR)",
-                tags=["Revenues"],
-                title="Country ID setting",
-                user=DeclarativeUserIdentifier(
-                    id="employee123",
-                    type="user",
-                ),
-                user_group=DeclarativeUserGroupIdentifier(
-                    id="group.admins",
-                    type="userGroup",
-                ),
-            ),
-        ],
-    ) # DeclarativeUserDataFilters | 
+    api_instance = gooddata_api_client.UserDataFiltersApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
+    declarative_user_data_filters = gooddata_api_client.DeclarativeUserDataFilters() # DeclarativeUserDataFilters | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Set user data filters
         api_instance.set_user_data_filters(workspace_id, declarative_user_data_filters)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling UserDataFiltersApi->set_user_data_filters: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
- **declarative_user_data_filters** | [**DeclarativeUserDataFilters**](DeclarativeUserDataFilters.md)|  |
+ **workspace_id** | **str**|  | 
+ **declarative_user_data_filters** | [**DeclarativeUserDataFilters**](DeclarativeUserDataFilters.md)|  | 
 
 ### Return type
 
@@ -151,7 +135,6 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: Not defined
-
 
 ### HTTP response details
 

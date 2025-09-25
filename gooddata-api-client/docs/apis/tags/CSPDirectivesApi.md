@@ -25,8 +25,8 @@ Post CSP Directives
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import csp_directives_api
-from gooddata_api_client.model.json_api_csp_directive_out_document import JsonApiCspDirectiveOutDocument
-from gooddata_api_client.model.json_api_csp_directive_in_document import JsonApiCspDirectiveInDocument
+from gooddata_api_client.models.json_api_csp_directive_out_document import JsonApiCspDirectiveOutDocument
+from gooddata_api_client.models.json_api_csp_directive_in_document import JsonApiCspDirectiveInDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -233,7 +233,7 @@ Get CSP Directives
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import csp_directives_api
-from gooddata_api_client.model.json_api_csp_directive_out_list import JsonApiCspDirectiveOutList
+from gooddata_api_client.models.json_api_csp_directive_out_list import JsonApiCspDirectiveOutList
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -357,7 +357,7 @@ Get CSP Directives
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import csp_directives_api
-from gooddata_api_client.model.json_api_csp_directive_out_document import JsonApiCspDirectiveOutDocument
+from gooddata_api_client.models.json_api_csp_directive_out_document import JsonApiCspDirectiveOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -482,8 +482,8 @@ Patch CSP Directives
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import csp_directives_api
-from gooddata_api_client.model.json_api_csp_directive_out_document import JsonApiCspDirectiveOutDocument
-from gooddata_api_client.model.json_api_csp_directive_patch_document import JsonApiCspDirectivePatchDocument
+from gooddata_api_client.models.json_api_csp_directive_out_document import JsonApiCspDirectiveOutDocument
+from gooddata_api_client.models.json_api_csp_directive_patch_document import JsonApiCspDirectivePatchDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -642,8 +642,8 @@ Put CSP Directives
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import csp_directives_api
-from gooddata_api_client.model.json_api_csp_directive_out_document import JsonApiCspDirectiveOutDocument
-from gooddata_api_client.model.json_api_csp_directive_in_document import JsonApiCspDirectiveInDocument
+from gooddata_api_client.models.json_api_csp_directive_out_document import JsonApiCspDirectiveOutDocument
+from gooddata_api_client.models.json_api_csp_directive_in_document import JsonApiCspDirectiveInDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -788,4 +788,3 @@ Type | Description  | Notes
 No authorization required
 
 [[Back to top]](#__pageTop) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
-

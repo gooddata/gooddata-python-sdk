@@ -1,4 +1,4 @@
-# gooddata_api_client.model.json_api_label_out_document.JsonApiLabelOutDocument
+# gooddata_api_client.models.json_api_label_out_document.JsonApiLabelOutDocument
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes
@@ -28,4 +28,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**JsonApiAttributeOutWithLinks**](JsonApiAttributeOutWithLinks.md) | [**JsonApiAttributeOutWithLinks**](JsonApiAttributeOutWithLinks.md) | [**JsonApiAttributeOutWithLinks**](JsonApiAttributeOutWithLinks.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

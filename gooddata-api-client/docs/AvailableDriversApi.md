@@ -8,7 +8,7 @@ Method | HTTP request | Description
 
 
 # **get_data_source_drivers**
-> {str: (str,)} get_data_source_drivers()
+> Dict[str, str] get_data_source_drivers()
 
 Get all available data source drivers
 
@@ -18,10 +18,10 @@ Retrieves a list of all supported data sources along with information about the 
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import available_drivers_api
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -30,26 +30,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = available_drivers_api.AvailableDriversApi(api_client)
+    api_instance = gooddata_api_client.AvailableDriversApi(api_client)
 
-    # example, this endpoint has no required or optional parameters
     try:
         # Get all available data source drivers
         api_response = api_instance.get_data_source_drivers()
+        print("The response of AvailableDriversApi->get_data_source_drivers:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling AvailableDriversApi->get_data_source_drivers: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 This endpoint does not need any parameter.
 
 ### Return type
 
-**{str: (str,)}**
+**Dict[str, str]**
 
 ### Authorization
 
@@ -59,7 +61,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
-
 
 ### HTTP response details
 

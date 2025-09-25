@@ -4,10 +4,10 @@ from __future__ import annotations
 from typing import Optional
 
 import attr
-from gooddata_api_client.model.json_api_jwk_in import JsonApiJwkIn
-from gooddata_api_client.model.json_api_jwk_in_attributes import JsonApiJwkInAttributes
-from gooddata_api_client.model.json_api_jwk_in_attributes_content import JsonApiJwkInAttributesContent
-from gooddata_api_client.model.json_api_jwk_in_document import JsonApiJwkInDocument
+from gooddata_api_client.models.json_api_jwk_in import JsonApiJwkIn
+from gooddata_api_client.models.json_api_jwk_in_attributes import JsonApiJwkInAttributes
+from gooddata_api_client.models.json_api_jwk_in_attributes_content import JsonApiJwkInAttributesContent
+from gooddata_api_client.models.json_api_jwk_in_document import JsonApiJwkInDocument
 
 from gooddata_sdk.catalog.base import Base
 

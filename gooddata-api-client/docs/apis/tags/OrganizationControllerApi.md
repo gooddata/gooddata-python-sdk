@@ -23,7 +23,7 @@ Get CookieSecurityConfiguration
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import organization_controller_api
-from gooddata_api_client.model.json_api_cookie_security_configuration_out_document import JsonApiCookieSecurityConfigurationOutDocument
+from gooddata_api_client.models.json_api_cookie_security_configuration_out_document import JsonApiCookieSecurityConfigurationOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -146,7 +146,7 @@ Get Organizations
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import organization_controller_api
-from gooddata_api_client.model.json_api_organization_out_document import JsonApiOrganizationOutDocument
+from gooddata_api_client.models.json_api_organization_out_document import JsonApiOrganizationOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -303,8 +303,8 @@ Patch CookieSecurityConfiguration
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import organization_controller_api
-from gooddata_api_client.model.json_api_cookie_security_configuration_out_document import JsonApiCookieSecurityConfigurationOutDocument
-from gooddata_api_client.model.json_api_cookie_security_configuration_patch_document import JsonApiCookieSecurityConfigurationPatchDocument
+from gooddata_api_client.models.json_api_cookie_security_configuration_out_document import JsonApiCookieSecurityConfigurationOutDocument
+from gooddata_api_client.models.json_api_cookie_security_configuration_patch_document import JsonApiCookieSecurityConfigurationPatchDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -459,8 +459,8 @@ Patch Organization
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import organization_controller_api
-from gooddata_api_client.model.json_api_organization_out_document import JsonApiOrganizationOutDocument
-from gooddata_api_client.model.json_api_organization_patch_document import JsonApiOrganizationPatchDocument
+from gooddata_api_client.models.json_api_organization_out_document import JsonApiOrganizationOutDocument
+from gooddata_api_client.models.json_api_organization_patch_document import JsonApiOrganizationPatchDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -647,8 +647,8 @@ Put CookieSecurityConfiguration
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import organization_controller_api
-from gooddata_api_client.model.json_api_cookie_security_configuration_in_document import JsonApiCookieSecurityConfigurationInDocument
-from gooddata_api_client.model.json_api_cookie_security_configuration_out_document import JsonApiCookieSecurityConfigurationOutDocument
+from gooddata_api_client.models.json_api_cookie_security_configuration_in_document import JsonApiCookieSecurityConfigurationInDocument
+from gooddata_api_client.models.json_api_cookie_security_configuration_out_document import JsonApiCookieSecurityConfigurationOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -803,8 +803,8 @@ Put Organization
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import organization_controller_api
-from gooddata_api_client.model.json_api_organization_out_document import JsonApiOrganizationOutDocument
-from gooddata_api_client.model.json_api_organization_in_document import JsonApiOrganizationInDocument
+from gooddata_api_client.models.json_api_organization_out_document import JsonApiOrganizationOutDocument
+from gooddata_api_client.models.json_api_organization_in_document import JsonApiOrganizationInDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -979,4 +979,3 @@ Type | Description  | Notes
 No authorization required
 
 [[Back to top]](#__pageTop) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
-

@@ -25,8 +25,8 @@ import frozendict  # noqa: F401
 
 from gooddata_api_client import schemas  # noqa: F401
 
-from gooddata_api_client.model.dependent_entities_request import DependentEntitiesRequest
-from gooddata_api_client.model.dependent_entities_response import DependentEntitiesResponse
+from gooddata_api_client.models.dependent_entities_request import DependentEntitiesRequest
+from gooddata_api_client.models.dependent_entities_response import DependentEntitiesResponse
 
 # Path params
 WorkspaceIdSchema = schemas.StrSchema
@@ -382,5 +382,3 @@ class ApiForpost(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
-
-

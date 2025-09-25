@@ -38,7 +38,7 @@ class MeasureValueFilter(
 
 
     class MetaOapg:
-        
+
         @classmethod
         @functools.lru_cache()
         def one_of(cls):
@@ -68,5 +68,5 @@ class MeasureValueFilter(
             **kwargs,
         )
 
-from gooddata_api_client.model.comparison_measure_value_filter import ComparisonMeasureValueFilter
-from gooddata_api_client.model.range_measure_value_filter import RangeMeasureValueFilter
+from gooddata_api_client.models.comparison_measure_value_filter import ComparisonMeasureValueFilter
+from gooddata_api_client.models.range_measure_value_filter import RangeMeasureValueFilter

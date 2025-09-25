@@ -23,12 +23,12 @@ Post CSP Directives
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import csp_directives_api
-from gooddata_api_client.model.json_api_csp_directive_out_document import JsonApiCspDirectiveOutDocument
-from gooddata_api_client.model.json_api_csp_directive_in_document import JsonApiCspDirectiveInDocument
+from gooddata_api_client.models.json_api_csp_directive_in_document import JsonApiCspDirectiveInDocument
+from gooddata_api_client.models.json_api_csp_directive_out_document import JsonApiCspDirectiveOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -37,36 +37,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = csp_directives_api.CSPDirectivesApi(api_client)
-    json_api_csp_directive_in_document = JsonApiCspDirectiveInDocument(
-        data=JsonApiCspDirectiveIn(
-            attributes=JsonApiCspDirectiveInAttributes(
-                sources=[
-                    "sources_example",
-                ],
-            ),
-            id="id1",
-            type="cspDirective",
-        ),
-    ) # JsonApiCspDirectiveInDocument | 
+    api_instance = gooddata_api_client.CSPDirectivesApi(api_client)
+    json_api_csp_directive_in_document = gooddata_api_client.JsonApiCspDirectiveInDocument() # JsonApiCspDirectiveInDocument | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Post CSP Directives
         api_response = api_instance.create_entity_csp_directives(json_api_csp_directive_in_document)
+        print("The response of CSPDirectivesApi->create_entity_csp_directives:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling CSPDirectivesApi->create_entity_csp_directives: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **json_api_csp_directive_in_document** | [**JsonApiCspDirectiveInDocument**](JsonApiCspDirectiveInDocument.md)|  |
+ **json_api_csp_directive_in_document** | [**JsonApiCspDirectiveInDocument**](JsonApiCspDirectiveInDocument.md)|  | 
 
 ### Return type
 
@@ -81,7 +73,6 @@ No authorization required
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -91,7 +82,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **delete_entity_csp_directives**
-> delete_entity_csp_directives(id)
+> delete_entity_csp_directives(id, filter=filter)
 
 Delete CSP Directives
 
@@ -101,10 +92,10 @@ Delete CSP Directives
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import csp_directives_api
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -113,35 +104,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = csp_directives_api.CSPDirectivesApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "sources==v1,v2,v3" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.CSPDirectivesApi(api_client)
+    id = 'id_example' # str | 
+    filter = 'sources==v1,v2,v3' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Delete CSP Directives
-        api_instance.delete_entity_csp_directives(id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling CSPDirectivesApi->delete_entity_csp_directives: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Delete CSP Directives
         api_instance.delete_entity_csp_directives(id, filter=filter)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling CSPDirectivesApi->delete_entity_csp_directives: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -156,7 +140,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: Not defined
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -166,7 +149,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_all_entities_csp_directives**
-> JsonApiCspDirectiveOutList get_all_entities_csp_directives()
+> JsonApiCspDirectiveOutList get_all_entities_csp_directives(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
 
 Get CSP Directives
 
@@ -176,11 +159,11 @@ Get CSP Directives
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import csp_directives_api
-from gooddata_api_client.model.json_api_csp_directive_out_list import JsonApiCspDirectiveOutList
+from gooddata_api_client.models.json_api_csp_directive_out_list import JsonApiCspDirectiveOutList
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -189,39 +172,36 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = csp_directives_api.CSPDirectivesApi(api_client)
-    filter = "sources==v1,v2,v3" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
-    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
-    sort = [
-        "sort_example",
-    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
-    meta_include = [
-        "metaInclude=page,all",
-    ] # [str] | Include Meta objects. (optional)
+    api_instance = gooddata_api_client.CSPDirectivesApi(api_client)
+    filter = 'sources==v1,v2,v3' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) (default to 0)
+    size = 20 # int | The size of the page to be returned (optional) (default to 20)
+    sort = ['sort_example'] # List[str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = ['metaInclude=page,all'] # List[str] | Include Meta objects. (optional)
 
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get CSP Directives
         api_response = api_instance.get_all_entities_csp_directives(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
+        print("The response of CSPDirectivesApi->get_all_entities_csp_directives:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling CSPDirectivesApi->get_all_entities_csp_directives: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
- **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
- **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
- **meta_include** | **[str]**| Include Meta objects. | [optional]
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **page** | **int**| Zero-based page index (0..N) | [optional] [default to 0]
+ **size** | **int**| The size of the page to be returned | [optional] [default to 20]
+ **sort** | [**List[str]**](str.md)| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional] 
+ **meta_include** | [**List[str]**](str.md)| Include Meta objects. | [optional] 
 
 ### Return type
 
@@ -236,7 +216,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -246,7 +225,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_entity_csp_directives**
-> JsonApiCspDirectiveOutDocument get_entity_csp_directives(id)
+> JsonApiCspDirectiveOutDocument get_entity_csp_directives(id, filter=filter)
 
 Get CSP Directives
 
@@ -256,11 +235,11 @@ Get CSP Directives
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import csp_directives_api
-from gooddata_api_client.model.json_api_csp_directive_out_document import JsonApiCspDirectiveOutDocument
+from gooddata_api_client.models.json_api_csp_directive_out_document import JsonApiCspDirectiveOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -269,37 +248,30 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = csp_directives_api.CSPDirectivesApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "sources==v1,v2,v3" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.CSPDirectivesApi(api_client)
+    id = 'id_example' # str | 
+    filter = 'sources==v1,v2,v3' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Get CSP Directives
-        api_response = api_instance.get_entity_csp_directives(id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling CSPDirectivesApi->get_entity_csp_directives: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get CSP Directives
         api_response = api_instance.get_entity_csp_directives(id, filter=filter)
+        print("The response of CSPDirectivesApi->get_entity_csp_directives:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling CSPDirectivesApi->get_entity_csp_directives: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -314,7 +286,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -324,7 +295,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **patch_entity_csp_directives**
-> JsonApiCspDirectiveOutDocument patch_entity_csp_directives(id, json_api_csp_directive_patch_document)
+> JsonApiCspDirectiveOutDocument patch_entity_csp_directives(id, json_api_csp_directive_patch_document, filter=filter)
 
 Patch CSP Directives
 
@@ -334,12 +305,12 @@ Patch CSP Directives
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import csp_directives_api
-from gooddata_api_client.model.json_api_csp_directive_out_document import JsonApiCspDirectiveOutDocument
-from gooddata_api_client.model.json_api_csp_directive_patch_document import JsonApiCspDirectivePatchDocument
+from gooddata_api_client.models.json_api_csp_directive_out_document import JsonApiCspDirectiveOutDocument
+from gooddata_api_client.models.json_api_csp_directive_patch_document import JsonApiCspDirectivePatchDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -348,49 +319,32 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = csp_directives_api.CSPDirectivesApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    json_api_csp_directive_patch_document = JsonApiCspDirectivePatchDocument(
-        data=JsonApiCspDirectivePatch(
-            attributes=JsonApiCspDirectivePatchAttributes(
-                sources=[
-                    "sources_example",
-                ],
-            ),
-            id="id1",
-            type="cspDirective",
-        ),
-    ) # JsonApiCspDirectivePatchDocument | 
-    filter = "sources==v1,v2,v3" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.CSPDirectivesApi(api_client)
+    id = 'id_example' # str | 
+    json_api_csp_directive_patch_document = gooddata_api_client.JsonApiCspDirectivePatchDocument() # JsonApiCspDirectivePatchDocument | 
+    filter = 'sources==v1,v2,v3' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Patch CSP Directives
-        api_response = api_instance.patch_entity_csp_directives(id, json_api_csp_directive_patch_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling CSPDirectivesApi->patch_entity_csp_directives: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Patch CSP Directives
         api_response = api_instance.patch_entity_csp_directives(id, json_api_csp_directive_patch_document, filter=filter)
+        print("The response of CSPDirectivesApi->patch_entity_csp_directives:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling CSPDirectivesApi->patch_entity_csp_directives: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **json_api_csp_directive_patch_document** | [**JsonApiCspDirectivePatchDocument**](JsonApiCspDirectivePatchDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **json_api_csp_directive_patch_document** | [**JsonApiCspDirectivePatchDocument**](JsonApiCspDirectivePatchDocument.md)|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -404,7 +358,6 @@ No authorization required
 
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
-
 
 ### HTTP response details
 
@@ -415,7 +368,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **update_entity_csp_directives**
-> JsonApiCspDirectiveOutDocument update_entity_csp_directives(id, json_api_csp_directive_in_document)
+> JsonApiCspDirectiveOutDocument update_entity_csp_directives(id, json_api_csp_directive_in_document, filter=filter)
 
 Put CSP Directives
 
@@ -425,12 +378,12 @@ Put CSP Directives
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import csp_directives_api
-from gooddata_api_client.model.json_api_csp_directive_out_document import JsonApiCspDirectiveOutDocument
-from gooddata_api_client.model.json_api_csp_directive_in_document import JsonApiCspDirectiveInDocument
+from gooddata_api_client.models.json_api_csp_directive_in_document import JsonApiCspDirectiveInDocument
+from gooddata_api_client.models.json_api_csp_directive_out_document import JsonApiCspDirectiveOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -439,49 +392,32 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = csp_directives_api.CSPDirectivesApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    json_api_csp_directive_in_document = JsonApiCspDirectiveInDocument(
-        data=JsonApiCspDirectiveIn(
-            attributes=JsonApiCspDirectiveInAttributes(
-                sources=[
-                    "sources_example",
-                ],
-            ),
-            id="id1",
-            type="cspDirective",
-        ),
-    ) # JsonApiCspDirectiveInDocument | 
-    filter = "sources==v1,v2,v3" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.CSPDirectivesApi(api_client)
+    id = 'id_example' # str | 
+    json_api_csp_directive_in_document = gooddata_api_client.JsonApiCspDirectiveInDocument() # JsonApiCspDirectiveInDocument | 
+    filter = 'sources==v1,v2,v3' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Put CSP Directives
-        api_response = api_instance.update_entity_csp_directives(id, json_api_csp_directive_in_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling CSPDirectivesApi->update_entity_csp_directives: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Put CSP Directives
         api_response = api_instance.update_entity_csp_directives(id, json_api_csp_directive_in_document, filter=filter)
+        print("The response of CSPDirectivesApi->update_entity_csp_directives:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling CSPDirectivesApi->update_entity_csp_directives: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **json_api_csp_directive_in_document** | [**JsonApiCspDirectiveInDocument**](JsonApiCspDirectiveInDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **json_api_csp_directive_in_document** | [**JsonApiCspDirectiveInDocument**](JsonApiCspDirectiveInDocument.md)|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -495,7 +431,6 @@ No authorization required
 
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
-
 
 ### HTTP response details
 

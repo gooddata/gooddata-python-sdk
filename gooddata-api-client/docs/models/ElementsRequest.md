@@ -1,4 +1,4 @@
-# gooddata_api_client.model.elements_request.ElementsRequest
+# gooddata_api_client.models.elements_request.ElementsRequest
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes
@@ -33,4 +33,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 items | str,  | str,  | Return only items, whose &#x60;&#x60;&#x60;label&#x60;&#x60;&#x60; title exactly matches one of &#x60;&#x60;&#x60;filter&#x60;&#x60;&#x60;. | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

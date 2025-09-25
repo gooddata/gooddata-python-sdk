@@ -42,29 +42,29 @@ class TabularExportRequest(
             "executionResult",
             "format",
         }
-        
+
         class properties:
             executionResult = schemas.StrSchema
             fileName = schemas.StrSchema
-            
-            
+
+
             class format(
                 schemas.EnumBase,
                 schemas.StrSchema
             ):
-                
+
                 @schemas.classproperty
                 def CSV(cls):
                     return cls("CSV")
-                
+
                 @schemas.classproperty
                 def XLSX(cls):
                     return cls("XLSX")
-        
+
             @staticmethod
             def customOverride() -> typing.Type['CustomOverride']:
                 return CustomOverride
-        
+
             @staticmethod
             def settings() -> typing.Type['Settings']:
                 return Settings
@@ -75,55 +75,55 @@ class TabularExportRequest(
                 "customOverride": customOverride,
                 "settings": settings,
             }
-    
+
     fileName: MetaOapg.properties.fileName
     executionResult: MetaOapg.properties.executionResult
     format: MetaOapg.properties.format
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["executionResult"]) -> MetaOapg.properties.executionResult: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["fileName"]) -> MetaOapg.properties.fileName: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["format"]) -> MetaOapg.properties.format: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["customOverride"]) -> 'CustomOverride': ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["settings"]) -> 'Settings': ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["executionResult", "fileName", "format", "customOverride", "settings", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["executionResult"]) -> MetaOapg.properties.executionResult: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["fileName"]) -> MetaOapg.properties.fileName: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["format"]) -> MetaOapg.properties.format: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["customOverride"]) -> typing.Union['CustomOverride', schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["settings"]) -> typing.Union['Settings', schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["executionResult", "fileName", "format", "customOverride", "settings", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -148,5 +148,5 @@ class TabularExportRequest(
             **kwargs,
         )
 
-from gooddata_api_client.model.custom_override import CustomOverride
-from gooddata_api_client.model.settings import Settings
+from gooddata_api_client.models.custom_override import CustomOverride
+from gooddata_api_client.models.settings import Settings

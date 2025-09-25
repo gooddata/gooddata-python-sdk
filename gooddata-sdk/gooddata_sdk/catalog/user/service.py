@@ -5,8 +5,8 @@ import functools
 from pathlib import Path
 
 from gooddata_api_client.exceptions import NotFoundException
-from gooddata_api_client.model.json_api_api_token_in import JsonApiApiTokenIn
-from gooddata_api_client.model.json_api_api_token_in_document import JsonApiApiTokenInDocument
+from gooddata_api_client.models.json_api_api_token_in import JsonApiApiTokenIn
+from gooddata_api_client.models.json_api_api_token_in_document import JsonApiApiTokenInDocument
 
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.user.declarative_model.user import CatalogDeclarativeUsers
@@ -85,7 +85,6 @@ class CatalogUserService(CatalogServiceBase):
         get_users = functools.partial(
             self._entities_api.get_all_entities_users,
             include=["userGroups"],
-            _check_return_type=False,
         )
         users = load_all_entities_dict(get_users, camel_case=False)
         return [CatalogUser.from_dict(v, camel_case=False) for v in users["data"]]
@@ -153,7 +152,6 @@ class CatalogUserService(CatalogServiceBase):
         get_user_groups = functools.partial(
             self._entities_api.get_all_entities_user_groups,
             include=["userGroups"],
-            _check_return_type=False,
         )
         user_groups = load_all_entities(get_user_groups)
         return [CatalogUserGroup.from_api(v) for v in user_groups.data]
@@ -455,19 +453,18 @@ class CatalogUserService(CatalogServiceBase):
         get_api_tokens = functools.partial(
             self._entities_api.get_all_entities_api_tokens,
             user_id,
-            _check_return_type=False,
         )
         api_tokens = load_all_entities(get_api_tokens)
         return [CatalogApiToken(id=v["id"]) for v in api_tokens.data]
 
     def create_user_api_token(self, user_id: str, api_token_id: str) -> CatalogApiToken:
         document = JsonApiApiTokenInDocument(data=JsonApiApiTokenIn(id=api_token_id, type="apiToken"))
-        api_token = self._entities_api.create_entity_api_tokens(user_id, document, _check_return_type=False)
+        api_token = self._entities_api.create_entity_api_tokens(user_id, document)
         v = api_token.data
         return CatalogApiToken(id=v["id"], bearer_token=v.get("attributes", {}).get("bearerToken"))
 
     def get_user_api_token(self, user_id: str, api_token_id: str) -> CatalogApiToken:
-        api_token = self._entities_api.get_entity_api_tokens(user_id, api_token_id, _check_return_type=False)
+        api_token = self._entities_api.get_entity_api_tokens(user_id, api_token_id)
         v = api_token.data
         return CatalogApiToken(id=v["id"])
 

@@ -25,8 +25,8 @@ import frozendict  # noqa: F401
 
 from gooddata_api_client import schemas  # noqa: F401
 
-from gooddata_api_client.model.json_api_color_palette_in_document import JsonApiColorPaletteInDocument
-from gooddata_api_client.model.json_api_color_palette_out_document import JsonApiColorPaletteOutDocument
+from gooddata_api_client.models.json_api_color_palette_in_document import JsonApiColorPaletteInDocument
+from gooddata_api_client.models.json_api_color_palette_out_document import JsonApiColorPaletteOutDocument
 
 from . import path
 
@@ -330,5 +330,3 @@ class ApiForpost(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
-
-

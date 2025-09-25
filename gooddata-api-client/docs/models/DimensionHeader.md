@@ -1,4 +1,4 @@
-# gooddata_api_client.model.dimension_header.DimensionHeader
+# gooddata_api_client.models.dimension_header.DimensionHeader
 
 Contains the dimension-specific header information.
 
@@ -28,4 +28,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**HeaderGroup**](HeaderGroup.md) | [**HeaderGroup**](HeaderGroup.md) | [**HeaderGroup**](HeaderGroup.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

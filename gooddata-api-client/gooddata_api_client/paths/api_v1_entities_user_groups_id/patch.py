@@ -25,8 +25,8 @@ import frozendict  # noqa: F401
 
 from gooddata_api_client import schemas  # noqa: F401
 
-from gooddata_api_client.model.json_api_user_group_out_document import JsonApiUserGroupOutDocument
-from gooddata_api_client.model.json_api_user_group_patch_document import JsonApiUserGroupPatchDocument
+from gooddata_api_client.models.json_api_user_group_out_document import JsonApiUserGroupOutDocument
+from gooddata_api_client.models.json_api_user_group_patch_document import JsonApiUserGroupPatchDocument
 
 from . import path
 
@@ -40,29 +40,29 @@ class IncludeSchema(
 
 
     class MetaOapg:
-        
-        
+
+
         class items(
             schemas.EnumBase,
             schemas.StrSchema
         ):
-        
-        
+
+
             class MetaOapg:
                 enum_value_to_name = {
                     "userGroups": "USER_GROUPS",
                     "parents": "PARENTS",
                     "ALL": "ALL",
                 }
-            
+
             @schemas.classproperty
             def USER_GROUPS(cls):
                 return cls("userGroups")
-            
+
             @schemas.classproperty
             def PARENTS(cls):
                 return cls("parents")
-            
+
             @schemas.classproperty
             def ALL(cls):
                 return cls("ALL")
@@ -509,5 +509,3 @@ class ApiForpatch(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
-
-

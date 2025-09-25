@@ -19,7 +19,7 @@ Get all Facts
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import facts_api
-from gooddata_api_client.model.json_api_fact_out_list import JsonApiFactOutList
+from gooddata_api_client.models.json_api_fact_out_list import JsonApiFactOutList
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -243,7 +243,7 @@ Get a Fact
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import facts_api
-from gooddata_api_client.model.json_api_fact_out_document import JsonApiFactOutDocument
+from gooddata_api_client.models.json_api_fact_out_document import JsonApiFactOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -420,4 +420,3 @@ Type | Description  | Notes
 No authorization required
 
 [[Back to top]](#__pageTop) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
-

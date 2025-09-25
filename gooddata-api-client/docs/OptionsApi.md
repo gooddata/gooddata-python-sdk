@@ -8,7 +8,7 @@ Method | HTTP request | Description
 
 
 # **get_all_options**
-> {str: (bool, date, datetime, dict, float, int, list, str, none_type)} get_all_options()
+> object get_all_options()
 
 Links for all configuration options
 
@@ -18,10 +18,10 @@ Retrieves links for all options for different configurations.
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import options_api
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -30,26 +30,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = options_api.OptionsApi(api_client)
+    api_instance = gooddata_api_client.OptionsApi(api_client)
 
-    # example, this endpoint has no required or optional parameters
     try:
         # Links for all configuration options
         api_response = api_instance.get_all_options()
+        print("The response of OptionsApi->get_all_options:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling OptionsApi->get_all_options: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 This endpoint does not need any parameter.
 
 ### Return type
 
-**{str: (bool, date, datetime, dict, float, int, list, str, none_type)}**
+**object**
 
 ### Authorization
 
@@ -59,7 +61,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
-
 
 ### HTTP response details
 

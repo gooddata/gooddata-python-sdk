@@ -1,4 +1,4 @@
-# gooddata_api_client.model.declarative_users.DeclarativeUsers
+# gooddata_api_client.models.declarative_users.DeclarativeUsers
 
 Declarative form of users and its properties.
 
@@ -26,4 +26,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**DeclarativeUser**](DeclarativeUser.md) | [**DeclarativeUser**](DeclarativeUser.md) | [**DeclarativeUser**](DeclarativeUser.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

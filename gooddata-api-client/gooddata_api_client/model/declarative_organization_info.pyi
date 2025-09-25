@@ -43,39 +43,39 @@ class DeclarativeOrganizationInfo(
             "name",
             "id",
         }
-        
+
         class properties:
-            
-            
+
+
             class hostname(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class id(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class name(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class permissions(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeOrganizationPermission']:
                         return DeclarativeOrganizationPermission
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeOrganizationPermission'], typing.List['DeclarativeOrganizationPermission']],
@@ -86,22 +86,22 @@ class DeclarativeOrganizationInfo(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeOrganizationPermission':
                     return super().__getitem__(i)
-            
-            
+
+
             class colorPalettes(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeColorPalette']:
                         return DeclarativeColorPalette
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeColorPalette'], typing.List['DeclarativeColorPalette']],
@@ -112,22 +112,22 @@ class DeclarativeOrganizationInfo(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeColorPalette':
                     return super().__getitem__(i)
-            
-            
+
+
             class cspDirectives(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeCspDirective']:
                         return DeclarativeCspDirective
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeCspDirective'], typing.List['DeclarativeCspDirective']],
@@ -138,52 +138,52 @@ class DeclarativeOrganizationInfo(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeCspDirective':
                     return super().__getitem__(i)
-            
-            
+
+
             class earlyAccess(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class oauthClientId(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class oauthClientSecret(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class oauthIssuerId(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class oauthIssuerLocation(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class settings(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeSetting']:
                         return DeclarativeSetting
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeSetting'], typing.List['DeclarativeSetting']],
@@ -194,22 +194,22 @@ class DeclarativeOrganizationInfo(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeSetting':
                     return super().__getitem__(i)
-            
-            
+
+
             class themes(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeTheme']:
                         return DeclarativeTheme
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeTheme'], typing.List['DeclarativeTheme']],
@@ -220,7 +220,7 @@ class DeclarativeOrganizationInfo(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeTheme':
                     return super().__getitem__(i)
             __annotations__ = {
@@ -238,104 +238,104 @@ class DeclarativeOrganizationInfo(
                 "settings": settings,
                 "themes": themes,
             }
-    
+
     hostname: MetaOapg.properties.hostname
     permissions: MetaOapg.properties.permissions
     name: MetaOapg.properties.name
     id: MetaOapg.properties.id
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["hostname"]) -> MetaOapg.properties.hostname: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["permissions"]) -> MetaOapg.properties.permissions: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["colorPalettes"]) -> MetaOapg.properties.colorPalettes: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["cspDirectives"]) -> MetaOapg.properties.cspDirectives: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["earlyAccess"]) -> MetaOapg.properties.earlyAccess: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["oauthClientId"]) -> MetaOapg.properties.oauthClientId: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["oauthClientSecret"]) -> MetaOapg.properties.oauthClientSecret: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["oauthIssuerId"]) -> MetaOapg.properties.oauthIssuerId: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["oauthIssuerLocation"]) -> MetaOapg.properties.oauthIssuerLocation: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["settings"]) -> MetaOapg.properties.settings: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["themes"]) -> MetaOapg.properties.themes: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["hostname", "id", "name", "permissions", "colorPalettes", "cspDirectives", "earlyAccess", "oauthClientId", "oauthClientSecret", "oauthIssuerId", "oauthIssuerLocation", "settings", "themes", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["hostname"]) -> MetaOapg.properties.hostname: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["permissions"]) -> MetaOapg.properties.permissions: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["colorPalettes"]) -> typing.Union[MetaOapg.properties.colorPalettes, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["cspDirectives"]) -> typing.Union[MetaOapg.properties.cspDirectives, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["earlyAccess"]) -> typing.Union[MetaOapg.properties.earlyAccess, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["oauthClientId"]) -> typing.Union[MetaOapg.properties.oauthClientId, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["oauthClientSecret"]) -> typing.Union[MetaOapg.properties.oauthClientSecret, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["oauthIssuerId"]) -> typing.Union[MetaOapg.properties.oauthIssuerId, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["oauthIssuerLocation"]) -> typing.Union[MetaOapg.properties.oauthIssuerLocation, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["settings"]) -> typing.Union[MetaOapg.properties.settings, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["themes"]) -> typing.Union[MetaOapg.properties.themes, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["hostname", "id", "name", "permissions", "colorPalettes", "cspDirectives", "earlyAccess", "oauthClientId", "oauthClientSecret", "oauthIssuerId", "oauthIssuerLocation", "settings", "themes", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -376,8 +376,8 @@ class DeclarativeOrganizationInfo(
             **kwargs,
         )
 
-from gooddata_api_client.model.declarative_color_palette import DeclarativeColorPalette
-from gooddata_api_client.model.declarative_csp_directive import DeclarativeCspDirective
-from gooddata_api_client.model.declarative_organization_permission import DeclarativeOrganizationPermission
-from gooddata_api_client.model.declarative_setting import DeclarativeSetting
-from gooddata_api_client.model.declarative_theme import DeclarativeTheme
+from gooddata_api_client.models.declarative_color_palette import DeclarativeColorPalette
+from gooddata_api_client.models.declarative_csp_directive import DeclarativeCspDirective
+from gooddata_api_client.models.declarative_organization_permission import DeclarativeOrganizationPermission
+from gooddata_api_client.models.declarative_setting import DeclarativeSetting
+from gooddata_api_client.models.declarative_theme import DeclarativeTheme

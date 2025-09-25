@@ -1,4 +1,4 @@
-# gooddata_api_client.model.user_group_permission.UserGroupPermission
+# gooddata_api_client.models.user_group_permission.UserGroupPermission
 
 List of user groups
 
@@ -30,4 +30,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**GrantedPermission**](GrantedPermission.md) | [**GrantedPermission**](GrantedPermission.md) | [**GrantedPermission**](GrantedPermission.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

@@ -36,7 +36,7 @@ class ResultDimensionHeader(
 
 
     class MetaOapg:
-        
+
         @classmethod
         @functools.lru_cache()
         def one_of(cls):
@@ -66,5 +66,5 @@ class ResultDimensionHeader(
             **kwargs,
         )
 
-from gooddata_api_client.model.attribute_header_out import AttributeHeaderOut
-from gooddata_api_client.model.measure_group_headers import MeasureGroupHeaders
+from gooddata_api_client.models.attribute_header_out import AttributeHeaderOut
+from gooddata_api_client.models.measure_group_headers import MeasureGroupHeaders

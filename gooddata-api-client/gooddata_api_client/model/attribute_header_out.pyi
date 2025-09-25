@@ -38,15 +38,15 @@ class AttributeHeaderOut(
         required = {
             "attributeHeader",
         }
-        
+
         class properties:
-            
-            
+
+
             class attributeHeader(
                 schemas.DictSchema
             ):
-            
-            
+
+
                 class MetaOapg:
                     required = {
                         "primaryLabel",
@@ -56,95 +56,95 @@ class AttributeHeaderOut(
                         "label",
                         "labelName",
                     }
-                    
+
                     class properties:
-                    
+
                         @staticmethod
                         def attribute() -> typing.Type['RestApiIdentifier']:
                             return RestApiIdentifier
                         attributeName = schemas.StrSchema
-                    
+
                         @staticmethod
                         def format() -> typing.Type['AttributeFormat']:
                             return AttributeFormat
-                        
-                        
+
+
                         class granularity(
                             schemas.EnumBase,
                             schemas.StrSchema
                         ):
-                            
+
                             @schemas.classproperty
                             def MINUTE(cls):
                                 return cls("MINUTE")
-                            
+
                             @schemas.classproperty
                             def HOUR(cls):
                                 return cls("HOUR")
-                            
+
                             @schemas.classproperty
                             def DAY(cls):
                                 return cls("DAY")
-                            
+
                             @schemas.classproperty
                             def WEEK(cls):
                                 return cls("WEEK")
-                            
+
                             @schemas.classproperty
                             def MONTH(cls):
                                 return cls("MONTH")
-                            
+
                             @schemas.classproperty
                             def QUARTER(cls):
                                 return cls("QUARTER")
-                            
+
                             @schemas.classproperty
                             def YEAR(cls):
                                 return cls("YEAR")
-                            
+
                             @schemas.classproperty
                             def MINUTE_OF_HOUR(cls):
                                 return cls("MINUTE_OF_HOUR")
-                            
+
                             @schemas.classproperty
                             def HOUR_OF_DAY(cls):
                                 return cls("HOUR_OF_DAY")
-                            
+
                             @schemas.classproperty
                             def DAY_OF_WEEK(cls):
                                 return cls("DAY_OF_WEEK")
-                            
+
                             @schemas.classproperty
                             def DAY_OF_MONTH(cls):
                                 return cls("DAY_OF_MONTH")
-                            
+
                             @schemas.classproperty
                             def DAY_OF_YEAR(cls):
                                 return cls("DAY_OF_YEAR")
-                            
+
                             @schemas.classproperty
                             def WEEK_OF_YEAR(cls):
                                 return cls("WEEK_OF_YEAR")
-                            
+
                             @schemas.classproperty
                             def MONTH_OF_YEAR(cls):
                                 return cls("MONTH_OF_YEAR")
-                            
+
                             @schemas.classproperty
                             def QUARTER_OF_YEAR(cls):
                                 return cls("QUARTER_OF_YEAR")
-                    
+
                         @staticmethod
                         def label() -> typing.Type['RestApiIdentifier']:
                             return RestApiIdentifier
                         labelName = schemas.StrSchema
-                        
-                        
+
+
                         class localIdentifier(
                             schemas.StrSchema
                         ):
                             pass
-                    
+
                         @staticmethod
                         def primaryLabel() -> typing.Type['RestApiIdentifier']:
                             return RestApiIdentifier
@@ -158,77 +158,77 @@ class AttributeHeaderOut(
                             "localIdentifier": localIdentifier,
                             "primaryLabel": primaryLabel,
                         }
-                
+
                 primaryLabel: 'RestApiIdentifier'
                 localIdentifier: MetaOapg.properties.localIdentifier
                 attributeName: MetaOapg.properties.attributeName
                 attribute: 'RestApiIdentifier'
                 label: 'RestApiIdentifier'
                 labelName: MetaOapg.properties.labelName
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["attribute"]) -> 'RestApiIdentifier': ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["attributeName"]) -> MetaOapg.properties.attributeName: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["format"]) -> 'AttributeFormat': ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["granularity"]) -> MetaOapg.properties.granularity: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["label"]) -> 'RestApiIdentifier': ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["labelName"]) -> MetaOapg.properties.labelName: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["localIdentifier"]) -> MetaOapg.properties.localIdentifier: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["primaryLabel"]) -> 'RestApiIdentifier': ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-                
+
                 def __getitem__(self, name: typing.Union[typing_extensions.Literal["attribute", "attributeName", "format", "granularity", "label", "labelName", "localIdentifier", "primaryLabel", ], str]):
                     # dict_instance[name] accessor
                     return super().__getitem__(name)
-                
-                
+
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["attribute"]) -> 'RestApiIdentifier': ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["attributeName"]) -> MetaOapg.properties.attributeName: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["format"]) -> typing.Union['AttributeFormat', schemas.Unset]: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["granularity"]) -> typing.Union[MetaOapg.properties.granularity, schemas.Unset]: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["label"]) -> 'RestApiIdentifier': ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["labelName"]) -> MetaOapg.properties.labelName: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["localIdentifier"]) -> MetaOapg.properties.localIdentifier: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["primaryLabel"]) -> 'RestApiIdentifier': ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-                
+
                 def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["attribute", "attributeName", "format", "granularity", "label", "labelName", "localIdentifier", "primaryLabel", ], str]):
                     return super().get_item_oapg(name)
-                
-            
+
+
                 def __new__(
                     cls,
                     *_args: typing.Union[dict, frozendict.frozendict, ],
@@ -260,29 +260,29 @@ class AttributeHeaderOut(
             __annotations__ = {
                 "attributeHeader": attributeHeader,
             }
-    
+
     attributeHeader: MetaOapg.properties.attributeHeader
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["attributeHeader"]) -> MetaOapg.properties.attributeHeader: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["attributeHeader", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["attributeHeader"]) -> MetaOapg.properties.attributeHeader: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["attributeHeader", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -299,5 +299,5 @@ class AttributeHeaderOut(
             **kwargs,
         )
 
-from gooddata_api_client.model.attribute_format import AttributeFormat
-from gooddata_api_client.model.rest_api_identifier import RestApiIdentifier
+from gooddata_api_client.models.attribute_format import AttributeFormat
+from gooddata_api_client.models.rest_api_identifier import RestApiIdentifier

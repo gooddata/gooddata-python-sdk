@@ -41,43 +41,43 @@ class AfmValidObjectsQuery(
             "types",
             "afm",
         }
-        
+
         class properties:
-        
+
             @staticmethod
             def afm() -> typing.Type['AFM']:
                 return AFM
-            
-            
+
+
             class types(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
-                    
+
+
                     class items(
                         schemas.EnumBase,
                         schemas.StrSchema
                     ):
-                        
+
                         @schemas.classproperty
                         def FACTS(cls):
                             return cls("facts")
-                        
+
                         @schemas.classproperty
                         def ATTRIBUTES(cls):
                             return cls("attributes")
-                        
+
                         @schemas.classproperty
                         def MEASURES(cls):
                             return cls("measures")
-                        
+
                         @schemas.classproperty
                         def UNRECOGNIZED(cls):
                             return cls("UNRECOGNIZED")
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, str, ]], typing.List[typing.Union[MetaOapg.items, str, ]]],
@@ -88,43 +88,43 @@ class AfmValidObjectsQuery(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
             __annotations__ = {
                 "afm": afm,
                 "types": types,
             }
-    
+
     types: MetaOapg.properties.types
     afm: 'AFM'
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["afm"]) -> 'AFM': ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["types"]) -> MetaOapg.properties.types: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["afm", "types", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["afm"]) -> 'AFM': ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["types"]) -> MetaOapg.properties.types: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["afm", "types", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -143,4 +143,4 @@ class AfmValidObjectsQuery(
             **kwargs,
         )
 
-from gooddata_api_client.model.afm import AFM
+from gooddata_api_client.models.afm import AFM

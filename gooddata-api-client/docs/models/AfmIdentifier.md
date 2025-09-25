@@ -1,4 +1,4 @@
-# gooddata_api_client.model.afm_identifier.AfmIdentifier
+# gooddata_api_client.models.afm_identifier.AfmIdentifier
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes
@@ -13,4 +13,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [AfmLocalIdentifier](AfmLocalIdentifier.md) | [**AfmLocalIdentifier**](AfmLocalIdentifier.md) | [**AfmLocalIdentifier**](AfmLocalIdentifier.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

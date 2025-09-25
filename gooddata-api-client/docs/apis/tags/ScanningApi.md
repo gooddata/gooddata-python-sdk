@@ -22,7 +22,7 @@ It scans a database and reads metadata. The result of the request contains a lis
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import scanning_api
-from gooddata_api_client.model.data_source_schemata import DataSourceSchemata
+from gooddata_api_client.models.data_source_schemata import DataSourceSchemata
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -111,8 +111,8 @@ It scans a database and transforms its metadata to a declarative definition of t
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import scanning_api
-from gooddata_api_client.model.scan_request import ScanRequest
-from gooddata_api_client.model.scan_result_pdm import ScanResultPdm
+from gooddata_api_client.models.scan_request import ScanRequest
+from gooddata_api_client.models.scan_result_pdm import ScanResultPdm
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -220,8 +220,8 @@ It executes SQL query against specified data source and extracts metadata. Metad
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import scanning_api
-from gooddata_api_client.model.scan_sql_response import ScanSqlResponse
-from gooddata_api_client.model.scan_sql_request import ScanSqlRequest
+from gooddata_api_client.models.scan_sql_response import ScanSqlResponse
+from gooddata_api_client.models.scan_sql_request import ScanSqlRequest
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -310,4 +310,3 @@ Type | Description  | Notes
 No authorization required
 
 [[Back to top]](#__pageTop) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
-

@@ -1,4 +1,4 @@
-# gooddata_api_client.model.identifier_duplications.IdentifierDuplications
+# gooddata_api_client.models.identifier_duplications.IdentifierDuplications
 
 Contains information about conflicting IDs in workspace hierarchy
 
@@ -28,4 +28,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 items | str,  | str,  |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

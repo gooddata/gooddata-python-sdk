@@ -37,7 +37,7 @@ class JsonApiFilterContextToManyLinkage(
 
 
     class MetaOapg:
-        
+
         @staticmethod
         def items() -> typing.Type['JsonApiFilterContextLinkage']:
             return JsonApiFilterContextLinkage
@@ -56,4 +56,4 @@ class JsonApiFilterContextToManyLinkage(
     def __getitem__(self, i: int) -> 'JsonApiFilterContextLinkage':
         return super().__getitem__(i)
 
-from gooddata_api_client.model.json_api_filter_context_linkage import JsonApiFilterContextLinkage
+from gooddata_api_client.models.json_api_filter_context_linkage import JsonApiFilterContextLinkage

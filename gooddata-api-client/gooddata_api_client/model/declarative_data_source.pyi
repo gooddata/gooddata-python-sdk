@@ -43,98 +43,98 @@ class DeclarativeDataSource(
             "id",
             "type",
         }
-        
+
         class properties:
-            
-            
+
+
             class id(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class name(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class schema(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class type(
                 schemas.EnumBase,
                 schemas.StrSchema
             ):
-                
+
                 @schemas.classproperty
                 def POSTGRESQL(cls):
                     return cls("POSTGRESQL")
-                
+
                 @schemas.classproperty
                 def REDSHIFT(cls):
                     return cls("REDSHIFT")
-                
+
                 @schemas.classproperty
                 def VERTICA(cls):
                     return cls("VERTICA")
-                
+
                 @schemas.classproperty
                 def SNOWFLAKE(cls):
                     return cls("SNOWFLAKE")
-                
+
                 @schemas.classproperty
                 def ADS(cls):
                     return cls("ADS")
-                
+
                 @schemas.classproperty
                 def BIGQUERY(cls):
                     return cls("BIGQUERY")
-                
+
                 @schemas.classproperty
                 def MSSQL(cls):
                     return cls("MSSQL")
-                
+
                 @schemas.classproperty
                 def PRESTO(cls):
                     return cls("PRESTO")
-                
+
                 @schemas.classproperty
                 def DREMIO(cls):
                     return cls("DREMIO")
-                
+
                 @schemas.classproperty
                 def DRILL(cls):
                     return cls("DRILL")
-                
+
                 @schemas.classproperty
                 def GREENPLUM(cls):
                     return cls("GREENPLUM")
-                
+
                 @schemas.classproperty
                 def AZURESQL(cls):
                     return cls("AZURESQL")
-                
+
                 @schemas.classproperty
                 def SYNAPSESQL(cls):
                     return cls("SYNAPSESQL")
-                
+
                 @schemas.classproperty
                 def DATABRICKS(cls):
                     return cls("DATABRICKS")
-            
-            
+
+
             class cachePath(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
                     items = schemas.StrSchema
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, str, ]], typing.List[typing.Union[MetaOapg.items, str, ]]],
@@ -145,22 +145,22 @@ class DeclarativeDataSource(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
-            
-            
+
+
             class decodedParameters(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['Parameter']:
                         return Parameter
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['Parameter'], typing.List['Parameter']],
@@ -171,23 +171,23 @@ class DeclarativeDataSource(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'Parameter':
                     return super().__getitem__(i)
             enableCaching = schemas.BoolSchema
-            
-            
+
+
             class parameters(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['Parameter']:
                         return Parameter
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['Parameter'], typing.List['Parameter']],
@@ -198,32 +198,32 @@ class DeclarativeDataSource(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'Parameter':
                     return super().__getitem__(i)
-            
-            
+
+
             class password(
                 schemas.StrSchema
             ):
                 pass
-        
+
             @staticmethod
             def pdm() -> typing.Type['DeclarativeTables']:
                 return DeclarativeTables
-            
-            
+
+
             class permissions(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeDataSourcePermission']:
                         return DeclarativeDataSourcePermission
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeDataSourcePermission'], typing.List['DeclarativeDataSourcePermission']],
@@ -234,23 +234,23 @@ class DeclarativeDataSource(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeDataSourcePermission':
                     return super().__getitem__(i)
-            
-            
+
+
             class token(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class url(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class username(
                 schemas.StrSchema
             ):
@@ -271,110 +271,110 @@ class DeclarativeDataSource(
                 "url": url,
                 "username": username,
             }
-    
+
     schema: MetaOapg.properties.schema
     name: MetaOapg.properties.name
     id: MetaOapg.properties.id
     type: MetaOapg.properties.type
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["schema"]) -> MetaOapg.properties.schema: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["type"]) -> MetaOapg.properties.type: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["cachePath"]) -> MetaOapg.properties.cachePath: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["decodedParameters"]) -> MetaOapg.properties.decodedParameters: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["enableCaching"]) -> MetaOapg.properties.enableCaching: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["parameters"]) -> MetaOapg.properties.parameters: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["password"]) -> MetaOapg.properties.password: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["pdm"]) -> 'DeclarativeTables': ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["permissions"]) -> MetaOapg.properties.permissions: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["token"]) -> MetaOapg.properties.token: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["url"]) -> MetaOapg.properties.url: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["username"]) -> MetaOapg.properties.username: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["id", "name", "schema", "type", "cachePath", "decodedParameters", "enableCaching", "parameters", "password", "pdm", "permissions", "token", "url", "username", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["schema"]) -> MetaOapg.properties.schema: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["type"]) -> MetaOapg.properties.type: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["cachePath"]) -> typing.Union[MetaOapg.properties.cachePath, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["decodedParameters"]) -> typing.Union[MetaOapg.properties.decodedParameters, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["enableCaching"]) -> typing.Union[MetaOapg.properties.enableCaching, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["parameters"]) -> typing.Union[MetaOapg.properties.parameters, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["password"]) -> typing.Union[MetaOapg.properties.password, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["pdm"]) -> typing.Union['DeclarativeTables', schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["permissions"]) -> typing.Union[MetaOapg.properties.permissions, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["token"]) -> typing.Union[MetaOapg.properties.token, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["url"]) -> typing.Union[MetaOapg.properties.url, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["username"]) -> typing.Union[MetaOapg.properties.username, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["id", "name", "schema", "type", "cachePath", "decodedParameters", "enableCaching", "parameters", "password", "pdm", "permissions", "token", "url", "username", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -417,6 +417,6 @@ class DeclarativeDataSource(
             **kwargs,
         )
 
-from gooddata_api_client.model.declarative_data_source_permission import DeclarativeDataSourcePermission
-from gooddata_api_client.model.declarative_tables import DeclarativeTables
-from gooddata_api_client.model.parameter import Parameter
+from gooddata_api_client.models.declarative_data_source_permission import DeclarativeDataSourcePermission
+from gooddata_api_client.models.declarative_tables import DeclarativeTables
+from gooddata_api_client.models.parameter import Parameter

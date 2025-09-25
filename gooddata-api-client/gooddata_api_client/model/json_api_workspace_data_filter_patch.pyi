@@ -321,4 +321,4 @@ class JsonApiWorkspaceDataFilterPatch(
             **kwargs,
         )
 
-from gooddata_api_client.model.json_api_workspace_data_filter_setting_to_many_linkage import JsonApiWorkspaceDataFilterSettingToManyLinkage
+from gooddata_api_client.models.json_api_workspace_data_filter_setting_to_many_linkage import JsonApiWorkspaceDataFilterSettingToManyLinkage

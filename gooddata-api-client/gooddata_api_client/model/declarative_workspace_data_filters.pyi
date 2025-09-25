@@ -40,21 +40,21 @@ class DeclarativeWorkspaceDataFilters(
         required = {
             "workspaceDataFilters",
         }
-        
+
         class properties:
-            
-            
+
+
             class workspaceDataFilters(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeWorkspaceDataFilter']:
                         return DeclarativeWorkspaceDataFilter
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeWorkspaceDataFilter'], typing.List['DeclarativeWorkspaceDataFilter']],
@@ -65,35 +65,35 @@ class DeclarativeWorkspaceDataFilters(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeWorkspaceDataFilter':
                     return super().__getitem__(i)
             __annotations__ = {
                 "workspaceDataFilters": workspaceDataFilters,
             }
-    
+
     workspaceDataFilters: MetaOapg.properties.workspaceDataFilters
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["workspaceDataFilters"]) -> MetaOapg.properties.workspaceDataFilters: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["workspaceDataFilters", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["workspaceDataFilters"]) -> MetaOapg.properties.workspaceDataFilters: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["workspaceDataFilters", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -110,4 +110,4 @@ class DeclarativeWorkspaceDataFilters(
             **kwargs,
         )
 
-from gooddata_api_client.model.declarative_workspace_data_filter import DeclarativeWorkspaceDataFilter
+from gooddata_api_client.models.declarative_workspace_data_filter import DeclarativeWorkspaceDataFilter

@@ -4,7 +4,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import attr
-from gooddata_api_client.model.declarative_tables import DeclarativeTables
+from gooddata_api_client.models.declarative_tables import DeclarativeTables
 
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.catalog.data_source.declarative_model.physical_model.table import CatalogDeclarativeTable

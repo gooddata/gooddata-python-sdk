@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 
 # **create_pdf_export**
-> ExportResponse create_pdf_export(workspace_id, visual_export_request)
+> ExportResponse create_pdf_export(workspace_id, visual_export_request, x_gdc_debug=x_gdc_debug)
 
 Create visual - pdf export request
 
@@ -20,12 +20,12 @@ An visual export job will be created based on the export request and put to queu
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import visual_export_api
-from gooddata_api_client.model.export_response import ExportResponse
-from gooddata_api_client.model.visual_export_request import VisualExportRequest
+from gooddata_api_client.models.export_response import ExportResponse
+from gooddata_api_client.models.visual_export_request import VisualExportRequest
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -34,43 +34,32 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = visual_export_api.VisualExportApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
-    visual_export_request = VisualExportRequest(
-        dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
-        file_name="filename",
-        metadata={},
-    ) # VisualExportRequest | 
-    x_gdc_debug = False # bool |  (optional) if omitted the server will use the default value of False
+    api_instance = gooddata_api_client.VisualExportApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
+    visual_export_request = gooddata_api_client.VisualExportRequest() # VisualExportRequest | 
+    x_gdc_debug = False # bool |  (optional) (default to False)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Create visual - pdf export request
-        api_response = api_instance.create_pdf_export(workspace_id, visual_export_request)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling VisualExportApi->create_pdf_export: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Create visual - pdf export request
         api_response = api_instance.create_pdf_export(workspace_id, visual_export_request, x_gdc_debug=x_gdc_debug)
+        print("The response of VisualExportApi->create_pdf_export:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling VisualExportApi->create_pdf_export: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
- **visual_export_request** | [**VisualExportRequest**](VisualExportRequest.md)|  |
- **x_gdc_debug** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **workspace_id** | **str**|  | 
+ **visual_export_request** | [**VisualExportRequest**](VisualExportRequest.md)|  | 
+ **x_gdc_debug** | **bool**|  | [optional] [default to False]
 
 ### Return type
 
@@ -85,7 +74,6 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -95,7 +83,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_exported_file**
-> file_type get_exported_file(workspace_id, export_id)
+> bytearray get_exported_file(workspace_id, export_id)
 
 Retrieve exported files
 
@@ -105,10 +93,10 @@ Returns 202 until original POST export request is not processed.Returns 200 with
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import visual_export_api
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -117,32 +105,34 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = visual_export_api.VisualExportApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
-    export_id = "exportId_example" # str | 
+    api_instance = gooddata_api_client.VisualExportApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
+    export_id = 'export_id_example' # str | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Retrieve exported files
         api_response = api_instance.get_exported_file(workspace_id, export_id)
+        print("The response of VisualExportApi->get_exported_file:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling VisualExportApi->get_exported_file: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
- **export_id** | **str**|  |
+ **workspace_id** | **str**|  | 
+ **export_id** | **str**|  | 
 
 ### Return type
 
-**file_type**
+**bytearray**
 
 ### Authorization
 
@@ -152,7 +142,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/pdf
-
 
 ### HTTP response details
 
@@ -174,10 +163,10 @@ This endpoint serves as a cache for user-defined metadata of the export for the 
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import visual_export_api
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -186,27 +175,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = visual_export_api.VisualExportApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
-    export_id = "exportId_example" # str | 
+    api_instance = gooddata_api_client.VisualExportApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
+    export_id = 'export_id_example' # str | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Retrieve metadata context
         api_instance.get_metadata(workspace_id, export_id)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling VisualExportApi->get_metadata: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
- **export_id** | **str**|  |
+ **workspace_id** | **str**|  | 
+ **export_id** | **str**|  | 
 
 ### Return type
 
@@ -220,7 +210,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
-
 
 ### HTTP response details
 

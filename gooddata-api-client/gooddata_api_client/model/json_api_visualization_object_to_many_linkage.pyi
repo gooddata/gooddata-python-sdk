@@ -37,7 +37,7 @@ class JsonApiVisualizationObjectToManyLinkage(
 
 
     class MetaOapg:
-        
+
         @staticmethod
         def items() -> typing.Type['JsonApiVisualizationObjectLinkage']:
             return JsonApiVisualizationObjectLinkage
@@ -56,4 +56,4 @@ class JsonApiVisualizationObjectToManyLinkage(
     def __getitem__(self, i: int) -> 'JsonApiVisualizationObjectLinkage':
         return super().__getitem__(i)
 
-from gooddata_api_client.model.json_api_visualization_object_linkage import JsonApiVisualizationObjectLinkage
+from gooddata_api_client.models.json_api_visualization_object_linkage import JsonApiVisualizationObjectLinkage

@@ -35,7 +35,7 @@ class JsonApiUserSettingOutWithLinks(
 
 
     class MetaOapg:
-        
+
         @classmethod
         @functools.lru_cache()
         def all_of(cls):
@@ -65,5 +65,5 @@ class JsonApiUserSettingOutWithLinks(
             **kwargs,
         )
 
-from gooddata_api_client.model.json_api_user_setting_out import JsonApiUserSettingOut
-from gooddata_api_client.model.object_links_container import ObjectLinksContainer
+from gooddata_api_client.models.json_api_user_setting_out import JsonApiUserSettingOut
+from gooddata_api_client.models.object_links_container import ObjectLinksContainer

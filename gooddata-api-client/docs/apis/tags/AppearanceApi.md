@@ -29,8 +29,8 @@ Post Color Pallettes
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import appearance_api
-from gooddata_api_client.model.json_api_color_palette_in_document import JsonApiColorPaletteInDocument
-from gooddata_api_client.model.json_api_color_palette_out_document import JsonApiColorPaletteOutDocument
+from gooddata_api_client.models.json_api_color_palette_in_document import JsonApiColorPaletteInDocument
+from gooddata_api_client.models.json_api_color_palette_out_document import JsonApiColorPaletteOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -119,8 +119,8 @@ Post Theming
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import appearance_api
-from gooddata_api_client.model.json_api_theme_in_document import JsonApiThemeInDocument
-from gooddata_api_client.model.json_api_theme_out_document import JsonApiThemeOutDocument
+from gooddata_api_client.models.json_api_theme_in_document import JsonApiThemeInDocument
+from gooddata_api_client.models.json_api_theme_out_document import JsonApiThemeOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -435,7 +435,7 @@ Get all Color Pallettes
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import appearance_api
-from gooddata_api_client.model.json_api_color_palette_out_list import JsonApiColorPaletteOutList
+from gooddata_api_client.models.json_api_color_palette_out_list import JsonApiColorPaletteOutList
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -557,7 +557,7 @@ Get all Theming entities
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import appearance_api
-from gooddata_api_client.model.json_api_theme_out_list import JsonApiThemeOutList
+from gooddata_api_client.models.json_api_theme_out_list import JsonApiThemeOutList
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -679,7 +679,7 @@ Get Color Pallette
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import appearance_api
-from gooddata_api_client.model.json_api_color_palette_out_document import JsonApiColorPaletteOutDocument
+from gooddata_api_client.models.json_api_color_palette_out_document import JsonApiColorPaletteOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -802,7 +802,7 @@ Get Theming
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import appearance_api
-from gooddata_api_client.model.json_api_theme_out_document import JsonApiThemeOutDocument
+from gooddata_api_client.models.json_api_theme_out_document import JsonApiThemeOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -925,8 +925,8 @@ Patch Color Pallette
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import appearance_api
-from gooddata_api_client.model.json_api_color_palette_patch_document import JsonApiColorPalettePatchDocument
-from gooddata_api_client.model.json_api_color_palette_out_document import JsonApiColorPaletteOutDocument
+from gooddata_api_client.models.json_api_color_palette_patch_document import JsonApiColorPalettePatchDocument
+from gooddata_api_client.models.json_api_color_palette_out_document import JsonApiColorPaletteOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1081,8 +1081,8 @@ Patch Theming
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import appearance_api
-from gooddata_api_client.model.json_api_theme_patch_document import JsonApiThemePatchDocument
-from gooddata_api_client.model.json_api_theme_out_document import JsonApiThemeOutDocument
+from gooddata_api_client.models.json_api_theme_patch_document import JsonApiThemePatchDocument
+from gooddata_api_client.models.json_api_theme_out_document import JsonApiThemeOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1237,8 +1237,8 @@ Put Color Pallette
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import appearance_api
-from gooddata_api_client.model.json_api_color_palette_in_document import JsonApiColorPaletteInDocument
-from gooddata_api_client.model.json_api_color_palette_out_document import JsonApiColorPaletteOutDocument
+from gooddata_api_client.models.json_api_color_palette_in_document import JsonApiColorPaletteInDocument
+from gooddata_api_client.models.json_api_color_palette_out_document import JsonApiColorPaletteOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1393,8 +1393,8 @@ Put Theming
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import appearance_api
-from gooddata_api_client.model.json_api_theme_in_document import JsonApiThemeInDocument
-from gooddata_api_client.model.json_api_theme_out_document import JsonApiThemeOutDocument
+from gooddata_api_client.models.json_api_theme_in_document import JsonApiThemeInDocument
+from gooddata_api_client.models.json_api_theme_out_document import JsonApiThemeOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1537,4 +1537,3 @@ Type | Description  | Notes
 No authorization required
 
 [[Back to top]](#__pageTop) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
-

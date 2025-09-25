@@ -37,7 +37,7 @@ class JsonApiWorkspaceDataFilterSettingToManyLinkage(
 
 
     class MetaOapg:
-        
+
         @staticmethod
         def items() -> typing.Type['JsonApiWorkspaceDataFilterSettingLinkage']:
             return JsonApiWorkspaceDataFilterSettingLinkage
@@ -56,4 +56,4 @@ class JsonApiWorkspaceDataFilterSettingToManyLinkage(
     def __getitem__(self, i: int) -> 'JsonApiWorkspaceDataFilterSettingLinkage':
         return super().__getitem__(i)
 
-from gooddata_api_client.model.json_api_workspace_data_filter_setting_linkage import JsonApiWorkspaceDataFilterSettingLinkage
+from gooddata_api_client.models.json_api_workspace_data_filter_setting_linkage import JsonApiWorkspaceDataFilterSettingLinkage

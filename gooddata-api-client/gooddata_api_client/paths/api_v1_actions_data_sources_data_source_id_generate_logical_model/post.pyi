@@ -25,8 +25,8 @@ import frozendict  # noqa: F401
 
 from gooddata_api_client import schemas  # noqa: F401
 
-from gooddata_api_client.model.declarative_model import DeclarativeModel
-from gooddata_api_client.model.generate_ldm_request import GenerateLdmRequest
+from gooddata_api_client.models.declarative_model import DeclarativeModel
+from gooddata_api_client.models.generate_ldm_request import GenerateLdmRequest
 
 # Path params
 DataSourceIdSchema = schemas.StrSchema
@@ -382,5 +382,3 @@ class ApiForpost(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
-
-

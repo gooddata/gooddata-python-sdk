@@ -25,7 +25,7 @@ import frozendict  # noqa: F401
 
 from gooddata_api_client import schemas  # noqa: F401
 
-from gooddata_api_client.model.result_cache_metadata import ResultCacheMetadata
+from gooddata_api_client.models.result_cache_metadata import ResultCacheMetadata
 
 from . import path
 
@@ -308,5 +308,3 @@ class ApiForget(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
-
-

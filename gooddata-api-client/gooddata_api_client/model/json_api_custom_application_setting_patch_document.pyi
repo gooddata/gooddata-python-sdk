@@ -86,4 +86,4 @@ class JsonApiCustomApplicationSettingPatchDocument(
             **kwargs,
         )
 
-from gooddata_api_client.model.json_api_custom_application_setting_patch import JsonApiCustomApplicationSettingPatch
+from gooddata_api_client.models.json_api_custom_application_setting_patch import JsonApiCustomApplicationSettingPatch

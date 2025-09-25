@@ -43,39 +43,39 @@ class DeclarativeWorkspaceDataFilter(
             "title",
             "columnName",
         }
-        
+
         class properties:
-            
-            
+
+
             class columnName(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class id(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class title(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class workspaceDataFilterSettings(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeWorkspaceDataFilterSetting']:
                         return DeclarativeWorkspaceDataFilterSetting
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeWorkspaceDataFilterSetting'], typing.List['DeclarativeWorkspaceDataFilterSetting']],
@@ -86,16 +86,16 @@ class DeclarativeWorkspaceDataFilter(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeWorkspaceDataFilterSetting':
                     return super().__getitem__(i)
-            
-            
+
+
             class description(
                 schemas.StrSchema
             ):
                 pass
-        
+
             @staticmethod
             def workspace() -> typing.Type['WorkspaceIdentifier']:
                 return WorkspaceIdentifier
@@ -107,62 +107,62 @@ class DeclarativeWorkspaceDataFilter(
                 "description": description,
                 "workspace": workspace,
             }
-    
+
     workspaceDataFilterSettings: MetaOapg.properties.workspaceDataFilterSettings
     id: MetaOapg.properties.id
     title: MetaOapg.properties.title
     columnName: MetaOapg.properties.columnName
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["columnName"]) -> MetaOapg.properties.columnName: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["title"]) -> MetaOapg.properties.title: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["workspaceDataFilterSettings"]) -> MetaOapg.properties.workspaceDataFilterSettings: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["description"]) -> MetaOapg.properties.description: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["workspace"]) -> 'WorkspaceIdentifier': ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["columnName", "id", "title", "workspaceDataFilterSettings", "description", "workspace", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["columnName"]) -> MetaOapg.properties.columnName: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["title"]) -> MetaOapg.properties.title: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["workspaceDataFilterSettings"]) -> MetaOapg.properties.workspaceDataFilterSettings: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["description"]) -> typing.Union[MetaOapg.properties.description, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["workspace"]) -> typing.Union['WorkspaceIdentifier', schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["columnName", "id", "title", "workspaceDataFilterSettings", "description", "workspace", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -189,5 +189,5 @@ class DeclarativeWorkspaceDataFilter(
             **kwargs,
         )
 
-from gooddata_api_client.model.declarative_workspace_data_filter_setting import DeclarativeWorkspaceDataFilterSetting
-from gooddata_api_client.model.workspace_identifier import WorkspaceIdentifier
+from gooddata_api_client.models.declarative_workspace_data_filter_setting import DeclarativeWorkspaceDataFilterSetting
+from gooddata_api_client.models.workspace_identifier import WorkspaceIdentifier

@@ -53,7 +53,7 @@ Provides information about platform usage, like amount of users, workspaces, ...
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import actions_api
-from gooddata_api_client.model.platform_usage import PlatformUsage
+from gooddata_api_client.models.platform_usage import PlatformUsage
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -120,7 +120,7 @@ Get Available Assignees
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import actions_api
-from gooddata_api_client.model.available_assignees import AvailableAssignees
+from gooddata_api_client.models.available_assignees import AvailableAssignees
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -218,8 +218,8 @@ Finds entities with given ID in hierarchy (e.g. to check possible future conflic
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import actions_api
-from gooddata_api_client.model.hierarchy_object_identification import HierarchyObjectIdentification
-from gooddata_api_client.model.identifier_duplications import IdentifierDuplications
+from gooddata_api_client.models.hierarchy_object_identification import HierarchyObjectIdentification
+from gooddata_api_client.models.identifier_duplications import IdentifierDuplications
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -339,8 +339,8 @@ Returns paged list of elements (values) of given label satisfying given filterin
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import actions_api
-from gooddata_api_client.model.elements_request import ElementsRequest
-from gooddata_api_client.model.elements_response import ElementsResponse
+from gooddata_api_client.models.elements_request import ElementsRequest
+from gooddata_api_client.models.elements_response import ElementsResponse
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -536,8 +536,8 @@ AFM is a combination of attributes, measures and filters that describe a query y
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import actions_api
-from gooddata_api_client.model.afm_execution_response import AfmExecutionResponse
-from gooddata_api_client.model.afm_execution import AfmExecution
+from gooddata_api_client.models.afm_execution_response import AfmExecutionResponse
+from gooddata_api_client.models.afm_execution import AfmExecution
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -792,8 +792,8 @@ Returns list containing attributes, facts, or metrics, which can be added to giv
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import actions_api
-from gooddata_api_client.model.afm_valid_objects_query import AfmValidObjectsQuery
-from gooddata_api_client.model.afm_valid_objects_response import AfmValidObjectsResponse
+from gooddata_api_client.models.afm_valid_objects_query import AfmValidObjectsQuery
+from gooddata_api_client.models.afm_valid_objects_response import AfmValidObjectsResponse
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -924,8 +924,8 @@ An visual export job will be created based on the export request and put to queu
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import actions_api
-from gooddata_api_client.model.export_response import ExportResponse
-from gooddata_api_client.model.pdf_export_request import PdfExportRequest
+from gooddata_api_client.models.export_response import ExportResponse
+from gooddata_api_client.models.pdf_export_request import PdfExportRequest
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1030,8 +1030,8 @@ An tabular export job will be created based on the export request and put to que
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import actions_api
-from gooddata_api_client.model.export_response import ExportResponse
-from gooddata_api_client.model.tabular_export_request import TabularExportRequest
+from gooddata_api_client.models.export_response import ExportResponse
+from gooddata_api_client.models.tabular_export_request import TabularExportRequest
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1151,7 +1151,7 @@ Get Dashboard Permissions
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import actions_api
-from gooddata_api_client.model.dashboard_permissions import DashboardPermissions
+from gooddata_api_client.models.dashboard_permissions import DashboardPermissions
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1249,7 +1249,7 @@ The resource provides static structures needed for investigation of a problem wi
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import actions_api
-from gooddata_api_client.model.afm_execution import AfmExecution
+from gooddata_api_client.models.afm_execution import AfmExecution
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1497,8 +1497,8 @@ Generate logical data model (LDM) from physical data model (PDM) stored in data 
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import actions_api
-from gooddata_api_client.model.declarative_model import DeclarativeModel
-from gooddata_api_client.model.generate_ldm_request import GenerateLdmRequest
+from gooddata_api_client.models.declarative_model import DeclarativeModel
+from gooddata_api_client.models.generate_ldm_request import GenerateLdmRequest
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1616,7 +1616,7 @@ It scans a database and reads metadata. The result of the request contains a lis
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import actions_api
-from gooddata_api_client.model.data_source_schemata import DataSourceSchemata
+from gooddata_api_client.models.data_source_schemata import DataSourceSchemata
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1705,7 +1705,7 @@ Computes the dependent entities graph
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import actions_api
-from gooddata_api_client.model.dependent_entities_response import DependentEntitiesResponse
+from gooddata_api_client.models.dependent_entities_response import DependentEntitiesResponse
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1794,8 +1794,8 @@ Computes the dependent entities graph from given entry points
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import actions_api
-from gooddata_api_client.model.dependent_entities_request import DependentEntitiesRequest
-from gooddata_api_client.model.dependent_entities_response import DependentEntitiesResponse
+from gooddata_api_client.models.dependent_entities_request import DependentEntitiesRequest
+from gooddata_api_client.models.dependent_entities_response import DependentEntitiesResponse
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -2236,7 +2236,7 @@ Finds API identifier conflicts in given workspace hierarchy.
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import actions_api
-from gooddata_api_client.model.identifier_duplications import IdentifierDuplications
+from gooddata_api_client.models.identifier_duplications import IdentifierDuplications
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -2329,7 +2329,7 @@ Manage Permissions for a Dashboard
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import actions_api
-from gooddata_api_client.model.permissions_for_assignee import PermissionsForAssignee
+from gooddata_api_client.models.permissions_for_assignee import PermissionsForAssignee
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -2449,7 +2449,7 @@ Finds API identifier overrides in given workspace hierarchy.
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import actions_api
-from gooddata_api_client.model.identifier_duplications import IdentifierDuplications
+from gooddata_api_client.models.identifier_duplications import IdentifierDuplications
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -2544,8 +2544,8 @@ Provides information about platform usage, like amount of users, workspaces, ...
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import actions_api
-from gooddata_api_client.model.platform_usage_request import PlatformUsageRequest
-from gooddata_api_client.model.platform_usage import PlatformUsage
+from gooddata_api_client.models.platform_usage_request import PlatformUsageRequest
+from gooddata_api_client.models.platform_usage import PlatformUsage
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -2717,7 +2717,7 @@ Resolves values of available entitlements for the organization.
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import actions_api
-from gooddata_api_client.model.api_entitlement import ApiEntitlement
+from gooddata_api_client.models.api_entitlement import ApiEntitlement
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -2786,7 +2786,7 @@ Resolves values for all settings without workspace by current user, organization
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import actions_api
-from gooddata_api_client.model.resolved_setting import ResolvedSetting
+from gooddata_api_client.models.resolved_setting import ResolvedSetting
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -2855,8 +2855,8 @@ Resolves values for requested entitlements in the organization.
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import actions_api
-from gooddata_api_client.model.api_entitlement import ApiEntitlement
-from gooddata_api_client.model.entitlements_request import EntitlementsRequest
+from gooddata_api_client.models.api_entitlement import ApiEntitlement
+from gooddata_api_client.models.entitlements_request import EntitlementsRequest
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -2948,8 +2948,8 @@ Resolves values for selected settings without workspace by current user, organiz
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import actions_api
-from gooddata_api_client.model.resolved_setting import ResolvedSetting
-from gooddata_api_client.model.resolve_settings_request import ResolveSettingsRequest
+from gooddata_api_client.models.resolved_setting import ResolvedSetting
+from gooddata_api_client.models.resolve_settings_request import ResolveSettingsRequest
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -3039,7 +3039,7 @@ The resource provides execution result's metadata as AFM and resultSpec used in 
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import actions_api
-from gooddata_api_client.model.result_cache_metadata import ResultCacheMetadata
+from gooddata_api_client.models.result_cache_metadata import ResultCacheMetadata
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -3137,7 +3137,7 @@ Gets a single execution result.
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import actions_api
-from gooddata_api_client.model.execution_result import ExecutionResult
+from gooddata_api_client.models.execution_result import ExecutionResult
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -3311,8 +3311,8 @@ It scans a database and transforms its metadata to a declarative definition of t
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import actions_api
-from gooddata_api_client.model.scan_request import ScanRequest
-from gooddata_api_client.model.scan_result_pdm import ScanResultPdm
+from gooddata_api_client.models.scan_request import ScanRequest
+from gooddata_api_client.models.scan_result_pdm import ScanResultPdm
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -3420,8 +3420,8 @@ It executes SQL query against specified data source and extracts metadata. Metad
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import actions_api
-from gooddata_api_client.model.scan_sql_response import ScanSqlResponse
-from gooddata_api_client.model.scan_sql_request import ScanSqlRequest
+from gooddata_api_client.models.scan_sql_response import ScanSqlResponse
+from gooddata_api_client.models.scan_sql_request import ScanSqlRequest
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -3524,8 +3524,8 @@ Test if it is possible to connect to a database using an existing data source de
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import actions_api
-from gooddata_api_client.model.test_response import TestResponse
-from gooddata_api_client.model.test_request import TestRequest
+from gooddata_api_client.models.test_response import TestResponse
+from gooddata_api_client.models.test_request import TestRequest
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -3642,8 +3642,8 @@ Test if it is possible to connect to a database using a connection provided by t
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import actions_api
-from gooddata_api_client.model.test_response import TestResponse
-from gooddata_api_client.model.test_definition_request import TestDefinitionRequest
+from gooddata_api_client.models.test_response import TestResponse
+from gooddata_api_client.models.test_definition_request import TestDefinitionRequest
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -3738,7 +3738,7 @@ Resolves values for all settings in a workspace by current user, workspace, orga
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import actions_api
-from gooddata_api_client.model.resolved_setting import ResolvedSetting
+from gooddata_api_client.models.resolved_setting import ResolvedSetting
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -3833,8 +3833,8 @@ Resolves value for selected settings in a workspace by current user, workspace, 
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import actions_api
-from gooddata_api_client.model.resolved_setting import ResolvedSetting
-from gooddata_api_client.model.resolve_settings_request import ResolveSettingsRequest
+from gooddata_api_client.models.resolved_setting import ResolvedSetting
+from gooddata_api_client.models.resolve_settings_request import ResolveSettingsRequest
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -3929,4 +3929,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 No authorization required
 
 [[Back to top]](#__pageTop) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
-

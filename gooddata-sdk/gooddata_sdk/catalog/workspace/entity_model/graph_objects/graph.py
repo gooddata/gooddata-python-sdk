@@ -5,11 +5,11 @@ import builtins
 from typing import Optional
 
 import attr
-from gooddata_api_client.model.dependent_entities_graph import DependentEntitiesGraph
-from gooddata_api_client.model.dependent_entities_node import DependentEntitiesNode
-from gooddata_api_client.model.dependent_entities_request import DependentEntitiesRequest
-from gooddata_api_client.model.dependent_entities_response import DependentEntitiesResponse
-from gooddata_api_client.model.entity_identifier import EntityIdentifier
+from gooddata_api_client.models.dependent_entities_graph import DependentEntitiesGraph
+from gooddata_api_client.models.dependent_entities_node import DependentEntitiesNode
+from gooddata_api_client.models.dependent_entities_request import DependentEntitiesRequest
+from gooddata_api_client.models.dependent_entities_response import DependentEntitiesResponse
+from gooddata_api_client.models.entity_identifier import EntityIdentifier
 
 from gooddata_sdk.catalog.base import Base
 

@@ -2,7 +2,7 @@
 from pathlib import Path
 
 import attr
-from gooddata_api_client.model.declarative_dataset_extension import DeclarativeDatasetExtension
+from gooddata_api_client.models.declarative_dataset_extension import DeclarativeDatasetExtension
 
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.data_filter_references import (

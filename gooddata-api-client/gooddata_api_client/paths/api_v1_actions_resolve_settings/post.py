@@ -25,8 +25,8 @@ import frozendict  # noqa: F401
 
 from gooddata_api_client import schemas  # noqa: F401
 
-from gooddata_api_client.model.resolved_setting import ResolvedSetting
-from gooddata_api_client.model.resolve_settings_request import ResolveSettingsRequest
+from gooddata_api_client.models.resolved_setting import ResolvedSetting
+from gooddata_api_client.models.resolve_settings_request import ResolveSettingsRequest
 
 from . import path
 
@@ -49,7 +49,7 @@ class SchemaFor200ResponseBodyApplicationJson(
 
 
     class MetaOapg:
-        
+
         @staticmethod
         def items() -> typing.Type['ResolvedSetting']:
             return ResolvedSetting
@@ -355,5 +355,3 @@ class ApiForpost(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
-
-

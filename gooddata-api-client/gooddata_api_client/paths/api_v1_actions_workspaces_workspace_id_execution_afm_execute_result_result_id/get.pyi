@@ -25,7 +25,7 @@ import frozendict  # noqa: F401
 
 from gooddata_api_client import schemas  # noqa: F401
 
-from gooddata_api_client.model.execution_result import ExecutionResult
+from gooddata_api_client.models.execution_result import ExecutionResult
 
 # Query params
 
@@ -433,5 +433,3 @@ class ApiForget(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
-
-

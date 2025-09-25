@@ -1,4 +1,4 @@
-# gooddata_api_client.model.json_api_organization_out_includes.JsonApiOrganizationOutIncludes
+# gooddata_api_client.models.json_api_organization_out_includes.JsonApiOrganizationOutIncludes
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes
@@ -13,4 +13,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [JsonApiUserGroupOutWithLinks](JsonApiUserGroupOutWithLinks.md) | [**JsonApiUserGroupOutWithLinks**](JsonApiUserGroupOutWithLinks.md) | [**JsonApiUserGroupOutWithLinks**](JsonApiUserGroupOutWithLinks.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

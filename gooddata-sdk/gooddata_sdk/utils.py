@@ -17,7 +17,7 @@ import yaml
 from cattrs import structure
 from cattrs.errors import ClassValidationError
 from gooddata_api_client import ApiAttributeError
-from gooddata_api_client.model_utils import OpenApiModel
+from pydantic import BaseModel
 
 from gooddata_sdk.compute.model.attribute import Attribute
 from gooddata_sdk.compute.model.base import ObjId
@@ -101,7 +101,7 @@ def load_all_entities(get_page_func: functools.partial[Any], page_size: int = 50
     >>> import gooddata_api_client.apis as apis
     >>> api = apis.EntitiesApi(api_client.ApiClient())
     >>> get_func = functools.partial(api.get_all_entities_visualization_objects, 'some-workspace-id',
-    >>>                              include=["ALL"], _check_return_type=False)
+    >>>                              include=["ALL"])
     >>> vis_objects = load_all_entities(get_func)
 
     :param get_page_func: an API controller from the metadata client
@@ -364,9 +364,9 @@ def safeget(var: Any, path: list[str]) -> Any:
     if len(path) == 0:
         # base case: we have reached the innermost key
         return var
-    elif not isinstance(var, (dict, OpenApiModel)):
+    elif not isinstance(var, (dict, BaseModel)):
         # base case: var is not a dictionary, so we can't proceed
-        # in this repository, we also use OpenApiModel objects, which support "to_dict"
+        # in this repository, we also use BaseModel objects, which support "to_dict"
         return None
     else:
         # recursive case: we still have keys to traverse

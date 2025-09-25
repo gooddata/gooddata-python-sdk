@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 
 # **resolve_all_settings_without_workspace**
-> [ResolvedSetting] resolve_all_settings_without_workspace()
+> List[ResolvedSetting] resolve_all_settings_without_workspace()
 
 Values for all settings without workspace.
 
@@ -19,11 +19,11 @@ Resolves values for all settings without workspace by current user, organization
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import reporting_settings_api
-from gooddata_api_client.model.resolved_setting import ResolvedSetting
+from gooddata_api_client.models.resolved_setting import ResolvedSetting
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -32,26 +32,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = reporting_settings_api.ReportingSettingsApi(api_client)
+    api_instance = gooddata_api_client.ReportingSettingsApi(api_client)
 
-    # example, this endpoint has no required or optional parameters
     try:
         # Values for all settings without workspace.
         api_response = api_instance.resolve_all_settings_without_workspace()
+        print("The response of ReportingSettingsApi->resolve_all_settings_without_workspace:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling ReportingSettingsApi->resolve_all_settings_without_workspace: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 This endpoint does not need any parameter.
 
 ### Return type
 
-[**[ResolvedSetting]**](ResolvedSetting.md)
+[**List[ResolvedSetting]**](ResolvedSetting.md)
 
 ### Authorization
 
@@ -62,7 +64,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -72,7 +73,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **resolve_settings_without_workspace**
-> [ResolvedSetting] resolve_settings_without_workspace(resolve_settings_request)
+> List[ResolvedSetting] resolve_settings_without_workspace(resolve_settings_request)
 
 Values for selected settings without workspace.
 
@@ -82,12 +83,12 @@ Resolves values for selected settings without workspace by current user, organiz
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import reporting_settings_api
-from gooddata_api_client.model.resolved_setting import ResolvedSetting
-from gooddata_api_client.model.resolve_settings_request import ResolveSettingsRequest
+from gooddata_api_client.models.resolve_settings_request import ResolveSettingsRequest
+from gooddata_api_client.models.resolved_setting import ResolvedSetting
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -96,32 +97,32 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = reporting_settings_api.ReportingSettingsApi(api_client)
-    resolve_settings_request = ResolveSettingsRequest(
-        settings=["timezone"],
-    ) # ResolveSettingsRequest | 
+    api_instance = gooddata_api_client.ReportingSettingsApi(api_client)
+    resolve_settings_request = gooddata_api_client.ResolveSettingsRequest() # ResolveSettingsRequest | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Values for selected settings without workspace.
         api_response = api_instance.resolve_settings_without_workspace(resolve_settings_request)
+        print("The response of ReportingSettingsApi->resolve_settings_without_workspace:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling ReportingSettingsApi->resolve_settings_without_workspace: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **resolve_settings_request** | [**ResolveSettingsRequest**](ResolveSettingsRequest.md)|  |
+ **resolve_settings_request** | [**ResolveSettingsRequest**](ResolveSettingsRequest.md)|  | 
 
 ### Return type
 
-[**[ResolvedSetting]**](ResolvedSetting.md)
+[**List[ResolvedSetting]**](ResolvedSetting.md)
 
 ### Authorization
 
@@ -131,7 +132,6 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: application/json
-
 
 ### HTTP response details
 

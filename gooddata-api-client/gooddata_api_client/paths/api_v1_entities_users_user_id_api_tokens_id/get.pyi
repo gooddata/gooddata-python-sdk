@@ -25,7 +25,7 @@ import frozendict  # noqa: F401
 
 from gooddata_api_client import schemas  # noqa: F401
 
-from gooddata_api_client.model.json_api_api_token_out_document import JsonApiApiTokenOutDocument
+from gooddata_api_client.models.json_api_api_token_out_document import JsonApiApiTokenOutDocument
 
 # Query params
 FilterSchema = schemas.StrSchema
@@ -352,5 +352,3 @@ class ApiForget(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
-
-

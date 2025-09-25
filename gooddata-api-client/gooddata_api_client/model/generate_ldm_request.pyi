@@ -37,7 +37,7 @@ class GenerateLdmRequest(
 
 
     class MetaOapg:
-        
+
         class properties:
             dateGranularities = schemas.StrSchema
             denormPrefix = schemas.StrSchema
@@ -45,7 +45,7 @@ class GenerateLdmRequest(
             generateLongIds = schemas.BoolSchema
             grainPrefix = schemas.StrSchema
             grainReferencePrefix = schemas.StrSchema
-        
+
             @staticmethod
             def pdm() -> typing.Type['PdmLdmRequest']:
                 return PdmLdmRequest
@@ -72,105 +72,105 @@ class GenerateLdmRequest(
                 "viewPrefix": viewPrefix,
                 "wdfPrefix": wdfPrefix,
             }
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["dateGranularities"]) -> MetaOapg.properties.dateGranularities: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["denormPrefix"]) -> MetaOapg.properties.denormPrefix: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["factPrefix"]) -> MetaOapg.properties.factPrefix: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["generateLongIds"]) -> MetaOapg.properties.generateLongIds: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["grainPrefix"]) -> MetaOapg.properties.grainPrefix: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["grainReferencePrefix"]) -> MetaOapg.properties.grainReferencePrefix: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["pdm"]) -> 'PdmLdmRequest': ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["primaryLabelPrefix"]) -> MetaOapg.properties.primaryLabelPrefix: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["referencePrefix"]) -> MetaOapg.properties.referencePrefix: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["secondaryLabelPrefix"]) -> MetaOapg.properties.secondaryLabelPrefix: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["separator"]) -> MetaOapg.properties.separator: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["tablePrefix"]) -> MetaOapg.properties.tablePrefix: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["viewPrefix"]) -> MetaOapg.properties.viewPrefix: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["wdfPrefix"]) -> MetaOapg.properties.wdfPrefix: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["dateGranularities", "denormPrefix", "factPrefix", "generateLongIds", "grainPrefix", "grainReferencePrefix", "pdm", "primaryLabelPrefix", "referencePrefix", "secondaryLabelPrefix", "separator", "tablePrefix", "viewPrefix", "wdfPrefix", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["dateGranularities"]) -> typing.Union[MetaOapg.properties.dateGranularities, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["denormPrefix"]) -> typing.Union[MetaOapg.properties.denormPrefix, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["factPrefix"]) -> typing.Union[MetaOapg.properties.factPrefix, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["generateLongIds"]) -> typing.Union[MetaOapg.properties.generateLongIds, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["grainPrefix"]) -> typing.Union[MetaOapg.properties.grainPrefix, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["grainReferencePrefix"]) -> typing.Union[MetaOapg.properties.grainReferencePrefix, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["pdm"]) -> typing.Union['PdmLdmRequest', schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["primaryLabelPrefix"]) -> typing.Union[MetaOapg.properties.primaryLabelPrefix, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["referencePrefix"]) -> typing.Union[MetaOapg.properties.referencePrefix, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["secondaryLabelPrefix"]) -> typing.Union[MetaOapg.properties.secondaryLabelPrefix, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["separator"]) -> typing.Union[MetaOapg.properties.separator, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["tablePrefix"]) -> typing.Union[MetaOapg.properties.tablePrefix, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["viewPrefix"]) -> typing.Union[MetaOapg.properties.viewPrefix, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["wdfPrefix"]) -> typing.Union[MetaOapg.properties.wdfPrefix, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["dateGranularities", "denormPrefix", "factPrefix", "generateLongIds", "grainPrefix", "grainReferencePrefix", "pdm", "primaryLabelPrefix", "referencePrefix", "secondaryLabelPrefix", "separator", "tablePrefix", "viewPrefix", "wdfPrefix", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -213,4 +213,4 @@ class GenerateLdmRequest(
             **kwargs,
         )
 
-from gooddata_api_client.model.pdm_ldm_request import PdmLdmRequest
+from gooddata_api_client.models.pdm_ldm_request import PdmLdmRequest

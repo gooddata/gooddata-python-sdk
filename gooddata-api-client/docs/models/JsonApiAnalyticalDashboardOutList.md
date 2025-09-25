@@ -1,4 +1,4 @@
-# gooddata_api_client.model.json_api_analytical_dashboard_out_list.JsonApiAnalyticalDashboardOutList
+# gooddata_api_client.models.json_api_analytical_dashboard_out_list.JsonApiAnalyticalDashboardOutList
 
 A JSON:API document with a list of resources
 
@@ -42,4 +42,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**JsonApiAnalyticalDashboardOutIncludes**](JsonApiAnalyticalDashboardOutIncludes.md) | [**JsonApiAnalyticalDashboardOutIncludes**](JsonApiAnalyticalDashboardOutIncludes.md) | [**JsonApiAnalyticalDashboardOutIncludes**](JsonApiAnalyticalDashboardOutIncludes.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

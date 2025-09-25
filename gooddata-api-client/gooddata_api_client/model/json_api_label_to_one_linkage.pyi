@@ -37,7 +37,7 @@ class JsonApiLabelToOneLinkage(
 
 
     class MetaOapg:
-        
+
         @classmethod
         @functools.lru_cache()
         def one_of(cls):
@@ -66,4 +66,4 @@ class JsonApiLabelToOneLinkage(
             **kwargs,
         )
 
-from gooddata_api_client.model.json_api_label_linkage import JsonApiLabelLinkage
+from gooddata_api_client.models.json_api_label_linkage import JsonApiLabelLinkage

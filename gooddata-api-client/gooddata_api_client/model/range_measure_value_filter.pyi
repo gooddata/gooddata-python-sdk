@@ -40,15 +40,15 @@ class RangeMeasureValueFilter(
         required = {
             "rangeMeasureValueFilter",
         }
-        
+
         class properties:
-            
-            
+
+
             class rangeMeasureValueFilter(
                 schemas.DictSchema
             ):
-            
-            
+
+
                 class MetaOapg:
                     required = {
                         "measure",
@@ -56,25 +56,25 @@ class RangeMeasureValueFilter(
                         "to",
                         "operator",
                     }
-                    
+
                     class properties:
                         applyOnResult = schemas.BoolSchema
                         _from = schemas.NumberSchema
-                    
+
                         @staticmethod
                         def measure() -> typing.Type['AfmIdentifier']:
                             return AfmIdentifier
-                        
-                        
+
+
                         class operator(
                             schemas.EnumBase,
                             schemas.StrSchema
                         ):
-                            
+
                             @schemas.classproperty
                             def BETWEEN(cls):
                                 return cls("BETWEEN")
-                            
+
                             @schemas.classproperty
                             def NOT_BETWEEN(cls):
                                 return cls("NOT_BETWEEN")
@@ -88,62 +88,62 @@ class RangeMeasureValueFilter(
                             "to": to,
                             "treatNullValuesAs": treatNullValuesAs,
                         }
-                
+
                 measure: 'AfmIdentifier'
                 to: MetaOapg.properties.to
                 operator: MetaOapg.properties.operator
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["applyOnResult"]) -> MetaOapg.properties.applyOnResult: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["from"]) -> MetaOapg.properties._from: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["measure"]) -> 'AfmIdentifier': ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["operator"]) -> MetaOapg.properties.operator: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["to"]) -> MetaOapg.properties.to: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["treatNullValuesAs"]) -> MetaOapg.properties.treatNullValuesAs: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-                
+
                 def __getitem__(self, name: typing.Union[typing_extensions.Literal["applyOnResult", "from", "measure", "operator", "to", "treatNullValuesAs", ], str]):
                     # dict_instance[name] accessor
                     return super().__getitem__(name)
-                
-                
+
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["applyOnResult"]) -> typing.Union[MetaOapg.properties.applyOnResult, schemas.Unset]: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["from"]) -> MetaOapg.properties._from: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["measure"]) -> 'AfmIdentifier': ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["operator"]) -> MetaOapg.properties.operator: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["to"]) -> MetaOapg.properties.to: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["treatNullValuesAs"]) -> typing.Union[MetaOapg.properties.treatNullValuesAs, schemas.Unset]: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-                
+
                 def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["applyOnResult", "from", "measure", "operator", "to", "treatNullValuesAs", ], str]):
                     return super().get_item_oapg(name)
-                
-            
+
+
                 def __new__(
                     cls,
                     *_args: typing.Union[dict, frozendict.frozendict, ],
@@ -169,29 +169,29 @@ class RangeMeasureValueFilter(
             __annotations__ = {
                 "rangeMeasureValueFilter": rangeMeasureValueFilter,
             }
-    
+
     rangeMeasureValueFilter: MetaOapg.properties.rangeMeasureValueFilter
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["rangeMeasureValueFilter"]) -> MetaOapg.properties.rangeMeasureValueFilter: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["rangeMeasureValueFilter", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["rangeMeasureValueFilter"]) -> MetaOapg.properties.rangeMeasureValueFilter: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["rangeMeasureValueFilter", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -208,4 +208,4 @@ class RangeMeasureValueFilter(
             **kwargs,
         )
 
-from gooddata_api_client.model.afm_identifier import AfmIdentifier
+from gooddata_api_client.models.afm_identifier import AfmIdentifier

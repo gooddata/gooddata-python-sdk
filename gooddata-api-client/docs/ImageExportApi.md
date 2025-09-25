@@ -20,12 +20,12 @@ Note: This API is an experimental and is going to change. Please, use it accordi
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import image_export_api
-from gooddata_api_client.model.export_response import ExportResponse
-from gooddata_api_client.model.image_export_request import ImageExportRequest
+from gooddata_api_client.models.export_response import ExportResponse
+from gooddata_api_client.models.image_export_request import ImageExportRequest
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -34,36 +34,30 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = image_export_api.ImageExportApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
-    image_export_request = ImageExportRequest(
-        dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
-        file_name="filename",
-        format="PNG",
-        metadata=JsonNode(),
-        widget_ids=[
-            "widget_ids_example",
-        ],
-    ) # ImageExportRequest | 
+    api_instance = gooddata_api_client.ImageExportApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
+    image_export_request = gooddata_api_client.ImageExportRequest() # ImageExportRequest | 
 
-    # example passing only required values which don't have defaults set
     try:
         # (EXPERIMENTAL) Create image export request
         api_response = api_instance.create_image_export(workspace_id, image_export_request)
+        print("The response of ImageExportApi->create_image_export:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling ImageExportApi->create_image_export: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
- **image_export_request** | [**ImageExportRequest**](ImageExportRequest.md)|  |
+ **workspace_id** | **str**|  | 
+ **image_export_request** | [**ImageExportRequest**](ImageExportRequest.md)|  | 
 
 ### Return type
 
@@ -78,7 +72,6 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -88,7 +81,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_image_export**
-> file_type get_image_export(workspace_id, export_id)
+> bytearray get_image_export(workspace_id, export_id)
 
 (EXPERIMENTAL) Retrieve exported files
 
@@ -98,11 +91,10 @@ Note: This API is an experimental and is going to change. Please, use it accordi
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import image_export_api
-from gooddata_api_client.model.get_image_export202_response_inner import GetImageExport202ResponseInner
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -111,32 +103,34 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = image_export_api.ImageExportApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
-    export_id = "exportId_example" # str | 
+    api_instance = gooddata_api_client.ImageExportApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
+    export_id = 'export_id_example' # str | 
 
-    # example passing only required values which don't have defaults set
     try:
         # (EXPERIMENTAL) Retrieve exported files
         api_response = api_instance.get_image_export(workspace_id, export_id)
+        print("The response of ImageExportApi->get_image_export:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling ImageExportApi->get_image_export: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
- **export_id** | **str**|  |
+ **workspace_id** | **str**|  | 
+ **export_id** | **str**|  | 
 
 ### Return type
 
-**file_type**
+**bytearray**
 
 ### Authorization
 
@@ -146,7 +140,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: image/png
-
 
 ### HTTP response details
 
@@ -168,10 +161,10 @@ Note: This API is an experimental and is going to change. Please, use it accordi
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import image_export_api
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -180,27 +173,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = image_export_api.ImageExportApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
-    export_id = "exportId_example" # str | 
+    api_instance = gooddata_api_client.ImageExportApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
+    export_id = 'export_id_example' # str | 
 
-    # example passing only required values which don't have defaults set
     try:
         # (EXPERIMENTAL) Retrieve metadata context
         api_instance.get_image_export_metadata(workspace_id, export_id)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling ImageExportApi->get_image_export_metadata: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
- **export_id** | **str**|  |
+ **workspace_id** | **str**|  | 
+ **export_id** | **str**|  | 
 
 ### Return type
 
@@ -214,7 +208,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
-
 
 ### HTTP response details
 

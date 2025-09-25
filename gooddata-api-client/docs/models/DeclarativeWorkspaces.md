@@ -1,4 +1,4 @@
-# gooddata_api_client.model.declarative_workspaces.DeclarativeWorkspaces
+# gooddata_api_client.models.declarative_workspaces.DeclarativeWorkspaces
 
 A declarative form of a all workspace layout.
 
@@ -39,4 +39,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**DeclarativeWorkspace**](DeclarativeWorkspace.md) | [**DeclarativeWorkspace**](DeclarativeWorkspace.md) | [**DeclarativeWorkspace**](DeclarativeWorkspace.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

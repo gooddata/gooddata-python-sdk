@@ -1,4 +1,4 @@
-# gooddata_api_client.model.filter_definition_for_simple_measure.FilterDefinitionForSimpleMeasure
+# gooddata_api_client.models.filter_definition_for_simple_measure.FilterDefinitionForSimpleMeasure
 
 Abstract filter definition type for simple metric.
 
@@ -15,4 +15,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [AttributeFilter](AttributeFilter.md) | [**AttributeFilter**](AttributeFilter.md) | [**AttributeFilter**](AttributeFilter.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

@@ -38,12 +38,12 @@ Method | HTTP request | Description
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import smart_functions_api
-from gooddata_api_client.model.chat_result import ChatResult
-from gooddata_api_client.model.chat_request import ChatRequest
+from gooddata_api_client.models.chat_request import ChatRequest
+from gooddata_api_client.models.chat_result import ChatResult
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -52,44 +52,30 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = smart_functions_api.SmartFunctionsApi(api_client)
-    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
-    chat_request = ChatRequest(
-        limit_create=3,
-        limit_create_context=10,
-        limit_search=5,
-        question="question_example",
-        relevant_score_threshold=0.45,
-        search_score_threshold=0.9,
-        thread_id_suffix="thread_id_suffix_example",
-        title_to_descriptor_ratio=0.7,
-        user_context=UserContext(
-            active_object=ActiveObjectIdentification(
-                id="id_example",
-                type="type_example",
-                workspace_id="workspace_id_example",
-            ),
-        ),
-    ) # ChatRequest | 
+    api_instance = gooddata_api_client.SmartFunctionsApi(api_client)
+    workspace_id = 'workspace_id_example' # str | Workspace identifier
+    chat_request = gooddata_api_client.ChatRequest() # ChatRequest | 
 
-    # example passing only required values which don't have defaults set
     try:
         # (BETA) Chat with AI
         api_response = api_instance.ai_chat(workspace_id, chat_request)
+        print("The response of SmartFunctionsApi->ai_chat:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling SmartFunctionsApi->ai_chat: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**| Workspace identifier |
- **chat_request** | [**ChatRequest**](ChatRequest.md)|  |
+ **workspace_id** | **str**| Workspace identifier | 
+ **chat_request** | [**ChatRequest**](ChatRequest.md)|  | 
 
 ### Return type
 
@@ -103,7 +89,6 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: application/json
-
 
 ### HTTP response details
 
@@ -124,12 +109,12 @@ No authorization required
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import smart_functions_api
-from gooddata_api_client.model.chat_history_result import ChatHistoryResult
-from gooddata_api_client.model.chat_history_request import ChatHistoryRequest
+from gooddata_api_client.models.chat_history_request import ChatHistoryRequest
+from gooddata_api_client.models.chat_history_result import ChatHistoryResult
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -138,38 +123,30 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = smart_functions_api.SmartFunctionsApi(api_client)
-    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
-    chat_history_request = ChatHistoryRequest(
-        chat_history_interaction_id="chat_history_interaction_id_example",
-        reset=True,
-        response_state="SUCCESSFUL",
-        saved_visualization=SavedVisualization(
-            created_visualization_id="created_visualization_id_example",
-            saved_visualization_id="saved_visualization_id_example",
-        ),
-        thread_id_suffix="thread_id_suffix_example",
-        user_feedback="POSITIVE",
-    ) # ChatHistoryRequest | 
+    api_instance = gooddata_api_client.SmartFunctionsApi(api_client)
+    workspace_id = 'workspace_id_example' # str | Workspace identifier
+    chat_history_request = gooddata_api_client.ChatHistoryRequest() # ChatHistoryRequest | 
 
-    # example passing only required values which don't have defaults set
     try:
         # (BETA) Get Chat History
         api_response = api_instance.ai_chat_history(workspace_id, chat_history_request)
+        print("The response of SmartFunctionsApi->ai_chat_history:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling SmartFunctionsApi->ai_chat_history: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**| Workspace identifier |
- **chat_history_request** | [**ChatHistoryRequest**](ChatHistoryRequest.md)|  |
+ **workspace_id** | **str**| Workspace identifier | 
+ **chat_history_request** | [**ChatHistoryRequest**](ChatHistoryRequest.md)|  | 
 
 ### Return type
 
@@ -184,7 +161,6 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -194,7 +170,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **ai_chat_stream**
-> [dict] ai_chat_stream(workspace_id, chat_request)
+> List[object] ai_chat_stream(workspace_id, chat_request)
 
 (BETA) Chat with AI
 
@@ -204,11 +180,11 @@ No authorization required
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import smart_functions_api
-from gooddata_api_client.model.chat_request import ChatRequest
+from gooddata_api_client.models.chat_request import ChatRequest
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -217,48 +193,34 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = smart_functions_api.SmartFunctionsApi(api_client)
-    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
-    chat_request = ChatRequest(
-        limit_create=3,
-        limit_create_context=10,
-        limit_search=5,
-        question="question_example",
-        relevant_score_threshold=0.45,
-        search_score_threshold=0.9,
-        thread_id_suffix="thread_id_suffix_example",
-        title_to_descriptor_ratio=0.7,
-        user_context=UserContext(
-            active_object=ActiveObjectIdentification(
-                id="id_example",
-                type="type_example",
-                workspace_id="workspace_id_example",
-            ),
-        ),
-    ) # ChatRequest | 
+    api_instance = gooddata_api_client.SmartFunctionsApi(api_client)
+    workspace_id = 'workspace_id_example' # str | Workspace identifier
+    chat_request = gooddata_api_client.ChatRequest() # ChatRequest | 
 
-    # example passing only required values which don't have defaults set
     try:
         # (BETA) Chat with AI
         api_response = api_instance.ai_chat_stream(workspace_id, chat_request)
+        print("The response of SmartFunctionsApi->ai_chat_stream:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling SmartFunctionsApi->ai_chat_stream: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**| Workspace identifier |
- **chat_request** | [**ChatRequest**](ChatRequest.md)|  |
+ **workspace_id** | **str**| Workspace identifier | 
+ **chat_request** | [**ChatRequest**](ChatRequest.md)|  | 
 
 ### Return type
 
-**[dict]**
+**List[object]**
 
 ### Authorization
 
@@ -268,7 +230,6 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: text/event-stream
-
 
 ### HTTP response details
 
@@ -289,11 +250,11 @@ Returns usage statistics of chat for a user in a workspace.
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import smart_functions_api
-from gooddata_api_client.model.chat_usage_response import ChatUsageResponse
+from gooddata_api_client.models.chat_usage_response import ChatUsageResponse
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -302,26 +263,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = smart_functions_api.SmartFunctionsApi(api_client)
-    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    api_instance = gooddata_api_client.SmartFunctionsApi(api_client)
+    workspace_id = 'workspace_id_example' # str | Workspace identifier
 
-    # example passing only required values which don't have defaults set
     try:
         # Get Chat Usage
         api_response = api_instance.ai_chat_usage(workspace_id)
+        print("The response of SmartFunctionsApi->ai_chat_usage:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling SmartFunctionsApi->ai_chat_usage: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**| Workspace identifier |
+ **workspace_id** | **str**| Workspace identifier | 
 
 ### Return type
 
@@ -335,7 +298,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
-
 
 ### HTTP response details
 
@@ -356,12 +318,12 @@ No authorization required
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import smart_functions_api
-from gooddata_api_client.model.search_result import SearchResult
-from gooddata_api_client.model.search_request import SearchRequest
+from gooddata_api_client.models.search_request import SearchRequest
+from gooddata_api_client.models.search_result import SearchResult
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -370,38 +332,30 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = smart_functions_api.SmartFunctionsApi(api_client)
-    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
-    search_request = SearchRequest(
-        deep_search=False,
-        include_hidden=False,
-        limit=10,
-        object_types=[
-            "attribute",
-        ],
-        question="question_example",
-        relevant_score_threshold=0.3,
-        title_to_descriptor_ratio=0.7,
-    ) # SearchRequest | 
+    api_instance = gooddata_api_client.SmartFunctionsApi(api_client)
+    workspace_id = 'workspace_id_example' # str | Workspace identifier
+    search_request = gooddata_api_client.SearchRequest() # SearchRequest | 
 
-    # example passing only required values which don't have defaults set
     try:
         # (BETA) Semantic Search in Metadata
         api_response = api_instance.ai_search(workspace_id, search_request)
+        print("The response of SmartFunctionsApi->ai_search:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling SmartFunctionsApi->ai_search: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**| Workspace identifier |
- **search_request** | [**SearchRequest**](SearchRequest.md)|  |
+ **workspace_id** | **str**| Workspace identifier | 
+ **search_request** | [**SearchRequest**](SearchRequest.md)|  | 
 
 ### Return type
 
@@ -416,7 +370,6 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -426,7 +379,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **anomaly_detection**
-> SmartFunctionResponse anomaly_detection(workspace_id, result_id, anomaly_detection_request)
+> SmartFunctionResponse anomaly_detection(workspace_id, result_id, anomaly_detection_request, skip_cache=skip_cache)
 
 (EXPERIMENTAL) Smart functions - Anomaly Detection
 
@@ -436,12 +389,12 @@ No authorization required
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import smart_functions_api
-from gooddata_api_client.model.anomaly_detection_request import AnomalyDetectionRequest
-from gooddata_api_client.model.smart_function_response import SmartFunctionResponse
+from gooddata_api_client.models.anomaly_detection_request import AnomalyDetectionRequest
+from gooddata_api_client.models.smart_function_response import SmartFunctionResponse
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -450,43 +403,34 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = smart_functions_api.SmartFunctionsApi(api_client)
-    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
-    result_id = "9bd52018570364264fcf62d373da6bed313120e8" # str | Input result ID to be used in the computation
-    anomaly_detection_request = AnomalyDetectionRequest(
-        sensitivity=3.14,
-    ) # AnomalyDetectionRequest | 
-    skip_cache = False # bool | Ignore all caches during execution of current request. (optional) if omitted the server will use the default value of False
+    api_instance = gooddata_api_client.SmartFunctionsApi(api_client)
+    workspace_id = 'workspace_id_example' # str | Workspace identifier
+    result_id = '9bd52018570364264fcf62d373da6bed313120e8' # str | Input result ID to be used in the computation
+    anomaly_detection_request = gooddata_api_client.AnomalyDetectionRequest() # AnomalyDetectionRequest | 
+    skip_cache = False # bool | Ignore all caches during execution of current request. (optional) (default to False)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # (EXPERIMENTAL) Smart functions - Anomaly Detection
-        api_response = api_instance.anomaly_detection(workspace_id, result_id, anomaly_detection_request)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling SmartFunctionsApi->anomaly_detection: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # (EXPERIMENTAL) Smart functions - Anomaly Detection
         api_response = api_instance.anomaly_detection(workspace_id, result_id, anomaly_detection_request, skip_cache=skip_cache)
+        print("The response of SmartFunctionsApi->anomaly_detection:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling SmartFunctionsApi->anomaly_detection: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**| Workspace identifier |
- **result_id** | **str**| Input result ID to be used in the computation |
- **anomaly_detection_request** | [**AnomalyDetectionRequest**](AnomalyDetectionRequest.md)|  |
- **skip_cache** | **bool**| Ignore all caches during execution of current request. | [optional] if omitted the server will use the default value of False
+ **workspace_id** | **str**| Workspace identifier | 
+ **result_id** | **str**| Input result ID to be used in the computation | 
+ **anomaly_detection_request** | [**AnomalyDetectionRequest**](AnomalyDetectionRequest.md)|  | 
+ **skip_cache** | **bool**| Ignore all caches during execution of current request. | [optional] [default to False]
 
 ### Return type
 
@@ -501,7 +445,6 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -511,7 +454,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **anomaly_detection_result**
-> AnomalyDetectionResult anomaly_detection_result(workspace_id, result_id)
+> AnomalyDetectionResult anomaly_detection_result(workspace_id, result_id, offset=offset, limit=limit)
 
 (EXPERIMENTAL) Smart functions - Anomaly Detection Result
 
@@ -521,11 +464,11 @@ No authorization required
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import smart_functions_api
-from gooddata_api_client.model.anomaly_detection_result import AnomalyDetectionResult
+from gooddata_api_client.models.anomaly_detection_result import AnomalyDetectionResult
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -534,41 +477,34 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = smart_functions_api.SmartFunctionsApi(api_client)
-    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
-    result_id = "a9b28f9dc55f37ea9f4a5fb0c76895923591e781" # str | Result ID
-    offset = 1 # int |  (optional)
-    limit = 1 # int |  (optional)
+    api_instance = gooddata_api_client.SmartFunctionsApi(api_client)
+    workspace_id = 'workspace_id_example' # str | Workspace identifier
+    result_id = 'a9b28f9dc55f37ea9f4a5fb0c76895923591e781' # str | Result ID
+    offset = 56 # int |  (optional)
+    limit = 56 # int |  (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # (EXPERIMENTAL) Smart functions - Anomaly Detection Result
-        api_response = api_instance.anomaly_detection_result(workspace_id, result_id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling SmartFunctionsApi->anomaly_detection_result: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # (EXPERIMENTAL) Smart functions - Anomaly Detection Result
         api_response = api_instance.anomaly_detection_result(workspace_id, result_id, offset=offset, limit=limit)
+        print("The response of SmartFunctionsApi->anomaly_detection_result:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling SmartFunctionsApi->anomaly_detection_result: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**| Workspace identifier |
- **result_id** | **str**| Result ID |
- **offset** | **int**|  | [optional]
- **limit** | **int**|  | [optional]
+ **workspace_id** | **str**| Workspace identifier | 
+ **result_id** | **str**| Result ID | 
+ **offset** | **int**|  | [optional] 
+ **limit** | **int**|  | [optional] 
 
 ### Return type
 
@@ -583,7 +519,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -593,7 +528,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **clustering**
-> SmartFunctionResponse clustering(workspace_id, result_id, clustering_request)
+> SmartFunctionResponse clustering(workspace_id, result_id, clustering_request, skip_cache=skip_cache)
 
 (EXPERIMENTAL) Smart functions - Clustering
 
@@ -603,12 +538,12 @@ No authorization required
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import smart_functions_api
-from gooddata_api_client.model.clustering_request import ClusteringRequest
-from gooddata_api_client.model.smart_function_response import SmartFunctionResponse
+from gooddata_api_client.models.clustering_request import ClusteringRequest
+from gooddata_api_client.models.smart_function_response import SmartFunctionResponse
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -617,44 +552,34 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = smart_functions_api.SmartFunctionsApi(api_client)
-    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
-    result_id = "9bd52018570364264fcf62d373da6bed313120e8" # str | Input result ID to be used in the computation
-    clustering_request = ClusteringRequest(
-        number_of_clusters=1,
-        threshold=0.03,
-    ) # ClusteringRequest | 
-    skip_cache = False # bool | Ignore all caches during execution of current request. (optional) if omitted the server will use the default value of False
+    api_instance = gooddata_api_client.SmartFunctionsApi(api_client)
+    workspace_id = 'workspace_id_example' # str | Workspace identifier
+    result_id = '9bd52018570364264fcf62d373da6bed313120e8' # str | Input result ID to be used in the computation
+    clustering_request = gooddata_api_client.ClusteringRequest() # ClusteringRequest | 
+    skip_cache = False # bool | Ignore all caches during execution of current request. (optional) (default to False)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # (EXPERIMENTAL) Smart functions - Clustering
-        api_response = api_instance.clustering(workspace_id, result_id, clustering_request)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling SmartFunctionsApi->clustering: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # (EXPERIMENTAL) Smart functions - Clustering
         api_response = api_instance.clustering(workspace_id, result_id, clustering_request, skip_cache=skip_cache)
+        print("The response of SmartFunctionsApi->clustering:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling SmartFunctionsApi->clustering: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**| Workspace identifier |
- **result_id** | **str**| Input result ID to be used in the computation |
- **clustering_request** | [**ClusteringRequest**](ClusteringRequest.md)|  |
- **skip_cache** | **bool**| Ignore all caches during execution of current request. | [optional] if omitted the server will use the default value of False
+ **workspace_id** | **str**| Workspace identifier | 
+ **result_id** | **str**| Input result ID to be used in the computation | 
+ **clustering_request** | [**ClusteringRequest**](ClusteringRequest.md)|  | 
+ **skip_cache** | **bool**| Ignore all caches during execution of current request. | [optional] [default to False]
 
 ### Return type
 
@@ -669,7 +594,6 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -679,7 +603,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **clustering_result**
-> ClusteringResult clustering_result(workspace_id, result_id)
+> ClusteringResult clustering_result(workspace_id, result_id, offset=offset, limit=limit)
 
 (EXPERIMENTAL) Smart functions - Clustering Result
 
@@ -689,11 +613,11 @@ No authorization required
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import smart_functions_api
-from gooddata_api_client.model.clustering_result import ClusteringResult
+from gooddata_api_client.models.clustering_result import ClusteringResult
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -702,41 +626,34 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = smart_functions_api.SmartFunctionsApi(api_client)
-    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
-    result_id = "a9b28f9dc55f37ea9f4a5fb0c76895923591e781" # str | Result ID
-    offset = 1 # int |  (optional)
-    limit = 1 # int |  (optional)
+    api_instance = gooddata_api_client.SmartFunctionsApi(api_client)
+    workspace_id = 'workspace_id_example' # str | Workspace identifier
+    result_id = 'a9b28f9dc55f37ea9f4a5fb0c76895923591e781' # str | Result ID
+    offset = 56 # int |  (optional)
+    limit = 56 # int |  (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # (EXPERIMENTAL) Smart functions - Clustering Result
-        api_response = api_instance.clustering_result(workspace_id, result_id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling SmartFunctionsApi->clustering_result: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # (EXPERIMENTAL) Smart functions - Clustering Result
         api_response = api_instance.clustering_result(workspace_id, result_id, offset=offset, limit=limit)
+        print("The response of SmartFunctionsApi->clustering_result:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling SmartFunctionsApi->clustering_result: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**| Workspace identifier |
- **result_id** | **str**| Result ID |
- **offset** | **int**|  | [optional]
- **limit** | **int**|  | [optional]
+ **workspace_id** | **str**| Workspace identifier | 
+ **result_id** | **str**| Result ID | 
+ **offset** | **int**|  | [optional] 
+ **limit** | **int**|  | [optional] 
 
 ### Return type
 
@@ -750,7 +667,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
-
 
 ### HTTP response details
 
@@ -771,11 +687,11 @@ No authorization required
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import smart_functions_api
-from gooddata_api_client.model.memory_item import MemoryItem
+from gooddata_api_client.models.memory_item import MemoryItem
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -784,45 +700,30 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = smart_functions_api.SmartFunctionsApi(api_client)
-    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
-    memory_item = MemoryItem(
-        id="id_example",
-        instruction="instruction_example",
-        keywords=[
-            "keywords_example",
-        ],
-        strategy="MEMORY_ITEM_STRATEGY_ALLWAYS",
-        use_cases=MemoryItemUseCases(
-            general=True,
-            howto=True,
-            keywords=True,
-            metric=True,
-            normalize=True,
-            router=True,
-            search=True,
-            visualization=True,
-        ),
-    ) # MemoryItem | 
+    api_instance = gooddata_api_client.SmartFunctionsApi(api_client)
+    workspace_id = 'workspace_id_example' # str | Workspace identifier
+    memory_item = gooddata_api_client.MemoryItem() # MemoryItem | 
 
-    # example passing only required values which don't have defaults set
     try:
         # (EXPERIMENTAL) Create new memory item
         api_response = api_instance.create_memory_item(workspace_id, memory_item)
+        print("The response of SmartFunctionsApi->create_memory_item:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling SmartFunctionsApi->create_memory_item: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**| Workspace identifier |
- **memory_item** | [**MemoryItem**](MemoryItem.md)|  |
+ **workspace_id** | **str**| Workspace identifier | 
+ **memory_item** | [**MemoryItem**](MemoryItem.md)|  | 
 
 ### Return type
 
@@ -837,7 +738,6 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -847,7 +747,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **forecast**
-> SmartFunctionResponse forecast(workspace_id, result_id, forecast_request)
+> SmartFunctionResponse forecast(workspace_id, result_id, forecast_request, skip_cache=skip_cache)
 
 (BETA) Smart functions - Forecast
 
@@ -857,12 +757,12 @@ No authorization required
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import smart_functions_api
-from gooddata_api_client.model.forecast_request import ForecastRequest
-from gooddata_api_client.model.smart_function_response import SmartFunctionResponse
+from gooddata_api_client.models.forecast_request import ForecastRequest
+from gooddata_api_client.models.smart_function_response import SmartFunctionResponse
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -871,45 +771,34 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = smart_functions_api.SmartFunctionsApi(api_client)
-    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
-    result_id = "9bd52018570364264fcf62d373da6bed313120e8" # str | Input result ID to be used in the computation
-    forecast_request = ForecastRequest(
-        confidence_level=0.95,
-        forecast_period=1,
-        seasonal=False,
-    ) # ForecastRequest | 
-    skip_cache = False # bool | Ignore all caches during execution of current request. (optional) if omitted the server will use the default value of False
+    api_instance = gooddata_api_client.SmartFunctionsApi(api_client)
+    workspace_id = 'workspace_id_example' # str | Workspace identifier
+    result_id = '9bd52018570364264fcf62d373da6bed313120e8' # str | Input result ID to be used in the computation
+    forecast_request = gooddata_api_client.ForecastRequest() # ForecastRequest | 
+    skip_cache = False # bool | Ignore all caches during execution of current request. (optional) (default to False)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # (BETA) Smart functions - Forecast
-        api_response = api_instance.forecast(workspace_id, result_id, forecast_request)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling SmartFunctionsApi->forecast: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # (BETA) Smart functions - Forecast
         api_response = api_instance.forecast(workspace_id, result_id, forecast_request, skip_cache=skip_cache)
+        print("The response of SmartFunctionsApi->forecast:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling SmartFunctionsApi->forecast: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**| Workspace identifier |
- **result_id** | **str**| Input result ID to be used in the computation |
- **forecast_request** | [**ForecastRequest**](ForecastRequest.md)|  |
- **skip_cache** | **bool**| Ignore all caches during execution of current request. | [optional] if omitted the server will use the default value of False
+ **workspace_id** | **str**| Workspace identifier | 
+ **result_id** | **str**| Input result ID to be used in the computation | 
+ **forecast_request** | [**ForecastRequest**](ForecastRequest.md)|  | 
+ **skip_cache** | **bool**| Ignore all caches during execution of current request. | [optional] [default to False]
 
 ### Return type
 
@@ -924,7 +813,6 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -934,7 +822,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **forecast_result**
-> ForecastResult forecast_result(workspace_id, result_id)
+> ForecastResult forecast_result(workspace_id, result_id, offset=offset, limit=limit)
 
 (BETA) Smart functions - Forecast Result
 
@@ -944,11 +832,11 @@ No authorization required
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import smart_functions_api
-from gooddata_api_client.model.forecast_result import ForecastResult
+from gooddata_api_client.models.forecast_result import ForecastResult
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -957,41 +845,34 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = smart_functions_api.SmartFunctionsApi(api_client)
-    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
-    result_id = "a9b28f9dc55f37ea9f4a5fb0c76895923591e781" # str | Result ID
-    offset = 1 # int |  (optional)
-    limit = 1 # int |  (optional)
+    api_instance = gooddata_api_client.SmartFunctionsApi(api_client)
+    workspace_id = 'workspace_id_example' # str | Workspace identifier
+    result_id = 'a9b28f9dc55f37ea9f4a5fb0c76895923591e781' # str | Result ID
+    offset = 56 # int |  (optional)
+    limit = 56 # int |  (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # (BETA) Smart functions - Forecast Result
-        api_response = api_instance.forecast_result(workspace_id, result_id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling SmartFunctionsApi->forecast_result: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # (BETA) Smart functions - Forecast Result
         api_response = api_instance.forecast_result(workspace_id, result_id, offset=offset, limit=limit)
+        print("The response of SmartFunctionsApi->forecast_result:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling SmartFunctionsApi->forecast_result: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**| Workspace identifier |
- **result_id** | **str**| Result ID |
- **offset** | **int**|  | [optional]
- **limit** | **int**|  | [optional]
+ **workspace_id** | **str**| Workspace identifier | 
+ **result_id** | **str**| Result ID | 
+ **offset** | **int**|  | [optional] 
+ **limit** | **int**|  | [optional] 
 
 ### Return type
 
@@ -1005,7 +886,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
-
 
 ### HTTP response details
 
@@ -1026,11 +906,11 @@ No authorization required
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import smart_functions_api
-from gooddata_api_client.model.memory_item import MemoryItem
+from gooddata_api_client.models.memory_item import MemoryItem
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -1039,28 +919,30 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = smart_functions_api.SmartFunctionsApi(api_client)
-    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
-    memory_id = "memoryId_example" # str | 
+    api_instance = gooddata_api_client.SmartFunctionsApi(api_client)
+    workspace_id = 'workspace_id_example' # str | Workspace identifier
+    memory_id = 'memory_id_example' # str | 
 
-    # example passing only required values which don't have defaults set
     try:
         # (EXPERIMENTAL) Get memory item
         api_response = api_instance.get_memory_item(workspace_id, memory_id)
+        print("The response of SmartFunctionsApi->get_memory_item:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling SmartFunctionsApi->get_memory_item: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**| Workspace identifier |
- **memory_id** | **str**|  |
+ **workspace_id** | **str**| Workspace identifier | 
+ **memory_id** | **str**|  | 
 
 ### Return type
 
@@ -1074,7 +956,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
-
 
 ### HTTP response details
 
@@ -1095,11 +976,11 @@ Returns metadata quality issues detected by the platform linter.
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import smart_functions_api
-from gooddata_api_client.model.get_quality_issues_response import GetQualityIssuesResponse
+from gooddata_api_client.models.get_quality_issues_response import GetQualityIssuesResponse
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -1108,26 +989,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = smart_functions_api.SmartFunctionsApi(api_client)
-    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    api_instance = gooddata_api_client.SmartFunctionsApi(api_client)
+    workspace_id = 'workspace_id_example' # str | Workspace identifier
 
-    # example passing only required values which don't have defaults set
     try:
         # Get Quality Issues
         api_response = api_instance.get_quality_issues(workspace_id)
+        print("The response of SmartFunctionsApi->get_quality_issues:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling SmartFunctionsApi->get_quality_issues: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**| Workspace identifier |
+ **workspace_id** | **str**| Workspace identifier | 
 
 ### Return type
 
@@ -1142,7 +1025,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -1152,7 +1034,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **list_memory_items**
-> [MemoryItem] list_memory_items(workspace_id)
+> List[MemoryItem] list_memory_items(workspace_id)
 
 (EXPERIMENTAL) List all memory items
 
@@ -1162,11 +1044,11 @@ No authorization required
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import smart_functions_api
-from gooddata_api_client.model.memory_item import MemoryItem
+from gooddata_api_client.models.memory_item import MemoryItem
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -1175,30 +1057,32 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = smart_functions_api.SmartFunctionsApi(api_client)
-    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    api_instance = gooddata_api_client.SmartFunctionsApi(api_client)
+    workspace_id = 'workspace_id_example' # str | Workspace identifier
 
-    # example passing only required values which don't have defaults set
     try:
         # (EXPERIMENTAL) List all memory items
         api_response = api_instance.list_memory_items(workspace_id)
+        print("The response of SmartFunctionsApi->list_memory_items:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling SmartFunctionsApi->list_memory_items: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**| Workspace identifier |
+ **workspace_id** | **str**| Workspace identifier | 
 
 ### Return type
 
-[**[MemoryItem]**](MemoryItem.md)
+[**List[MemoryItem]**](MemoryItem.md)
 
 ### Authorization
 
@@ -1208,7 +1092,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
-
 
 ### HTTP response details
 
@@ -1229,10 +1112,10 @@ No authorization required
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import smart_functions_api
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -1241,27 +1124,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = smart_functions_api.SmartFunctionsApi(api_client)
-    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
-    memory_id = "memoryId_example" # str | 
+    api_instance = gooddata_api_client.SmartFunctionsApi(api_client)
+    workspace_id = 'workspace_id_example' # str | Workspace identifier
+    memory_id = 'memory_id_example' # str | 
 
-    # example passing only required values which don't have defaults set
     try:
         # (EXPERIMENTAL) Remove memory item
         api_instance.remove_memory_item(workspace_id, memory_id)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling SmartFunctionsApi->remove_memory_item: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**| Workspace identifier |
- **memory_id** | **str**|  |
+ **workspace_id** | **str**| Workspace identifier | 
+ **memory_id** | **str**|  | 
 
 ### Return type
 
@@ -1275,7 +1159,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: Not defined
-
 
 ### HTTP response details
 
@@ -1296,11 +1179,11 @@ Returns a list of available LLM Endpoints
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import smart_functions_api
-from gooddata_api_client.model.resolved_llm_endpoints import ResolvedLlmEndpoints
+from gooddata_api_client.models.resolved_llm_endpoints import ResolvedLlmEndpoints
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -1309,26 +1192,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = smart_functions_api.SmartFunctionsApi(api_client)
-    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    api_instance = gooddata_api_client.SmartFunctionsApi(api_client)
+    workspace_id = 'workspace_id_example' # str | Workspace identifier
 
-    # example passing only required values which don't have defaults set
     try:
         # Get Active LLM Endpoints for this workspace
         api_response = api_instance.resolve_llm_endpoints(workspace_id)
+        print("The response of SmartFunctionsApi->resolve_llm_endpoints:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling SmartFunctionsApi->resolve_llm_endpoints: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**| Workspace identifier |
+ **workspace_id** | **str**| Workspace identifier | 
 
 ### Return type
 
@@ -1342,7 +1227,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
-
 
 ### HTTP response details
 
@@ -1363,11 +1247,11 @@ Returns a list of tags for this workspace
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import smart_functions_api
-from gooddata_api_client.model.analytics_catalog_tags import AnalyticsCatalogTags
+from gooddata_api_client.models.analytics_catalog_tags import AnalyticsCatalogTags
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -1376,26 +1260,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = smart_functions_api.SmartFunctionsApi(api_client)
-    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    api_instance = gooddata_api_client.SmartFunctionsApi(api_client)
+    workspace_id = 'workspace_id_example' # str | Workspace identifier
 
-    # example passing only required values which don't have defaults set
     try:
         # Get Analytics Catalog Tags
         api_response = api_instance.tags(workspace_id)
+        print("The response of SmartFunctionsApi->tags:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling SmartFunctionsApi->tags: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**| Workspace identifier |
+ **workspace_id** | **str**| Workspace identifier | 
 
 ### Return type
 
@@ -1409,7 +1295,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
-
 
 ### HTTP response details
 
@@ -1430,11 +1315,11 @@ No authorization required
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import smart_functions_api
-from gooddata_api_client.model.memory_item import MemoryItem
+from gooddata_api_client.models.memory_item import MemoryItem
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -1443,47 +1328,32 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = smart_functions_api.SmartFunctionsApi(api_client)
-    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
-    memory_id = "memoryId_example" # str | 
-    memory_item = MemoryItem(
-        id="id_example",
-        instruction="instruction_example",
-        keywords=[
-            "keywords_example",
-        ],
-        strategy="MEMORY_ITEM_STRATEGY_ALLWAYS",
-        use_cases=MemoryItemUseCases(
-            general=True,
-            howto=True,
-            keywords=True,
-            metric=True,
-            normalize=True,
-            router=True,
-            search=True,
-            visualization=True,
-        ),
-    ) # MemoryItem | 
+    api_instance = gooddata_api_client.SmartFunctionsApi(api_client)
+    workspace_id = 'workspace_id_example' # str | Workspace identifier
+    memory_id = 'memory_id_example' # str | 
+    memory_item = gooddata_api_client.MemoryItem() # MemoryItem | 
 
-    # example passing only required values which don't have defaults set
     try:
         # (EXPERIMENTAL) Update memory item
         api_response = api_instance.update_memory_item(workspace_id, memory_id, memory_item)
+        print("The response of SmartFunctionsApi->update_memory_item:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling SmartFunctionsApi->update_memory_item: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**| Workspace identifier |
- **memory_id** | **str**|  |
- **memory_item** | [**MemoryItem**](MemoryItem.md)|  |
+ **workspace_id** | **str**| Workspace identifier | 
+ **memory_id** | **str**|  | 
+ **memory_item** | [**MemoryItem**](MemoryItem.md)|  | 
 
 ### Return type
 
@@ -1497,7 +1367,6 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: application/json
-
 
 ### HTTP response details
 
@@ -1518,12 +1387,12 @@ Validates LLM endpoint with provided parameters.
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import smart_functions_api
-from gooddata_api_client.model.validate_llm_endpoint_response import ValidateLLMEndpointResponse
-from gooddata_api_client.model.validate_llm_endpoint_request import ValidateLLMEndpointRequest
+from gooddata_api_client.models.validate_llm_endpoint_request import ValidateLLMEndpointRequest
+from gooddata_api_client.models.validate_llm_endpoint_response import ValidateLLMEndpointResponse
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -1532,32 +1401,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = smart_functions_api.SmartFunctionsApi(api_client)
-    validate_llm_endpoint_request = ValidateLLMEndpointRequest(
-        base_url="base_url_example",
-        llm_model="llm_model_example",
-        llm_organization="llm_organization_example",
-        provider="provider_example",
-        token="token_example",
-    ) # ValidateLLMEndpointRequest | 
+    api_instance = gooddata_api_client.SmartFunctionsApi(api_client)
+    validate_llm_endpoint_request = gooddata_api_client.ValidateLLMEndpointRequest() # ValidateLLMEndpointRequest | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Validate LLM Endpoint
         api_response = api_instance.validate_llm_endpoint(validate_llm_endpoint_request)
+        print("The response of SmartFunctionsApi->validate_llm_endpoint:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling SmartFunctionsApi->validate_llm_endpoint: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **validate_llm_endpoint_request** | [**ValidateLLMEndpointRequest**](ValidateLLMEndpointRequest.md)|  |
+ **validate_llm_endpoint_request** | [**ValidateLLMEndpointRequest**](ValidateLLMEndpointRequest.md)|  | 
 
 ### Return type
 
@@ -1571,7 +1436,6 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: application/json
-
 
 ### HTTP response details
 
@@ -1582,7 +1446,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **validate_llm_endpoint_by_id**
-> ValidateLLMEndpointResponse validate_llm_endpoint_by_id(llm_endpoint_id)
+> ValidateLLMEndpointResponse validate_llm_endpoint_by_id(llm_endpoint_id, validate_llm_endpoint_by_id_request=validate_llm_endpoint_by_id_request)
 
 Validate LLM Endpoint By Id
 
@@ -1592,12 +1456,12 @@ Validates existing LLM endpoint with provided parameters and updates it if they 
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import smart_functions_api
-from gooddata_api_client.model.validate_llm_endpoint_response import ValidateLLMEndpointResponse
-from gooddata_api_client.model.validate_llm_endpoint_by_id_request import ValidateLLMEndpointByIdRequest
+from gooddata_api_client.models.validate_llm_endpoint_by_id_request import ValidateLLMEndpointByIdRequest
+from gooddata_api_client.models.validate_llm_endpoint_response import ValidateLLMEndpointResponse
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -1606,43 +1470,30 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = smart_functions_api.SmartFunctionsApi(api_client)
-    llm_endpoint_id = "llmEndpointId_example" # str | 
-    validate_llm_endpoint_by_id_request = ValidateLLMEndpointByIdRequest(
-        base_url="base_url_example",
-        llm_model="llm_model_example",
-        llm_organization="llm_organization_example",
-        provider="provider_example",
-        token="token_example",
-    ) # ValidateLLMEndpointByIdRequest |  (optional)
+    api_instance = gooddata_api_client.SmartFunctionsApi(api_client)
+    llm_endpoint_id = 'llm_endpoint_id_example' # str | 
+    validate_llm_endpoint_by_id_request = gooddata_api_client.ValidateLLMEndpointByIdRequest() # ValidateLLMEndpointByIdRequest |  (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Validate LLM Endpoint By Id
-        api_response = api_instance.validate_llm_endpoint_by_id(llm_endpoint_id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling SmartFunctionsApi->validate_llm_endpoint_by_id: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Validate LLM Endpoint By Id
         api_response = api_instance.validate_llm_endpoint_by_id(llm_endpoint_id, validate_llm_endpoint_by_id_request=validate_llm_endpoint_by_id_request)
+        print("The response of SmartFunctionsApi->validate_llm_endpoint_by_id:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling SmartFunctionsApi->validate_llm_endpoint_by_id: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **llm_endpoint_id** | **str**|  |
- **validate_llm_endpoint_by_id_request** | [**ValidateLLMEndpointByIdRequest**](ValidateLLMEndpointByIdRequest.md)|  | [optional]
+ **llm_endpoint_id** | **str**|  | 
+ **validate_llm_endpoint_by_id_request** | [**ValidateLLMEndpointByIdRequest**](ValidateLLMEndpointByIdRequest.md)|  | [optional] 
 
 ### Return type
 
@@ -1656,7 +1507,6 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: application/json
-
 
 ### HTTP response details
 

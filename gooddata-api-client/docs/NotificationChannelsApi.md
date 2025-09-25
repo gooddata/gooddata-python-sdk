@@ -32,12 +32,12 @@ Post Notification Channel entities
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import notification_channels_api
-from gooddata_api_client.model.json_api_notification_channel_out_document import JsonApiNotificationChannelOutDocument
-from gooddata_api_client.model.json_api_notification_channel_post_optional_id_document import JsonApiNotificationChannelPostOptionalIdDocument
+from gooddata_api_client.models.json_api_notification_channel_out_document import JsonApiNotificationChannelOutDocument
+from gooddata_api_client.models.json_api_notification_channel_post_optional_id_document import JsonApiNotificationChannelPostOptionalIdDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -46,41 +46,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = notification_channels_api.NotificationChannelsApi(api_client)
-    json_api_notification_channel_post_optional_id_document = JsonApiNotificationChannelPostOptionalIdDocument(
-        data=JsonApiNotificationChannelPostOptionalId(
-            attributes=JsonApiNotificationChannelInAttributes(
-                allowed_recipients="CREATOR",
-                custom_dashboard_url="custom_dashboard_url_example",
-                dashboard_link_visibility="HIDDEN",
-                description="description_example",
-                destination=JsonApiNotificationChannelInAttributesDestination(None),
-                in_platform_notification="DISABLED",
-                name="name_example",
-                notification_source="notification_source_example",
-            ),
-            id="id1",
-            type="notificationChannel",
-        ),
-    ) # JsonApiNotificationChannelPostOptionalIdDocument | 
+    api_instance = gooddata_api_client.NotificationChannelsApi(api_client)
+    json_api_notification_channel_post_optional_id_document = gooddata_api_client.JsonApiNotificationChannelPostOptionalIdDocument() # JsonApiNotificationChannelPostOptionalIdDocument | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Post Notification Channel entities
         api_response = api_instance.create_entity_notification_channels(json_api_notification_channel_post_optional_id_document)
+        print("The response of NotificationChannelsApi->create_entity_notification_channels:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling NotificationChannelsApi->create_entity_notification_channels: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **json_api_notification_channel_post_optional_id_document** | [**JsonApiNotificationChannelPostOptionalIdDocument**](JsonApiNotificationChannelPostOptionalIdDocument.md)|  |
+ **json_api_notification_channel_post_optional_id_document** | [**JsonApiNotificationChannelPostOptionalIdDocument**](JsonApiNotificationChannelPostOptionalIdDocument.md)|  | 
 
 ### Return type
 
@@ -95,7 +82,6 @@ No authorization required
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -105,7 +91,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **delete_entity_notification_channels**
-> delete_entity_notification_channels(id)
+> delete_entity_notification_channels(id, filter=filter)
 
 Delete Notification Channel entity
 
@@ -113,10 +99,10 @@ Delete Notification Channel entity
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import notification_channels_api
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -125,35 +111,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = notification_channels_api.NotificationChannelsApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "name==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.NotificationChannelsApi(api_client)
+    id = 'id_example' # str | 
+    filter = 'name==someString;description==someString' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Delete Notification Channel entity
-        api_instance.delete_entity_notification_channels(id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling NotificationChannelsApi->delete_entity_notification_channels: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Delete Notification Channel entity
         api_instance.delete_entity_notification_channels(id, filter=filter)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling NotificationChannelsApi->delete_entity_notification_channels: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -168,7 +147,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: Not defined
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -178,7 +156,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_all_entities_notification_channel_identifiers**
-> JsonApiNotificationChannelIdentifierOutList get_all_entities_notification_channel_identifiers()
+> JsonApiNotificationChannelIdentifierOutList get_all_entities_notification_channel_identifiers(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
 
 
 
@@ -186,11 +164,11 @@ No authorization required
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import notification_channels_api
-from gooddata_api_client.model.json_api_notification_channel_identifier_out_list import JsonApiNotificationChannelIdentifierOutList
+from gooddata_api_client.models.json_api_notification_channel_identifier_out_list import JsonApiNotificationChannelIdentifierOutList
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -199,38 +177,35 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = notification_channels_api.NotificationChannelsApi(api_client)
-    filter = "name==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
-    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
-    sort = [
-        "sort_example",
-    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
-    meta_include = [
-        "metaInclude=page,all",
-    ] # [str] | Include Meta objects. (optional)
+    api_instance = gooddata_api_client.NotificationChannelsApi(api_client)
+    filter = 'name==someString;description==someString' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) (default to 0)
+    size = 20 # int | The size of the page to be returned (optional) (default to 20)
+    sort = ['sort_example'] # List[str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = ['metaInclude=page,all'] # List[str] | Include Meta objects. (optional)
 
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         api_response = api_instance.get_all_entities_notification_channel_identifiers(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
+        print("The response of NotificationChannelsApi->get_all_entities_notification_channel_identifiers:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling NotificationChannelsApi->get_all_entities_notification_channel_identifiers: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
- **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
- **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
- **meta_include** | **[str]**| Include Meta objects. | [optional]
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **page** | **int**| Zero-based page index (0..N) | [optional] [default to 0]
+ **size** | **int**| The size of the page to be returned | [optional] [default to 20]
+ **sort** | [**List[str]**](str.md)| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional] 
+ **meta_include** | [**List[str]**](str.md)| Include Meta objects. | [optional] 
 
 ### Return type
 
@@ -245,7 +220,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -255,7 +229,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_all_entities_notification_channels**
-> JsonApiNotificationChannelOutList get_all_entities_notification_channels()
+> JsonApiNotificationChannelOutList get_all_entities_notification_channels(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
 
 Get all Notification Channel entities
 
@@ -263,11 +237,11 @@ Get all Notification Channel entities
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import notification_channels_api
-from gooddata_api_client.model.json_api_notification_channel_out_list import JsonApiNotificationChannelOutList
+from gooddata_api_client.models.json_api_notification_channel_out_list import JsonApiNotificationChannelOutList
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -276,39 +250,36 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = notification_channels_api.NotificationChannelsApi(api_client)
-    filter = "name==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
-    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
-    sort = [
-        "sort_example",
-    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
-    meta_include = [
-        "metaInclude=page,all",
-    ] # [str] | Include Meta objects. (optional)
+    api_instance = gooddata_api_client.NotificationChannelsApi(api_client)
+    filter = 'name==someString;description==someString' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) (default to 0)
+    size = 20 # int | The size of the page to be returned (optional) (default to 20)
+    sort = ['sort_example'] # List[str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = ['metaInclude=page,all'] # List[str] | Include Meta objects. (optional)
 
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get all Notification Channel entities
         api_response = api_instance.get_all_entities_notification_channels(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
+        print("The response of NotificationChannelsApi->get_all_entities_notification_channels:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling NotificationChannelsApi->get_all_entities_notification_channels: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
- **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
- **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
- **meta_include** | **[str]**| Include Meta objects. | [optional]
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **page** | **int**| Zero-based page index (0..N) | [optional] [default to 0]
+ **size** | **int**| The size of the page to be returned | [optional] [default to 20]
+ **sort** | [**List[str]**](str.md)| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional] 
+ **meta_include** | [**List[str]**](str.md)| Include Meta objects. | [optional] 
 
 ### Return type
 
@@ -323,7 +294,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -333,7 +303,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_entity_notification_channel_identifiers**
-> JsonApiNotificationChannelIdentifierOutDocument get_entity_notification_channel_identifiers(id)
+> JsonApiNotificationChannelIdentifierOutDocument get_entity_notification_channel_identifiers(id, filter=filter)
 
 
 
@@ -341,11 +311,11 @@ No authorization required
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import notification_channels_api
-from gooddata_api_client.model.json_api_notification_channel_identifier_out_document import JsonApiNotificationChannelIdentifierOutDocument
+from gooddata_api_client.models.json_api_notification_channel_identifier_out_document import JsonApiNotificationChannelIdentifierOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -354,35 +324,29 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = notification_channels_api.NotificationChannelsApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "name==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.NotificationChannelsApi(api_client)
+    id = 'id_example' # str | 
+    filter = 'name==someString;description==someString' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        api_response = api_instance.get_entity_notification_channel_identifiers(id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling NotificationChannelsApi->get_entity_notification_channel_identifiers: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         api_response = api_instance.get_entity_notification_channel_identifiers(id, filter=filter)
+        print("The response of NotificationChannelsApi->get_entity_notification_channel_identifiers:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling NotificationChannelsApi->get_entity_notification_channel_identifiers: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -397,7 +361,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -407,7 +370,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_entity_notification_channels**
-> JsonApiNotificationChannelOutDocument get_entity_notification_channels(id)
+> JsonApiNotificationChannelOutDocument get_entity_notification_channels(id, filter=filter)
 
 Get Notification Channel entity
 
@@ -415,11 +378,11 @@ Get Notification Channel entity
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import notification_channels_api
-from gooddata_api_client.model.json_api_notification_channel_out_document import JsonApiNotificationChannelOutDocument
+from gooddata_api_client.models.json_api_notification_channel_out_document import JsonApiNotificationChannelOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -428,37 +391,30 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = notification_channels_api.NotificationChannelsApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "name==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.NotificationChannelsApi(api_client)
+    id = 'id_example' # str | 
+    filter = 'name==someString;description==someString' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Get Notification Channel entity
-        api_response = api_instance.get_entity_notification_channels(id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling NotificationChannelsApi->get_entity_notification_channels: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get Notification Channel entity
         api_response = api_instance.get_entity_notification_channels(id, filter=filter)
+        print("The response of NotificationChannelsApi->get_entity_notification_channels:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling NotificationChannelsApi->get_entity_notification_channels: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -472,7 +428,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
-
 
 ### HTTP response details
 
@@ -493,11 +448,11 @@ Gets complete layout of export templates.
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import notification_channels_api
-from gooddata_api_client.model.declarative_export_templates import DeclarativeExportTemplates
+from gooddata_api_client.models.declarative_export_templates import DeclarativeExportTemplates
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -506,21 +461,23 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = notification_channels_api.NotificationChannelsApi(api_client)
+    api_instance = gooddata_api_client.NotificationChannelsApi(api_client)
 
-    # example, this endpoint has no required or optional parameters
     try:
         # Get all export templates layout
         api_response = api_instance.get_export_templates_layout()
+        print("The response of NotificationChannelsApi->get_export_templates_layout:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling NotificationChannelsApi->get_export_templates_layout: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 This endpoint does not need any parameter.
 
 ### Return type
@@ -535,7 +492,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
-
 
 ### HTTP response details
 
@@ -556,11 +512,11 @@ Gets complete layout of notification channels.
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import notification_channels_api
-from gooddata_api_client.model.declarative_notification_channels import DeclarativeNotificationChannels
+from gooddata_api_client.models.declarative_notification_channels import DeclarativeNotificationChannels
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -569,21 +525,23 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = notification_channels_api.NotificationChannelsApi(api_client)
+    api_instance = gooddata_api_client.NotificationChannelsApi(api_client)
 
-    # example, this endpoint has no required or optional parameters
     try:
         # Get all notification channels layout
         api_response = api_instance.get_notification_channels_layout()
+        print("The response of NotificationChannelsApi->get_notification_channels_layout:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling NotificationChannelsApi->get_notification_channels_layout: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 This endpoint does not need any parameter.
 
 ### Return type
@@ -599,7 +557,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -609,7 +566,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_notifications**
-> Notifications get_notifications()
+> Notifications get_notifications(workspace_id=workspace_id, is_read=is_read, page=page, size=size, meta_include=meta_include)
 
 Get latest notifications.
 
@@ -619,11 +576,11 @@ Get latest in-platform notifications for the current user.
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import notification_channels_api
-from gooddata_api_client.model.notifications import Notifications
+from gooddata_api_client.models.notifications import Notifications
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -632,37 +589,36 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = notification_channels_api.NotificationChannelsApi(api_client)
-    workspace_id = "workspaceId_example" # str | Workspace ID to filter notifications by. (optional)
+    api_instance = gooddata_api_client.NotificationChannelsApi(api_client)
+    workspace_id = 'workspace_id_example' # str | Workspace ID to filter notifications by. (optional)
     is_read = True # bool | Filter notifications by read status. (optional)
-    page = "0" # str | Zero-based page index (0..N) (optional) if omitted the server will use the default value of "0"
-    size = "20" # str | The size of the page to be returned. (optional) if omitted the server will use the default value of "20"
-    meta_include = [
-        "total",
-    ] # [str] | Additional meta information to include in the response. (optional)
+    page = '0' # str | Zero-based page index (0..N) (optional) (default to '0')
+    size = '20' # str | The size of the page to be returned. (optional) (default to '20')
+    meta_include = ['meta_include_example'] # List[str] | Additional meta information to include in the response. (optional)
 
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get latest notifications.
         api_response = api_instance.get_notifications(workspace_id=workspace_id, is_read=is_read, page=page, size=size, meta_include=meta_include)
+        print("The response of NotificationChannelsApi->get_notifications:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling NotificationChannelsApi->get_notifications: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**| Workspace ID to filter notifications by. | [optional]
- **is_read** | **bool**| Filter notifications by read status. | [optional]
- **page** | **str**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of "0"
- **size** | **str**| The size of the page to be returned. | [optional] if omitted the server will use the default value of "20"
- **meta_include** | **[str]**| Additional meta information to include in the response. | [optional]
+ **workspace_id** | **str**| Workspace ID to filter notifications by. | [optional] 
+ **is_read** | **bool**| Filter notifications by read status. | [optional] 
+ **page** | **str**| Zero-based page index (0..N) | [optional] [default to &#39;0&#39;]
+ **size** | **str**| The size of the page to be returned. | [optional] [default to &#39;20&#39;]
+ **meta_include** | [**List[str]**](str.md)| Additional meta information to include in the response. | [optional] 
 
 ### Return type
 
@@ -676,7 +632,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
-
 
 ### HTTP response details
 
@@ -697,10 +652,10 @@ Mark in-platform notification by its ID as read.
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import notification_channels_api
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -709,25 +664,26 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = notification_channels_api.NotificationChannelsApi(api_client)
-    notification_id = "notificationId_example" # str | Notification ID to mark as read.
+    api_instance = gooddata_api_client.NotificationChannelsApi(api_client)
+    notification_id = 'notification_id_example' # str | Notification ID to mark as read.
 
-    # example passing only required values which don't have defaults set
     try:
         # Mark notification as read.
         api_instance.mark_as_read_notification(notification_id)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling NotificationChannelsApi->mark_as_read_notification: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **notification_id** | **str**| Notification ID to mark as read. |
+ **notification_id** | **str**| Notification ID to mark as read. | 
 
 ### Return type
 
@@ -741,7 +697,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: Not defined
-
 
 ### HTTP response details
 
@@ -752,7 +707,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **mark_as_read_notification_all**
-> mark_as_read_notification_all()
+> mark_as_read_notification_all(workspace_id=workspace_id)
 
 Mark all notifications as read.
 
@@ -762,10 +717,10 @@ Mark all user in-platform notifications as read.
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import notification_channels_api
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -774,26 +729,26 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = notification_channels_api.NotificationChannelsApi(api_client)
-    workspace_id = "workspaceId_example" # str | Workspace ID where to mark notifications as read. (optional)
+    api_instance = gooddata_api_client.NotificationChannelsApi(api_client)
+    workspace_id = 'workspace_id_example' # str | Workspace ID where to mark notifications as read. (optional)
 
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Mark all notifications as read.
         api_instance.mark_as_read_notification_all(workspace_id=workspace_id)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling NotificationChannelsApi->mark_as_read_notification_all: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**| Workspace ID where to mark notifications as read. | [optional]
+ **workspace_id** | **str**| Workspace ID where to mark notifications as read. | [optional] 
 
 ### Return type
 
@@ -808,7 +763,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: Not defined
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -818,7 +772,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **patch_entity_notification_channels**
-> JsonApiNotificationChannelOutDocument patch_entity_notification_channels(id, json_api_notification_channel_patch_document)
+> JsonApiNotificationChannelOutDocument patch_entity_notification_channels(id, json_api_notification_channel_patch_document, filter=filter)
 
 Patch Notification Channel entity
 
@@ -826,12 +780,12 @@ Patch Notification Channel entity
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import notification_channels_api
-from gooddata_api_client.model.json_api_notification_channel_out_document import JsonApiNotificationChannelOutDocument
-from gooddata_api_client.model.json_api_notification_channel_patch_document import JsonApiNotificationChannelPatchDocument
+from gooddata_api_client.models.json_api_notification_channel_out_document import JsonApiNotificationChannelOutDocument
+from gooddata_api_client.models.json_api_notification_channel_patch_document import JsonApiNotificationChannelPatchDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -840,54 +794,32 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = notification_channels_api.NotificationChannelsApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    json_api_notification_channel_patch_document = JsonApiNotificationChannelPatchDocument(
-        data=JsonApiNotificationChannelPatch(
-            attributes=JsonApiNotificationChannelInAttributes(
-                allowed_recipients="CREATOR",
-                custom_dashboard_url="custom_dashboard_url_example",
-                dashboard_link_visibility="HIDDEN",
-                description="description_example",
-                destination=JsonApiNotificationChannelInAttributesDestination(None),
-                in_platform_notification="DISABLED",
-                name="name_example",
-                notification_source="notification_source_example",
-            ),
-            id="id1",
-            type="notificationChannel",
-        ),
-    ) # JsonApiNotificationChannelPatchDocument | 
-    filter = "name==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.NotificationChannelsApi(api_client)
+    id = 'id_example' # str | 
+    json_api_notification_channel_patch_document = gooddata_api_client.JsonApiNotificationChannelPatchDocument() # JsonApiNotificationChannelPatchDocument | 
+    filter = 'name==someString;description==someString' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Patch Notification Channel entity
-        api_response = api_instance.patch_entity_notification_channels(id, json_api_notification_channel_patch_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling NotificationChannelsApi->patch_entity_notification_channels: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Patch Notification Channel entity
         api_response = api_instance.patch_entity_notification_channels(id, json_api_notification_channel_patch_document, filter=filter)
+        print("The response of NotificationChannelsApi->patch_entity_notification_channels:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling NotificationChannelsApi->patch_entity_notification_channels: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **json_api_notification_channel_patch_document** | [**JsonApiNotificationChannelPatchDocument**](JsonApiNotificationChannelPatchDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **json_api_notification_channel_patch_document** | [**JsonApiNotificationChannelPatchDocument**](JsonApiNotificationChannelPatchDocument.md)|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -901,7 +833,6 @@ No authorization required
 
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
-
 
 ### HTTP response details
 
@@ -922,11 +853,11 @@ Sets export templates in organization.
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import notification_channels_api
-from gooddata_api_client.model.declarative_export_templates import DeclarativeExportTemplates
+from gooddata_api_client.models.declarative_export_templates import DeclarativeExportTemplates
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -935,99 +866,26 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = notification_channels_api.NotificationChannelsApi(api_client)
-    declarative_export_templates = DeclarativeExportTemplates(
-        export_templates=[
-            DeclarativeExportTemplate(
-                dashboard_slides_template=DashboardSlidesTemplate(
-                    applied_on=["PDF","PPTX"],
-                    content_slide=ContentSlideTemplate(
-                        description_field="{{dashboardFilters}}",
-                        footer=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                        header=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                    ),
-                    cover_slide=CoverSlideTemplate(
-                        background_image=True,
-                        description_field="Exported at: {{exportedAt}}",
-                        footer=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                        header=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                    ),
-                    intro_slide=IntroSlideTemplate(
-                        background_image=True,
-                        description_field='''About:
-{{dashboardDescription}}
+    api_instance = gooddata_api_client.NotificationChannelsApi(api_client)
+    declarative_export_templates = gooddata_api_client.DeclarativeExportTemplates() # DeclarativeExportTemplates | 
 
-{{dashboardFilters}}''',
-                        footer=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                        header=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                        title_field="Introduction",
-                    ),
-                    section_slide=SectionSlideTemplate(
-                        background_image=True,
-                        footer=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                        header=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                    ),
-                ),
-                id="default-export-template",
-                name="My default export template",
-                widget_slides_template=WidgetSlidesTemplate(
-                    applied_on=["PDF","PPTX"],
-                    content_slide=ContentSlideTemplate(
-                        description_field="{{dashboardFilters}}",
-                        footer=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                        header=RunningSection(
-                            left="left_example",
-                            right="right_example",
-                        ),
-                    ),
-                ),
-            ),
-        ],
-    ) # DeclarativeExportTemplates | 
-
-    # example passing only required values which don't have defaults set
     try:
         # Set all export templates
         api_instance.set_export_templates(declarative_export_templates)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling NotificationChannelsApi->set_export_templates: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **declarative_export_templates** | [**DeclarativeExportTemplates**](DeclarativeExportTemplates.md)|  |
+ **declarative_export_templates** | [**DeclarativeExportTemplates**](DeclarativeExportTemplates.md)|  | 
 
 ### Return type
 
@@ -1041,7 +899,6 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: Not defined
-
 
 ### HTTP response details
 
@@ -1062,11 +919,11 @@ Sets notification channels in organization.
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import notification_channels_api
-from gooddata_api_client.model.declarative_notification_channels import DeclarativeNotificationChannels
+from gooddata_api_client.models.declarative_notification_channels import DeclarativeNotificationChannels
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -1075,39 +932,26 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = notification_channels_api.NotificationChannelsApi(api_client)
-    declarative_notification_channels = DeclarativeNotificationChannels(
-        notification_channels=[
-            DeclarativeNotificationChannel(
-                allowed_recipients="INTERNAL",
-                custom_dashboard_url="custom_dashboard_url_example",
-                dashboard_link_visibility="INTERNAL_ONLY",
-                description="This is a channel",
-                destination=DeclarativeNotificationChannelDestination(None),
-                id="notification-channel-1",
-                in_platform_notification="DISABLED",
-                name="channel",
-                notification_source="notification_source_example",
-            ),
-        ],
-    ) # DeclarativeNotificationChannels | 
+    api_instance = gooddata_api_client.NotificationChannelsApi(api_client)
+    declarative_notification_channels = gooddata_api_client.DeclarativeNotificationChannels() # DeclarativeNotificationChannels | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Set all notification channels
         api_instance.set_notification_channels(declarative_notification_channels)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling NotificationChannelsApi->set_notification_channels: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **declarative_notification_channels** | [**DeclarativeNotificationChannels**](DeclarativeNotificationChannels.md)|  |
+ **declarative_notification_channels** | [**DeclarativeNotificationChannels**](DeclarativeNotificationChannels.md)|  | 
 
 ### Return type
 
@@ -1122,7 +966,6 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: Not defined
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -1132,7 +975,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **test_existing_notification_channel**
-> TestResponse test_existing_notification_channel(notification_channel_id)
+> TestResponse test_existing_notification_channel(notification_channel_id, test_destination_request=test_destination_request)
 
 Test existing notification channel.
 
@@ -1142,12 +985,12 @@ Tests the existing notification channel by sending a test notification.
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import notification_channels_api
-from gooddata_api_client.model.test_response import TestResponse
-from gooddata_api_client.model.test_destination_request import TestDestinationRequest
+from gooddata_api_client.models.test_destination_request import TestDestinationRequest
+from gooddata_api_client.models.test_response import TestResponse
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -1156,44 +999,30 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = notification_channels_api.NotificationChannelsApi(api_client)
-    notification_channel_id = "notificationChannelId_example" # str | 
-    test_destination_request = TestDestinationRequest(
-        destination=DeclarativeNotificationChannelDestination(None),
-        external_recipients=[
-            AutomationExternalRecipient(
-                email="email_example",
-            ),
-        ],
-    ) # TestDestinationRequest |  (optional)
+    api_instance = gooddata_api_client.NotificationChannelsApi(api_client)
+    notification_channel_id = 'notification_channel_id_example' # str | 
+    test_destination_request = gooddata_api_client.TestDestinationRequest() # TestDestinationRequest |  (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Test existing notification channel.
-        api_response = api_instance.test_existing_notification_channel(notification_channel_id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling NotificationChannelsApi->test_existing_notification_channel: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Test existing notification channel.
         api_response = api_instance.test_existing_notification_channel(notification_channel_id, test_destination_request=test_destination_request)
+        print("The response of NotificationChannelsApi->test_existing_notification_channel:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling NotificationChannelsApi->test_existing_notification_channel: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **notification_channel_id** | **str**|  |
- **test_destination_request** | [**TestDestinationRequest**](TestDestinationRequest.md)|  | [optional]
+ **notification_channel_id** | **str**|  | 
+ **test_destination_request** | [**TestDestinationRequest**](TestDestinationRequest.md)|  | [optional] 
 
 ### Return type
 
@@ -1207,7 +1036,6 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: application/json
-
 
 ### HTTP response details
 
@@ -1228,12 +1056,12 @@ Tests the notification channel by sending a test notification.
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import notification_channels_api
-from gooddata_api_client.model.test_response import TestResponse
-from gooddata_api_client.model.test_destination_request import TestDestinationRequest
+from gooddata_api_client.models.test_destination_request import TestDestinationRequest
+from gooddata_api_client.models.test_response import TestResponse
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -1242,33 +1070,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = notification_channels_api.NotificationChannelsApi(api_client)
-    test_destination_request = TestDestinationRequest(
-        destination=DeclarativeNotificationChannelDestination(None),
-        external_recipients=[
-            AutomationExternalRecipient(
-                email="email_example",
-            ),
-        ],
-    ) # TestDestinationRequest | 
+    api_instance = gooddata_api_client.NotificationChannelsApi(api_client)
+    test_destination_request = gooddata_api_client.TestDestinationRequest() # TestDestinationRequest | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Test notification channel.
         api_response = api_instance.test_notification_channel(test_destination_request)
+        print("The response of NotificationChannelsApi->test_notification_channel:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling NotificationChannelsApi->test_notification_channel: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **test_destination_request** | [**TestDestinationRequest**](TestDestinationRequest.md)|  |
+ **test_destination_request** | [**TestDestinationRequest**](TestDestinationRequest.md)|  | 
 
 ### Return type
 
@@ -1283,7 +1106,6 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -1293,7 +1115,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **update_entity_notification_channels**
-> JsonApiNotificationChannelOutDocument update_entity_notification_channels(id, json_api_notification_channel_in_document)
+> JsonApiNotificationChannelOutDocument update_entity_notification_channels(id, json_api_notification_channel_in_document, filter=filter)
 
 Put Notification Channel entity
 
@@ -1301,12 +1123,12 @@ Put Notification Channel entity
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import notification_channels_api
-from gooddata_api_client.model.json_api_notification_channel_in_document import JsonApiNotificationChannelInDocument
-from gooddata_api_client.model.json_api_notification_channel_out_document import JsonApiNotificationChannelOutDocument
+from gooddata_api_client.models.json_api_notification_channel_in_document import JsonApiNotificationChannelInDocument
+from gooddata_api_client.models.json_api_notification_channel_out_document import JsonApiNotificationChannelOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -1315,54 +1137,32 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = notification_channels_api.NotificationChannelsApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    json_api_notification_channel_in_document = JsonApiNotificationChannelInDocument(
-        data=JsonApiNotificationChannelIn(
-            attributes=JsonApiNotificationChannelInAttributes(
-                allowed_recipients="CREATOR",
-                custom_dashboard_url="custom_dashboard_url_example",
-                dashboard_link_visibility="HIDDEN",
-                description="description_example",
-                destination=JsonApiNotificationChannelInAttributesDestination(None),
-                in_platform_notification="DISABLED",
-                name="name_example",
-                notification_source="notification_source_example",
-            ),
-            id="id1",
-            type="notificationChannel",
-        ),
-    ) # JsonApiNotificationChannelInDocument | 
-    filter = "name==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.NotificationChannelsApi(api_client)
+    id = 'id_example' # str | 
+    json_api_notification_channel_in_document = gooddata_api_client.JsonApiNotificationChannelInDocument() # JsonApiNotificationChannelInDocument | 
+    filter = 'name==someString;description==someString' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Put Notification Channel entity
-        api_response = api_instance.update_entity_notification_channels(id, json_api_notification_channel_in_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling NotificationChannelsApi->update_entity_notification_channels: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Put Notification Channel entity
         api_response = api_instance.update_entity_notification_channels(id, json_api_notification_channel_in_document, filter=filter)
+        print("The response of NotificationChannelsApi->update_entity_notification_channels:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling NotificationChannelsApi->update_entity_notification_channels: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **json_api_notification_channel_in_document** | [**JsonApiNotificationChannelInDocument**](JsonApiNotificationChannelInDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **json_api_notification_channel_in_document** | [**JsonApiNotificationChannelInDocument**](JsonApiNotificationChannelInDocument.md)|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -1376,7 +1176,6 @@ No authorization required
 
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
-
 
 ### HTTP response details
 

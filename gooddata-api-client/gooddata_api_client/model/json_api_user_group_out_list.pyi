@@ -158,5 +158,5 @@ class JsonApiUserGroupOutList(
             **kwargs,
         )
 
-from gooddata_api_client.model.json_api_user_group_out_with_links import JsonApiUserGroupOutWithLinks
-from gooddata_api_client.model.list_links import ListLinks
+from gooddata_api_client.models.json_api_user_group_out_with_links import JsonApiUserGroupOutWithLinks
+from gooddata_api_client.models.list_links import ListLinks

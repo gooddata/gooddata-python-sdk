@@ -1,4 +1,4 @@
-# gooddata_api_client.model.result_dimension_header.ResultDimensionHeader
+# gooddata_api_client.models.result_dimension_header.ResultDimensionHeader
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes
@@ -13,4 +13,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [AttributeHeaderOut](AttributeHeaderOut.md) | [**AttributeHeaderOut**](AttributeHeaderOut.md) | [**AttributeHeaderOut**](AttributeHeaderOut.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

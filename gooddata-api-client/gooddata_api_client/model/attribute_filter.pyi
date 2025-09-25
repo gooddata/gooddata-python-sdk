@@ -38,7 +38,7 @@ class AttributeFilter(
 
 
     class MetaOapg:
-        
+
         @classmethod
         @functools.lru_cache()
         def one_of(cls):
@@ -68,5 +68,5 @@ class AttributeFilter(
             **kwargs,
         )
 
-from gooddata_api_client.model.negative_attribute_filter import NegativeAttributeFilter
-from gooddata_api_client.model.positive_attribute_filter import PositiveAttributeFilter
+from gooddata_api_client.models.negative_attribute_filter import NegativeAttributeFilter
+from gooddata_api_client.models.positive_attribute_filter import PositiveAttributeFilter

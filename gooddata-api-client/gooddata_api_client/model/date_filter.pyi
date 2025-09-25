@@ -38,7 +38,7 @@ class DateFilter(
 
 
     class MetaOapg:
-        
+
         @classmethod
         @functools.lru_cache()
         def one_of(cls):
@@ -68,5 +68,5 @@ class DateFilter(
             **kwargs,
         )
 
-from gooddata_api_client.model.absolute_date_filter import AbsoluteDateFilter
-from gooddata_api_client.model.relative_date_filter import RelativeDateFilter
+from gooddata_api_client.models.absolute_date_filter import AbsoluteDateFilter
+from gooddata_api_client.models.relative_date_filter import RelativeDateFilter

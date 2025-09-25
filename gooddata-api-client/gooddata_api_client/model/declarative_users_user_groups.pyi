@@ -41,21 +41,21 @@ class DeclarativeUsersUserGroups(
             "userGroups",
             "users",
         }
-        
+
         class properties:
-            
-            
+
+
             class userGroups(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeUserGroup']:
                         return DeclarativeUserGroup
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeUserGroup'], typing.List['DeclarativeUserGroup']],
@@ -66,22 +66,22 @@ class DeclarativeUsersUserGroups(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeUserGroup':
                     return super().__getitem__(i)
-            
-            
+
+
             class users(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeUser']:
                         return DeclarativeUser
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeUser'], typing.List['DeclarativeUser']],
@@ -92,43 +92,43 @@ class DeclarativeUsersUserGroups(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeUser':
                     return super().__getitem__(i)
             __annotations__ = {
                 "userGroups": userGroups,
                 "users": users,
             }
-    
+
     userGroups: MetaOapg.properties.userGroups
     users: MetaOapg.properties.users
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["userGroups"]) -> MetaOapg.properties.userGroups: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["users"]) -> MetaOapg.properties.users: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["userGroups", "users", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["userGroups"]) -> MetaOapg.properties.userGroups: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["users"]) -> MetaOapg.properties.users: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["userGroups", "users", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -147,5 +147,5 @@ class DeclarativeUsersUserGroups(
             **kwargs,
         )
 
-from gooddata_api_client.model.declarative_user import DeclarativeUser
-from gooddata_api_client.model.declarative_user_group import DeclarativeUserGroup
+from gooddata_api_client.models.declarative_user import DeclarativeUser
+from gooddata_api_client.models.declarative_user_group import DeclarativeUserGroup

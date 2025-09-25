@@ -38,7 +38,7 @@ class ExecutionResultHeader(
 
 
     class MetaOapg:
-        
+
         @classmethod
         @functools.lru_cache()
         def one_of(cls):
@@ -69,6 +69,6 @@ class ExecutionResultHeader(
             **kwargs,
         )
 
-from gooddata_api_client.model.attribute_execution_result_header import AttributeExecutionResultHeader
-from gooddata_api_client.model.measure_execution_result_header import MeasureExecutionResultHeader
-from gooddata_api_client.model.total_execution_result_header import TotalExecutionResultHeader
+from gooddata_api_client.models.attribute_execution_result_header import AttributeExecutionResultHeader
+from gooddata_api_client.models.measure_execution_result_header import MeasureExecutionResultHeader
+from gooddata_api_client.models.total_execution_result_header import TotalExecutionResultHeader

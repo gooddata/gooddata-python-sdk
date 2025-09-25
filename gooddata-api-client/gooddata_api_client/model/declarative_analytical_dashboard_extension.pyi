@@ -39,27 +39,27 @@ class DeclarativeAnalyticalDashboardExtension(
             "permissions",
             "id",
         }
-        
+
         class properties:
-            
-            
+
+
             class id(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class permissions(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeAnalyticalDashboardPermission']:
                         return DeclarativeAnalyticalDashboardPermission
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeAnalyticalDashboardPermission'], typing.List['DeclarativeAnalyticalDashboardPermission']],
@@ -70,43 +70,43 @@ class DeclarativeAnalyticalDashboardExtension(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeAnalyticalDashboardPermission':
                     return super().__getitem__(i)
             __annotations__ = {
                 "id": id,
                 "permissions": permissions,
             }
-    
+
     permissions: MetaOapg.properties.permissions
     id: MetaOapg.properties.id
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["permissions"]) -> MetaOapg.properties.permissions: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["id", "permissions", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["permissions"]) -> MetaOapg.properties.permissions: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["id", "permissions", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -125,4 +125,4 @@ class DeclarativeAnalyticalDashboardExtension(
             **kwargs,
         )
 
-from gooddata_api_client.model.declarative_analytical_dashboard_permission import DeclarativeAnalyticalDashboardPermission
+from gooddata_api_client.models.declarative_analytical_dashboard_permission import DeclarativeAnalyticalDashboardPermission

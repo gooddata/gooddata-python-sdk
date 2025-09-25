@@ -18,10 +18,10 @@ Notification sets up all reports to be computed again with new data.
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import invalidate_cache_api
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -30,25 +30,26 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = invalidate_cache_api.InvalidateCacheApi(api_client)
-    data_source_id = "dataSourceId_example" # str | 
+    api_instance = gooddata_api_client.InvalidateCacheApi(api_client)
+    data_source_id = 'data_source_id_example' # str | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Register an upload notification
         api_instance.register_upload_notification(data_source_id)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling InvalidateCacheApi->register_upload_notification: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **data_source_id** | **str**|  |
+ **data_source_id** | **str**|  | 
 
 ### Return type
 
@@ -62,7 +63,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: Not defined
-
 
 ### HTTP response details
 

@@ -3,13 +3,30 @@
 A JSON:API document with a list of resources
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**data** | [**[JsonApiWorkspaceSettingOutWithLinks]**](JsonApiWorkspaceSettingOutWithLinks.md) |  | 
+**data** | [**List[JsonApiWorkspaceSettingOutWithLinks]**](JsonApiWorkspaceSettingOutWithLinks.md) |  | 
 **links** | [**ListLinks**](ListLinks.md) |  | [optional] 
 **meta** | [**JsonApiAggregatedFactOutListMeta**](JsonApiAggregatedFactOutListMeta.md) |  | [optional] 
-**any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 
+## Example
+
+```python
+from gooddata_api_client.models.json_api_workspace_setting_out_list import JsonApiWorkspaceSettingOutList
+
+# TODO update the JSON string below
+json = "{}"
+# create an instance of JsonApiWorkspaceSettingOutList from a JSON string
+json_api_workspace_setting_out_list_instance = JsonApiWorkspaceSettingOutList.from_json(json)
+# print the JSON string representation of the object
+print(JsonApiWorkspaceSettingOutList.to_json())
+
+# convert the object into a dict
+json_api_workspace_setting_out_list_dict = json_api_workspace_setting_out_list_instance.to_dict()
+# create an instance of JsonApiWorkspaceSettingOutList from a dict
+json_api_workspace_setting_out_list_from_dict = JsonApiWorkspaceSettingOutList.from_dict(json_api_workspace_setting_out_list_dict)
+```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
 

@@ -41,23 +41,23 @@ class PdmSql(
             "statement",
             "title",
         }
-        
+
         class properties:
             statement = schemas.StrSchema
             title = schemas.StrSchema
-            
-            
+
+
             class columns(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['SqlColumn']:
                         return SqlColumn
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['SqlColumn'], typing.List['SqlColumn']],
@@ -68,7 +68,7 @@ class PdmSql(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'SqlColumn':
                     return super().__getitem__(i)
             __annotations__ = {
@@ -76,42 +76,42 @@ class PdmSql(
                 "title": title,
                 "columns": columns,
             }
-    
+
     statement: MetaOapg.properties.statement
     title: MetaOapg.properties.title
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["statement"]) -> MetaOapg.properties.statement: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["title"]) -> MetaOapg.properties.title: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["columns"]) -> MetaOapg.properties.columns: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["statement", "title", "columns", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["statement"]) -> MetaOapg.properties.statement: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["title"]) -> MetaOapg.properties.title: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["columns"]) -> typing.Union[MetaOapg.properties.columns, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["statement", "title", "columns", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -132,4 +132,4 @@ class PdmSql(
             **kwargs,
         )
 
-from gooddata_api_client.model.sql_column import SqlColumn
+from gooddata_api_client.models.sql_column import SqlColumn

@@ -35,7 +35,7 @@ class JsonApiCspDirectiveOutWithLinks(
 
 
     class MetaOapg:
-        
+
         @classmethod
         @functools.lru_cache()
         def all_of(cls):
@@ -65,5 +65,5 @@ class JsonApiCspDirectiveOutWithLinks(
             **kwargs,
         )
 
-from gooddata_api_client.model.json_api_csp_directive_out import JsonApiCspDirectiveOut
-from gooddata_api_client.model.object_links_container import ObjectLinksContainer
+from gooddata_api_client.models.json_api_csp_directive_out import JsonApiCspDirectiveOut
+from gooddata_api_client.models.object_links_container import ObjectLinksContainer

@@ -2,13 +2,13 @@
 from typing import Literal, Optional
 
 from attrs import define
-from gooddata_api_client.model.custom_label import CustomLabel as ApiCustomLabel
-from gooddata_api_client.model.custom_metric import CustomMetric as ApiCustomMetric
-from gooddata_api_client.model.custom_override import CustomOverride as ApiCustomOverride
-from gooddata_api_client.model.settings import Settings as ApiSettings
-from gooddata_api_client.model.slides_export_request import SlidesExportRequest as SlidesExportRequestApi
-from gooddata_api_client.model.tabular_export_request import TabularExportRequest
-from gooddata_api_client.model.visual_export_request import VisualExportRequest as VisualExportRequestApi
+from gooddata_api_client.models.custom_label import CustomLabel as ApiCustomLabel
+from gooddata_api_client.models.custom_metric import CustomMetric as ApiCustomMetric
+from gooddata_api_client.models.custom_override import CustomOverride as ApiCustomOverride
+from gooddata_api_client.models.settings import Settings as ApiSettings
+from gooddata_api_client.models.slides_export_request import SlidesExportRequest as SlidesExportRequestApi
+from gooddata_api_client.models.tabular_export_request import TabularExportRequest
+from gooddata_api_client.models.visual_export_request import VisualExportRequest as VisualExportRequestApi
 
 from gooddata_sdk.catalog.base import Base
 

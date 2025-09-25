@@ -123,5 +123,5 @@ class ExecutionResponse(
             **kwargs,
         )
 
-from gooddata_api_client.model.execution_links import ExecutionLinks
-from gooddata_api_client.model.result_dimension import ResultDimension
+from gooddata_api_client.models.execution_links import ExecutionLinks
+from gooddata_api_client.models.result_dimension import ResultDimension

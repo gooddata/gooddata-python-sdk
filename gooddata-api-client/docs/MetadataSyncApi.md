@@ -19,10 +19,10 @@ Method | HTTP request | Description
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import metadata_sync_api
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -31,25 +31,26 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = metadata_sync_api.MetadataSyncApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
+    api_instance = gooddata_api_client.MetadataSyncApi(api_client)
+    workspace_id = 'workspace_id_example' # str | 
 
-    # example passing only required values which don't have defaults set
     try:
         # (BETA) Sync Metadata to other services
         api_instance.metadata_sync(workspace_id)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling MetadataSyncApi->metadata_sync: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
+ **workspace_id** | **str**|  | 
 
 ### Return type
 
@@ -63,7 +64,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: Not defined
-
 
 ### HTTP response details
 
@@ -84,10 +84,10 @@ No authorization required
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import metadata_sync_api
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -96,20 +96,21 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = metadata_sync_api.MetadataSyncApi(api_client)
+    api_instance = gooddata_api_client.MetadataSyncApi(api_client)
 
-    # example, this endpoint has no required or optional parameters
     try:
         # (BETA) Sync organization scope Metadata to other services
         api_instance.metadata_sync_organization()
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling MetadataSyncApi->metadata_sync_organization: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 This endpoint does not need any parameter.
 
 ### Return type
@@ -124,7 +125,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: Not defined
-
 
 ### HTTP response details
 

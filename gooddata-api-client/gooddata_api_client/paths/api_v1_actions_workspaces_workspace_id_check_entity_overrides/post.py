@@ -25,8 +25,8 @@ import frozendict  # noqa: F401
 
 from gooddata_api_client import schemas  # noqa: F401
 
-from gooddata_api_client.model.hierarchy_object_identification import HierarchyObjectIdentification
-from gooddata_api_client.model.identifier_duplications import IdentifierDuplications
+from gooddata_api_client.models.hierarchy_object_identification import HierarchyObjectIdentification
+from gooddata_api_client.models.identifier_duplications import IdentifierDuplications
 
 from . import path
 
@@ -65,7 +65,7 @@ class SchemaForRequestBodyApplicationJson(
 
 
     class MetaOapg:
-        
+
         @staticmethod
         def items() -> typing.Type['HierarchyObjectIdentification']:
             return HierarchyObjectIdentification
@@ -100,7 +100,7 @@ class SchemaFor200ResponseBodyApplicationJson(
 
 
     class MetaOapg:
-        
+
         @staticmethod
         def items() -> typing.Type['IdentifierDuplications']:
             return IdentifierDuplications
@@ -437,5 +437,3 @@ class ApiForpost(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
-
-

@@ -35,42 +35,42 @@ class ListLinks(
 
 
     class MetaOapg:
-        
-        
+
+
         class all_of_1(
             schemas.DictSchema
         ):
-        
-        
+
+
             class MetaOapg:
-                
+
                 class properties:
                     next = schemas.StrSchema
                     __annotations__ = {
                         "next": next,
                     }
-            
+
             @typing.overload
             def __getitem__(self, name: typing_extensions.Literal["next"]) -> MetaOapg.properties.next: ...
-            
+
             @typing.overload
             def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-            
+
             def __getitem__(self, name: typing.Union[typing_extensions.Literal["next", ], str]):
                 # dict_instance[name] accessor
                 return super().__getitem__(name)
-            
-            
+
+
             @typing.overload
             def get_item_oapg(self, name: typing_extensions.Literal["next"]) -> typing.Union[MetaOapg.properties.next, schemas.Unset]: ...
-            
+
             @typing.overload
             def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-            
+
             def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["next", ], str]):
                 return super().get_item_oapg(name)
-            
-        
+
+
             def __new__(
                 cls,
                 *_args: typing.Union[dict, frozendict.frozendict, ],
@@ -85,7 +85,7 @@ class ListLinks(
                     _configuration=_configuration,
                     **kwargs,
                 )
-        
+
         @classmethod
         @functools.lru_cache()
         def all_of(cls):
@@ -115,4 +115,4 @@ class ListLinks(
             **kwargs,
         )
 
-from gooddata_api_client.model.object_links import ObjectLinks
+from gooddata_api_client.models.object_links import ObjectLinks

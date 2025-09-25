@@ -3,8 +3,8 @@ import builtins
 from typing import Optional
 
 from attrs import define, field
-from gooddata_api_client.model.declarative_notification_channel import DeclarativeNotificationChannel
-from gooddata_api_client.model.webhook import Webhook
+from gooddata_api_client.models.declarative_notification_channel import DeclarativeNotificationChannel
+from gooddata_api_client.models.webhook import Webhook
 
 from gooddata_sdk.catalog.base import Base
 

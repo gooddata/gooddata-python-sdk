@@ -1,4 +1,4 @@
-# gooddata_api_client.model.json_api_workspace_data_filter_setting_to_many_linkage.JsonApiWorkspaceDataFilterSettingToManyLinkage
+# gooddata_api_client.models.json_api_workspace_data_filter_setting_to_many_linkage.JsonApiWorkspaceDataFilterSettingToManyLinkage
 
 References to other resource objects in a to-many (\\\"relationship\\\"). Relationships can be specified by including a member in a resource's links object.
 
@@ -13,4 +13,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**JsonApiWorkspaceDataFilterSettingLinkage**](JsonApiWorkspaceDataFilterSettingLinkage.md) | [**JsonApiWorkspaceDataFilterSettingLinkage**](JsonApiWorkspaceDataFilterSettingLinkage.md) | [**JsonApiWorkspaceDataFilterSettingLinkage**](JsonApiWorkspaceDataFilterSettingLinkage.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

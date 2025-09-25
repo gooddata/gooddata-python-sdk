@@ -1,4 +1,4 @@
-# gooddata_api_client.model.json_api_analytical_dashboard_out_includes.JsonApiAnalyticalDashboardOutIncludes
+# gooddata_api_client.models.json_api_analytical_dashboard_out_includes.JsonApiAnalyticalDashboardOutIncludes
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes
@@ -18,4 +18,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [JsonApiDashboardPluginOutWithLinks](JsonApiDashboardPluginOutWithLinks.md) | [**JsonApiDashboardPluginOutWithLinks**](JsonApiDashboardPluginOutWithLinks.md) | [**JsonApiDashboardPluginOutWithLinks**](JsonApiDashboardPluginOutWithLinks.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

@@ -42,18 +42,18 @@ class ExecutionResultGrandTotal(
             "totalDimensions",
             "dimensionHeaders",
         }
-        
+
         class properties:
-            
-            
+
+
             class data(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
                     items = schemas.DictSchema
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, ]]],
@@ -64,22 +64,22 @@ class ExecutionResultGrandTotal(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
-            
-            
+
+
             class dimensionHeaders(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DimensionHeader']:
                         return DimensionHeader
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DimensionHeader'], typing.List['DimensionHeader']],
@@ -90,19 +90,19 @@ class ExecutionResultGrandTotal(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DimensionHeader':
                     return super().__getitem__(i)
-            
-            
+
+
             class totalDimensions(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
                     items = schemas.StrSchema
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, str, ]], typing.List[typing.Union[MetaOapg.items, str, ]]],
@@ -113,7 +113,7 @@ class ExecutionResultGrandTotal(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
             __annotations__ = {
@@ -121,43 +121,43 @@ class ExecutionResultGrandTotal(
                 "dimensionHeaders": dimensionHeaders,
                 "totalDimensions": totalDimensions,
             }
-    
+
     data: MetaOapg.properties.data
     totalDimensions: MetaOapg.properties.totalDimensions
     dimensionHeaders: MetaOapg.properties.dimensionHeaders
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["data"]) -> MetaOapg.properties.data: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["dimensionHeaders"]) -> MetaOapg.properties.dimensionHeaders: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["totalDimensions"]) -> MetaOapg.properties.totalDimensions: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["data", "dimensionHeaders", "totalDimensions", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["data"]) -> MetaOapg.properties.data: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["dimensionHeaders"]) -> MetaOapg.properties.dimensionHeaders: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["totalDimensions"]) -> MetaOapg.properties.totalDimensions: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["data", "dimensionHeaders", "totalDimensions", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -178,4 +178,4 @@ class ExecutionResultGrandTotal(
             **kwargs,
         )
 
-from gooddata_api_client.model.dimension_header import DimensionHeader
+from gooddata_api_client.models.dimension_header import DimensionHeader

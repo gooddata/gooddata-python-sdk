@@ -1,4 +1,4 @@
-# gooddata_api_client.model.measure_definition.MeasureDefinition
+# gooddata_api_client.models.measure_definition.MeasureDefinition
 
 Abstract metric definition type
 
@@ -17,4 +17,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [PopMeasureDefinition](PopMeasureDefinition.md) | [**PopMeasureDefinition**](PopMeasureDefinition.md) | [**PopMeasureDefinition**](PopMeasureDefinition.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

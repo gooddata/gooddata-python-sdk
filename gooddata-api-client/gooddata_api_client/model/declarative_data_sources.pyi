@@ -40,21 +40,21 @@ class DeclarativeDataSources(
         required = {
             "dataSources",
         }
-        
+
         class properties:
-            
-            
+
+
             class dataSources(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeDataSource']:
                         return DeclarativeDataSource
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeDataSource'], typing.List['DeclarativeDataSource']],
@@ -65,35 +65,35 @@ class DeclarativeDataSources(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeDataSource':
                     return super().__getitem__(i)
             __annotations__ = {
                 "dataSources": dataSources,
             }
-    
+
     dataSources: MetaOapg.properties.dataSources
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["dataSources"]) -> MetaOapg.properties.dataSources: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["dataSources", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["dataSources"]) -> MetaOapg.properties.dataSources: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["dataSources", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -110,4 +110,4 @@ class DeclarativeDataSources(
             **kwargs,
         )
 
-from gooddata_api_client.model.declarative_data_source import DeclarativeDataSource
+from gooddata_api_client.models.declarative_data_source import DeclarativeDataSource

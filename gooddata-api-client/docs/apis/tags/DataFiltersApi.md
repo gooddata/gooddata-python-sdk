@@ -33,8 +33,8 @@ Post User Data Filters
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import data_filters_api
-from gooddata_api_client.model.json_api_user_data_filter_out_document import JsonApiUserDataFilterOutDocument
-from gooddata_api_client.model.json_api_user_data_filter_post_optional_id_document import JsonApiUserDataFilterPostOptionalIdDocument
+from gooddata_api_client.models.json_api_user_data_filter_out_document import JsonApiUserDataFilterOutDocument
+from gooddata_api_client.models.json_api_user_data_filter_post_optional_id_document import JsonApiUserDataFilterPostOptionalIdDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -240,8 +240,8 @@ Post Workspace Data Filters
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import data_filters_api
-from gooddata_api_client.model.json_api_workspace_data_filter_out_document import JsonApiWorkspaceDataFilterOutDocument
-from gooddata_api_client.model.json_api_workspace_data_filter_in_document import JsonApiWorkspaceDataFilterInDocument
+from gooddata_api_client.models.json_api_workspace_data_filter_out_document import JsonApiWorkspaceDataFilterOutDocument
+from gooddata_api_client.models.json_api_workspace_data_filter_in_document import JsonApiWorkspaceDataFilterInDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -671,7 +671,7 @@ Get all User Data Filters
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import data_filters_api
-from gooddata_api_client.model.json_api_user_data_filter_out_list import JsonApiUserDataFilterOutList
+from gooddata_api_client.models.json_api_user_data_filter_out_list import JsonApiUserDataFilterOutList
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -895,7 +895,7 @@ Get all Settings for Workspace Data Filters
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import data_filters_api
-from gooddata_api_client.model.json_api_workspace_data_filter_setting_out_list import JsonApiWorkspaceDataFilterSettingOutList
+from gooddata_api_client.models.json_api_workspace_data_filter_setting_out_list import JsonApiWorkspaceDataFilterSettingOutList
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1101,7 +1101,7 @@ Get all Workspace Data Filters
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import data_filters_api
-from gooddata_api_client.model.json_api_workspace_data_filter_out_list import JsonApiWorkspaceDataFilterOutList
+from gooddata_api_client.models.json_api_workspace_data_filter_out_list import JsonApiWorkspaceDataFilterOutList
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1307,7 +1307,7 @@ Get a User Data Filter
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import data_filters_api
-from gooddata_api_client.model.json_api_user_data_filter_out_document import JsonApiUserDataFilterOutDocument
+from gooddata_api_client.models.json_api_user_data_filter_out_document import JsonApiUserDataFilterOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1496,7 +1496,7 @@ Get a Setting for Workspace Data Filter
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import data_filters_api
-from gooddata_api_client.model.json_api_workspace_data_filter_setting_out_document import JsonApiWorkspaceDataFilterSettingOutDocument
+from gooddata_api_client.models.json_api_workspace_data_filter_setting_out_document import JsonApiWorkspaceDataFilterSettingOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1667,7 +1667,7 @@ Get a Workspace Data Filter
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import data_filters_api
-from gooddata_api_client.model.json_api_workspace_data_filter_out_document import JsonApiWorkspaceDataFilterOutDocument
+from gooddata_api_client.models.json_api_workspace_data_filter_out_document import JsonApiWorkspaceDataFilterOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1840,7 +1840,7 @@ Retrieve all workspaces and related workspace data filters (and their settings /
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import data_filters_api
-from gooddata_api_client.model.declarative_workspace_data_filters import DeclarativeWorkspaceDataFilters
+from gooddata_api_client.models.declarative_workspace_data_filters import DeclarativeWorkspaceDataFilters
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1901,8 +1901,8 @@ Patch a User Data Filter
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import data_filters_api
-from gooddata_api_client.model.json_api_user_data_filter_out_document import JsonApiUserDataFilterOutDocument
-from gooddata_api_client.model.json_api_user_data_filter_patch_document import JsonApiUserDataFilterPatchDocument
+from gooddata_api_client.models.json_api_user_data_filter_out_document import JsonApiUserDataFilterOutDocument
+from gooddata_api_client.models.json_api_user_data_filter_patch_document import JsonApiUserDataFilterPatchDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -2109,8 +2109,8 @@ Patch a Workspace Data Filter
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import data_filters_api
-from gooddata_api_client.model.json_api_workspace_data_filter_out_document import JsonApiWorkspaceDataFilterOutDocument
-from gooddata_api_client.model.json_api_workspace_data_filter_patch_document import JsonApiWorkspaceDataFilterPatchDocument
+from gooddata_api_client.models.json_api_workspace_data_filter_out_document import JsonApiWorkspaceDataFilterOutDocument
+from gooddata_api_client.models.json_api_workspace_data_filter_patch_document import JsonApiWorkspaceDataFilterPatchDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -2315,7 +2315,7 @@ Sets workspace data filters in all workspaces in entire organization.
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import data_filters_api
-from gooddata_api_client.model.declarative_workspace_data_filters import DeclarativeWorkspaceDataFilters
+from gooddata_api_client.models.declarative_workspace_data_filters import DeclarativeWorkspaceDataFilters
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -2409,8 +2409,8 @@ Put a User Data Filter
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import data_filters_api
-from gooddata_api_client.model.json_api_user_data_filter_out_document import JsonApiUserDataFilterOutDocument
-from gooddata_api_client.model.json_api_user_data_filter_in_document import JsonApiUserDataFilterInDocument
+from gooddata_api_client.models.json_api_user_data_filter_out_document import JsonApiUserDataFilterOutDocument
+from gooddata_api_client.models.json_api_user_data_filter_in_document import JsonApiUserDataFilterInDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -2617,8 +2617,8 @@ Put a Workspace Data Filter
 ```python
 import gooddata_api_client
 from gooddata_api_client.apis.tags import data_filters_api
-from gooddata_api_client.model.json_api_workspace_data_filter_out_document import JsonApiWorkspaceDataFilterOutDocument
-from gooddata_api_client.model.json_api_workspace_data_filter_in_document import JsonApiWorkspaceDataFilterInDocument
+from gooddata_api_client.models.json_api_workspace_data_filter_out_document import JsonApiWorkspaceDataFilterOutDocument
+from gooddata_api_client.models.json_api_workspace_data_filter_in_document import JsonApiWorkspaceDataFilterInDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -2809,4 +2809,3 @@ Type | Description  | Notes
 No authorization required
 
 [[Back to top]](#__pageTop) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
-

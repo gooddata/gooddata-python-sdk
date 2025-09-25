@@ -1,4 +1,4 @@
-# gooddata_api_client.model.data_column_locator.DataColumnLocator
+# gooddata_api_client.models.data_column_locator.DataColumnLocator
 
 Mapping from dimension items (either 'localIdentifier' from 'AttributeItem', or \"measureGroup\") to their respective values. This effectively specifies the path (location) of the data column used for sorting. Therefore values for all dimension items must be specified.
 
@@ -28,4 +28,3 @@ Key | Input Type | Accessed Type | Description | Notes
 **any_string_name** | str,  | str,  | any string name can be used but the value must be the correct type Mapping from dimension items (either &#x27;localIdentifier&#x27; from &#x27;AttributeItem&#x27;, or \&quot;measureGroup\&quot;) to their respective values. This effectively specifies the path (location) of the data column used for sorting. Therefore values for all dimension items must be specified. | [optional] 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

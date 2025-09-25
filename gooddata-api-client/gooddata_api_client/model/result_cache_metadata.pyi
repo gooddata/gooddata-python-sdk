@@ -43,18 +43,18 @@ class ResultCacheMetadata(
             "resultSize",
             "afm",
         }
-        
+
         class properties:
-        
+
             @staticmethod
             def afm() -> typing.Type['AFM']:
                 return AFM
-        
+
             @staticmethod
             def executionResponse() -> typing.Type['ExecutionResponse']:
                 return ExecutionResponse
             resultSize = schemas.Int64Schema
-        
+
             @staticmethod
             def resultSpec() -> typing.Type['ResultSpec']:
                 return ResultSpec
@@ -64,50 +64,50 @@ class ResultCacheMetadata(
                 "resultSize": resultSize,
                 "resultSpec": resultSpec,
             }
-    
+
     executionResponse: 'ExecutionResponse'
     resultSpec: 'ResultSpec'
     resultSize: MetaOapg.properties.resultSize
     afm: 'AFM'
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["afm"]) -> 'AFM': ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["executionResponse"]) -> 'ExecutionResponse': ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["resultSize"]) -> MetaOapg.properties.resultSize: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["resultSpec"]) -> 'ResultSpec': ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["afm", "executionResponse", "resultSize", "resultSpec", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["afm"]) -> 'AFM': ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["executionResponse"]) -> 'ExecutionResponse': ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["resultSize"]) -> MetaOapg.properties.resultSize: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["resultSpec"]) -> 'ResultSpec': ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["afm", "executionResponse", "resultSize", "resultSpec", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -130,6 +130,6 @@ class ResultCacheMetadata(
             **kwargs,
         )
 
-from gooddata_api_client.model.afm import AFM
-from gooddata_api_client.model.execution_response import ExecutionResponse
-from gooddata_api_client.model.result_spec import ResultSpec
+from gooddata_api_client.models.afm import AFM
+from gooddata_api_client.models.execution_response import ExecutionResponse
+from gooddata_api_client.models.result_spec import ResultSpec

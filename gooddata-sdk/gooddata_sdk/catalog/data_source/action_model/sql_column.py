@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import attr
-from gooddata_api_client.model.sql_column import SqlColumn as ApiSqlColumn
+from gooddata_api_client.models.sql_column import SqlColumn as ApiSqlColumn
 
 from gooddata_sdk.catalog.base import Base
 

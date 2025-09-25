@@ -40,35 +40,35 @@ class PopDateMeasureDefinition(
         required = {
             "overPeriodMeasure",
         }
-        
+
         class properties:
-            
-            
+
+
             class overPeriodMeasure(
                 schemas.DictSchema
             ):
-            
-            
+
+
                 class MetaOapg:
                     required = {
                         "measureIdentifier",
                         "dateAttributes",
                     }
-                    
+
                     class properties:
-                        
-                        
+
+
                         class dateAttributes(
                             schemas.ListSchema
                         ):
-                        
-                        
+
+
                             class MetaOapg:
-                                
+
                                 @staticmethod
                                 def items() -> typing.Type['PopDate']:
                                     return PopDate
-                        
+
                             def __new__(
                                 cls,
                                 _arg: typing.Union[typing.Tuple['PopDate'], typing.List['PopDate']],
@@ -79,10 +79,10 @@ class PopDateMeasureDefinition(
                                     _arg,
                                     _configuration=_configuration,
                                 )
-                        
+
                             def __getitem__(self, i: int) -> 'PopDate':
                                 return super().__getitem__(i)
-                    
+
                         @staticmethod
                         def measureIdentifier() -> typing.Type['AfmLocalIdentifier']:
                             return AfmLocalIdentifier
@@ -90,37 +90,37 @@ class PopDateMeasureDefinition(
                             "dateAttributes": dateAttributes,
                             "measureIdentifier": measureIdentifier,
                         }
-                
+
                 measureIdentifier: 'AfmLocalIdentifier'
                 dateAttributes: MetaOapg.properties.dateAttributes
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["dateAttributes"]) -> MetaOapg.properties.dateAttributes: ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: typing_extensions.Literal["measureIdentifier"]) -> 'AfmLocalIdentifier': ...
-                
+
                 @typing.overload
                 def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-                
+
                 def __getitem__(self, name: typing.Union[typing_extensions.Literal["dateAttributes", "measureIdentifier", ], str]):
                     # dict_instance[name] accessor
                     return super().__getitem__(name)
-                
-                
+
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["dateAttributes"]) -> MetaOapg.properties.dateAttributes: ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: typing_extensions.Literal["measureIdentifier"]) -> 'AfmLocalIdentifier': ...
-                
+
                 @typing.overload
                 def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-                
+
                 def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["dateAttributes", "measureIdentifier", ], str]):
                     return super().get_item_oapg(name)
-                
-            
+
+
                 def __new__(
                     cls,
                     *_args: typing.Union[dict, frozendict.frozendict, ],
@@ -140,29 +140,29 @@ class PopDateMeasureDefinition(
             __annotations__ = {
                 "overPeriodMeasure": overPeriodMeasure,
             }
-    
+
     overPeriodMeasure: MetaOapg.properties.overPeriodMeasure
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["overPeriodMeasure"]) -> MetaOapg.properties.overPeriodMeasure: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["overPeriodMeasure", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["overPeriodMeasure"]) -> MetaOapg.properties.overPeriodMeasure: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["overPeriodMeasure", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -179,5 +179,5 @@ class PopDateMeasureDefinition(
             **kwargs,
         )
 
-from gooddata_api_client.model.afm_local_identifier import AfmLocalIdentifier
-from gooddata_api_client.model.pop_date import PopDate
+from gooddata_api_client.models.afm_local_identifier import AfmLocalIdentifier
+from gooddata_api_client.models.pop_date import PopDate

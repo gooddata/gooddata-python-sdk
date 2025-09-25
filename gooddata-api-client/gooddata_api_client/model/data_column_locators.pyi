@@ -35,28 +35,28 @@ class DataColumnLocators(
 
 
     class MetaOapg:
-        
+
         class properties:
-            
-            
+
+
             class properties(
                 schemas.DictSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def additional_properties() -> typing.Type['DataColumnLocator']:
                         return DataColumnLocator
-                
+
                 def __getitem__(self, name: typing.Union[str, ]) -> 'DataColumnLocator':
                     # dict_instance[name] accessor
                     return super().__getitem__(name)
-                
+
                 def get_item_oapg(self, name: typing.Union[str, ]) -> 'DataColumnLocator':
                     return super().get_item_oapg(name)
-            
+
                 def __new__(
                     cls,
                     *_args: typing.Union[dict, frozendict.frozendict, ],
@@ -72,27 +72,27 @@ class DataColumnLocators(
             __annotations__ = {
                 "properties": properties,
             }
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["properties"]) -> MetaOapg.properties.properties: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["properties", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["properties"]) -> typing.Union[MetaOapg.properties.properties, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["properties", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -109,4 +109,4 @@ class DataColumnLocators(
             **kwargs,
         )
 
-from gooddata_api_client.model.data_column_locator import DataColumnLocator
+from gooddata_api_client.models.data_column_locator import DataColumnLocator

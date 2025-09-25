@@ -39,21 +39,21 @@ class AvailableAssignees(
             "userGroups",
             "users",
         }
-        
+
         class properties:
-            
-            
+
+
             class userGroups(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['UserGroupAssignee']:
                         return UserGroupAssignee
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['UserGroupAssignee'], typing.List['UserGroupAssignee']],
@@ -64,22 +64,22 @@ class AvailableAssignees(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'UserGroupAssignee':
                     return super().__getitem__(i)
-            
-            
+
+
             class users(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['UserAssignee']:
                         return UserAssignee
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['UserAssignee'], typing.List['UserAssignee']],
@@ -90,43 +90,43 @@ class AvailableAssignees(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'UserAssignee':
                     return super().__getitem__(i)
             __annotations__ = {
                 "userGroups": userGroups,
                 "users": users,
             }
-    
+
     userGroups: MetaOapg.properties.userGroups
     users: MetaOapg.properties.users
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["userGroups"]) -> MetaOapg.properties.userGroups: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["users"]) -> MetaOapg.properties.users: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["userGroups", "users", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["userGroups"]) -> MetaOapg.properties.userGroups: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["users"]) -> MetaOapg.properties.users: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["userGroups", "users", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -145,5 +145,5 @@ class AvailableAssignees(
             **kwargs,
         )
 
-from gooddata_api_client.model.user_assignee import UserAssignee
-from gooddata_api_client.model.user_group_assignee import UserGroupAssignee
+from gooddata_api_client.models.user_assignee import UserAssignee
+from gooddata_api_client.models.user_group_assignee import UserGroupAssignee

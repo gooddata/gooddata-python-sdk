@@ -23,12 +23,12 @@ Post Identity Providers
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import identity_providers_api
-from gooddata_api_client.model.json_api_identity_provider_out_document import JsonApiIdentityProviderOutDocument
-from gooddata_api_client.model.json_api_identity_provider_in_document import JsonApiIdentityProviderInDocument
+from gooddata_api_client.models.json_api_identity_provider_in_document import JsonApiIdentityProviderInDocument
+from gooddata_api_client.models.json_api_identity_provider_out_document import JsonApiIdentityProviderOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -37,50 +37,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = identity_providers_api.IdentityProvidersApi(api_client)
-    json_api_identity_provider_in_document = JsonApiIdentityProviderInDocument(
-        data=JsonApiIdentityProviderIn(
-            attributes=JsonApiIdentityProviderInAttributes(
-                custom_claim_mapping={
-                    "key": "key_example",
-                },
-                identifiers=["gooddata.com"],
-                idp_type="MANAGED_IDP",
-                oauth_client_id="oauth_client_id_example",
-                oauth_client_secret="oauth_client_secret_example",
-                oauth_custom_auth_attributes={
-                    "key": "key_example",
-                },
-                oauth_custom_scopes=[
-                    "oauth_custom_scopes_example",
-                ],
-                oauth_issuer_id="myOidcProvider",
-                oauth_issuer_location="oauth_issuer_location_example",
-                oauth_subject_id_claim="oid",
-                saml_metadata="saml_metadata_example",
-            ),
-            id="id1",
-            type="identityProvider",
-        ),
-    ) # JsonApiIdentityProviderInDocument | 
+    api_instance = gooddata_api_client.IdentityProvidersApi(api_client)
+    json_api_identity_provider_in_document = gooddata_api_client.JsonApiIdentityProviderInDocument() # JsonApiIdentityProviderInDocument | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Post Identity Providers
         api_response = api_instance.create_entity_identity_providers(json_api_identity_provider_in_document)
+        print("The response of IdentityProvidersApi->create_entity_identity_providers:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling IdentityProvidersApi->create_entity_identity_providers: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **json_api_identity_provider_in_document** | [**JsonApiIdentityProviderInDocument**](JsonApiIdentityProviderInDocument.md)|  |
+ **json_api_identity_provider_in_document** | [**JsonApiIdentityProviderInDocument**](JsonApiIdentityProviderInDocument.md)|  | 
 
 ### Return type
 
@@ -95,7 +73,6 @@ No authorization required
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -105,7 +82,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **delete_entity_identity_providers**
-> delete_entity_identity_providers(id)
+> delete_entity_identity_providers(id, filter=filter)
 
 Delete Identity Provider
 
@@ -113,10 +90,10 @@ Delete Identity Provider
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import identity_providers_api
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -125,35 +102,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = identity_providers_api.IdentityProvidersApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "identifiers==v1,v2,v3;customClaimMapping==MapValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.IdentityProvidersApi(api_client)
+    id = 'id_example' # str | 
+    filter = 'identifiers==v1,v2,v3;customClaimMapping==MapValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Delete Identity Provider
-        api_instance.delete_entity_identity_providers(id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling IdentityProvidersApi->delete_entity_identity_providers: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Delete Identity Provider
         api_instance.delete_entity_identity_providers(id, filter=filter)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling IdentityProvidersApi->delete_entity_identity_providers: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -168,7 +138,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: Not defined
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -178,7 +147,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_all_entities_identity_providers**
-> JsonApiIdentityProviderOutList get_all_entities_identity_providers()
+> JsonApiIdentityProviderOutList get_all_entities_identity_providers(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
 
 Get all Identity Providers
 
@@ -186,11 +155,11 @@ Get all Identity Providers
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import identity_providers_api
-from gooddata_api_client.model.json_api_identity_provider_out_list import JsonApiIdentityProviderOutList
+from gooddata_api_client.models.json_api_identity_provider_out_list import JsonApiIdentityProviderOutList
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -199,39 +168,36 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = identity_providers_api.IdentityProvidersApi(api_client)
-    filter = "identifiers==v1,v2,v3;customClaimMapping==MapValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
-    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
-    sort = [
-        "sort_example",
-    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
-    meta_include = [
-        "metaInclude=page,all",
-    ] # [str] | Include Meta objects. (optional)
+    api_instance = gooddata_api_client.IdentityProvidersApi(api_client)
+    filter = 'identifiers==v1,v2,v3;customClaimMapping==MapValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) (default to 0)
+    size = 20 # int | The size of the page to be returned (optional) (default to 20)
+    sort = ['sort_example'] # List[str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = ['metaInclude=page,all'] # List[str] | Include Meta objects. (optional)
 
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get all Identity Providers
         api_response = api_instance.get_all_entities_identity_providers(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
+        print("The response of IdentityProvidersApi->get_all_entities_identity_providers:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling IdentityProvidersApi->get_all_entities_identity_providers: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
- **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
- **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
- **meta_include** | **[str]**| Include Meta objects. | [optional]
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
+ **page** | **int**| Zero-based page index (0..N) | [optional] [default to 0]
+ **size** | **int**| The size of the page to be returned | [optional] [default to 20]
+ **sort** | [**List[str]**](str.md)| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional] 
+ **meta_include** | [**List[str]**](str.md)| Include Meta objects. | [optional] 
 
 ### Return type
 
@@ -246,7 +212,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -256,7 +221,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_entity_identity_providers**
-> JsonApiIdentityProviderOutDocument get_entity_identity_providers(id)
+> JsonApiIdentityProviderOutDocument get_entity_identity_providers(id, filter=filter)
 
 Get Identity Provider
 
@@ -264,11 +229,11 @@ Get Identity Provider
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import identity_providers_api
-from gooddata_api_client.model.json_api_identity_provider_out_document import JsonApiIdentityProviderOutDocument
+from gooddata_api_client.models.json_api_identity_provider_out_document import JsonApiIdentityProviderOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -277,37 +242,30 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = identity_providers_api.IdentityProvidersApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "identifiers==v1,v2,v3;customClaimMapping==MapValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.IdentityProvidersApi(api_client)
+    id = 'id_example' # str | 
+    filter = 'identifiers==v1,v2,v3;customClaimMapping==MapValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Get Identity Provider
-        api_response = api_instance.get_entity_identity_providers(id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling IdentityProvidersApi->get_entity_identity_providers: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get Identity Provider
         api_response = api_instance.get_entity_identity_providers(id, filter=filter)
+        print("The response of IdentityProvidersApi->get_entity_identity_providers:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling IdentityProvidersApi->get_entity_identity_providers: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -322,7 +280,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.gooddata.api+json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -332,7 +289,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_identity_providers_layout**
-> [DeclarativeIdentityProvider] get_identity_providers_layout()
+> List[DeclarativeIdentityProvider] get_identity_providers_layout()
 
 Get all identity providers layout
 
@@ -342,11 +299,11 @@ Gets complete layout of identity providers.
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import identity_providers_api
-from gooddata_api_client.model.declarative_identity_provider import DeclarativeIdentityProvider
+from gooddata_api_client.models.declarative_identity_provider import DeclarativeIdentityProvider
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -355,26 +312,28 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = identity_providers_api.IdentityProvidersApi(api_client)
+    api_instance = gooddata_api_client.IdentityProvidersApi(api_client)
 
-    # example, this endpoint has no required or optional parameters
     try:
         # Get all identity providers layout
         api_response = api_instance.get_identity_providers_layout()
+        print("The response of IdentityProvidersApi->get_identity_providers_layout:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling IdentityProvidersApi->get_identity_providers_layout: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 This endpoint does not need any parameter.
 
 ### Return type
 
-[**[DeclarativeIdentityProvider]**](DeclarativeIdentityProvider.md)
+[**List[DeclarativeIdentityProvider]**](DeclarativeIdentityProvider.md)
 
 ### Authorization
 
@@ -385,7 +344,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -395,7 +353,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **patch_entity_identity_providers**
-> JsonApiIdentityProviderOutDocument patch_entity_identity_providers(id, json_api_identity_provider_patch_document)
+> JsonApiIdentityProviderOutDocument patch_entity_identity_providers(id, json_api_identity_provider_patch_document, filter=filter)
 
 Patch Identity Provider
 
@@ -403,12 +361,12 @@ Patch Identity Provider
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import identity_providers_api
-from gooddata_api_client.model.json_api_identity_provider_patch_document import JsonApiIdentityProviderPatchDocument
-from gooddata_api_client.model.json_api_identity_provider_out_document import JsonApiIdentityProviderOutDocument
+from gooddata_api_client.models.json_api_identity_provider_out_document import JsonApiIdentityProviderOutDocument
+from gooddata_api_client.models.json_api_identity_provider_patch_document import JsonApiIdentityProviderPatchDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -417,63 +375,32 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = identity_providers_api.IdentityProvidersApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    json_api_identity_provider_patch_document = JsonApiIdentityProviderPatchDocument(
-        data=JsonApiIdentityProviderPatch(
-            attributes=JsonApiIdentityProviderInAttributes(
-                custom_claim_mapping={
-                    "key": "key_example",
-                },
-                identifiers=["gooddata.com"],
-                idp_type="MANAGED_IDP",
-                oauth_client_id="oauth_client_id_example",
-                oauth_client_secret="oauth_client_secret_example",
-                oauth_custom_auth_attributes={
-                    "key": "key_example",
-                },
-                oauth_custom_scopes=[
-                    "oauth_custom_scopes_example",
-                ],
-                oauth_issuer_id="myOidcProvider",
-                oauth_issuer_location="oauth_issuer_location_example",
-                oauth_subject_id_claim="oid",
-                saml_metadata="saml_metadata_example",
-            ),
-            id="id1",
-            type="identityProvider",
-        ),
-    ) # JsonApiIdentityProviderPatchDocument | 
-    filter = "identifiers==v1,v2,v3;customClaimMapping==MapValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.IdentityProvidersApi(api_client)
+    id = 'id_example' # str | 
+    json_api_identity_provider_patch_document = gooddata_api_client.JsonApiIdentityProviderPatchDocument() # JsonApiIdentityProviderPatchDocument | 
+    filter = 'identifiers==v1,v2,v3;customClaimMapping==MapValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Patch Identity Provider
-        api_response = api_instance.patch_entity_identity_providers(id, json_api_identity_provider_patch_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling IdentityProvidersApi->patch_entity_identity_providers: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Patch Identity Provider
         api_response = api_instance.patch_entity_identity_providers(id, json_api_identity_provider_patch_document, filter=filter)
+        print("The response of IdentityProvidersApi->patch_entity_identity_providers:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling IdentityProvidersApi->patch_entity_identity_providers: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **json_api_identity_provider_patch_document** | [**JsonApiIdentityProviderPatchDocument**](JsonApiIdentityProviderPatchDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **json_api_identity_provider_patch_document** | [**JsonApiIdentityProviderPatchDocument**](JsonApiIdentityProviderPatchDocument.md)|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -487,7 +414,6 @@ No authorization required
 
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
-
 
 ### HTTP response details
 
@@ -508,11 +434,11 @@ Sets identity providers in organization.
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import identity_providers_api
-from gooddata_api_client.model.declarative_identity_provider import DeclarativeIdentityProvider
+from gooddata_api_client.models.declarative_identity_provider import DeclarativeIdentityProvider
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -521,46 +447,26 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = identity_providers_api.IdentityProvidersApi(api_client)
-    declarative_identity_provider = [
-        DeclarativeIdentityProvider(
-            custom_claim_mapping={
-                "key": "key_example",
-            },
-            id="filterView-1",
-            identifiers=["gooddata.com"],
-            idp_type="MANAGED_IDP",
-            oauth_client_id="oauth_client_id_example",
-            oauth_client_secret="oauth_client_secret_example",
-            oauth_custom_auth_attributes={
-                "key": "key_example",
-            },
-            oauth_custom_scopes=[
-                "oauth_custom_scopes_example",
-            ],
-            oauth_issuer_id="myOidcProvider",
-            oauth_issuer_location="oauth_issuer_location_example",
-            oauth_subject_id_claim="oid",
-            saml_metadata="saml_metadata_example",
-        ),
-    ] # [DeclarativeIdentityProvider] | 
+    api_instance = gooddata_api_client.IdentityProvidersApi(api_client)
+    declarative_identity_provider = [gooddata_api_client.DeclarativeIdentityProvider()] # List[DeclarativeIdentityProvider] | 
 
-    # example passing only required values which don't have defaults set
     try:
         # Set all identity providers
         api_instance.set_identity_providers(declarative_identity_provider)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling IdentityProvidersApi->set_identity_providers: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **declarative_identity_provider** | [**[DeclarativeIdentityProvider]**](DeclarativeIdentityProvider.md)|  |
+ **declarative_identity_provider** | [**List[DeclarativeIdentityProvider]**](DeclarativeIdentityProvider.md)|  | 
 
 ### Return type
 
@@ -575,7 +481,6 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: Not defined
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -585,7 +490,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **update_entity_identity_providers**
-> JsonApiIdentityProviderOutDocument update_entity_identity_providers(id, json_api_identity_provider_in_document)
+> JsonApiIdentityProviderOutDocument update_entity_identity_providers(id, json_api_identity_provider_in_document, filter=filter)
 
 Put Identity Provider
 
@@ -593,12 +498,12 @@ Put Identity Provider
 
 
 ```python
-import time
 import gooddata_api_client
-from gooddata_api_client.api import identity_providers_api
-from gooddata_api_client.model.json_api_identity_provider_out_document import JsonApiIdentityProviderOutDocument
-from gooddata_api_client.model.json_api_identity_provider_in_document import JsonApiIdentityProviderInDocument
+from gooddata_api_client.models.json_api_identity_provider_in_document import JsonApiIdentityProviderInDocument
+from gooddata_api_client.models.json_api_identity_provider_out_document import JsonApiIdentityProviderOutDocument
+from gooddata_api_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_api_client.Configuration(
@@ -607,63 +512,32 @@ configuration = gooddata_api_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
+with gooddata_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = identity_providers_api.IdentityProvidersApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    json_api_identity_provider_in_document = JsonApiIdentityProviderInDocument(
-        data=JsonApiIdentityProviderIn(
-            attributes=JsonApiIdentityProviderInAttributes(
-                custom_claim_mapping={
-                    "key": "key_example",
-                },
-                identifiers=["gooddata.com"],
-                idp_type="MANAGED_IDP",
-                oauth_client_id="oauth_client_id_example",
-                oauth_client_secret="oauth_client_secret_example",
-                oauth_custom_auth_attributes={
-                    "key": "key_example",
-                },
-                oauth_custom_scopes=[
-                    "oauth_custom_scopes_example",
-                ],
-                oauth_issuer_id="myOidcProvider",
-                oauth_issuer_location="oauth_issuer_location_example",
-                oauth_subject_id_claim="oid",
-                saml_metadata="saml_metadata_example",
-            ),
-            id="id1",
-            type="identityProvider",
-        ),
-    ) # JsonApiIdentityProviderInDocument | 
-    filter = "identifiers==v1,v2,v3;customClaimMapping==MapValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    api_instance = gooddata_api_client.IdentityProvidersApi(api_client)
+    id = 'id_example' # str | 
+    json_api_identity_provider_in_document = gooddata_api_client.JsonApiIdentityProviderInDocument() # JsonApiIdentityProviderInDocument | 
+    filter = 'identifiers==v1,v2,v3;customClaimMapping==MapValue' # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Put Identity Provider
-        api_response = api_instance.update_entity_identity_providers(id, json_api_identity_provider_in_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling IdentityProvidersApi->update_entity_identity_providers: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Put Identity Provider
         api_response = api_instance.update_entity_identity_providers(id, json_api_identity_provider_in_document, filter=filter)
+        print("The response of IdentityProvidersApi->update_entity_identity_providers:\n")
         pprint(api_response)
-    except gooddata_api_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling IdentityProvidersApi->update_entity_identity_providers: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **json_api_identity_provider_in_document** | [**JsonApiIdentityProviderInDocument**](JsonApiIdentityProviderInDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **id** | **str**|  | 
+ **json_api_identity_provider_in_document** | [**JsonApiIdentityProviderInDocument**](JsonApiIdentityProviderInDocument.md)|  | 
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional] 
 
 ### Return type
 
@@ -677,7 +551,6 @@ No authorization required
 
  - **Content-Type**: application/vnd.gooddata.api+json
  - **Accept**: application/vnd.gooddata.api+json
-
 
 ### HTTP response details
 

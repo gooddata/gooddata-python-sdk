@@ -25,8 +25,8 @@ import frozendict  # noqa: F401
 
 from gooddata_api_client import schemas  # noqa: F401
 
-from gooddata_api_client.model.json_api_visualization_object_out_document import JsonApiVisualizationObjectOutDocument
-from gooddata_api_client.model.json_api_visualization_object_patch_document import JsonApiVisualizationObjectPatchDocument
+from gooddata_api_client.models.json_api_visualization_object_out_document import JsonApiVisualizationObjectOutDocument
+from gooddata_api_client.models.json_api_visualization_object_patch_document import JsonApiVisualizationObjectPatchDocument
 
 from . import path
 
@@ -40,14 +40,14 @@ class IncludeSchema(
 
 
     class MetaOapg:
-        
-        
+
+
         class items(
             schemas.EnumBase,
             schemas.StrSchema
         ):
-        
-        
+
+
             class MetaOapg:
                 enum_value_to_name = {
                     "facts": "FACTS",
@@ -57,27 +57,27 @@ class IncludeSchema(
                     "datasets": "DATASETS",
                     "ALL": "ALL",
                 }
-            
+
             @schemas.classproperty
             def FACTS(cls):
                 return cls("facts")
-            
+
             @schemas.classproperty
             def ATTRIBUTES(cls):
                 return cls("attributes")
-            
+
             @schemas.classproperty
             def LABELS(cls):
                 return cls("labels")
-            
+
             @schemas.classproperty
             def METRICS(cls):
                 return cls("metrics")
-            
+
             @schemas.classproperty
             def DATASETS(cls):
                 return cls("datasets")
-            
+
             @schemas.classproperty
             def ALL(cls):
                 return cls("ALL")
@@ -523,5 +523,3 @@ class ApiForpatch(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
-
-

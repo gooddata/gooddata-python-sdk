@@ -43,49 +43,49 @@ class Total(
             "function",
             "localIdentifier",
         }
-        
+
         class properties:
-            
-            
+
+
             class function(
                 schemas.EnumBase,
                 schemas.StrSchema
             ):
-                
+
                 @schemas.classproperty
                 def SUM(cls):
                     return cls("SUM")
-                
+
                 @schemas.classproperty
                 def MIN(cls):
                     return cls("MIN")
-                
+
                 @schemas.classproperty
                 def MAX(cls):
                     return cls("MAX")
-                
+
                 @schemas.classproperty
                 def AVG(cls):
                     return cls("AVG")
-                
+
                 @schemas.classproperty
                 def MED(cls):
                     return cls("MED")
             localIdentifier = schemas.StrSchema
             metric = schemas.StrSchema
-            
-            
+
+
             class totalDimensions(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['TotalDimension']:
                         return TotalDimension
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['TotalDimension'], typing.List['TotalDimension']],
@@ -96,7 +96,7 @@ class Total(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'TotalDimension':
                     return super().__getitem__(i)
             __annotations__ = {
@@ -105,50 +105,50 @@ class Total(
                 "metric": metric,
                 "totalDimensions": totalDimensions,
             }
-    
+
     metric: MetaOapg.properties.metric
     totalDimensions: MetaOapg.properties.totalDimensions
     function: MetaOapg.properties.function
     localIdentifier: MetaOapg.properties.localIdentifier
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["function"]) -> MetaOapg.properties.function: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["localIdentifier"]) -> MetaOapg.properties.localIdentifier: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["metric"]) -> MetaOapg.properties.metric: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["totalDimensions"]) -> MetaOapg.properties.totalDimensions: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["function", "localIdentifier", "metric", "totalDimensions", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["function"]) -> MetaOapg.properties.function: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["localIdentifier"]) -> MetaOapg.properties.localIdentifier: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["metric"]) -> MetaOapg.properties.metric: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["totalDimensions"]) -> MetaOapg.properties.totalDimensions: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["function", "localIdentifier", "metric", "totalDimensions", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -171,4 +171,4 @@ class Total(
             **kwargs,
         )
 
-from gooddata_api_client.model.total_dimension import TotalDimension
+from gooddata_api_client.models.total_dimension import TotalDimension

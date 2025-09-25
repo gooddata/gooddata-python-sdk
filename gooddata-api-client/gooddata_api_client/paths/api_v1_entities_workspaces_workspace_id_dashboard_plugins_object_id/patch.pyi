@@ -25,8 +25,8 @@ import frozendict  # noqa: F401
 
 from gooddata_api_client import schemas  # noqa: F401
 
-from gooddata_api_client.model.json_api_dashboard_plugin_out_document import JsonApiDashboardPluginOutDocument
-from gooddata_api_client.model.json_api_dashboard_plugin_patch_document import JsonApiDashboardPluginPatchDocument
+from gooddata_api_client.models.json_api_dashboard_plugin_out_document import JsonApiDashboardPluginOutDocument
+from gooddata_api_client.models.json_api_dashboard_plugin_patch_document import JsonApiDashboardPluginPatchDocument
 
 # Query params
 FilterSchema = schemas.StrSchema
@@ -448,5 +448,3 @@ class ApiForpatch(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
-
-

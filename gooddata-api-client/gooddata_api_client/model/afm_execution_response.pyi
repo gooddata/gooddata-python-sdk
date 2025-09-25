@@ -38,38 +38,38 @@ class AfmExecutionResponse(
         required = {
             "executionResponse",
         }
-        
+
         class properties:
-        
+
             @staticmethod
             def executionResponse() -> typing.Type['ExecutionResponse']:
                 return ExecutionResponse
             __annotations__ = {
                 "executionResponse": executionResponse,
             }
-    
+
     executionResponse: 'ExecutionResponse'
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["executionResponse"]) -> 'ExecutionResponse': ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["executionResponse", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["executionResponse"]) -> 'ExecutionResponse': ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["executionResponse", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -86,4 +86,4 @@ class AfmExecutionResponse(
             **kwargs,
         )
 
-from gooddata_api_client.model.execution_response import ExecutionResponse
+from gooddata_api_client.models.execution_response import ExecutionResponse

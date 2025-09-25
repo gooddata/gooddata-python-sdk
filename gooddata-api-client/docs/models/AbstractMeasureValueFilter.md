@@ -1,4 +1,4 @@
-# gooddata_api_client.model.abstract_measure_value_filter.AbstractMeasureValueFilter
+# gooddata_api_client.models.abstract_measure_value_filter.AbstractMeasureValueFilter
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes
@@ -14,4 +14,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [RankingFilter](RankingFilter.md) | [**RankingFilter**](RankingFilter.md) | [**RankingFilter**](RankingFilter.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

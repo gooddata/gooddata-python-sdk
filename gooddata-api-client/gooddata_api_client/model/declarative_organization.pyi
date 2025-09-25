@@ -40,25 +40,25 @@ class DeclarativeOrganization(
         required = {
             "organization",
         }
-        
+
         class properties:
-        
+
             @staticmethod
             def organization() -> typing.Type['DeclarativeOrganizationInfo']:
                 return DeclarativeOrganizationInfo
-            
-            
+
+
             class dataSources(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeDataSource']:
                         return DeclarativeDataSource
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeDataSource'], typing.List['DeclarativeDataSource']],
@@ -69,22 +69,22 @@ class DeclarativeOrganization(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeDataSource':
                     return super().__getitem__(i)
-            
-            
+
+
             class userGroups(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeUserGroup']:
                         return DeclarativeUserGroup
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeUserGroup'], typing.List['DeclarativeUserGroup']],
@@ -95,22 +95,22 @@ class DeclarativeOrganization(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeUserGroup':
                     return super().__getitem__(i)
-            
-            
+
+
             class users(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeUser']:
                         return DeclarativeUser
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeUser'], typing.List['DeclarativeUser']],
@@ -121,22 +121,22 @@ class DeclarativeOrganization(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeUser':
                     return super().__getitem__(i)
-            
-            
+
+
             class workspaceDataFilters(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeWorkspaceDataFilter']:
                         return DeclarativeWorkspaceDataFilter
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeWorkspaceDataFilter'], typing.List['DeclarativeWorkspaceDataFilter']],
@@ -147,22 +147,22 @@ class DeclarativeOrganization(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeWorkspaceDataFilter':
                     return super().__getitem__(i)
-            
-            
+
+
             class workspaces(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeWorkspace']:
                         return DeclarativeWorkspace
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeWorkspace'], typing.List['DeclarativeWorkspace']],
@@ -173,7 +173,7 @@ class DeclarativeOrganization(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeWorkspace':
                     return super().__getitem__(i)
             __annotations__ = {
@@ -184,59 +184,59 @@ class DeclarativeOrganization(
                 "workspaceDataFilters": workspaceDataFilters,
                 "workspaces": workspaces,
             }
-    
+
     organization: 'DeclarativeOrganizationInfo'
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["organization"]) -> 'DeclarativeOrganizationInfo': ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["dataSources"]) -> MetaOapg.properties.dataSources: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["userGroups"]) -> MetaOapg.properties.userGroups: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["users"]) -> MetaOapg.properties.users: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["workspaceDataFilters"]) -> MetaOapg.properties.workspaceDataFilters: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["workspaces"]) -> MetaOapg.properties.workspaces: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["organization", "dataSources", "userGroups", "users", "workspaceDataFilters", "workspaces", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["organization"]) -> 'DeclarativeOrganizationInfo': ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["dataSources"]) -> typing.Union[MetaOapg.properties.dataSources, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["userGroups"]) -> typing.Union[MetaOapg.properties.userGroups, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["users"]) -> typing.Union[MetaOapg.properties.users, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["workspaceDataFilters"]) -> typing.Union[MetaOapg.properties.workspaceDataFilters, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["workspaces"]) -> typing.Union[MetaOapg.properties.workspaces, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["organization", "dataSources", "userGroups", "users", "workspaceDataFilters", "workspaces", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -263,9 +263,9 @@ class DeclarativeOrganization(
             **kwargs,
         )
 
-from gooddata_api_client.model.declarative_data_source import DeclarativeDataSource
-from gooddata_api_client.model.declarative_organization_info import DeclarativeOrganizationInfo
-from gooddata_api_client.model.declarative_user import DeclarativeUser
-from gooddata_api_client.model.declarative_user_group import DeclarativeUserGroup
-from gooddata_api_client.model.declarative_workspace import DeclarativeWorkspace
-from gooddata_api_client.model.declarative_workspace_data_filter import DeclarativeWorkspaceDataFilter
+from gooddata_api_client.models.declarative_data_source import DeclarativeDataSource
+from gooddata_api_client.models.declarative_organization_info import DeclarativeOrganizationInfo
+from gooddata_api_client.models.declarative_user import DeclarativeUser
+from gooddata_api_client.models.declarative_user_group import DeclarativeUserGroup
+from gooddata_api_client.models.declarative_workspace import DeclarativeWorkspace
+from gooddata_api_client.models.declarative_workspace_data_filter import DeclarativeWorkspaceDataFilter

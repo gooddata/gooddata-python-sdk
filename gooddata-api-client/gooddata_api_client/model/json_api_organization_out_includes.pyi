@@ -35,7 +35,7 @@ class JsonApiOrganizationOutIncludes(
 
 
     class MetaOapg:
-        
+
         @classmethod
         @functools.lru_cache()
         def one_of(cls):
@@ -65,5 +65,5 @@ class JsonApiOrganizationOutIncludes(
             **kwargs,
         )
 
-from gooddata_api_client.model.json_api_user_group_out_with_links import JsonApiUserGroupOutWithLinks
-from gooddata_api_client.model.json_api_user_out_with_links import JsonApiUserOutWithLinks
+from gooddata_api_client.models.json_api_user_group_out_with_links import JsonApiUserGroupOutWithLinks
+from gooddata_api_client.models.json_api_user_out_with_links import JsonApiUserOutWithLinks

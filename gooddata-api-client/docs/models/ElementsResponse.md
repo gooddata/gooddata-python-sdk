@@ -1,4 +1,4 @@
-# gooddata_api_client.model.elements_response.ElementsResponse
+# gooddata_api_client.models.elements_response.ElementsResponse
 
 Entity holding list of sorted & filtered label elements, related primary label of attribute owning requested label and paging.
 
@@ -32,4 +32,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**Element**](Element.md) | [**Element**](Element.md) | [**Element**](Element.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

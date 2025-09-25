@@ -25,7 +25,7 @@ import frozendict  # noqa: F401
 
 from gooddata_api_client import schemas  # noqa: F401
 
-from gooddata_api_client.model.afm_execution import AfmExecution
+from gooddata_api_client.models.afm_execution import AfmExecution
 
 # Query params
 
@@ -34,43 +34,43 @@ class ExplainTypeSchema(
     schemas.EnumBase,
     schemas.StrSchema
 ):
-    
+
     @schemas.classproperty
     def MAQL(cls):
         return cls("MAQL")
-    
+
     @schemas.classproperty
     def GRPC_MODEL(cls):
         return cls("GRPC_MODEL")
-    
+
     @schemas.classproperty
     def GRPC_MODEL_SVG(cls):
         return cls("GRPC_MODEL_SVG")
-    
+
     @schemas.classproperty
     def WDF(cls):
         return cls("WDF")
-    
+
     @schemas.classproperty
     def QT(cls):
         return cls("QT")
-    
+
     @schemas.classproperty
     def QT_SVG(cls):
         return cls("QT_SVG")
-    
+
     @schemas.classproperty
     def OPT_QT(cls):
         return cls("OPT_QT")
-    
+
     @schemas.classproperty
     def OPT_QT_SVG(cls):
         return cls("OPT_QT_SVG")
-    
+
     @schemas.classproperty
     def SQL(cls):
         return cls("SQL")
-    
+
     @schemas.classproperty
     def SETTINGS(cls):
         return cls("SETTINGS")
@@ -497,5 +497,3 @@ class ApiForpost(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
-
-

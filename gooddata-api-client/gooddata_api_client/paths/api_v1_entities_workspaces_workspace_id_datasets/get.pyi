@@ -25,7 +25,7 @@ import frozendict  # noqa: F401
 
 from gooddata_api_client import schemas  # noqa: F401
 
-from gooddata_api_client.model.json_api_dataset_out_list import JsonApiDatasetOutList
+from gooddata_api_client.models.json_api_dataset_out_list import JsonApiDatasetOutList
 
 # Query params
 
@@ -34,15 +34,15 @@ class OriginSchema(
     schemas.EnumBase,
     schemas.StrSchema
 ):
-    
+
     @schemas.classproperty
     def ALL(cls):
         return cls("ALL")
-    
+
     @schemas.classproperty
     def PARENTS(cls):
         return cls("PARENTS")
-    
+
     @schemas.classproperty
     def NATIVE(cls):
         return cls("NATIVE")
@@ -55,29 +55,29 @@ class IncludeSchema(
 
 
     class MetaOapg:
-        
-        
+
+
         class items(
             schemas.EnumBase,
             schemas.StrSchema
         ):
-            
+
             @schemas.classproperty
             def ATTRIBUTES(cls):
                 return cls("attributes")
-            
+
             @schemas.classproperty
             def FACTS(cls):
                 return cls("facts")
-            
+
             @schemas.classproperty
             def DATASETS(cls):
                 return cls("datasets")
-            
+
             @schemas.classproperty
             def REFERENCES(cls):
                 return cls("references")
-            
+
             @schemas.classproperty
             def ALL(cls):
                 return cls("ALL")
@@ -128,21 +128,21 @@ class MetaIncludeSchema(
 
 
     class MetaOapg:
-        
-        
+
+
         class items(
             schemas.EnumBase,
             schemas.StrSchema
         ):
-            
+
             @schemas.classproperty
             def ORIGIN(cls):
                 return cls("origin")
-            
+
             @schemas.classproperty
             def ALL(cls):
                 return cls("all")
-            
+
             @schemas.classproperty
             def ALL(cls):
                 return cls("ALL")
@@ -563,5 +563,3 @@ class ApiForget(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
-
-

@@ -86,4 +86,4 @@ class JsonApiMetricInDocument(
             **kwargs,
         )
 
-from gooddata_api_client.model.json_api_metric_in import JsonApiMetricIn
+from gooddata_api_client.models.json_api_metric_in import JsonApiMetricIn

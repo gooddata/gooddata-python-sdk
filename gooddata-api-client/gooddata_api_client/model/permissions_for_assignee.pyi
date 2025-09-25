@@ -41,39 +41,39 @@ class PermissionsForAssignee(
             "assigneeIdentifier",
             "permissions",
         }
-        
+
         class properties:
-        
+
             @staticmethod
             def assigneeIdentifier() -> typing.Type['AssigneeIdentifier']:
                 return AssigneeIdentifier
-            
-            
+
+
             class permissions(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
-                    
+
+
                     class items(
                         schemas.EnumBase,
                         schemas.StrSchema
                     ):
-                        
+
                         @schemas.classproperty
                         def EDIT(cls):
                             return cls("EDIT")
-                        
+
                         @schemas.classproperty
                         def SHARE(cls):
                             return cls("SHARE")
-                        
+
                         @schemas.classproperty
                         def VIEW(cls):
                             return cls("VIEW")
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, str, ]], typing.List[typing.Union[MetaOapg.items, str, ]]],
@@ -84,43 +84,43 @@ class PermissionsForAssignee(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
             __annotations__ = {
                 "assigneeIdentifier": assigneeIdentifier,
                 "permissions": permissions,
             }
-    
+
     assigneeIdentifier: 'AssigneeIdentifier'
     permissions: MetaOapg.properties.permissions
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["assigneeIdentifier"]) -> 'AssigneeIdentifier': ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["permissions"]) -> MetaOapg.properties.permissions: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["assigneeIdentifier", "permissions", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["assigneeIdentifier"]) -> 'AssigneeIdentifier': ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["permissions"]) -> MetaOapg.properties.permissions: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["assigneeIdentifier", "permissions", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -139,4 +139,4 @@ class PermissionsForAssignee(
             **kwargs,
         )
 
-from gooddata_api_client.model.assignee_identifier import AssigneeIdentifier
+from gooddata_api_client.models.assignee_identifier import AssigneeIdentifier

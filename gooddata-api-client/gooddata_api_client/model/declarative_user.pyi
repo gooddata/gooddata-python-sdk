@@ -40,51 +40,51 @@ class DeclarativeUser(
         required = {
             "id",
         }
-        
+
         class properties:
-            
-            
+
+
             class id(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class authId(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class email(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class firstname(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class lastname(
                 schemas.StrSchema
             ):
                 pass
-            
-            
+
+
             class permissions(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeUserPermission']:
                         return DeclarativeUserPermission
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeUserPermission'], typing.List['DeclarativeUserPermission']],
@@ -95,22 +95,22 @@ class DeclarativeUser(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeUserPermission':
                     return super().__getitem__(i)
-            
-            
+
+
             class settings(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeSetting']:
                         return DeclarativeSetting
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeSetting'], typing.List['DeclarativeSetting']],
@@ -121,22 +121,22 @@ class DeclarativeUser(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeSetting':
                     return super().__getitem__(i)
-            
-            
+
+
             class userGroups(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DeclarativeUserGroupIdentifier']:
                         return DeclarativeUserGroupIdentifier
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DeclarativeUserGroupIdentifier'], typing.List['DeclarativeUserGroupIdentifier']],
@@ -147,7 +147,7 @@ class DeclarativeUser(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DeclarativeUserGroupIdentifier':
                     return super().__getitem__(i)
             __annotations__ = {
@@ -160,71 +160,71 @@ class DeclarativeUser(
                 "settings": settings,
                 "userGroups": userGroups,
             }
-    
+
     id: MetaOapg.properties.id
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["authId"]) -> MetaOapg.properties.authId: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["email"]) -> MetaOapg.properties.email: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["firstname"]) -> MetaOapg.properties.firstname: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["lastname"]) -> MetaOapg.properties.lastname: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["permissions"]) -> MetaOapg.properties.permissions: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["settings"]) -> MetaOapg.properties.settings: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["userGroups"]) -> MetaOapg.properties.userGroups: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["id", "authId", "email", "firstname", "lastname", "permissions", "settings", "userGroups", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["authId"]) -> typing.Union[MetaOapg.properties.authId, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["email"]) -> typing.Union[MetaOapg.properties.email, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["firstname"]) -> typing.Union[MetaOapg.properties.firstname, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["lastname"]) -> typing.Union[MetaOapg.properties.lastname, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["permissions"]) -> typing.Union[MetaOapg.properties.permissions, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["settings"]) -> typing.Union[MetaOapg.properties.settings, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["userGroups"]) -> typing.Union[MetaOapg.properties.userGroups, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["id", "authId", "email", "firstname", "lastname", "permissions", "settings", "userGroups", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -255,6 +255,6 @@ class DeclarativeUser(
             **kwargs,
         )
 
-from gooddata_api_client.model.declarative_setting import DeclarativeSetting
-from gooddata_api_client.model.declarative_user_permission import DeclarativeUserPermission
-from gooddata_api_client.model.user_group_identifier import DeclarativeUserGroupIdentifier
+from gooddata_api_client.models.declarative_setting import DeclarativeSetting
+from gooddata_api_client.models.declarative_user_permission import DeclarativeUserPermission
+from gooddata_api_client.models.user_group_identifier import DeclarativeUserGroupIdentifier

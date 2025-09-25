@@ -757,10 +757,7 @@ class VisualizationService:
                 each visualization will contain side loaded metadata about the entities it references
         """
         get_func = functools.partial(
-            self._entities_api.get_all_entities_visualization_objects,
-            workspace_id,
-            include=["ALL"],
-            _check_return_type=False,
+            self._entities_api.get_all_entities_visualization_objects, workspace_id, include=["ALL"]
         )
 
         vis_objects = load_all_entities(get_func)
@@ -788,11 +785,7 @@ class VisualizationService:
                 A single visualization object contains side loaded metadata about the entities it references
         """
         vis_obj = self._entities_api.get_entity_visualization_objects(
-            workspace_id,
-            object_id=visualization_id,
-            include=["ALL"],
-            _check_return_type=False,
-            _request_timeout=timeout,
+            workspace_id, object_id=visualization_id, include=["ALL"], _request_timeout=timeout
         )
         side_loads = None
         if hasattr(vis_obj, "included"):

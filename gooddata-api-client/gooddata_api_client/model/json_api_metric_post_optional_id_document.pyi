@@ -38,38 +38,38 @@ class JsonApiMetricPostOptionalIdDocument(
         required = {
             "data",
         }
-        
+
         class properties:
-        
+
             @staticmethod
             def data() -> typing.Type['JsonApiMetricPostOptionalId']:
                 return JsonApiMetricPostOptionalId
             __annotations__ = {
                 "data": data,
             }
-    
+
     data: 'JsonApiMetricPostOptionalId'
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["data"]) -> 'JsonApiMetricPostOptionalId': ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["data", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["data"]) -> 'JsonApiMetricPostOptionalId': ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["data", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -86,4 +86,4 @@ class JsonApiMetricPostOptionalIdDocument(
             **kwargs,
         )
 
-from gooddata_api_client.model.json_api_metric_post_optional_id import JsonApiMetricPostOptionalId
+from gooddata_api_client.models.json_api_metric_post_optional_id import JsonApiMetricPostOptionalId

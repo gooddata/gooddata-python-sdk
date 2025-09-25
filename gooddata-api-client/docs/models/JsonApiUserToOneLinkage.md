@@ -1,4 +1,4 @@
-# gooddata_api_client.model.json_api_user_to_one_linkage.JsonApiUserToOneLinkage
+# gooddata_api_client.models.json_api_user_to_one_linkage.JsonApiUserToOneLinkage
 
 References to other resource objects in a to-one (\\\"relationship\\\"). Relationships can be specified by including a member in a resource's links object.
 
@@ -14,4 +14,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [JsonApiUserLinkage](JsonApiUserLinkage.md) | [**JsonApiUserLinkage**](JsonApiUserLinkage.md) | [**JsonApiUserLinkage**](JsonApiUserLinkage.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

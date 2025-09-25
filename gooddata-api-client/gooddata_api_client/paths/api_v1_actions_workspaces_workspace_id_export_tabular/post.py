@@ -25,8 +25,8 @@ import frozendict  # noqa: F401
 
 from gooddata_api_client import schemas  # noqa: F401
 
-from gooddata_api_client.model.export_response import ExportResponse
-from gooddata_api_client.model.tabular_export_request import TabularExportRequest
+from gooddata_api_client.models.export_response import ExportResponse
+from gooddata_api_client.models.tabular_export_request import TabularExportRequest
 
 from . import path
 
@@ -387,5 +387,3 @@ class ApiForpost(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
-
-

@@ -3,14 +3,31 @@
 JSON:API representation of exportDefinition entity.
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** | Object type | defaults to "exportDefinition"
 **attributes** | [**JsonApiExportDefinitionInAttributes**](JsonApiExportDefinitionInAttributes.md) |  | [optional] 
 **id** | **str** | API identifier of an object | [optional] 
 **relationships** | [**JsonApiExportDefinitionInRelationships**](JsonApiExportDefinitionInRelationships.md) |  | [optional] 
-**any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
+**type** | **str** | Object type | 
 
+## Example
+
+```python
+from gooddata_api_client.models.json_api_export_definition_post_optional_id import JsonApiExportDefinitionPostOptionalId
+
+# TODO update the JSON string below
+json = "{}"
+# create an instance of JsonApiExportDefinitionPostOptionalId from a JSON string
+json_api_export_definition_post_optional_id_instance = JsonApiExportDefinitionPostOptionalId.from_json(json)
+# print the JSON string representation of the object
+print(JsonApiExportDefinitionPostOptionalId.to_json())
+
+# convert the object into a dict
+json_api_export_definition_post_optional_id_dict = json_api_export_definition_post_optional_id_instance.to_dict()
+# create an instance of JsonApiExportDefinitionPostOptionalId from a dict
+json_api_export_definition_post_optional_id_from_dict = JsonApiExportDefinitionPostOptionalId.from_dict(json_api_export_definition_post_optional_id_dict)
+```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
 

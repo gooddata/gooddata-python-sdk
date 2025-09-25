@@ -86,4 +86,4 @@ class JsonApiUserPatchDocument(
             **kwargs,
         )
 
-from gooddata_api_client.model.json_api_user_patch import JsonApiUserPatch
+from gooddata_api_client.models.json_api_user_patch import JsonApiUserPatch

@@ -37,18 +37,18 @@ class TestRequest(
 
 
     class MetaOapg:
-        
+
         class properties:
-            
-            
+
+
             class cachePath(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
                     items = schemas.StrSchema
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, str, ]], typing.List[typing.Union[MetaOapg.items, str, ]]],
@@ -59,23 +59,23 @@ class TestRequest(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
             enableCaching = schemas.BoolSchema
-            
-            
+
+
             class parameters(
                 schemas.ListSchema
             ):
-            
-            
+
+
                 class MetaOapg:
-                    
+
                     @staticmethod
                     def items() -> typing.Type['DataSourceParameter']:
                         return DataSourceParameter
-            
+
                 def __new__(
                     cls,
                     _arg: typing.Union[typing.Tuple['DataSourceParameter'], typing.List['DataSourceParameter']],
@@ -86,7 +86,7 @@ class TestRequest(
                         _arg,
                         _configuration=_configuration,
                     )
-            
+
                 def __getitem__(self, i: int) -> 'DataSourceParameter':
                     return super().__getitem__(i)
             password = schemas.StrSchema
@@ -104,69 +104,69 @@ class TestRequest(
                 "url": url,
                 "username": username,
             }
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["cachePath"]) -> MetaOapg.properties.cachePath: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["enableCaching"]) -> MetaOapg.properties.enableCaching: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["parameters"]) -> MetaOapg.properties.parameters: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["password"]) -> MetaOapg.properties.password: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["schema"]) -> MetaOapg.properties.schema: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["token"]) -> MetaOapg.properties.token: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["url"]) -> MetaOapg.properties.url: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["username"]) -> MetaOapg.properties.username: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
+
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["cachePath", "enableCaching", "parameters", "password", "schema", "token", "url", "username", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["cachePath"]) -> typing.Union[MetaOapg.properties.cachePath, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["enableCaching"]) -> typing.Union[MetaOapg.properties.enableCaching, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["parameters"]) -> typing.Union[MetaOapg.properties.parameters, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["password"]) -> typing.Union[MetaOapg.properties.password, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["schema"]) -> typing.Union[MetaOapg.properties.schema, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["token"]) -> typing.Union[MetaOapg.properties.token, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["url"]) -> typing.Union[MetaOapg.properties.url, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["username"]) -> typing.Union[MetaOapg.properties.username, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
+
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["cachePath", "enableCaching", "parameters", "password", "schema", "token", "url", "username", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -197,4 +197,4 @@ class TestRequest(
             **kwargs,
         )
 
-from gooddata_api_client.model.data_source_parameter import DataSourceParameter
+from gooddata_api_client.models.data_source_parameter import DataSourceParameter

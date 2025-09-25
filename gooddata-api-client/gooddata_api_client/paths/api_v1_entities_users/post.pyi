@@ -25,8 +25,8 @@ import frozendict  # noqa: F401
 
 from gooddata_api_client import schemas  # noqa: F401
 
-from gooddata_api_client.model.json_api_user_in_document import JsonApiUserInDocument
-from gooddata_api_client.model.json_api_user_out_document import JsonApiUserOutDocument
+from gooddata_api_client.models.json_api_user_in_document import JsonApiUserInDocument
+from gooddata_api_client.models.json_api_user_out_document import JsonApiUserOutDocument
 
 # Query params
 
@@ -37,17 +37,17 @@ class IncludeSchema(
 
 
     class MetaOapg:
-        
-        
+
+
         class items(
             schemas.EnumBase,
             schemas.StrSchema
         ):
-            
+
             @schemas.classproperty
             def USER_GROUPS(cls):
                 return cls("userGroups")
-            
+
             @schemas.classproperty
             def ALL(cls):
                 return cls("ALL")
@@ -416,5 +416,3 @@ class ApiForpost(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
-
-

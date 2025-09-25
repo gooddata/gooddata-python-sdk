@@ -1,4 +1,4 @@
-# gooddata_api_client.model.data_column_locators.DataColumnLocators
+# gooddata_api_client.models.data_column_locators.DataColumnLocators
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes
@@ -26,4 +26,3 @@ Key | Input Type | Accessed Type | Description | Notes
 **any_string_name** | [**DataColumnLocator**](DataColumnLocator.md) | [**DataColumnLocator**](DataColumnLocator.md) | any string name can be used but the value must be the correct type | [optional] 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

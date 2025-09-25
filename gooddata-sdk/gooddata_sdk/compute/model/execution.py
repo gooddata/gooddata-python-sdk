@@ -7,9 +7,9 @@ from typing import Any, Optional, Union
 from attr.setters import frozen as frozen_attr
 from attrs import define, field
 from gooddata_api_client import models
-from gooddata_api_client.model.afm import AFM
-from gooddata_api_client.model.afm_cancel_tokens import AfmCancelTokens
-from gooddata_api_client.model.result_spec import ResultSpec
+from gooddata_api_client.models.afm import AFM
+from gooddata_api_client.models.afm_cancel_tokens import AfmCancelTokens
+from gooddata_api_client.models.result_spec import ResultSpec
 
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.model.attribute import Attribute
@@ -351,8 +351,6 @@ class BareExecutionResponse:
             result_id=self.result_id,
             offset=_offset,
             limit=_limit,
-            _check_return_type=False,
-            _return_http_data_only=False,
             **({"x_gdc_cancel_token": self.cancel_token} if self.cancel_token else {}),
         )
         custom_headers = self._api_client.custom_headers

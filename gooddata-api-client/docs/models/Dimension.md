@@ -1,4 +1,4 @@
-# gooddata_api_client.model.dimension.Dimension
+# gooddata_api_client.models.dimension.Dimension
 
 Single dimension description.
 
@@ -44,4 +44,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [**SortKey**](SortKey.md) | [**SortKey**](SortKey.md) | [**SortKey**](SortKey.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

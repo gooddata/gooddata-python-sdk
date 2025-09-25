@@ -3,10 +3,10 @@ import builtins
 from typing import Any, Optional
 
 from attrs import define, field
-from gooddata_api_client.model.automation_schedule import AutomationSchedule
-from gooddata_api_client.model.automation_tabular_export import AutomationTabularExport
-from gooddata_api_client.model.automation_visual_export import AutomationVisualExport
-from gooddata_api_client.model.declarative_automation import DeclarativeAutomation
+from gooddata_api_client.models.automation_schedule import AutomationSchedule
+from gooddata_api_client.models.automation_tabular_export import AutomationTabularExport
+from gooddata_api_client.models.automation_visual_export import AutomationVisualExport
+from gooddata_api_client.models.declarative_automation import DeclarativeAutomation
 
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.catalog.export.request import (

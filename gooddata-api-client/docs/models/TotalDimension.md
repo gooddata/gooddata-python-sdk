@@ -1,4 +1,4 @@
-# gooddata_api_client.model.total_dimension.TotalDimension
+# gooddata_api_client.models.total_dimension.TotalDimension
 
 A list of dimensions across which the total will be computed. Total headers for only these dimensions will be returned in the result.
 
@@ -29,4 +29,3 @@ Class Name | Input Type | Accessed Type | Description | Notes
 items | str,  | str,  |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

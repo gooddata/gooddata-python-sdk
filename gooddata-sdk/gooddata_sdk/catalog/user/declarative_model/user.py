@@ -5,9 +5,9 @@ from pathlib import Path
 from typing import Optional
 
 import attr
-from gooddata_api_client.model.declarative_user import DeclarativeUser
-from gooddata_api_client.model.declarative_user_permission import DeclarativeUserPermission
-from gooddata_api_client.model.declarative_users import DeclarativeUsers
+from gooddata_api_client.models.declarative_user import DeclarativeUser
+from gooddata_api_client.models.declarative_user_permission import DeclarativeUserPermission
+from gooddata_api_client.models.declarative_users import DeclarativeUsers
 
 from gooddata_sdk.catalog.base import Base, value_in_allowed
 from gooddata_sdk.catalog.identifier import CatalogAssigneeIdentifier, CatalogDeclarativeUserGroupIdentifier
