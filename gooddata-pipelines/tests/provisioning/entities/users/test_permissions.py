@@ -1,7 +1,7 @@
 # (C) 2025 GoodData Corporation
-import json
 from typing import Literal
 
+import orjson
 import pytest
 from gooddata_api_client.exceptions import (  # type: ignore[import]
     NotFoundException,
@@ -455,7 +455,7 @@ def test_permission_provisioner(
         f"{TEST_DATA_SUBDIR}/existing_upstream_permissions.json"
     )
     with open(EXISTING_UPSTREAM_PERMISSIONS_PATH, "r") as f:
-        raw_existing_upstream_permissions = json.load(f)
+        raw_existing_upstream_permissions = orjson.loads(f.read())
 
     existing_upstream_permissions = parse_expected_permissions(
         raw_existing_upstream_permissions
@@ -477,11 +477,11 @@ def test_permission_provisioner(
 
     # Load source data
     with open(f"{TEST_DATA_SUBDIR}/{source_data_path}", "r") as f:
-        source_data = json.load(f)
+        source_data = orjson.loads(f.read())
 
     # Load and parse expected data
     with open(f"{TEST_DATA_SUBDIR}/{expected_data_path}", "r") as f:
-        raw_expected_result = json.load(f)
+        raw_expected_result = orjson.loads(f.read())
 
     expected_result = parse_expected_permissions(raw_expected_result)
 
