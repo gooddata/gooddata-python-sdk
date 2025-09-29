@@ -1,8 +1,8 @@
 # (C) 2025 GoodData Corporation
-import json
 from dataclasses import dataclass
 from typing import Literal, Optional
 
+import orjson
 import pytest
 from gooddata_api_client.exceptions import NotFoundException  # type: ignore
 from gooddata_sdk.catalog.user.entity_model.user import (
@@ -225,15 +225,15 @@ def test_user_provisioning(
 
     # Load input data
     with open(f"{TEST_DATA_SUBDIR}/{input_path}", "r") as f:
-        input_data = json.load(f)
+        input_data = orjson.loads(f.read())
 
     # Load expected data
     with open(f"{TEST_DATA_SUBDIR}/{expected_path}", "r") as f:
-        raw_expected_data = json.load(f)
+        raw_expected_data = orjson.loads(f.read())
 
     # Load and patch "existing users"
     with open(f"{TEST_DATA_SUBDIR}/existing_upstream_users.json", "r") as f:
-        raw_upstream_users = json.load(f)
+        raw_upstream_users = orjson.loads(f.read())
 
     upstream_users = parse_user_data(raw_upstream_users)
 

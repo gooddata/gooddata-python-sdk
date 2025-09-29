@@ -1,8 +1,8 @@
 # (C) 2025 GoodData Corporation
 
-import json
 from typing import Any
 
+import orjson
 import pytest
 from pydantic import ValidationError
 from requests import Response
@@ -67,7 +67,7 @@ def test_get_wdf_settings_for_workspace_valid_payload(
 
     payload = WDF_VALID_PAYLOAD
 
-    mock_response._content = json.dumps(payload).encode("utf-8")
+    mock_response._content = orjson.dumps(payload)
 
     mocker.patch.object(
         mock_gooddata_api,
@@ -102,7 +102,7 @@ def test_get_wdf_settings_for_workspace_invalid_payload(
         ]
     }
 
-    mock_response._content = json.dumps(payload).encode("utf-8")
+    mock_response._content = orjson.dumps(payload)
 
     mocker.patch.object(
         mock_gooddata_api,
