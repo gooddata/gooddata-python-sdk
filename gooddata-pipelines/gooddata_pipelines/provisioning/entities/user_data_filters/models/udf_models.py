@@ -7,6 +7,8 @@
 
 from dataclasses import dataclass, field
 
+from pydantic import BaseModel, ConfigDict
+
 
 @dataclass
 class UserDataFilterGroup:
@@ -20,13 +22,13 @@ class WorkspaceUserDataFilters:
     user_data_filters: list["UserDataFilterGroup"] = field(default_factory=list)
 
 
-@dataclass
-class UserDataFilterFullLoad:
+class UserDataFilterFullLoad(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     workspace_id: str
     udf_id: str
     udf_value: str
 
 
-@dataclass
 class UserDataFilterIncrementalLoad(UserDataFilterFullLoad):
     is_active: bool

@@ -3,7 +3,7 @@
 from typing import Any
 
 from gooddata_sdk.catalog.user.entity_model.user import CatalogUser
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class UserProfile(BaseModel):
@@ -17,6 +17,8 @@ class UserProfile(BaseModel):
 
 class BaseUser(BaseModel):
     """Base class containing shared user fields and functionality."""
+
+    model_config = ConfigDict(extra="forbid")
 
     user_id: str
     firstname: str | None
