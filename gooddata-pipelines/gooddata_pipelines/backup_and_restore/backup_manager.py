@@ -6,10 +6,10 @@ import shutil
 import tempfile
 import time
 import traceback
-from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Type
 
+import attrs
 import requests
 import yaml
 from gooddata_sdk.utils import PROFILES_FILE_PATH, profile_content
@@ -40,7 +40,7 @@ from gooddata_pipelines.logger import LogObserver
 from gooddata_pipelines.utils.rate_limiter import RateLimiter
 
 
-@dataclass
+@attrs.define
 class BackupBatch:
     list_of_ids: list[str]
 

@@ -9,7 +9,7 @@ from gooddata_sdk.catalog.permission.declarative_model.permission import (
     CatalogDeclarativeSingleWorkspacePermission,
     CatalogDeclarativeWorkspacePermissions,
 )
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from gooddata_pipelines.provisioning.utils.exceptions import BaseUserException
 
@@ -23,6 +23,8 @@ class EntityType(str, Enum):
 
 
 class BasePermission(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     permission: str
     workspace_id: str
     entity_id: str

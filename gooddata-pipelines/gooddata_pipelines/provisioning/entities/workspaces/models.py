@@ -22,7 +22,7 @@ class WorkspaceDataMaps:
 
 
 class WorkspaceBase(BaseModel):
-    model_config = ConfigDict(coerce_numbers_to_str=True)
+    model_config = ConfigDict(coerce_numbers_to_str=True, extra="forbid")
 
     parent_id: str
     workspace_id: str
