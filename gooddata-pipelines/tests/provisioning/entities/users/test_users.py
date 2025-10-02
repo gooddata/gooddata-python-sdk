@@ -1,7 +1,7 @@
 # (C) 2025 GoodData Corporation
-from dataclasses import dataclass
 from typing import Literal, Optional
 
+import attrs
 import orjson
 import pytest
 from gooddata_api_client.exceptions import NotFoundException  # type: ignore
@@ -29,7 +29,7 @@ from tests.conftest import TEST_DATA_DIR
 TEST_DATA_SUBDIR = f"{TEST_DATA_DIR}/provisioning/entities/users"
 
 
-@dataclass
+@attrs.define
 class MockUser:
     id: str
     firstname: Optional[str]

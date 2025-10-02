@@ -2,24 +2,20 @@
 
 """This module defines data models for user data filters in a GoodData workspace."""
 
-# TODO: consider using attrs instead of dataclasses for these models. Dataclasses
-# have different functionality per Python version (not package version).
-
-from dataclasses import dataclass, field
-
+import attrs
 from pydantic import BaseModel, ConfigDict
 
 
-@dataclass
+@attrs.define
 class UserDataFilterGroup:
     udf_id: str
     udf_values: list[str]
 
 
-@dataclass
+@attrs.define
 class WorkspaceUserDataFilters:
     workspace_id: str
-    user_data_filters: list["UserDataFilterGroup"] = field(default_factory=list)
+    user_data_filters: list["UserDataFilterGroup"] = attrs.field(factory=list)
 
 
 class UserDataFilterFullLoad(BaseModel):
