@@ -1,7 +1,6 @@
 # (C) 2025 GoodData Corporation
 
-from dataclasses import dataclass
-
+import attrs
 import requests
 
 from gooddata_pipelines.api import GoodDataApi
@@ -46,7 +45,7 @@ class BackupInputProcessor:
         )
         self.all_workspaces_endpoint = f"{self.base_workspace_endpoint}?page=0&size={self.page_size}&sort=name,asc&metaInclude=page"
 
-    @dataclass
+    @attrs.define
     class _ProcessDataOutput:
         workspace_ids: list[str]
         sub_parents: list[str] | None = None

@@ -50,6 +50,8 @@ class UserDataFilterProvisioner(
     ldm_column_name: str = ""
     maql_column_name: str = ""
 
+    FULL_LOAD_TYPE = UserDataFilterFullLoad
+
     def set_ldm_column_name(self, ldm_column_name: str) -> None:
         """Set the LDM column name for user data filters.
 
@@ -213,8 +215,6 @@ class UserDataFilterProvisioner(
             self._group_db_user_data_filters_by_ws_id(self.source_group_full)
         )
         self._create_user_data_filters(grouped_db_user_data_filters)
-
-        self.logger.info("User data filters provisioning completed")
 
     def _provision_incremental_load(self) -> None:
         """Provision user data filters in GoodData workspaces."""

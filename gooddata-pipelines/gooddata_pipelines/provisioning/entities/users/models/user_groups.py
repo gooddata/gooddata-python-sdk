@@ -1,9 +1,17 @@
 # (C) 2025 GoodData Corporation
 
-from pydantic import BaseModel, Field, ValidationInfo, field_validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    ValidationInfo,
+    field_validator,
+)
 
 
 class UserGroupBase(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     user_group_id: str
     user_group_name: str
     parent_user_groups: list[str] = Field(default_factory=list)

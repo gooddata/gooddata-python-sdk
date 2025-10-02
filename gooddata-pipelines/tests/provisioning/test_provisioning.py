@@ -3,11 +3,13 @@ import os
 from pathlib import Path
 
 import pytest
+from pydantic import BaseModel, ValidationError
 
 from gooddata_pipelines import (
     EntityType,
     PermissionFullLoad,
     PermissionIncrementalLoad,
+    UserDataFilterFullLoad,
     UserFullLoad,
     UserGroupFullLoad,
     UserGroupIncrementalLoad,
@@ -119,3 +121,106 @@ def test_create_from_profile() -> None:
     )
     assert provisioner._api._domain == "http://localhost:3000"
     assert provisioner._api._token == os.environ.pop("MOCK_TOKEN")
+
+
+MODELS_AND_VALID_DATA = [
+    (
+        WorkspaceFullLoad,
+        {
+            "parent_id": "parent_id",
+            "workspace_id": "workspace_id",
+            "workspace_name": "workspace_name",
+        },
+    ),
+    (
+        WorkspaceIncrementalLoad,
+        {
+            "parent_id": "parent_id",
+            "workspace_id": "workspace_id",
+            "workspace_name": "workspace_name",
+            "is_active": True,
+        },
+    ),
+    (
+        UserFullLoad,
+        {
+            "user_id": "user_id",
+            "firstname": "firstname",
+            "lastname": "lastname",
+            "email": "email",
+            "auth_id": "auth_id",
+            "user_groups": ["user_group_id"],
+        },
+    ),
+    (
+        UserIncrementalLoad,
+        {
+            "user_id": "user_id",
+            "firstname": "firstname",
+            "lastname": "lastname",
+            "email": "email",
+            "auth_id": "auth_id",
+            "user_groups": ["user_group_id"],
+            "is_active": True,
+        },
+    ),
+    (
+        UserGroupFullLoad,
+        {
+            "user_group_id": "user_group_id",
+            "user_group_name": "user_group_name",
+        },
+    ),
+    (
+        UserGroupIncrementalLoad,
+        {
+            "user_group_id": "user_group_id",
+            "user_group_name": "user_group_name",
+            "is_active": True,
+        },
+    ),
+    (
+        PermissionFullLoad,
+        {
+            "permission": "permission",
+            "workspace_id": "workspace_id",
+            "entity_id": "entity_id",
+            "entity_type": EntityType.user,
+        },
+    ),
+    (
+        PermissionIncrementalLoad,
+        {
+            "permission": "permission",
+            "workspace_id": "workspace_id",
+            "entity_id": "entity_id",
+            "entity_type": EntityType.user,
+            "is_active": True,
+        },
+    ),
+    (
+        UserDataFilterFullLoad,
+        {
+            "workspace_id": "workspace_id",
+            "udf_id": "udf_id",
+            "udf_value": "udf_value",
+        },
+    ),
+]
+
+
+@pytest.mark.parametrize(["provisioning_model", "data"], MODELS_AND_VALID_DATA)
+def test_validate_valid_data(provisioning_model: BaseModel, data: dict) -> None:
+    """Test validating valid data."""
+    provisioning_model.model_validate(data)
+
+
+@pytest.mark.parametrize(
+    ["provisioning_model", "data"],
+    MODELS_AND_VALID_DATA,
+)
+def test_raise_extra_fields(provisioning_model: BaseModel, data: dict) -> None:
+    """Test raising an error when extra fields are provided."""
+    data["extra_field"] = "extra_field"
+    with pytest.raises(ValidationError):
+        provisioning_model.model_validate(data)
