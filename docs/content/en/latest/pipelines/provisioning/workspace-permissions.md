@@ -1,7 +1,7 @@
 ---
 title: "Workspace Permissions"
 linkTitle: "Workspace Permissions"
-weight: 4
+weight: 5
 ---
 
 Workspace permission provisioning allows you to create, update, or delete user permissions. See [Manage Workspace Permissions](https://www.gooddata.com/docs/cloud/manage-organization/manage-permissions/set-permissions-for-workspace/) to learn more about workspace permissions in GoodData Cloud.
