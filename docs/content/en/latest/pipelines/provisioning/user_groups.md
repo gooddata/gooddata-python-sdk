@@ -10,6 +10,8 @@ User groups enable you to organize users and manage permissions at scale by assi
 
 You can provision user groups using full or incremental load methods. Each of these methods requires a specific input type.
 
+{{% alert color="info" %}} This section covers the usage with manual data validation. You can also take advantage of the generic provisioning function. You can read more about it on the [Provisioning](../#generic-function) page. {{% /alert %}}
+
 ## Usage
 
 Start by importing and initializing the UserGroupProvisioner.
@@ -26,10 +28,10 @@ provisioner = UserGroupProvisioner.create(host=host, token=token)
 
 ```
 
-
 Then validate your data using an input model corresponding to the provisioned resource and selected workflow type, i.e., `UserGroupFullLoad` if you intend to run the provisioning in full load mode, or `UserGroupIncrementalLoad` if you want to provision incrementally.
 
 The models expect the following fields:
+
 - **user_group_id**: ID of the user group.
 - **user_group_name**: Name of the user group.
 - **parent_user_groups**: A list of parent user group IDs.
@@ -129,7 +131,6 @@ validated_data = [
 provisioner.full_load(validated_data)
 
 ```
-
 
 ### Incremental Load
 

@@ -51,6 +51,10 @@ from .provisioning.entities.workspaces.models import (
 )
 from .provisioning.entities.workspaces.workspace import WorkspaceProvisioner
 
+# -------- Generic Provisioning --------
+from .provisioning.generic.config import WorkflowType
+from .provisioning.generic.provision import provision
+
 __all__ = [
     "BackupManager",
     "BackupRestoreConfig",
@@ -79,5 +83,7 @@ __all__ = [
     "CustomFieldDefinition",
     "ColumnDataType",
     "CustomFieldType",
+    "provision",
+    "WorkflowType",
     "__version__",
 ]
