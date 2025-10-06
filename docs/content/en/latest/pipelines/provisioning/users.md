@@ -4,10 +4,11 @@ linkTitle: "Users"
 weight: 2
 ---
 
-
 User provisioning allows you to create, update, or delete user profiles in your GoodData environment.
 
 You can provision users using full or incremental load methods. Each of these methods requires a specific input type.
+
+{{% alert color="info" %}} This section covers the usage with manual data validation. You can also take advantage of the generic provisioning function. You can read more about it on the [Provisioning](../#generic-function) page. {{% /alert %}}
 
 ## Usage
 
@@ -24,7 +25,6 @@ token = "some_user_token"
 provisioner = UserProvisioner.create(host=host, token=token)
 
 ```
-
 
 Then validate your data using an input model corresponding to the provisioned resource and selected workflow type, i.e., `UserFullLoad` if you intend to run the provisioning in full load mode, or `UserIncrementalLoad` if you want to provision incrementally.
 
@@ -146,7 +146,6 @@ validated_data = [
 provisioner.full_load(validated_data)
 
 ```
-
 
 ### Incremental Load
 
