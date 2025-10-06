@@ -27,6 +27,12 @@ create pandas series and data frames.
 
 Check out the GoodData Pandas [documentation](https://gooddata-pandas.readthedocs.io/en/latest/) to learn more and get started.
 
+### GoodData Pipelines
+
+The [gooddata-pipelines](./gooddata-pipelines/) package provides easy ways to manage the lifecycle of GoodData Cloud.
+
+Check out the GoodData Pipelines [documentation](https://www.gooddata.com/docs/python-sdk/latest/pipelines-overview/) to learn more and get started.
+
 ### GoodData FlexConnect
 
 The [gooddata-flexconnect](./gooddata-flexconnect) package is the foundation for writing custom FlexConnect data sources.
@@ -45,5 +51,6 @@ into PostgreSQL as foreign tables that you can then query using SQL.
 Check out the GoodData Foreign Data Wrapper [documentation](https://gooddata-fdw.readthedocs.io/en/latest/) to learn more and get started.
 
 ## Contributing
+
 If you would like to improve, extend or fix a feature in the repository, read and follow the
 [Contributing guide](./CONTRIBUTING.md).
