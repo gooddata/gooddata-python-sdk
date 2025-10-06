@@ -8,6 +8,8 @@ Workspace permission provisioning allows you to create, update, or delete user p
 
 You can provision workspace permissions using full or incremental load methods. Each of these methods requires a specific input type.
 
+{{% alert color="info" %}} This section covers the usage with manual data validation. You can also take advantage of the generic provisioning function. You can read more about it on the [Provisioning](../#generic-function) page. {{% /alert %}}
+
 ## Usage
 
 Start by importing and initializing the PermissionProvisioner.
@@ -24,10 +26,10 @@ provisioner = PermissionProvisioner.create(host=host, token=token)
 
 ```
 
-
 Then validate your data using an input model corresponding to the provisioned resource and selected workflow type, i.e., `PermissionFullLoad` if you intend to run the provisioning in full load mode, or `PermissionIncrementalLoad` if you want to provision incrementally.
 
 The models expect the following fields:
+
 - **permission**: Permission you want to grant, e.g., `VIEW`, `ANALYZE`, `MANAGE`.
 - **workspace_id**: ID of the workspace the permission will be applied to.
 - **entity_id**: ID of the entity (user or user group) which will receive the permission.
@@ -137,7 +139,6 @@ validated_data = [
 provisioner.full_load(validated_data)
 
 ```
-
 
 ### Incremental Load
 

@@ -12,6 +12,7 @@ See [Multitenancy: One Platform, Many Customers](https://www.gooddata.com/resour
 
 You can provision child workspaces using full or incremental load methods. Each of these methods requires a specific input type.
 
+{{% alert color="info" %}} This section covers the usage with manual data validation. You can also take advantage of the generic provisioning function. You can read more about it on the [Provisioning](../#generic-function) page. {{% /alert %}}
 
 ## Usage
 
@@ -28,7 +29,6 @@ token = "some_user_token"
 provisioner = WorkspaceProvisioner.create(host=host, token=token)
 
 ```
-
 
 Then validate your data using an input model corresponding to the provisioned resource and selected workflow type, i.e., `WorkspaceFullLoad` if you intend to run the provisioning in full load mode, or `WorkspaceIncrementalLoad` if you want to provision incrementally.
 
@@ -92,7 +92,6 @@ Now with the provisioner initialized and your data validated, you can run the pr
 # Run the provisioning method
 provisioner.full_load(validated_data)
 ```
-
 
 ## Workspace Data Filters
 
