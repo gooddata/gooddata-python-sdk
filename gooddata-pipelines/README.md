@@ -28,33 +28,37 @@ The provisioning module exposes _Provisioner_ classes reflecting the different e
 
 ```python
 import os
+import logging
+
 from csv import DictReader
 from pathlib import Path
 
 # Import the Entity Provisioner class and corresponding model from gooddata_pipelines library
 from gooddata_pipelines import UserFullLoad, UserProvisioner
-from gooddata_pipelines.logger.logger import LogObserver
-
-# Optionally, subscribe a standard Python logger to the LogObserver
-import logging
-logger = logging.getLogger(__name__)
-LogObserver().subscribe(logger)
 
 # Create the Provisioner instance - you can also create the instance from a GDC yaml profile
 provisioner = UserProvisioner(
     host=os.environ["GDC_HOSTNAME"], token=os.environ["GDC_AUTH_TOKEN"]
 )
 
+# Optional: set up logging and subscribe to logs emitted by the provisioner
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+provisioner.logger.subscribe(logger)
+
 # Load your data from your data source
 source_data_path: Path = Path("path/to/some.csv")
 source_data_reader = DictReader(source_data_path.read_text().splitlines())
 source_data = [row for row in source_data_reader]
 
-# Validate your input data with
+# Validate your input data
 full_load_data: list[UserFullLoad] = UserFullLoad.from_list_of_dicts(
     source_data
 )
+
+# Run the provisioning
 provisioner.full_load(full_load_data)
+
 ```
 
 ## Bugs & Requests
@@ -64,5 +68,5 @@ or request features.
 
 ## Changelog
 
-See  [Github releases](https://github.com/gooddata/gooddata-python-sdk/releases) for released versions
+See [Github releases](https://github.com/gooddata/gooddata-python-sdk/releases) for released versions
 and a list of changes.
