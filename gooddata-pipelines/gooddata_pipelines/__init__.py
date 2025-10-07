@@ -10,6 +10,10 @@ from .backup_and_restore.models.storage import (
     S3StorageConfig,
     StorageType,
 )
+from .backup_and_restore.restore_manager import (
+    RestoreManager,
+    WorkspaceToRestore,
+)
 from .backup_and_restore.storage.local_storage import LocalStorage
 from .backup_and_restore.storage.s3_storage import S3Storage
 
@@ -57,6 +61,8 @@ from .provisioning.generic.provision import provision
 
 __all__ = [
     "BackupManager",
+    "RestoreManager",
+    "WorkspaceToRestore",
     "BackupRestoreConfig",
     "StorageType",
     "LocalStorage",

@@ -10,9 +10,10 @@ You can use the package to manage following resources in GDC:
    - User/Group permissions
    - User Data Filters
    - Child workspaces (incl. Workspace Data Filter settings)
-1. _[PLANNED]:_ Backup and restore of workspaces
-1. _[PLANNED]:_ Custom fields management
-   - extend the Logical Data Model of a child workspace
+1. Backup and restore of workspaces
+   - Create and backup snapshots of workspace metadata.
+1. LDM Extension
+   - extend the Logical Data Model of a child workspace with custom datasets and fields
 
 In case you are not interested in incorporating a library in your own program but would like to use a ready-made script, consider having a look at [GoodData Productivity Tools](https://github.com/gooddata/gooddata-productivity-tools).
 
