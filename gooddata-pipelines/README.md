@@ -10,7 +10,7 @@ You can use the package to manage following resources in GDC:
    - User/Group permissions
    - User Data Filters
    - Child workspaces (incl. Workspace Data Filter settings)
-1. _[PLANNED]:_ Backup and restore of workspaces
+1. Backup and restore of workspaces
 1. _[PLANNED]:_ Custom fields management
    - extend the Logical Data Model of a child workspace
 
@@ -33,7 +33,7 @@ import logging
 from csv import DictReader
 from pathlib import Path
 
-# Import the Entity Provisioner class and corresponding model from gooddata_pipelines library
+# Import the Entity Provisioner class and corresponding model from the gooddata_pipelines library
 from gooddata_pipelines import UserFullLoad, UserProvisioner
 
 # Create the Provisioner instance - you can also create the instance from a GDC yaml profile
@@ -70,3 +70,156 @@ or request features.
 
 See [Github releases](https://github.com/gooddata/gooddata-python-sdk/releases) for released versions
 and a list of changes.
+
+## Backup and restore of workspaces
+The backup and restore module allows you to create snapshots of GoodData Cloud workspaces and restore them later. This is useful for:
+
+- Creating backups before major changes
+- Migrating workspaces between environments
+- Disaster recovery scenarios
+- Copying workspace configurations
+
+### Backup
+
+The module supports three backup modes:
+
+1. **List of workspaces** - Backup specific workspaces by providing a list of workspace IDs
+2. **Workspace hierarchies** - Backup a workspace and all its direct and indirect children
+3. **Entire organization** - Backup all workspaces in the organization
+
+Each backup includes:
+- Workspace declarative model (logical data model, analytics model, permissions)
+- User data filters
+- Filter views
+- Automations
+
+#### Storage Options
+
+Backups can be stored in:
+- **Local storage** - Save backups to a local directory
+- **S3 storage** - Upload backups to an AWS S3 bucket
+
+#### Basic Usage
+
+```python
+import os
+from pathlib import Path
+
+from gooddata_pipelines import BackupManager
+from gooddata_pipelines.backup_and_restore.models.storage import (
+    BackupRestoreConfig,
+    LocalStorageConfig,
+    StorageType,
+)
+from gooddata_pipelines.logger.logger import LogObserver
+
+# Optionally, subscribe a standard Python logger to the LogObserver
+import logging
+logger = logging.getLogger(__name__)
+LogObserver().subscribe(logger)
+
+# Configure backup storage
+config = BackupRestoreConfig(
+    storage_type=StorageType.LOCAL,
+    storage=LocalStorageConfig(),
+    batch_size=10,  # Number of workspaces to process in one batch
+    api_calls_per_second=10,  # Rate limit for API calls
+)
+
+# Create the BackupManager instance
+backup_manager = BackupManager.create(
+    config=config,
+    host=os.environ["GDC_HOSTNAME"],
+    token=os.environ["GDC_AUTH_TOKEN"]
+)
+
+# Backup-specific workspaces
+workspace_ids = ["workspace1", "workspace2", "workspace3"]
+backup_manager.backup_workspaces(workspace_ids=workspace_ids)
+
+# Or read workspace IDs from a CSV file
+backup_manager.backup_workspaces(path_to_csv="workspaces.csv")
+
+# Backup workspace hierarchies (workspace + all children)
+backup_manager.backup_hierarchies(workspace_ids=["parent_workspace"])
+
+# Backup entire organization
+backup_manager.backup_entire_organization()
+```
+
+#### Using S3 Storage
+``` python
+from gooddata_pipelines.backup_and_restore.models.storage import (
+BackupRestoreConfig,
+S3StorageConfig,
+StorageType,
+)
+
+# Configure S3 storage with explicit credentials
+config = BackupRestoreConfig(
+storage_type=StorageType.S3,
+storage=S3StorageConfig(
+bucket="my-backup-bucket",
+backup_path="gooddata-backups/",
+aws_access_key_id=os.environ["AWS_ACCESS_KEY_ID"],
+aws_secret_access_key=os.environ["AWS_SECRET_ACCESS_KEY"],
+aws_default_region="us-east-1"
+),
+)
+
+# Or use AWS profile
+config = BackupRestoreConfig(
+storage_type=StorageType.S3,
+storage=S3StorageConfig(
+bucket="my-backup-bucket",
+backup_path="gooddata-backups/",
+profile="my-aws-profile"
+),
+)
+
+backup_manager = BackupManager.create(
+config=config,
+host=os.environ["GDC_HOSTNAME"],
+token=os.environ["GDC_AUTH_TOKEN"]
+)
+
+backup_manager.backup_workspaces(workspace_ids=["workspace1"])
+```
+
+#### Using GoodData Profile
+You can also create the BackupManager from a GoodData profile file:
+``` python
+from pathlib import Path
+
+backup_manager = BackupManager.create_from_profile(
+    config=config,
+    profile="production",
+    profiles_path=Path.home() / ".gooddata" / "profiles.yaml"
+)
+```
+
+CSV File Format
+When providing workspace IDs via a CSV file, the file should have a workspace_id column:
+``` csv
+workspace_id
+workspace1
+workspace2
+workspace3
+```
+
+#### Configuration Options
+
+The BackupRestoreConfig class accepts the following parameters:
+- `storage_type` - Type of storage (StorageType.LOCAL or StorageType.S3)
+- `storage` - Storage-specific configuration (LocalStorageConfig or S3StorageConfig)
+- `batch_size` (optional, default: 10) - Number of workspaces to process in one batch
+- `api_calls_per_second` (optional, default: 10) - Rate limit for API calls to avoid throttling
+- `api_page_size` (optional, default: 500) - Page size for paginated API calls
+
+
+#### Error Handling and Retries
+
+The backup process includes automatic retry logic with exponential backoff. If a batch fails, it will retry up to 3 times before failing completely. Individual workspace errors are logged but don't stop the entire backup process.
+Restore
+
+Note: Restore functionality is currently in development.
