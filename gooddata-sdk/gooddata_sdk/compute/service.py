@@ -4,7 +4,7 @@ from __future__ import annotations
 import json
 import logging
 from collections.abc import Iterator
-from typing import Any, Optional
+from typing import Any, Optional, Union
 
 from gooddata_api_client import ApiException
 from gooddata_api_client.model.afm_cancel_tokens import AfmCancelTokens
@@ -40,17 +40,27 @@ class ComputeService:
         self._actions_api = self._api_client.actions_api
         self._entities_api = self._api_client.entities_api
 
-    def for_exec_def(self, workspace_id: str, exec_def: ExecutionDefinition) -> Execution:
+    def for_exec_def(
+        self,
+        workspace_id: str,
+        exec_def: ExecutionDefinition,
+        timeout: Optional[Union[int, float, tuple]] = None,
+    ) -> Execution:
         """
         Starts computation in GoodData.CN workspace, using the provided execution definition.
 
         Args:
             workspace_id: workspace identifier
             exec_def: execution definition - this prescribes what to calculate, how to place labels and metric values
+            timeout: request timeout in seconds. If a tuple is provided, it is used as (connection timeout, read timeout).
          into dimensions
         """
         response, _, headers = self._actions_api.compute_report(
-            workspace_id, exec_def.as_api_model(), _check_return_type=False, _return_http_data_only=False
+            workspace_id,
+            exec_def.as_api_model(),
+            _check_return_type=False,
+            _return_http_data_only=False,
+            _request_timeout=timeout,
         )
 
         return Execution(
