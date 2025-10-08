@@ -334,7 +334,12 @@ class BareExecutionResponse:
     def cancel_token(self) -> Optional[str]:
         return self._cancel_token
 
-    def read_result(self, limit: Union[int, list[int]], offset: Union[None, int, list[int]] = None) -> ExecutionResult:
+    def read_result(
+        self,
+        limit: Union[int, list[int]],
+        offset: Union[None, int, list[int]] = None,
+        timeout: Optional[Union[int, float, tuple]] = None,
+    ) -> ExecutionResult:
         """
         Reads from the execution result.
         """
@@ -353,6 +358,7 @@ class BareExecutionResponse:
             limit=_limit,
             _check_return_type=False,
             _return_http_data_only=False,
+            _request_timeout=timeout,
             **({"x_gdc_cancel_token": self.cancel_token} if self.cancel_token else {}),
         )
         custom_headers = self._api_client.custom_headers
@@ -450,8 +456,13 @@ class Execution:
                             formats[m_group["localIdentifier"]] = m_group["format"]
         return labels, formats
 
-    def read_result(self, limit: Union[int, list[int]], offset: Union[None, int, list[int]] = None) -> ExecutionResult:
-        return self.bare_exec_response.read_result(limit, offset)
+    def read_result(
+        self,
+        limit: Union[int, list[int]],
+        offset: Union[None, int, list[int]] = None,
+        timeout: Optional[Union[int, float, tuple]] = None,
+    ) -> ExecutionResult:
+        return self.bare_exec_response.read_result(limit, offset, timeout)
 
     def cancel(self) -> None:
         """
