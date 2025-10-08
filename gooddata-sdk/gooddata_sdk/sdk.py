@@ -47,6 +47,7 @@ class GoodDataSdk:
         token_: str,
         extra_user_agent_: Optional[str] = None,
         *,
+        ssl_ca_cert: Optional[str] = None,
         executions_cancellable: bool = False,
         **custom_headers_: Optional[str],
     ) -> GoodDataSdk:
@@ -64,6 +65,7 @@ class GoodDataSdk:
             custom_headers=filtered_headers,
             extra_user_agent=extra_user_agent_,
             executions_cancellable=executions_cancellable,
+            ssl_ca_cert=ssl_ca_cert,
         )
         return cls(client)
 
