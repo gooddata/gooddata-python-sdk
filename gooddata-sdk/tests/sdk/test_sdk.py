@@ -4,6 +4,7 @@ from __future__ import annotations
 import os
 from pathlib import Path
 from typing import Any, Union
+from unittest.mock import patch
 
 import pytest
 import yaml
@@ -27,6 +28,8 @@ def are_same_check(profile_data: dict[str, Any], sdk: GoodDataSdk):
         assert profile_data["custom_headers"] == sdk.client._custom_headers
     if "extra_user_agent" in profile_data:
         assert profile_data["extra_user_agent"] in sdk.client._api_client.user_agent
+    if "ssl_ca_cert" in profile_data:
+        assert profile_data["ssl_ca_cert"] == sdk.client._api_config.ssl_ca_cert
 
 
 @pytest.mark.parametrize(
@@ -42,6 +45,14 @@ def are_same_check(profile_data: dict[str, Any], sdk: GoodDataSdk):
 )
 def test_legacy_config(profile):
     sdk = GoodDataSdk.create_from_profile(profile=profile, profiles_path=PROFILES_PATH)
+    data = load_profiles_content(PROFILES_PATH)
+    are_same_check(data[profile], sdk)
+
+
+def test_legacy_certificate_profile():
+    profile = "certificate"
+    with patch.object(Path, "exists", return_value=True):
+        sdk = GoodDataSdk.create_from_profile(profile=profile, profiles_path=PROFILES_PATH)
     data = load_profiles_content(PROFILES_PATH)
     are_same_check(data[profile], sdk)
 
@@ -68,6 +79,17 @@ def test_new_config_selected(setenvvar):
     profile_data = data["profiles"][profile]
     assert profile_data["host"] == sdk.client._hostname
     assert os.environ[profile_data["token"][1:]] == sdk.client._token
+
+
+def test_new_config_certificate(setenvvar):
+    profile = "certificate"
+    with patch.object(Path, "exists", return_value=True):
+        sdk = GoodDataSdk.create_from_profile(profile=profile, profiles_path=AAC_PROFILES_PATH)
+    data = load_profiles_content(AAC_PROFILES_PATH)
+    profile_data = data["profiles"][profile]
+    assert profile_data["host"] == sdk.client._hostname
+    assert os.environ[profile_data["token"][1:]] == sdk.client._token
+    assert profile_data["ssl_ca_cert"] == sdk.client._api_config.ssl_ca_cert
 
 
 def test_non_existing_token(setenvvar):

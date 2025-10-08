@@ -12,6 +12,13 @@ profiles:
     host: https://xyz.com/
     token: $ENV_VAR
     data_source_id: demo_ds
+  certificate:
+    host: http://abc:3000
+    token: $OK_TOKEN
+    custom_headers:
+      Host: localhost123
+    extra_user_agent: abc
+    ssl_ca_cert: /path/to/cert.pem
 source_dir: analytics
 default_profile: abc
 

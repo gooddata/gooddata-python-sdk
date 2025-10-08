@@ -32,3 +32,10 @@ wrong:
   custom_headers:
     Host: localhost123
   extra_user_agent: abc
+certificate:
+  host: http://abc:3000
+  token: "123"
+  custom_headers:
+    Host: localhost123
+  extra_user_agent: abc
+  ssl_ca_cert: /path/to/cert.pem
