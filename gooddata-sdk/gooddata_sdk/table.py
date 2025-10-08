@@ -240,7 +240,11 @@ def _prepare_tabular_definition(
     return ExecutionDefinition(attributes=attributes, metrics=metrics, filters=filters, dimensions=dims)
 
 
-def _as_table(response: ExecutionResponse, always_two_dimensional: bool = False) -> ExecutionTable:
+def _as_table(
+    response: ExecutionResponse,
+    always_two_dimensional: bool = False,
+    timeout: Optional[Union[int, float, tuple]] = None,
+) -> ExecutionTable:
     first_page_offset = [0, 0]
     first_page_limit = [_TABLE_ROW_BATCH_SIZE, _MAX_METRICS]
 
@@ -256,7 +260,7 @@ def _as_table(response: ExecutionResponse, always_two_dimensional: bool = False)
             first_page_limit = [first_page_limit[0]]
             first_page_offset = [0]
 
-    first_page = response.read_result(offset=first_page_offset, limit=first_page_limit)
+    first_page = response.read_result(offset=first_page_offset, limit=first_page_limit, timeout=timeout)
 
     return ExecutionTable(response=response, first_page=first_page)
 
@@ -793,7 +797,11 @@ class TableService:
         return _as_table(response, always_two_dimensional)
 
     def for_items(
-        self, workspace_id: str, items: list[Union[Attribute, Metric]], filters: Optional[list[Filter]] = None
+        self,
+        workspace_id: str,
+        items: list[Union[Attribute, Metric]],
+        filters: Optional[list[Filter]] = None,
+        timeout: Optional[Union[int, float, tuple]] = None,
     ) -> ExecutionTable:
         if filters is None:
             filters = []
@@ -810,6 +818,6 @@ class TableService:
                 raise ValueError(f"Invalid input item: {item}. Expecting instance of Attribute or Metric")
 
         exec_def = _prepare_tabular_definition(attributes=attributes, metrics=metrics, filters=filters)
-        response = self._compute.for_exec_def(workspace_id=workspace_id, exec_def=exec_def)
+        response = self._compute.for_exec_def(workspace_id=workspace_id, exec_def=exec_def, timeout=timeout)
 
-        return _as_table(response)
+        return _as_table(response, timeout=timeout)
