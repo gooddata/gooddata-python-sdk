@@ -35,6 +35,7 @@ class Profile(ConfigBase):
     token: str
     custom_headers: Optional[dict[str, str]] = None
     extra_user_agent: Optional[str] = None
+    ssl_ca_cert: Optional[str] = None
 
     def to_dict(self, use_env: bool = False) -> dict[str, str]:
         load_dotenv()
