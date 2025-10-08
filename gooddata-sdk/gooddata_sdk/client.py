@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Optional
 
 import gooddata_api_client as api_client
@@ -25,6 +26,7 @@ class GoodDataApiClient:
         custom_headers: Optional[dict[str, str]] = None,
         extra_user_agent: Optional[str] = None,
         executions_cancellable: bool = False,
+        ssl_ca_cert: Optional[str] = None,
     ) -> None:
         """Take url, token for connecting to GoodData.CN.
 
@@ -45,7 +47,14 @@ class GoodDataApiClient:
 
         user_agent = f"{USER_AGENT} {extra_user_agent}" if extra_user_agent is not None else USER_AGENT
 
-        self._api_config = api_client.Configuration(host=host)
+        if ssl_ca_cert is not None:
+            ssl_ca_cert_path = Path(ssl_ca_cert)
+            if not ssl_ca_cert_path.exists():
+                raise ValueError(
+                    f"ssl_ca_cert file path specified but the file does not exist. Path: {ssl_ca_cert_path}."
+                )
+
+        self._api_config = api_client.Configuration(host=host, ssl_ca_cert=ssl_ca_cert)
         self._api_client = api_client.ApiClient(
             configuration=self._api_config,
             header_name="Authorization",
