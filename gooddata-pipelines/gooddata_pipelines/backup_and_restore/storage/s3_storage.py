@@ -25,8 +25,6 @@ class S3Storage(BackupStorage):
         self._client = self._session.client("s3")
         self._resource = self._session.resource("s3")
         self._bucket = self._resource.Bucket(self._config.bucket)  # type: ignore [missing library stubs]
-        suffix = "/" if not self._config.backup_path.endswith("/") else ""
-        self._backup_path = self._config.backup_path + suffix
 
         self._verify_connection()
 
@@ -95,3 +93,28 @@ class S3Storage(BackupStorage):
                     self._client.put_object(
                         Bucket=self._config.bucket, Key=export_path, Body=data
                     )
+
+    def get_ws_declaration(
+        self, target_path: str, local_target_path: str
+    ) -> None:
+        """Retrieves workspace declaration from S3 bucket."""
+        target_s3_prefix = f"{self._backup_path}{target_path}"
+
+        objs_found = list(self._bucket.objects.filter(Prefix=target_s3_prefix))
+
+        # Remove the included directory (which equals prefix) on hit
+        objs_found = objs_found[1:] if len(objs_found) > 0 else objs_found
+
+        if not objs_found:
+            message = f"No target backup found for {target_s3_prefix}."
+            self.logger.error(message)
+            raise Exception(message)
+
+        if len(objs_found) > 1:
+            self.logger.warning(
+                f"Multiple backups found at {target_s3_prefix}."
+                " Continuing with the first one, ignoring the rest..."
+            )
+
+        s3_obj = objs_found[0]
+        self._bucket.download_file(s3_obj.key, local_target_path)

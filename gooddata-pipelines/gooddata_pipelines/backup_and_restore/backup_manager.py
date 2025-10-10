@@ -1,23 +1,20 @@
 # (C) 2025 GoodData Corporation
 
-import json
 import os
 import shutil
 import tempfile
 import time
 import traceback
 from pathlib import Path
-from typing import Any, Type
+from typing import Any
 
 import attrs
 import requests
-import yaml
-from gooddata_sdk.utils import PROFILES_FILE_PATH, profile_content
 
-from gooddata_pipelines.api.gooddata_api_wrapper import GoodDataApi
 from gooddata_pipelines.backup_and_restore.backup_input_processor import (
     BackupInputProcessor,
 )
+from gooddata_pipelines.backup_and_restore.base_manager import BaseManager
 from gooddata_pipelines.backup_and_restore.constants import (
     BackupSettings,
     DirNames,
@@ -25,18 +22,10 @@ from gooddata_pipelines.backup_and_restore.constants import (
 from gooddata_pipelines.backup_and_restore.models.input_type import InputType
 from gooddata_pipelines.backup_and_restore.models.storage import (
     BackupRestoreConfig,
-    StorageType,
 )
 from gooddata_pipelines.backup_and_restore.storage.base_storage import (
     BackupStorage,
 )
-from gooddata_pipelines.backup_and_restore.storage.local_storage import (
-    LocalStorage,
-)
-from gooddata_pipelines.backup_and_restore.storage.s3_storage import (
-    S3Storage,
-)
-from gooddata_pipelines.logger import LogObserver
 from gooddata_pipelines.utils.rate_limiter import RateLimiter
 
 
@@ -45,16 +34,12 @@ class BackupBatch:
     list_of_ids: list[str]
 
 
-class BackupManager:
+class BackupManager(BaseManager):
     storage: BackupStorage
 
     def __init__(self, host: str, token: str, config: BackupRestoreConfig):
-        self._api = GoodDataApi(host, token)
-        self.logger = LogObserver()
+        super().__init__(host, token, config)
 
-        self.config = config
-
-        self.storage = self._get_storage(self.config)
         self.org_id = self._api.get_organization_id()
 
         self.loader = BackupInputProcessor(self._api, self.config.api_page_size)
@@ -62,39 +47,6 @@ class BackupManager:
         self._api_rate_limiter = RateLimiter(
             calls_per_second=self.config.api_calls_per_second,
         )
-
-    @classmethod
-    def create(
-        cls: Type["BackupManager"],
-        config: BackupRestoreConfig,
-        host: str,
-        token: str,
-    ) -> "BackupManager":
-        """Creates a backup worker instance using the provided host and token."""
-        return cls(host=host, token=token, config=config)
-
-    @classmethod
-    def create_from_profile(
-        cls: Type["BackupManager"],
-        config: BackupRestoreConfig,
-        profile: str = "default",
-        profiles_path: Path = PROFILES_FILE_PATH,
-    ) -> "BackupManager":
-        """Creates a backup worker instance using a GoodData profile file."""
-        content = profile_content(profile, profiles_path)
-        return cls(**content, config=config)
-
-    @staticmethod
-    def _get_storage(conf: BackupRestoreConfig) -> BackupStorage:
-        """Returns the storage class based on the storage type."""
-        if conf.storage_type == StorageType.S3:
-            return S3Storage(conf)
-        elif conf.storage_type == StorageType.LOCAL:
-            return LocalStorage(conf)
-        else:
-            raise RuntimeError(
-                f'Unsupported storage type "{conf.storage_type.value}".'
-            )
 
     def get_user_data_filters(self, ws_id: str) -> dict:
         """Returns the user data filters for the specified workspace."""
@@ -133,18 +85,12 @@ class BackupManager:
                 "user_data_filters",
                 filter["id"] + ".yaml",
             )
-            self._write_to_yaml(udf_file_path, filter)
+            self.yaml_utils.dump(udf_file_path, filter)
 
     @staticmethod
     def _move_folder(source: Path, destination: Path) -> None:
         """Moves the source folder to the destination."""
         shutil.move(source, destination)
-
-    @staticmethod
-    def _write_to_yaml(path: str, source: Any) -> None:
-        """Writes the source to a YAML file."""
-        with open(path, "w") as outfile:
-            yaml.dump(source, outfile)
 
     def _get_automations_from_api(self, workspace_id: str) -> Any:
         """Returns automations for the workspace as JSON."""
@@ -182,8 +128,7 @@ class BackupManager:
 
         # Store the automations in a JSON file
         if len(automations["data"]) > 0:
-            with open(automations_file_path, "w") as f:
-                json.dump(automations, f)
+            self.json_utils.dump(automations_file_path, automations)
 
     def store_declarative_filter_views(
         self, export_path: Path, workspace_id: str

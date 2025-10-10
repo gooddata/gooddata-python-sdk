@@ -17,6 +17,7 @@ from gooddata_pipelines.backup_and_restore.backup_manager import (
 from gooddata_pipelines.backup_and_restore.constants import BackupSettings
 from gooddata_pipelines.backup_and_restore.models.storage import (
     BackupRestoreConfig,
+    LocalStorageConfig,
     S3StorageConfig,
     StorageType,
 )
@@ -31,7 +32,10 @@ TEST_DATA_SUBDIR = f"{TEST_DATA_DIR}/backup"
 S3_BACKUP_PATH = "some/s3/backup/path/org_id/"
 S3_BUCKET = "some-s3-bucket"
 
-LOCAL_CONFIG = BackupRestoreConfig(storage_type=StorageType.LOCAL)
+LOCAL_CONFIG = BackupRestoreConfig(
+    storage_type=StorageType.LOCAL,
+    storage=LocalStorageConfig(backup_path=f"{TEST_DATA_DIR}/local_export"),
+)
 
 S3_CONFIG = BackupRestoreConfig(
     storage_type=StorageType.S3,
@@ -249,7 +253,6 @@ def test_local_storage_export(backup_manager):
         local_storage.export(
             folder=tmpdir,
             org_id="services",
-            export_folder=f"{TEST_DATA_DIR}/local_export",
         )
 
         local_export_folder_exist = os.path.isdir(

@@ -23,13 +23,14 @@ class DirNames:
 
 @attrs.frozen
 class ApiDefaults:
-    DEFAULT_PAGE_SIZE = 100
-    DEFAULT_BATCH_SIZE = 100
-    DEFAULT_API_CALLS_PER_SECOND = 1.0
+    PAGE_SIZE = 100
+    BATCH_SIZE = 100
+    CALLS_PER_SECOND = 1.0
 
 
 @attrs.frozen
-class BackupSettings(ApiDefaults):
+class BackupSettings:
+    API = ApiDefaults()
     MAX_RETRIES = 3
     RETRY_DELAY = 5  # seconds
     TIMESTAMP_SDK_FOLDER = (

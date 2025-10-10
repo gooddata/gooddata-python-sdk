@@ -26,10 +26,11 @@ class AttributesMixin:
         Returns:
             dict: Returns a dictionary of the objects' attributes.
         """
-        # TODO: This might not work great with nested objects, values  which are lists of objects etc.
-        # If we care about parsing the logs back from the string, we should consider some other approach
         attributes: dict[str, str] = {}
-        for context_object in objects:
+        for index, context_object in enumerate(objects):
+            if isinstance(context_object, str):
+                attributes[f"string_context_{index}"] = context_object
+
             if isinstance(context_object, Response):
                 # for request.Response objects, keys need to be renamed to match the log schema
                 attributes.update(
@@ -48,10 +49,12 @@ class AttributesMixin:
                     cast(attrs.AttrsInstance, context_object)
                 ).items():
                     self._add_to_dict(attributes, key, value)
-            else:
+            elif hasattr(context_object, "__dict__"):
                 # Generic handling for other objects
                 for key, value in context_object.__dict__.items():
                     self._add_to_dict(attributes, key, value)
+            else:
+                attributes[f"object_{index}"] = str(context_object)
 
         if overrides:
             attributes.update(overrides)
