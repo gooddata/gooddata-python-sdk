@@ -41,11 +41,12 @@ body {
         margin-top: 2em;
         margin-bottom: 1em;
 
-        &[id]:before {
-            @include mq(large) {
-                height: 179px;
-                margin-top: -179px;
-            }
+        &[id] {
+            scroll-margin-top: 179px;
+        }
+
+        &[id]::before {
+            display: none;
         }
 
         a {
