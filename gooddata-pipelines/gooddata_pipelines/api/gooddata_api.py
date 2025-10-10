@@ -167,12 +167,39 @@ class ApiMethods:
         endpoint = f"/layout/workspaces/{workspace_id}/userDataFilters"
         return self._get(endpoint)
 
+    def put_user_data_filters(
+        self, workspace_id: str, user_data_filters: dict[str, Any]
+    ) -> requests.Response:
+        """Puts the user data filters into GoodData workspace."""
+        headers = {**self.headers, "Content-Type": "application/json"}
+        return self._put(
+            f"/layout/workspaces/{workspace_id}/userDataFilters",
+            user_data_filters,
+            headers,
+        )
+
     def get_automations(self, workspace_id: str) -> requests.Response:
         """Gets the automations for a given workspace."""
         endpoint = (
             f"/entities/workspaces/{workspace_id}/automations?include=ALL"
         )
         return self._get(endpoint)
+
+    def post_automation(
+        self, workspace_id: str, automation: dict[str, Any]
+    ) -> requests.Response:
+        """Posts an automation for a given workspace."""
+        endpoint = f"/entities/workspaces/{workspace_id}/automations"
+        return self._post(endpoint, automation)
+
+    def delete_automation(
+        self, workspace_id: str, automation_id: str
+    ) -> requests.Response:
+        """Deletes an automation for a given workspace."""
+        endpoint = (
+            f"/entities/workspaces/{workspace_id}/automations/{automation_id}"
+        )
+        return self._delete(endpoint)
 
     def get_all_metrics(self, workspace_id: str) -> requests.Response:
         """Get all metrics from the specified workspace.
