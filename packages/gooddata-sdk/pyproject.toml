@@ -55,7 +55,7 @@ Documentation = "https://www.gooddata.com/docs/python-sdk/1.53.0"
 Source = "https://github.com/gooddata/gooddata-python-sdk"
 
 [project.scripts]
-gdc = "gooddata_sdk.cli.main:main"
+gdc = "gooddata_sdk.cli.gdc_core:main"
 
 [dependency-groups]
 test = [
@@ -80,7 +80,7 @@ type = [
 [tool.hatch.build.targets.wheel]
 packages = ["src/gooddata_sdk"]
 include = [
-    "gooddata_sdk/cli/package.json",
+    "src/gooddata_sdk/cli/package.json",
 ]
 
 [build-system]

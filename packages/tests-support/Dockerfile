@@ -12,14 +12,14 @@ RUN set -x \
 
 USER ${USER_NAME}
 WORKDIR /app
-COPY ./tests-support/requirements.txt /app/requirements.txt
-COPY ./tests-support/fixtures /app/fixtures
+COPY ./packages/tests-support/requirements.txt /app/requirements.txt
+COPY ./packages/tests-support/fixtures /app/fixtures
 
 RUN set -x \
   && pip3 install --no-cache-dir --user -r requirements.txt \
   && true
 
-COPY ./tests-support/*.py /app
+COPY ./packages/tests-support/*.py /app
 
 LABEL image_name="GoodData Python SDK python test support image"
 # LABEL maintainer="TigerTeam <tiger@gooddata.com>"

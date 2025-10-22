@@ -127,68 +127,73 @@ message_template = "Bump to {new_version}"
 tag_template = "v{new_version}"
 
 [[tool.tbump.file]]
+# root workspace pyproject.toml
+src = "pyproject.toml"
+search = 'version = "{current_version}"'
+
+[[tool.tbump.file]]
 # clients setup.py
 src = "gooddata-*-client/setup.py"
 search = "VERSION = \"{current_version}\""
 
 [[tool.tbump.file]]
-# fdw setup.py
-src = "gooddata-fdw/setup.py"
-search = "version=\"{current_version}\""
+# fdw pyproject.toml
+src = "packages/gooddata-fdw/pyproject.toml"
+search = "version = \"{current_version}\""
 
 [[tool.tbump.file]]
-# fdw setup.py dependency
-src = "gooddata-fdw/setup.py"
+# fdw pyproject.toml dependency
+src = "packages/gooddata-fdw/pyproject.toml"
 search = "gooddata-sdk~={current_version}"
 
 [[tool.tbump.file]]
-# pandas setup.py
-src = "gooddata-pandas/setup.py"
-search = "version=\"{current_version}\""
+# pandas pyproject.toml
+src = "packages/gooddata-pandas/pyproject.toml"
+search = "version = \"{current_version}\""
 
 [[tool.tbump.file]]
-# pandas setup.py dependency
-src = "gooddata-pandas/setup.py"
+# pandas pyproject.toml dependency
+src = "packages/gooddata-pandas/pyproject.toml"
 search = "gooddata-sdk~={current_version}"
 
 [[tool.tbump.file]]
-# sdk setup.py
-src = "gooddata-sdk/setup.py"
-search = "version=\"{current_version}\""
+# sdk pyproject.toml
+src = "packages/gooddata-sdk/pyproject.toml"
+search = "version = \"{current_version}\""
 
 [[tool.tbump.file]]
-# sdk setup.py dependency
-src = "gooddata-sdk/setup.py"
+# sdk pyproject.toml dependency
+src = "packages/gooddata-sdk/pyproject.toml"
 search = "gooddata-.*-client~={current_version}"
 
 [[tool.tbump.file]]
-# sdk setup.py
-src = "gooddata-dbt/setup.py"
-search = "version=\"{current_version}\""
+# dbt pyproject.toml
+src = "packages/gooddata-dbt/pyproject.toml"
+search = "version = \"{current_version}\""
 
 [[tool.tbump.file]]
-# sdk setup.py dependency
-src = "gooddata-dbt/setup.py"
+# dbt pyproject.toml dependency
+src = "packages/gooddata-dbt/pyproject.toml"
 search = "gooddata-sdk~={current_version}"
 
 [[tool.tbump.file]]
-# gooddata-flight-server setup.py
-src = "gooddata-flight-server/setup.py"
-search = "version=\"{current_version}\""
+# gooddata-flight-server pyproject.toml
+src = "packages/gooddata-flight-server/pyproject.toml"
+search = "version = \"{current_version}\""
 
 [[tool.tbump.file]]
-# gooddata-flexconnect setup.py
-src = "gooddata-flexconnect/setup.py"
-search = "version=\"{current_version}\""
+# gooddata-flexconnect pyproject.toml
+src = "packages/gooddata-flexconnect/pyproject.toml"
+search = "version = \"{current_version}\""
 
 [[tool.tbump.file]]
-# gooddata-flexconnect setup.py dependency
-src = "gooddata-flexconnect/setup.py"
+# gooddata-flexconnect pyproject.toml dependency
+src = "packages/gooddata-flexconnect/pyproject.toml"
 search = "gooddata-sdk~={current_version}"
 
 [[tool.tbump.file]]
-# gooddata-flexconnect setup.py dependency
-src = "gooddata-flexconnect/setup.py"
+# gooddata-flexconnect pyproject.toml dependency
+src = "packages/gooddata-flexconnect/pyproject.toml"
 search = "gooddata-flight-server~={current_version}"
 
 [[tool.tbump.file]]
@@ -212,37 +217,37 @@ src = "gooddata-*-client/gooddata_*_client/__init__.py"
 src = ".openapi-generator/configs/gooddata-*-client.yaml"
 
 [[tool.tbump.file]]
-src = "gooddata-sdk/setup.py"
-search = '"Documentation": "https://www.gooddata.com/docs/python-sdk/{current_version}"'
+src = "packages/gooddata-sdk/pyproject.toml"
+search = 'Documentation = "https://www.gooddata.com/docs/python-sdk/{current_version}"'
 
 [[tool.tbump.file]]
-src = "gooddata-sdk/README.md"
+src = "packages/gooddata-sdk/README.md"
 search = "https://www.gooddata.com/docs/python-sdk/{current_version}"
 
 [[tool.tbump.file]]
-src = "gooddata-pandas/setup.py"
-search = '"Documentation": "https://gooddata-pandas.readthedocs.io/en/v{current_version}"'
+src = "packages/gooddata-pandas/pyproject.toml"
+search = 'Documentation = "https://gooddata-pandas.readthedocs.io/en/v{current_version}"'
 
 [[tool.tbump.file]]
-src = "gooddata-fdw/setup.py"
-search = '"Documentation": "https://gooddata-fdw.readthedocs.io/en/v{current_version}"'
+src = "packages/gooddata-fdw/pyproject.toml"
+search = 'Documentation = "https://gooddata-fdw.readthedocs.io/en/v{current_version}"'
 
 [[tool.tbump.file]]
-src = "gooddata-flight-server/setup.py"
-search = '"Documentation": "https://gooddata-flight-server.readthedocs.io/en/v{current_version}"'
+src = "packages/gooddata-flight-server/pyproject.toml"
+search = 'Documentation = "https://gooddata-flight-server.readthedocs.io/en/v{current_version}"'
 
 [[tool.tbump.file]]
-src = "gooddata-flexconnect/setup.py"
-search = '"Documentation": "https://gooddata-flexconnect.readthedocs.io/en/v{current_version}"'
+src = "packages/gooddata-flexconnect/pyproject.toml"
+search = 'Documentation = "https://gooddata-flexconnect.readthedocs.io/en/v{current_version}"'
 
 [[tool.tbump.file]]
 # gooddata-pipelines version
-src = "gooddata-pipelines/pyproject.toml"
+src = "packages/gooddata-pipelines/pyproject.toml"
 search = 'version = "{current_version}"'
 
 [[tool.tbump.file]]
 # gooddata-sdk version in gooddata-pipelines dependencies
-src = "gooddata-pipelines/pyproject.toml"
+src = "packages/gooddata-pipelines/pyproject.toml"
 search = "gooddata-sdk~={current_version}"
 
 # You can specify a list of commands to

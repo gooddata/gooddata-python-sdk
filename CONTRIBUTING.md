@@ -143,12 +143,12 @@ Here are the options how to run the tests:
 - run tests for one sub-project - drill down to sub-project's directory
     - use `make test` to trigger tests
   ```bash
-  cd gooddata-sdk
+  cd packages/gooddata-sdk
   make test
   ```
     - or execute `tox` command with arguments of your choice
   ```bash
-  cd gooddata-sdk
+  cd packages/gooddata-sdk
   tox -e py39
   ```
 - run tests for all non-client projects using `make test` in project root directory
@@ -210,7 +210,7 @@ venv automatically. So when docker tox tests are executed after localhost tests 
   ```
 - run all tests for all supported python environments and for one project
   ```bash
-  cd gooddata-sdk
+  cd packages/gooddata-sdk
   make test-ci
   ```
 - run all tests containing `http_headers` in name for py310 and py39 for all projects

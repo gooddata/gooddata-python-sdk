@@ -1,6 +1,6 @@
 # (C) 2021 GoodData Corporation
 # list all full paths to files and directories in CWD containing "gooddata", filter out ones ending by "client"
-NO_CLIENT_GD_PROJECTS_ABS = $(filter-out %client, $(wildcard $(CURDIR)/*gooddata*))
+NO_CLIENT_GD_PROJECTS_ABS = $(filter-out %client, $(wildcard $(CURDIR)/packages/*gooddata*))
 # for each path, take only the base name of the path
 NO_CLIENT_GD_PROJECTS_DIRS = $(foreach dir, $(NO_CLIENT_GD_PROJECTS_ABS), $(notdir $(dir)))
 # TODO: replace API_VERSION in the future by call to API
@@ -18,9 +18,7 @@ all:
 
 .PHONY: dev
 dev:
-	rm -rf .venv
-	python3.13 -m venv .venv --upgrade-deps
-	.venv/bin/pip3 install -r dev-requirements.txt
+	uv sync --all-groups
 	.venv/bin/pre-commit install
 
 .PHONY: lint
@@ -72,13 +70,13 @@ download:
 .PHONY: mypy
 mypy:
 	RESULT=0; \
-	for project in $(NO_CLIENT_GD_PROJECTS_DIRS); do $(MAKE) -C $${project} $@ || RESULT=$$?; done; \
+	for project in $(NO_CLIENT_GD_PROJECTS_DIRS); do $(MAKE) -C packages/$${project} $@ || RESULT=$$?; done; \
 	exit $$RESULT
 
 .PHONY: test
 test:
 	RESULT=0; \
-	for project in $(NO_CLIENT_GD_PROJECTS_DIRS); do $(MAKE) -C $${project} test || RESULT=$$?; done; \
+	for project in $(NO_CLIENT_GD_PROJECTS_DIRS); do $(MAKE) -C packages/$${project} test || RESULT=$$?; done; \
 	exit $$RESULT
 
 .PHONY: release
@@ -98,13 +96,13 @@ check-copyright:
 .PHONY: docs
 docs:
 	RESULT=0; \
-	for project in gooddata-fdw gooddata-pandas; do $(MAKE) -C $${project} $@ || RESULT=$$?; done; \
+	for project in gooddata-fdw gooddata-pandas; do $(MAKE) -C packages/$${project} $@ || RESULT=$$?; done; \
 	exit $$RESULT
 
 .PHONY: remove-cassettes
 remove-cassettes:
 	RESULT=0; \
-	for project in $(NO_CLIENT_GD_PROJECTS_DIRS); do $(MAKE) -C $${project} $@ || RESULT=$$?; done; \
+	for project in $(NO_CLIENT_GD_PROJECTS_DIRS); do $(MAKE) -C packages/$${project} $@ || RESULT=$$?; done; \
 	exit $$RESULT
 
 .PHONY: new-docs

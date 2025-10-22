@@ -28,8 +28,8 @@ RUN apk add --no-cache --update wget make musl-dev llvm llvm-dev gcc clang pytho
 # Add all required gooddata-python packages into the image
 #
 ADD gooddata-api-client /gd/gooddata-api-client
-ADD gooddata-sdk /gd/gooddata-sdk
-ADD gooddata-fdw /gd/gooddata-fdw
+ADD packages/gooddata-sdk /gd/gooddata-sdk
+ADD packages/gooddata-fdw /gd/gooddata-fdw
 
 RUN cd /gd/gooddata-api-client  && pip install . \
      && cd /gd/gooddata-sdk && pip install . \
@@ -37,5 +37,5 @@ RUN cd /gd/gooddata-api-client  && pip install . \
 
 # Add sql files to be executed during start of container
 # They register extensions and install helping sql procedures
-ADD gooddata-fdw/sql/create_extensions.sql /docker-entrypoint-initdb.d/create_extensions.sql
-ADD gooddata-fdw/sql/import_gooddata.sql /docker-entrypoint-initdb.d/import_gooddata.sql
+ADD packages/gooddata-fdw/sql/create_extensions.sql /docker-entrypoint-initdb.d/create_extensions.sql
+ADD packages/gooddata-fdw/sql/import_gooddata.sql /docker-entrypoint-initdb.d/import_gooddata.sql
