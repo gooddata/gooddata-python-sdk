@@ -1,4 +1,54 @@
 # (C) 2021 GoodData Corporation
+[project]
+name = "gooddata-python-sdk-workspace"
+version = "1.53.0"
+description = "GoodData Python SDK Workspace"
+requires-python = ">=3.9"
+dependencies = [
+    "gooddata-sdk",
+    "gooddata-pandas",
+    "gooddata-dbt",
+    "gooddata-fdw",
+    "gooddata-flight-server",
+    "gooddata-flexconnect",
+    "gooddata-api-client",
+    "tests-support",
+]
+
+[tool.uv.sources]
+gooddata-sdk = { workspace = true }
+gooddata-pandas = { workspace = true }
+gooddata-dbt = { workspace = true }
+gooddata-fdw = { workspace = true }
+gooddata-flight-server = { workspace = true }
+gooddata-flexconnect = { workspace = true }
+tests-support = { workspace = true }
+gooddata-api-client = { path = "gooddata-api-client", editable = true }
+
+[tool.uv.workspace]
+# note gooddata-api-client is not a workspace package, it is a dependency of other packages
+members = ["packages/*"]
+
+[dependency-groups]
+dev = [
+    "pre-commit~=4.0.1",
+    "gitlint~=0.19.1",
+]
+lint = [
+    "ruff==0.9.5",
+]
+type = [
+    "mypy~=1.11.2"
+]
+release = [
+    "tbump~=6.11.0",
+    "tomlkit>=0.11"
+]
+tox = [
+    "tox~=4.26.0",
+    "tox-uv~=1.26.1"
+]
+
 [tool.ruff]
 exclude = [
     ".git",
@@ -35,13 +85,13 @@ lint.ignore = [
 target-version = "py39"
 
 [tool.ruff.lint.per-file-ignores]
-"gooddata-pandas/gooddata_pandas/__init__.py" = ["F401"]
-"gooddata-sdk/gooddata_sdk/*/__init__.py" = ["F401"]
-"gooddata-sdk/gooddata_sdk/__init__.py" = ["F401"]
-"gooddata-dbt/gooddata_dbt/__init__.py" = ["F401"]
-"gooddata-fdw/gooddata_fdw/__init__.py" = ["F401"]
-"gooddata-flight-server/gooddata_flight_server/__init__.py" = ["F401"]
-"gooddata-flexconnect/gooddata_flexconnect/__init__.py" = ["F401"]
+"packages/gooddata-pandas/src/gooddata_pandas/__init__.py" = ["F401"]
+"packages/gooddata-sdk/src/gooddata_sdk/*/__init__.py" = ["F401"]
+"packages/gooddata-sdk/src/gooddata_sdk/__init__.py" = ["F401"]
+"packages/gooddata-dbt/src/gooddata_dbt/__init__.py" = ["F401"]
+"packages/gooddata-fdw/src/gooddata_fdw/__init__.py" = ["F401"]
+"packages/gooddata-flight-server/src/gooddata_flight_server/__init__.py" = ["F401"]
+"packages/gooddata-flexconnect/src/gooddata_flexconnect/__init__.py" = ["F401"]
 
 [tool.ruff.format]
 exclude = ['(gooddata-api-client|.*\.snapshot\..*)']

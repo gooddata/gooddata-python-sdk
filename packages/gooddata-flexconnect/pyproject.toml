@@ -1,0 +1,73 @@
+# (C) 2025 GoodData Corporation
+[project]
+name = "gooddata-flexconnect"
+version = "1.53.0"
+description = "Build your own data source for GoodData Cloud and GoodData Cloud Native."
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "GoodData", email = "support@gooddata.com"}
+]
+keywords = [
+    "gooddata",
+    "flight",
+    "rpc",
+    "flight rpc",
+    "custom functions",
+    "analytics",
+    "headless",
+    "business",
+    "intelligence",
+    "headless-bi",
+    "cloud",
+    "native",
+    "semantic",
+    "layer",
+    "sql",
+    "metrics",
+]
+requires-python = ">=3.9.0"
+dependencies = [
+    "dynaconf>=3.1.11,<4.0.0",
+    "gooddata-flight-server~=1.53.0",
+    "gooddata-sdk~=1.53.0",
+    "orjson>=3.9.15,<4.0.0",
+    "pyarrow>=16.1.0",
+    "structlog>=24.0.0,<25.0.0",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Database",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Software Development",
+    "Typing :: Typed",
+]
+
+[project.urls]
+Documentation = "https://gooddata-flexconnect.readthedocs.io/en/v1.53.0"
+Source = "https://github.com/gooddata/gooddata-python-sdk"
+
+[dependency-groups]
+test = [
+    "jsonschema~=4.23.0",
+    "pytest~=8.3.4",
+    "pytest-cov~=6.0.0",
+]
+type = [
+    "mypy~=1.11.2",
+    "pydantic~=2.9.2"
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/gooddata_flexconnect"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

@@ -1,5 +1,5 @@
 docstring_parser~=0.15
 toml~=0.10.2
--e./gooddata-api-client
--e./gooddata-sdk
--e./gooddata-pandas
+-e./packages/gooddata-api-client
+-e./packages/gooddata-sdk
+-e./packages/gooddata-pandas
