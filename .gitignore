@@ -1,6 +1,5 @@
 .idea
 .vscode
-.cursor
 *.iml
 .env
 .env.test

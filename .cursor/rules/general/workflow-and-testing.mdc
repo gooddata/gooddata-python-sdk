@@ -1,0 +1,139 @@
+---
+description: Essential development workflow and testing commands for GoodData Python SDK - formatting, linting, testing, and validation procedures
+alwaysApply: true
+---
+
+# Development Workflow & Testing
+
+## After ANY Code Change - Run This
+
+```bash
+# From repository root:
+make format-fix    # Auto-format code
+make lint          # Check for issues
+
+# From package directory (e.g., cd gooddata-sdk):
+TEST_ENVS=py313 ADD_ARGS="-k relevant_test" make test
+```
+
+## Virtual Environment
+
+- **Location**: `.venv/` at repository root
+- **NEVER** use system `python` or `pip` directly
+- **ALWAYS** use `.venv/bin/tox`, `.venv/bin/ruff`, etc.
+
+## Monorepo Structure
+
+```
+gooddata-api-client/    # Generated from OpenAPI (DO NOT EDIT)
+gooddata-sdk/           # Core SDK (depends on api-client)
+gooddata-pandas/        # Pandas integration (depends on sdk)
+gooddata-pipelines/     # Pipelines (depends on sdk)
+```
+
+**Dependency chain**: api-client → sdk → pandas, pipelines, etc.
+
+## Testing Commands
+
+### Quick Reference
+
+| Command | Use When |
+|---------|----------|
+| `TEST_ENVS=py313 make test` | Quick test, one Python version |
+| `TEST_ENVS=py313 ADD_ARGS="-k test_name" make test` | Test specific functionality |
+| `../.venv/bin/tox -e py313 -- -k test_name` | Rapid iteration (from package dir) |
+| `make test` | Full test suite, all Python versions |
+
+### Environment Variables
+
+- `TEST_ENVS=py313` - Test with Python 3.13 only (faster)
+- `ADD_ARGS="-k scan"` - Run tests matching keyword
+- `RECREATE_ENVS=1` - Force recreate tox environments
+
+## Standard Workflow Example
+
+```bash
+# 1. Make code changes
+vim gooddata-sdk/gooddata_sdk/some_file.py
+
+# 2. Format and lint
+make format-fix && make lint
+
+# 3. Run relevant tests
+cd gooddata-sdk
+TEST_ENVS=py313 ADD_ARGS="-k relevant" make test
+
+# 4. Review and commit
+cd ..
+git diff
+git add gooddata-sdk/
+git commit -m "feat: add new feature"
+```
+
+## API Client Change Workflow
+
+```bash
+# 1. Regenerate API client
+make api-client
+
+# 2. Update SDK wrapper classes
+vim gooddata-sdk/gooddata_sdk/catalog/.../column.py
+# Add new field: description: Optional[str] = None
+
+# 3. Format, lint, test
+make format-fix && make lint
+cd gooddata-sdk
+TEST_ENVS=py313 ADD_ARGS="-k scan" make test
+
+# 4. Commit all changes
+cd ..
+git add gooddata-api-client/ gooddata-sdk/ schemas/
+git commit -m "feat: adopt column description from scan API"
+```
+
+## Common Commands
+
+| Task | Command |
+|------|---------|
+| Setup dev environment | `make dev` |
+| Format code | `make format-fix` |
+| Check linting | `make lint` |
+| Run tests (all versions) | `make test` |
+| Regenerate API client | `make api-client` |
+| Type checking | `make mypy` |
+
+## Pre-commit Hooks
+
+Pre-commit hooks run automatically when committing. If they fail:
+- Auto-corrections aren't staged
+- Review the changes: `git diff`
+- Re-stage and commit again
+
+## Git Commit Format
+
+Use Conventional Commits:
+- `feat:` - New feature
+- `fix:` - Bug fix
+- `docs:` - Documentation
+- `test:` - Tests
+- `refactor:` - Code refactoring
+
+## Critical Rules
+
+❌ **DON'T**:
+- Edit files in `gooddata-api-client/` manually
+- Use system Python directly
+- Skip `make format-fix` before committing
+- Commit without running tests
+
+✅ **DO**:
+- Use `.venv/bin/` tools
+- Run `make format-fix && make lint` always
+- Test in relevant package: `cd <package> && TEST_ENVS=py313 make test`
+- Export new public classes in `__init__.py`
+
+## Need More Details?
+
+- API client regeneration → See `libraries/gooddata-api-client.mdc`
+- Pre-commit config → See `.pre-commit-config.yaml`
+- Full guide → See `CONTRIBUTING.md`

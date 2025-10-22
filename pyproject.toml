@@ -8,6 +8,7 @@ exclude = [
     "build",
     "dist",
     "gooddata-api-client",
+    ".cursor",
 ]
 line-length = 120
 lint.select = [
