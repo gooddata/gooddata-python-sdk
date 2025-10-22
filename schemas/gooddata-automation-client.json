@@ -803,6 +803,7 @@
         "type": "object"
       },
       "AutomationMetadata": {
+        "additionalProperties": true,
         "description": "Additional information for the automation.",
         "maxLength": 250000,
         "nullable": true,

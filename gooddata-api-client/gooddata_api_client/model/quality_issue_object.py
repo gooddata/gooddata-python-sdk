@@ -84,6 +84,7 @@ class QualityIssueObject(ModelNormal):
         return {
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
+            'workspace_id': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -94,6 +95,7 @@ class QualityIssueObject(ModelNormal):
     attribute_map = {
         'id': 'id',  # noqa: E501
         'type': 'type',  # noqa: E501
+        'workspace_id': 'workspaceId',  # noqa: E501
     }
 
     read_only_vars = {
@@ -103,12 +105,13 @@ class QualityIssueObject(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, id, type, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, id, type, workspace_id, *args, **kwargs):  # noqa: E501
         """QualityIssueObject - a model defined in OpenAPI
 
         Args:
-            id (str):
-            type (str):
+            id (str): Object ID
+            type (str): Object type
+            workspace_id (str): Workspace ID where the object belongs
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -174,6 +177,7 @@ class QualityIssueObject(ModelNormal):
 
         self.id = id
         self.type = type
+        self.workspace_id = workspace_id
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -194,12 +198,13 @@ class QualityIssueObject(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, id, type, *args, **kwargs):  # noqa: E501
+    def __init__(self, id, type, workspace_id, *args, **kwargs):  # noqa: E501
         """QualityIssueObject - a model defined in OpenAPI
 
         Args:
-            id (str):
-            type (str):
+            id (str): Object ID
+            type (str): Object type
+            workspace_id (str): Workspace ID where the object belongs
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -263,6 +268,7 @@ class QualityIssueObject(ModelNormal):
 
         self.id = id
         self.type = type
+        self.workspace_id = workspace_id
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

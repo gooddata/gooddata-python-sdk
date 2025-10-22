@@ -400,7 +400,6 @@
               "ExtraCache",
               "Hipaa",
               "PdfExports",
-              "ManagedOIDC",
               "UiLocalization",
               "Tier",
               "UserCount",
@@ -730,6 +729,7 @@
         "type": "object"
       },
       "AutomationMetadata": {
+        "additionalProperties": true,
         "description": "Additional information for the automation.",
         "maxLength": 250000,
         "nullable": true,
@@ -2277,6 +2277,12 @@
             "example": "INT",
             "type": "string"
           },
+          "description": {
+            "description": "Column description/comment from database",
+            "example": "Customer unique identifier",
+            "maxLength": 255,
+            "type": "string"
+          },
           "isPrimaryKey": {
             "description": "Is column part of primary key?",
             "type": "boolean"
@@ -3132,8 +3138,6 @@
         "properties": {
           "customClaimMapping": {
             "additionalProperties": {
-              "description": "Map of custom claim overrides. To be used when your Idp does not provide default claims (sub, email, name, given_name, family_name, urn.gooddata.user_groups [optional]). Define the key pair for the claim you wish to override, where the key is the default name of the attribute and the value is your custom name for the given attribute.",
-              "maxLength": 10000,
               "type": "string"
             },
             "description": "Map of custom claim overrides. To be used when your Idp does not provide default claims (sub, email, name, given_name, family_name, urn.gooddata.user_groups [optional]). Define the key pair for the claim you wish to override, where the key is the default name of the attribute and the value is your custom name for the given attribute.",
@@ -3410,6 +3414,11 @@
             "example": "total-sales",
             "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
+          },
+          "isHidden": {
+            "description": "If true, this metric is hidden from AI search results.",
+            "example": false,
+            "type": "boolean"
           },
           "modifiedAt": {
             "description": "Time of the last entity modification.",
@@ -3714,52 +3723,6 @@
             "maxLength": 255,
             "type": "string"
           },
-          "oauthClientId": {
-            "description": "Identifier of the authentication provider",
-            "maxLength": 255,
-            "type": "string"
-          },
-          "oauthClientSecret": {
-            "description": "Communication secret of the authentication provider (never returned back).",
-            "maxLength": 255,
-            "type": "string"
-          },
-          "oauthCustomAuthAttributes": {
-            "additionalProperties": {
-              "description": "Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.",
-              "maxLength": 10000,
-              "type": "string"
-            },
-            "description": "Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.",
-            "maxLength": 10000,
-            "type": "object"
-          },
-          "oauthCustomScopes": {
-            "description": "List of additional OAuth scopes which may be required by other providers (e.g. Snowflake)",
-            "items": {
-              "maxLength": 255,
-              "type": "string"
-            },
-            "nullable": true,
-            "type": "array"
-          },
-          "oauthIssuerId": {
-            "description": "Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.",
-            "example": "myOidcProvider",
-            "maxLength": 255,
-            "type": "string"
-          },
-          "oauthIssuerLocation": {
-            "description": "URI of the authentication provider.",
-            "maxLength": 255,
-            "type": "string"
-          },
-          "oauthSubjectIdClaim": {
-            "description": "Any string identifying the claim in ID token, that should be used for user identification. The default value is 'sub'.",
-            "example": "oid",
-            "maxLength": 255,
-            "type": "string"
-          },
           "permissions": {
             "items": {
               "$ref": "#/components/schemas/DeclarativeOrganizationPermission"
@@ -4000,12 +3963,14 @@
               "JWT_JIT_PROVISIONING",
               "DASHBOARD_FILTERS_APPLY_MODE",
               "ENABLE_SLIDES_EXPORT",
+              "ENABLE_SNAPSHOT_EXPORT",
               "AI_RATE_LIMIT",
               "ATTACHMENT_SIZE_LIMIT",
               "ATTACHMENT_LINK_TTL",
               "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
               "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
               "ENABLE_AUTOMATION_EVALUATION_MODE",
+              "ENABLE_ACCESSIBILITY_MODE",
               "REGISTERED_PLUGGABLE_APPLICATIONS"
             ],
             "example": "TIMEZONE",
@@ -5017,7 +4982,6 @@
                 "ExtraCache",
                 "Hipaa",
                 "PdfExports",
-                "ManagedOIDC",
                 "UiLocalization",
                 "Tier",
                 "UserCount",
@@ -5156,25 +5120,16 @@
               "YES",
               "NO"
             ],
-            "type": "string",
-            "xml": {
-              "attribute": true
-            }
+            "type": "string"
           },
           "id": {
-            "type": "string",
-            "xml": {
-              "attribute": true
-            }
+            "type": "string"
           },
           "notes": {
             "$ref": "#/components/schemas/Notes"
           },
           "original": {
-            "type": "string",
-            "xml": {
-              "attribute": true
-            }
+            "type": "string"
           },
           "otherAttributes": {
             "additionalProperties": {
@@ -5186,11 +5141,7 @@
             "$ref": "#/components/schemas/Skeleton"
           },
           "space": {
-            "type": "string",
-            "xml": {
-              "attribute": true,
-              "namespace": "http://www.w3.org/XML/1998/namespace"
-            }
+            "type": "string"
           },
           "srcDir": {
             "enum": [
@@ -5198,20 +5149,14 @@
               "RTL",
               "AUTO"
             ],
-            "type": "string",
-            "xml": {
-              "attribute": true
-            }
+            "type": "string"
           },
           "translate": {
             "enum": [
               "YES",
               "NO"
             ],
-            "type": "string",
-            "xml": {
-              "attribute": true
-            }
+            "type": "string"
           },
           "trgDir": {
             "enum": [
@@ -5219,10 +5164,7 @@
               "RTL",
               "AUTO"
             ],
-            "type": "string",
-            "xml": {
-              "attribute": true
-            }
+            "type": "string"
           },
           "unitOrGroup": {
             "items": {
@@ -5231,11 +5173,7 @@
             "type": "array"
           }
         },
-        "type": "object",
-        "xml": {
-          "name": "file",
-          "namespace": "urn:oasis:names:tc:xliff:document:2.0"
-        }
+        "type": "object"
       },
       "FilterDefinition": {
         "description": "Abstract filter definition type",
@@ -5290,6 +5228,11 @@
           "dateGranularities": {
             "description": "Option to control date granularities for date datasets. Empty value enables common date granularities (DAY, WEEK, MONTH, QUARTER, YEAR). Default value is `all` which enables all available date granularities, including time granularities (like hours, minutes).",
             "example": "all",
+            "type": "string"
+          },
+          "dateReferencePrefix": {
+            "description": "Columns starting with this prefix will be considered as references to date dataset. The prefix is then followed by the value of `separator` parameter. Given the reference prefix is `d` and separator is `__`, the columns with name like `d__date` will be considered as reference to date dataset. There can be also second separator and granularity suffix, e.g. `d__date__day` to create attribute reference to exact date dataset and granularity.",
+            "example": "d",
             "type": "string"
           },
           "denormPrefix": {
@@ -7386,6 +7329,7 @@
                 "type": "array"
               },
               "metadata": {
+                "additionalProperties": true,
                 "description": "Additional information for the automation.",
                 "maxLength": 250000,
                 "nullable": true,
@@ -7710,6 +7654,7 @@
                 "type": "array"
               },
               "metadata": {
+                "additionalProperties": true,
                 "description": "Additional information for the automation.",
                 "maxLength": 250000,
                 "nullable": true,
@@ -8152,6 +8097,7 @@
                 "type": "array"
               },
               "metadata": {
+                "additionalProperties": true,
                 "description": "Additional information for the automation.",
                 "maxLength": 250000,
                 "nullable": true,
@@ -15211,47 +15157,6 @@
                 "maxLength": 255,
                 "nullable": true,
                 "type": "string"
-              },
-              "oauthClientId": {
-                "maxLength": 255,
-                "type": "string"
-              },
-              "oauthClientSecret": {
-                "maxLength": 255,
-                "type": "string"
-              },
-              "oauthCustomAuthAttributes": {
-                "additionalProperties": {
-                  "type": "string"
-                },
-                "description": "Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.",
-                "maxLength": 10000,
-                "type": "object"
-              },
-              "oauthCustomScopes": {
-                "description": "List of additional OAuth scopes which may be required by other providers (e.g. Snowflake)",
-                "items": {
-                  "maxLength": 255,
-                  "type": "string"
-                },
-                "nullable": true,
-                "type": "array"
-              },
-              "oauthIssuerId": {
-                "description": "Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.",
-                "example": "myOidcProvider",
-                "maxLength": 255,
-                "type": "string"
-              },
-              "oauthIssuerLocation": {
-                "maxLength": 255,
-                "type": "string"
-              },
-              "oauthSubjectIdClaim": {
-                "description": "Any string identifying the claim in ID token, that should be used for user identification. The default value is 'sub'.",
-                "example": "oid",
-                "maxLength": 255,
-                "type": "string"
               }
             },
             "type": "object"
@@ -15355,43 +15260,6 @@
               "name": {
                 "maxLength": 255,
                 "nullable": true,
-                "type": "string"
-              },
-              "oauthClientId": {
-                "maxLength": 255,
-                "type": "string"
-              },
-              "oauthCustomAuthAttributes": {
-                "additionalProperties": {
-                  "type": "string"
-                },
-                "description": "Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.",
-                "maxLength": 10000,
-                "type": "object"
-              },
-              "oauthCustomScopes": {
-                "description": "List of additional OAuth scopes which may be required by other providers (e.g. Snowflake)",
-                "items": {
-                  "maxLength": 255,
-                  "type": "string"
-                },
-                "nullable": true,
-                "type": "array"
-              },
-              "oauthIssuerId": {
-                "description": "Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.",
-                "example": "myOidcProvider",
-                "maxLength": 255,
-                "type": "string"
-              },
-              "oauthIssuerLocation": {
-                "maxLength": 255,
-                "type": "string"
-              },
-              "oauthSubjectIdClaim": {
-                "description": "Any string identifying the claim in ID token, that should be used for user identification. The default value is 'sub'.",
-                "example": "oid",
-                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -15542,47 +15410,6 @@
                 "maxLength": 255,
                 "nullable": true,
                 "type": "string"
-              },
-              "oauthClientId": {
-                "maxLength": 255,
-                "type": "string"
-              },
-              "oauthClientSecret": {
-                "maxLength": 255,
-                "type": "string"
-              },
-              "oauthCustomAuthAttributes": {
-                "additionalProperties": {
-                  "type": "string"
-                },
-                "description": "Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.",
-                "maxLength": 10000,
-                "type": "object"
-              },
-              "oauthCustomScopes": {
-                "description": "List of additional OAuth scopes which may be required by other providers (e.g. Snowflake)",
-                "items": {
-                  "maxLength": 255,
-                  "type": "string"
-                },
-                "nullable": true,
-                "type": "array"
-              },
-              "oauthIssuerId": {
-                "description": "Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.",
-                "example": "myOidcProvider",
-                "maxLength": 255,
-                "type": "string"
-              },
-              "oauthIssuerLocation": {
-                "maxLength": 255,
-                "type": "string"
-              },
-              "oauthSubjectIdClaim": {
-                "description": "Any string identifying the claim in ID token, that should be used for user identification. The default value is 'sub'.",
-                "example": "oid",
-                "maxLength": 255,
-                "type": "string"
               }
             },
             "type": "object"
@@ -15670,12 +15497,14 @@
                   "JWT_JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
                   "ENABLE_SLIDES_EXPORT",
+                  "ENABLE_SNAPSHOT_EXPORT",
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
                   "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
                   "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
                   "ENABLE_AUTOMATION_EVALUATION_MODE",
+                  "ENABLE_ACCESSIBILITY_MODE",
                   "REGISTERED_PLUGGABLE_APPLICATIONS"
                 ],
                 "type": "string"
@@ -15750,12 +15579,14 @@
                   "JWT_JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
                   "ENABLE_SLIDES_EXPORT",
+                  "ENABLE_SNAPSHOT_EXPORT",
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
                   "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
                   "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
                   "ENABLE_AUTOMATION_EVALUATION_MODE",
+                  "ENABLE_ACCESSIBILITY_MODE",
                   "REGISTERED_PLUGGABLE_APPLICATIONS"
                 ],
                 "type": "string"
@@ -15870,12 +15701,14 @@
                   "JWT_JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
                   "ENABLE_SLIDES_EXPORT",
+                  "ENABLE_SNAPSHOT_EXPORT",
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
                   "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
                   "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
                   "ENABLE_AUTOMATION_EVALUATION_MODE",
+                  "ENABLE_ACCESSIBILITY_MODE",
                   "REGISTERED_PLUGGABLE_APPLICATIONS"
                 ],
                 "type": "string"
@@ -17356,12 +17189,14 @@
                   "JWT_JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
                   "ENABLE_SLIDES_EXPORT",
+                  "ENABLE_SNAPSHOT_EXPORT",
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
                   "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
                   "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
                   "ENABLE_AUTOMATION_EVALUATION_MODE",
+                  "ENABLE_ACCESSIBILITY_MODE",
                   "REGISTERED_PLUGGABLE_APPLICATIONS"
                 ],
                 "type": "string"
@@ -17436,12 +17271,14 @@
                   "JWT_JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
                   "ENABLE_SLIDES_EXPORT",
+                  "ENABLE_SNAPSHOT_EXPORT",
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
                   "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
                   "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
                   "ENABLE_AUTOMATION_EVALUATION_MODE",
+                  "ENABLE_ACCESSIBILITY_MODE",
                   "REGISTERED_PLUGGABLE_APPLICATIONS"
                 ],
                 "type": "string"
@@ -18139,6 +17976,7 @@
                 "type": "array"
               },
               "metadata": {
+                "additionalProperties": true,
                 "description": "Additional information for the automation.",
                 "maxLength": 250000,
                 "nullable": true,
@@ -19618,12 +19456,14 @@
                   "JWT_JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
                   "ENABLE_SLIDES_EXPORT",
+                  "ENABLE_SNAPSHOT_EXPORT",
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
                   "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
                   "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
                   "ENABLE_AUTOMATION_EVALUATION_MODE",
+                  "ENABLE_ACCESSIBILITY_MODE",
                   "REGISTERED_PLUGGABLE_APPLICATIONS"
                 ],
                 "type": "string"
@@ -19698,12 +19538,14 @@
                   "JWT_JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
                   "ENABLE_SLIDES_EXPORT",
+                  "ENABLE_SNAPSHOT_EXPORT",
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
                   "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
                   "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
                   "ENABLE_AUTOMATION_EVALUATION_MODE",
+                  "ENABLE_ACCESSIBILITY_MODE",
                   "REGISTERED_PLUGGABLE_APPLICATIONS"
                 ],
                 "type": "string"
@@ -19844,12 +19686,14 @@
                   "JWT_JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
                   "ENABLE_SLIDES_EXPORT",
+                  "ENABLE_SNAPSHOT_EXPORT",
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
                   "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
                   "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
                   "ENABLE_AUTOMATION_EVALUATION_MODE",
+                  "ENABLE_ACCESSIBILITY_MODE",
                   "REGISTERED_PLUGGABLE_APPLICATIONS"
                 ],
                 "type": "string"
@@ -19924,12 +19768,14 @@
                   "JWT_JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
                   "ENABLE_SLIDES_EXPORT",
+                  "ENABLE_SNAPSHOT_EXPORT",
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
                   "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
                   "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
                   "ENABLE_AUTOMATION_EVALUATION_MODE",
+                  "ENABLE_ACCESSIBILITY_MODE",
                   "REGISTERED_PLUGGABLE_APPLICATIONS"
                 ],
                 "type": "string"
@@ -20152,25 +19998,16 @@
               "SOURCE",
               "TARGET"
             ],
-            "type": "string",
-            "xml": {
-              "attribute": true
-            }
+            "type": "string"
           },
           "category": {
-            "type": "string",
-            "xml": {
-              "attribute": true
-            }
+            "type": "string"
           },
           "content": {
             "type": "string"
           },
           "id": {
-            "type": "string",
-            "xml": {
-              "attribute": true
-            }
+            "type": "string"
           },
           "otherAttributes": {
             "additionalProperties": {
@@ -20180,17 +20017,10 @@
           },
           "priority": {
             "format": "int32",
-            "type": "integer",
-            "xml": {
-              "attribute": true
-            }
+            "type": "integer"
           }
         },
-        "type": "object",
-        "xml": {
-          "name": "note",
-          "namespace": "urn:oasis:names:tc:xliff:document:2.0"
-        }
+        "type": "object"
       },
       "Notes": {
         "properties": {
@@ -20201,14 +20031,7 @@
             "type": "array"
           }
         },
-        "required": [
-          "note"
-        ],
-        "type": "object",
-        "xml": {
-          "name": "notes",
-          "namespace": "urn:oasis:names:tc:xliff:document:2.0"
-        }
+        "type": "object"
       },
       "NotificationChannelDestination": {
         "oneOf": [
@@ -21193,12 +21016,14 @@
               "JWT_JIT_PROVISIONING",
               "DASHBOARD_FILTERS_APPLY_MODE",
               "ENABLE_SLIDES_EXPORT",
+              "ENABLE_SNAPSHOT_EXPORT",
               "AI_RATE_LIMIT",
               "ATTACHMENT_SIZE_LIMIT",
               "ATTACHMENT_LINK_TTL",
               "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
               "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
               "ENABLE_AUTOMATION_EVALUATION_MODE",
+              "ENABLE_ACCESSIBILITY_MODE",
               "REGISTERED_PLUGGABLE_APPLICATIONS"
             ],
             "example": "TIMEZONE",
@@ -21224,9 +21049,6 @@
             "type": "string"
           },
           "kid": {
-            "maxLength": 255,
-            "minLength": 0,
-            "pattern": "^[^.]",
             "type": "string"
           },
           "kty": {
@@ -21456,17 +21278,10 @@
             "type": "array"
           },
           "href": {
-            "type": "string",
-            "xml": {
-              "attribute": true
-            }
+            "type": "string"
           }
         },
-        "type": "object",
-        "xml": {
-          "name": "skeleton",
-          "namespace": "urn:oasis:names:tc:xliff:document:2.0"
-        }
+        "type": "object"
       },
       "SlidesExportRequest": {
         "description": "Export request object describing the export properties and metadata for slides exports.",
@@ -22421,39 +22236,19 @@
             "type": "object"
           },
           "space": {
-            "type": "string",
-            "xml": {
-              "attribute": true,
-              "namespace": "http://www.w3.org/XML/1998/namespace"
-            }
+            "type": "string"
           },
           "srcLang": {
-            "type": "string",
-            "xml": {
-              "attribute": true
-            }
+            "type": "string"
           },
           "trgLang": {
-            "type": "string",
-            "xml": {
-              "attribute": true
-            }
+            "type": "string"
           },
           "version": {
-            "type": "string",
-            "xml": {
-              "attribute": true
-            }
+            "type": "string"
           }
         },
-        "required": [
-          "file"
-        ],
-        "type": "object",
-        "xml": {
-          "name": "xliff",
-          "namespace": "urn:oasis:names:tc:xliff:document:2.0"
-        }
+        "type": "object"
       }
     }
   },

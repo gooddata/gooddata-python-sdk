@@ -289,17 +289,6 @@ with gooddata_api_client.ApiClient() as api_client:
                 type="identityProvider",
             ),
             name="Alpha corporation",
-            oauth_client_id="oauth_client_id_example",
-            oauth_client_secret="oauth_client_secret_example",
-            oauth_custom_auth_attributes={
-                "key": "key_example",
-            },
-            oauth_custom_scopes=[
-                "oauth_custom_scopes_example",
-            ],
-            oauth_issuer_id="myOidcProvider",
-            oauth_issuer_location="oauth_issuer_location_example",
-            oauth_subject_id_claim="oid",
             permissions=[
                 DeclarativeOrganizationPermission(
                     assignee=AssigneeIdentifier(
@@ -497,16 +486,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                 ),
                             ),
                         ],
-                        metadata=AutomationMetadata(
-                            visible_filters=[
-                                VisibleFilter(
-                                    is_all_time_date_filter=False,
-                                    local_identifier="local_identifier_example",
-                                    title="title_example",
-                                ),
-                            ],
-                            widget="widget_example",
-                        ),
+                        metadata=AutomationMetadata(),
                         modified_at="2023-07-20 12:30",
                         modified_by=DeclarativeUserIdentifier(
                             id="employee123",
@@ -820,6 +800,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                 ),
                                 description="Sales for all the data available.",
                                 id="total-sales",
+                                is_hidden=False,
                                 modified_at="["2023-07-20 12:30"]",
                                 modified_by=DeclarativeUserIdentifier(
                                     id="employee123",

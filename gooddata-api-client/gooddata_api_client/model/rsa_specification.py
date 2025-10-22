@@ -70,13 +70,6 @@ class RsaSpecification(ModelNormal):
     }
 
     validations = {
-        ('kid',): {
-            'max_length': 255,
-            'min_length': 0,
-            'regex': {
-                'pattern': r'^[^.]',  # noqa: E501
-            },
-        },
     }
 
     @cached_property

@@ -34,7 +34,9 @@ docs/AlertCondition.md
 docs/AlertConditionOperand.md
 docs/AlertDescription.md
 docs/AlertEvaluationRow.md
+docs/AnalyticsCatalogCreatedBy.md
 docs/AnalyticsCatalogTags.md
+docs/AnalyticsCatalogUser.md
 docs/AnalyticsModelApi.md
 docs/AnomalyDetectionRequest.md
 docs/AnomalyDetectionResult.md
@@ -48,6 +50,7 @@ docs/AssigneeRule.md
 docs/AttributeElements.md
 docs/AttributeElementsByRef.md
 docs/AttributeElementsByValue.md
+docs/AttributeEqualityFilter.md
 docs/AttributeExecutionResultHeader.md
 docs/AttributeFilter.md
 docs/AttributeFilterByDate.md
@@ -83,6 +86,9 @@ docs/AvailableAssignees.md
 docs/AvailableDriversApi.md
 docs/BoundedFilter.md
 docs/CSPDirectivesApi.md
+docs/ChangeAnalysisRequest.md
+docs/ChangeAnalysisResponse.md
+docs/ChangeAnalysisResult.md
 docs/ChatHistoryInteraction.md
 docs/ChatHistoryRequest.md
 docs/ChatHistoryResult.md
@@ -859,6 +865,7 @@ docs/MemoryItemUseCases.md
 docs/MetadataSyncApi.md
 docs/Metric.md
 docs/MetricRecord.md
+docs/MetricValueChange.md
 docs/MetricsApi.md
 docs/NegativeAttributeFilter.md
 docs/NegativeAttributeFilterNegativeAttributeFilter.md
@@ -911,6 +918,7 @@ docs/PositiveAttributeFilter.md
 docs/PositiveAttributeFilterPositiveAttributeFilter.md
 docs/QualityIssue.md
 docs/QualityIssueObject.md
+docs/QualityIssuesCalculationStatusResponse.md
 docs/Range.md
 docs/RangeMeasureValueFilter.md
 docs/RangeMeasureValueFilterRangeMeasureValueFilter.md
@@ -997,6 +1005,7 @@ docs/TotalExecutionResultHeader.md
 docs/TotalResultHeader.md
 docs/TranslationsApi.md
 docs/TriggerAutomationRequest.md
+docs/TriggerQualityIssuesCalculationResponse.md
 docs/UsageApi.md
 docs/UserAssignee.md
 docs/UserContext.md
@@ -1162,7 +1171,9 @@ gooddata_api_client/model/alert_condition.py
 gooddata_api_client/model/alert_condition_operand.py
 gooddata_api_client/model/alert_description.py
 gooddata_api_client/model/alert_evaluation_row.py
+gooddata_api_client/model/analytics_catalog_created_by.py
 gooddata_api_client/model/analytics_catalog_tags.py
+gooddata_api_client/model/analytics_catalog_user.py
 gooddata_api_client/model/anomaly_detection_request.py
 gooddata_api_client/model/anomaly_detection_result.py
 gooddata_api_client/model/api_entitlement.py
@@ -1174,6 +1185,7 @@ gooddata_api_client/model/assignee_rule.py
 gooddata_api_client/model/attribute_elements.py
 gooddata_api_client/model/attribute_elements_by_ref.py
 gooddata_api_client/model/attribute_elements_by_value.py
+gooddata_api_client/model/attribute_equality_filter.py
 gooddata_api_client/model/attribute_execution_result_header.py
 gooddata_api_client/model/attribute_filter.py
 gooddata_api_client/model/attribute_filter_by_date.py
@@ -1203,6 +1215,9 @@ gooddata_api_client/model/automation_tabular_export.py
 gooddata_api_client/model/automation_visual_export.py
 gooddata_api_client/model/available_assignees.py
 gooddata_api_client/model/bounded_filter.py
+gooddata_api_client/model/change_analysis_request.py
+gooddata_api_client/model/change_analysis_response.py
+gooddata_api_client/model/change_analysis_result.py
 gooddata_api_client/model/chat_history_interaction.py
 gooddata_api_client/model/chat_history_request.py
 gooddata_api_client/model/chat_history_result.py
@@ -1952,6 +1967,7 @@ gooddata_api_client/model/memory_item.py
 gooddata_api_client/model/memory_item_use_cases.py
 gooddata_api_client/model/metric.py
 gooddata_api_client/model/metric_record.py
+gooddata_api_client/model/metric_value_change.py
 gooddata_api_client/model/negative_attribute_filter.py
 gooddata_api_client/model/negative_attribute_filter_negative_attribute_filter.py
 gooddata_api_client/model/note.py
@@ -1994,6 +2010,7 @@ gooddata_api_client/model/positive_attribute_filter.py
 gooddata_api_client/model/positive_attribute_filter_positive_attribute_filter.py
 gooddata_api_client/model/quality_issue.py
 gooddata_api_client/model/quality_issue_object.py
+gooddata_api_client/model/quality_issues_calculation_status_response.py
 gooddata_api_client/model/range.py
 gooddata_api_client/model/range_measure_value_filter.py
 gooddata_api_client/model/range_measure_value_filter_range_measure_value_filter.py
@@ -2072,6 +2089,7 @@ gooddata_api_client/model/total_dimension.py
 gooddata_api_client/model/total_execution_result_header.py
 gooddata_api_client/model/total_result_header.py
 gooddata_api_client/model/trigger_automation_request.py
+gooddata_api_client/model/trigger_quality_issues_calculation_response.py
 gooddata_api_client/model/user_assignee.py
 gooddata_api_client/model/user_context.py
 gooddata_api_client/model/user_group_assignee.py

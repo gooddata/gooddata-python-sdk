@@ -14,6 +14,8 @@ Method | HTTP request | Description
 [**anomaly_detection_result**](ActionsApi.md#anomaly_detection_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/result/{resultId} | (EXPERIMENTAL) Smart functions - Anomaly Detection Result
 [**available_assignees**](ActionsApi.md#available_assignees) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/availableAssignees | Get Available Assignees
 [**cancel_executions**](ActionsApi.md#cancel_executions) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/cancel | Applies all the given cancel tokens.
+[**change_analysis**](ActionsApi.md#change_analysis) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/computeChangeAnalysis | Compute change analysis
+[**change_analysis_result**](ActionsApi.md#change_analysis_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/computeChangeAnalysis/result/{resultId} | Get change analysis result
 [**check_entity_overrides**](ActionsApi.md#check_entity_overrides) | **POST** /api/v1/actions/workspaces/{workspaceId}/checkEntityOverrides | Finds entities with given ID in hierarchy.
 [**clean_translations**](ActionsApi.md#clean_translations) | **POST** /api/v1/actions/workspaces/{workspaceId}/translations/clean | Cleans up translations.
 [**clustering**](ActionsApi.md#clustering) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/clustering/{resultId} | (EXPERIMENTAL) Smart functions - Clustering
@@ -30,6 +32,7 @@ Method | HTTP request | Description
 [**create_raw_export**](ActionsApi.md#create_raw_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/raw | (EXPERIMENTAL) Create raw export request
 [**create_slides_export**](ActionsApi.md#create_slides_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/slides | (EXPERIMENTAL) Create slides export request
 [**create_tabular_export**](ActionsApi.md#create_tabular_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/tabular | Create tabular export request
+[**created_by**](ActionsApi.md#created_by) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/createdBy | Get Analytics Catalog CreatedBy
 [**dashboard_permissions**](ActionsApi.md#dashboard_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/permissions | Get Dashboard Permissions
 [**delete_organization_automations**](ActionsApi.md#delete_organization_automations) | **POST** /api/v1/actions/organization/automations/delete | Delete selected automations across all workspaces
 [**delete_workspace_automations**](ActionsApi.md#delete_workspace_automations) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/delete | Delete selected automations in the workspace
@@ -47,6 +50,7 @@ Method | HTTP request | Description
 [**get_metadata**](ActionsApi.md#get_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId}/metadata | Retrieve metadata context
 [**get_notifications**](ActionsApi.md#get_notifications) | **GET** /api/v1/actions/notifications | Get latest notifications.
 [**get_quality_issues**](ActionsApi.md#get_quality_issues) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/issues | Get Quality Issues
+[**get_quality_issues_calculation_status**](ActionsApi.md#get_quality_issues_calculation_status) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/issues/status/{processId} | Get Quality Issues Calculation Status
 [**get_raw_export**](ActionsApi.md#get_raw_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/raw/{exportId} | (EXPERIMENTAL) Retrieve exported files
 [**get_slides_export**](ActionsApi.md#get_slides_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/slides/{exportId} | (EXPERIMENTAL) Retrieve exported files
 [**get_slides_export_metadata**](ActionsApi.md#get_slides_export_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/slides/{exportId}/metadata | (EXPERIMENTAL) Retrieve metadata context
@@ -92,6 +96,7 @@ Method | HTTP request | Description
 [**test_notification_channel**](ActionsApi.md#test_notification_channel) | **POST** /api/v1/actions/notificationChannels/test | Test notification channel.
 [**trigger_automation**](ActionsApi.md#trigger_automation) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/trigger | Trigger automation.
 [**trigger_existing_automation**](ActionsApi.md#trigger_existing_automation) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/{automationId}/trigger | Trigger existing automation.
+[**trigger_quality_issues_calculation**](ActionsApi.md#trigger_quality_issues_calculation) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/issues/triggerCheck | Trigger Quality Issues Calculation
 [**unpause_organization_automations**](ActionsApi.md#unpause_organization_automations) | **POST** /api/v1/actions/organization/automations/unpause | Unpause selected automations across all workspaces
 [**unpause_workspace_automations**](ActionsApi.md#unpause_workspace_automations) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/unpause | Unpause selected automations in the workspace
 [**unsubscribe_all_automations**](ActionsApi.md#unsubscribe_all_automations) | **DELETE** /api/v1/actions/organization/automations/unsubscribe | Unsubscribe from all automations in all workspaces
@@ -136,6 +141,7 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = actions_api.ActionsApi(api_client)
     workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
     chat_request = ChatRequest(
+        include_hidden=False,
         limit_create=3,
         limit_create_context=10,
         limit_search=5,
@@ -301,6 +307,7 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = actions_api.ActionsApi(api_client)
     workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
     chat_request = ChatRequest(
+        include_hidden=False,
         limit_create=3,
         limit_create_context=10,
         limit_search=5,
@@ -871,6 +878,162 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Status of the cancellation operation. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **change_analysis**
+> ChangeAnalysisResponse change_analysis(workspace_id, change_analysis_request)
+
+Compute change analysis
+
+Computes change analysis for the provided execution definition.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.change_analysis_response import ChangeAnalysisResponse
+from gooddata_api_client.model.change_analysis_request import ChangeAnalysisRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    change_analysis_request = ChangeAnalysisRequest(
+        analyzed_period="analyzed_period_example",
+        attribute_label_identifiers=[
+            "attribute_label_identifiers_example",
+        ],
+        date_attribute_identifier="date_attribute_identifier_example",
+        filters=[
+            AttributeEqualityFilter(
+                label_identifier="label_identifier_example",
+                values=[
+                    "values_example",
+                ],
+            ),
+        ],
+        metric_identifier="metric_identifier_example",
+        reference_period="reference_period_example",
+        use_smart_attribute_selection=False,
+    ) # ChangeAnalysisRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Compute change analysis
+        api_response = api_instance.change_analysis(workspace_id, change_analysis_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->change_analysis: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **change_analysis_request** | [**ChangeAnalysisRequest**](ChangeAnalysisRequest.md)|  |
+
+### Return type
+
+[**ChangeAnalysisResponse**](ChangeAnalysisResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **change_analysis_result**
+> ChangeAnalysisResult change_analysis_result(workspace_id, result_id)
+
+Get change analysis result
+
+Gets change analysis result.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.change_analysis_result import ChangeAnalysisResult
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    result_id = "a9b28f9dc55f37ea9f4a5fb0c76895923591e781" # str | Result ID
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get change analysis result
+        api_response = api_instance.change_analysis_result(workspace_id, result_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->change_analysis_result: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **result_id** | **str**| Result ID |
+
+### Return type
+
+[**ChangeAnalysisResult**](ChangeAnalysisResult.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -2361,6 +2524,73 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **created_by**
+> AnalyticsCatalogCreatedBy created_by(workspace_id)
+
+Get Analytics Catalog CreatedBy
+
+Returns a list of Users who created any object for this workspace
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.analytics_catalog_created_by import AnalyticsCatalogCreatedBy
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get Analytics Catalog CreatedBy
+        api_response = api_instance.created_by(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->created_by: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+
+### Return type
+
+[**AnalyticsCatalogCreatedBy**](AnalyticsCatalogCreatedBy.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **dashboard_permissions**
 > DashboardPermissions dashboard_permissions(workspace_id, dashboard_id)
 
@@ -2908,6 +3138,7 @@ with gooddata_api_client.ApiClient() as api_client:
     generate_ldm_request = GenerateLdmRequest(
         aggregated_fact_prefix="aggr",
         date_granularities="all",
+        date_reference_prefix="d",
         denorm_prefix="dr",
         fact_prefix="f",
         generate_long_ids=False,
@@ -2921,6 +3152,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     columns=[
                         SqlColumn(
                             data_type="INT",
+                            description="Customer unique identifier",
                             name="customer_id",
                         ),
                     ],
@@ -2946,6 +3178,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     columns=[
                         DeclarativeColumn(
                             data_type="INT",
+                            description="Customer unique identifier",
                             is_primary_key=True,
                             name="customer_id",
                             referenced_table_column="customer_id",
@@ -3687,6 +3920,75 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**GetQualityIssuesResponse**](GetQualityIssuesResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_quality_issues_calculation_status**
+> QualityIssuesCalculationStatusResponse get_quality_issues_calculation_status(workspace_id, process_id)
+
+Get Quality Issues Calculation Status
+
+Returns the status of a quality issues calculation process identified by process ID.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.quality_issues_calculation_status_response import QualityIssuesCalculationStatusResponse
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    process_id = "processId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get Quality Issues Calculation Status
+        api_response = api_instance.get_quality_issues_calculation_status(workspace_id, process_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->get_quality_issues_calculation_status: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **process_id** | **str**|  |
+
+### Return type
+
+[**QualityIssuesCalculationStatusResponse**](QualityIssuesCalculationStatusResponse.md)
 
 ### Authorization
 
@@ -6964,16 +7266,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     ),
                 ),
             ],
-            metadata=AutomationMetadata(
-                visible_filters=[
-                    VisibleFilter(
-                        is_all_time_date_filter=False,
-                        local_identifier="local_identifier_example",
-                        title="title_example",
-                    ),
-                ],
-                widget="widget_example",
-            ),
+            metadata=AutomationMetadata(),
             notification_channel=DeclarativeNotificationChannelIdentifier(
                 id="webhook123",
                 type="notificationChannel",
@@ -7220,6 +7513,73 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **204** | The automation is successfully triggered. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **trigger_quality_issues_calculation**
+> TriggerQualityIssuesCalculationResponse trigger_quality_issues_calculation(workspace_id)
+
+Trigger Quality Issues Calculation
+
+Triggers asynchronous calculation of metadata quality issues and returns a process ID for status tracking.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.trigger_quality_issues_calculation_response import TriggerQualityIssuesCalculationResponse
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Trigger Quality Issues Calculation
+        api_response = api_instance.trigger_quality_issues_calculation(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->trigger_quality_issues_calculation: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+
+### Return type
+
+[**TriggerQualityIssuesCalculationResponse**](TriggerQualityIssuesCalculationResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

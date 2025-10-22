@@ -134,6 +134,8 @@ Class | Method | HTTP request | Description
 *CSPDirectivesApi* | [**get_entity_csp_directives**](docs/CSPDirectivesApi.md#get_entity_csp_directives) | **GET** /api/v1/entities/cspDirectives/{id} | Get CSP Directives
 *CSPDirectivesApi* | [**patch_entity_csp_directives**](docs/CSPDirectivesApi.md#patch_entity_csp_directives) | **PATCH** /api/v1/entities/cspDirectives/{id} | Patch CSP Directives
 *CSPDirectivesApi* | [**update_entity_csp_directives**](docs/CSPDirectivesApi.md#update_entity_csp_directives) | **PUT** /api/v1/entities/cspDirectives/{id} | Put CSP Directives
+*ComputationApi* | [**change_analysis**](docs/ComputationApi.md#change_analysis) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/computeChangeAnalysis | Compute change analysis
+*ComputationApi* | [**change_analysis_result**](docs/ComputationApi.md#change_analysis_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/computeChangeAnalysis/result/{resultId} | Get change analysis result
 *ComputationApi* | [**column_statistics**](docs/ComputationApi.md#column_statistics) | **POST** /api/v1/actions/dataSources/{dataSourceId}/computeColumnStatistics | (EXPERIMENTAL) Compute column statistics
 *ComputationApi* | [**compute_label_elements_post**](docs/ComputationApi.md#compute_label_elements_post) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/collectLabelElements | Listing of label values. The resulting data are limited by the static platform limit to the maximum of 10000 rows.
 *ComputationApi* | [**compute_report**](docs/ComputationApi.md#compute_report) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute | Executes analytical request and returns link to the result
@@ -334,14 +336,17 @@ Class | Method | HTTP request | Description
 *SmartFunctionsApi* | [**clustering**](docs/SmartFunctionsApi.md#clustering) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/clustering/{resultId} | (EXPERIMENTAL) Smart functions - Clustering
 *SmartFunctionsApi* | [**clustering_result**](docs/SmartFunctionsApi.md#clustering_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/clustering/result/{resultId} | (EXPERIMENTAL) Smart functions - Clustering Result
 *SmartFunctionsApi* | [**create_memory_item**](docs/SmartFunctionsApi.md#create_memory_item) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/memory | (EXPERIMENTAL) Create new memory item
+*SmartFunctionsApi* | [**created_by**](docs/SmartFunctionsApi.md#created_by) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/createdBy | Get Analytics Catalog CreatedBy
 *SmartFunctionsApi* | [**forecast**](docs/SmartFunctionsApi.md#forecast) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/{resultId} | (BETA) Smart functions - Forecast
 *SmartFunctionsApi* | [**forecast_result**](docs/SmartFunctionsApi.md#forecast_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/result/{resultId} | (BETA) Smart functions - Forecast Result
 *SmartFunctionsApi* | [**get_memory_item**](docs/SmartFunctionsApi.md#get_memory_item) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/memory/{memoryId} | (EXPERIMENTAL) Get memory item
 *SmartFunctionsApi* | [**get_quality_issues**](docs/SmartFunctionsApi.md#get_quality_issues) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/issues | Get Quality Issues
+*SmartFunctionsApi* | [**get_quality_issues_calculation_status**](docs/SmartFunctionsApi.md#get_quality_issues_calculation_status) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/issues/status/{processId} | Get Quality Issues Calculation Status
 *SmartFunctionsApi* | [**list_memory_items**](docs/SmartFunctionsApi.md#list_memory_items) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/memory | (EXPERIMENTAL) List all memory items
 *SmartFunctionsApi* | [**remove_memory_item**](docs/SmartFunctionsApi.md#remove_memory_item) | **DELETE** /api/v1/actions/workspaces/{workspaceId}/ai/memory/{memoryId} | (EXPERIMENTAL) Remove memory item
 *SmartFunctionsApi* | [**resolve_llm_endpoints**](docs/SmartFunctionsApi.md#resolve_llm_endpoints) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/resolveLlmEndpoints | Get Active LLM Endpoints for this workspace
 *SmartFunctionsApi* | [**tags**](docs/SmartFunctionsApi.md#tags) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/tags | Get Analytics Catalog Tags
+*SmartFunctionsApi* | [**trigger_quality_issues_calculation**](docs/SmartFunctionsApi.md#trigger_quality_issues_calculation) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/issues/triggerCheck | Trigger Quality Issues Calculation
 *SmartFunctionsApi* | [**update_memory_item**](docs/SmartFunctionsApi.md#update_memory_item) | **PUT** /api/v1/actions/workspaces/{workspaceId}/ai/memory/{memoryId} | (EXPERIMENTAL) Update memory item
 *SmartFunctionsApi* | [**validate_llm_endpoint**](docs/SmartFunctionsApi.md#validate_llm_endpoint) | **POST** /api/v1/actions/ai/llmEndpoint/test | Validate LLM Endpoint
 *SmartFunctionsApi* | [**validate_llm_endpoint_by_id**](docs/SmartFunctionsApi.md#validate_llm_endpoint_by_id) | **POST** /api/v1/actions/ai/llmEndpoint/{llmEndpointId}/test | Validate LLM Endpoint By Id
@@ -438,6 +443,8 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**anomaly_detection_result**](docs/ActionsApi.md#anomaly_detection_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/result/{resultId} | (EXPERIMENTAL) Smart functions - Anomaly Detection Result
 *ActionsApi* | [**available_assignees**](docs/ActionsApi.md#available_assignees) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/availableAssignees | Get Available Assignees
 *ActionsApi* | [**cancel_executions**](docs/ActionsApi.md#cancel_executions) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/cancel | Applies all the given cancel tokens.
+*ActionsApi* | [**change_analysis**](docs/ActionsApi.md#change_analysis) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/computeChangeAnalysis | Compute change analysis
+*ActionsApi* | [**change_analysis_result**](docs/ActionsApi.md#change_analysis_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/computeChangeAnalysis/result/{resultId} | Get change analysis result
 *ActionsApi* | [**check_entity_overrides**](docs/ActionsApi.md#check_entity_overrides) | **POST** /api/v1/actions/workspaces/{workspaceId}/checkEntityOverrides | Finds entities with given ID in hierarchy.
 *ActionsApi* | [**clean_translations**](docs/ActionsApi.md#clean_translations) | **POST** /api/v1/actions/workspaces/{workspaceId}/translations/clean | Cleans up translations.
 *ActionsApi* | [**clustering**](docs/ActionsApi.md#clustering) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/clustering/{resultId} | (EXPERIMENTAL) Smart functions - Clustering
@@ -454,6 +461,7 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**create_raw_export**](docs/ActionsApi.md#create_raw_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/raw | (EXPERIMENTAL) Create raw export request
 *ActionsApi* | [**create_slides_export**](docs/ActionsApi.md#create_slides_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/slides | (EXPERIMENTAL) Create slides export request
 *ActionsApi* | [**create_tabular_export**](docs/ActionsApi.md#create_tabular_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/tabular | Create tabular export request
+*ActionsApi* | [**created_by**](docs/ActionsApi.md#created_by) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/createdBy | Get Analytics Catalog CreatedBy
 *ActionsApi* | [**dashboard_permissions**](docs/ActionsApi.md#dashboard_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/permissions | Get Dashboard Permissions
 *ActionsApi* | [**delete_organization_automations**](docs/ActionsApi.md#delete_organization_automations) | **POST** /api/v1/actions/organization/automations/delete | Delete selected automations across all workspaces
 *ActionsApi* | [**delete_workspace_automations**](docs/ActionsApi.md#delete_workspace_automations) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/delete | Delete selected automations in the workspace
@@ -471,6 +479,7 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**get_metadata**](docs/ActionsApi.md#get_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId}/metadata | Retrieve metadata context
 *ActionsApi* | [**get_notifications**](docs/ActionsApi.md#get_notifications) | **GET** /api/v1/actions/notifications | Get latest notifications.
 *ActionsApi* | [**get_quality_issues**](docs/ActionsApi.md#get_quality_issues) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/issues | Get Quality Issues
+*ActionsApi* | [**get_quality_issues_calculation_status**](docs/ActionsApi.md#get_quality_issues_calculation_status) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/issues/status/{processId} | Get Quality Issues Calculation Status
 *ActionsApi* | [**get_raw_export**](docs/ActionsApi.md#get_raw_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/raw/{exportId} | (EXPERIMENTAL) Retrieve exported files
 *ActionsApi* | [**get_slides_export**](docs/ActionsApi.md#get_slides_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/slides/{exportId} | (EXPERIMENTAL) Retrieve exported files
 *ActionsApi* | [**get_slides_export_metadata**](docs/ActionsApi.md#get_slides_export_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/slides/{exportId}/metadata | (EXPERIMENTAL) Retrieve metadata context
@@ -516,6 +525,7 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**test_notification_channel**](docs/ActionsApi.md#test_notification_channel) | **POST** /api/v1/actions/notificationChannels/test | Test notification channel.
 *ActionsApi* | [**trigger_automation**](docs/ActionsApi.md#trigger_automation) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/trigger | Trigger automation.
 *ActionsApi* | [**trigger_existing_automation**](docs/ActionsApi.md#trigger_existing_automation) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/{automationId}/trigger | Trigger existing automation.
+*ActionsApi* | [**trigger_quality_issues_calculation**](docs/ActionsApi.md#trigger_quality_issues_calculation) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/issues/triggerCheck | Trigger Quality Issues Calculation
 *ActionsApi* | [**unpause_organization_automations**](docs/ActionsApi.md#unpause_organization_automations) | **POST** /api/v1/actions/organization/automations/unpause | Unpause selected automations across all workspaces
 *ActionsApi* | [**unpause_workspace_automations**](docs/ActionsApi.md#unpause_workspace_automations) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/unpause | Unpause selected automations in the workspace
 *ActionsApi* | [**unsubscribe_all_automations**](docs/ActionsApi.md#unsubscribe_all_automations) | **DELETE** /api/v1/actions/organization/automations/unsubscribe | Unsubscribe from all automations in all workspaces
@@ -1000,7 +1010,9 @@ Class | Method | HTTP request | Description
  - [AlertConditionOperand](docs/AlertConditionOperand.md)
  - [AlertDescription](docs/AlertDescription.md)
  - [AlertEvaluationRow](docs/AlertEvaluationRow.md)
+ - [AnalyticsCatalogCreatedBy](docs/AnalyticsCatalogCreatedBy.md)
  - [AnalyticsCatalogTags](docs/AnalyticsCatalogTags.md)
+ - [AnalyticsCatalogUser](docs/AnalyticsCatalogUser.md)
  - [AnomalyDetectionRequest](docs/AnomalyDetectionRequest.md)
  - [AnomalyDetectionResult](docs/AnomalyDetectionResult.md)
  - [ApiEntitlement](docs/ApiEntitlement.md)
@@ -1012,6 +1024,7 @@ Class | Method | HTTP request | Description
  - [AttributeElements](docs/AttributeElements.md)
  - [AttributeElementsByRef](docs/AttributeElementsByRef.md)
  - [AttributeElementsByValue](docs/AttributeElementsByValue.md)
+ - [AttributeEqualityFilter](docs/AttributeEqualityFilter.md)
  - [AttributeExecutionResultHeader](docs/AttributeExecutionResultHeader.md)
  - [AttributeFilter](docs/AttributeFilter.md)
  - [AttributeFilterByDate](docs/AttributeFilterByDate.md)
@@ -1041,6 +1054,9 @@ Class | Method | HTTP request | Description
  - [AutomationVisualExport](docs/AutomationVisualExport.md)
  - [AvailableAssignees](docs/AvailableAssignees.md)
  - [BoundedFilter](docs/BoundedFilter.md)
+ - [ChangeAnalysisRequest](docs/ChangeAnalysisRequest.md)
+ - [ChangeAnalysisResponse](docs/ChangeAnalysisResponse.md)
+ - [ChangeAnalysisResult](docs/ChangeAnalysisResult.md)
  - [ChatHistoryInteraction](docs/ChatHistoryInteraction.md)
  - [ChatHistoryRequest](docs/ChatHistoryRequest.md)
  - [ChatHistoryResult](docs/ChatHistoryResult.md)
@@ -1790,6 +1806,7 @@ Class | Method | HTTP request | Description
  - [MemoryItemUseCases](docs/MemoryItemUseCases.md)
  - [Metric](docs/Metric.md)
  - [MetricRecord](docs/MetricRecord.md)
+ - [MetricValueChange](docs/MetricValueChange.md)
  - [NegativeAttributeFilter](docs/NegativeAttributeFilter.md)
  - [NegativeAttributeFilterNegativeAttributeFilter](docs/NegativeAttributeFilterNegativeAttributeFilter.md)
  - [Note](docs/Note.md)
@@ -1832,6 +1849,7 @@ Class | Method | HTTP request | Description
  - [PositiveAttributeFilterPositiveAttributeFilter](docs/PositiveAttributeFilterPositiveAttributeFilter.md)
  - [QualityIssue](docs/QualityIssue.md)
  - [QualityIssueObject](docs/QualityIssueObject.md)
+ - [QualityIssuesCalculationStatusResponse](docs/QualityIssuesCalculationStatusResponse.md)
  - [Range](docs/Range.md)
  - [RangeMeasureValueFilter](docs/RangeMeasureValueFilter.md)
  - [RangeMeasureValueFilterRangeMeasureValueFilter](docs/RangeMeasureValueFilterRangeMeasureValueFilter.md)
@@ -1910,6 +1928,7 @@ Class | Method | HTTP request | Description
  - [TotalExecutionResultHeader](docs/TotalExecutionResultHeader.md)
  - [TotalResultHeader](docs/TotalResultHeader.md)
  - [TriggerAutomationRequest](docs/TriggerAutomationRequest.md)
+ - [TriggerQualityIssuesCalculationResponse](docs/TriggerQualityIssuesCalculationResponse.md)
  - [UserAssignee](docs/UserAssignee.md)
  - [UserContext](docs/UserContext.md)
  - [UserGroupAssignee](docs/UserGroupAssignee.md)

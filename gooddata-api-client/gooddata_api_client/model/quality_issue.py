@@ -60,6 +60,10 @@ class QualityIssue(ModelNormal):
     """
 
     allowed_values = {
+        ('severity',): {
+            'ERROR': "error",
+            'WARNING': "warning",
+        },
     }
 
     validations = {
@@ -117,10 +121,10 @@ class QualityIssue(ModelNormal):
         """QualityIssue - a model defined in OpenAPI
 
         Args:
-            code (str):
-            detail ({str: ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},)}):
-            objects ([QualityIssueObject]):
-            severity (str):
+            code (str): Quality issue code
+            detail ({str: ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},)}): Detailed information about the quality issue
+            objects ([QualityIssueObject]): List of objects affected by this quality issue
+            severity (str): Severity level
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -212,10 +216,10 @@ class QualityIssue(ModelNormal):
         """QualityIssue - a model defined in OpenAPI
 
         Args:
-            code (str):
-            detail ({str: ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},)}):
-            objects ([QualityIssueObject]):
-            severity (str):
+            code (str): Quality issue code
+            detail ({str: ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},)}): Detailed information about the quality issue
+            objects ([QualityIssueObject]): List of objects affected by this quality issue
+            severity (str): Severity level
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
