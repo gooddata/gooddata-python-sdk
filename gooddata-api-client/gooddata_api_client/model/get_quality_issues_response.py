@@ -111,7 +111,7 @@ class GetQualityIssuesResponse(ModelNormal):
         """GetQualityIssuesResponse - a model defined in OpenAPI
 
         Args:
-            issues ([QualityIssue]):
+            issues ([QualityIssue]): List of quality issues found in the workspace
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -200,7 +200,7 @@ class GetQualityIssuesResponse(ModelNormal):
         """GetQualityIssuesResponse - a model defined in OpenAPI
 
         Args:
-            issues ([QualityIssue]):
+            issues ([QualityIssue]): List of quality issues found in the workspace
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types

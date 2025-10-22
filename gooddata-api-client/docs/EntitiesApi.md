@@ -582,16 +582,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         ),
                     ),
                 ],
-                metadata=JsonApiAutomationInAttributesMetadata(
-                    visible_filters=[
-                        VisibleFilter(
-                            is_all_time_date_filter=False,
-                            local_identifier="local_identifier_example",
-                            title="title_example",
-                        ),
-                    ],
-                    widget="widget_example",
-                ),
+                metadata=JsonApiAutomationInAttributesMetadata(),
                 raw_exports=[
                     JsonApiAutomationInAttributesRawExportsInner(
                         request_payload=RawExportAutomationRequest(
@@ -12573,16 +12564,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         ),
                     ),
                 ],
-                metadata=JsonApiAutomationInAttributesMetadata(
-                    visible_filters=[
-                        VisibleFilter(
-                            is_all_time_date_filter=False,
-                            local_identifier="local_identifier_example",
-                            title="title_example",
-                        ),
-                    ],
-                    widget="widget_example",
-                ),
+                metadata=JsonApiAutomationInAttributesMetadata(),
                 raw_exports=[
                     JsonApiAutomationInAttributesRawExportsInner(
                         request_payload=RawExportAutomationRequest(
@@ -14445,17 +14427,6 @@ with gooddata_api_client.ApiClient() as api_client:
                 ],
                 hostname="hostname_example",
                 name="name_example",
-                oauth_client_id="oauth_client_id_example",
-                oauth_client_secret="oauth_client_secret_example",
-                oauth_custom_auth_attributes={
-                    "key": "key_example",
-                },
-                oauth_custom_scopes=[
-                    "oauth_custom_scopes_example",
-                ],
-                oauth_issuer_id="myOidcProvider",
-                oauth_issuer_location="oauth_issuer_location_example",
-                oauth_subject_id_claim="oid",
             ),
             id="id1",
             relationships=JsonApiOrganizationInRelationships(
@@ -15738,16 +15709,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         ),
                     ),
                 ],
-                metadata=JsonApiAutomationInAttributesMetadata(
-                    visible_filters=[
-                        VisibleFilter(
-                            is_all_time_date_filter=False,
-                            local_identifier="local_identifier_example",
-                            title="title_example",
-                        ),
-                    ],
-                    widget="widget_example",
-                ),
+                metadata=JsonApiAutomationInAttributesMetadata(),
                 raw_exports=[
                     JsonApiAutomationInAttributesRawExportsInner(
                         request_payload=RawExportAutomationRequest(
@@ -17610,17 +17572,6 @@ with gooddata_api_client.ApiClient() as api_client:
                 ],
                 hostname="hostname_example",
                 name="name_example",
-                oauth_client_id="oauth_client_id_example",
-                oauth_client_secret="oauth_client_secret_example",
-                oauth_custom_auth_attributes={
-                    "key": "key_example",
-                },
-                oauth_custom_scopes=[
-                    "oauth_custom_scopes_example",
-                ],
-                oauth_issuer_id="myOidcProvider",
-                oauth_issuer_location="oauth_issuer_location_example",
-                oauth_subject_id_claim="oid",
             ),
             id="id1",
             relationships=JsonApiOrganizationInRelationships(

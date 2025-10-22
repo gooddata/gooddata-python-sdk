@@ -1,0 +1,152 @@
+---
+description: How to create or update Cursor rule files for GoodData Python SDK repository
+alwaysApply: false
+---
+
+# How to Create/Update Cursor Rule Files
+
+## Rule File Structure
+
+```
+.cursor/rules/
+├── cursor/                      # Meta-rules about Cursor
+│   ├── rules.mdc               # This file
+│   └── workflow-validation.mdc
+├── general/                     # Always-applied core rules
+│   └── workflow-and-testing.mdc # ESSENTIAL: Keep concise!
+└── libraries/                   # Library-specific rules
+    └── gooddata-api-client.mdc
+```
+
+## Rule Categories
+
+### General Rules (alwaysApply: true)
+Located in `general/`, always included in context.
+
+**CRITICAL**: Keep these concise - they're always loaded!
+- Focus on essential workflows
+- Use tables for quick reference
+- Remove redundancy
+- Typical size: 100-200 lines max
+
+Example: `workflow-and-testing.mdc` (merged workflow + testing essentials)
+
+### Library Rules (alwaysApply: false)
+Located in `libraries/`, loaded when relevant.
+
+Can be more detailed since they're conditional.
+
+Example: `gooddata-api-client.mdc` (API client regeneration)
+
+## Rule File Format
+
+```markdown
+---
+description: Specific, keyword-rich description for Cursor's relevance detection
+alwaysApply: true  # or false
+---
+
+# Clear Title
+
+## Essential sections only
+```
+
+### Writing Concise Rules
+
+**DO**:
+- ✅ Focus on commands and workflows
+- ✅ Use tables for quick reference
+- ✅ Include concrete examples
+- ✅ Keep always-applied rules under 200 lines
+- ✅ Merge related topics to avoid redundancy
+
+**DON'T**:
+- ❌ Repeat information across files
+- ❌ Include every possible detail
+- ❌ Write long explanations for obvious things
+- ❌ Create separate files for related topics
+
+## Description Guidelines
+
+The `description` field is critical for Cursor's relevance matching.
+
+**Good**:
+```yaml
+description: Essential development workflow and testing commands for GoodData Python SDK - formatting, linting, testing, and validation procedures
+```
+
+**Bad**:
+```yaml
+description: How to work with the code
+```
+
+Include keywords: package names, technologies, workflows, concepts.
+
+## Creating New Rules
+
+### When to Create
+
+- ✅ Critical workflow not covered
+- ✅ Library-specific patterns needed
+- ✅ Common mistakes to prevent
+
+### Process
+
+1. **Determine category**: General (always) or Library (conditional)?
+2. **Keep it concise**: Merge related topics
+3. **Test usefulness**: Would this solve real problems?
+4. **Check redundancy**: Does existing rule cover this?
+
+### Example: Adding Library Rule
+
+**User**: "Add rules for gooddata-sdk"
+
+**Action**:
+```bash
+# Create libraries/gooddata-sdk.mdc with:
+# - SDK-specific patterns (catalog services, data sources)
+# - Common imports and class structures
+# - Testing patterns for SDK
+# - Integration with API client
+```
+
+Keep focused on SDK-specific knowledge, not general workflow (already in `general/`).
+
+## Repository Context
+
+### Package Structure
+```
+gooddata-api-client/    # Generated (DO NOT EDIT)
+gooddata-sdk/           # Core SDK
+gooddata-pandas/        # Pandas integration
+gooddata-pipelines/     # Pipelines
+```
+
+### Key Files
+- `Makefile` - Root commands (api-client, test, lint)
+- `project_common.mk` - Shared package rules
+- `pyproject.toml` - Ruff configuration
+- `.pre-commit-config.yaml` - Pre-commit hooks
+
+## Validation Checklist
+
+Before committing a rule:
+
+- [ ] Description is specific and keyword-rich
+- [ ] If `alwaysApply: true`, file is under 200 lines
+- [ ] No redundancy with other rules
+- [ ] Commands are accurate and tested
+- [ ] Examples are concrete
+- [ ] File is in correct directory
+
+## TODO: Future Rules
+
+Only create if truly needed:
+- [ ] `libraries/gooddata-sdk.mdc` - SDK patterns (if not covered by api-client rule)
+- [ ] `libraries/gooddata-pandas.mdc` - Pandas integration (if needed)
+
+## Related Rules
+
+- **workflow-validation.mdc** - How Cursor reports used rules
+- **workflow-and-testing.mdc** - Example of concise, merged general rule
+- **libraries/gooddata-api-client.mdc** - Example of library-specific rule

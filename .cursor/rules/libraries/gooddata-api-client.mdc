@@ -1,0 +1,187 @@
+---
+description: Rules for GoodData API Client management - OpenAPI client generation, regeneration workflow, and integration with gooddata-sdk. Critical for maintaining API synchronization.
+alwaysApply: false
+---
+
+# GoodData API Client Management
+
+## Critical: Generated Code - DO NOT EDIT MANUALLY
+
+**gooddata-api-client** is generated from OpenAPI specs. Manual edits will be overwritten.
+
+## When to Regenerate
+
+Regenerate when backend API changes:
+- ✅ New endpoints, fields, or models
+- ✅ Changed request/response structures
+- ✅ Adopting new backend features
+
+## Regeneration Command
+
+```bash
+# From repository root (backend must be running at localhost:3000)
+make api-client
+```
+
+This will:
+1. Download OpenAPI schemas from backend
+2. Merge them into `schemas/gooddata-api-client.json`
+3. Regenerate Python client in `gooddata-api-client/`
+
+## Post-Regeneration: Adopt Changes in SDK
+
+**Pattern**: When API client model changes, update SDK wrapper classes.
+
+### Example: Adding New Field
+
+```bash
+# 1. Regenerate
+make api-client
+
+# 2. Check what changed
+git diff gooddata-api-client/gooddata_api_client/model/declarative_column.py
+
+# 3. Update SDK wrapper
+vim gooddata-sdk/gooddata_sdk/catalog/data_source/declarative_model/physical_model/column.py
+
+# Add the new field:
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogDeclarativeColumn(Base):
+    name: str
+    data_type: str
+    description: Optional[str] = None  # NEW FIELD
+    # ...
+
+# 4. Format, lint, test
+make format-fix && make lint
+cd gooddata-sdk
+TEST_ENVS=py313 ADD_ARGS="-k scan" make test
+
+# 5. Commit all
+cd ..
+git add schemas/ gooddata-api-client/ gooddata-sdk/
+git commit -m "feat: adopt column description from scan API"
+```
+
+## SDK Wrapper Pattern
+
+SDK wrappers provide clean interfaces around generated API models:
+
+```python
+# SDK wrapper class
+from gooddata_api_client.model.declarative_column import DeclarativeColumn
+from gooddata_sdk.catalog.base import Base
+
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogDeclarativeColumn(Base):
+    name: str
+    data_type: str
+    description: Optional[str] = None  # Match API client fields
+    
+    @staticmethod
+    def client_class() -> type[DeclarativeColumn]:
+        return DeclarativeColumn  # Link to API client
+```
+
+## Common Wrapper Locations
+
+| API Client Model | SDK Wrapper | Location |
+|-----------------|-------------|----------|
+| `DeclarativeColumn` | `CatalogDeclarativeColumn` | `gooddata-sdk/.../physical_model/column.py` |
+| `DeclarativeTable` | `CatalogDeclarativeTable` | `gooddata-sdk/.../physical_model/table.py` |
+| `ScanRequest` | `CatalogScanModelRequest` | `gooddata-sdk/.../requests/scan_model_request.py` |
+| `SqlColumn` | `SqlColumn` | `gooddata-sdk/.../action_model/sql_column.py` |
+
+## Finding Changes
+
+```bash
+# See what changed in specific model
+git diff gooddata-api-client/gooddata_api_client/model/declarative_column.py
+
+# Check generated docs
+cat gooddata-api-client/docs/DeclarativeColumn.md
+```
+
+## Adding Optional Field
+
+```python
+# If API adds optional field, SDK should match:
+description: Optional[str] = None  # Add with None default
+```
+
+## Adding Required Field (Breaking)
+
+```python
+# If API makes field required:
+new_required_field: str  # No default = required
+```
+
+Note: This is a breaking change - document in commit message.
+
+## Testing After Regeneration
+
+```bash
+cd gooddata-sdk
+
+# Test affected functionality
+TEST_ENVS=py313 ADD_ARGS="-k scan" make test
+TEST_ENVS=py313 ADD_ARGS="-k generate_logical_model" make test
+
+# Full test
+make test
+```
+
+## Export New Classes
+
+If adding new SDK wrapper class, export it:
+
+```python
+# gooddata-sdk/gooddata_sdk/__init__.py
+from gooddata_sdk.catalog.new_feature import CatalogNewFeature
+```
+
+## Troubleshooting
+
+**Backend not running**:
+```bash
+docker-compose up
+```
+
+**Schema download failed**:
+```bash
+# Check backend services respond
+curl http://localhost:3000/api/v1/schemas/scan
+```
+
+**Merge conflict after regeneration**:
+```bash
+git pull
+make api-client  # Regenerate to get consistent state
+git add gooddata-api-client/ schemas/
+git commit -m "chore: regenerate API client after merge"
+```
+
+## Checklist
+
+After regenerating API client:
+
+- [ ] Regeneration completed without errors
+- [ ] Checked `git diff` to see changes
+- [ ] Updated SDK wrappers in `gooddata-sdk/`
+- [ ] Added new classes to `__init__.py` if needed
+- [ ] Ran `make format-fix && make lint`
+- [ ] Ran tests: `TEST_ENVS=py313 ADD_ARGS="-k relevant" make test`
+- [ ] Committed with descriptive message
+
+## Key Rules
+
+❌ **DON'T**:
+- Edit generated files in `gooddata-api-client/`
+- Regenerate without backend running
+- Skip updating SDK wrappers
+
+✅ **DO**:
+- Commit `schemas/` along with generated code
+- Update SDK wrappers to match new fields
+- Test thoroughly after regeneration
+- Export new classes in `__init__.py`

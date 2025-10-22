@@ -120,7 +120,6 @@
         "properties": {
           "resultIdToCancelTokenPairs": {
             "additionalProperties": {
-              "description": "resultId to cancel token pairs",
               "type": "string"
             },
             "description": "resultId to cancel token pairs",
@@ -422,6 +421,26 @@
         ],
         "type": "object"
       },
+      "AnalyticsCatalogCreatedBy": {
+        "properties": {
+          "reasoning": {
+            "description": "Reasoning for error states",
+            "type": "string"
+          },
+          "users": {
+            "description": "Users who created any object in the catalog",
+            "items": {
+              "$ref": "#/components/schemas/AnalyticsCatalogUser"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "reasoning",
+          "users"
+        ],
+        "type": "object"
+      },
       "AnalyticsCatalogTags": {
         "properties": {
           "tags": {
@@ -434,6 +453,29 @@
         },
         "required": [
           "tags"
+        ],
+        "type": "object"
+      },
+      "AnalyticsCatalogUser": {
+        "description": "Users who created any object in the catalog",
+        "properties": {
+          "firstname": {
+            "description": "First name of the user who created any objects",
+            "type": "string"
+          },
+          "lastname": {
+            "description": "Last name of the user who created any objects",
+            "type": "string"
+          },
+          "userId": {
+            "description": "User ID of the user who created any objects",
+            "type": "string"
+          }
+        },
+        "required": [
+          "firstname",
+          "lastname",
+          "userId"
         ],
         "type": "object"
       },
@@ -514,6 +556,28 @@
         },
         "required": [
           "arithmeticMeasure"
+        ],
+        "type": "object"
+      },
+      "AttributeEqualityFilter": {
+        "description": "Attribute equality filter",
+        "properties": {
+          "labelIdentifier": {
+            "description": "The attribute label identifier to filter on",
+            "type": "string"
+          },
+          "values": {
+            "description": "List of values to match (IN operation)",
+            "items": {
+              "description": "List of values to match (IN operation)",
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "labelIdentifier",
+          "values"
         ],
         "type": "object"
       },
@@ -805,6 +869,84 @@
         ],
         "type": "object"
       },
+      "ChangeAnalysisRequest": {
+        "description": "Request for change analysis computation",
+        "properties": {
+          "analyzedPeriod": {
+            "description": "The analyzed time period (e.g., '2025-02')",
+            "type": "string"
+          },
+          "attributeLabelIdentifiers": {
+            "description": "Label identifiers of attributes to analyze for significant changes. If empty, valid attributes will be automatically discovered.",
+            "items": {
+              "description": "Label identifiers of attributes to analyze for significant changes. If empty, valid attributes will be automatically discovered.",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "dateAttributeIdentifier": {
+            "description": "The date attribute identifier to use for time period comparison",
+            "type": "string"
+          },
+          "filters": {
+            "description": "Optional filters to apply.",
+            "items": {
+              "$ref": "#/components/schemas/AttributeEqualityFilter"
+            },
+            "type": "array"
+          },
+          "metricIdentifier": {
+            "description": "The metric identifier to analyze for changes",
+            "type": "string"
+          },
+          "referencePeriod": {
+            "description": "The reference time period (e.g., '2025-01')",
+            "type": "string"
+          },
+          "useSmartAttributeSelection": {
+            "default": false,
+            "description": "Whether to use smart attribute selection (LLM-based) instead of discovering all valid attributes. If true, GenAI will intelligently select the most relevant attributes for change analysis. If false or not set, all valid attributes will be discovered using Calcique. Smart attribute selection applies only when no attributes are provided.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "analyzedPeriod",
+          "attributeLabelIdentifiers",
+          "dateAttributeIdentifier",
+          "filters",
+          "metricIdentifier",
+          "referencePeriod"
+        ],
+        "type": "object"
+      },
+      "ChangeAnalysisResponse": {
+        "description": "Response for change analysis computation",
+        "properties": {
+          "links": {
+            "$ref": "#/components/schemas/ExecutionLinks"
+          }
+        },
+        "required": [
+          "links"
+        ],
+        "type": "object"
+      },
+      "ChangeAnalysisResult": {
+        "description": "Result of a change analysis execution.",
+        "properties": {
+          "data": {
+            "description": "The change analysis result data containing significant changes.",
+            "items": {
+              "$ref": "#/components/schemas/MetricValueChange"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
       "ChatHistoryInteraction": {
         "description": "List of chat history interactions.",
         "properties": {
@@ -924,6 +1066,11 @@
       },
       "ChatRequest": {
         "properties": {
+          "includeHidden": {
+            "default": false,
+            "description": "If true, includes hidden objects in search and visualization building. If false (default), excludes objects where isHidden=true.",
+            "type": "boolean"
+          },
           "limitCreate": {
             "default": 3,
             "description": "Maximum number of created results.",
@@ -2111,6 +2258,7 @@
       "GetQualityIssuesResponse": {
         "properties": {
           "issues": {
+            "description": "List of quality issues found in the workspace",
             "items": {
               "$ref": "#/components/schemas/QualityIssue"
             },
@@ -2537,6 +2685,65 @@
         ],
         "type": "object"
       },
+      "MetricValueChange": {
+        "description": "Individual change analysis data item",
+        "properties": {
+          "attributeName": {
+            "description": "The name of the attribute being analyzed",
+            "type": "string"
+          },
+          "attributeValue": {
+            "description": "The value of the attribute being analyzed",
+            "type": "string"
+          },
+          "attributeValuesChangeMean": {
+            "description": "The mean of attribute value changes for the attribute being analyzed",
+            "format": "double",
+            "type": "number"
+          },
+          "attributeValuesChangeStd": {
+            "description": "The standard deviation of attribute value changes for the attribute being analyzed",
+            "format": "double",
+            "type": "number"
+          },
+          "isSignificantChange": {
+            "description": "Whether the change is statistically significant",
+            "type": "boolean"
+          },
+          "metricValueDelta": {
+            "description": "The delta between analyzed and reference periods",
+            "format": "double",
+            "type": "number"
+          },
+          "metricValueDeltaAbs": {
+            "description": "The absolute delta between analyzed and reference periods",
+            "format": "double",
+            "type": "number"
+          },
+          "metricValueInAnalyzedPeriod": {
+            "description": "The metric value in the analyzed period",
+            "format": "double",
+            "type": "number"
+          },
+          "metricValueInReferencePeriod": {
+            "description": "The metric value in the reference period",
+            "format": "double",
+            "type": "number"
+          }
+        },
+        "required": [
+          "attributeName",
+          "attributeValue",
+          "attributeValuesChangeMean",
+          "attributeValuesChangeStd",
+          "isSignificantChange",
+          "metricValueDelta",
+          "metricValueDeltaAbs",
+          "metricValueInAnalyzedPeriod",
+          "metricValueInReferencePeriod"
+        ],
+        "type": "object"
+      },
       "NegativeAttributeFilter": {
         "description": "Filter able to limit element values by label and related selected negated elements.",
         "properties": {
@@ -2737,23 +2944,34 @@
         "type": "object"
       },
       "QualityIssue": {
+        "description": "List of quality issues (available when status is COMPLETED)",
         "properties": {
           "code": {
+            "description": "Quality issue code",
+            "example": "SIMILAR_NAMES",
             "type": "string"
           },
           "detail": {
             "additionalProperties": {
+              "description": "Detailed information about the quality issue",
               "type": "object"
             },
+            "description": "Detailed information about the quality issue",
             "type": "object"
           },
           "objects": {
+            "description": "List of objects affected by this quality issue",
             "items": {
               "$ref": "#/components/schemas/QualityIssueObject"
             },
             "type": "array"
           },
           "severity": {
+            "description": "Severity level",
+            "enum": [
+              "error",
+              "warning"
+            ],
             "type": "string"
           }
         },
@@ -2766,17 +2984,57 @@
         "type": "object"
       },
       "QualityIssueObject": {
+        "description": "List of objects affected by this quality issue",
         "properties": {
           "id": {
+            "description": "Object ID",
+            "example": "revenue",
             "type": "string"
           },
           "type": {
+            "description": "Object type",
+            "example": "metric",
+            "type": "string"
+          },
+          "workspaceId": {
+            "description": "Workspace ID where the object belongs",
+            "example": "demo",
             "type": "string"
           }
         },
         "required": [
           "id",
-          "type"
+          "type",
+          "workspaceId"
+        ],
+        "type": "object"
+      },
+      "QualityIssuesCalculationStatusResponse": {
+        "properties": {
+          "error": {
+            "description": "Error message (available when status is FAILED or NOT_FOUND)",
+            "type": "string"
+          },
+          "issues": {
+            "description": "List of quality issues (available when status is COMPLETED)",
+            "items": {
+              "$ref": "#/components/schemas/QualityIssue"
+            },
+            "type": "array"
+          },
+          "status": {
+            "description": "Current status of the calculation",
+            "enum": [
+              "RUNNING",
+              "COMPLETED",
+              "FAILED",
+              "NOT_FOUND"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "status"
         ],
         "type": "object"
       },
@@ -3623,6 +3881,28 @@
         ],
         "type": "object"
       },
+      "TriggerQualityIssuesCalculationResponse": {
+        "properties": {
+          "processId": {
+            "description": "Process ID for tracking the calculation status",
+            "type": "string"
+          },
+          "status": {
+            "description": "Current status of the calculation",
+            "enum": [
+              "RUNNING",
+              "COMPLETED",
+              "FAILED"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "processId",
+          "status"
+        ],
+        "type": "object"
+      },
       "UserContext": {
         "description": "User context, which can affect the behavior of the underlying AI features.",
         "properties": {
@@ -3802,6 +4082,41 @@
           }
         },
         "summary": "Validate LLM Endpoint By Id",
+        "tags": [
+          "Smart Functions",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/createdBy": {
+      "get": {
+        "description": "Returns a list of Users who created any object for this workspace",
+        "operationId": "createdBy",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalyticsCatalogCreatedBy"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Get Analytics Catalog CreatedBy",
         "tags": [
           "Smart Functions",
           "actions"
@@ -4045,6 +4360,84 @@
           }
         },
         "summary": "Get Quality Issues",
+        "tags": [
+          "Smart Functions",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/issues/status/{processId}": {
+      "get": {
+        "description": "Returns the status of a quality issues calculation process identified by process ID.",
+        "operationId": "getQualityIssuesCalculationStatus",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "processId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QualityIssuesCalculationStatusResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Get Quality Issues Calculation Status",
+        "tags": [
+          "Smart Functions",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/issues/triggerCheck": {
+      "post": {
+        "description": "Triggers asynchronous calculation of metadata quality issues and returns a process ID for status tracking.",
+        "operationId": "triggerQualityIssuesCalculation",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TriggerQualityIssuesCalculationResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Trigger Quality Issues Calculation",
         "tags": [
           "Smart Functions",
           "actions"
@@ -4897,6 +5290,96 @@
             "VIEW"
           ]
         }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/computeChangeAnalysis": {
+      "post": {
+        "description": "Computes change analysis for the provided execution definition.",
+        "operationId": "changeAnalysis",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangeAnalysisRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangeAnalysisResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Compute change analysis",
+        "tags": [
+          "Computation",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/computeChangeAnalysis/result/{resultId}": {
+      "get": {
+        "description": "Gets change analysis result.",
+        "operationId": "changeAnalysisResult",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Result ID",
+            "example": "a9b28f9dc55f37ea9f4a5fb0c76895923591e781",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangeAnalysisResult"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Get change analysis result",
+        "tags": [
+          "Computation",
+          "actions"
+        ]
       }
     },
     "/api/v1/actions/workspaces/{workspaceId}/execution/computeKeyDrivers": {

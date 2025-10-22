@@ -39,6 +39,7 @@ with gooddata_api_client.ApiClient() as api_client:
     generate_ldm_request = GenerateLdmRequest(
         aggregated_fact_prefix="aggr",
         date_granularities="all",
+        date_reference_prefix="d",
         denorm_prefix="dr",
         fact_prefix="f",
         generate_long_ids=False,
@@ -52,6 +53,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     columns=[
                         SqlColumn(
                             data_type="INT",
+                            description="Customer unique identifier",
                             name="customer_id",
                         ),
                     ],
@@ -77,6 +79,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     columns=[
                         DeclarativeColumn(
                             data_type="INT",
+                            description="Customer unique identifier",
                             is_primary_key=True,
                             name="customer_id",
                             referenced_table_column="customer_id",

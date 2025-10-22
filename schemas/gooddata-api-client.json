@@ -280,7 +280,6 @@
         "properties": {
           "resultIdToCancelTokenPairs": {
             "additionalProperties": {
-              "description": "resultId to cancel token pairs",
               "type": "string"
             },
             "description": "resultId to cancel token pairs",
@@ -736,6 +735,26 @@
         },
         "type": "object"
       },
+      "AnalyticsCatalogCreatedBy": {
+        "properties": {
+          "reasoning": {
+            "description": "Reasoning for error states",
+            "type": "string"
+          },
+          "users": {
+            "description": "Users who created any object in the catalog",
+            "items": {
+              "$ref": "#/components/schemas/AnalyticsCatalogUser"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "reasoning",
+          "users"
+        ],
+        "type": "object"
+      },
       "AnalyticsCatalogTags": {
         "properties": {
           "tags": {
@@ -748,6 +767,29 @@
         },
         "required": [
           "tags"
+        ],
+        "type": "object"
+      },
+      "AnalyticsCatalogUser": {
+        "description": "Users who created any object in the catalog",
+        "properties": {
+          "firstname": {
+            "description": "First name of the user who created any objects",
+            "type": "string"
+          },
+          "lastname": {
+            "description": "Last name of the user who created any objects",
+            "type": "string"
+          },
+          "userId": {
+            "description": "User ID of the user who created any objects",
+            "type": "string"
+          }
+        },
+        "required": [
+          "firstname",
+          "lastname",
+          "userId"
         ],
         "type": "object"
       },
@@ -808,7 +850,6 @@
               "ExtraCache",
               "Hipaa",
               "PdfExports",
-              "ManagedOIDC",
               "UiLocalization",
               "Tier",
               "UserCount",
@@ -977,6 +1018,28 @@
           }
         },
         "required": [
+          "values"
+        ],
+        "type": "object"
+      },
+      "AttributeEqualityFilter": {
+        "description": "Attribute equality filter",
+        "properties": {
+          "labelIdentifier": {
+            "description": "The attribute label identifier to filter on",
+            "type": "string"
+          },
+          "values": {
+            "description": "List of values to match (IN operation)",
+            "items": {
+              "description": "List of values to match (IN operation)",
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "labelIdentifier",
           "values"
         ],
         "type": "object"
@@ -1323,6 +1386,7 @@
         "type": "object"
       },
       "AutomationMetadata": {
+        "additionalProperties": true,
         "description": "Additional information for the automation.",
         "maxLength": 250000,
         "nullable": true,
@@ -1503,6 +1567,84 @@
         ],
         "type": "object"
       },
+      "ChangeAnalysisRequest": {
+        "description": "Request for change analysis computation",
+        "properties": {
+          "analyzedPeriod": {
+            "description": "The analyzed time period (e.g., '2025-02')",
+            "type": "string"
+          },
+          "attributeLabelIdentifiers": {
+            "description": "Label identifiers of attributes to analyze for significant changes. If empty, valid attributes will be automatically discovered.",
+            "items": {
+              "description": "Label identifiers of attributes to analyze for significant changes. If empty, valid attributes will be automatically discovered.",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "dateAttributeIdentifier": {
+            "description": "The date attribute identifier to use for time period comparison",
+            "type": "string"
+          },
+          "filters": {
+            "description": "Optional filters to apply.",
+            "items": {
+              "$ref": "#/components/schemas/AttributeEqualityFilter"
+            },
+            "type": "array"
+          },
+          "metricIdentifier": {
+            "description": "The metric identifier to analyze for changes",
+            "type": "string"
+          },
+          "referencePeriod": {
+            "description": "The reference time period (e.g., '2025-01')",
+            "type": "string"
+          },
+          "useSmartAttributeSelection": {
+            "default": false,
+            "description": "Whether to use smart attribute selection (LLM-based) instead of discovering all valid attributes. If true, GenAI will intelligently select the most relevant attributes for change analysis. If false or not set, all valid attributes will be discovered using Calcique. Smart attribute selection applies only when no attributes are provided.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "analyzedPeriod",
+          "attributeLabelIdentifiers",
+          "dateAttributeIdentifier",
+          "filters",
+          "metricIdentifier",
+          "referencePeriod"
+        ],
+        "type": "object"
+      },
+      "ChangeAnalysisResponse": {
+        "description": "Response for change analysis computation",
+        "properties": {
+          "links": {
+            "$ref": "#/components/schemas/ExecutionLinks"
+          }
+        },
+        "required": [
+          "links"
+        ],
+        "type": "object"
+      },
+      "ChangeAnalysisResult": {
+        "description": "Result of a change analysis execution.",
+        "properties": {
+          "data": {
+            "description": "The change analysis result data containing significant changes.",
+            "items": {
+              "$ref": "#/components/schemas/MetricValueChange"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
       "ChatHistoryInteraction": {
         "description": "List of chat history interactions.",
         "properties": {
@@ -1622,6 +1764,11 @@
       },
       "ChatRequest": {
         "properties": {
+          "includeHidden": {
+            "default": false,
+            "description": "If true, includes hidden objects in search and visualization building. If false (default), excludes objects where isHidden=true.",
+            "type": "boolean"
+          },
           "limitCreate": {
             "default": 3,
             "description": "Maximum number of created results.",
@@ -3641,6 +3788,12 @@
             "example": "INT",
             "type": "string"
           },
+          "description": {
+            "description": "Column description/comment from database",
+            "example": "Customer unique identifier",
+            "maxLength": 255,
+            "type": "string"
+          },
           "isPrimaryKey": {
             "description": "Is column part of primary key?",
             "type": "boolean"
@@ -4495,8 +4648,6 @@
         "properties": {
           "customClaimMapping": {
             "additionalProperties": {
-              "description": "Map of custom claim overrides. To be used when your Idp does not provide default claims (sub, email, name, given_name, family_name, urn.gooddata.user_groups [optional]). Define the key pair for the claim you wish to override, where the key is the default name of the attribute and the value is your custom name for the given attribute.",
-              "maxLength": 10000,
               "type": "string"
             },
             "description": "Map of custom claim overrides. To be used when your Idp does not provide default claims (sub, email, name, given_name, family_name, urn.gooddata.user_groups [optional]). Define the key pair for the claim you wish to override, where the key is the default name of the attribute and the value is your custom name for the given attribute.",
@@ -4773,6 +4924,11 @@
             "example": "total-sales",
             "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
+          },
+          "isHidden": {
+            "description": "If true, this metric is hidden from AI search results.",
+            "example": false,
+            "type": "boolean"
           },
           "modifiedAt": {
             "description": "Time of the last entity modification.",
@@ -5077,52 +5233,6 @@
             "maxLength": 255,
             "type": "string"
           },
-          "oauthClientId": {
-            "description": "Identifier of the authentication provider",
-            "maxLength": 255,
-            "type": "string"
-          },
-          "oauthClientSecret": {
-            "description": "Communication secret of the authentication provider (never returned back).",
-            "maxLength": 255,
-            "type": "string"
-          },
-          "oauthCustomAuthAttributes": {
-            "additionalProperties": {
-              "description": "Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.",
-              "maxLength": 10000,
-              "type": "string"
-            },
-            "description": "Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.",
-            "maxLength": 10000,
-            "type": "object"
-          },
-          "oauthCustomScopes": {
-            "description": "List of additional OAuth scopes which may be required by other providers (e.g. Snowflake)",
-            "items": {
-              "maxLength": 255,
-              "type": "string"
-            },
-            "nullable": true,
-            "type": "array"
-          },
-          "oauthIssuerId": {
-            "description": "Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.",
-            "example": "myOidcProvider",
-            "maxLength": 255,
-            "type": "string"
-          },
-          "oauthIssuerLocation": {
-            "description": "URI of the authentication provider.",
-            "maxLength": 255,
-            "type": "string"
-          },
-          "oauthSubjectIdClaim": {
-            "description": "Any string identifying the claim in ID token, that should be used for user identification. The default value is 'sub'.",
-            "example": "oid",
-            "maxLength": 255,
-            "type": "string"
-          },
           "permissions": {
             "items": {
               "$ref": "#/components/schemas/DeclarativeOrganizationPermission"
@@ -5363,12 +5473,14 @@
               "JWT_JIT_PROVISIONING",
               "DASHBOARD_FILTERS_APPLY_MODE",
               "ENABLE_SLIDES_EXPORT",
+              "ENABLE_SNAPSHOT_EXPORT",
               "AI_RATE_LIMIT",
               "ATTACHMENT_SIZE_LIMIT",
               "ATTACHMENT_LINK_TTL",
               "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
               "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
               "ENABLE_AUTOMATION_EVALUATION_MODE",
+              "ENABLE_ACCESSIBILITY_MODE",
               "REGISTERED_PLUGGABLE_APPLICATIONS"
             ],
             "example": "TIMEZONE",
@@ -6702,7 +6814,6 @@
                 "ExtraCache",
                 "Hipaa",
                 "PdfExports",
-                "ManagedOIDC",
                 "UiLocalization",
                 "Tier",
                 "UserCount",
@@ -7128,25 +7239,16 @@
               "YES",
               "NO"
             ],
-            "type": "string",
-            "xml": {
-              "attribute": true
-            }
+            "type": "string"
           },
           "id": {
-            "type": "string",
-            "xml": {
-              "attribute": true
-            }
+            "type": "string"
           },
           "notes": {
             "$ref": "#/components/schemas/Notes"
           },
           "original": {
-            "type": "string",
-            "xml": {
-              "attribute": true
-            }
+            "type": "string"
           },
           "otherAttributes": {
             "additionalProperties": {
@@ -7158,11 +7260,7 @@
             "$ref": "#/components/schemas/Skeleton"
           },
           "space": {
-            "type": "string",
-            "xml": {
-              "attribute": true,
-              "namespace": "http://www.w3.org/XML/1998/namespace"
-            }
+            "type": "string"
           },
           "srcDir": {
             "enum": [
@@ -7170,20 +7268,14 @@
               "RTL",
               "AUTO"
             ],
-            "type": "string",
-            "xml": {
-              "attribute": true
-            }
+            "type": "string"
           },
           "translate": {
             "enum": [
               "YES",
               "NO"
             ],
-            "type": "string",
-            "xml": {
-              "attribute": true
-            }
+            "type": "string"
           },
           "trgDir": {
             "enum": [
@@ -7191,10 +7283,7 @@
               "RTL",
               "AUTO"
             ],
-            "type": "string",
-            "xml": {
-              "attribute": true
-            }
+            "type": "string"
           },
           "unitOrGroup": {
             "items": {
@@ -7203,11 +7292,7 @@
             "type": "array"
           }
         },
-        "type": "object",
-        "xml": {
-          "name": "file",
-          "namespace": "urn:oasis:names:tc:xliff:document:2.0"
-        }
+        "type": "object"
       },
       "Filter": {
         "description": "List of filters to be applied to the new visualization",
@@ -7418,6 +7503,11 @@
             "example": "all",
             "type": "string"
           },
+          "dateReferencePrefix": {
+            "description": "Columns starting with this prefix will be considered as references to date dataset. The prefix is then followed by the value of `separator` parameter. Given the reference prefix is `d` and separator is `__`, the columns with name like `d__date` will be considered as reference to date dataset. There can be also second separator and granularity suffix, e.g. `d__date__day` to create attribute reference to exact date dataset and granularity.",
+            "example": "d",
+            "type": "string"
+          },
           "denormPrefix": {
             "description": "Columns starting with this prefix will be considered as denormalization references. The prefix is then followed by the value of `separator` parameter. Given the denormalization reference prefix is `dr` and separator is `__`, the columns with name like `dr__customer_name` will be considered as denormalization references.",
             "example": "dr",
@@ -7503,6 +7593,7 @@
       "GetQualityIssuesResponse": {
         "properties": {
           "issues": {
+            "description": "List of quality issues found in the workspace",
             "items": {
               "$ref": "#/components/schemas/QualityIssue"
             },
@@ -9599,6 +9690,7 @@
                 "type": "array"
               },
               "metadata": {
+                "additionalProperties": true,
                 "description": "Additional information for the automation.",
                 "maxLength": 250000,
                 "nullable": true,
@@ -9923,6 +10015,7 @@
                 "type": "array"
               },
               "metadata": {
+                "additionalProperties": true,
                 "description": "Additional information for the automation.",
                 "maxLength": 250000,
                 "nullable": true,
@@ -10365,6 +10458,7 @@
                 "type": "array"
               },
               "metadata": {
+                "additionalProperties": true,
                 "description": "Additional information for the automation.",
                 "maxLength": 250000,
                 "nullable": true,
@@ -17424,47 +17518,6 @@
                 "maxLength": 255,
                 "nullable": true,
                 "type": "string"
-              },
-              "oauthClientId": {
-                "maxLength": 255,
-                "type": "string"
-              },
-              "oauthClientSecret": {
-                "maxLength": 255,
-                "type": "string"
-              },
-              "oauthCustomAuthAttributes": {
-                "additionalProperties": {
-                  "type": "string"
-                },
-                "description": "Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.",
-                "maxLength": 10000,
-                "type": "object"
-              },
-              "oauthCustomScopes": {
-                "description": "List of additional OAuth scopes which may be required by other providers (e.g. Snowflake)",
-                "items": {
-                  "maxLength": 255,
-                  "type": "string"
-                },
-                "nullable": true,
-                "type": "array"
-              },
-              "oauthIssuerId": {
-                "description": "Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.",
-                "example": "myOidcProvider",
-                "maxLength": 255,
-                "type": "string"
-              },
-              "oauthIssuerLocation": {
-                "maxLength": 255,
-                "type": "string"
-              },
-              "oauthSubjectIdClaim": {
-                "description": "Any string identifying the claim in ID token, that should be used for user identification. The default value is 'sub'.",
-                "example": "oid",
-                "maxLength": 255,
-                "type": "string"
               }
             },
             "type": "object"
@@ -17568,43 +17621,6 @@
               "name": {
                 "maxLength": 255,
                 "nullable": true,
-                "type": "string"
-              },
-              "oauthClientId": {
-                "maxLength": 255,
-                "type": "string"
-              },
-              "oauthCustomAuthAttributes": {
-                "additionalProperties": {
-                  "type": "string"
-                },
-                "description": "Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.",
-                "maxLength": 10000,
-                "type": "object"
-              },
-              "oauthCustomScopes": {
-                "description": "List of additional OAuth scopes which may be required by other providers (e.g. Snowflake)",
-                "items": {
-                  "maxLength": 255,
-                  "type": "string"
-                },
-                "nullable": true,
-                "type": "array"
-              },
-              "oauthIssuerId": {
-                "description": "Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.",
-                "example": "myOidcProvider",
-                "maxLength": 255,
-                "type": "string"
-              },
-              "oauthIssuerLocation": {
-                "maxLength": 255,
-                "type": "string"
-              },
-              "oauthSubjectIdClaim": {
-                "description": "Any string identifying the claim in ID token, that should be used for user identification. The default value is 'sub'.",
-                "example": "oid",
-                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -17755,47 +17771,6 @@
                 "maxLength": 255,
                 "nullable": true,
                 "type": "string"
-              },
-              "oauthClientId": {
-                "maxLength": 255,
-                "type": "string"
-              },
-              "oauthClientSecret": {
-                "maxLength": 255,
-                "type": "string"
-              },
-              "oauthCustomAuthAttributes": {
-                "additionalProperties": {
-                  "type": "string"
-                },
-                "description": "Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.",
-                "maxLength": 10000,
-                "type": "object"
-              },
-              "oauthCustomScopes": {
-                "description": "List of additional OAuth scopes which may be required by other providers (e.g. Snowflake)",
-                "items": {
-                  "maxLength": 255,
-                  "type": "string"
-                },
-                "nullable": true,
-                "type": "array"
-              },
-              "oauthIssuerId": {
-                "description": "Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.",
-                "example": "myOidcProvider",
-                "maxLength": 255,
-                "type": "string"
-              },
-              "oauthIssuerLocation": {
-                "maxLength": 255,
-                "type": "string"
-              },
-              "oauthSubjectIdClaim": {
-                "description": "Any string identifying the claim in ID token, that should be used for user identification. The default value is 'sub'.",
-                "example": "oid",
-                "maxLength": 255,
-                "type": "string"
               }
             },
             "type": "object"
@@ -17883,12 +17858,14 @@
                   "JWT_JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
                   "ENABLE_SLIDES_EXPORT",
+                  "ENABLE_SNAPSHOT_EXPORT",
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
                   "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
                   "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
                   "ENABLE_AUTOMATION_EVALUATION_MODE",
+                  "ENABLE_ACCESSIBILITY_MODE",
                   "REGISTERED_PLUGGABLE_APPLICATIONS"
                 ],
                 "type": "string"
@@ -17963,12 +17940,14 @@
                   "JWT_JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
                   "ENABLE_SLIDES_EXPORT",
+                  "ENABLE_SNAPSHOT_EXPORT",
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
                   "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
                   "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
                   "ENABLE_AUTOMATION_EVALUATION_MODE",
+                  "ENABLE_ACCESSIBILITY_MODE",
                   "REGISTERED_PLUGGABLE_APPLICATIONS"
                 ],
                 "type": "string"
@@ -18083,12 +18062,14 @@
                   "JWT_JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
                   "ENABLE_SLIDES_EXPORT",
+                  "ENABLE_SNAPSHOT_EXPORT",
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
                   "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
                   "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
                   "ENABLE_AUTOMATION_EVALUATION_MODE",
+                  "ENABLE_ACCESSIBILITY_MODE",
                   "REGISTERED_PLUGGABLE_APPLICATIONS"
                 ],
                 "type": "string"
@@ -19569,12 +19550,14 @@
                   "JWT_JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
                   "ENABLE_SLIDES_EXPORT",
+                  "ENABLE_SNAPSHOT_EXPORT",
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
                   "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
                   "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
                   "ENABLE_AUTOMATION_EVALUATION_MODE",
+                  "ENABLE_ACCESSIBILITY_MODE",
                   "REGISTERED_PLUGGABLE_APPLICATIONS"
                 ],
                 "type": "string"
@@ -19649,12 +19632,14 @@
                   "JWT_JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
                   "ENABLE_SLIDES_EXPORT",
+                  "ENABLE_SNAPSHOT_EXPORT",
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
                   "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
                   "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
                   "ENABLE_AUTOMATION_EVALUATION_MODE",
+                  "ENABLE_ACCESSIBILITY_MODE",
                   "REGISTERED_PLUGGABLE_APPLICATIONS"
                 ],
                 "type": "string"
@@ -20352,6 +20337,7 @@
                 "type": "array"
               },
               "metadata": {
+                "additionalProperties": true,
                 "description": "Additional information for the automation.",
                 "maxLength": 250000,
                 "nullable": true,
@@ -21831,12 +21817,14 @@
                   "JWT_JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
                   "ENABLE_SLIDES_EXPORT",
+                  "ENABLE_SNAPSHOT_EXPORT",
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
                   "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
                   "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
                   "ENABLE_AUTOMATION_EVALUATION_MODE",
+                  "ENABLE_ACCESSIBILITY_MODE",
                   "REGISTERED_PLUGGABLE_APPLICATIONS"
                 ],
                 "type": "string"
@@ -21911,12 +21899,14 @@
                   "JWT_JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
                   "ENABLE_SLIDES_EXPORT",
+                  "ENABLE_SNAPSHOT_EXPORT",
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
                   "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
                   "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
                   "ENABLE_AUTOMATION_EVALUATION_MODE",
+                  "ENABLE_ACCESSIBILITY_MODE",
                   "REGISTERED_PLUGGABLE_APPLICATIONS"
                 ],
                 "type": "string"
@@ -22057,12 +22047,14 @@
                   "JWT_JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
                   "ENABLE_SLIDES_EXPORT",
+                  "ENABLE_SNAPSHOT_EXPORT",
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
                   "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
                   "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
                   "ENABLE_AUTOMATION_EVALUATION_MODE",
+                  "ENABLE_ACCESSIBILITY_MODE",
                   "REGISTERED_PLUGGABLE_APPLICATIONS"
                 ],
                 "type": "string"
@@ -22137,12 +22129,14 @@
                   "JWT_JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
                   "ENABLE_SLIDES_EXPORT",
+                  "ENABLE_SNAPSHOT_EXPORT",
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
                   "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
                   "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
                   "ENABLE_AUTOMATION_EVALUATION_MODE",
+                  "ENABLE_ACCESSIBILITY_MODE",
                   "REGISTERED_PLUGGABLE_APPLICATIONS"
                 ],
                 "type": "string"
@@ -22665,6 +22659,65 @@
         ],
         "type": "object"
       },
+      "MetricValueChange": {
+        "description": "Individual change analysis data item",
+        "properties": {
+          "attributeName": {
+            "description": "The name of the attribute being analyzed",
+            "type": "string"
+          },
+          "attributeValue": {
+            "description": "The value of the attribute being analyzed",
+            "type": "string"
+          },
+          "attributeValuesChangeMean": {
+            "description": "The mean of attribute value changes for the attribute being analyzed",
+            "format": "double",
+            "type": "number"
+          },
+          "attributeValuesChangeStd": {
+            "description": "The standard deviation of attribute value changes for the attribute being analyzed",
+            "format": "double",
+            "type": "number"
+          },
+          "isSignificantChange": {
+            "description": "Whether the change is statistically significant",
+            "type": "boolean"
+          },
+          "metricValueDelta": {
+            "description": "The delta between analyzed and reference periods",
+            "format": "double",
+            "type": "number"
+          },
+          "metricValueDeltaAbs": {
+            "description": "The absolute delta between analyzed and reference periods",
+            "format": "double",
+            "type": "number"
+          },
+          "metricValueInAnalyzedPeriod": {
+            "description": "The metric value in the analyzed period",
+            "format": "double",
+            "type": "number"
+          },
+          "metricValueInReferencePeriod": {
+            "description": "The metric value in the reference period",
+            "format": "double",
+            "type": "number"
+          }
+        },
+        "required": [
+          "attributeName",
+          "attributeValue",
+          "attributeValuesChangeMean",
+          "attributeValuesChangeStd",
+          "isSignificantChange",
+          "metricValueDelta",
+          "metricValueDeltaAbs",
+          "metricValueInAnalyzedPeriod",
+          "metricValueInReferencePeriod"
+        ],
+        "type": "object"
+      },
       "NegativeAttributeFilter": {
         "description": "Filter able to limit element values by label and related selected negated elements.",
         "properties": {
@@ -22702,25 +22755,16 @@
               "SOURCE",
               "TARGET"
             ],
-            "type": "string",
-            "xml": {
-              "attribute": true
-            }
+            "type": "string"
           },
           "category": {
-            "type": "string",
-            "xml": {
-              "attribute": true
-            }
+            "type": "string"
           },
           "content": {
             "type": "string"
           },
           "id": {
-            "type": "string",
-            "xml": {
-              "attribute": true
-            }
+            "type": "string"
           },
           "otherAttributes": {
             "additionalProperties": {
@@ -22730,17 +22774,10 @@
           },
           "priority": {
             "format": "int32",
-            "type": "integer",
-            "xml": {
-              "attribute": true
-            }
+            "type": "integer"
           }
         },
-        "type": "object",
-        "xml": {
-          "name": "note",
-          "namespace": "urn:oasis:names:tc:xliff:document:2.0"
-        }
+        "type": "object"
       },
       "Notes": {
         "properties": {
@@ -22751,14 +22788,7 @@
             "type": "array"
           }
         },
-        "required": [
-          "note"
-        ],
-        "type": "object",
-        "xml": {
-          "name": "notes",
-          "namespace": "urn:oasis:names:tc:xliff:document:2.0"
-        }
+        "type": "object"
       },
       "Notification": {
         "properties": {
@@ -23405,23 +23435,34 @@
         "type": "object"
       },
       "QualityIssue": {
+        "description": "List of quality issues (available when status is COMPLETED)",
         "properties": {
           "code": {
+            "description": "Quality issue code",
+            "example": "SIMILAR_NAMES",
             "type": "string"
           },
           "detail": {
             "additionalProperties": {
+              "description": "Detailed information about the quality issue",
               "type": "object"
             },
+            "description": "Detailed information about the quality issue",
             "type": "object"
           },
           "objects": {
+            "description": "List of objects affected by this quality issue",
             "items": {
               "$ref": "#/components/schemas/QualityIssueObject"
             },
             "type": "array"
           },
           "severity": {
+            "description": "Severity level",
+            "enum": [
+              "error",
+              "warning"
+            ],
             "type": "string"
           }
         },
@@ -23434,17 +23475,57 @@
         "type": "object"
       },
       "QualityIssueObject": {
+        "description": "List of objects affected by this quality issue",
         "properties": {
           "id": {
+            "description": "Object ID",
+            "example": "revenue",
             "type": "string"
           },
           "type": {
+            "description": "Object type",
+            "example": "metric",
+            "type": "string"
+          },
+          "workspaceId": {
+            "description": "Workspace ID where the object belongs",
+            "example": "demo",
             "type": "string"
           }
         },
         "required": [
           "id",
-          "type"
+          "type",
+          "workspaceId"
+        ],
+        "type": "object"
+      },
+      "QualityIssuesCalculationStatusResponse": {
+        "properties": {
+          "error": {
+            "description": "Error message (available when status is FAILED or NOT_FOUND)",
+            "type": "string"
+          },
+          "issues": {
+            "description": "List of quality issues (available when status is COMPLETED)",
+            "items": {
+              "$ref": "#/components/schemas/QualityIssue"
+            },
+            "type": "array"
+          },
+          "status": {
+            "description": "Current status of the calculation",
+            "enum": [
+              "RUNNING",
+              "COMPLETED",
+              "FAILED",
+              "NOT_FOUND"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "status"
         ],
         "type": "object"
       },
@@ -24000,12 +24081,14 @@
               "JWT_JIT_PROVISIONING",
               "DASHBOARD_FILTERS_APPLY_MODE",
               "ENABLE_SLIDES_EXPORT",
+              "ENABLE_SNAPSHOT_EXPORT",
               "AI_RATE_LIMIT",
               "ATTACHMENT_SIZE_LIMIT",
               "ATTACHMENT_LINK_TTL",
               "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
               "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
               "ENABLE_AUTOMATION_EVALUATION_MODE",
+              "ENABLE_ACCESSIBILITY_MODE",
               "REGISTERED_PLUGGABLE_APPLICATIONS"
             ],
             "example": "TIMEZONE",
@@ -24154,9 +24237,6 @@
             "type": "string"
           },
           "kid": {
-            "maxLength": 255,
-            "minLength": 0,
-            "pattern": "^[^.]",
             "type": "string"
           },
           "kty": {
@@ -24723,17 +24803,10 @@
             "type": "array"
           },
           "href": {
-            "type": "string",
-            "xml": {
-              "attribute": true
-            }
+            "type": "string"
           }
         },
-        "type": "object",
-        "xml": {
-          "name": "skeleton",
-          "namespace": "urn:oasis:names:tc:xliff:document:2.0"
-        }
+        "type": "object"
       },
       "SlidesExportRequest": {
         "description": "Export request object describing the export properties and metadata for slides exports.",
@@ -25036,6 +25109,11 @@
               "BOOLEAN"
             ],
             "example": "INT",
+            "type": "string"
+          },
+          "description": {
+            "description": "Column description/comment from database",
+            "example": "Customer unique identifier",
             "type": "string"
           },
           "name": {
@@ -25564,6 +25642,28 @@
         },
         "required": [
           "automation"
+        ],
+        "type": "object"
+      },
+      "TriggerQualityIssuesCalculationResponse": {
+        "properties": {
+          "processId": {
+            "description": "Process ID for tracking the calculation status",
+            "type": "string"
+          },
+          "status": {
+            "description": "Current status of the calculation",
+            "enum": [
+              "RUNNING",
+              "COMPLETED",
+              "FAILED"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "processId",
+          "status"
         ],
         "type": "object"
       },
@@ -26548,39 +26648,19 @@
             "type": "object"
           },
           "space": {
-            "type": "string",
-            "xml": {
-              "attribute": true,
-              "namespace": "http://www.w3.org/XML/1998/namespace"
-            }
+            "type": "string"
           },
           "srcLang": {
-            "type": "string",
-            "xml": {
-              "attribute": true
-            }
+            "type": "string"
           },
           "trgLang": {
-            "type": "string",
-            "xml": {
-              "attribute": true
-            }
+            "type": "string"
           },
           "version": {
-            "type": "string",
-            "xml": {
-              "attribute": true
-            }
+            "type": "string"
           }
         },
-        "required": [
-          "file"
-        ],
-        "type": "object",
-        "xml": {
-          "name": "xliff",
-          "namespace": "urn:oasis:names:tc:xliff:document:2.0"
-        }
+        "type": "object"
       }
     }
   },
@@ -28287,6 +28367,41 @@
         ]
       }
     },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/createdBy": {
+      "get": {
+        "description": "Returns a list of Users who created any object for this workspace",
+        "operationId": "createdBy",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalyticsCatalogCreatedBy"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Get Analytics Catalog CreatedBy",
+        "tags": [
+          "Smart Functions",
+          "actions"
+        ]
+      }
+    },
     "/api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/tags": {
       "get": {
         "description": "Returns a list of tags for this workspace",
@@ -28524,6 +28639,84 @@
           }
         },
         "summary": "Get Quality Issues",
+        "tags": [
+          "Smart Functions",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/issues/status/{processId}": {
+      "get": {
+        "description": "Returns the status of a quality issues calculation process identified by process ID.",
+        "operationId": "getQualityIssuesCalculationStatus",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "processId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QualityIssuesCalculationStatusResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Get Quality Issues Calculation Status",
+        "tags": [
+          "Smart Functions",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/issues/triggerCheck": {
+      "post": {
+        "description": "Triggers asynchronous calculation of metadata quality issues and returns a process ID for status tracking.",
+        "operationId": "triggerQualityIssuesCalculation",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TriggerQualityIssuesCalculationResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Trigger Quality Issues Calculation",
         "tags": [
           "Smart Functions",
           "actions"
@@ -29975,6 +30168,96 @@
             "VIEW"
           ]
         }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/computeChangeAnalysis": {
+      "post": {
+        "description": "Computes change analysis for the provided execution definition.",
+        "operationId": "changeAnalysis",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangeAnalysisRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangeAnalysisResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Compute change analysis",
+        "tags": [
+          "Computation",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/computeChangeAnalysis/result/{resultId}": {
+      "get": {
+        "description": "Gets change analysis result.",
+        "operationId": "changeAnalysisResult",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Result ID",
+            "example": "a9b28f9dc55f37ea9f4a5fb0c76895923591e781",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangeAnalysisResult"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Get change analysis result",
+        "tags": [
+          "Computation",
+          "actions"
+        ]
       }
     },
     "/api/v1/actions/workspaces/{workspaceId}/execution/computeKeyDrivers": {

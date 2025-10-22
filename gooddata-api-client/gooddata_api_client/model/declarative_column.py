@@ -71,6 +71,9 @@ class DeclarativeColumn(ModelNormal):
         ('name',): {
             'max_length': 255,
         },
+        ('description',): {
+            'max_length': 255,
+        },
         ('referenced_table_column',): {
             'max_length': 255,
         },
@@ -102,6 +105,7 @@ class DeclarativeColumn(ModelNormal):
         return {
             'data_type': (str,),  # noqa: E501
             'name': (str,),  # noqa: E501
+            'description': (str,),  # noqa: E501
             'is_primary_key': (bool,),  # noqa: E501
             'referenced_table_column': (str,),  # noqa: E501
             'referenced_table_id': (str,),  # noqa: E501
@@ -115,6 +119,7 @@ class DeclarativeColumn(ModelNormal):
     attribute_map = {
         'data_type': 'dataType',  # noqa: E501
         'name': 'name',  # noqa: E501
+        'description': 'description',  # noqa: E501
         'is_primary_key': 'isPrimaryKey',  # noqa: E501
         'referenced_table_column': 'referencedTableColumn',  # noqa: E501
         'referenced_table_id': 'referencedTableId',  # noqa: E501
@@ -165,6 +170,7 @@ class DeclarativeColumn(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            description (str): Column description/comment from database. [optional]  # noqa: E501
             is_primary_key (bool): Is column part of primary key?. [optional]  # noqa: E501
             referenced_table_column (str): Referenced table (Foreign key). [optional]  # noqa: E501
             referenced_table_id (str): Referenced table (Foreign key). [optional]  # noqa: E501
@@ -259,6 +265,7 @@ class DeclarativeColumn(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            description (str): Column description/comment from database. [optional]  # noqa: E501
             is_primary_key (bool): Is column part of primary key?. [optional]  # noqa: E501
             referenced_table_column (str): Referenced table (Foreign key). [optional]  # noqa: E501
             referenced_table_id (str): Referenced table (Foreign key). [optional]  # noqa: E501
