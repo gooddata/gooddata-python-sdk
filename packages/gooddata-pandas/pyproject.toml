@@ -64,7 +64,8 @@ test = [
     "vcrpy~=7.0.0",
     "urllib3==1.26.9",
     "python-dotenv~=1.0.0",
-    "pyyaml"
+    "pyyaml",
+    "tests_support",
 ]
 type = [
     "mypy~=1.11.2",

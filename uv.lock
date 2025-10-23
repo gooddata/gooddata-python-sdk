@@ -662,6 +662,7 @@ test = [
     { name = "pytest" },
     { name = "pytest-cov" },
     { name = "pyyaml" },
+    { name = "tests-support" },
     { name = "urllib3" },
     { name = "vcrpy" },
 ]
@@ -678,6 +679,7 @@ test = [
     { name = "pytest", specifier = "~=8.3.4" },
     { name = "pytest-cov", specifier = "~=6.0.0" },
     { name = "pyyaml" },
+    { name = "tests-support", editable = "packages/tests-support" },
     { name = "urllib3", specifier = "==1.26.9" },
     { name = "vcrpy", specifier = "~=7.0.0" },
 ]
@@ -795,6 +797,7 @@ test = [
     { name = "pytest-snapshot" },
     { name = "python-dotenv" },
     { name = "pyyaml" },
+    { name = "tests-support" },
     { name = "urllib3" },
     { name = "vcrpy" },
 ]
@@ -817,6 +820,7 @@ test = [
     { name = "pytest-snapshot", specifier = "==0.9.0" },
     { name = "python-dotenv", specifier = "~=1.0.0" },
     { name = "pyyaml" },
+    { name = "tests-support", editable = "packages/tests-support" },
     { name = "urllib3", specifier = "==1.26.9" },
     { name = "vcrpy", specifier = "~=7.0.0" },
 ]
@@ -962,6 +966,7 @@ test = [
     { name = "pytest-order" },
     { name = "pytest-snapshot" },
     { name = "python-dotenv" },
+    { name = "tests-support" },
     { name = "urllib3" },
     { name = "vcrpy" },
 ]
@@ -994,6 +999,7 @@ test = [
     { name = "pytest-order", specifier = "~=1.3.0" },
     { name = "pytest-snapshot", specifier = "==0.9.0" },
     { name = "python-dotenv", specifier = "~=1.0.0" },
+    { name = "tests-support", editable = "packages/tests-support" },
     { name = "urllib3", specifier = "==1.26.9" },
     { name = "vcrpy", specifier = "~=7.0.0" },
 ]
