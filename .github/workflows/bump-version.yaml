@@ -34,7 +34,7 @@ jobs:
 
         - name: Install dependencies
           run: |
-            uv sync --group release
+            uv sync --only-group release
 
         - name: Bump version
           id: bump
