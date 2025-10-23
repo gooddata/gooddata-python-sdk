@@ -1,0 +1,70 @@
+# (C) 2025 GoodData Corporation
+[project]
+name = "gooddata-fdw"
+version = "1.53.0"
+description = "GoodData Cloud Foreign Data Wrapper For PostgreSQL"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "GoodData", email = "support@gooddata.com"}
+]
+keywords = [
+    "gooddata",
+    "fdw",
+    "postgresql",
+    "analytics",
+    "headless",
+    "business",
+    "intelligence",
+    "headless-bi",
+    "cloud",
+    "native",
+    "semantic",
+    "layer",
+    "sql",
+    "metrics",
+]
+requires-python = ">=3.9.0"
+dependencies = [
+    "gooddata-sdk~=1.53.0",
+    # "multicorn>=1.4.0",  # Uncommented as it was in original setup.py
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Database",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Software Development",
+    "Typing :: Typed",
+]
+
+[project.urls]
+Documentation = "https://gooddata-fdw.readthedocs.io/en/v1.53.0"
+Source = "https://github.com/gooddata/gooddata-python-sdk"
+
+[dependency-groups]
+test = [
+    "pytest~=8.3.4",
+    "pytest-cov~=6.0.0",
+    "vcrpy~=7.0.0",
+    # TODO - Bump the version together with bumping the version of openapi generator
+    "urllib3==1.26.9",
+    "pyyaml",
+]
+type = [
+    "mypy~=1.11.2",
+    "pydantic~=2.9.2"
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/gooddata_fdw"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

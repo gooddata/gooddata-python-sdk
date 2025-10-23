@@ -30,7 +30,7 @@ endif
 # to the project directory so that only tests for given project are executed
 DOCKER_COMMAND =
 ifdef TEST_CI_PROJECT
-	DOCKER_COMMAND = make -C $(TEST_CI_PROJECT) test
+	DOCKER_COMMAND = make -C packages/$(TEST_CI_PROJECT) test
 endif
 
 

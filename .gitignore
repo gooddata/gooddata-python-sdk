@@ -6,8 +6,8 @@
 .env.test
 .venv
 test_clients.py
-gooddata-sdk/tests/catalog/store
-gooddata-sdk/tests/catalog/translate
+packages/gooddata-sdk/tests/catalog/store
+packages/gooddata-sdk/tests/catalog/translate
 .DS_Store
 .vscode
 .ruff_cache

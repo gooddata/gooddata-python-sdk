@@ -34,23 +34,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version-file: '.python-version'
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install build
+    - name: Install uv
+      uses: astral-sh/setup-uv@v5
     - name: Build ${{ matrix.component }}
       run: |
-          cd ${{ matrix.component }}
-          python -m build
+          if [ "${{ matrix.component }}" = "gooddata-api-client" ]; then
+            cd ${{ matrix.component }}
+          else
+            cd packages/${{ matrix.component }}
+          fi
+          uv build --out-dir dist
     - name: Persist ${{ matrix.component }} artifacts
       uses: actions/upload-artifact@v4
       with:
         name: artifacts_${{ matrix.component }}
-        path: ${{ matrix.component }}/dist/
+        path: |
+          ${{ matrix.component == 'gooddata-api-client' && format('{0}/dist/', matrix.component) || format('packages/{0}/dist/', matrix.component) }}
         if-no-files-found: error
   github_release:
     name: Create GitHub release

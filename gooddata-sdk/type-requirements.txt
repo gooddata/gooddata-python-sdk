@@ -1,6 +1,0 @@
-mypy~=1.15.0
-pydantic~=2.9.2
-types-python-dateutil >= 2.5.3
-types-pyyaml~=6.0.0
-attrs>=21.4.0,<=24.2.0
-cattrs>=22.1.0,<=24.1.1

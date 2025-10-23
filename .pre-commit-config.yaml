@@ -15,7 +15,7 @@ repos:
         args: [ '--maxkb=890' ]
       - id: check-case-conflict
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.9.1
+    rev: v0.9.5
     hooks:
       # Run the linter.
       - id: ruff
