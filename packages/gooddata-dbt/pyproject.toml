@@ -8,7 +8,7 @@ license = {text = "MIT"}
 authors = [
     {name = "GoodData", email = "support@gooddata.com"}
 ]
-requires-python = ">=3.9.0"
+requires-python = ">=3.10"
 dependencies = [
     "gooddata-sdk~=1.53.0",
     "pyyaml>=6.0",

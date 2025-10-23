@@ -2,7 +2,7 @@
 
 ## Getting Started
 
-1. Ensure you have at minimum Python 3.13 installed; Python 3.12, 3.11, 3.10 and 3.9 are optional for multi-environment tests
+1. Ensure you have at minimum Python 3.13 installed; Python 3.12, 3.11 and 3.10 are optional for multi-environment tests
 
    This repo uses [tox](https://tox.readthedocs.io/en/latest/) and by default will try to run tests against all
    supported versions. If you have only subset of supported python interpreters installed, see
@@ -149,7 +149,7 @@ Here are the options how to run the tests:
     - or execute `tox` command with arguments of your choice
   ```bash
   cd packages/gooddata-sdk
-  tox -e py39
+  tox -e py310
   ```
 - run tests for all non-client projects using `make test` in project root directory
 
@@ -213,9 +213,9 @@ venv automatically. So when docker tox tests are executed after localhost tests 
   cd packages/gooddata-sdk
   make test-ci
   ```
-- run all tests containing `http_headers` in name for py310 and py39 for all projects
+- run all tests containing `http_headers` in name for py311 and py310 for all projects
   ```bash
-  TEST_ENVS=py310,py39 ADD_ARGS="-k http_headers" make test-ci
+  TEST_ENVS=py311,py310 ADD_ARGS="-k http_headers" make test-ci
   ```
 - run tests on localhost against all-in-one image started with docker-compose
   ```bash

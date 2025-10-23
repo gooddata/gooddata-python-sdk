@@ -27,7 +27,7 @@ keywords = [
     "sql",
     "metrics",
 ]
-requires-python = ">=3.9.0"
+requires-python = ">=3.10"
 dependencies = [
     "gooddata-sdk~=1.53.0",
     "pandas>=2.0.0,<3.0.0",
@@ -64,7 +64,8 @@ test = [
     "vcrpy~=7.0.0",
     "urllib3==1.26.9",
     "python-dotenv~=1.0.0",
-    "pyyaml"
+    "pyyaml",
+    "tests_support",
 ]
 type = [
     "mypy~=1.11.2",

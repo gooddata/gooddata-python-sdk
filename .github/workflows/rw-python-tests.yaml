@@ -11,7 +11,7 @@ jobs:
     if: ${{inputs.changed-python-modules == 'true'}}
     strategy:
       matrix:
-        python_version: [py313, py312, py311, py310, py39]
+        python_version: [py313, py312, py311, py310]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
