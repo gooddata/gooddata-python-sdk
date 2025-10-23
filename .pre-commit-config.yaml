@@ -34,3 +34,7 @@ repos:
     rev: v0.19.1
     hooks:
       - id: gitlint
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 0.9.5
+    hooks:
+      - id: uv-lock

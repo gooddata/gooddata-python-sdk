@@ -82,16 +82,16 @@ test:
 .PHONY: release
 release:
 	if [ -z "$(VERSION)" ]; then echo "Usage: 'make release VERSION=X.Y.Z'"; false; else \
-	tbump $(VERSION) --no-tag --no-push ; fi
+	uv run tbump $(VERSION) --no-tag --no-push ; fi
 
 .PHONY: release-ci
 release-ci:
 	if [ -z "$(VERSION)" ]; then echo "Usage: 'make release-ci VERSION=X.Y.Z'"; false; else \
-	tbump $(VERSION) --only-patch --non-interactive ; fi
+	uv run tbump $(VERSION) --only-patch --non-interactive ; fi
 
 .PHONY: check-copyright
 check-copyright:
-	./scripts/check_copyright.py FOLDER
+	uv run ./scripts/check_copyright.py FOLDER
 
 .PHONY: docs
 docs:
