@@ -24,7 +24,7 @@ keywords = [
     "sql",
     "metrics",
 ]
-requires-python = ">=3.9.0"
+requires-python = ">=3.10"
 dependencies = [
     "gooddata-sdk~=1.53.0",
     # "multicorn>=1.4.0",  # Uncommented as it was in original setup.py

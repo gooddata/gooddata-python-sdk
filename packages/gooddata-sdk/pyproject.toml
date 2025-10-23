@@ -24,7 +24,7 @@ keywords = [
     "sql",
     "metrics",
 ]
-requires-python = ">=3.9.0"
+requires-python = ">=3.10"
 dependencies = [
     "gooddata-api-client~=1.53.0",
     "python-dateutil>=2.5.3",
