@@ -32,7 +32,7 @@ jobs:
         uses: astral-sh/setup-uv@v6
       - name: Install dependencies
         run: |
-          uv sync --group release
+          uv sync --only-group release
       - name: Bump to dev
         run: uv run tbump  --only-patch --non-interactive $(./scripts/next_dev.sh)
       - name: Build ${{ matrix.component }}
