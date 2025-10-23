@@ -109,7 +109,7 @@ You can also perform certain administration tasks:
 
 ## Where to Learn More
 
-Get started with Python SDK right now by following the [Quick Start](./getting-started/#quick-start) guide.
+Get started with Python SDK right now by following the [Quick Start]({{< relref "getting-started#quick-start" >}}) guide.
 
 New to GoodData? Follow the [Getting Started](https://www.gooddata.com/docs/cloud/getting-started/) series of articles that include Python SDK code examples.
 
