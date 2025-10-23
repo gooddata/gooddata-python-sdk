@@ -29,12 +29,12 @@ jobs:
         with:
           ref: ${{ inputs.BRANCH_NAME }}
       - name: Install uv
-        uses: astral-sh/setup-uv@v5
+        uses: astral-sh/setup-uv@v6
       - name: Install dependencies
         run: |
           uv sync --group release
       - name: Bump to dev
-        run: tbump  --only-patch --non-interactive $(./scripts/next_dev.sh)
+        run: uv run tbump  --only-patch --non-interactive $(./scripts/next_dev.sh)
       - name: Build ${{ matrix.component }}
         run: |
           if [ "${{ matrix.component }}" = "gooddata-api-client" ]; then
