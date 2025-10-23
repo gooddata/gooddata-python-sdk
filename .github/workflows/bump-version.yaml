@@ -30,7 +30,7 @@ jobs:
             token: ${{ secrets.TOKEN_GITHUB_YENKINS_ADMIN }} # needed to push to the protected branch
 
         - name: Install uv
-          uses: astral-sh/setup-uv@v5
+          uses: astral-sh/setup-uv@v6
 
         - name: Install dependencies
           run: |
@@ -39,12 +39,12 @@ jobs:
         - name: Bump version
           id: bump
           run: |
-            NEW_VERSION=$(python ./scripts/bump_version.py ${{ github.event.inputs.bump_type }})
+            NEW_VERSION=$(uv run python ./scripts/bump_version.py ${{ github.event.inputs.bump_type }})
             echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
 
         - name: Bump version in documentation
           run: |
-            python scripts/bump_doc_dependencies.py ${{ steps.bump.outputs.new_version }}
+            uv run python ./scripts/bump_doc_dependencies.py ${{ steps.bump.outputs.new_version }}
 
         - name: Bump version in codebase
           run: |

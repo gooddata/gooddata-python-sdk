@@ -38,11 +38,11 @@ format-fix:
 
 .PHONY: mypy
 mypy:
-	tox $(TOX_FLAGS) -e mypy
+	uv run tox $(TOX_FLAGS) -e mypy
 
 .PHONY: test
 test:
-	tox -v $(TOX_FLAGS) $(LOCAL_TEST_ENVS) $(LOCAL_ADD_ARGS)
+	uv run tox -v $(TOX_FLAGS) $(LOCAL_TEST_ENVS) $(LOCAL_ADD_ARGS)
 
 .PHONY: test-ci
 test-ci:
