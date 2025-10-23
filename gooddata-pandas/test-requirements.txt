@@ -1,7 +1,0 @@
-pytest~=8.3.4
-pytest-cov~=6.0.0
-vcrpy~=7.0.0
-# TODO - Bump the version together with bumping the version of openapi generator
-urllib3==1.26.9
-python-dotenv~=1.0.0
-pyyaml

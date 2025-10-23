@@ -24,7 +24,7 @@ jobs:
         if: ${{ matrix.python_version == 'py313' }}
         uses: codecov/codecov-action@v3
         with:
-          files: ./gooddata-sdk/coverage.xml,./gooddata-pandas/coverage.xml,./gooddata-fdw/coverage.xml,./gooddata-flight-server/coverage.xml,./gooddata-flexconnect/coverage.xml
+          files: ./packages/gooddata-sdk/coverage.xml,./packages/gooddata-pandas/coverage.xml,./packages/gooddata-fdw/coverage.xml,./packages/gooddata-flight-server/coverage.xml,./packages/gooddata-flexconnect/coverage.xml
   lint-and-format-check:
     runs-on: ubuntu-latest
     if: ${{inputs.changed-python-modules == 'true'}}
@@ -32,15 +32,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Set up python 3.13
-        uses: actions/setup-python@v5
+        uses: astral-sh/setup-uv@v6
         with:
-          python-version-file: '.python-version'
-          cache: 'pip'
-          cache-dependency-path: |
-            fmt-requirements.txt
+          python-version: 3.13
       - name: Install dependencies
         run: |
-          make dev
+          uv venv
+          uv pip install --group lint
       - name: pep8 and formatting check
         run: |
           make format
@@ -54,13 +52,10 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version-file: '.python-version'
-          cache: 'pip'
-          cache-dependency-path: |
-            tox-requirements.txt
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -r tox-requirements.txt
+          python -m pip install uv
+          uv pip install --group tox --group type --system
       - name: mypy check
         run: |
           make mypy

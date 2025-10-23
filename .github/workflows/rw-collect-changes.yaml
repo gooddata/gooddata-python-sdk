@@ -34,18 +34,11 @@ jobs:
           base: ${{ inputs.commit-branch }}
           filters: |
             docs:
-              - 'gooddata-pandas/**'
-              - 'gooddata-sdk/**'
+              - 'packages/gooddata-pandas/**'
+              - 'packages/gooddata-sdk/**'
               - 'docs/**'
             python-modules:
               - '.docker/**'
-              - 'gooddata-fdw/**'
-              - 'gooddata-pandas/**'
-              - 'gooddata-sdk/**'
+              - 'packages/**'
               - '*.mk'
               - 'Makefile'
-              - 'gooddata-api-client/**'
-              - 'gooddata-dbt/**'
-              - 'gooddata-flight-server/**'
-              - 'gooddata-flexconnect/**'
-              - 'gooddata-pipelines/**'

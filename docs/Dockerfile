@@ -6,8 +6,8 @@ COPY scripts/script-requirements.txt /scripts/script-requirements.txt
 COPY docs docs
 COPY scripts/docs/ /docs
 COPY gooddata-api-client /gooddata-api-client
-COPY gooddata-sdk /gooddata-sdk
-COPY gooddata-pandas /gooddata-pandas
+COPY packages/gooddata-sdk /gooddata-sdk
+COPY packages/gooddata-pandas /gooddata-pandas
 
 RUN pip install --no-cache-dir -r /scripts/script-requirements.txt
 

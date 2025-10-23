@@ -29,16 +29,12 @@ jobs:
           with:
             token: ${{ secrets.TOKEN_GITHUB_YENKINS_ADMIN }} # needed to push to the protected branch
 
-        - uses: actions/setup-python@v5
-          with:
-            python-version-file: '.python-version'
-            cache: 'pip'
-            cache-dependency-path: |
-              release-requirements.txt
+        - name: Install uv
+          uses: astral-sh/setup-uv@v5
 
         - name: Install dependencies
           run: |
-            pip install -r release-requirements.txt
+            uv sync --group release
 
         - name: Bump version
           id: bump

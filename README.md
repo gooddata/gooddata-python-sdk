@@ -16,26 +16,26 @@ Python. Learn more about the clients in their [dedicated readme](./clients_READM
 
 ### GoodData Python SDK
 
-The [gooddata-sdk](./gooddata-sdk) package provides a clean and convenient Python API to interact with GoodData.CN.
+The [gooddata-sdk](./packages/gooddata-sdk) package provides a clean and convenient Python API to interact with GoodData.CN.
 
 Check out the GoodData Python SDK [documentation](https://www.gooddata.com/docs/python-sdk) to learn more and get started.
 
 ### GoodData Pandas
 
-The [gooddata-pandas](./gooddata-pandas) package is a thin layer that utilizes Python SDK and allows you to conveniently
+The [gooddata-pandas](./packages/gooddata-pandas) package is a thin layer that utilizes Python SDK and allows you to conveniently
 create pandas series and data frames.
 
 Check out the GoodData Pandas [documentation](https://gooddata-pandas.readthedocs.io/en/latest/) to learn more and get started.
 
 ### GoodData Pipelines
 
-The [gooddata-pipelines](./gooddata-pipelines/) package provides easy ways to manage the lifecycle of GoodData Cloud.
+The [gooddata-pipelines](./packages/gooddata-pipelines/) package provides easy ways to manage the lifecycle of GoodData Cloud.
 
 Check out the GoodData Pipelines [documentation](https://www.gooddata.com/docs/python-sdk/latest/pipelines-overview/) to learn more and get started.
 
 ### GoodData FlexConnect
 
-The [gooddata-flexconnect](./gooddata-flexconnect) package is the foundation for writing custom FlexConnect data sources.
+The [gooddata-flexconnect](./packages/gooddata-flexconnect) package is the foundation for writing custom FlexConnect data sources.
 
 Check out the GoodData FlexConnect [documentation](https://www.gooddata.com/docs/cloud/connect-data/create-data-sources/flexconnect/) to learn more and get started.
 
@@ -44,7 +44,7 @@ Check out the GoodData FlexConnect [documentation](https://www.gooddata.com/docs
 > [!WARNING]
 > GoodData Foreign Data Wrapper is currently deprecated.
 
-The [gooddata-fdw](./gooddata-fdw) package provides a way
+The [gooddata-fdw](./packages/gooddata-fdw) package provides a way
 to map GoodData Cloud semantic layer and/or visualizations stored in your GoodData Cloud
 into PostgreSQL as foreign tables that you can then query using SQL.
 

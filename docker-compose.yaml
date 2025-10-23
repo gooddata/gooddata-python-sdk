@@ -30,7 +30,7 @@ services:
   gooddata-fdw:
     build:
       context: .
-      dockerfile: gooddata-fdw/Dockerfile
+      dockerfile: packages/gooddata-fdw/Dockerfile
     ports:
       - "2543:5432"
     environment:
@@ -42,7 +42,7 @@ services:
   upload-layout:
     build:
       context: .
-      dockerfile: tests-support/Dockerfile
+      dockerfile: packages/tests-support/Dockerfile
     environment:
       FIXTURES_DIR: /app/fixtures
       HOST: "http://gooddata-cn-ce:3000"
