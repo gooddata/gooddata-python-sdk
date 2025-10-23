@@ -18,7 +18,7 @@ See [DOCUMENTATION](https://www.gooddata.com/docs/python-sdk/1.53.0) for more de
 ## Requirements
 
 -  GoodData Cloud or GoodData.CN installation
--  Python 3.9 or newer
+-  Python 3.10 or newer
 
 ## Installation
 

@@ -3,7 +3,7 @@
 name = "gooddata-python-sdk-workspace"
 version = "1.53.0"
 description = "GoodData Python SDK Workspace"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = [
     "gooddata-sdk",
     "gooddata-pandas",
@@ -84,8 +84,12 @@ lint.ignore = [
     "UP007",
     # ignore the rule, because it presents non-zero perf cost
     "SIM105",
+    # ignore the rule (import from `collections.abc` instead: `Callable`)
+    "UP035",
+    #  ignore the rule (use `X | Y` in `isinstance` call instead of `(X, Y)`)
+    "UP038",
 ]
-target-version = "py39"
+target-version = "py310"
 
 [tool.ruff.lint.per-file-ignores]
 "packages/gooddata-pandas/src/gooddata_pandas/__init__.py" = ["F401"]
