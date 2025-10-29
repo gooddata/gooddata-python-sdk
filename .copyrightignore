@@ -43,6 +43,7 @@ gooddata-*-client/**
 venv/**
 .venv/**
 .python-version
+uv.lock
 
 # Distribution / packaging
 **/.Python
