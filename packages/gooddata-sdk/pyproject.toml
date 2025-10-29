@@ -24,14 +24,14 @@ keywords = [
     "sql",
     "metrics",
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.10,<4.0"
 dependencies = [
     "gooddata-api-client~=1.54.0",
     "python-dateutil>=2.5.3",
     "pyyaml>=6.0",
     "attrs>=21.4.0,<=24.2.0",
     "cattrs>=22.1.0,<=24.1.1",
-    "brotli==1.1.0",
+    "brotli==1.2.0",
     "requests~=2.32.0",
     "python-dotenv>=1.0.0,<2.0.0",
 ]
@@ -43,6 +43,7 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Database",
     "Topic :: Scientific/Engineering",
     "Topic :: Software Development",
@@ -70,7 +71,7 @@ test = [
 ]
 type = [
     "mypy~=1.11.2",
-    "pydantic~=2.9.2",
+    "pydantic~=2.12.0",
     "types-python-dateutil >= 2.5.3",
     "types-pyyaml~=6.0.0",
     "attrs>=21.4.0,<=24.2.0",

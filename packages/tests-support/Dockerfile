@@ -1,5 +1,5 @@
 # (C) 2022 GoodData Corporation
-ARG PY_TAG="python3.10-bookworm"
+ARG PY_TAG="python3.14-bookworm"
 FROM ghcr.io/astral-sh/uv:${PY_TAG}
 
 ENV USER_NAME=tests
