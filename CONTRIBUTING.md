@@ -2,7 +2,7 @@
 
 ## Getting Started
 
-1. Ensure you have at minimum Python 3.13 installed; Python 3.12, 3.11 and 3.10 are optional for multi-environment tests
+1. Ensure you have at minimum Python 3.14 installed; Python 3.13, 3.12, 3.11 and 3.10 are optional for multi-environment tests
 
    This repo uses [tox](https://tox.readthedocs.io/en/latest/) and by default will try to run tests against all
    supported versions. If you have only subset of supported python interpreters installed, see
@@ -21,7 +21,7 @@
     source .venv/bin/activate
     ```
 
-   The `make dev` command will create a new Python 3.13 virtual environment in the `.venv` directory, install all
+   The `make dev` command will create a new Python 3.14 virtual environment in the `.venv` directory, install all
    third party dependencies into it and setup git hooks.
 
    Additionally, if you use [direnv](https://direnv.net/) you can run `direnv allow .envrc` to enable automatic
@@ -37,6 +37,19 @@
 4. Develop the feature or the fix. Make sure your code follows [coding conventions](#coding-conventions). Create pull
    request.
 
+
+## Maintenance Tasks
+
+### Adding Support for a New Python Version
+
+When adding support for a new Python version:
+
+1. Update all `pyproject.toml` files to include the new Python version classifier
+2. Update all `tox.ini` files to include the new Python version in `envlist`
+3. Update CI/CD workflows to test against the new Python version
+4. **Run `uv lock --upgrade`** to upgrade the lock file and re-resolve dependencies for all Python versions, including the newly added one
+
+The lock file upgrade is crucial as it allows `uv` to pick package versions that are compatible with all supported Python versions.
 
 ## Coding Conventions
 
