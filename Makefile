@@ -87,7 +87,7 @@ release:
 .PHONY: release-ci
 release-ci:
 	if [ -z "$(VERSION)" ]; then echo "Usage: 'make release-ci VERSION=X.Y.Z'"; false; else \
-	uv run tbump $(VERSION) --only-patch --non-interactive ; fi
+	uv run tbump $(VERSION) --only-patch --non-interactive && uv lock ; fi
 
 .PHONY: check-copyright
 check-copyright:
