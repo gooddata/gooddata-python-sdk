@@ -1,4 +1,3 @@
-# (C) 2025 GoodData Corporation
 version = 1
 revision = 3
 requires-python = ">=3.10"
@@ -637,7 +636,7 @@ trusted-deps = [
 
 [[package]]
 name = "gooddata-api-client"
-version = "1.53.0"
+version = "1.54.0"
 source = { editable = "gooddata-api-client" }
 dependencies = [
     { name = "python-dateutil" },
@@ -652,7 +651,7 @@ requires-dist = [
 
 [[package]]
 name = "gooddata-dbt"
-version = "1.53.0"
+version = "1.54.0"
 source = { editable = "packages/gooddata-dbt" }
 dependencies = [
     { name = "attrs" },
@@ -695,7 +694,7 @@ type = [
 
 [[package]]
 name = "gooddata-fdw"
-version = "1.53.0"
+version = "1.54.0"
 source = { editable = "packages/gooddata-fdw" }
 dependencies = [
     { name = "gooddata-sdk" },
@@ -734,7 +733,7 @@ type = [
 
 [[package]]
 name = "gooddata-flexconnect"
-version = "1.53.0"
+version = "1.54.0"
 source = { editable = "packages/gooddata-flexconnect" }
 dependencies = [
     { name = "dynaconf" },
@@ -779,7 +778,7 @@ type = [
 
 [[package]]
 name = "gooddata-flight-server"
-version = "1.53.0"
+version = "1.54.0"
 source = { editable = "packages/gooddata-flight-server" }
 dependencies = [
     { name = "dynaconf" },
@@ -826,7 +825,7 @@ type = [
 
 [[package]]
 name = "gooddata-pandas"
-version = "1.53.0"
+version = "1.54.0"
 source = { editable = "packages/gooddata-pandas" }
 dependencies = [
     { name = "gooddata-sdk" },
@@ -875,7 +874,7 @@ type = [
 
 [[package]]
 name = "gooddata-pipelines"
-version = "1.53.0"
+version = "1.54.0"
 source = { editable = "packages/gooddata-pipelines" }
 dependencies = [
     { name = "boto3" },
@@ -926,7 +925,7 @@ type = [
 
 [[package]]
 name = "gooddata-python-sdk-workspace"
-version = "1.53.0"
+version = "1.54.0"
 source = { virtual = "." }
 dependencies = [
     { name = "gooddata-api-client" },
@@ -989,7 +988,7 @@ type = [{ name = "mypy", specifier = "~=1.11.2" }]
 
 [[package]]
 name = "gooddata-sdk"
-version = "1.53.0"
+version = "1.54.0"
 source = { editable = "packages/gooddata-sdk" }
 dependencies = [
     { name = "attrs" },
