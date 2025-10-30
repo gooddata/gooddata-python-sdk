@@ -42,3 +42,5 @@ jobs:
               - 'packages/**'
               - '*.mk'
               - 'Makefile'
+              - Dockerfile
+              - pyproject.toml

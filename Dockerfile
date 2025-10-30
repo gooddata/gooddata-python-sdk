@@ -4,15 +4,20 @@ FROM python:${PY_TAG}
 
 ARG PY_TAG
 ARG ENV_TAG
+ARG UV_VERSION=0.9.5
+
 # tox defines all python targets, makefile recognizes TEST_ENVS and forces
 # tox to execute only tests for installed python
 ENV TEST_ENVS=${ENV_TAG}
 
 # install make and gosu
+# install uv using pip
+# UV_VERSION should match pyproject.toml [tool.uv] required-version (currently 0.9.5)
 ENV GOSU_VERSION=1.14
 RUN set -x \
   && apt-get update \
   && apt-get install -y --no-install-recommends make curl gnupg \
+  && pip install --no-cache-dir "uv==${UV_VERSION}" \
   && curl -sSLo /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$(dpkg --print-architecture)" \
   && curl -sSLo /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$(dpkg --print-architecture).asc" \
   && export GNUPGHOME="$(mktemp -d)" \
@@ -26,17 +31,27 @@ RUN set -x \
   && rm -rf /var/lib/apt/lists/* \
   && true
 
-# install tox
-ENV PYTHON_TOX_VERSION=4.30.0
-ENV PYTHON_TOX_UV_VERSION=1.28.0
-# install uv
-ENV PYTHON_UV_VERSION=0.9.5
+# Set working directory before copying files
+WORKDIR /data
+
+# copy dependency files - these will be available at build time
+# At runtime, the directory will be mounted, but uv will use the lock file
+# to ensure consistent dependencies
+COPY pyproject.toml uv.lock ./
+
+# Install tox and tox-uv as system packages so they're available globally
+# This matches the original behavior where tox was installed via pip
+# We use uv pip install to install packages from the tox dependency group in pyproject.toml
+# by reading from the lock file which ensures consistent versions
+# Reinstall uv after pip install to ensure correct version (uv pip install may install a different version)
+# Clean up dependency files after installation to reduce image size
 RUN set -x \
-  && pip3 install uv==${PYTHON_UV_VERSION} tox==${PYTHON_TOX_VERSION} tox-uv==${PYTHON_TOX_UV_VERSION}\
+  && uv pip install --system --group tox \
+  && pip install --no-cache-dir --force-reinstall "uv==${UV_VERSION}" \
+  && rm -f pyproject.toml uv.lock \
   && true
 
 COPY .docker/entrypoint.sh /entrypoint.sh
-WORKDIR /data
 
 LABEL image_name="GoodData Python SDK test image with python, tox and make"
 # LABEL maintainer="TigerTeam <tiger@gooddata.com>"
