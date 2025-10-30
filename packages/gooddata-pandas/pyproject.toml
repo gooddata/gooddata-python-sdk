@@ -1,7 +1,7 @@
 # (C) 2025 GoodData Corporation
 [project]
 name = "gooddata-pandas"
-version = "1.53.0"
+version = "1.54.0"
 description = "GoodData Cloud to pandas"
 readme = "README.md"
 license = {text = "MIT"}
@@ -29,7 +29,7 @@ keywords = [
 ]
 requires-python = ">=3.10"
 dependencies = [
-    "gooddata-sdk~=1.53.0",
+    "gooddata-sdk~=1.54.0",
     "pandas>=2.0.0,<3.0.0",
 ]
 
@@ -51,7 +51,7 @@ classifiers = [
 gooddata-sdk = { workspace = true }
 
 [project.urls]
-Documentation = "https://gooddata-pandas.readthedocs.io/en/v1.53.0"
+Documentation = "https://gooddata-pandas.readthedocs.io/en/v1.54.0"
 Source = "https://github.com/gooddata/gooddata-python-sdk"
 
 [dependency-groups]
