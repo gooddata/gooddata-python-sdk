@@ -934,6 +934,7 @@ dependencies = [
     { name = "gooddata-flexconnect" },
     { name = "gooddata-flight-server" },
     { name = "gooddata-pandas" },
+    { name = "gooddata-pipelines" },
     { name = "gooddata-sdk" },
     { name = "tests-support" },
 ]
@@ -966,6 +967,7 @@ requires-dist = [
     { name = "gooddata-flexconnect", editable = "packages/gooddata-flexconnect" },
     { name = "gooddata-flight-server", editable = "packages/gooddata-flight-server" },
     { name = "gooddata-pandas", editable = "packages/gooddata-pandas" },
+    { name = "gooddata-pipelines", editable = "packages/gooddata-pipelines" },
     { name = "gooddata-sdk", editable = "packages/gooddata-sdk" },
     { name = "tests-support", editable = "packages/tests-support" },
 ]

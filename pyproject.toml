@@ -12,6 +12,7 @@ dependencies = [
     "gooddata-flight-server",
     "gooddata-flexconnect",
     "gooddata-api-client",
+    "gooddata-pipelines",
     "tests-support",
 ]
 
@@ -25,6 +26,7 @@ gooddata-dbt = { workspace = true }
 gooddata-fdw = { workspace = true }
 gooddata-flight-server = { workspace = true }
 gooddata-flexconnect = { workspace = true }
+gooddata-pipelines = { workspace = true }
 tests-support = { workspace = true }
 gooddata-api-client = { path = "gooddata-api-client", editable = true }
 
