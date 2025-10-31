@@ -47,9 +47,6 @@ classifiers = [
     "Typing :: Typed",
 ]
 
-[tool.uv.sources]
-gooddata-sdk = { workspace = true }
-
 [project.urls]
 Documentation = "https://gooddata-pandas.readthedocs.io/en/v1.54.0"
 Source = "https://github.com/gooddata/gooddata-python-sdk"
