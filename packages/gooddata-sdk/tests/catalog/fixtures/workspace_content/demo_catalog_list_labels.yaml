@@ -19,55 +19,35 @@ interactions:
         code: 200
         message: OK
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '8196'
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: &id001
           - PLACEHOLDER
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
-        Server:
-          - nginx
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
+        X-Xss-Protection:
+          - 1; mode=block
       body:
         string:
           data:
@@ -103,24 +83,6 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_channels.category
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: type
-              type: label
-              attributes:
-                title: Type
-                description: Type
-                tags:
-                  - Campaign channels
-                primary: true
-                sourceColumn: type
-                sourceColumnDataType: STRING
-                valueType: TEXT
-                areRelationsValid: true
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/type
               meta:
                 origin:
                   originType: NATIVE
@@ -197,38 +159,82 @@ interactions:
                 origin:
                   originType: NATIVE
                   originId: demo
-            - id: region
+            - id: date.day
               type: label
               attributes:
-                title: Region
-                description: Region
+                title: Date - Date
+                description: Date
                 tags:
-                  - Customers
+                  - Date
                 primary: true
-                sourceColumn: region
-                sourceColumnDataType: STRING
-                valueType: TEXT
+                sourceColumn: ''
                 areRelationsValid: true
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/region
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.day
               meta:
                 origin:
                   originType: NATIVE
                   originId: demo
-            - id: state
+            - id: date.month
               type: label
               attributes:
-                title: State
-                description: State
+                title: Date - Month/Year
+                description: Month and Year (12/2020)
                 tags:
-                  - Customers
+                  - Date
                 primary: true
-                sourceColumn: state
-                sourceColumnDataType: STRING
-                valueType: TEXT
+                sourceColumn: ''
                 areRelationsValid: true
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/state
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.month
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: date.quarter
+              type: label
+              attributes:
+                title: Date - Quarter/Year
+                description: Quarter and Year (Q1/2020)
+                tags:
+                  - Date
+                primary: true
+                sourceColumn: ''
+                areRelationsValid: true
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.quarter
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: date.week
+              type: label
+              attributes:
+                title: Date - Week/Year
+                description: Week and Year (W52/2020)
+                tags:
+                  - Date
+                primary: true
+                sourceColumn: ''
+                areRelationsValid: true
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.week
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: date.year
+              type: label
+              attributes:
+                title: Date - Year
+                description: Year
+                tags:
+                  - Date
+                primary: true
+                sourceColumn: ''
+                areRelationsValid: true
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.year
               meta:
                 origin:
                   originType: NATIVE
@@ -359,82 +365,56 @@ interactions:
                 origin:
                   originType: NATIVE
                   originId: demo
-            - id: date.day
+            - id: region
               type: label
               attributes:
-                title: Date - Date
-                description: Date
+                title: Region
+                description: Region
                 tags:
-                  - Date
+                  - Customers
                 primary: true
-                sourceColumn: ''
+                sourceColumn: region
+                sourceColumnDataType: STRING
+                valueType: TEXT
                 areRelationsValid: true
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.day
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/region
               meta:
                 origin:
                   originType: NATIVE
                   originId: demo
-            - id: date.month
+            - id: state
               type: label
               attributes:
-                title: Date - Month/Year
-                description: Month and Year (12/2020)
+                title: State
+                description: State
                 tags:
-                  - Date
+                  - Customers
                 primary: true
-                sourceColumn: ''
+                sourceColumn: state
+                sourceColumnDataType: STRING
+                valueType: TEXT
                 areRelationsValid: true
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.month
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/state
               meta:
                 origin:
                   originType: NATIVE
                   originId: demo
-            - id: date.quarter
+            - id: type
               type: label
               attributes:
-                title: Date - Quarter/Year
-                description: Quarter and Year (Q1/2020)
+                title: Type
+                description: Type
                 tags:
-                  - Date
+                  - Campaign channels
                 primary: true
-                sourceColumn: ''
+                sourceColumn: type
+                sourceColumnDataType: STRING
+                valueType: TEXT
                 areRelationsValid: true
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.quarter
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: date.week
-              type: label
-              attributes:
-                title: Date - Week/Year
-                description: Week and Year (W52/2020)
-                tags:
-                  - Date
-                primary: true
-                sourceColumn: ''
-                areRelationsValid: true
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.week
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: date.year
-              type: label
-              attributes:
-                title: Date - Year
-                description: Year
-                tags:
-                  - Date
-                primary: true
-                sourceColumn: ''
-                areRelationsValid: true
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.year
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/type
               meta:
                 origin:
                   originType: NATIVE

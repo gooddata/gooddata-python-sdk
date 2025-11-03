@@ -4,7 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**file** | [**[File]**](File.md) |  | 
+**file** | [**[File]**](File.md) |  | [optional] 
 **other_attributes** | **{str: (str,)}** |  | [optional] 
 **space** | **str** |  | [optional] 
 **src_lang** | **str** |  | [optional] 

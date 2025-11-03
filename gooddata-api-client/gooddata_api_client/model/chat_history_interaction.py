@@ -31,9 +31,11 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.change_analysis_params import ChangeAnalysisParams
     from gooddata_api_client.model.created_visualizations import CreatedVisualizations
     from gooddata_api_client.model.found_objects import FoundObjects
     from gooddata_api_client.model.route_result import RouteResult
+    globals()['ChangeAnalysisParams'] = ChangeAnalysisParams
     globals()['CreatedVisualizations'] = CreatedVisualizations
     globals()['FoundObjects'] = FoundObjects
     globals()['RouteResult'] = RouteResult
@@ -104,6 +106,7 @@ class ChatHistoryInteraction(ModelNormal):
             'interaction_finished': (bool,),  # noqa: E501
             'question': (str,),  # noqa: E501
             'routing': (RouteResult,),  # noqa: E501
+            'change_analysis_params': (ChangeAnalysisParams,),  # noqa: E501
             'created_visualizations': (CreatedVisualizations,),  # noqa: E501
             'error_response': (str,),  # noqa: E501
             'found_objects': (FoundObjects,),  # noqa: E501
@@ -122,6 +125,7 @@ class ChatHistoryInteraction(ModelNormal):
         'interaction_finished': 'interactionFinished',  # noqa: E501
         'question': 'question',  # noqa: E501
         'routing': 'routing',  # noqa: E501
+        'change_analysis_params': 'changeAnalysisParams',  # noqa: E501
         'created_visualizations': 'createdVisualizations',  # noqa: E501
         'error_response': 'errorResponse',  # noqa: E501
         'found_objects': 'foundObjects',  # noqa: E501
@@ -177,6 +181,7 @@ class ChatHistoryInteraction(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            change_analysis_params (ChangeAnalysisParams): [optional]  # noqa: E501
             created_visualizations (CreatedVisualizations): [optional]  # noqa: E501
             error_response (str): Error response in anything fails.. [optional]  # noqa: E501
             found_objects (FoundObjects): [optional]  # noqa: E501
@@ -278,6 +283,7 @@ class ChatHistoryInteraction(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            change_analysis_params (ChangeAnalysisParams): [optional]  # noqa: E501
             created_visualizations (CreatedVisualizations): [optional]  # noqa: E501
             error_response (str): Error response in anything fails.. [optional]  # noqa: E501
             found_objects (FoundObjects): [optional]  # noqa: E501

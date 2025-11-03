@@ -39,6 +39,7 @@ with gooddata_api_client.ApiClient() as api_client:
     generate_ldm_request = GenerateLdmRequest(
         aggregated_fact_prefix="aggr",
         date_granularities="all",
+        date_reference_prefix="d",
         denorm_prefix="dr",
         fact_prefix="f",
         generate_long_ids=False,
