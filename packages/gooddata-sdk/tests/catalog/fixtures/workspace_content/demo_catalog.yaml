@@ -591,30 +591,6 @@ interactions:
                     type: attribute
                 referenceProperties:
                   - identifier:
-                      id: date
-                      type: dataset
-                    multivalue: false
-                    sources:
-                      - column: date
-                        dataType: DATE
-                        target:
-                          id: date
-                          type: date
-                    sourceColumns: null
-                    sourceColumnDataTypes: null
-                  - identifier:
-                      id: campaigns
-                      type: dataset
-                    multivalue: false
-                    sources:
-                      - column: campaign_id
-                        dataType: INT
-                        target:
-                          id: campaign_id
-                          type: attribute
-                    sourceColumns: null
-                    sourceColumnDataTypes: null
-                  - identifier:
                       id: customers
                       type: dataset
                     multivalue: false
@@ -624,6 +600,18 @@ interactions:
                         target:
                           id: customer_id
                           type: attribute
+                    sourceColumns: null
+                    sourceColumnDataTypes: null
+                  - identifier:
+                      id: date
+                      type: dataset
+                    multivalue: false
+                    sources:
+                      - column: date
+                        dataType: DATE
+                        target:
+                          id: date
+                          type: date
                     sourceColumns: null
                     sourceColumnDataTypes: null
                   - identifier:
@@ -638,6 +626,18 @@ interactions:
                           type: attribute
                     sourceColumns: null
                     sourceColumnDataTypes: null
+                  - identifier:
+                      id: campaigns
+                      type: dataset
+                    multivalue: false
+                    sources:
+                      - column: campaign_id
+                        dataType: INT
+                        target:
+                          id: campaign_id
+                          type: attribute
+                    sourceColumns: null
+                    sourceColumnDataTypes: null
                 dataSourceTableId: demo-test-ds:order_lines
                 dataSourceTablePath:
                   - demo
@@ -649,14 +649,14 @@ interactions:
                     dataType: STRING
                 workspaceDataFilterReferences:
                   - filterId:
-                      id: wdf__region
-                      type: workspaceDataFilter
-                    filterColumn: wdf__region
-                    filterColumnDataType: STRING
-                  - filterId:
                       id: wdf__state
                       type: workspaceDataFilter
                     filterColumn: wdf__state
+                    filterColumnDataType: STRING
+                  - filterId:
+                      id: wdf__region
+                      type: workspaceDataFilter
+                    filterColumn: wdf__region
                     filterColumnDataType: STRING
                 type: NORMAL
               links:
@@ -1231,30 +1231,6 @@ interactions:
                     type: attribute
                 referenceProperties:
                   - identifier:
-                      id: date
-                      type: dataset
-                    multivalue: false
-                    sources:
-                      - column: date
-                        dataType: DATE
-                        target:
-                          id: date
-                          type: date
-                    sourceColumns: null
-                    sourceColumnDataTypes: null
-                  - identifier:
-                      id: campaigns
-                      type: dataset
-                    multivalue: false
-                    sources:
-                      - column: campaign_id
-                        dataType: INT
-                        target:
-                          id: campaign_id
-                          type: attribute
-                    sourceColumns: null
-                    sourceColumnDataTypes: null
-                  - identifier:
                       id: customers
                       type: dataset
                     multivalue: false
@@ -1267,6 +1243,18 @@ interactions:
                     sourceColumns: null
                     sourceColumnDataTypes: null
                   - identifier:
+                      id: date
+                      type: dataset
+                    multivalue: false
+                    sources:
+                      - column: date
+                        dataType: DATE
+                        target:
+                          id: date
+                          type: date
+                    sourceColumns: null
+                    sourceColumnDataTypes: null
+                  - identifier:
                       id: products
                       type: dataset
                     multivalue: false
@@ -1275,6 +1263,18 @@ interactions:
                         dataType: INT
                         target:
                           id: product_id
+                          type: attribute
+                    sourceColumns: null
+                    sourceColumnDataTypes: null
+                  - identifier:
+                      id: campaigns
+                      type: dataset
+                    multivalue: false
+                    sources:
+                      - column: campaign_id
+                        dataType: INT
+                        target:
+                          id: campaign_id
                           type: attribute
                     sourceColumns: null
                     sourceColumnDataTypes: null

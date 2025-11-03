@@ -90,6 +90,7 @@ class GenerateLdmRequest(ModelNormal):
         return {
             'aggregated_fact_prefix': (str,),  # noqa: E501
             'date_granularities': (str,),  # noqa: E501
+            'date_reference_prefix': (str,),  # noqa: E501
             'denorm_prefix': (str,),  # noqa: E501
             'fact_prefix': (str,),  # noqa: E501
             'generate_long_ids': (bool,),  # noqa: E501
@@ -116,6 +117,7 @@ class GenerateLdmRequest(ModelNormal):
     attribute_map = {
         'aggregated_fact_prefix': 'aggregatedFactPrefix',  # noqa: E501
         'date_granularities': 'dateGranularities',  # noqa: E501
+        'date_reference_prefix': 'dateReferencePrefix',  # noqa: E501
         'denorm_prefix': 'denormPrefix',  # noqa: E501
         'fact_prefix': 'factPrefix',  # noqa: E501
         'generate_long_ids': 'generateLongIds',  # noqa: E501
@@ -177,6 +179,7 @@ class GenerateLdmRequest(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             aggregated_fact_prefix (str): Columns starting with this prefix will be considered as aggregated facts. The prefix is then followed by the value of `separator` parameter. Given the aggregated fact prefix is `aggr` and separator is `__`, the columns with name like `aggr__sum__product__sold` will be considered as aggregated sold fact in the product table with SUM aggregate function.. [optional]  # noqa: E501
             date_granularities (str): Option to control date granularities for date datasets. Empty value enables common date granularities (DAY, WEEK, MONTH, QUARTER, YEAR). Default value is `all` which enables all available date granularities, including time granularities (like hours, minutes).. [optional]  # noqa: E501
+            date_reference_prefix (str): Columns starting with this prefix will be considered as references to date dataset. The prefix is then followed by the value of `separator` parameter. Given the reference prefix is `d` and separator is `__`, the columns with name like `d__date` will be considered as reference to date dataset. There can be also second separator and granularity suffix, e.g. `d__date__day` to create attribute reference to exact date dataset and granularity.. [optional]  # noqa: E501
             denorm_prefix (str): Columns starting with this prefix will be considered as denormalization references. The prefix is then followed by the value of `separator` parameter. Given the denormalization reference prefix is `dr` and separator is `__`, the columns with name like `dr__customer_name` will be considered as denormalization references.. [optional]  # noqa: E501
             fact_prefix (str): Columns starting with this prefix will be considered as facts. The prefix is then followed by the value of `separator` parameter. Given the fact prefix is `f` and separator is `__`, the columns with name like `f__sold` will be considered as facts.. [optional]  # noqa: E501
             generate_long_ids (bool): A flag dictating how the attribute, fact and label ids are generated. By default their ids are derived only from the column name, unless there would be a conflict (e.g. category coming from two different tables). In that case a long id format of `<table>.<column>` is used. If the flag is set to true, then all ids will be generated in the long form.. [optional] if omitted the server will use the default value of False  # noqa: E501
@@ -280,6 +283,7 @@ class GenerateLdmRequest(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             aggregated_fact_prefix (str): Columns starting with this prefix will be considered as aggregated facts. The prefix is then followed by the value of `separator` parameter. Given the aggregated fact prefix is `aggr` and separator is `__`, the columns with name like `aggr__sum__product__sold` will be considered as aggregated sold fact in the product table with SUM aggregate function.. [optional]  # noqa: E501
             date_granularities (str): Option to control date granularities for date datasets. Empty value enables common date granularities (DAY, WEEK, MONTH, QUARTER, YEAR). Default value is `all` which enables all available date granularities, including time granularities (like hours, minutes).. [optional]  # noqa: E501
+            date_reference_prefix (str): Columns starting with this prefix will be considered as references to date dataset. The prefix is then followed by the value of `separator` parameter. Given the reference prefix is `d` and separator is `__`, the columns with name like `d__date` will be considered as reference to date dataset. There can be also second separator and granularity suffix, e.g. `d__date__day` to create attribute reference to exact date dataset and granularity.. [optional]  # noqa: E501
             denorm_prefix (str): Columns starting with this prefix will be considered as denormalization references. The prefix is then followed by the value of `separator` parameter. Given the denormalization reference prefix is `dr` and separator is `__`, the columns with name like `dr__customer_name` will be considered as denormalization references.. [optional]  # noqa: E501
             fact_prefix (str): Columns starting with this prefix will be considered as facts. The prefix is then followed by the value of `separator` parameter. Given the fact prefix is `f` and separator is `__`, the columns with name like `f__sold` will be considered as facts.. [optional]  # noqa: E501
             generate_long_ids (bool): A flag dictating how the attribute, fact and label ids are generated. By default their ids are derived only from the column name, unless there would be a conflict (e.g. category coming from two different tables). In that case a long id format of `<table>.<column>` is used. If the flag is set to true, then all ids will be generated in the long form.. [optional] if omitted the server will use the default value of False  # noqa: E501

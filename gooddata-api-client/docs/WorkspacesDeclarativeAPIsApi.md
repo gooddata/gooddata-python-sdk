@@ -296,6 +296,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     ),
                     description="Sales for all the data available.",
                     id="total-sales",
+                    is_hidden=False,
                     modified_at="["2023-07-20 12:30"]",
                     modified_by=DeclarativeUserIdentifier(
                         id="employee123",
@@ -372,6 +373,12 @@ with gooddata_api_client.ApiClient() as api_client:
                             labels=[
                                 DeclarativeLabel(
                                     description="Customer name",
+                                    geo_area_config=GeoAreaConfig(
+                                        collection=GeoCollection(
+                                            id="id_example",
+                                            matching_property="matching_property_example",
+                                        ),
+                                    ),
                                     id="label.customer_name",
                                     is_hidden=False,
                                     source_column="customer_name",
@@ -667,16 +674,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                 ),
                             ),
                         ],
-                        metadata=AutomationMetadata(
-                            visible_filters=[
-                                VisibleFilter(
-                                    is_all_time_date_filter=False,
-                                    local_identifier="local_identifier_example",
-                                    title="title_example",
-                                ),
-                            ],
-                            widget="widget_example",
-                        ),
+                        metadata=AutomationMetadata(),
                         modified_at="2023-07-20 12:30",
                         modified_by=DeclarativeUserIdentifier(
                             id="employee123",
@@ -990,6 +988,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                 ),
                                 description="Sales for all the data available.",
                                 id="total-sales",
+                                is_hidden=False,
                                 modified_at="["2023-07-20 12:30"]",
                                 modified_by=DeclarativeUserIdentifier(
                                     id="employee123",
@@ -1066,6 +1065,12 @@ with gooddata_api_client.ApiClient() as api_client:
                                         labels=[
                                             DeclarativeLabel(
                                                 description="Customer name",
+                                                geo_area_config=GeoAreaConfig(
+                                                    collection=GeoCollection(
+                                                        id="id_example",
+                                                        matching_property="matching_property_example",
+                                                    ),
+                                                ),
                                                 id="label.customer_name",
                                                 is_hidden=False,
                                                 source_column="customer_name",

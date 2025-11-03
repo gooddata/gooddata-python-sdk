@@ -120,7 +120,6 @@
         "properties": {
           "resultIdToCancelTokenPairs": {
             "additionalProperties": {
-              "description": "resultId to cancel token pairs",
               "type": "string"
             },
             "description": "resultId to cancel token pairs",
@@ -422,6 +421,26 @@
         ],
         "type": "object"
       },
+      "AnalyticsCatalogCreatedBy": {
+        "properties": {
+          "reasoning": {
+            "description": "Reasoning for error states",
+            "type": "string"
+          },
+          "users": {
+            "description": "Users who created any object in the catalog",
+            "items": {
+              "$ref": "#/components/schemas/AnalyticsCatalogUser"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "reasoning",
+          "users"
+        ],
+        "type": "object"
+      },
       "AnalyticsCatalogTags": {
         "properties": {
           "tags": {
@@ -434,6 +453,29 @@
         },
         "required": [
           "tags"
+        ],
+        "type": "object"
+      },
+      "AnalyticsCatalogUser": {
+        "description": "Users who created any object in the catalog",
+        "properties": {
+          "firstname": {
+            "description": "First name of the user who created any objects",
+            "type": "string"
+          },
+          "lastname": {
+            "description": "Last name of the user who created any objects",
+            "type": "string"
+          },
+          "userId": {
+            "description": "User ID of the user who created any objects",
+            "type": "string"
+          }
+        },
+        "required": [
+          "firstname",
+          "lastname",
+          "userId"
         ],
         "type": "object"
       },
@@ -643,6 +685,7 @@
                   "GEO",
                   "GEO_LONGITUDE",
                   "GEO_LATITUDE",
+                  "GEO_AREA",
                   "IMAGE"
                 ],
                 "type": "string"
@@ -805,9 +848,159 @@
         ],
         "type": "object"
       },
+      "ChangeAnalysisParams": {
+        "description": "Change analysis specification.",
+        "properties": {
+          "analyzedPeriod": {
+            "description": "The analyzed time period",
+            "type": "string"
+          },
+          "attributes": {
+            "description": "Attributes to analyze for significant changes",
+            "items": {
+              "$ref": "#/components/schemas/AttributeItem"
+            },
+            "type": "array"
+          },
+          "dateAttribute": {
+            "$ref": "#/components/schemas/AttributeItem"
+          },
+          "filters": {
+            "description": "Optional filters to apply",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/AbstractMeasureValueFilter"
+                },
+                {
+                  "$ref": "#/components/schemas/FilterDefinitionForSimpleMeasure"
+                },
+                {
+                  "$ref": "#/components/schemas/InlineFilterDefinition"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "measure": {
+            "$ref": "#/components/schemas/MeasureItem"
+          },
+          "referencePeriod": {
+            "description": "The reference time period",
+            "type": "string"
+          },
+          "useSmartAttributeSelection": {
+            "description": "Whether to use smart attribute selection",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "analyzedPeriod",
+          "attributes",
+          "dateAttribute",
+          "filters",
+          "measure",
+          "referencePeriod",
+          "useSmartAttributeSelection"
+        ],
+        "type": "object"
+      },
+      "ChangeAnalysisRequest": {
+        "description": "Request for change analysis computation",
+        "properties": {
+          "analyzedPeriod": {
+            "description": "The analyzed time period (e.g., '2025-02')",
+            "type": "string"
+          },
+          "attributes": {
+            "description": "Attributes to analyze for significant changes. If empty, valid attributes will be automatically discovered.",
+            "items": {
+              "$ref": "#/components/schemas/AttributeItem"
+            },
+            "type": "array"
+          },
+          "auxMeasures": {
+            "description": "Auxiliary measures",
+            "items": {
+              "$ref": "#/components/schemas/MeasureItem"
+            },
+            "type": "array"
+          },
+          "dateAttribute": {
+            "$ref": "#/components/schemas/AttributeItem"
+          },
+          "filters": {
+            "description": "Optional filters to apply.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/AbstractMeasureValueFilter"
+                },
+                {
+                  "$ref": "#/components/schemas/FilterDefinitionForSimpleMeasure"
+                },
+                {
+                  "$ref": "#/components/schemas/InlineFilterDefinition"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "measure": {
+            "$ref": "#/components/schemas/MeasureItem"
+          },
+          "referencePeriod": {
+            "description": "The reference time period (e.g., '2025-01')",
+            "type": "string"
+          },
+          "useSmartAttributeSelection": {
+            "default": false,
+            "description": "Whether to use smart attribute selection (LLM-based) instead of discovering all valid attributes. If true, GenAI will intelligently select the most relevant attributes for change analysis. If false or not set, all valid attributes will be discovered using Calcique. Smart attribute selection applies only when no attributes are provided.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "analyzedPeriod",
+          "dateAttribute",
+          "measure",
+          "referencePeriod"
+        ],
+        "type": "object"
+      },
+      "ChangeAnalysisResponse": {
+        "description": "Response for change analysis computation",
+        "properties": {
+          "links": {
+            "$ref": "#/components/schemas/ExecutionLinks"
+          }
+        },
+        "required": [
+          "links"
+        ],
+        "type": "object"
+      },
+      "ChangeAnalysisResult": {
+        "description": "Result of a change analysis execution.",
+        "properties": {
+          "data": {
+            "description": "The change analysis result data containing significant changes.",
+            "items": {
+              "$ref": "#/components/schemas/MetricValueChange"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
       "ChatHistoryInteraction": {
         "description": "List of chat history interactions.",
         "properties": {
+          "changeAnalysisParams": {
+            "$ref": "#/components/schemas/ChangeAnalysisParams"
+          },
           "chatHistoryInteractionId": {
             "description": "Chat History interaction ID. Unique ID for each interaction.",
             "type": "string"
@@ -898,6 +1091,10 @@
               "NONE"
             ],
             "type": "string"
+          },
+          "userTextFeedback": {
+            "description": "User text feedback for the interaction.",
+            "type": "string"
           }
         },
         "type": "object"
@@ -924,6 +1121,11 @@
       },
       "ChatRequest": {
         "properties": {
+          "includeHidden": {
+            "default": false,
+            "description": "If true, includes hidden objects in search and visualization building. If false (default), excludes objects where isHidden=true.",
+            "type": "boolean"
+          },
           "limitCreate": {
             "default": 3,
             "description": "Maximum number of created results.",
@@ -980,6 +1182,9 @@
       },
       "ChatResult": {
         "properties": {
+          "changeAnalysisParams": {
+            "$ref": "#/components/schemas/ChangeAnalysisParams"
+          },
           "chatHistoryInteractionId": {
             "description": "Chat History interaction ID. Unique ID for each interaction.",
             "type": "string"
@@ -2111,14 +2316,30 @@
       "GetQualityIssuesResponse": {
         "properties": {
           "issues": {
+            "description": "List of quality issues found in the workspace",
             "items": {
               "$ref": "#/components/schemas/QualityIssue"
             },
             "type": "array"
+          },
+          "status": {
+            "description": "Status of the latest triggered quality check process",
+            "enum": [
+              "RUNNING",
+              "COMPLETED",
+              "FAILED",
+              "NOT_FOUND"
+            ],
+            "type": "string"
+          },
+          "updatedAt": {
+            "description": "Timestamp when the quality issues were last updated (ISO format)",
+            "type": "string"
           }
         },
         "required": [
-          "issues"
+          "issues",
+          "status"
         ],
         "type": "object"
       },
@@ -2231,6 +2452,7 @@
               "GEO",
               "GEO_LONGITUDE",
               "GEO_LATITUDE",
+              "GEO_AREA",
               "IMAGE"
             ],
             "type": "string"
@@ -2407,94 +2629,6 @@
         ],
         "type": "object"
       },
-      "MemoryItem": {
-        "properties": {
-          "id": {
-            "description": "Memory item ID",
-            "maxLength": 255,
-            "type": "string"
-          },
-          "instruction": {
-            "description": "Instruction that will be injected into the prompt.",
-            "maxLength": 255,
-            "type": "string"
-          },
-          "keywords": {
-            "description": "List of keywords used to match the memory item.",
-            "items": {
-              "description": "List of keywords used to match the memory item.",
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "strategy": {
-            "description": "Defines the application strategy.",
-            "enum": [
-              "MEMORY_ITEM_STRATEGY_ALLWAYS",
-              "MEMORY_ITEM_STRATEGY_NEVER",
-              "MEMORY_ITEM_STRATEGY_AUTO"
-            ],
-            "type": "string"
-          },
-          "useCases": {
-            "$ref": "#/components/schemas/MemoryItemUseCases"
-          }
-        },
-        "required": [
-          "id",
-          "instruction",
-          "keywords"
-        ],
-        "type": "object"
-      },
-      "MemoryItemUseCases": {
-        "description": "Defines the prompts where the given instruction should be applied.",
-        "properties": {
-          "general": {
-            "description": "Apply this memory item to the general answer prompt.",
-            "type": "boolean"
-          },
-          "howto": {
-            "description": "Apply this memory item to the how-to prompt.",
-            "type": "boolean"
-          },
-          "keywords": {
-            "description": "Apply this memory item to the search keyword extraction prompt.",
-            "type": "boolean"
-          },
-          "metric": {
-            "description": "Apply this memory item to the metric selection prompt.",
-            "type": "boolean"
-          },
-          "normalize": {
-            "description": "Apply this memory item to the normalize prompt.",
-            "type": "boolean"
-          },
-          "router": {
-            "description": "Appy this memory item to the router prompt.",
-            "type": "boolean"
-          },
-          "search": {
-            "description": "Apply this memory item to the search prompt.",
-            "type": "boolean"
-          },
-          "visualization": {
-            "description": "Apply this memory item to the visualization prompt.",
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "general",
-          "howto",
-          "keywords",
-          "metric",
-          "normalize",
-          "router",
-          "search",
-          "visualization"
-        ],
-        "type": "object"
-      },
       "Metric": {
         "description": "List of metrics to be used in the new visualization",
         "properties": {
@@ -2534,6 +2668,77 @@
           "id",
           "title",
           "type"
+        ],
+        "type": "object"
+      },
+      "MetricValueChange": {
+        "description": "Individual change analysis data item",
+        "properties": {
+          "attributeName": {
+            "description": "The name of the attribute being analyzed",
+            "type": "string"
+          },
+          "attributeValue": {
+            "description": "The value of the attribute being analyzed",
+            "type": "string"
+          },
+          "attributeValuesChangeMean": {
+            "description": "The mean of attribute value changes for the attribute being analyzed",
+            "format": "double",
+            "type": "number"
+          },
+          "attributeValuesChangeStd": {
+            "description": "The standard deviation of attribute value changes for the attribute being analyzed",
+            "format": "double",
+            "type": "number"
+          },
+          "isSignificantChange": {
+            "description": "Whether the change is statistically significant",
+            "type": "boolean"
+          },
+          "metricValueDelta": {
+            "description": "The delta between analyzed and reference periods",
+            "format": "double",
+            "type": "number"
+          },
+          "metricValueDeltaAbs": {
+            "description": "The absolute delta between analyzed and reference periods",
+            "format": "double",
+            "type": "number"
+          },
+          "metricValueInAnalyzedPeriod": {
+            "description": "The metric value in the analyzed period",
+            "format": "double",
+            "type": "number"
+          },
+          "metricValueInReferencePeriod": {
+            "description": "The metric value in the reference period",
+            "format": "double",
+            "type": "number"
+          },
+          "overallMetricValueInAnalyzedPeriod": {
+            "description": "The overall metric value in the analyzed period",
+            "format": "double",
+            "type": "number"
+          },
+          "overallMetricValueInReferencePeriod": {
+            "description": "The overall metric value in the reference period",
+            "format": "double",
+            "type": "number"
+          }
+        },
+        "required": [
+          "attributeName",
+          "attributeValue",
+          "attributeValuesChangeMean",
+          "attributeValuesChangeStd",
+          "isSignificantChange",
+          "metricValueDelta",
+          "metricValueDeltaAbs",
+          "metricValueInAnalyzedPeriod",
+          "metricValueInReferencePeriod",
+          "overallMetricValueInAnalyzedPeriod",
+          "overallMetricValueInReferencePeriod"
         ],
         "type": "object"
       },
@@ -2737,46 +2942,108 @@
         "type": "object"
       },
       "QualityIssue": {
+        "description": "List of quality issues (available when status is COMPLETED)",
         "properties": {
           "code": {
+            "description": "Quality issue code",
+            "example": "SIMILAR_NAMES",
             "type": "string"
           },
           "detail": {
             "additionalProperties": {
+              "description": "Detailed information about the quality issue",
               "type": "object"
             },
+            "description": "Detailed information about the quality issue",
             "type": "object"
           },
+          "id": {
+            "description": "Unique identifier for the quality issue",
+            "type": "string"
+          },
           "objects": {
+            "description": "List of objects affected by this quality issue",
             "items": {
               "$ref": "#/components/schemas/QualityIssueObject"
             },
             "type": "array"
           },
           "severity": {
+            "description": "Severity level",
+            "enum": [
+              "WARNING",
+              "INFO"
+            ],
             "type": "string"
           }
         },
         "required": [
           "code",
           "detail",
+          "id",
           "objects",
           "severity"
         ],
         "type": "object"
       },
       "QualityIssueObject": {
+        "description": "List of objects affected by this quality issue",
         "properties": {
           "id": {
+            "description": "Object ID",
+            "example": "revenue",
+            "type": "string"
+          },
+          "title": {
+            "description": "Object title",
+            "example": "Total Revenue",
             "type": "string"
           },
           "type": {
+            "description": "Object type",
+            "example": "metric",
+            "type": "string"
+          },
+          "workspaceId": {
+            "description": "Workspace ID where the object belongs",
+            "example": "demo",
             "type": "string"
           }
         },
         "required": [
           "id",
-          "type"
+          "title",
+          "type",
+          "workspaceId"
+        ],
+        "type": "object"
+      },
+      "QualityIssuesCalculationStatusResponse": {
+        "properties": {
+          "error": {
+            "description": "Error message (available when status is FAILED or NOT_FOUND)",
+            "type": "string"
+          },
+          "issues": {
+            "description": "List of quality issues (available when status is COMPLETED)",
+            "items": {
+              "$ref": "#/components/schemas/QualityIssue"
+            },
+            "type": "array"
+          },
+          "status": {
+            "description": "Current status of the calculation",
+            "enum": [
+              "RUNNING",
+              "COMPLETED",
+              "FAILED",
+              "NOT_FOUND"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "status"
         ],
         "type": "object"
       },
@@ -3100,7 +3367,8 @@
               "SEARCH",
               "CREATE_VISUALIZATION",
               "EXTEND_VISUALIZATION",
-              "HOWTO"
+              "HOWTO",
+              "CHANGE_ANALYSIS"
             ],
             "type": "string"
           }
@@ -3623,6 +3891,28 @@
         ],
         "type": "object"
       },
+      "TriggerQualityIssuesCalculationResponse": {
+        "properties": {
+          "processId": {
+            "description": "Process ID for tracking the calculation status",
+            "type": "string"
+          },
+          "status": {
+            "description": "Current status of the calculation",
+            "enum": [
+              "RUNNING",
+              "COMPLETED",
+              "FAILED"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "processId",
+          "status"
+        ],
+        "type": "object"
+      },
       "UserContext": {
         "description": "User context, which can affect the behavior of the underlying AI features.",
         "properties": {
@@ -3802,6 +4092,41 @@
           }
         },
         "summary": "Validate LLM Endpoint By Id",
+        "tags": [
+          "Smart Functions",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/createdBy": {
+      "get": {
+        "description": "Returns a list of Users who created any object for this workspace",
+        "operationId": "createdBy",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalyticsCatalogCreatedBy"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Get Analytics Catalog CreatedBy",
         "tags": [
           "Smart Functions",
           "actions"
@@ -4051,10 +4376,10 @@
         ]
       }
     },
-    "/api/v1/actions/workspaces/{workspaceId}/ai/memory": {
+    "/api/v1/actions/workspaces/{workspaceId}/ai/issues/status/{processId}": {
       "get": {
-        "description": "(EXPERIMENTAL) Returns a list of memory items",
-        "operationId": "listMemoryItems",
+        "description": "Returns the status of a quality issues calculation process identified by process ID.",
+        "operationId": "getQualityIssuesCalculationStatus",
         "parameters": [
           {
             "description": "Workspace identifier",
@@ -4064,78 +4389,40 @@
             "schema": {
               "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
               "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/MemoryItem"
-                  },
-                  "type": "array"
-                }
-              }
-            },
-            "description": "OK"
-          }
-        },
-        "summary": "(EXPERIMENTAL) List all memory items",
-        "tags": [
-          "Smart Functions",
-          "actions"
-        ]
-      },
-      "post": {
-        "description": "(EXPERIMENTAL) Creates a new memory item and returns it",
-        "operationId": "createMemoryItem",
-        "parameters": [
-          {
-            "description": "Workspace identifier",
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/MemoryItem"
-              }
             }
           },
-          "required": true
-        },
+          {
+            "in": "path",
+            "name": "processId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MemoryItem"
+                  "$ref": "#/components/schemas/QualityIssuesCalculationStatusResponse"
                 }
               }
             },
             "description": "OK"
           }
         },
-        "summary": "(EXPERIMENTAL) Create new memory item",
+        "summary": "Get Quality Issues Calculation Status",
         "tags": [
           "Smart Functions",
           "actions"
         ]
       }
     },
-    "/api/v1/actions/workspaces/{workspaceId}/ai/memory/{memoryId}": {
-      "delete": {
-        "description": "(EXPERIMENTAL) Removes memory item",
-        "operationId": "removeMemoryItem",
+    "/api/v1/actions/workspaces/{workspaceId}/ai/issues/triggerCheck": {
+      "post": {
+        "description": "Triggers asynchronous calculation of metadata quality issues and returns a process ID for status tracking.",
+        "operationId": "triggerQualityIssuesCalculation",
         "parameters": [
           {
             "description": "Workspace identifier",
@@ -4144,48 +4431,6 @@
             "required": true,
             "schema": {
               "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-              "type": "string"
-            }
-          },
-          {
-            "in": "path",
-            "name": "memoryId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "No Content"
-          }
-        },
-        "summary": "(EXPERIMENTAL) Remove memory item",
-        "tags": [
-          "Smart Functions",
-          "actions"
-        ]
-      },
-      "get": {
-        "description": "(EXPERIMENTAL) Get memory item by id",
-        "operationId": "getMemoryItem",
-        "parameters": [
-          {
-            "description": "Workspace identifier",
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-              "type": "string"
-            }
-          },
-          {
-            "in": "path",
-            "name": "memoryId",
-            "required": true,
-            "schema": {
               "type": "string"
             }
           }
@@ -4195,65 +4440,14 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MemoryItem"
+                  "$ref": "#/components/schemas/TriggerQualityIssuesCalculationResponse"
                 }
               }
             },
             "description": "OK"
           }
         },
-        "summary": "(EXPERIMENTAL) Get memory item",
-        "tags": [
-          "Smart Functions",
-          "actions"
-        ]
-      },
-      "put": {
-        "description": "(EXPERIMENTAL) Updates memory item and returns it",
-        "operationId": "updateMemoryItem",
-        "parameters": [
-          {
-            "description": "Workspace identifier",
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-              "type": "string"
-            }
-          },
-          {
-            "in": "path",
-            "name": "memoryId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/MemoryItem"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MemoryItem"
-                }
-              }
-            },
-            "description": "OK"
-          }
-        },
-        "summary": "(EXPERIMENTAL) Update memory item",
+        "summary": "Trigger Quality Issues Calculation",
         "tags": [
           "Smart Functions",
           "actions"
@@ -4897,6 +5091,96 @@
             "VIEW"
           ]
         }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/computeChangeAnalysis": {
+      "post": {
+        "description": "Computes change analysis for the provided execution definition.",
+        "operationId": "changeAnalysis",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangeAnalysisRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangeAnalysisResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Compute change analysis",
+        "tags": [
+          "Computation",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/computeChangeAnalysis/result/{resultId}": {
+      "get": {
+        "description": "Gets change analysis result.",
+        "operationId": "changeAnalysisResult",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Result ID",
+            "example": "a9b28f9dc55f37ea9f4a5fb0c76895923591e781",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangeAnalysisResult"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Get change analysis result",
+        "tags": [
+          "Computation",
+          "actions"
+        ]
       }
     },
     "/api/v1/actions/workspaces/{workspaceId}/execution/computeKeyDrivers": {

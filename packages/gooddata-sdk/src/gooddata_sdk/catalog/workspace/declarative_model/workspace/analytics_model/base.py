@@ -39,3 +39,4 @@ class CatalogAnalyticsBase(CatalogAnalyticsBaseMeta):
     content: dict[str, Any]
     description: Optional[str] = None
     tags: Optional[list[str]] = None
+    is_hidden: Optional[bool] = None

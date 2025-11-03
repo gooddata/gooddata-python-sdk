@@ -21,5 +21,9 @@ class CatalogMetric(AttrCatalogEntity):
     def format(self) -> Optional[str]:
         return safeget(self.json_api_attributes, ["content", "format"])
 
+    @property
+    def is_hidden(self) -> Optional[bool]:
+        return safeget(self.json_api_attributes, ["isHidden"])
+
     def as_computable(self) -> Metric:
         return SimpleMetric(local_id=self.id, item=self.obj_id)

@@ -6,6 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **are_relations_valid** | **bool** |  | [optional] 
 **description** | **str** |  | [optional] 
+**geo_area_config** | [**JsonApiLabelOutAttributesGeoAreaConfig**](JsonApiLabelOutAttributesGeoAreaConfig.md) |  | [optional] 
 **is_hidden** | **bool** |  | [optional] 
 **primary** | **bool** |  | [optional] 
 **source_column** | **str** |  | [optional] 

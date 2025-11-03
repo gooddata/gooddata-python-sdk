@@ -5,6 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **question** | **str** | User question | 
+**include_hidden** | **bool** | If true, includes hidden objects in search and visualization building. If false (default), excludes objects where isHidden&#x3D;true. | [optional]  if omitted the server will use the default value of False
 **limit_create** | **int** | Maximum number of created results. | [optional]  if omitted the server will use the default value of 3
 **limit_create_context** | **int** | Maximum number of relevant objects included into context for LLM (for each object type). | [optional]  if omitted the server will use the default value of 10
 **limit_search** | **int** | Maximum number of search results. | [optional]  if omitted the server will use the default value of 5

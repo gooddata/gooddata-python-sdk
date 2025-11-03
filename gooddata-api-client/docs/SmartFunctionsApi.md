@@ -13,16 +13,14 @@ Method | HTTP request | Description
 [**anomaly_detection_result**](SmartFunctionsApi.md#anomaly_detection_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/result/{resultId} | (EXPERIMENTAL) Smart functions - Anomaly Detection Result
 [**clustering**](SmartFunctionsApi.md#clustering) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/clustering/{resultId} | (EXPERIMENTAL) Smart functions - Clustering
 [**clustering_result**](SmartFunctionsApi.md#clustering_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/clustering/result/{resultId} | (EXPERIMENTAL) Smart functions - Clustering Result
-[**create_memory_item**](SmartFunctionsApi.md#create_memory_item) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/memory | (EXPERIMENTAL) Create new memory item
+[**created_by**](SmartFunctionsApi.md#created_by) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/createdBy | Get Analytics Catalog CreatedBy
 [**forecast**](SmartFunctionsApi.md#forecast) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/{resultId} | (BETA) Smart functions - Forecast
 [**forecast_result**](SmartFunctionsApi.md#forecast_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/result/{resultId} | (BETA) Smart functions - Forecast Result
-[**get_memory_item**](SmartFunctionsApi.md#get_memory_item) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/memory/{memoryId} | (EXPERIMENTAL) Get memory item
 [**get_quality_issues**](SmartFunctionsApi.md#get_quality_issues) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/issues | Get Quality Issues
-[**list_memory_items**](SmartFunctionsApi.md#list_memory_items) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/memory | (EXPERIMENTAL) List all memory items
-[**remove_memory_item**](SmartFunctionsApi.md#remove_memory_item) | **DELETE** /api/v1/actions/workspaces/{workspaceId}/ai/memory/{memoryId} | (EXPERIMENTAL) Remove memory item
+[**get_quality_issues_calculation_status**](SmartFunctionsApi.md#get_quality_issues_calculation_status) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/issues/status/{processId} | Get Quality Issues Calculation Status
 [**resolve_llm_endpoints**](SmartFunctionsApi.md#resolve_llm_endpoints) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/resolveLlmEndpoints | Get Active LLM Endpoints for this workspace
 [**tags**](SmartFunctionsApi.md#tags) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/tags | Get Analytics Catalog Tags
-[**update_memory_item**](SmartFunctionsApi.md#update_memory_item) | **PUT** /api/v1/actions/workspaces/{workspaceId}/ai/memory/{memoryId} | (EXPERIMENTAL) Update memory item
+[**trigger_quality_issues_calculation**](SmartFunctionsApi.md#trigger_quality_issues_calculation) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/issues/triggerCheck | Trigger Quality Issues Calculation
 [**validate_llm_endpoint**](SmartFunctionsApi.md#validate_llm_endpoint) | **POST** /api/v1/actions/ai/llmEndpoint/test | Validate LLM Endpoint
 [**validate_llm_endpoint_by_id**](SmartFunctionsApi.md#validate_llm_endpoint_by_id) | **POST** /api/v1/actions/ai/llmEndpoint/{llmEndpointId}/test | Validate LLM Endpoint By Id
 
@@ -57,6 +55,7 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = smart_functions_api.SmartFunctionsApi(api_client)
     workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
     chat_request = ChatRequest(
+        include_hidden=False,
         limit_create=3,
         limit_create_context=10,
         limit_search=5,
@@ -152,6 +151,7 @@ with gooddata_api_client.ApiClient() as api_client:
         ),
         thread_id_suffix="thread_id_suffix_example",
         user_feedback="POSITIVE",
+        user_text_feedback="user_text_feedback_example",
     ) # ChatHistoryRequest | 
 
     # example passing only required values which don't have defaults set
@@ -222,6 +222,7 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = smart_functions_api.SmartFunctionsApi(api_client)
     workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
     chat_request = ChatRequest(
+        include_hidden=False,
         limit_create=3,
         limit_create_context=10,
         limit_search=5,
@@ -760,12 +761,12 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **create_memory_item**
-> MemoryItem create_memory_item(workspace_id, memory_item)
+# **created_by**
+> AnalyticsCatalogCreatedBy created_by(workspace_id)
 
-(EXPERIMENTAL) Create new memory item
+Get Analytics Catalog CreatedBy
 
-(EXPERIMENTAL) Creates a new memory item and returns it
+Returns a list of Users who created any object for this workspace
 
 ### Example
 
@@ -774,7 +775,7 @@ No authorization required
 import time
 import gooddata_api_client
 from gooddata_api_client.api import smart_functions_api
-from gooddata_api_client.model.memory_item import MemoryItem
+from gooddata_api_client.model.analytics_catalog_created_by import AnalyticsCatalogCreatedBy
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -788,32 +789,14 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = smart_functions_api.SmartFunctionsApi(api_client)
     workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
-    memory_item = MemoryItem(
-        id="id_example",
-        instruction="instruction_example",
-        keywords=[
-            "keywords_example",
-        ],
-        strategy="MEMORY_ITEM_STRATEGY_ALLWAYS",
-        use_cases=MemoryItemUseCases(
-            general=True,
-            howto=True,
-            keywords=True,
-            metric=True,
-            normalize=True,
-            router=True,
-            search=True,
-            visualization=True,
-        ),
-    ) # MemoryItem | 
 
     # example passing only required values which don't have defaults set
     try:
-        # (EXPERIMENTAL) Create new memory item
-        api_response = api_instance.create_memory_item(workspace_id, memory_item)
+        # Get Analytics Catalog CreatedBy
+        api_response = api_instance.created_by(workspace_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
-        print("Exception when calling SmartFunctionsApi->create_memory_item: %s\n" % e)
+        print("Exception when calling SmartFunctionsApi->created_by: %s\n" % e)
 ```
 
 
@@ -822,11 +805,10 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**| Workspace identifier |
- **memory_item** | [**MemoryItem**](MemoryItem.md)|  |
 
 ### Return type
 
-[**MemoryItem**](MemoryItem.md)
+[**AnalyticsCatalogCreatedBy**](AnalyticsCatalogCreatedBy.md)
 
 ### Authorization
 
@@ -834,7 +816,7 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/json
+ - **Content-Type**: Not defined
  - **Accept**: application/json
 
 
@@ -1015,75 +997,6 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **get_memory_item**
-> MemoryItem get_memory_item(workspace_id, memory_id)
-
-(EXPERIMENTAL) Get memory item
-
-(EXPERIMENTAL) Get memory item by id
-
-### Example
-
-
-```python
-import time
-import gooddata_api_client
-from gooddata_api_client.api import smart_functions_api
-from gooddata_api_client.model.memory_item import MemoryItem
-from pprint import pprint
-# Defining the host is optional and defaults to http://localhost
-# See configuration.py for a list of all supported configuration parameters.
-configuration = gooddata_api_client.Configuration(
-    host = "http://localhost"
-)
-
-
-# Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
-    # Create an instance of the API class
-    api_instance = smart_functions_api.SmartFunctionsApi(api_client)
-    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
-    memory_id = "memoryId_example" # str | 
-
-    # example passing only required values which don't have defaults set
-    try:
-        # (EXPERIMENTAL) Get memory item
-        api_response = api_instance.get_memory_item(workspace_id, memory_id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling SmartFunctionsApi->get_memory_item: %s\n" % e)
-```
-
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**| Workspace identifier |
- **memory_id** | **str**|  |
-
-### Return type
-
-[**MemoryItem**](MemoryItem.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: application/json
-
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
 # **get_quality_issues**
 > GetQualityIssuesResponse get_quality_issues(workspace_id)
 
@@ -1151,12 +1064,12 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **list_memory_items**
-> [MemoryItem] list_memory_items(workspace_id)
+# **get_quality_issues_calculation_status**
+> QualityIssuesCalculationStatusResponse get_quality_issues_calculation_status(workspace_id, process_id)
 
-(EXPERIMENTAL) List all memory items
+Get Quality Issues Calculation Status
 
-(EXPERIMENTAL) Returns a list of memory items
+Returns the status of a quality issues calculation process identified by process ID.
 
 ### Example
 
@@ -1165,7 +1078,7 @@ No authorization required
 import time
 import gooddata_api_client
 from gooddata_api_client.api import smart_functions_api
-from gooddata_api_client.model.memory_item import MemoryItem
+from gooddata_api_client.model.quality_issues_calculation_status_response import QualityIssuesCalculationStatusResponse
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1179,14 +1092,15 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = smart_functions_api.SmartFunctionsApi(api_client)
     workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    process_id = "processId_example" # str | 
 
     # example passing only required values which don't have defaults set
     try:
-        # (EXPERIMENTAL) List all memory items
-        api_response = api_instance.list_memory_items(workspace_id)
+        # Get Quality Issues Calculation Status
+        api_response = api_instance.get_quality_issues_calculation_status(workspace_id, process_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
-        print("Exception when calling SmartFunctionsApi->list_memory_items: %s\n" % e)
+        print("Exception when calling SmartFunctionsApi->get_quality_issues_calculation_status: %s\n" % e)
 ```
 
 
@@ -1195,10 +1109,11 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**| Workspace identifier |
+ **process_id** | **str**|  |
 
 ### Return type
 
-[**[MemoryItem]**](MemoryItem.md)
+[**QualityIssuesCalculationStatusResponse**](QualityIssuesCalculationStatusResponse.md)
 
 ### Authorization
 
@@ -1215,73 +1130,6 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **remove_memory_item**
-> remove_memory_item(workspace_id, memory_id)
-
-(EXPERIMENTAL) Remove memory item
-
-(EXPERIMENTAL) Removes memory item
-
-### Example
-
-
-```python
-import time
-import gooddata_api_client
-from gooddata_api_client.api import smart_functions_api
-from pprint import pprint
-# Defining the host is optional and defaults to http://localhost
-# See configuration.py for a list of all supported configuration parameters.
-configuration = gooddata_api_client.Configuration(
-    host = "http://localhost"
-)
-
-
-# Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
-    # Create an instance of the API class
-    api_instance = smart_functions_api.SmartFunctionsApi(api_client)
-    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
-    memory_id = "memoryId_example" # str | 
-
-    # example passing only required values which don't have defaults set
-    try:
-        # (EXPERIMENTAL) Remove memory item
-        api_instance.remove_memory_item(workspace_id, memory_id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling SmartFunctionsApi->remove_memory_item: %s\n" % e)
-```
-
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**| Workspace identifier |
- **memory_id** | **str**|  |
-
-### Return type
-
-void (empty response body)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: Not defined
-
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**204** | No Content |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -1419,12 +1267,12 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **update_memory_item**
-> MemoryItem update_memory_item(workspace_id, memory_id, memory_item)
+# **trigger_quality_issues_calculation**
+> TriggerQualityIssuesCalculationResponse trigger_quality_issues_calculation(workspace_id)
 
-(EXPERIMENTAL) Update memory item
+Trigger Quality Issues Calculation
 
-(EXPERIMENTAL) Updates memory item and returns it
+Triggers asynchronous calculation of metadata quality issues and returns a process ID for status tracking.
 
 ### Example
 
@@ -1433,7 +1281,7 @@ No authorization required
 import time
 import gooddata_api_client
 from gooddata_api_client.api import smart_functions_api
-from gooddata_api_client.model.memory_item import MemoryItem
+from gooddata_api_client.model.trigger_quality_issues_calculation_response import TriggerQualityIssuesCalculationResponse
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1447,33 +1295,14 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = smart_functions_api.SmartFunctionsApi(api_client)
     workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
-    memory_id = "memoryId_example" # str | 
-    memory_item = MemoryItem(
-        id="id_example",
-        instruction="instruction_example",
-        keywords=[
-            "keywords_example",
-        ],
-        strategy="MEMORY_ITEM_STRATEGY_ALLWAYS",
-        use_cases=MemoryItemUseCases(
-            general=True,
-            howto=True,
-            keywords=True,
-            metric=True,
-            normalize=True,
-            router=True,
-            search=True,
-            visualization=True,
-        ),
-    ) # MemoryItem | 
 
     # example passing only required values which don't have defaults set
     try:
-        # (EXPERIMENTAL) Update memory item
-        api_response = api_instance.update_memory_item(workspace_id, memory_id, memory_item)
+        # Trigger Quality Issues Calculation
+        api_response = api_instance.trigger_quality_issues_calculation(workspace_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
-        print("Exception when calling SmartFunctionsApi->update_memory_item: %s\n" % e)
+        print("Exception when calling SmartFunctionsApi->trigger_quality_issues_calculation: %s\n" % e)
 ```
 
 
@@ -1482,12 +1311,10 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**| Workspace identifier |
- **memory_id** | **str**|  |
- **memory_item** | [**MemoryItem**](MemoryItem.md)|  |
 
 ### Return type
 
-[**MemoryItem**](MemoryItem.md)
+[**TriggerQualityIssuesCalculationResponse**](TriggerQualityIssuesCalculationResponse.md)
 
 ### Authorization
 
@@ -1495,7 +1322,7 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/json
+ - **Content-Type**: Not defined
  - **Accept**: application/json
 
 

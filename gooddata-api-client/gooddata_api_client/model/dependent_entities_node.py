@@ -67,6 +67,7 @@ class DependentEntitiesNode(ModelNormal):
             'METRIC': "metric",
             'USERDATAFILTER': "userDataFilter",
             'AUTOMATION': "automation",
+            'MEMORYITEM': "memoryItem",
             'VISUALIZATIONOBJECT': "visualizationObject",
             'FILTERCONTEXT': "filterContext",
             'FILTERVIEW': "filterView",

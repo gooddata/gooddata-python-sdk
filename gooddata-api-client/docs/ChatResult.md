@@ -4,6 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**change_analysis_params** | [**ChangeAnalysisParams**](ChangeAnalysisParams.md) |  | [optional] 
 **chat_history_interaction_id** | **str** | Chat History interaction ID. Unique ID for each interaction. | [optional] 
 **created_visualizations** | [**CreatedVisualizations**](CreatedVisualizations.md) |  | [optional] 
 **error_response** | **str** | Error response in anything fails. | [optional] 

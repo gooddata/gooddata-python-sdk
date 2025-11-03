@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **interaction_finished** | **bool** | Has the interaction already finished? Can be used for polling when interaction is in progress. | 
 **question** | **str** | User question | 
 **routing** | [**RouteResult**](RouteResult.md) |  | 
+**change_analysis_params** | [**ChangeAnalysisParams**](ChangeAnalysisParams.md) |  | [optional] 
 **created_visualizations** | [**CreatedVisualizations**](CreatedVisualizations.md) |  | [optional] 
 **error_response** | **str** | Error response in anything fails. | [optional] 
 **found_objects** | [**FoundObjects**](FoundObjects.md) |  | [optional] 

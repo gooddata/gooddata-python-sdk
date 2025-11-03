@@ -60,6 +60,12 @@ class GetQualityIssuesResponse(ModelNormal):
     """
 
     allowed_values = {
+        ('status',): {
+            'RUNNING': "RUNNING",
+            'COMPLETED': "COMPLETED",
+            'FAILED': "FAILED",
+            'NOT_FOUND': "NOT_FOUND",
+        },
     }
 
     validations = {
@@ -89,6 +95,8 @@ class GetQualityIssuesResponse(ModelNormal):
         lazy_import()
         return {
             'issues': ([QualityIssue],),  # noqa: E501
+            'status': (str,),  # noqa: E501
+            'updated_at': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -98,6 +106,8 @@ class GetQualityIssuesResponse(ModelNormal):
 
     attribute_map = {
         'issues': 'issues',  # noqa: E501
+        'status': 'status',  # noqa: E501
+        'updated_at': 'updatedAt',  # noqa: E501
     }
 
     read_only_vars = {
@@ -107,11 +117,12 @@ class GetQualityIssuesResponse(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, issues, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, issues, status, *args, **kwargs):  # noqa: E501
         """GetQualityIssuesResponse - a model defined in OpenAPI
 
         Args:
-            issues ([QualityIssue]):
+            issues ([QualityIssue]): List of quality issues found in the workspace
+            status (str): Status of the latest triggered quality check process
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -144,6 +155,7 @@ class GetQualityIssuesResponse(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            updated_at (str): Timestamp when the quality issues were last updated (ISO format). [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -176,6 +188,7 @@ class GetQualityIssuesResponse(ModelNormal):
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
         self.issues = issues
+        self.status = status
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -196,11 +209,12 @@ class GetQualityIssuesResponse(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, issues, *args, **kwargs):  # noqa: E501
+    def __init__(self, issues, status, *args, **kwargs):  # noqa: E501
         """GetQualityIssuesResponse - a model defined in OpenAPI
 
         Args:
-            issues ([QualityIssue]):
+            issues ([QualityIssue]): List of quality issues found in the workspace
+            status (str): Status of the latest triggered quality check process
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -233,6 +247,7 @@ class GetQualityIssuesResponse(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            updated_at (str): Timestamp when the quality issues were last updated (ISO format). [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -263,6 +278,7 @@ class GetQualityIssuesResponse(ModelNormal):
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
         self.issues = issues
+        self.status = status
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

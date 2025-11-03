@@ -224,6 +224,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     ),
                     description="Sales for all the data available.",
                     id="total-sales",
+                    is_hidden=False,
                     modified_at="["2023-07-20 12:30"]",
                     modified_by=DeclarativeUserIdentifier(
                         id="employee123",

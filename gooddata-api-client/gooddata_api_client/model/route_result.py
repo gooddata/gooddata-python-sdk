@@ -63,6 +63,7 @@ class RouteResult(ModelNormal):
             'CREATE_VISUALIZATION': "CREATE_VISUALIZATION",
             'EXTEND_VISUALIZATION': "EXTEND_VISUALIZATION",
             'HOWTO': "HOWTO",
+            'CHANGE_ANALYSIS': "CHANGE_ANALYSIS",
         },
     }
 

@@ -63,7 +63,6 @@ class ApiEntitlement(ModelNormal):
             'EXTRACACHE': "ExtraCache",
             'HIPAA': "Hipaa",
             'PDFEXPORTS': "PdfExports",
-            'MANAGEDOIDC': "ManagedOIDC",
             'UILOCALIZATION': "UiLocalization",
             'TIER': "Tier",
             'USERCOUNT': "UserCount",

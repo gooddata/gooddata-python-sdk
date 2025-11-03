@@ -76,6 +76,7 @@ class CatalogDeclarativeAttribute(Base):
     sort_direction: Optional[str] = None
     description: Optional[str] = None
     tags: Optional[list[str]] = None
+    is_hidden: Optional[bool] = None
 
     @staticmethod
     def client_class() -> type[DeclarativeAttribute]:
@@ -90,6 +91,7 @@ class CatalogDeclarativeFact(Base):
     source_column_data_type: Optional[str] = None
     description: Optional[str] = None
     tags: Optional[list[str]] = None
+    is_hidden: Optional[bool] = None
 
     @staticmethod
     def client_class() -> type[DeclarativeFact]:
@@ -102,7 +104,7 @@ class CatalogDeclarativeSourceFactReference(Base):
     reference: CatalogFactIdentifier
 
     @staticmethod
-    def client_class() -> type[DeclarativeFact]:
+    def client_class() -> type[DeclarativeSourceFactReference]:
         return DeclarativeSourceFactReference
 
 
@@ -150,6 +152,7 @@ class CatalogDeclarativeLabel(Base):
     description: Optional[str] = None
     tags: Optional[list[str]] = None
     value_type: Optional[str] = None
+    is_hidden: Optional[bool] = None
 
     @staticmethod
     def client_class() -> type[DeclarativeLabel]:

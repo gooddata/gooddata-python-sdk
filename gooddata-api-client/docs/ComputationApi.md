@@ -4,6 +4,8 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**change_analysis**](ComputationApi.md#change_analysis) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/computeChangeAnalysis | Compute change analysis
+[**change_analysis_result**](ComputationApi.md#change_analysis_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/computeChangeAnalysis/result/{resultId} | Get change analysis result
 [**column_statistics**](ComputationApi.md#column_statistics) | **POST** /api/v1/actions/dataSources/{dataSourceId}/computeColumnStatistics | (EXPERIMENTAL) Compute column statistics
 [**compute_label_elements_post**](ComputationApi.md#compute_label_elements_post) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/collectLabelElements | Listing of label values. The resulting data are limited by the static platform limit to the maximum of 10000 rows.
 [**compute_report**](ComputationApi.md#compute_report) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute | Executes analytical request and returns link to the result
@@ -15,6 +17,184 @@ Method | HTTP request | Description
 [**retrieve_execution_metadata**](ComputationApi.md#retrieve_execution_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId}/metadata | Get a single execution result&#39;s metadata.
 [**retrieve_result**](ComputationApi.md#retrieve_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId} | Get a single execution result
 
+
+# **change_analysis**
+> ChangeAnalysisResponse change_analysis(workspace_id, change_analysis_request)
+
+Compute change analysis
+
+Computes change analysis for the provided execution definition.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import computation_api
+from gooddata_api_client.model.change_analysis_response import ChangeAnalysisResponse
+from gooddata_api_client.model.change_analysis_request import ChangeAnalysisRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = computation_api.ComputationApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    change_analysis_request = ChangeAnalysisRequest(
+        analyzed_period="analyzed_period_example",
+        attributes=[
+            AttributeItem(
+                label=AfmObjectIdentifierLabel(
+                    identifier=AfmObjectIdentifierLabelIdentifier(
+                        id="sample_item.price",
+                        type="label",
+                    ),
+                ),
+                local_identifier="attribute_1",
+                show_all_values=False,
+            ),
+        ],
+        aux_measures=[
+            MeasureItem(
+                definition=MeasureDefinition(),
+                local_identifier="metric_1",
+            ),
+        ],
+        date_attribute=AttributeItem(
+            label=AfmObjectIdentifierLabel(
+                identifier=AfmObjectIdentifierLabelIdentifier(
+                    id="sample_item.price",
+                    type="label",
+                ),
+            ),
+            local_identifier="attribute_1",
+            show_all_values=False,
+        ),
+        filters=[
+            ChangeAnalysisParamsFiltersInner(None),
+        ],
+        measure=MeasureItem(
+            definition=MeasureDefinition(),
+            local_identifier="metric_1",
+        ),
+        reference_period="reference_period_example",
+        use_smart_attribute_selection=False,
+    ) # ChangeAnalysisRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Compute change analysis
+        api_response = api_instance.change_analysis(workspace_id, change_analysis_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ComputationApi->change_analysis: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **change_analysis_request** | [**ChangeAnalysisRequest**](ChangeAnalysisRequest.md)|  |
+
+### Return type
+
+[**ChangeAnalysisResponse**](ChangeAnalysisResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **change_analysis_result**
+> ChangeAnalysisResult change_analysis_result(workspace_id, result_id)
+
+Get change analysis result
+
+Gets change analysis result.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import computation_api
+from gooddata_api_client.model.change_analysis_result import ChangeAnalysisResult
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = computation_api.ComputationApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    result_id = "a9b28f9dc55f37ea9f4a5fb0c76895923591e781" # str | Result ID
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get change analysis result
+        api_response = api_instance.change_analysis_result(workspace_id, result_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ComputationApi->change_analysis_result: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **result_id** | **str**| Result ID |
+
+### Return type
+
+[**ChangeAnalysisResult**](ChangeAnalysisResult.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **column_statistics**
 > ColumnStatisticsResponse column_statistics(data_source_id, column_statistics_request)

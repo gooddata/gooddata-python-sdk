@@ -32,6 +32,10 @@ class CatalogLabel(AttrCatalogEntity):
     def value_type(self) -> bool:
         return safeget(self.json_api_attributes, ["valueType"])
 
+    @property
+    def is_hidden(self) -> Optional[bool]:
+        return safeget(self.json_api_attributes, ["isHidden"])
+
     def as_computable(self) -> Attribute:
         return Attribute(local_id=self.id, label=self.id)
 
@@ -65,6 +69,10 @@ class CatalogAttribute(AttrCatalogEntity):
     def granularity(self) -> Union[str, None]:
         return self.json_api_attributes.get("granularity")
 
+    @property
+    def is_hidden(self) -> Optional[bool]:
+        return safeget(self.json_api_attributes, ["isHidden"])
+
     def primary_label(self) -> Union[CatalogLabel, None]:
         # use cast as mypy is not applying next, it claims, type is filter[CatalogLabel]
         return cast(Union[CatalogLabel, None], next(filter(lambda x: x.primary, self.labels), None))
@@ -93,6 +101,10 @@ class CatalogFact(AttrCatalogEntity):
     @staticmethod
     def client_class() -> Any:
         return JsonApiFactOut
+
+    @property
+    def is_hidden(self) -> Optional[bool]:
+        return safeget(self.json_api_attributes, ["isHidden"])
 
     def as_computable(self) -> Metric:
         return SimpleMetric(local_id=self.id, item=self.obj_id)
