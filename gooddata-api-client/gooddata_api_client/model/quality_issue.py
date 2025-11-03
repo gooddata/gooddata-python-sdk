@@ -60,6 +60,10 @@ class QualityIssue(ModelNormal):
     """
 
     allowed_values = {
+        ('severity',): {
+            'WARNING': "WARNING",
+            'INFO': "INFO",
+        },
     }
 
     validations = {
@@ -90,6 +94,7 @@ class QualityIssue(ModelNormal):
         return {
             'code': (str,),  # noqa: E501
             'detail': ({str: ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},)},),  # noqa: E501
+            'id': (str,),  # noqa: E501
             'objects': ([QualityIssueObject],),  # noqa: E501
             'severity': (str,),  # noqa: E501
         }
@@ -102,6 +107,7 @@ class QualityIssue(ModelNormal):
     attribute_map = {
         'code': 'code',  # noqa: E501
         'detail': 'detail',  # noqa: E501
+        'id': 'id',  # noqa: E501
         'objects': 'objects',  # noqa: E501
         'severity': 'severity',  # noqa: E501
     }
@@ -113,14 +119,15 @@ class QualityIssue(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, code, detail, objects, severity, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, code, detail, id, objects, severity, *args, **kwargs):  # noqa: E501
         """QualityIssue - a model defined in OpenAPI
 
         Args:
-            code (str):
-            detail ({str: ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},)}):
-            objects ([QualityIssueObject]):
-            severity (str):
+            code (str): Quality issue code
+            detail ({str: ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},)}): Detailed information about the quality issue
+            id (str): Unique identifier for the quality issue
+            objects ([QualityIssueObject]): List of objects affected by this quality issue
+            severity (str): Severity level
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -186,6 +193,7 @@ class QualityIssue(ModelNormal):
 
         self.code = code
         self.detail = detail
+        self.id = id
         self.objects = objects
         self.severity = severity
         for var_name, var_value in kwargs.items():
@@ -208,14 +216,15 @@ class QualityIssue(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, code, detail, objects, severity, *args, **kwargs):  # noqa: E501
+    def __init__(self, code, detail, id, objects, severity, *args, **kwargs):  # noqa: E501
         """QualityIssue - a model defined in OpenAPI
 
         Args:
-            code (str):
-            detail ({str: ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},)}):
-            objects ([QualityIssueObject]):
-            severity (str):
+            code (str): Quality issue code
+            detail ({str: ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},)}): Detailed information about the quality issue
+            id (str): Unique identifier for the quality issue
+            objects ([QualityIssueObject]): List of objects affected by this quality issue
+            severity (str): Severity level
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -279,6 +288,7 @@ class QualityIssue(ModelNormal):
 
         self.code = code
         self.detail = detail
+        self.id = id
         self.objects = objects
         self.severity = severity
         for var_name, var_value in kwargs.items():

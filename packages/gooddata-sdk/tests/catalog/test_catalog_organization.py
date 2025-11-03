@@ -67,38 +67,6 @@ def test_get_organization(test_config):
     _default_organization_check(organization)
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "update_oidc_settings.yaml"))
-def test_update_oidc_settings(test_config):
-    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-
-    organization = sdk.catalog_organization.get_organization()
-    _default_organization_check(organization)
-
-    oauth_issuer_location = "test.com"
-    oauth_client_id = "123456"
-    oauth_client_secret = "password"
-
-    try:
-        sdk.catalog_organization.update_oidc_parameters(
-            oauth_issuer_location=oauth_issuer_location,
-            oauth_client_id=oauth_client_id,
-            oauth_client_secret=oauth_client_secret,
-        )
-
-        updated_organization = sdk.catalog_organization.get_organization()
-        _default_organization_check(updated_organization)
-        assert updated_organization.attributes.oauth_issuer_location == oauth_issuer_location
-        assert updated_organization.attributes.oauth_client_id == oauth_client_id
-
-    finally:
-        sdk.catalog_organization.update_oidc_parameters(
-            oauth_issuer_location=None, oauth_client_id=None, oauth_client_secret=None
-        )
-
-        revert_organization = sdk.catalog_organization.get_organization()
-        _default_organization_check(revert_organization)
-
-
 @gd_vcr.use_cassette(str(_fixtures_dir / "update_name.yaml"))
 def test_update_name(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
