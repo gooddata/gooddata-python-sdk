@@ -68,23 +68,6 @@ class JsonApiOrganizationInAttributes(ModelNormal):
         ('name',): {
             'max_length': 255,
         },
-        ('oauth_client_id',): {
-            'max_length': 255,
-        },
-        ('oauth_client_secret',): {
-            'max_length': 255,
-        },
-        ('oauth_custom_auth_attributes',): {
-        },
-        ('oauth_issuer_id',): {
-            'max_length': 255,
-        },
-        ('oauth_issuer_location',): {
-            'max_length': 255,
-        },
-        ('oauth_subject_id_claim',): {
-            'max_length': 255,
-        },
     }
 
     @cached_property
@@ -113,13 +96,6 @@ class JsonApiOrganizationInAttributes(ModelNormal):
             'early_access_values': ([str], none_type,),  # noqa: E501
             'hostname': (str,),  # noqa: E501
             'name': (str, none_type,),  # noqa: E501
-            'oauth_client_id': (str,),  # noqa: E501
-            'oauth_client_secret': (str,),  # noqa: E501
-            'oauth_custom_auth_attributes': ({str: (str,)},),  # noqa: E501
-            'oauth_custom_scopes': ([str], none_type,),  # noqa: E501
-            'oauth_issuer_id': (str,),  # noqa: E501
-            'oauth_issuer_location': (str,),  # noqa: E501
-            'oauth_subject_id_claim': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -133,13 +109,6 @@ class JsonApiOrganizationInAttributes(ModelNormal):
         'early_access_values': 'earlyAccessValues',  # noqa: E501
         'hostname': 'hostname',  # noqa: E501
         'name': 'name',  # noqa: E501
-        'oauth_client_id': 'oauthClientId',  # noqa: E501
-        'oauth_client_secret': 'oauthClientSecret',  # noqa: E501
-        'oauth_custom_auth_attributes': 'oauthCustomAuthAttributes',  # noqa: E501
-        'oauth_custom_scopes': 'oauthCustomScopes',  # noqa: E501
-        'oauth_issuer_id': 'oauthIssuerId',  # noqa: E501
-        'oauth_issuer_location': 'oauthIssuerLocation',  # noqa: E501
-        'oauth_subject_id_claim': 'oauthSubjectIdClaim',  # noqa: E501
     }
 
     read_only_vars = {
@@ -188,13 +157,6 @@ class JsonApiOrganizationInAttributes(ModelNormal):
             early_access_values ([str], none_type): The early access feature identifiers. They are used to enable experimental features.. [optional]  # noqa: E501
             hostname (str): [optional]  # noqa: E501
             name (str, none_type): [optional]  # noqa: E501
-            oauth_client_id (str): [optional]  # noqa: E501
-            oauth_client_secret (str): [optional]  # noqa: E501
-            oauth_custom_auth_attributes ({str: (str,)}): Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.. [optional]  # noqa: E501
-            oauth_custom_scopes ([str], none_type): List of additional OAuth scopes which may be required by other providers (e.g. Snowflake). [optional]  # noqa: E501
-            oauth_issuer_id (str): Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.. [optional]  # noqa: E501
-            oauth_issuer_location (str): [optional]  # noqa: E501
-            oauth_subject_id_claim (str): Any string identifying the claim in ID token, that should be used for user identification. The default value is 'sub'.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -285,13 +247,6 @@ class JsonApiOrganizationInAttributes(ModelNormal):
             early_access_values ([str], none_type): The early access feature identifiers. They are used to enable experimental features.. [optional]  # noqa: E501
             hostname (str): [optional]  # noqa: E501
             name (str, none_type): [optional]  # noqa: E501
-            oauth_client_id (str): [optional]  # noqa: E501
-            oauth_client_secret (str): [optional]  # noqa: E501
-            oauth_custom_auth_attributes ({str: (str,)}): Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.. [optional]  # noqa: E501
-            oauth_custom_scopes ([str], none_type): List of additional OAuth scopes which may be required by other providers (e.g. Snowflake). [optional]  # noqa: E501
-            oauth_issuer_id (str): Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.. [optional]  # noqa: E501
-            oauth_issuer_location (str): [optional]  # noqa: E501
-            oauth_subject_id_claim (str): Any string identifying the claim in ID token, that should be used for user identification. The default value is 'sub'.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

@@ -280,7 +280,6 @@
         "properties": {
           "resultIdToCancelTokenPairs": {
             "additionalProperties": {
-              "description": "resultId to cancel token pairs",
               "type": "string"
             },
             "description": "resultId to cancel token pairs",
@@ -736,6 +735,26 @@
         },
         "type": "object"
       },
+      "AnalyticsCatalogCreatedBy": {
+        "properties": {
+          "reasoning": {
+            "description": "Reasoning for error states",
+            "type": "string"
+          },
+          "users": {
+            "description": "Users who created any object in the catalog",
+            "items": {
+              "$ref": "#/components/schemas/AnalyticsCatalogUser"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "reasoning",
+          "users"
+        ],
+        "type": "object"
+      },
       "AnalyticsCatalogTags": {
         "properties": {
           "tags": {
@@ -748,6 +767,29 @@
         },
         "required": [
           "tags"
+        ],
+        "type": "object"
+      },
+      "AnalyticsCatalogUser": {
+        "description": "Users who created any object in the catalog",
+        "properties": {
+          "firstname": {
+            "description": "First name of the user who created any objects",
+            "type": "string"
+          },
+          "lastname": {
+            "description": "Last name of the user who created any objects",
+            "type": "string"
+          },
+          "userId": {
+            "description": "User ID of the user who created any objects",
+            "type": "string"
+          }
+        },
+        "required": [
+          "firstname",
+          "lastname",
+          "userId"
         ],
         "type": "object"
       },
@@ -808,7 +850,6 @@
               "ExtraCache",
               "Hipaa",
               "PdfExports",
-              "ManagedOIDC",
               "UiLocalization",
               "Tier",
               "UserCount",
@@ -1137,6 +1178,7 @@
                   "GEO",
                   "GEO_LONGITUDE",
                   "GEO_LATITUDE",
+                  "GEO_AREA",
                   "IMAGE"
                 ],
                 "type": "string"
@@ -1323,6 +1365,7 @@
         "type": "object"
       },
       "AutomationMetadata": {
+        "additionalProperties": true,
         "description": "Additional information for the automation.",
         "maxLength": 250000,
         "nullable": true,
@@ -1503,9 +1546,159 @@
         ],
         "type": "object"
       },
+      "ChangeAnalysisParams": {
+        "description": "Change analysis specification.",
+        "properties": {
+          "analyzedPeriod": {
+            "description": "The analyzed time period",
+            "type": "string"
+          },
+          "attributes": {
+            "description": "Attributes to analyze for significant changes",
+            "items": {
+              "$ref": "#/components/schemas/AttributeItem"
+            },
+            "type": "array"
+          },
+          "dateAttribute": {
+            "$ref": "#/components/schemas/AttributeItem"
+          },
+          "filters": {
+            "description": "Optional filters to apply",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/AbstractMeasureValueFilter"
+                },
+                {
+                  "$ref": "#/components/schemas/FilterDefinitionForSimpleMeasure"
+                },
+                {
+                  "$ref": "#/components/schemas/InlineFilterDefinition"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "measure": {
+            "$ref": "#/components/schemas/MeasureItem"
+          },
+          "referencePeriod": {
+            "description": "The reference time period",
+            "type": "string"
+          },
+          "useSmartAttributeSelection": {
+            "description": "Whether to use smart attribute selection",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "analyzedPeriod",
+          "attributes",
+          "dateAttribute",
+          "filters",
+          "measure",
+          "referencePeriod",
+          "useSmartAttributeSelection"
+        ],
+        "type": "object"
+      },
+      "ChangeAnalysisRequest": {
+        "description": "Request for change analysis computation",
+        "properties": {
+          "analyzedPeriod": {
+            "description": "The analyzed time period (e.g., '2025-02')",
+            "type": "string"
+          },
+          "attributes": {
+            "description": "Attributes to analyze for significant changes. If empty, valid attributes will be automatically discovered.",
+            "items": {
+              "$ref": "#/components/schemas/AttributeItem"
+            },
+            "type": "array"
+          },
+          "auxMeasures": {
+            "description": "Auxiliary measures",
+            "items": {
+              "$ref": "#/components/schemas/MeasureItem"
+            },
+            "type": "array"
+          },
+          "dateAttribute": {
+            "$ref": "#/components/schemas/AttributeItem"
+          },
+          "filters": {
+            "description": "Optional filters to apply.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/AbstractMeasureValueFilter"
+                },
+                {
+                  "$ref": "#/components/schemas/FilterDefinitionForSimpleMeasure"
+                },
+                {
+                  "$ref": "#/components/schemas/InlineFilterDefinition"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "measure": {
+            "$ref": "#/components/schemas/MeasureItem"
+          },
+          "referencePeriod": {
+            "description": "The reference time period (e.g., '2025-01')",
+            "type": "string"
+          },
+          "useSmartAttributeSelection": {
+            "default": false,
+            "description": "Whether to use smart attribute selection (LLM-based) instead of discovering all valid attributes. If true, GenAI will intelligently select the most relevant attributes for change analysis. If false or not set, all valid attributes will be discovered using Calcique. Smart attribute selection applies only when no attributes are provided.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "analyzedPeriod",
+          "dateAttribute",
+          "measure",
+          "referencePeriod"
+        ],
+        "type": "object"
+      },
+      "ChangeAnalysisResponse": {
+        "description": "Response for change analysis computation",
+        "properties": {
+          "links": {
+            "$ref": "#/components/schemas/ExecutionLinks"
+          }
+        },
+        "required": [
+          "links"
+        ],
+        "type": "object"
+      },
+      "ChangeAnalysisResult": {
+        "description": "Result of a change analysis execution.",
+        "properties": {
+          "data": {
+            "description": "The change analysis result data containing significant changes.",
+            "items": {
+              "$ref": "#/components/schemas/MetricValueChange"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
       "ChatHistoryInteraction": {
         "description": "List of chat history interactions.",
         "properties": {
+          "changeAnalysisParams": {
+            "$ref": "#/components/schemas/ChangeAnalysisParams"
+          },
           "chatHistoryInteractionId": {
             "description": "Chat History interaction ID. Unique ID for each interaction.",
             "type": "string"
@@ -1596,6 +1789,10 @@
               "NONE"
             ],
             "type": "string"
+          },
+          "userTextFeedback": {
+            "description": "User text feedback for the interaction.",
+            "type": "string"
           }
         },
         "type": "object"
@@ -1622,6 +1819,11 @@
       },
       "ChatRequest": {
         "properties": {
+          "includeHidden": {
+            "default": false,
+            "description": "If true, includes hidden objects in search and visualization building. If false (default), excludes objects where isHidden=true.",
+            "type": "boolean"
+          },
           "limitCreate": {
             "default": 3,
             "description": "Maximum number of created results.",
@@ -1678,6 +1880,9 @@
       },
       "ChatResult": {
         "properties": {
+          "changeAnalysisParams": {
+            "$ref": "#/components/schemas/ChangeAnalysisParams"
+          },
           "chatHistoryInteractionId": {
             "description": "Chat History interaction ID. Unique ID for each interaction.",
             "type": "string"
@@ -1825,6 +2030,7 @@
               "GEO",
               "GEO_LONGITUDE",
               "GEO_LATITUDE",
+              "GEO_AREA",
               "IMAGE"
             ],
             "example": "HYPERLINK",
@@ -4495,8 +4701,6 @@
         "properties": {
           "customClaimMapping": {
             "additionalProperties": {
-              "description": "Map of custom claim overrides. To be used when your Idp does not provide default claims (sub, email, name, given_name, family_name, urn.gooddata.user_groups [optional]). Define the key pair for the claim you wish to override, where the key is the default name of the attribute and the value is your custom name for the given attribute.",
-              "maxLength": 10000,
               "type": "string"
             },
             "description": "Map of custom claim overrides. To be used when your Idp does not provide default claims (sub, email, name, given_name, family_name, urn.gooddata.user_groups [optional]). Define the key pair for the claim you wish to override, where the key is the default name of the attribute and the value is your custom name for the given attribute.",
@@ -4649,6 +4853,9 @@
             "maxLength": 10000,
             "type": "string"
           },
+          "geoAreaConfig": {
+            "$ref": "#/components/schemas/GeoAreaConfig"
+          },
           "id": {
             "description": "Label ID.",
             "example": "label.customer_name",
@@ -4708,6 +4915,7 @@
               "GEO",
               "GEO_LONGITUDE",
               "GEO_LATITUDE",
+              "GEO_AREA",
               "IMAGE"
             ],
             "type": "string"
@@ -4773,6 +4981,11 @@
             "example": "total-sales",
             "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
+          },
+          "isHidden": {
+            "description": "If true, this metric is hidden from AI search results.",
+            "example": false,
+            "type": "boolean"
           },
           "modifiedAt": {
             "description": "Time of the last entity modification.",
@@ -5077,52 +5290,6 @@
             "maxLength": 255,
             "type": "string"
           },
-          "oauthClientId": {
-            "description": "Identifier of the authentication provider",
-            "maxLength": 255,
-            "type": "string"
-          },
-          "oauthClientSecret": {
-            "description": "Communication secret of the authentication provider (never returned back).",
-            "maxLength": 255,
-            "type": "string"
-          },
-          "oauthCustomAuthAttributes": {
-            "additionalProperties": {
-              "description": "Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.",
-              "maxLength": 10000,
-              "type": "string"
-            },
-            "description": "Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.",
-            "maxLength": 10000,
-            "type": "object"
-          },
-          "oauthCustomScopes": {
-            "description": "List of additional OAuth scopes which may be required by other providers (e.g. Snowflake)",
-            "items": {
-              "maxLength": 255,
-              "type": "string"
-            },
-            "nullable": true,
-            "type": "array"
-          },
-          "oauthIssuerId": {
-            "description": "Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.",
-            "example": "myOidcProvider",
-            "maxLength": 255,
-            "type": "string"
-          },
-          "oauthIssuerLocation": {
-            "description": "URI of the authentication provider.",
-            "maxLength": 255,
-            "type": "string"
-          },
-          "oauthSubjectIdClaim": {
-            "description": "Any string identifying the claim in ID token, that should be used for user identification. The default value is 'sub'.",
-            "example": "oid",
-            "maxLength": 255,
-            "type": "string"
-          },
           "permissions": {
             "items": {
               "$ref": "#/components/schemas/DeclarativeOrganizationPermission"
@@ -5363,13 +5530,16 @@
               "JWT_JIT_PROVISIONING",
               "DASHBOARD_FILTERS_APPLY_MODE",
               "ENABLE_SLIDES_EXPORT",
+              "ENABLE_SNAPSHOT_EXPORT",
               "AI_RATE_LIMIT",
               "ATTACHMENT_SIZE_LIMIT",
               "ATTACHMENT_LINK_TTL",
               "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
               "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
               "ENABLE_AUTOMATION_EVALUATION_MODE",
-              "REGISTERED_PLUGGABLE_APPLICATIONS"
+              "ENABLE_ACCESSIBILITY_MODE",
+              "REGISTERED_PLUGGABLE_APPLICATIONS",
+              "DATA_LOCALE"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -6366,6 +6536,7 @@
               "metric",
               "userDataFilter",
               "automation",
+              "memoryItem",
               "visualizationObject",
               "filterContext",
               "filterView"
@@ -6702,7 +6873,6 @@
                 "ExtraCache",
                 "Hipaa",
                 "PdfExports",
-                "ManagedOIDC",
                 "UiLocalization",
                 "Tier",
                 "UserCount",
@@ -7128,25 +7298,16 @@
               "YES",
               "NO"
             ],
-            "type": "string",
-            "xml": {
-              "attribute": true
-            }
+            "type": "string"
           },
           "id": {
-            "type": "string",
-            "xml": {
-              "attribute": true
-            }
+            "type": "string"
           },
           "notes": {
             "$ref": "#/components/schemas/Notes"
           },
           "original": {
-            "type": "string",
-            "xml": {
-              "attribute": true
-            }
+            "type": "string"
           },
           "otherAttributes": {
             "additionalProperties": {
@@ -7158,11 +7319,7 @@
             "$ref": "#/components/schemas/Skeleton"
           },
           "space": {
-            "type": "string",
-            "xml": {
-              "attribute": true,
-              "namespace": "http://www.w3.org/XML/1998/namespace"
-            }
+            "type": "string"
           },
           "srcDir": {
             "enum": [
@@ -7170,20 +7327,14 @@
               "RTL",
               "AUTO"
             ],
-            "type": "string",
-            "xml": {
-              "attribute": true
-            }
+            "type": "string"
           },
           "translate": {
             "enum": [
               "YES",
               "NO"
             ],
-            "type": "string",
-            "xml": {
-              "attribute": true
-            }
+            "type": "string"
           },
           "trgDir": {
             "enum": [
@@ -7191,10 +7342,7 @@
               "RTL",
               "AUTO"
             ],
-            "type": "string",
-            "xml": {
-              "attribute": true
-            }
+            "type": "string"
           },
           "unitOrGroup": {
             "items": {
@@ -7203,11 +7351,7 @@
             "type": "array"
           }
         },
-        "type": "object",
-        "xml": {
-          "name": "file",
-          "namespace": "urn:oasis:names:tc:xliff:document:2.0"
-        }
+        "type": "object"
       },
       "Filter": {
         "description": "List of filters to be applied to the new visualization",
@@ -7418,6 +7562,11 @@
             "example": "all",
             "type": "string"
           },
+          "dateReferencePrefix": {
+            "description": "Columns starting with this prefix will be considered as references to date dataset. The prefix is then followed by the value of `separator` parameter. Given the reference prefix is `d` and separator is `__`, the columns with name like `d__date` will be considered as reference to date dataset. There can be also second separator and granularity suffix, e.g. `d__date__day` to create attribute reference to exact date dataset and granularity.",
+            "example": "d",
+            "type": "string"
+          },
           "denormPrefix": {
             "description": "Columns starting with this prefix will be considered as denormalization references. The prefix is then followed by the value of `separator` parameter. Given the denormalization reference prefix is `dr` and separator is `__`, the columns with name like `dr__customer_name` will be considered as denormalization references.",
             "example": "dr",
@@ -7500,17 +7649,60 @@
         },
         "type": "object"
       },
+      "GeoAreaConfig": {
+        "description": "Configuration specific to geo area labels.",
+        "properties": {
+          "collection": {
+            "$ref": "#/components/schemas/GeoCollection"
+          }
+        },
+        "required": [
+          "collection"
+        ],
+        "type": "object"
+      },
+      "GeoCollection": {
+        "properties": {
+          "id": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "matchingProperty": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "type": "object"
+      },
       "GetQualityIssuesResponse": {
         "properties": {
           "issues": {
+            "description": "List of quality issues found in the workspace",
             "items": {
               "$ref": "#/components/schemas/QualityIssue"
             },
             "type": "array"
+          },
+          "status": {
+            "description": "Status of the latest triggered quality check process",
+            "enum": [
+              "RUNNING",
+              "COMPLETED",
+              "FAILED",
+              "NOT_FOUND"
+            ],
+            "type": "string"
+          },
+          "updatedAt": {
+            "description": "Timestamp when the quality issues were last updated (ISO format)",
+            "type": "string"
           }
         },
         "required": [
-          "issues"
+          "issues",
+          "status"
         ],
         "type": "object"
       },
@@ -7740,6 +7932,7 @@
                   "exportDefinition",
                   "automation",
                   "automationResult",
+                  "memoryItem",
                   "prompt",
                   "visualizationObject",
                   "filterContext",
@@ -9599,6 +9792,7 @@
                 "type": "array"
               },
               "metadata": {
+                "additionalProperties": true,
                 "description": "Additional information for the automation.",
                 "maxLength": 250000,
                 "nullable": true,
@@ -9923,6 +10117,7 @@
                 "type": "array"
               },
               "metadata": {
+                "additionalProperties": true,
                 "description": "Additional information for the automation.",
                 "maxLength": 250000,
                 "nullable": true,
@@ -10365,6 +10560,7 @@
                 "type": "array"
               },
               "metadata": {
+                "additionalProperties": true,
                 "description": "Additional information for the automation.",
                 "maxLength": 250000,
                 "nullable": true,
@@ -15794,6 +15990,18 @@
                 "maxLength": 10000,
                 "type": "string"
               },
+              "geoAreaConfig": {
+                "description": "Configuration specific to geo area labels.",
+                "properties": {
+                  "collection": {
+                    "$ref": "#/components/schemas/GeoCollection"
+                  }
+                },
+                "required": [
+                  "collection"
+                ],
+                "type": "object"
+              },
               "isHidden": {
                 "type": "boolean"
               },
@@ -15833,6 +16041,7 @@
                   "GEO",
                   "GEO_LONGITUDE",
                   "GEO_LATITUDE",
+                  "GEO_AREA",
                   "IMAGE"
                 ],
                 "type": "string"
@@ -16249,6 +16458,462 @@
         "properties": {
           "data": {
             "$ref": "#/components/schemas/JsonApiLlmEndpointPatch"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiMemoryItemIn": {
+        "description": "JSON:API representation of memoryItem entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "areRelationsValid": {
+                "type": "boolean"
+              },
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "instruction": {
+                "description": "The text that will be injected into the system prompt",
+                "maxLength": 255,
+                "type": "string"
+              },
+              "isDisabled": {
+                "description": "Whether memory item is disabled",
+                "type": "boolean"
+              },
+              "keywords": {
+                "description": "Set of unique strings used for semantic similarity filtering",
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "strategy": {
+                "description": "Strategy defining when the memory item should be applied",
+                "enum": [
+                  "ALWAYS",
+                  "AUTO"
+                ],
+                "type": "string"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "required": [
+              "instruction",
+              "strategy"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "memoryItem"
+            ],
+            "example": "memoryItem",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiMemoryItemInDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiMemoryItemIn"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiMemoryItemOut": {
+        "description": "JSON:API representation of memoryItem entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "areRelationsValid": {
+                "type": "boolean"
+              },
+              "createdAt": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "instruction": {
+                "description": "The text that will be injected into the system prompt",
+                "maxLength": 255,
+                "type": "string"
+              },
+              "isDisabled": {
+                "description": "Whether memory item is disabled",
+                "type": "boolean"
+              },
+              "keywords": {
+                "description": "Set of unique strings used for semantic similarity filtering",
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "modifiedAt": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "strategy": {
+                "description": "Strategy defining when the memory item should be applied",
+                "enum": [
+                  "ALWAYS",
+                  "AUTO"
+                ],
+                "type": "string"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "required": [
+              "instruction",
+              "strategy"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "meta": {
+            "properties": {
+              "origin": {
+                "properties": {
+                  "originId": {
+                    "description": "defines id of the workspace where the entity comes from",
+                    "type": "string"
+                  },
+                  "originType": {
+                    "description": "defines type of the origin of the entity",
+                    "enum": [
+                      "NATIVE",
+                      "PARENT"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "originId",
+                  "originType"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "relationships": {
+            "properties": {
+              "createdBy": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserIdentifierToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "modifiedBy": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserIdentifierToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "memoryItem"
+            ],
+            "example": "memoryItem",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiMemoryItemOutDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiMemoryItemOut"
+          },
+          "included": {
+            "description": "Included resources",
+            "items": {
+              "$ref": "#/components/schemas/JsonApiUserIdentifierOutWithLinks"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "links": {
+            "$ref": "#/components/schemas/ObjectLinks"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiMemoryItemOutList": {
+        "description": "A JSON:API document with a list of resources",
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/JsonApiMemoryItemOutWithLinks"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "included": {
+            "description": "Included resources",
+            "items": {
+              "$ref": "#/components/schemas/JsonApiUserIdentifierOutWithLinks"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "links": {
+            "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiMemoryItemOutWithLinks": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiMemoryItemOut"
+          },
+          {
+            "$ref": "#/components/schemas/ObjectLinksContainer"
+          }
+        ]
+      },
+      "JsonApiMemoryItemPatch": {
+        "description": "JSON:API representation of patching memoryItem entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "areRelationsValid": {
+                "type": "boolean"
+              },
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "instruction": {
+                "description": "The text that will be injected into the system prompt",
+                "maxLength": 255,
+                "type": "string"
+              },
+              "isDisabled": {
+                "description": "Whether memory item is disabled",
+                "type": "boolean"
+              },
+              "keywords": {
+                "description": "Set of unique strings used for semantic similarity filtering",
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "strategy": {
+                "description": "Strategy defining when the memory item should be applied",
+                "enum": [
+                  "ALWAYS",
+                  "AUTO"
+                ],
+                "type": "string"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "memoryItem"
+            ],
+            "example": "memoryItem",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiMemoryItemPatchDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiMemoryItemPatch"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiMemoryItemPostOptionalId": {
+        "description": "JSON:API representation of memoryItem entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "areRelationsValid": {
+                "type": "boolean"
+              },
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "instruction": {
+                "description": "The text that will be injected into the system prompt",
+                "maxLength": 255,
+                "type": "string"
+              },
+              "isDisabled": {
+                "description": "Whether memory item is disabled",
+                "type": "boolean"
+              },
+              "keywords": {
+                "description": "Set of unique strings used for semantic similarity filtering",
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "strategy": {
+                "description": "Strategy defining when the memory item should be applied",
+                "enum": [
+                  "ALWAYS",
+                  "AUTO"
+                ],
+                "type": "string"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "required": [
+              "instruction",
+              "strategy"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "memoryItem"
+            ],
+            "example": "memoryItem",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiMemoryItemPostOptionalIdDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiMemoryItemPostOptionalId"
           }
         },
         "required": [
@@ -17424,47 +18089,6 @@
                 "maxLength": 255,
                 "nullable": true,
                 "type": "string"
-              },
-              "oauthClientId": {
-                "maxLength": 255,
-                "type": "string"
-              },
-              "oauthClientSecret": {
-                "maxLength": 255,
-                "type": "string"
-              },
-              "oauthCustomAuthAttributes": {
-                "additionalProperties": {
-                  "type": "string"
-                },
-                "description": "Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.",
-                "maxLength": 10000,
-                "type": "object"
-              },
-              "oauthCustomScopes": {
-                "description": "List of additional OAuth scopes which may be required by other providers (e.g. Snowflake)",
-                "items": {
-                  "maxLength": 255,
-                  "type": "string"
-                },
-                "nullable": true,
-                "type": "array"
-              },
-              "oauthIssuerId": {
-                "description": "Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.",
-                "example": "myOidcProvider",
-                "maxLength": 255,
-                "type": "string"
-              },
-              "oauthIssuerLocation": {
-                "maxLength": 255,
-                "type": "string"
-              },
-              "oauthSubjectIdClaim": {
-                "description": "Any string identifying the claim in ID token, that should be used for user identification. The default value is 'sub'.",
-                "example": "oid",
-                "maxLength": 255,
-                "type": "string"
               }
             },
             "type": "object"
@@ -17568,43 +18192,6 @@
               "name": {
                 "maxLength": 255,
                 "nullable": true,
-                "type": "string"
-              },
-              "oauthClientId": {
-                "maxLength": 255,
-                "type": "string"
-              },
-              "oauthCustomAuthAttributes": {
-                "additionalProperties": {
-                  "type": "string"
-                },
-                "description": "Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.",
-                "maxLength": 10000,
-                "type": "object"
-              },
-              "oauthCustomScopes": {
-                "description": "List of additional OAuth scopes which may be required by other providers (e.g. Snowflake)",
-                "items": {
-                  "maxLength": 255,
-                  "type": "string"
-                },
-                "nullable": true,
-                "type": "array"
-              },
-              "oauthIssuerId": {
-                "description": "Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.",
-                "example": "myOidcProvider",
-                "maxLength": 255,
-                "type": "string"
-              },
-              "oauthIssuerLocation": {
-                "maxLength": 255,
-                "type": "string"
-              },
-              "oauthSubjectIdClaim": {
-                "description": "Any string identifying the claim in ID token, that should be used for user identification. The default value is 'sub'.",
-                "example": "oid",
-                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -17755,47 +18342,6 @@
                 "maxLength": 255,
                 "nullable": true,
                 "type": "string"
-              },
-              "oauthClientId": {
-                "maxLength": 255,
-                "type": "string"
-              },
-              "oauthClientSecret": {
-                "maxLength": 255,
-                "type": "string"
-              },
-              "oauthCustomAuthAttributes": {
-                "additionalProperties": {
-                  "type": "string"
-                },
-                "description": "Map of additional authentication attributes that should be added to the OAuth2 authentication requests, where the key is the name of the attribute and the value is the value of the attribute.",
-                "maxLength": 10000,
-                "type": "object"
-              },
-              "oauthCustomScopes": {
-                "description": "List of additional OAuth scopes which may be required by other providers (e.g. Snowflake)",
-                "items": {
-                  "maxLength": 255,
-                  "type": "string"
-                },
-                "nullable": true,
-                "type": "array"
-              },
-              "oauthIssuerId": {
-                "description": "Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.",
-                "example": "myOidcProvider",
-                "maxLength": 255,
-                "type": "string"
-              },
-              "oauthIssuerLocation": {
-                "maxLength": 255,
-                "type": "string"
-              },
-              "oauthSubjectIdClaim": {
-                "description": "Any string identifying the claim in ID token, that should be used for user identification. The default value is 'sub'.",
-                "example": "oid",
-                "maxLength": 255,
-                "type": "string"
               }
             },
             "type": "object"
@@ -17883,13 +18429,16 @@
                   "JWT_JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
                   "ENABLE_SLIDES_EXPORT",
+                  "ENABLE_SNAPSHOT_EXPORT",
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
                   "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
                   "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
                   "ENABLE_AUTOMATION_EVALUATION_MODE",
-                  "REGISTERED_PLUGGABLE_APPLICATIONS"
+                  "ENABLE_ACCESSIBILITY_MODE",
+                  "REGISTERED_PLUGGABLE_APPLICATIONS",
+                  "DATA_LOCALE"
                 ],
                 "type": "string"
               }
@@ -17963,13 +18512,16 @@
                   "JWT_JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
                   "ENABLE_SLIDES_EXPORT",
+                  "ENABLE_SNAPSHOT_EXPORT",
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
                   "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
                   "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
                   "ENABLE_AUTOMATION_EVALUATION_MODE",
-                  "REGISTERED_PLUGGABLE_APPLICATIONS"
+                  "ENABLE_ACCESSIBILITY_MODE",
+                  "REGISTERED_PLUGGABLE_APPLICATIONS",
+                  "DATA_LOCALE"
                 ],
                 "type": "string"
               }
@@ -18083,13 +18635,16 @@
                   "JWT_JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
                   "ENABLE_SLIDES_EXPORT",
+                  "ENABLE_SNAPSHOT_EXPORT",
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
                   "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
                   "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
                   "ENABLE_AUTOMATION_EVALUATION_MODE",
-                  "REGISTERED_PLUGGABLE_APPLICATIONS"
+                  "ENABLE_ACCESSIBILITY_MODE",
+                  "REGISTERED_PLUGGABLE_APPLICATIONS",
+                  "DATA_LOCALE"
                 ],
                 "type": "string"
               }
@@ -19569,13 +20124,16 @@
                   "JWT_JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
                   "ENABLE_SLIDES_EXPORT",
+                  "ENABLE_SNAPSHOT_EXPORT",
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
                   "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
                   "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
                   "ENABLE_AUTOMATION_EVALUATION_MODE",
-                  "REGISTERED_PLUGGABLE_APPLICATIONS"
+                  "ENABLE_ACCESSIBILITY_MODE",
+                  "REGISTERED_PLUGGABLE_APPLICATIONS",
+                  "DATA_LOCALE"
                 ],
                 "type": "string"
               }
@@ -19649,13 +20207,16 @@
                   "JWT_JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
                   "ENABLE_SLIDES_EXPORT",
+                  "ENABLE_SNAPSHOT_EXPORT",
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
                   "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
                   "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
                   "ENABLE_AUTOMATION_EVALUATION_MODE",
-                  "REGISTERED_PLUGGABLE_APPLICATIONS"
+                  "ENABLE_ACCESSIBILITY_MODE",
+                  "REGISTERED_PLUGGABLE_APPLICATIONS",
+                  "DATA_LOCALE"
                 ],
                 "type": "string"
               }
@@ -20352,6 +20913,7 @@
                 "type": "array"
               },
               "metadata": {
+                "additionalProperties": true,
                 "description": "Additional information for the automation.",
                 "maxLength": 250000,
                 "nullable": true,
@@ -21831,13 +22393,16 @@
                   "JWT_JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
                   "ENABLE_SLIDES_EXPORT",
+                  "ENABLE_SNAPSHOT_EXPORT",
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
                   "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
                   "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
                   "ENABLE_AUTOMATION_EVALUATION_MODE",
-                  "REGISTERED_PLUGGABLE_APPLICATIONS"
+                  "ENABLE_ACCESSIBILITY_MODE",
+                  "REGISTERED_PLUGGABLE_APPLICATIONS",
+                  "DATA_LOCALE"
                 ],
                 "type": "string"
               }
@@ -21911,13 +22476,16 @@
                   "JWT_JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
                   "ENABLE_SLIDES_EXPORT",
+                  "ENABLE_SNAPSHOT_EXPORT",
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
                   "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
                   "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
                   "ENABLE_AUTOMATION_EVALUATION_MODE",
-                  "REGISTERED_PLUGGABLE_APPLICATIONS"
+                  "ENABLE_ACCESSIBILITY_MODE",
+                  "REGISTERED_PLUGGABLE_APPLICATIONS",
+                  "DATA_LOCALE"
                 ],
                 "type": "string"
               }
@@ -22057,13 +22625,16 @@
                   "JWT_JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
                   "ENABLE_SLIDES_EXPORT",
+                  "ENABLE_SNAPSHOT_EXPORT",
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
                   "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
                   "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
                   "ENABLE_AUTOMATION_EVALUATION_MODE",
-                  "REGISTERED_PLUGGABLE_APPLICATIONS"
+                  "ENABLE_ACCESSIBILITY_MODE",
+                  "REGISTERED_PLUGGABLE_APPLICATIONS",
+                  "DATA_LOCALE"
                 ],
                 "type": "string"
               }
@@ -22137,13 +22708,16 @@
                   "JWT_JIT_PROVISIONING",
                   "DASHBOARD_FILTERS_APPLY_MODE",
                   "ENABLE_SLIDES_EXPORT",
+                  "ENABLE_SNAPSHOT_EXPORT",
                   "AI_RATE_LIMIT",
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
                   "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
                   "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
                   "ENABLE_AUTOMATION_EVALUATION_MODE",
-                  "REGISTERED_PLUGGABLE_APPLICATIONS"
+                  "ENABLE_ACCESSIBILITY_MODE",
+                  "REGISTERED_PLUGGABLE_APPLICATIONS",
+                  "DATA_LOCALE"
                 ],
                 "type": "string"
               }
@@ -22242,6 +22816,7 @@
               "GEO",
               "GEO_LONGITUDE",
               "GEO_LATITUDE",
+              "GEO_AREA",
               "IMAGE"
             ],
             "type": "string"
@@ -22520,94 +23095,6 @@
         ],
         "type": "object"
       },
-      "MemoryItem": {
-        "properties": {
-          "id": {
-            "description": "Memory item ID",
-            "maxLength": 255,
-            "type": "string"
-          },
-          "instruction": {
-            "description": "Instruction that will be injected into the prompt.",
-            "maxLength": 255,
-            "type": "string"
-          },
-          "keywords": {
-            "description": "List of keywords used to match the memory item.",
-            "items": {
-              "description": "List of keywords used to match the memory item.",
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "strategy": {
-            "description": "Defines the application strategy.",
-            "enum": [
-              "MEMORY_ITEM_STRATEGY_ALLWAYS",
-              "MEMORY_ITEM_STRATEGY_NEVER",
-              "MEMORY_ITEM_STRATEGY_AUTO"
-            ],
-            "type": "string"
-          },
-          "useCases": {
-            "$ref": "#/components/schemas/MemoryItemUseCases"
-          }
-        },
-        "required": [
-          "id",
-          "instruction",
-          "keywords"
-        ],
-        "type": "object"
-      },
-      "MemoryItemUseCases": {
-        "description": "Defines the prompts where the given instruction should be applied.",
-        "properties": {
-          "general": {
-            "description": "Apply this memory item to the general answer prompt.",
-            "type": "boolean"
-          },
-          "howto": {
-            "description": "Apply this memory item to the how-to prompt.",
-            "type": "boolean"
-          },
-          "keywords": {
-            "description": "Apply this memory item to the search keyword extraction prompt.",
-            "type": "boolean"
-          },
-          "metric": {
-            "description": "Apply this memory item to the metric selection prompt.",
-            "type": "boolean"
-          },
-          "normalize": {
-            "description": "Apply this memory item to the normalize prompt.",
-            "type": "boolean"
-          },
-          "router": {
-            "description": "Appy this memory item to the router prompt.",
-            "type": "boolean"
-          },
-          "search": {
-            "description": "Apply this memory item to the search prompt.",
-            "type": "boolean"
-          },
-          "visualization": {
-            "description": "Apply this memory item to the visualization prompt.",
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "general",
-          "howto",
-          "keywords",
-          "metric",
-          "normalize",
-          "router",
-          "search",
-          "visualization"
-        ],
-        "type": "object"
-      },
       "Metric": {
         "description": "List of metrics to be used in the new visualization",
         "properties": {
@@ -22665,6 +23152,77 @@
         ],
         "type": "object"
       },
+      "MetricValueChange": {
+        "description": "Individual change analysis data item",
+        "properties": {
+          "attributeName": {
+            "description": "The name of the attribute being analyzed",
+            "type": "string"
+          },
+          "attributeValue": {
+            "description": "The value of the attribute being analyzed",
+            "type": "string"
+          },
+          "attributeValuesChangeMean": {
+            "description": "The mean of attribute value changes for the attribute being analyzed",
+            "format": "double",
+            "type": "number"
+          },
+          "attributeValuesChangeStd": {
+            "description": "The standard deviation of attribute value changes for the attribute being analyzed",
+            "format": "double",
+            "type": "number"
+          },
+          "isSignificantChange": {
+            "description": "Whether the change is statistically significant",
+            "type": "boolean"
+          },
+          "metricValueDelta": {
+            "description": "The delta between analyzed and reference periods",
+            "format": "double",
+            "type": "number"
+          },
+          "metricValueDeltaAbs": {
+            "description": "The absolute delta between analyzed and reference periods",
+            "format": "double",
+            "type": "number"
+          },
+          "metricValueInAnalyzedPeriod": {
+            "description": "The metric value in the analyzed period",
+            "format": "double",
+            "type": "number"
+          },
+          "metricValueInReferencePeriod": {
+            "description": "The metric value in the reference period",
+            "format": "double",
+            "type": "number"
+          },
+          "overallMetricValueInAnalyzedPeriod": {
+            "description": "The overall metric value in the analyzed period",
+            "format": "double",
+            "type": "number"
+          },
+          "overallMetricValueInReferencePeriod": {
+            "description": "The overall metric value in the reference period",
+            "format": "double",
+            "type": "number"
+          }
+        },
+        "required": [
+          "attributeName",
+          "attributeValue",
+          "attributeValuesChangeMean",
+          "attributeValuesChangeStd",
+          "isSignificantChange",
+          "metricValueDelta",
+          "metricValueDeltaAbs",
+          "metricValueInAnalyzedPeriod",
+          "metricValueInReferencePeriod",
+          "overallMetricValueInAnalyzedPeriod",
+          "overallMetricValueInReferencePeriod"
+        ],
+        "type": "object"
+      },
       "NegativeAttributeFilter": {
         "description": "Filter able to limit element values by label and related selected negated elements.",
         "properties": {
@@ -22702,25 +23260,16 @@
               "SOURCE",
               "TARGET"
             ],
-            "type": "string",
-            "xml": {
-              "attribute": true
-            }
+            "type": "string"
           },
           "category": {
-            "type": "string",
-            "xml": {
-              "attribute": true
-            }
+            "type": "string"
           },
           "content": {
             "type": "string"
           },
           "id": {
-            "type": "string",
-            "xml": {
-              "attribute": true
-            }
+            "type": "string"
           },
           "otherAttributes": {
             "additionalProperties": {
@@ -22730,17 +23279,10 @@
           },
           "priority": {
             "format": "int32",
-            "type": "integer",
-            "xml": {
-              "attribute": true
-            }
+            "type": "integer"
           }
         },
-        "type": "object",
-        "xml": {
-          "name": "note",
-          "namespace": "urn:oasis:names:tc:xliff:document:2.0"
-        }
+        "type": "object"
       },
       "Notes": {
         "properties": {
@@ -22751,14 +23293,7 @@
             "type": "array"
           }
         },
-        "required": [
-          "note"
-        ],
-        "type": "object",
-        "xml": {
-          "name": "notes",
-          "namespace": "urn:oasis:names:tc:xliff:document:2.0"
-        }
+        "type": "object"
       },
       "Notification": {
         "properties": {
@@ -23405,46 +23940,108 @@
         "type": "object"
       },
       "QualityIssue": {
+        "description": "List of quality issues (available when status is COMPLETED)",
         "properties": {
           "code": {
+            "description": "Quality issue code",
+            "example": "SIMILAR_NAMES",
             "type": "string"
           },
           "detail": {
             "additionalProperties": {
+              "description": "Detailed information about the quality issue",
               "type": "object"
             },
+            "description": "Detailed information about the quality issue",
             "type": "object"
           },
+          "id": {
+            "description": "Unique identifier for the quality issue",
+            "type": "string"
+          },
           "objects": {
+            "description": "List of objects affected by this quality issue",
             "items": {
               "$ref": "#/components/schemas/QualityIssueObject"
             },
             "type": "array"
           },
           "severity": {
+            "description": "Severity level",
+            "enum": [
+              "WARNING",
+              "INFO"
+            ],
             "type": "string"
           }
         },
         "required": [
           "code",
           "detail",
+          "id",
           "objects",
           "severity"
         ],
         "type": "object"
       },
       "QualityIssueObject": {
+        "description": "List of objects affected by this quality issue",
         "properties": {
           "id": {
+            "description": "Object ID",
+            "example": "revenue",
+            "type": "string"
+          },
+          "title": {
+            "description": "Object title",
+            "example": "Total Revenue",
             "type": "string"
           },
           "type": {
+            "description": "Object type",
+            "example": "metric",
+            "type": "string"
+          },
+          "workspaceId": {
+            "description": "Workspace ID where the object belongs",
+            "example": "demo",
             "type": "string"
           }
         },
         "required": [
           "id",
-          "type"
+          "title",
+          "type",
+          "workspaceId"
+        ],
+        "type": "object"
+      },
+      "QualityIssuesCalculationStatusResponse": {
+        "properties": {
+          "error": {
+            "description": "Error message (available when status is FAILED or NOT_FOUND)",
+            "type": "string"
+          },
+          "issues": {
+            "description": "List of quality issues (available when status is COMPLETED)",
+            "items": {
+              "$ref": "#/components/schemas/QualityIssue"
+            },
+            "type": "array"
+          },
+          "status": {
+            "description": "Current status of the calculation",
+            "enum": [
+              "RUNNING",
+              "COMPLETED",
+              "FAILED",
+              "NOT_FOUND"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "status"
         ],
         "type": "object"
       },
@@ -24000,13 +24597,16 @@
               "JWT_JIT_PROVISIONING",
               "DASHBOARD_FILTERS_APPLY_MODE",
               "ENABLE_SLIDES_EXPORT",
+              "ENABLE_SNAPSHOT_EXPORT",
               "AI_RATE_LIMIT",
               "ATTACHMENT_SIZE_LIMIT",
               "ATTACHMENT_LINK_TTL",
               "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
               "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
               "ENABLE_AUTOMATION_EVALUATION_MODE",
-              "REGISTERED_PLUGGABLE_APPLICATIONS"
+              "ENABLE_ACCESSIBILITY_MODE",
+              "REGISTERED_PLUGGABLE_APPLICATIONS",
+              "DATA_LOCALE"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -24129,7 +24729,8 @@
               "SEARCH",
               "CREATE_VISUALIZATION",
               "EXTEND_VISUALIZATION",
-              "HOWTO"
+              "HOWTO",
+              "CHANGE_ANALYSIS"
             ],
             "type": "string"
           }
@@ -24154,9 +24755,6 @@
             "type": "string"
           },
           "kid": {
-            "maxLength": 255,
-            "minLength": 0,
-            "pattern": "^[^.]",
             "type": "string"
           },
           "kty": {
@@ -24723,17 +25321,10 @@
             "type": "array"
           },
           "href": {
-            "type": "string",
-            "xml": {
-              "attribute": true
-            }
+            "type": "string"
           }
         },
-        "type": "object",
-        "xml": {
-          "name": "skeleton",
-          "namespace": "urn:oasis:names:tc:xliff:document:2.0"
-        }
+        "type": "object"
       },
       "SlidesExportRequest": {
         "description": "Export request object describing the export properties and metadata for slides exports.",
@@ -25564,6 +26155,28 @@
         },
         "required": [
           "automation"
+        ],
+        "type": "object"
+      },
+      "TriggerQualityIssuesCalculationResponse": {
+        "properties": {
+          "processId": {
+            "description": "Process ID for tracking the calculation status",
+            "type": "string"
+          },
+          "status": {
+            "description": "Current status of the calculation",
+            "enum": [
+              "RUNNING",
+              "COMPLETED",
+              "FAILED"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "processId",
+          "status"
         ],
         "type": "object"
       },
@@ -26548,39 +27161,19 @@
             "type": "object"
           },
           "space": {
-            "type": "string",
-            "xml": {
-              "attribute": true,
-              "namespace": "http://www.w3.org/XML/1998/namespace"
-            }
+            "type": "string"
           },
           "srcLang": {
-            "type": "string",
-            "xml": {
-              "attribute": true
-            }
+            "type": "string"
           },
           "trgLang": {
-            "type": "string",
-            "xml": {
-              "attribute": true
-            }
+            "type": "string"
           },
           "version": {
-            "type": "string",
-            "xml": {
-              "attribute": true
-            }
+            "type": "string"
           }
         },
-        "required": [
-          "file"
-        ],
-        "type": "object",
-        "xml": {
-          "name": "xliff",
-          "namespace": "urn:oasis:names:tc:xliff:document:2.0"
-        }
+        "type": "object"
       }
     }
   },
@@ -28287,6 +28880,41 @@
         ]
       }
     },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/createdBy": {
+      "get": {
+        "description": "Returns a list of Users who created any object for this workspace",
+        "operationId": "createdBy",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalyticsCatalogCreatedBy"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Get Analytics Catalog CreatedBy",
+        "tags": [
+          "Smart Functions",
+          "actions"
+        ]
+      }
+    },
     "/api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/tags": {
       "get": {
         "description": "Returns a list of tags for this workspace",
@@ -28530,10 +29158,10 @@
         ]
       }
     },
-    "/api/v1/actions/workspaces/{workspaceId}/ai/memory": {
+    "/api/v1/actions/workspaces/{workspaceId}/ai/issues/status/{processId}": {
       "get": {
-        "description": "(EXPERIMENTAL) Returns a list of memory items",
-        "operationId": "listMemoryItems",
+        "description": "Returns the status of a quality issues calculation process identified by process ID.",
+        "operationId": "getQualityIssuesCalculationStatus",
         "parameters": [
           {
             "description": "Workspace identifier",
@@ -28543,78 +29171,40 @@
             "schema": {
               "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
               "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/MemoryItem"
-                  },
-                  "type": "array"
-                }
-              }
-            },
-            "description": "OK"
-          }
-        },
-        "summary": "(EXPERIMENTAL) List all memory items",
-        "tags": [
-          "Smart Functions",
-          "actions"
-        ]
-      },
-      "post": {
-        "description": "(EXPERIMENTAL) Creates a new memory item and returns it",
-        "operationId": "createMemoryItem",
-        "parameters": [
-          {
-            "description": "Workspace identifier",
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/MemoryItem"
-              }
             }
           },
-          "required": true
-        },
+          {
+            "in": "path",
+            "name": "processId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MemoryItem"
+                  "$ref": "#/components/schemas/QualityIssuesCalculationStatusResponse"
                 }
               }
             },
             "description": "OK"
           }
         },
-        "summary": "(EXPERIMENTAL) Create new memory item",
+        "summary": "Get Quality Issues Calculation Status",
         "tags": [
           "Smart Functions",
           "actions"
         ]
       }
     },
-    "/api/v1/actions/workspaces/{workspaceId}/ai/memory/{memoryId}": {
-      "delete": {
-        "description": "(EXPERIMENTAL) Removes memory item",
-        "operationId": "removeMemoryItem",
+    "/api/v1/actions/workspaces/{workspaceId}/ai/issues/triggerCheck": {
+      "post": {
+        "description": "Triggers asynchronous calculation of metadata quality issues and returns a process ID for status tracking.",
+        "operationId": "triggerQualityIssuesCalculation",
         "parameters": [
           {
             "description": "Workspace identifier",
@@ -28623,48 +29213,6 @@
             "required": true,
             "schema": {
               "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-              "type": "string"
-            }
-          },
-          {
-            "in": "path",
-            "name": "memoryId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "No Content"
-          }
-        },
-        "summary": "(EXPERIMENTAL) Remove memory item",
-        "tags": [
-          "Smart Functions",
-          "actions"
-        ]
-      },
-      "get": {
-        "description": "(EXPERIMENTAL) Get memory item by id",
-        "operationId": "getMemoryItem",
-        "parameters": [
-          {
-            "description": "Workspace identifier",
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-              "type": "string"
-            }
-          },
-          {
-            "in": "path",
-            "name": "memoryId",
-            "required": true,
-            "schema": {
               "type": "string"
             }
           }
@@ -28674,65 +29222,14 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MemoryItem"
+                  "$ref": "#/components/schemas/TriggerQualityIssuesCalculationResponse"
                 }
               }
             },
             "description": "OK"
           }
         },
-        "summary": "(EXPERIMENTAL) Get memory item",
-        "tags": [
-          "Smart Functions",
-          "actions"
-        ]
-      },
-      "put": {
-        "description": "(EXPERIMENTAL) Updates memory item and returns it",
-        "operationId": "updateMemoryItem",
-        "parameters": [
-          {
-            "description": "Workspace identifier",
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-              "type": "string"
-            }
-          },
-          {
-            "in": "path",
-            "name": "memoryId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/MemoryItem"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MemoryItem"
-                }
-              }
-            },
-            "description": "OK"
-          }
-        },
-        "summary": "(EXPERIMENTAL) Update memory item",
+        "summary": "Trigger Quality Issues Calculation",
         "tags": [
           "Smart Functions",
           "actions"
@@ -29975,6 +30472,96 @@
             "VIEW"
           ]
         }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/computeChangeAnalysis": {
+      "post": {
+        "description": "Computes change analysis for the provided execution definition.",
+        "operationId": "changeAnalysis",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangeAnalysisRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangeAnalysisResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Compute change analysis",
+        "tags": [
+          "Computation",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/computeChangeAnalysis/result/{resultId}": {
+      "get": {
+        "description": "Gets change analysis result.",
+        "operationId": "changeAnalysisResult",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Result ID",
+            "example": "a9b28f9dc55f37ea9f4a5fb0c76895923591e781",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangeAnalysisResult"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Get change analysis result",
+        "tags": [
+          "Computation",
+          "actions"
+        ]
       }
     },
     "/api/v1/actions/workspaces/{workspaceId}/execution/computeKeyDrivers": {
@@ -42760,6 +43347,498 @@
             "VIEW"
           ]
         }
+      }
+    },
+    "/api/v1/entities/workspaces/{workspaceId}/memoryItems": {
+      "get": {
+        "operationId": "getAllEntities@MemoryItems",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "origin",
+            "required": false,
+            "schema": {
+              "default": "ALL",
+              "description": "Defines scope of origin of objects. All by default.",
+              "enum": [
+                "ALL",
+                "PARENTS",
+                "NATIVE"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "createdBy,modifiedBy",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "userIdentifiers",
+                  "createdBy",
+                  "modifiedBy",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/size"
+          },
+          {
+            "$ref": "#/components/parameters/sort"
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=origin,page,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "origin",
+                  "page",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiMemoryItemOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "tags": [
+          "entities",
+          "workspace-object-controller"
+        ]
+      },
+      "post": {
+        "operationId": "createEntity@MemoryItems",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "createdBy,modifiedBy",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "userIdentifiers",
+                  "createdBy",
+                  "modifiedBy",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=origin,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "origin",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiMemoryItemPostOptionalIdDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiMemoryItemOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "tags": [
+          "entities",
+          "workspace-object-controller"
+        ]
+      }
+    },
+    "/api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId}": {
+      "delete": {
+        "operationId": "deleteEntity@MemoryItems",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "$ref": "#/components/responses/Deleted"
+          }
+        },
+        "tags": [
+          "entities",
+          "workspace-object-controller"
+        ]
+      },
+      "get": {
+        "operationId": "getEntity@MemoryItems",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "createdBy,modifiedBy",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "userIdentifiers",
+                  "createdBy",
+                  "modifiedBy",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=origin,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "origin",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiMemoryItemOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "tags": [
+          "entities",
+          "workspace-object-controller"
+        ]
+      },
+      "patch": {
+        "operationId": "patchEntity@MemoryItems",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "createdBy,modifiedBy",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "userIdentifiers",
+                  "createdBy",
+                  "modifiedBy",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiMemoryItemPatchDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiMemoryItemOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "tags": [
+          "entities",
+          "workspace-object-controller"
+        ]
+      },
+      "put": {
+        "operationId": "updateEntity@MemoryItems",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "createdBy,modifiedBy",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "userIdentifiers",
+                  "createdBy",
+                  "modifiedBy",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiMemoryItemInDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiMemoryItemOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "tags": [
+          "entities",
+          "workspace-object-controller"
+        ]
       }
     },
     "/api/v1/entities/workspaces/{workspaceId}/metrics": {

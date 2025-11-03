@@ -12,6 +12,7 @@ Method | HTTP request | Description
 [**create_entity_export_definitions**](WorkspaceObjectControllerApi.md#create_entity_export_definitions) | **POST** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions | Post Export Definitions
 [**create_entity_filter_contexts**](WorkspaceObjectControllerApi.md#create_entity_filter_contexts) | **POST** /api/v1/entities/workspaces/{workspaceId}/filterContexts | Post Context Filters
 [**create_entity_filter_views**](WorkspaceObjectControllerApi.md#create_entity_filter_views) | **POST** /api/v1/entities/workspaces/{workspaceId}/filterViews | Post Filter views
+[**create_entity_memory_items**](WorkspaceObjectControllerApi.md#create_entity_memory_items) | **POST** /api/v1/entities/workspaces/{workspaceId}/memoryItems | 
 [**create_entity_metrics**](WorkspaceObjectControllerApi.md#create_entity_metrics) | **POST** /api/v1/entities/workspaces/{workspaceId}/metrics | Post Metrics
 [**create_entity_user_data_filters**](WorkspaceObjectControllerApi.md#create_entity_user_data_filters) | **POST** /api/v1/entities/workspaces/{workspaceId}/userDataFilters | Post User Data Filters
 [**create_entity_visualization_objects**](WorkspaceObjectControllerApi.md#create_entity_visualization_objects) | **POST** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects | Post Visualization Objects
@@ -26,6 +27,7 @@ Method | HTTP request | Description
 [**delete_entity_export_definitions**](WorkspaceObjectControllerApi.md#delete_entity_export_definitions) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/{objectId} | Delete an Export Definition
 [**delete_entity_filter_contexts**](WorkspaceObjectControllerApi.md#delete_entity_filter_contexts) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | Delete a Context Filter
 [**delete_entity_filter_views**](WorkspaceObjectControllerApi.md#delete_entity_filter_views) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Delete Filter view
+[**delete_entity_memory_items**](WorkspaceObjectControllerApi.md#delete_entity_memory_items) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | 
 [**delete_entity_metrics**](WorkspaceObjectControllerApi.md#delete_entity_metrics) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | Delete a Metric
 [**delete_entity_user_data_filters**](WorkspaceObjectControllerApi.md#delete_entity_user_data_filters) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId} | Delete a User Data Filter
 [**delete_entity_visualization_objects**](WorkspaceObjectControllerApi.md#delete_entity_visualization_objects) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | Delete a Visualization Object
@@ -45,6 +47,7 @@ Method | HTTP request | Description
 [**get_all_entities_filter_contexts**](WorkspaceObjectControllerApi.md#get_all_entities_filter_contexts) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterContexts | Get all Context Filters
 [**get_all_entities_filter_views**](WorkspaceObjectControllerApi.md#get_all_entities_filter_views) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterViews | Get all Filter views
 [**get_all_entities_labels**](WorkspaceObjectControllerApi.md#get_all_entities_labels) | **GET** /api/v1/entities/workspaces/{workspaceId}/labels | Get all Labels
+[**get_all_entities_memory_items**](WorkspaceObjectControllerApi.md#get_all_entities_memory_items) | **GET** /api/v1/entities/workspaces/{workspaceId}/memoryItems | 
 [**get_all_entities_metrics**](WorkspaceObjectControllerApi.md#get_all_entities_metrics) | **GET** /api/v1/entities/workspaces/{workspaceId}/metrics | Get all Metrics
 [**get_all_entities_user_data_filters**](WorkspaceObjectControllerApi.md#get_all_entities_user_data_filters) | **GET** /api/v1/entities/workspaces/{workspaceId}/userDataFilters | Get all User Data Filters
 [**get_all_entities_visualization_objects**](WorkspaceObjectControllerApi.md#get_all_entities_visualization_objects) | **GET** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects | Get all Visualization Objects
@@ -64,6 +67,7 @@ Method | HTTP request | Description
 [**get_entity_filter_contexts**](WorkspaceObjectControllerApi.md#get_entity_filter_contexts) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | Get a Context Filter
 [**get_entity_filter_views**](WorkspaceObjectControllerApi.md#get_entity_filter_views) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Get Filter view
 [**get_entity_labels**](WorkspaceObjectControllerApi.md#get_entity_labels) | **GET** /api/v1/entities/workspaces/{workspaceId}/labels/{objectId} | Get a Label
+[**get_entity_memory_items**](WorkspaceObjectControllerApi.md#get_entity_memory_items) | **GET** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | 
 [**get_entity_metrics**](WorkspaceObjectControllerApi.md#get_entity_metrics) | **GET** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | Get a Metric
 [**get_entity_user_data_filters**](WorkspaceObjectControllerApi.md#get_entity_user_data_filters) | **GET** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId} | Get a User Data Filter
 [**get_entity_visualization_objects**](WorkspaceObjectControllerApi.md#get_entity_visualization_objects) | **GET** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | Get a Visualization Object
@@ -78,6 +82,7 @@ Method | HTTP request | Description
 [**patch_entity_export_definitions**](WorkspaceObjectControllerApi.md#patch_entity_export_definitions) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/{objectId} | Patch an Export Definition
 [**patch_entity_filter_contexts**](WorkspaceObjectControllerApi.md#patch_entity_filter_contexts) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | Patch a Context Filter
 [**patch_entity_filter_views**](WorkspaceObjectControllerApi.md#patch_entity_filter_views) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Patch Filter view
+[**patch_entity_memory_items**](WorkspaceObjectControllerApi.md#patch_entity_memory_items) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | 
 [**patch_entity_metrics**](WorkspaceObjectControllerApi.md#patch_entity_metrics) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | Patch a Metric
 [**patch_entity_user_data_filters**](WorkspaceObjectControllerApi.md#patch_entity_user_data_filters) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId} | Patch a User Data Filter
 [**patch_entity_visualization_objects**](WorkspaceObjectControllerApi.md#patch_entity_visualization_objects) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | Patch a Visualization Object
@@ -92,6 +97,7 @@ Method | HTTP request | Description
 [**update_entity_export_definitions**](WorkspaceObjectControllerApi.md#update_entity_export_definitions) | **PUT** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/{objectId} | Put an Export Definition
 [**update_entity_filter_contexts**](WorkspaceObjectControllerApi.md#update_entity_filter_contexts) | **PUT** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | Put a Context Filter
 [**update_entity_filter_views**](WorkspaceObjectControllerApi.md#update_entity_filter_views) | **PUT** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Put Filter views
+[**update_entity_memory_items**](WorkspaceObjectControllerApi.md#update_entity_memory_items) | **PUT** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | 
 [**update_entity_metrics**](WorkspaceObjectControllerApi.md#update_entity_metrics) | **PUT** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | Put a Metric
 [**update_entity_user_data_filters**](WorkspaceObjectControllerApi.md#update_entity_user_data_filters) | **PUT** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId} | Put a User Data Filter
 [**update_entity_visualization_objects**](WorkspaceObjectControllerApi.md#update_entity_visualization_objects) | **PUT** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | Put a Visualization Object
@@ -404,16 +410,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         ),
                     ),
                 ],
-                metadata=JsonApiAutomationInAttributesMetadata(
-                    visible_filters=[
-                        VisibleFilter(
-                            is_all_time_date_filter=False,
-                            local_identifier="local_identifier_example",
-                            title="title_example",
-                        ),
-                    ],
-                    widget="widget_example",
-                ),
+                metadata=JsonApiAutomationInAttributesMetadata(),
                 raw_exports=[
                     JsonApiAutomationInAttributesRawExportsInner(
                         request_payload=RawExportAutomationRequest(
@@ -1119,6 +1116,108 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiFilterViewOutDocument**](JsonApiFilterViewOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/vnd.gooddata.api+json
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**201** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **create_entity_memory_items**
+> JsonApiMemoryItemOutDocument create_entity_memory_items(workspace_id, json_api_memory_item_post_optional_id_document)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import workspace_object_controller_api
+from gooddata_api_client.model.json_api_memory_item_post_optional_id_document import JsonApiMemoryItemPostOptionalIdDocument
+from gooddata_api_client.model.json_api_memory_item_out_document import JsonApiMemoryItemOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = workspace_object_controller_api.WorkspaceObjectControllerApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    json_api_memory_item_post_optional_id_document = JsonApiMemoryItemPostOptionalIdDocument(
+        data=JsonApiMemoryItemPostOptionalId(
+            attributes=JsonApiMemoryItemInAttributes(
+                are_relations_valid=True,
+                description="description_example",
+                instruction="instruction_example",
+                is_disabled=True,
+                keywords=[
+                    "keywords_example",
+                ],
+                strategy="ALWAYS",
+                tags=[
+                    "tags_example",
+                ],
+                title="title_example",
+            ),
+            id="id1",
+            type="memoryItem",
+        ),
+    ) # JsonApiMemoryItemPostOptionalIdDocument | 
+    include = [
+        "createdBy,modifiedBy",
+    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    meta_include = [
+        "metaInclude=origin,all",
+    ] # [str] | Include Meta objects. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.create_entity_memory_items(workspace_id, json_api_memory_item_post_optional_id_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling WorkspaceObjectControllerApi->create_entity_memory_items: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.create_entity_memory_items(workspace_id, json_api_memory_item_post_optional_id_document, include=include, meta_include=meta_include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling WorkspaceObjectControllerApi->create_entity_memory_items: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **json_api_memory_item_post_optional_id_document** | [**JsonApiMemoryItemPostOptionalIdDocument**](JsonApiMemoryItemPostOptionalIdDocument.md)|  |
+ **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
+
+### Return type
+
+[**JsonApiMemoryItemOutDocument**](JsonApiMemoryItemOutDocument.md)
 
 ### Authorization
 
@@ -2312,6 +2411,79 @@ with gooddata_api_client.ApiClient() as api_client:
         api_instance.delete_entity_filter_views(workspace_id, object_id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling WorkspaceObjectControllerApi->delete_entity_filter_views: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | Successfully deleted |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **delete_entity_memory_items**
+> delete_entity_memory_items(workspace_id, object_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import workspace_object_controller_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = workspace_object_controller_api.WorkspaceObjectControllerApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+    filter = "title==someString;description==someString;createdBy.id==321;modifiedBy.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_instance.delete_entity_memory_items(workspace_id, object_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling WorkspaceObjectControllerApi->delete_entity_memory_items: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_instance.delete_entity_memory_items(workspace_id, object_id, filter=filter)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling WorkspaceObjectControllerApi->delete_entity_memory_items: %s\n" % e)
 ```
 
 
@@ -4037,6 +4209,100 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **get_all_entities_memory_items**
+> JsonApiMemoryItemOutList get_all_entities_memory_items(workspace_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import workspace_object_controller_api
+from gooddata_api_client.model.json_api_memory_item_out_list import JsonApiMemoryItemOutList
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = workspace_object_controller_api.WorkspaceObjectControllerApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    origin = "ALL" # str |  (optional) if omitted the server will use the default value of "ALL"
+    filter = "title==someString;description==someString;createdBy.id==321;modifiedBy.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = [
+        "createdBy,modifiedBy",
+    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
+    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
+    sort = [
+        "sort_example",
+    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+    meta_include = [
+        "metaInclude=origin,page,all",
+    ] # [str] | Include Meta objects. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.get_all_entities_memory_items(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling WorkspaceObjectControllerApi->get_all_entities_memory_items: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.get_all_entities_memory_items(workspace_id, origin=origin, filter=filter, include=include, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling WorkspaceObjectControllerApi->get_all_entities_memory_items: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **origin** | **str**|  | [optional] if omitted the server will use the default value of "ALL"
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+ **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
+ **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
+ **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
+
+### Return type
+
+[**JsonApiMemoryItemOutList**](JsonApiMemoryItemOutList.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **get_all_entities_metrics**
 > JsonApiMetricOutList get_all_entities_metrics(workspace_id)
 
@@ -5743,6 +6009,92 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **get_entity_memory_items**
+> JsonApiMemoryItemOutDocument get_entity_memory_items(workspace_id, object_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import workspace_object_controller_api
+from gooddata_api_client.model.json_api_memory_item_out_document import JsonApiMemoryItemOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = workspace_object_controller_api.WorkspaceObjectControllerApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+    filter = "title==someString;description==someString;createdBy.id==321;modifiedBy.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = [
+        "createdBy,modifiedBy",
+    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+    meta_include = [
+        "metaInclude=origin,all",
+    ] # [str] | Include Meta objects. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.get_entity_memory_items(workspace_id, object_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling WorkspaceObjectControllerApi->get_entity_memory_items: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.get_entity_memory_items(workspace_id, object_id, filter=filter, include=include, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling WorkspaceObjectControllerApi->get_entity_memory_items: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+ **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
+
+### Return type
+
+[**JsonApiMemoryItemOutDocument**](JsonApiMemoryItemOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **get_entity_metrics**
 > JsonApiMetricOutDocument get_entity_metrics(workspace_id, object_id)
 
@@ -6572,16 +6924,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         ),
                     ),
                 ],
-                metadata=JsonApiAutomationInAttributesMetadata(
-                    visible_filters=[
-                        VisibleFilter(
-                            is_all_time_date_filter=False,
-                            local_identifier="local_identifier_example",
-                            title="title_example",
-                        ),
-                    ],
-                    widget="widget_example",
-                ),
+                metadata=JsonApiAutomationInAttributesMetadata(),
                 raw_exports=[
                     JsonApiAutomationInAttributesRawExportsInner(
                         request_payload=RawExportAutomationRequest(
@@ -7290,6 +7633,108 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiFilterViewOutDocument**](JsonApiFilterViewOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/vnd.gooddata.api+json
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **patch_entity_memory_items**
+> JsonApiMemoryItemOutDocument patch_entity_memory_items(workspace_id, object_id, json_api_memory_item_patch_document)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import workspace_object_controller_api
+from gooddata_api_client.model.json_api_memory_item_patch_document import JsonApiMemoryItemPatchDocument
+from gooddata_api_client.model.json_api_memory_item_out_document import JsonApiMemoryItemOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = workspace_object_controller_api.WorkspaceObjectControllerApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+    json_api_memory_item_patch_document = JsonApiMemoryItemPatchDocument(
+        data=JsonApiMemoryItemPatch(
+            attributes=JsonApiMemoryItemPatchAttributes(
+                are_relations_valid=True,
+                description="description_example",
+                instruction="instruction_example",
+                is_disabled=True,
+                keywords=[
+                    "keywords_example",
+                ],
+                strategy="ALWAYS",
+                tags=[
+                    "tags_example",
+                ],
+                title="title_example",
+            ),
+            id="id1",
+            type="memoryItem",
+        ),
+    ) # JsonApiMemoryItemPatchDocument | 
+    filter = "title==someString;description==someString;createdBy.id==321;modifiedBy.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = [
+        "createdBy,modifiedBy",
+    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.patch_entity_memory_items(workspace_id, object_id, json_api_memory_item_patch_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling WorkspaceObjectControllerApi->patch_entity_memory_items: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.patch_entity_memory_items(workspace_id, object_id, json_api_memory_item_patch_document, filter=filter, include=include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling WorkspaceObjectControllerApi->patch_entity_memory_items: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+ **json_api_memory_item_patch_document** | [**JsonApiMemoryItemPatchDocument**](JsonApiMemoryItemPatchDocument.md)|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+
+### Return type
+
+[**JsonApiMemoryItemOutDocument**](JsonApiMemoryItemOutDocument.md)
 
 ### Authorization
 
@@ -8221,16 +8666,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         ),
                     ),
                 ],
-                metadata=JsonApiAutomationInAttributesMetadata(
-                    visible_filters=[
-                        VisibleFilter(
-                            is_all_time_date_filter=False,
-                            local_identifier="local_identifier_example",
-                            title="title_example",
-                        ),
-                    ],
-                    widget="widget_example",
-                ),
+                metadata=JsonApiAutomationInAttributesMetadata(),
                 raw_exports=[
                     JsonApiAutomationInAttributesRawExportsInner(
                         request_payload=RawExportAutomationRequest(
@@ -8939,6 +9375,108 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiFilterViewOutDocument**](JsonApiFilterViewOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/vnd.gooddata.api+json
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **update_entity_memory_items**
+> JsonApiMemoryItemOutDocument update_entity_memory_items(workspace_id, object_id, json_api_memory_item_in_document)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import workspace_object_controller_api
+from gooddata_api_client.model.json_api_memory_item_in_document import JsonApiMemoryItemInDocument
+from gooddata_api_client.model.json_api_memory_item_out_document import JsonApiMemoryItemOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = workspace_object_controller_api.WorkspaceObjectControllerApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+    json_api_memory_item_in_document = JsonApiMemoryItemInDocument(
+        data=JsonApiMemoryItemIn(
+            attributes=JsonApiMemoryItemInAttributes(
+                are_relations_valid=True,
+                description="description_example",
+                instruction="instruction_example",
+                is_disabled=True,
+                keywords=[
+                    "keywords_example",
+                ],
+                strategy="ALWAYS",
+                tags=[
+                    "tags_example",
+                ],
+                title="title_example",
+            ),
+            id="id1",
+            type="memoryItem",
+        ),
+    ) # JsonApiMemoryItemInDocument | 
+    filter = "title==someString;description==someString;createdBy.id==321;modifiedBy.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = [
+        "createdBy,modifiedBy",
+    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.update_entity_memory_items(workspace_id, object_id, json_api_memory_item_in_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling WorkspaceObjectControllerApi->update_entity_memory_items: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.update_entity_memory_items(workspace_id, object_id, json_api_memory_item_in_document, filter=filter, include=include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling WorkspaceObjectControllerApi->update_entity_memory_items: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+ **json_api_memory_item_in_document** | [**JsonApiMemoryItemInDocument**](JsonApiMemoryItemInDocument.md)|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+
+### Return type
+
+[**JsonApiMemoryItemOutDocument**](JsonApiMemoryItemOutDocument.md)
 
 ### Authorization
 

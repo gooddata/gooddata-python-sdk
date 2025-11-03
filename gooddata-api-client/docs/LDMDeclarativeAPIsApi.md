@@ -161,6 +161,12 @@ with gooddata_api_client.ApiClient() as api_client:
                             labels=[
                                 DeclarativeLabel(
                                     description="Customer name",
+                                    geo_area_config=GeoAreaConfig(
+                                        collection=GeoCollection(
+                                            id="id_example",
+                                            matching_property="matching_property_example",
+                                        ),
+                                    ),
                                     id="label.customer_name",
                                     is_hidden=False,
                                     source_column="customer_name",

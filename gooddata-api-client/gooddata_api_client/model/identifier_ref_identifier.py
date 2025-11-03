@@ -70,6 +70,7 @@ class IdentifierRefIdentifier(ModelNormal):
             'EXPORTDEFINITION': "exportDefinition",
             'AUTOMATION': "automation",
             'AUTOMATIONRESULT': "automationResult",
+            'MEMORYITEM': "memoryItem",
             'PROMPT': "prompt",
             'VISUALIZATIONOBJECT': "visualizationObject",
             'FILTERCONTEXT': "filterContext",

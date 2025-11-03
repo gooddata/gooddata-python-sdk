@@ -92,6 +92,7 @@ class ChatRequest(ModelNormal):
         lazy_import()
         return {
             'question': (str,),  # noqa: E501
+            'include_hidden': (bool,),  # noqa: E501
             'limit_create': (int,),  # noqa: E501
             'limit_create_context': (int,),  # noqa: E501
             'limit_search': (int,),  # noqa: E501
@@ -109,6 +110,7 @@ class ChatRequest(ModelNormal):
 
     attribute_map = {
         'question': 'question',  # noqa: E501
+        'include_hidden': 'includeHidden',  # noqa: E501
         'limit_create': 'limitCreate',  # noqa: E501
         'limit_create_context': 'limitCreateContext',  # noqa: E501
         'limit_search': 'limitSearch',  # noqa: E501
@@ -163,6 +165,7 @@ class ChatRequest(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            include_hidden (bool): If true, includes hidden objects in search and visualization building. If false (default), excludes objects where isHidden=true.. [optional] if omitted the server will use the default value of False  # noqa: E501
             limit_create (int): Maximum number of created results.. [optional] if omitted the server will use the default value of 3  # noqa: E501
             limit_create_context (int): Maximum number of relevant objects included into context for LLM (for each object type).. [optional] if omitted the server will use the default value of 10  # noqa: E501
             limit_search (int): Maximum number of search results.. [optional] if omitted the server will use the default value of 5  # noqa: E501
@@ -260,6 +263,7 @@ class ChatRequest(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            include_hidden (bool): If true, includes hidden objects in search and visualization building. If false (default), excludes objects where isHidden=true.. [optional] if omitted the server will use the default value of False  # noqa: E501
             limit_create (int): Maximum number of created results.. [optional] if omitted the server will use the default value of 3  # noqa: E501
             limit_create_context (int): Maximum number of relevant objects included into context for LLM (for each object type).. [optional] if omitted the server will use the default value of 10  # noqa: E501
             limit_search (int): Maximum number of search results.. [optional] if omitted the server will use the default value of 5  # noqa: E501
