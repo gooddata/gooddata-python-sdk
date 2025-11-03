@@ -3,7 +3,7 @@
 {{ $cover := .HasShortcode "blocks/cover" }}
 <div class="gd-docs-header-nav gd-docs-header-nav__first">
   <nav class="gd-docs-header-nav__left" aria-label="Homepage">
-    <a class="gd-docs-header-nav__logo gd-header-nav__logo" href="{{ (printf "%s%s/" .Site.Home.Permalink "latest" ) | safeURL }}" aria-label="Go to documentation homepage">
+    <a tabindex="1" class="gd-docs-header-nav__logo gd-header-nav__logo" href="{{ (printf "%s%s/" .Site.Home.Permalink "latest" ) | safeURL }}" aria-label="Go to documentation homepage">
       {{ with resources.Get "icons/GoodDataLearn.svg" }}{{ ( . | minify).Content | safeHTML }}{{ end }}
     </a>
     <span class="gd-header-nav__logo-text">Learn</span>
