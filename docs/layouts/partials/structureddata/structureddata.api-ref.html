@@ -1,0 +1,98 @@
+{{- $pageData := .Page -}}
+{{- $siteData := .Site -}}
+
+{{- $pageUrl := printf "https://www.gooddata.com%s" $pageData.RelPermalink -}}
+{{- $basePathVersionJson := partial "parseUrlBreadcrumbs.html" (dict "url" $pageUrl "variant" "before-version") -}}
+{{- $basePathVersionArray := $basePathVersionJson | unmarshal -}}
+{{- $basePathVersion := cond (gt (len $basePathVersionArray) 0) (index $basePathVersionArray 0) "https://www.gooddata.com/docs/python-sdk/latest/" -}}
+{{- $breadcrumbsJson := partial "parseUrlBreadcrumbs.html" (dict "url" $pageUrl "variant" "after-version") -}}
+{{- $breadcrumbs := $breadcrumbsJson | unmarshal -}}
+
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "{{ $basePathVersion }}#website",
+      "url": {{ $basePathVersion | jsonify }}
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://www.gooddata.com/#organization",
+      "name": "GoodData",
+      "url": "https://www.gooddata.com"
+    },
+    {
+      "@type": "TechArticle",
+      "@id": "https://www.gooddata.com{{ $pageData.RelPermalink }}#article",
+      "headline": "{{ $pageData.Params.title }} | GoodData Python SDK",
+      "description": {{ if $pageData.Params.description }}{{ $pageData.Params.description | jsonify }}{{ else }}{{ $pageData.Summary | jsonify }}{{ end }},
+      "url": "https://www.gooddata.com{{ $pageData.RelPermalink }}",
+      "dateModified": {{ $pageData.Params.lastmod | jsonify }},
+      "author": {
+        "@id": "https://www.gooddata.com/#organization"
+      },
+      "publisher": {
+        "@id": "https://www.gooddata.com/#organization"
+      },
+      "isPartOf": {
+        "@id": "{{ $basePathVersion }}#website"
+      },
+      "about": {
+        "@id": "{{ $basePathVersion }}#software"
+      },
+      "articleSection": {{ $pageData.Parent.Title | jsonify }},
+      "inLanguage": "en",
+      "mainEntity": {
+        "@type": "SoftwareSourceCode",
+        "name": {{ $pageData.Params.title | jsonify }},
+        "description": {{ if $pageData.Params.description }}{{ $pageData.Params.description | jsonify }}{{ else }}{{ $pageData.Summary | jsonify }}{{ end }},
+        "programmingLanguage": "Python",
+        "codeSampleType": "full",
+        "codeRepository": "https://github.com/gooddata/gooddata-python-sdk",
+        "runtimePlatform": "Python 3.13+",
+        "targetProduct": {
+          "@id": "{{ $basePathVersion }}#software"
+        }
+      }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://www.gooddata.com/docs/python-sdk/latest/administration/organization/update_name/#webpage",
+      "url": "https://www.gooddata.com/docs/python-sdk/latest/administration/organization/update_name/",
+      "name": "{{ $pageData.Params.title }} | GoodData Python SDK",
+      "isPartOf": {
+        "@id": "{{ $basePathVersion }}#website"
+      },
+      "breadcrumb": {
+        "@id": "https://www.gooddata.com{{ $pageData.RelPermalink }}#breadcrumb"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.gooddata.com{{ $pageData.RelPermalink }}#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.gooddata.com"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Documentation",
+          "item": "https://www.gooddata.com/docs/"
+        }{{- range $index, $breadcrumb := $breadcrumbs }}
+        {{- $segments := split (trim $breadcrumb "/") "/" }}
+        {{- $name := cond (eq (add $index 3) 3) "Python SDK" (index $segments (sub (len $segments) 1) | humanize) }},
+        {
+          "@type": "ListItem",
+          "position": {{ add $index 3 }},
+          "name": {{ $name | jsonify }},
+          "item": {{ $breadcrumb | jsonify }}
+        }{{- end }}
+      ]
+    }
+  ]
+}
