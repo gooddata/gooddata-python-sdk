@@ -1,0 +1,127 @@
+{{- $pageData := .Page -}}
+{{- $siteData := .Site -}}
+
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://www.gooddata.com{{ $pageData.RelPermalink }}#website",
+      "url": "https://www.gooddata.com{{ $pageData.RelPermalink }}",
+      "name": "GoodData Python SDK Documentation",
+      "description": "Official documentation for GoodData Python SDK - Python interface for GoodData Agentic data intelligence platform",
+      "inLanguage": "en",
+      "publisher": {
+        "@id": "https://www.gooddata.com/#organization"
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://www.gooddata.com{{ $pageData.RelPermalink }}?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://www.gooddata.com/#organization",
+      "name": "GoodData",
+      "url": "https://www.gooddata.com",
+      "logo": {
+        "@type": "ImageObject",
+        "@id": "https://www.gooddata.com#logo",
+        "url": "https://www.gooddata.com/img/generic/logo-gd-b.svg"
+      },
+      "image": {
+        "@id": "https://www.gooddata.com#logo"
+      },
+      "sameAs": [
+        "https://www.facebook.com/gooddata/",
+        "https://www.linkedin.com/company/gooddata",
+        "https://www.youtube.com/gooddata",
+        "https://en.wikipedia.org/wiki/GoodData",
+        "https://twitter.com/gooddata"
+      ]
+    },
+    {
+      "@type": "SoftwareSourceCode",
+      "@id": "https://www.gooddata.com{{ $pageData.RelPermalink }}#software",
+      "name": "GoodData Python SDK",
+      "description": "Python SDK for programmatic access to GoodData Agentic data intelligence platform",
+      "programmingLanguage": {
+        "@type": "ComputerLanguage",
+        "name": "Python",
+        "url": "https://www.python.org"
+      },
+      "codeRepository": "https://github.com/gooddata/gooddata-python-sdk",
+      "license": "https://github.com/gooddata/gooddata-python-sdk/blob/master/LICENSE.txt",
+      "runtimePlatform": "Python 3.13 or higher",
+      "author": {
+        "@id": "https://www.gooddata.com/#organization"
+      }
+    },
+    {
+      "@type": "TechArticle",
+      "@id": "https://www.gooddata.com{{ $pageData.RelPermalink }}#article",
+      "headline": "{{ $pageData.Params.title }} | GoodData Python SDK",
+      "description": "Introduction to GoodData Python SDK - overview, key concepts, and getting started guide",
+      "url": "https://www.gooddata.com{{ $pageData.RelPermalink }}",
+      "dateModified": {{ $pageData.Params.lastmod | jsonify }},
+      "author": {
+        "@id": "https://www.gooddata.com/#organization"
+      },
+      "publisher": {
+        "@id": "https://www.gooddata.com/#organization"
+      },
+      "isPartOf": {
+        "@id": "https://www.gooddata.com{{ $pageData.RelPermalink }}#website"
+      },
+      "about": {
+        "@id": "https://www.gooddata.com{{ $pageData.RelPermalink }}#software"
+      },
+      "articleSection": {{ $pageData.Parent.Title | jsonify }},
+      "inLanguage": "en"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://www.gooddata.com{{ $pageData.RelPermalink }}#webpage",
+      "url": "https://www.gooddata.com{{ $pageData.RelPermalink }}",
+      "name": "Python SDK - GoodData Documentation",
+      "description": "Complete documentation for GoodData Python SDK including installation, getting started, API reference, and examples",
+      "isPartOf": {
+        "@id": "https://www.gooddata.com{{ $pageData.RelPermalink }}#website"
+      },
+      "about": {
+        "@id": "https://www.gooddata.com{{ $pageData.RelPermalink }}#software"
+      },
+      "breadcrumb": {
+        "@id": "https://www.gooddata.com{{ $pageData.RelPermalink }}#breadcrumb"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.gooddata.com{{ $pageData.RelPermalink }}#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.gooddata.com"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Documentation",
+          "item": "https://www.gooddata.com/docs/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Python SDK",
+          "item": "https://www.gooddata.com{{ $pageData.RelPermalink }}"
+        }
+      ]
+    }
+  ]
+}
