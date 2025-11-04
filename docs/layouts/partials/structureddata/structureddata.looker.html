@@ -1,6 +1,37 @@
 {{- $pageData := .Page -}}
 {{- $siteData := .Site -}}
 
-{{ if eq $pageData.Params.title "Introduction" }}
- {{ partial "structureddata/structureddata.introduction.html" (dict "Page" $pageData "Site" $siteData) }}
+{{- $sectionTitles := slice -}}
+{{- range $siteData.Sections -}}
+{{- $sectionTitles = $sectionTitles | append .Title -}}
+{{- end -}}
+
+{{- $pageTitles := slice -}}
+{{- range $siteData.Pages -}}
+{{- $pageTitles = $pageTitles | append .Title -}}
+{{- end -}}
+
+{{- $uniquePageTitles := slice -}}
+{{- range $pageTitles -}}
+{{- if not (in $uniquePageTitles .) -}}
+    {{- $uniquePageTitles = $uniquePageTitles | append . -}}
+{{- end -}}
+{{- end -}}
+
+{{- $capitalTitles := slice -}}
+{{- range $uniquePageTitles -}}
+{{- $firstChar := substr . 0 1 -}}
+{{- if eq $firstChar (upper $firstChar) -}}
+    {{- $capitalTitles = $capitalTitles | append . -}}
+{{- end -}}
+{{- end -}}
+
+{{ if in $capitalTitles $pageData.Params.title }}
+ {{ if eq $pageData.Params.title "Introduction" }}
+  {{ partial "structureddata/structureddata.introduction.html" (dict "Page" $pageData "Site" $siteData) }}
+ {{ else }}
+  {{ partial "structureddata/structureddata.categories.html" (dict "Page" $pageData "Site" $siteData) }}
+ {{ end }}
+{{ else }}
+ {{ partial "structureddata/structureddata.api-ref.html" (dict "Page" $pageData "Site" $siteData) }}
 {{ end }}
