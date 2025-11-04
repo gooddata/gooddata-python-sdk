@@ -7,6 +7,9 @@
     {{ if .Params.externalLink }}
       <meta http-equiv="refresh" content="0;url={{ .Params.externalLink }}" />
     {{ end }}
+    <script type="application/ld+json">
+      {{ partial "structureddata/structureddata.looker.html" (dict "Page" . "Site" .Site) | safeJS }}
+    </script>
   </head>
   <body class="td-{{ .Kind }}">
     {{ partial "gtm-body.html" }}

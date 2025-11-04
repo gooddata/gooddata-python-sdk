@@ -1,0 +1,116 @@
+{{- $url := . -}}
+{{- $variant := "full" -}}
+
+{{- /* Check if variant is passed as context (dict) or just the URL string */ -}}
+{{- if reflect.IsMap . -}}
+  {{- $url = .url -}}
+  {{- $variant = .variant | default "full" -}}
+{{- end -}}
+
+{{- $urlObj := urls.Parse $url -}}
+{{- $host := printf "%s://%s" $urlObj.Scheme $urlObj.Host -}}
+{{- $pathname := $urlObj.Path -}}
+
+{{- $breadcrumbs := slice -}}
+{{- $segments := split $pathname "/" -}}
+{{- $currentPath := "" -}}
+
+{{- if eq $variant "before-version" -}}
+  {{/* Variant 1: Return only the base path up to and including /latest/ or any version from Site.Params.versions */}}
+  {{- $versionFound := false -}}
+  {{- $versionIndex := 0 -}}
+
+  {{- range $index, $segment := $segments -}}
+    {{- if ne $segment "" -}}
+      {{/* Check if segment is "latest" */}}
+      {{- if eq $segment "latest" -}}
+        {{- $versionFound = true -}}
+        {{- $versionIndex = $index -}}
+      {{- else -}}
+        {{/* Check if segment matches any version in Site.Params.versions or is a semantic version */}}
+        {{- if and ($.Site.Params) ($.Site.Params.versions) -}}
+          {{- range $.Site.Params.versions -}}
+            {{- if eq $segment .version -}}
+              {{- $versionFound = true -}}
+              {{- $versionIndex = $index -}}
+            {{- end -}}
+          {{- end -}}
+        {{- else -}}
+          {{/* Fallback: check if segment looks like a version (1.51, 1.52, etc.) */}}
+          {{- if or (eq $segment "dev") (eq $segment "master") (findRE `^\d+\.\d+` $segment) -}}
+            {{- $versionFound = true -}}
+            {{- $versionIndex = $index -}}
+          {{- end -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+
+  {{- if $versionFound -}}
+    {{- $currentPath = "" -}}
+    {{- range $index, $segment := $segments -}}
+      {{- if and (le $index $versionIndex) (ne $segment "") -}}
+        {{- $currentPath = printf "%s%s/" $currentPath $segment -}}
+      {{- end -}}
+    {{- end -}}
+    {{- $fullUrl := printf "%s/%s" $host $currentPath -}}
+    {{- $breadcrumbs = $breadcrumbs | append $fullUrl -}}
+  {{- end -}}
+
+{{- else if eq $variant "after-version" -}}
+  {{/* Variant 2: Start parsing from /latest/ or any version from Site.Params.versions */}}
+  {{- $versionFound := false -}}
+  {{- $startIndex := 0 -}}
+
+  {{- range $index, $segment := $segments -}}
+    {{- if ne $segment "" -}}
+      {{/* Check if segment is "latest" */}}
+      {{- if eq $segment "latest" -}}
+        {{- $versionFound = true -}}
+        {{- $startIndex = $index -}}
+      {{- else -}}
+        {{/* Check if segment matches any version in Site.Params.versions or is a semantic version */}}
+        {{- if and ($.Site.Params) ($.Site.Params.versions) -}}
+          {{- range $.Site.Params.versions -}}
+            {{- if eq $segment .version -}}
+              {{- $versionFound = true -}}
+              {{- $startIndex = $index -}}
+            {{- end -}}
+          {{- end -}}
+        {{- else -}}
+          {{/* Fallback: check if segment looks like a version (1.51, 1.52, etc.) */}}
+          {{- if or (eq $segment "dev") (eq $segment "master") (findRE `^\d+\.\d+` $segment) -}}
+            {{- $versionFound = true -}}
+            {{- $startIndex = $index -}}
+          {{- end -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+
+  {{- if $versionFound -}}
+    {{- $currentPath = "" -}}
+    {{- range $index, $segment := $segments -}}
+      {{- if and (ge $index $startIndex) (ne $segment "") -}}
+        {{- $currentPath = printf "%s%s/" $currentPath $segment -}}
+        {{- $fullUrl := printf "%s/%s" $host $currentPath -}}
+        {{- $breadcrumbs = $breadcrumbs | append $fullUrl -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+
+{{- else -}}
+  {{/* Default variant: Parse all segments */}}
+  {{- range $segments -}}
+    {{- if ne . "" -}}
+      {{- $currentPath = printf "%s%s/" $currentPath . -}}
+      {{- $fullUrl := printf "%s/%s" $host $currentPath -}}
+      {{- $breadcrumbs = $breadcrumbs | append $fullUrl -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- if gt (len $breadcrumbs) 0 -}}
+{{- $breadcrumbs | jsonify }}
+{{- else -}}
+[]{{- end -}}
