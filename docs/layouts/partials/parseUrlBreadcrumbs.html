@@ -1,0 +1,21 @@
+{{- $url := . -}}
+{{- $urlObj := urls.Parse $url -}}
+{{- $host := printf "%s://%s" $urlObj.Scheme $urlObj.Host -}}
+{{- $pathname := $urlObj.Path -}}
+
+{{- /* Split pathname and build breadcrumbs */ -}}
+{{- $breadcrumbs := slice -}}
+
+{{- /* Split path by "/" and filter out empty strings */ -}}
+{{- $segments := split $pathname "/" -}}
+{{- $currentPath := "" -}}
+
+{{- range $segments -}}
+  {{- if ne . "" -}}
+    {{- $currentPath = printf "%s%s/" $currentPath . -}}
+    {{- $fullUrl := printf "%s/%s" $host $currentPath -}}
+    {{- $breadcrumbs = $breadcrumbs | append $fullUrl -}}
+  {{- end -}}
+{{- end -}}
+
+{{- return $breadcrumbs -}}

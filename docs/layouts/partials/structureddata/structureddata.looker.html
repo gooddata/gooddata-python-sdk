@@ -1,0 +1,6 @@
+{{- $pageData := .Page -}}
+{{- $siteData := .Site -}}
+
+{{ if eq $pageData.Params.title "Introduction" }}
+ {{ partial "structureddata/structureddata.introduction.html" (dict "Page" $pageData "Site" $siteData) }}
+{{ end }}
