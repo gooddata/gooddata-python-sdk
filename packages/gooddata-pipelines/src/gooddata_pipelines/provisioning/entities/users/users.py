@@ -31,7 +31,7 @@ class UserProvisioner(Provisioning[UserFullLoad, UserIncrementalLoad]):
     source_group_incremental: list[UserIncrementalLoad]
     source_group_full: list[UserFullLoad]
 
-    current_user_id: str
+    protected_users: list[str]
 
     FULL_LOAD_TYPE: type[UserFullLoad] = UserFullLoad
     INCREMENTAL_LOAD_TYPE: type[UserIncrementalLoad] = UserIncrementalLoad
@@ -39,6 +39,9 @@ class UserProvisioner(Provisioning[UserFullLoad, UserIncrementalLoad]):
     def __init__(self, host: str, token: str) -> None:
         super().__init__(host, token)
         self.upstream_user_cache: dict[UserId, UserModel] = {}
+
+        # Protect the technical user modification
+        self.protected_users = ["admin"]
 
     def _get_current_user_id(self) -> str:
         """Gets the current user ID."""
@@ -116,10 +119,10 @@ class UserProvisioner(Provisioning[UserFullLoad, UserIncrementalLoad]):
 
         """
 
-        if user.user_id == self.current_user_id:
+        if user.user_id in self.protected_users:
             self.logger.warning(
-                f"Skipping creation/update of current user: {user.user_id}. "
-                + "Current user should not be modified.",
+                f"Skipping creation/update of protected user: {user.user_id}. "
+                + "Protected users should not be modified.",
             )
             return
 
@@ -142,10 +145,10 @@ class UserProvisioner(Provisioning[UserFullLoad, UserIncrementalLoad]):
 
     def _delete_user(self, user_id: str) -> None:
         """Deletes user from the project."""
-        if user_id == self.current_user_id:
+        if user_id in self.protected_users:
             self.logger.warning(
-                f"Skipping deletion of current user: {user_id}."
-                + " Current user should not be deleted.",
+                f"Skipping deletion of protected user: {user_id}."
+                + " Protected users should not be deleted.",
             )
             return
 
@@ -166,8 +169,8 @@ class UserProvisioner(Provisioning[UserFullLoad, UserIncrementalLoad]):
 
     def _provision_incremental_load(self) -> None:
         """Runs the incremental provisioning logic."""
-        # Set the current user ID
-        self.current_user_id = self._get_current_user_id()
+        # Set protected users
+        self.protected_users.append(self._get_current_user_id())
 
         for user in self.source_group_incremental:
             # Attempt to process each user. On failure, log the error and continue
@@ -181,8 +184,8 @@ class UserProvisioner(Provisioning[UserFullLoad, UserIncrementalLoad]):
     def _provision_full_load(self) -> None:
         """Runs the full load provisioning logic."""
 
-        # Set the current user ID
-        self.current_user_id = self._get_current_user_id()
+        # Set protected users
+        self.protected_users.append(self._get_current_user_id())
 
         # Get all upstream users
         catalog_upstream_users: list[CatalogUser] = self._api.list_users()
