@@ -4,7 +4,7 @@ name = "gooddata-flight-server"
 version = "1.54.0"
 description = "Flight RPC server to host custom functions"
 readme = "README.md"
-license = {text = "MIT"}
+license = "MIT"
 authors = [
     {name = "GoodData", email = "support@gooddata.com"}
 ]
@@ -40,11 +40,11 @@ dependencies = [
 classifiers = [
     "Development Status :: 4 - Beta",
     "Environment :: Console",
-    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Database",
     "Topic :: Scientific/Engineering",
     "Topic :: Software Development",
@@ -65,7 +65,7 @@ test = [
 ]
 type = [
     "mypy~=1.11.2",
-    "pydantic~=2.9.2"
+    "pydantic~=2.12.0",
 ]
 
 [tool.hatch.build.targets.wheel]

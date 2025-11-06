@@ -4,7 +4,7 @@ name = "gooddata-pipelines"
 version = "1.54.0"
 description = "GoodData Cloud lifecycle automation pipelines"
 authors = [{ name = "GoodData", email = "support@gooddata.com" }]
-license = { text = "MIT" }
+license = "MIT"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
@@ -37,7 +37,7 @@ test = [
 ]
 type = [
     "mypy (>=1.11.2,<2.0.0)",
-    "pydantic~=2.9.2",
+    "pydantic~=2.12.0",
 ]
 
 [build-system]
