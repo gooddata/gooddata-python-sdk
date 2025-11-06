@@ -11,7 +11,7 @@ jobs:
     if: ${{inputs.changed-python-modules == 'true'}}
     strategy:
       matrix:
-        python_version: [py313, py312, py311, py310]
+        python_version: [py314, py313, py312, py311, py310]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -21,7 +21,7 @@ jobs:
         env:
           TEST_ENVS: ${{ matrix.python_version }}
       - name: Upload coverage to Codecov
-        if: ${{ matrix.python_version == 'py313' }}
+        if: ${{ matrix.python_version == 'py314' }}
         uses: codecov/codecov-action@v3
         with:
           files: ./packages/gooddata-sdk/coverage.xml,./packages/gooddata-pandas/coverage.xml,./packages/gooddata-fdw/coverage.xml,./packages/gooddata-flight-server/coverage.xml,./packages/gooddata-flexconnect/coverage.xml
@@ -31,10 +31,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Set up python 3.13
+      - name: Set up python 3.14
         uses: astral-sh/setup-uv@v6
         with:
-          python-version: 3.13
+          python-version: 3.14
       - name: Install dependencies
         run: |
           uv sync --only-group lint
@@ -47,7 +47,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Set up python 3.13
+      - name: Set up python 3.14
         uses: astral-sh/setup-uv@v6
       - name: Install dependencies
         run: |
