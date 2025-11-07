@@ -6,8 +6,8 @@
   "@graph": [
     {
       "@type": "WebSite",
-      "@id": "https://www.gooddata.com{{ $pageData.RelPermalink }}#website",
-      "url": "https://www.gooddata.com{{ $pageData.RelPermalink }}",
+      "@id": "https://www.gooddata.com/docs/python-sdk/latest/#website",
+      "url": "https://www.gooddata.com/docs/python-sdk/latest/",
       "name": "GoodData Python SDK Documentation",
       "description": "Official documentation for GoodData Python SDK - Python interface for GoodData Agentic data intelligence platform",
       "inLanguage": "en",
@@ -18,7 +18,7 @@
         "@type": "SearchAction",
         "target": {
           "@type": "EntryPoint",
-          "urlTemplate": "https://www.gooddata.com{{ $pageData.RelPermalink }}?q={search_term_string}"
+          "urlTemplate": "https://www.gooddata.com/docs/python-sdk/latest/?q={search_term_string}"
         },
         "query-input": "required name=search_term_string"
       }
@@ -46,7 +46,7 @@
     },
     {
       "@type": "SoftwareSourceCode",
-      "@id": "https://www.gooddata.com{{ $pageData.RelPermalink }}#software",
+      "@id": "https://www.gooddata.com/docs/python-sdk/latest/#software",
       "name": "GoodData Python SDK",
       "description": "Python SDK for programmatic access to GoodData Agentic data intelligence platform",
       "programmingLanguage": {
@@ -63,10 +63,10 @@
     },
     {
       "@type": "TechArticle",
-      "@id": "https://www.gooddata.com{{ $pageData.RelPermalink }}#article",
+      "@id": "https://www.gooddata.com/docs/python-sdk/latest/#article",
       "headline": "{{ $pageData.Params.title }} | GoodData Python SDK",
       "description": "Introduction to GoodData Python SDK - overview, key concepts, and getting started guide",
-      "url": "https://www.gooddata.com{{ $pageData.RelPermalink }}",
+      "url": "https://www.gooddata.com/docs/python-sdk/latest/",
       "dateModified": {{ $pageData.Params.lastmod | jsonify }},
       "author": {
         "@id": "https://www.gooddata.com/#organization"
@@ -75,33 +75,33 @@
         "@id": "https://www.gooddata.com/#organization"
       },
       "isPartOf": {
-        "@id": "https://www.gooddata.com{{ $pageData.RelPermalink }}#website"
+        "@id": "https://www.gooddata.com/docs/python-sdk/latest/#website"
       },
       "about": {
-        "@id": "https://www.gooddata.com{{ $pageData.RelPermalink }}#software"
+        "@id": "https://www.gooddata.com/docs/python-sdk/latest/#software"
       },
       "articleSection": {{ $pageData.Parent.Title | jsonify }},
       "inLanguage": "en"
     },
     {
       "@type": "WebPage",
-      "@id": "https://www.gooddata.com{{ $pageData.RelPermalink }}#webpage",
-      "url": "https://www.gooddata.com{{ $pageData.RelPermalink }}",
+      "@id": "https://www.gooddata.com/docs/python-sdk/latest/#webpage",
+      "url": "https://www.gooddata.com/docs/python-sdk/latest/",
       "name": "Python SDK - GoodData Documentation",
       "description": "Complete documentation for GoodData Python SDK including installation, getting started, API reference, and examples",
       "isPartOf": {
-        "@id": "https://www.gooddata.com{{ $pageData.RelPermalink }}#website"
+        "@id": "https://www.gooddata.com/docs/python-sdk/latest/#website"
       },
       "about": {
-        "@id": "https://www.gooddata.com{{ $pageData.RelPermalink }}#software"
+        "@id": "https://www.gooddata.com/docs/python-sdk/latest/#software"
       },
       "breadcrumb": {
-        "@id": "https://www.gooddata.com{{ $pageData.RelPermalink }}#breadcrumb"
+        "@id": "https://www.gooddata.com/docs/python-sdk/latest/#breadcrumb"
       }
     },
     {
       "@type": "BreadcrumbList",
-      "@id": "https://www.gooddata.com{{ $pageData.RelPermalink }}#breadcrumb",
+      "@id": "https://www.gooddata.com/docs/python-sdk/latest/#breadcrumb",
       "itemListElement": [
         {
           "@type": "ListItem",
@@ -119,7 +119,7 @@
           "@type": "ListItem",
           "position": 3,
           "name": "Python SDK",
-          "item": "https://www.gooddata.com{{ $pageData.RelPermalink }}"
+          "item": "https://www.gooddata.com/docs/python-sdk/latest/"
         }
       ]
     }
