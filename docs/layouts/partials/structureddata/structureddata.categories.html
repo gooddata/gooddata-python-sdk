@@ -1,20 +1,29 @@
 {{- $pageData := .Page -}}
 {{- $siteData := .Site -}}
 
-{{- $pageUrl := printf "https://www.gooddata.com%s" $pageData.RelPermalink -}}
-{{- $basePathVersionJson := partial "parseUrlBreadcrumbs.html" (dict "url" $pageUrl "variant" "before-version") -}}
-{{- $basePathVersionArray := $basePathVersionJson | unmarshal -}}
-{{- $basePathVersion := cond (gt (len $basePathVersionArray) 0) (index $basePathVersionArray 0) "https://www.gooddata.com/docs/python-sdk/latest/" -}}
-{{- $breadcrumbsJson := partial "parseUrlBreadcrumbs.html" (dict "url" $pageUrl "variant" "after-version") -}}
+{{- $pageUrl := printf "https://www.gooddata.com/docs/python-sdk%s" $pageData.RelPermalink -}}
+{{- $breadcrumbsJson := partial "parseUrlBreadcrumbs.html" $pageUrl -}}
 {{- $breadcrumbs := $breadcrumbsJson | unmarshal -}}
+
+{{- /* Build path with /latest/ instead of version */ -}}
+{{- $pathSegments := split (trim $pageData.RelPermalink "/") "/" -}}
+{{- $latestPath := "" -}}
+{{- range $seg := $pathSegments -}}
+  {{- if or (eq $seg "latest") (findRE `^\d+\.\d+` $seg) (eq $seg "dev") (eq $seg "master") -}}
+    {{- $latestPath = printf "%s/latest" $latestPath -}}
+  {{- else -}}
+    {{- $latestPath = printf "%s/%s" $latestPath $seg -}}
+  {{- end -}}
+{{- end -}}
+{{- $latestPath = printf "%s/" $latestPath -}}
 
 {
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": "WebSite",
-      "@id": "{{ $basePathVersion }}#website",
-      "url": {{ $basePathVersion | jsonify }}
+      "@id": "https://www.gooddata.com/docs/python-sdk/latest/#website",
+      "url": "https://www.gooddata.com/docs/python-sdk/latest/",
     },
     {
       "@type": "Organization",
@@ -24,10 +33,10 @@
     },
     {
       "@type": "TechArticle",
-      "@id": "https://www.gooddata.com{{ $pageData.RelPermalink }}#article",
+      "@id": "https://www.gooddata.com/docs/python-sdk{{ $latestPath }}#article",
       "headline": "{{ $pageData.Params.title }} | GoodData Python SDK",
-      "description":{{ if $pageData.Params.description }}{{ $pageData.Params.description | jsonify }}{{ else }}{{ $pageData.Summary | jsonify }}{{ end }},
-      "url": "https://www.gooddata.com{{ $pageData.RelPermalink }}",
+      "description": {{ if $pageData.Params.description }}{{ $pageData.Params.description | jsonify }}{{ else }}{{ $pageData.Summary | jsonify }}{{ end }},
+      "url": "https://www.gooddata.com/docs/python-sdk{{ $latestPath }}",
       "dateModified": {{ $pageData.Params.lastmod | jsonify }},
       "author": {
         "@id": "https://www.gooddata.com/#organization"
@@ -36,29 +45,29 @@
         "@id": "https://www.gooddata.com/#organization"
       },
       "isPartOf": {
-        "@id": "{{ $basePathVersion }}#website"
+        "@id": "https://www.gooddata.com/docs/python-sdk/latest/#website"
       },
       "about": {
-        "@id": "{{ $basePathVersion }}#software"
+        "@id": "https://www.gooddata.com/docs/python-sdk/latest/#software"
       },
       "articleSection": {{ $pageData.Parent.Title | jsonify }},
       "inLanguage": "en"
     },
     {
       "@type": "WebPage",
-      "@id": "https://www.gooddata.com{{ $pageData.RelPermalink }}#webpage",
-      "url": "https://www.gooddata.com{{ $pageData.RelPermalink }}",
+      "@id": "https://www.gooddata.com/docs/python-sdk{{ $latestPath }}#webpage",
+      "url": "https://www.gooddata.com/docs/python-sdk{{ $latestPath }}",
       "name": "{{ $pageData.Params.title }} | GoodData Python SDK",
       "isPartOf": {
-        "@id": "{{ $basePathVersion }}#website"
+        "@id": "https://www.gooddata.com/docs/python-sdk/latest/#website"
       },
       "breadcrumb": {
-        "@id": "https://www.gooddata.com{{ $pageData.RelPermalink }}#breadcrumb"
+        "@id": "https://www.gooddata.com/docs/python-sdk{{ $latestPath }}#breadcrumb"
       }
     },
     {
       "@type": "BreadcrumbList",
-      "@id": "https://www.gooddata.com{{ $pageData.RelPermalink }}#breadcrumb",
+      "@id": "https://www.gooddata.com/docs/python-sdk{{ $latestPath }}#breadcrumb",
       "itemListElement": [
         {
           "@type": "ListItem",
@@ -71,15 +80,33 @@
           "position": 2,
           "name": "Documentation",
           "item": "https://www.gooddata.com/docs/"
-        }{{- range $index, $breadcrumb := $breadcrumbs }}
-        {{- $segments := split (trim $breadcrumb "/") "/" }}
-        {{- $name := cond (eq (add $index 3) 3) "Python SDK" (index $segments (sub (len $segments) 1) | humanize) }},
+        },
         {
           "@type": "ListItem",
-          "position": {{ add $index 3 }},
+          "position": 3,
+          "name": "Python SDK",
+          "item": "https://www.gooddata.com/docs/python-sdk/latest/"
+        }
+        {{- range $index, $breadcrumb := $breadcrumbs }}
+        {{- if ge $index 3 }}
+        {{- $segments := split (trim $breadcrumb "/") "/" }}
+        {{- $name := index $segments (sub (len $segments) 1) | humanize }}
+        {{- $latestBreadcrumb := "" }}
+        {{- range $seg := $segments }}
+          {{- if or (eq $seg "latest") (findRE `^\d+\.\d+` $seg) (eq $seg "dev") (eq $seg "master") }}
+            {{- $latestBreadcrumb = printf "%s/latest" $latestBreadcrumb }}
+          {{- else if and (ne $seg "") (ne $seg "https:") (ne $seg "www.gooddata.com") }}
+            {{- $latestBreadcrumb = printf "%s/%s" $latestBreadcrumb $seg }}
+          {{- end }}
+        {{- end }}
+        {{- $latestBreadcrumb = printf "https://www.gooddata.com%s/" $latestBreadcrumb }},
+        {
+          "@type": "ListItem",
+          "position": {{ add $index 1 }},
           "name": {{ $name | jsonify }},
-          "item": {{ $breadcrumb | jsonify }}
+          "item": {{ $latestBreadcrumb | jsonify }}
         }{{- end }}
+        {{- end }}
       ]
     }
   ]
