@@ -14,6 +14,8 @@ dependencies = [
     "gooddata-sdk~=1.54.0",
     "boto3 (>=1.39.3,<2.0.0)",
     "boto3-stubs (>=1.39.3,<2.0.0)",
+    "azure-storage-blob (>=12.19.0,<13.0.0)",
+    "azure-identity (>=1.15.0,<2.0.0)",
     "types-pyyaml (>=6.0.12.20250326,<7.0.0)",
 ]
 

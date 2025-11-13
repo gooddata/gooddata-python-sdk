@@ -5,6 +5,7 @@ from ._version import __version__
 # -------- Backup and Restore --------
 from .backup_and_restore.backup_manager import BackupManager
 from .backup_and_restore.models.storage import (
+    AzureStorageConfig,
     BackupRestoreConfig,
     LocalStorageConfig,
     S3StorageConfig,
@@ -14,6 +15,7 @@ from .backup_and_restore.restore_manager import (
     RestoreManager,
     WorkspaceToRestore,
 )
+from .backup_and_restore.storage.azure_storage import AzureStorage
 from .backup_and_restore.storage.local_storage import LocalStorage
 from .backup_and_restore.storage.s3_storage import S3Storage
 
@@ -67,6 +69,7 @@ __all__ = [
     "StorageType",
     "LocalStorage",
     "S3Storage",
+    "AzureStorage",
     "WorkspaceFullLoad",
     "WorkspaceProvisioner",
     "UserIncrementalLoad",
@@ -74,6 +77,7 @@ __all__ = [
     "PermissionFullLoad",
     "LocalStorageConfig",
     "S3StorageConfig",
+    "AzureStorageConfig",
     "PermissionIncrementalLoad",
     "UserFullLoad",
     "UserGroupFullLoad",
