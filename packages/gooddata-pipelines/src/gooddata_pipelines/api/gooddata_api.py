@@ -20,25 +20,11 @@ class ApiMethods:
     def _get_base_url(domain: str) -> str:
         """Returns the root endpoint for the GoodData Cloud API.
 
-        Method ensures that the URL starts with "https://" and does not
-        end with a trailing slash.
-
         Args:
             domain (str): The domain of the GoodData Cloud instance.
         Returns:
             str: The base URL for the GoodData Cloud API.
         """
-        # Remove trailing slash if present.
-        if domain[-1] == "/":
-            domain = domain[:-1]
-
-        if not domain.startswith("https://") and not domain.startswith(
-            "http://"
-        ):
-            domain = f"https://{domain}"
-
-        if domain.startswith("http://") and not domain.startswith("https://"):
-            domain = domain.replace("http://", "https://")
 
         return f"{domain}/api/{API_VERSION}"
 
