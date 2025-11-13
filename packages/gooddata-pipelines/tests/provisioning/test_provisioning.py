@@ -119,7 +119,7 @@ def test_create_from_profile() -> None:
         profile="mock_profile",
         profiles_path=Path(f"{TEST_DATA_DIR}/profiles.yaml"),
     )
-    assert provisioner._api._domain == "http://localhost:3000"
+    assert provisioner._api._domain == "https://localhost:3000"
     assert provisioner._api._token == os.environ.pop("MOCK_TOKEN")
 
 
