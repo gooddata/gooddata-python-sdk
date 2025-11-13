@@ -12,6 +12,16 @@ packages/gooddata-sdk/tests/catalog/translate
 .vscode
 .ruff_cache
 
+# Python build artifacts
+.tox
+*.egg-info
+dist/
+build/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
 docs/node_modules
 docs/public
 docs/resources/_gen

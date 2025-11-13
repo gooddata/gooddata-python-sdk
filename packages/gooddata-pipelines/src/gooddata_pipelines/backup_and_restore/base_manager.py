@@ -6,7 +6,7 @@ from typing import Type, TypeVar
 
 from gooddata_sdk.utils import PROFILES_FILE_PATH, profile_content
 
-from gooddata_pipelines.api.gooddata_api_wrapper import GoodDataApi
+from gooddata_pipelines.api import GoodDataApi
 from gooddata_pipelines.backup_and_restore.models.storage import (
     BackupRestoreConfig,
     StorageType,
@@ -18,6 +18,9 @@ from gooddata_pipelines.backup_and_restore.storage.local_storage import (
     LocalStorage,
 )
 from gooddata_pipelines.backup_and_restore.storage.s3_storage import S3Storage
+from gooddata_pipelines.backup_and_restore.storage.azure_storage import (
+    AzureStorage,
+)
 from gooddata_pipelines.logger import LogObserver
 from gooddata_pipelines.utils.file_utils import JsonUtils, YamlUtils
 
@@ -44,6 +47,8 @@ class BaseManager(abc.ABC):
         """Returns the storage class based on the storage type."""
         if conf.storage_type == StorageType.S3:
             return S3Storage(conf)
+        elif conf.storage_type == StorageType.AZURE:
+            return AzureStorage(conf)
         elif conf.storage_type == StorageType.LOCAL:
             return LocalStorage(conf)
         else:
