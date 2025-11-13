@@ -11,7 +11,7 @@ You can use the package to manage following resources in GDC:
    - User Data Filters
    - Child workspaces (incl. Workspace Data Filter settings)
 1. Backup and restore of workspaces
-   - Create and backup snapshots of workspace metadata.
+   - Create and backup snapshots of workspace metadata to local storage, AWS S3, or Azure Blob Storage
 1. LDM Extension
    - extend the Logical Data Model of a child workspace with custom datasets and fields
 
@@ -34,7 +34,7 @@ import logging
 from csv import DictReader
 from pathlib import Path
 
-# Import the Entity Provisioner class and corresponding model from gooddata_pipelines library
+# Import the Entity Provisioner class and corresponding model from the gooddata_pipelines library
 from gooddata_pipelines import UserFullLoad, UserProvisioner
 
 # Create the Provisioner instance - you can also create the instance from a GDC yaml profile
@@ -62,12 +62,51 @@ provisioner.full_load(full_load_data)
 
 ```
 
+Ready-made scripts covering the basic use cases can be found here in the [GoodData Productivity Tools](https://github.com/gooddata/gooddata-productivity-tools) repository.
+
+## Backup and Restore of Workspaces
+
+The backup and restore module allows you to create snapshots of GoodData Cloud workspaces and restore them later. Backups can be stored locally, in AWS S3, or Azure Blob Storage.
+
+```python
+import os
+
+from gooddata_pipelines import BackupManager
+from gooddata_pipelines.backup_and_restore.models.storage import (
+    BackupRestoreConfig,
+    LocalStorageConfig,
+    StorageType,
+)
+
+# Configure backup storage
+config = BackupRestoreConfig(
+    storage_type=StorageType.LOCAL,
+    storage=LocalStorageConfig(),
+)
+
+# Create the BackupManager instance
+backup_manager = BackupManager.create(
+    config=config,
+    host=os.environ["GDC_HOSTNAME"],
+    token=os.environ["GDC_AUTH_TOKEN"]
+)
+
+# Backup specific workspaces
+backup_manager.backup_workspaces(workspace_ids=["workspace1", "workspace2"])
+
+# Backup workspace hierarchies (workspace + all children)
+backup_manager.backup_hierarchies(workspace_ids=["parent_workspace"])
+
+# Backup entire organization
+backup_manager.backup_entire_organization()
+```
+
+For S3 or Azure Blob Storage, configure the appropriate storage type and credentials in `BackupRestoreConfig`.
+
 ## Bugs & Requests
 
-Please use the [GitHub issue tracker](https://github.com/gooddata/gooddata-python-sdk/issues) to submit bugs
-or request features.
+Please use the [GitHub issue tracker](https://github.com/gooddata/gooddata-python-sdk/issues) to submit bugs or request features.
 
 ## Changelog
 
-See [Github releases](https://github.com/gooddata/gooddata-python-sdk/releases) for released versions
-and a list of changes.
+See [GitHub releases](https://github.com/gooddata/gooddata-python-sdk/releases) for released versions and a list of changes.
