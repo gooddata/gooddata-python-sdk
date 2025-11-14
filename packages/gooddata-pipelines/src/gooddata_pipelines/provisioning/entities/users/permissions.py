@@ -4,7 +4,8 @@
 
 from typing import TypeVar
 
-from gooddata_pipelines.api.exceptions import GoodDataApiException
+from gooddata_api_client.exceptions import NotFoundException  # type: ignore
+
 from gooddata_pipelines.provisioning.entities.users.models.permissions import (
     EntityType,
     PermissionDeclaration,
@@ -14,7 +15,6 @@ from gooddata_pipelines.provisioning.entities.users.models.permissions import (
     WSPermissionsDeclarations,
 )
 from gooddata_pipelines.provisioning.provisioning import Provisioning
-from gooddata_pipelines.provisioning.utils.exceptions import BaseUserException
 
 # Type variable for permission models (PermissionIncrementalLoad or PermissionFullLoad)
 PermissionModel = TypeVar(
@@ -109,20 +109,32 @@ class PermissionProvisioner(
 
     def _validate_permission(
         self, permission: PermissionFullLoad | PermissionIncrementalLoad
-    ) -> None:
-        """Validates if the permission is correctly defined."""
-        if permission.entity_type == EntityType.user:
-            self._api.get_user(
-                permission.entity_id, error_message="User not found"
-            )
-        else:
-            self._api.get_user_group(
-                permission.entity_id, error_message="User group not found"
+    ) -> bool:
+        """Validates that all entities referenced in the permission exist.
+
+        Raises:
+            RuntimeError: If an unexpected error is encountered.
+        """
+        all_entities_exist = True
+        try:
+            if permission.entity_type == EntityType.user:
+                self._api._sdk.catalog_user.get_user(permission.entity_id)
+            else:
+                self._api._sdk.catalog_user.get_user_group(permission.entity_id)
+
+            self._api._sdk.catalog_workspace.get_workspace(
+                permission.workspace_id
             )
 
-        self._api.get_workspace(
-            permission.workspace_id, error_message="Workspace not found"
-        )
+        except NotFoundException:
+            all_entities_exist = False
+
+        except Exception as e:
+            raise RuntimeError(
+                f"Failed to validate permission: {e.__class__.__name__}: {e}"
+            )
+
+        return all_entities_exist
 
     def _filter_invalid_permissions(
         self,
@@ -132,11 +144,9 @@ class PermissionProvisioner(
         valid_permissions: list[PermissionModel] = []
 
         for permission in permissions:
-            try:
-                self._validate_permission(permission)
-            except (BaseUserException, GoodDataApiException) as e:
+            if not self._validate_permission(permission):
                 self.logger.error(
-                    f"Skipping {permission}. Error: {e.error_message} "
+                    f"Skipping {permission}. Error: Permission references non-existent entities."
                     + f"Context: {permission.__dict__}"
                 )
                 continue

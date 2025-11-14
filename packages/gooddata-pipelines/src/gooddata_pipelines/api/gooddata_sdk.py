@@ -52,20 +52,6 @@ class SdkMethods:
         except Exception:
             return False
 
-    def get_workspace(self, workspace_id: str, **_: str) -> CatalogWorkspace:
-        """
-        Calls GoodData Python SDK to retrieve a workspace by its ID.
-
-        Args:
-            workspace_id (str): The ID of the workspace to retrieve.
-        Returns:
-            CatalogWorkspace: The workspace object retrieved from the SDK.
-        Raises:
-            GoodDataApiException: If the workspace cannot be retrieved, an exception
-            is raised with additional context information.
-        """
-        return self._sdk.catalog_workspace.get_workspace(workspace_id)
-
     def delete_panther_workspace(self, workspace_id: str) -> None:
         """
         Calls GoodData Python SDK to delete a workspace by its ID.
@@ -184,20 +170,6 @@ class SdkMethods:
             workspace_id, ws_permissions
         )
 
-    def get_user(self, user_id: str, **_: str) -> CatalogUser:
-        """
-        Calls GoodData Python SDK to retrieve a user by its ID.
-
-        Args:
-            user_id (str): The ID of the user to retrieve.
-        Returns:
-            CatalogUser: The user object retrieved from the SDK.
-        Raises:
-            GoodDataApiException: If the user cannot be retrieved, an exception
-            is raised with additional context information.
-        """
-        return self._sdk.catalog_user.get_user(user_id)
-
     def create_or_update_user(self, user: CatalogUser, **_: str) -> None:
         """
         Calls GoodData Python SDK to create or update a user.
@@ -225,20 +197,6 @@ class SdkMethods:
             is raised with additional context information.
         """
         return self._sdk.catalog_user.delete_user(user_id)
-
-    def get_user_group(self, user_group_id: str, **_: str) -> CatalogUserGroup:
-        """
-        Calls GoodData Python SDK to retrieve a user group by its ID.
-
-        Args:
-            user_group_id (str): The ID of the user group to retrieve.
-        Returns:
-            CatalogUserGroup: The user group object retrieved from the SDK.
-        Raises:
-            GoodDataApiException: If the user group cannot be retrieved, an exception
-            is raised with additional context information.
-        """
-        return self._sdk.catalog_user.get_user_group(user_group_id)
 
     def list_user_groups(self) -> list[CatalogUserGroup]:
         """
