@@ -7,7 +7,6 @@ from gooddata_sdk.catalog.workspace.entity_model.workspace import (
     CatalogWorkspace,
 )
 
-from gooddata_pipelines.api.exceptions import GoodDataApiException
 from gooddata_pipelines.provisioning.entities.workspaces.models import (
     WorkspaceDataMaps,
     WorkspaceFullLoad,
@@ -93,6 +92,31 @@ class WorkspaceProvisioner(
 
         return ids_to_update
 
+    def _get_panther_children_workspaces(
+        self, parent_workspace_ids: set[str]
+    ) -> list[CatalogWorkspace]:
+        """
+        Calls GoodData Python SDK to retrieve all workspaces in domain and filters the
+        result by the set of parent workspace IDs.
+
+        Args:
+            parent_workspace_ids (set[str]): A set of parent workspace IDs to filter
+                child workspaces.
+        Returns:
+            list[CatalogWorkspace]: List of child workspaces in the parent workspace.
+        """
+        all_workspaces: list[CatalogWorkspace] = (
+            self._api._sdk.catalog_workspace.list_workspaces()
+        )
+
+        children: list[CatalogWorkspace] = [
+            workspace
+            for workspace in all_workspaces
+            if workspace.parent_id in parent_workspace_ids
+        ]
+
+        return children
+
     def _create_or_update_panther_workspaces(
         self,
         workspace_ids_to_create: set[str],
@@ -121,20 +145,21 @@ class WorkspaceProvisioner(
             parent_workspace_id: str = child_to_parent_map[context.workspace_id]
 
             try:
-                self._api.create_or_update_panther_workspace(
-                    workspace_id=context.workspace_id,
-                    workspace_name=str(context.workspace_name),
-                    parent_id=parent_workspace_id,
+                self._api._sdk.catalog_workspace.create_or_update(
+                    CatalogWorkspace(
+                        workspace_id=source_workspace.workspace_id,
+                        name=source_workspace.workspace_name,
+                        parent_id=parent_workspace_id,
+                    )
                 )
                 self.logger.info(
                     f"{action.title()}d workspace: {context.workspace_id}"
                 )
 
-            except GoodDataApiException as e:
-                combined_context = {**context.__dict__, **e.__dict__}
+            except Exception as e:
                 self.logger.error(
                     f"Failed to {action.title()} workspace: {context.workspace_id}. "
-                    + f"Error: {e} Context: {combined_context}"
+                    + f"Error: {e.__class__.__name__}: {e} Context: {context.__dict__}"
                 )
 
             # If child workspace has WDF settings, apply them
@@ -155,16 +180,15 @@ class WorkspaceProvisioner(
                 workspace_name=workspace_id_to_name_map.get(workspace_id),
             )
             try:
-                self._api.delete_panther_workspace(workspace_id)
+                self._api._sdk.catalog_workspace.delete_workspace(workspace_id)
                 self.logger.info(
                     f"Deleted workspace: {workspace_context.workspace_id}"
                 )
 
-            except GoodDataApiException as e:
-                exception_context = {**workspace_context.__dict__, **e.__dict__}
+            except Exception as e:
                 self.logger.error(
                     f"Failed to delete workspace: {workspace_context.workspace_id}. "
-                    + f"Error: {e} Context: {exception_context}"
+                    + f"Error: {e.__class__.__name__}: {e} Context: {workspace_context.__dict__}"
                 )
 
     def verify_workspace_provisioning(
@@ -178,7 +202,7 @@ class WorkspaceProvisioner(
         }
 
         panther_workspaces: list[CatalogWorkspace] = (
-            self._api.get_panther_children_workspaces(parent_workspace_ids)
+            self._get_panther_children_workspaces(parent_workspace_ids)
         )
 
         panther_ids_names: set[tuple[str, str]] = {
@@ -208,7 +232,7 @@ class WorkspaceProvisioner(
         )
 
         # Get upstream children of all parent workspaces.
-        self.upstream_group = self._api.get_panther_children_workspaces(
+        self.upstream_group = self._get_panther_children_workspaces(
             self.maps.parent_ids
         )
 
@@ -275,7 +299,7 @@ class WorkspaceProvisioner(
         )
 
         # Get upstream children of all parent workspaces.
-        self.upstream_group = self._api.get_panther_children_workspaces(
+        self.upstream_group = self._get_panther_children_workspaces(
             self.maps.parent_ids
         )
 

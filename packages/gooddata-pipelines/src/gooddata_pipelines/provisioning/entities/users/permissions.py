@@ -44,7 +44,9 @@ class PermissionProvisioner(
         users: TargetsPermissionDict = {}
         user_groups: TargetsPermissionDict = {}
 
-        upstream_declaration = self._api.get_declarative_permissions(ws_id)
+        upstream_declaration = (
+            self._api._sdk.catalog_permission.get_declarative_permissions(ws_id)
+        )
 
         for permission in upstream_declaration.permissions:
             permission_type, id = (
@@ -69,7 +71,9 @@ class PermissionProvisioner(
         self, ws_id: str
     ) -> PermissionDeclaration | None:
         """Retrieves upstream permission declaration for a workspace."""
-        declaration = self._api.get_declarative_permissions(ws_id)
+        declaration = (
+            self._api._sdk.catalog_permission.get_declarative_permissions(ws_id)
+        )
         return PermissionDeclaration.from_sdk_api(declaration)
 
     def _get_upstream_declarations(
@@ -176,7 +180,9 @@ class PermissionProvisioner(
 
             ws_permissions = upstream_declarations[ws_id].to_sdk_api()
 
-            self._api.put_declarative_permissions(ws_id, ws_permissions)
+            self._api._sdk.catalog_permission.put_declarative_permissions(
+                ws_id, ws_permissions
+            )
             self.logger.info(f"Updated permissions for workspace {ws_id}")
 
     def _provision_full_load(self) -> None:
@@ -195,5 +201,7 @@ class PermissionProvisioner(
         for ws_id, declaration in input_declarations.items():
             ws_permissions = declaration.to_sdk_api()
 
-            self._api.put_declarative_permissions(ws_id, ws_permissions)
+            self._api._sdk.catalog_permission.put_declarative_permissions(
+                ws_id, ws_permissions
+            )
             self.logger.info(f"Updated permissions for workspace {ws_id}")

@@ -5,11 +5,10 @@
 from gooddata_sdk.sdk import GoodDataSdk
 
 from gooddata_pipelines.api.gooddata_api import ApiMethods
-from gooddata_pipelines.api.gooddata_sdk import SdkMethods
 
 
 # TODO: Refactor the GoodDataApi class to use composition instead of inheritance.
-class GoodDataApi(SdkMethods, ApiMethods):
+class GoodDataApi(ApiMethods):
     """Wrapper class for the GoodData Cloud API.
 
     This class combines interactions with the GoodData Python SDK and direct API

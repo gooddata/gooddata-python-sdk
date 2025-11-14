@@ -120,7 +120,9 @@ class UserDataFilterProvisioner(
             user_data_filters = workspace_user_data_filter.user_data_filters
 
             gd_user_data_filters: list[CatalogUserDataFilter] = (
-                self._api.list_user_data_filters(workspace_id)
+                self._api._sdk.catalog_workspace.list_user_data_filters(
+                    workspace_id
+                )
             )
 
             gd_udf_ids = {
@@ -170,7 +172,7 @@ class UserDataFilterProvisioner(
                 )
 
                 try:
-                    self._api.create_or_update_user_data_filter(
+                    self._api._sdk.catalog_workspace.create_or_update_user_data_filter(
                         workspace_id, user_data_filter
                     )
                     self.logger.info(
@@ -190,7 +192,9 @@ class UserDataFilterProvisioner(
         """Delete user data filters in GoodData workspaces."""
         for udf_id in udf_ids_to_delete:
             try:
-                self._api.delete_user_data_filter(workspace_id, udf_id)
+                self._api._sdk.catalog_workspace.delete_user_data_filter(
+                    workspace_id, udf_id
+                )
                 self.logger.info(
                     f"Deleted user data filters for user with id {udf_id}"
                 )

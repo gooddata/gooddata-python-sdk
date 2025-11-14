@@ -20,13 +20,3 @@ class WorkspaceContext:
         self.workspace_name = workspace_name
         self.wdf_id = wdf_id
         self.wdf_values = wdf_values
-
-
-class UserContext:
-    user_id: str
-    user_groups: str
-
-    def __init__(self, user_id: str, user_groups: list[str]):
-        """User context object, stringifies list of user groups"""
-        self.user_id = user_id
-        self.user_groups = ",".join(user_groups)

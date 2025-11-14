@@ -40,7 +40,7 @@ class BackupManager(BaseManager):
     def __init__(self, host: str, token: str, config: BackupRestoreConfig):
         super().__init__(host, token, config)
 
-        self.org_id = self._api.get_organization_id()
+        self.org_id = self._api._sdk.catalog_organization.organization_id
 
         self.loader = BackupInputProcessor(self._api, self.config.api_page_size)
 
@@ -136,7 +136,9 @@ class BackupManager(BaseManager):
         """Stores the filter views in the specified export path."""
         # Get the filter views YAML files from the API
         with self._api_rate_limiter:
-            self._api.store_declarative_filter_views(workspace_id, export_path)
+            self._api._sdk.catalog_workspace.store_declarative_filter_views(
+                workspace_id, export_path
+            )
 
         # Move filter views to the subfolder containing the analytics model
         self._move_folder(
@@ -185,7 +187,7 @@ class BackupManager(BaseManager):
                 # directly instead of reorganizing the folder structures. That should
                 # be more transparent/readable and possibly safer for threading
                 with self._api_rate_limiter:
-                    self._api.store_declarative_workspace(
+                    self._api._sdk.catalog_workspace.store_declarative_workspace(
                         workspace_id, export_path
                     )
                 self.store_declarative_filter_views(export_path, workspace_id)

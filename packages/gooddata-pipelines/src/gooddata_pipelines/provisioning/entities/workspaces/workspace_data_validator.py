@@ -127,9 +127,13 @@ class WorkspaceDataValidator:
         """
         Raises an error if a parent workspace does not exist in Panther.
         """
-        if not self.api.check_workspace_exists(parent_id):
+        try:
+            self.api._sdk.catalog_workspace.get_workspace(parent_id)
+
+        except Exception as e:
             raise WorkspaceException(
-                f"Parent workspace {parent_id} does not exist in Panther.",
+                f"{e.__class__.__name__}: Parent workspace {parent_id} does not exist in Panther.",
+                e,
                 workspace_id=parent_id,
             )
 

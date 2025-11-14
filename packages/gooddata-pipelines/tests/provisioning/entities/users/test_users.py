@@ -238,7 +238,7 @@ def test_user_provisioning(
     upstream_users = parse_user_data(raw_upstream_users)
 
     mocker.patch.object(
-        user_provisioner._api,
+        user_provisioner._api._sdk.catalog_user,
         "list_users",
         return_value=upstream_users,
     )
@@ -293,12 +293,12 @@ def test_user_provisioning(
         deleted_users.append(user_id)
 
     mocker.patch.object(
-        user_provisioner._api,
+        user_provisioner._api._sdk.catalog_user,
         "create_or_update_user",
         side_effect=patch_create_or_update_user,
     )
     mocker.patch.object(
-        user_provisioner._api,
+        user_provisioner._api._sdk.catalog_user,
         "delete_user",
         side_effect=patch_delete_user,
     )
