@@ -80,12 +80,6 @@ class S3Storage(BackupStorage):
         self.logger.info(f"Uploading {org_id} to {storage_path}")
         folder = f"{folder}/{org_id}"
         for subdir, dirs, files in os.walk(folder):
-            full_path = os.path.join(subdir)
-            export_path = (
-                f"{self._backup_path}{org_id}/{full_path[len(folder) + 1 :]}/"
-            )
-            self._client.put_object(Bucket=self._config.bucket, Key=export_path)
-
             for file in files:
                 full_path = os.path.join(subdir, file)
                 with open(full_path, "rb") as data:

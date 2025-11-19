@@ -4,7 +4,7 @@ linkTitle: "Workspace Backup"
 weight: 2
 ---
 
-Workspace Backup allows you to create backups of one or more workspaces. Backups can be stored either locally or uploaded to an S3 bucket.
+Workspace Backup allows you to create backups of one or more workspaces. Backups can be stored locally, uploaded to an S3 bucket, or uploaded to Azure Blob Storage.
 
 The backup stores following definitions:
 
@@ -130,6 +130,43 @@ s3_storage_config = S3StorageConfig.from_aws_profile(
 
 # Create backup configuration
 config = BackupRestoreConfig(storage_type=StorageType.S3, storage=s3_storage_config)
+
+# Initialize the BackupManager with your configuration and GoodData credentials
+backup_manager = BackupManager.create(
+    config, os.environ["GD_HOST"], os.environ["GD_TOKEN"]
+)
+
+# Optionally set up a logger and subscribe it to the logs from the BackupManager
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+backup_manager.logger.subscribe(logger)
+
+# Run the backup
+backup_manager.backup_workspaces(workspace_ids=["workspace_id_1", "workspace_id_2"])
+```
+
+### Example with Azure Blob Storage
+
+Here is an example using Azure Blob Storage with Workload Identity:
+
+```python
+import logging
+import os
+
+from gooddata_pipelines import (
+    BackupManager,
+    BackupRestoreConfig,
+    AzureStorageConfig,
+    StorageType,
+)
+
+# Create storage configuration
+azure_storage_config = AzureStorageConfig.from_workload_identity(
+    backup_path="backup_folder", account_name="mystorageaccount", container="my-container"
+)
+
+# Create backup configuration
+config = BackupRestoreConfig(storage_type=StorageType.AZURE, storage=azure_storage_config)
 
 # Initialize the BackupManager with your configuration and GoodData credentials
 backup_manager = BackupManager.create(
