@@ -6,6 +6,7 @@ from gooddata_sdk import (
     ArithmeticMetric,
     Attribute,
     ComputeToSdkConverter,
+    InlineFilter,
     MetricValueFilter,
     NegativeAttributeFilter,
     PopDateMetric,
@@ -227,6 +228,22 @@ def test_ranking_filter_with_dimensionality_conversion():
     assert result.dimensionality[0] == "attribute1.localId"
     assert result.operator == "TOP"
     assert result.value == 5
+
+
+def test_inline_filter():
+    filter_dict = json.loads(
+        """
+        {
+            "inline": {
+                "filter": "{label/process_date.month} = \\"2025-02\\""
+            }
+        }
+        """
+    )
+
+    result = ComputeToSdkConverter.convert_filter(filter_dict)
+    assert isinstance(result, InlineFilter)
+    assert result.maql == '{label/process_date.month} = "2025-02"'
 
 
 def test_simple_metric_conversion():
