@@ -8,6 +8,7 @@ from gooddata_sdk.compute.model.filter import (
     AllTimeFilter,
     BoundedFilter,
     Filter,
+    InlineFilter,
     MetricValueFilter,
     NegativeAttributeFilter,
     PositiveAttributeFilter,
@@ -132,6 +133,11 @@ class ComputeToSdkConverter:
                 operator=f["operator"],
                 value=f["value"],
             )
+
+        if "inline" in filter_dict:
+            f = filter_dict["inline"]
+
+            return InlineFilter(maql=f["filter"])
 
         raise ValueError(f"Unsupported filter definition type: {filter_dict}")
 
