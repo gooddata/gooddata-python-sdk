@@ -13,6 +13,7 @@ from gooddata_api_client.model.declarative_dataset import DeclarativeDataset
 from gooddata_api_client.model.declarative_dataset_sql import DeclarativeDatasetSql
 from gooddata_api_client.model.declarative_fact import DeclarativeFact
 from gooddata_api_client.model.declarative_label import DeclarativeLabel
+from gooddata_api_client.model.declarative_label_translation import DeclarativeLabelTranslation
 from gooddata_api_client.model.declarative_reference import DeclarativeReference
 from gooddata_api_client.model.declarative_reference_source import DeclarativeReferenceSource
 from gooddata_api_client.model.declarative_source_fact_reference import DeclarativeSourceFactReference
@@ -77,6 +78,7 @@ class CatalogDeclarativeAttribute(Base):
     description: Optional[str] = None
     tags: Optional[list[str]] = None
     is_hidden: Optional[bool] = None
+    locale: Optional[str] = None
 
     @staticmethod
     def client_class() -> type[DeclarativeAttribute]:
@@ -144,6 +146,16 @@ class CatalogDeclarativeDatasetSql(Base):
 
 
 @attr.s(auto_attribs=True, kw_only=True)
+class CatalogDeclarativeLabelTranslation(Base):
+    locale: str
+    source_column: str
+
+    @staticmethod
+    def client_class() -> type[DeclarativeLabelTranslation]:
+        return DeclarativeLabelTranslation
+
+
+@attr.s(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeLabel(Base):
     id: str
     title: str
@@ -153,6 +165,8 @@ class CatalogDeclarativeLabel(Base):
     tags: Optional[list[str]] = None
     value_type: Optional[str] = None
     is_hidden: Optional[bool] = None
+    locale: Optional[str] = None
+    translations: Optional[list[CatalogDeclarativeLabelTranslation]] = None
 
     @staticmethod
     def client_class() -> type[DeclarativeLabel]:
