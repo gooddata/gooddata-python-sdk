@@ -56,7 +56,7 @@ Documentation = "https://gooddata-flight-server.readthedocs.io/en/v1.55.0"
 Source = "https://github.com/gooddata/gooddata-python-sdk"
 
 [project.scripts]
-gooddata-flight-server = "gooddata_flight_server.cli:main"
+gooddata-flight-server = "gooddata_flight_server.cli:server_cli"
 
 [dependency-groups]
 test = [
