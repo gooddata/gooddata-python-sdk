@@ -36,6 +36,14 @@ class CatalogLabel(AttrCatalogEntity):
     def is_hidden(self) -> Optional[bool]:
         return safeget(self.json_api_attributes, ["isHidden"])
 
+    @property
+    def locale(self) -> Optional[str]:
+        return safeget(self.json_api_attributes, ["locale"])
+
+    @property
+    def translations(self) -> Optional[list[dict[str, str]]]:
+        return safeget(self.json_api_attributes, ["translations"])
+
     def as_computable(self) -> Attribute:
         return Attribute(local_id=self.id, label=self.id)
 
@@ -72,6 +80,10 @@ class CatalogAttribute(AttrCatalogEntity):
     @property
     def is_hidden(self) -> Optional[bool]:
         return safeget(self.json_api_attributes, ["isHidden"])
+
+    @property
+    def locale(self) -> Optional[bool]:
+        return safeget(self.json_api_attributes, ["locale"])
 
     def primary_label(self) -> Union[CatalogLabel, None]:
         # use cast as mypy is not applying next, it claims, type is filter[CatalogLabel]
