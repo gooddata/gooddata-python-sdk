@@ -89,7 +89,7 @@ def _manage_node_cli() -> None:
         sys.exit(1)
 
 
-def main(cli_args: list[str]) -> None:
+def main() -> None:
     """
     The entrypoint for gdc cli.
     """
@@ -102,7 +102,7 @@ def main(cli_args: list[str]) -> None:
     parser.add_argument("--only", help="Specify available granularity for action.", nargs="+", choices=_SUPPORTED)
 
     _manage_node_cli()
-    args = parser.parse_args(cli_args)
+    args = parser.parse_args()
     manifest_directory = get_manifest_directory()
     if args.action == "clone":
         _clone(manifest_directory, args)
@@ -111,4 +111,4 @@ def main(cli_args: list[str]) -> None:
 
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    main()
