@@ -885,6 +885,10 @@
           "measure": {
             "$ref": "#/components/schemas/MeasureItem"
           },
+          "measureTitle": {
+            "description": "The title of the measure being analyzed",
+            "type": "string"
+          },
           "referencePeriod": {
             "description": "The reference time period",
             "type": "string"
@@ -900,6 +904,7 @@
           "dateAttribute",
           "filters",
           "measure",
+          "measureTitle",
           "referencePeriod",
           "useSmartAttributeSelection"
         ],
@@ -1143,6 +1148,24 @@
             "description": "Maximum number of search results.",
             "format": "int32",
             "type": "integer"
+          },
+          "objectTypes": {
+            "description": "List of object types to filter the search and visualization building. If empty or null, all object types are considered.",
+            "items": {
+              "description": "Object type to filter.",
+              "enum": [
+                "attribute",
+                "metric",
+                "fact",
+                "label",
+                "date",
+                "dataset",
+                "visualization",
+                "dashboard"
+              ],
+              "type": "string"
+            },
+            "type": "array"
           },
           "question": {
             "description": "User question",
@@ -2328,7 +2351,8 @@
               "RUNNING",
               "COMPLETED",
               "FAILED",
-              "NOT_FOUND"
+              "NOT_FOUND",
+              "DISABLED"
             ],
             "type": "string"
           },
@@ -2626,6 +2650,49 @@
           {
             "$ref": "#/components/schemas/RangeMeasureValueFilter"
           }
+        ],
+        "type": "object"
+      },
+      "MemoryItemCreatedByUsers": {
+        "properties": {
+          "reasoning": {
+            "description": "Reasoning for error states",
+            "type": "string"
+          },
+          "users": {
+            "description": "Users who created memory item",
+            "items": {
+              "$ref": "#/components/schemas/MemoryItemUser"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "reasoning",
+          "users"
+        ],
+        "type": "object"
+      },
+      "MemoryItemUser": {
+        "description": "Users who created memory item",
+        "properties": {
+          "firstname": {
+            "description": "First name of the user who created memory item",
+            "type": "string"
+          },
+          "lastname": {
+            "description": "Last name of the user who created memory item",
+            "type": "string"
+          },
+          "userId": {
+            "description": "User ID of the user who created memory item",
+            "type": "string"
+          }
+        },
+        "required": [
+          "firstname",
+          "lastname",
+          "userId"
         ],
         "type": "object"
       },
@@ -3037,7 +3104,8 @@
               "RUNNING",
               "COMPLETED",
               "FAILED",
-              "NOT_FOUND"
+              "NOT_FOUND",
+              "DISABLED"
             ],
             "type": "string"
           }
@@ -3368,7 +3436,8 @@
               "CREATE_VISUALIZATION",
               "EXTEND_VISUALIZATION",
               "HOWTO",
-              "CHANGE_ANALYSIS"
+              "CHANGE_ANALYSIS",
+              "ALERT"
             ],
             "type": "string"
           }
@@ -3902,7 +3971,8 @@
             "enum": [
               "RUNNING",
               "COMPLETED",
-              "FAILED"
+              "FAILED",
+              "DISABLED"
             ],
             "type": "string"
           }
@@ -4126,7 +4196,7 @@
             "description": "OK"
           }
         },
-        "summary": "Get Analytics Catalog CreatedBy",
+        "summary": "Get Analytics Catalog CreatedBy Users",
         "tags": [
           "Smart Functions",
           "actions"
@@ -4448,6 +4518,41 @@
           }
         },
         "summary": "Trigger Quality Issues Calculation",
+        "tags": [
+          "Smart Functions",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/memory/createdBy": {
+      "get": {
+        "description": "Returns a list of Users who created any memory item for this workspace",
+        "operationId": "memoryCreatedByUsers",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MemoryItemCreatedByUsers"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Get AI Memory CreatedBy Users",
         "tags": [
           "Smart Functions",
           "actions"

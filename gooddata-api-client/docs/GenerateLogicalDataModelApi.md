@@ -53,6 +53,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     columns=[
                         SqlColumn(
                             data_type="INT",
+                            description="Customer unique identifier",
                             name="customer_id",
                         ),
                     ],
@@ -78,6 +79,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     columns=[
                         DeclarativeColumn(
                             data_type="INT",
+                            description="Customer unique identifier",
                             is_primary_key=True,
                             name="customer_id",
                             referenced_table_column="customer_id",
@@ -96,6 +98,7 @@ with gooddata_api_client.ApiClient() as api_client:
         secondary_label_prefix="ls",
         separator="__",
         table_prefix="out_table",
+        translation_prefix="tr",
         view_prefix="out_view",
         wdf_prefix="wdf",
         workspace_id="workspace_id_example",

@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **description** | **str** |  | [optional] 
 **granularity** | **str** |  | [optional] 
 **is_hidden** | **bool** |  | [optional] 
+**locale** | **str** |  | [optional] 
 **sort_column** | **str** |  | [optional] 
 **sort_direction** | **str** |  | [optional] 
 **source_column** | **str** |  | [optional] 
