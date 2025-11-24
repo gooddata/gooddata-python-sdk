@@ -337,7 +337,7 @@
             "type": "array"
           },
           "filters": {
-            "description": "Various filter types to filter execution result.",
+            "description": "Various filter types to filter execution result. For anomaly detection, exactly one date filter (RelativeDateFilter or AbsoluteDateFilter) is required.",
             "items": {
               "$ref": "#/components/schemas/FilterDefinition"
             },
@@ -370,6 +370,9 @@
           },
           {
             "$ref": "#/components/schemas/RelativeWrapper"
+          },
+          {
+            "$ref": "#/components/schemas/AnomalyDetectionWrapper"
           }
         ],
         "type": "object"
@@ -383,6 +386,52 @@
           {
             "$ref": "#/components/schemas/Value"
           }
+        ],
+        "type": "object"
+      },
+      "AnomalyDetection": {
+        "properties": {
+          "granularity": {
+            "description": "Date granularity for anomaly detection. Only time-based granularities are supported (MINUTE, HOUR, DAY, WEEK, MONTH, QUARTER, YEAR).",
+            "enum": [
+              "MINUTE",
+              "HOUR",
+              "DAY",
+              "WEEK",
+              "MONTH",
+              "QUARTER",
+              "YEAR"
+            ],
+            "type": "string"
+          },
+          "measure": {
+            "$ref": "#/components/schemas/LocalIdentifier"
+          },
+          "sensitivity": {
+            "default": "MEDIUM",
+            "description": "Sensitivity level for anomaly detection",
+            "enum": [
+              "LOW",
+              "MEDIUM",
+              "HIGH"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "granularity",
+          "measure"
+        ],
+        "type": "object"
+      },
+      "AnomalyDetectionWrapper": {
+        "properties": {
+          "anomaly": {
+            "$ref": "#/components/schemas/AnomalyDetection"
+          }
+        },
+        "required": [
+          "anomaly"
         ],
         "type": "object"
       },
@@ -663,6 +712,9 @@
         "properties": {
           "condition": {
             "oneOf": [
+              {
+                "$ref": "#/components/schemas/AnomalyDetectionWrapper"
+              },
               {
                 "$ref": "#/components/schemas/ComparisonWrapper"
               },
@@ -1415,6 +1467,16 @@
             "example": "761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
             "type": "string"
           },
+          "dashboardTabsFiltersOverrides": {
+            "additionalProperties": {
+              "items": {
+                "$ref": "#/components/schemas/DashboardFilter"
+              },
+              "type": "array"
+            },
+            "description": "Map of tab-specific filter overrides. Key is tabId, value is list of filters for that tab.",
+            "type": "object"
+          },
           "fileName": {
             "description": "Filename of downloaded file without extension.",
             "example": "result",
@@ -1956,6 +2018,11 @@
             },
             "type": "array"
           },
+          "locale": {
+            "description": "Default locale for primary label.",
+            "example": "en-US",
+            "type": "string"
+          },
           "sortColumn": {
             "description": "Attribute sort column.",
             "example": "customer_name",
@@ -2276,6 +2343,12 @@
               "BOOLEAN"
             ],
             "example": "INT",
+            "type": "string"
+          },
+          "description": {
+            "description": "Column description/comment from database",
+            "example": "Customer unique identifier",
+            "maxLength": 10000,
             "type": "string"
           },
           "isPrimaryKey": {
@@ -3299,6 +3372,11 @@
             "example": false,
             "type": "boolean"
           },
+          "locale": {
+            "description": "Default label locale.",
+            "example": "en-US",
+            "type": "string"
+          },
           "sourceColumn": {
             "description": "A name of the source column in the table.",
             "example": "customer_name",
@@ -3339,6 +3417,13 @@
             "maxLength": 255,
             "type": "string"
           },
+          "translations": {
+            "description": "Other translations.",
+            "items": {
+              "$ref": "#/components/schemas/DeclarativeLabelTranslation"
+            },
+            "type": "array"
+          },
           "valueType": {
             "description": "Specific type of label",
             "enum": [
@@ -3357,6 +3442,26 @@
           "id",
           "sourceColumn",
           "title"
+        ],
+        "type": "object"
+      },
+      "DeclarativeLabelTranslation": {
+        "description": "A label translation.",
+        "properties": {
+          "locale": {
+            "description": "Translation locale.",
+            "example": "en-US",
+            "type": "string"
+          },
+          "sourceColumn": {
+            "description": "Translation source column.",
+            "example": "customer_name_en",
+            "type": "string"
+          }
+        },
+        "required": [
+          "locale",
+          "sourceColumn"
         ],
         "type": "object"
       },
@@ -3950,6 +4055,7 @@
               "MAPBOX_TOKEN",
               "AG_GRID_TOKEN",
               "WEEK_START",
+              "FISCAL_YEAR",
               "SHOW_HIDDEN_CATALOG_ITEMS",
               "OPERATOR_OVERRIDES",
               "TIMEZONE_VALIDATION_ENABLED",
@@ -3967,11 +4073,15 @@
               "ATTACHMENT_SIZE_LIMIT",
               "ATTACHMENT_LINK_TTL",
               "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
+              "ENABLE_DRILL_TO_URL_BY_DEFAULT",
               "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
               "ENABLE_AUTOMATION_EVALUATION_MODE",
               "ENABLE_ACCESSIBILITY_MODE",
               "REGISTERED_PLUGGABLE_APPLICATIONS",
-              "DATA_LOCALE"
+              "DATA_LOCALE",
+              "LDM_DEFAULT_LOCALE",
+              "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
+              "SORT_CASE_SENSITIVE"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -5300,6 +5410,11 @@
             "example": "out_table",
             "type": "string"
           },
+          "translationPrefix": {
+            "description": "Columns starting with this prefix will be considered as secondary label translation. The prefix is then followed by the value of `separator` parameter. Given the translation prefix is `tr` and separator is `__`, the columns with name like `tr__attribute__label__en-US` will be considered as secondary label en-US translation to `label` label in `attribute` attribute.",
+            "example": "tr",
+            "type": "string"
+          },
           "viewPrefix": {
             "deprecated": true,
             "description": "Views starting with this prefix will be included. The prefix is then followed by the value of `separator` parameter. Given the view prefix is `out_view` and separator is `__`, the table with name like `out_view__us_customers` will be scanned.",
@@ -5334,9 +5449,6 @@
         "properties": {
           "id": {
             "maxLength": 255,
-            "type": "string"
-          },
-          "matchingProperty": {
             "type": "string"
           }
         },
@@ -7030,6 +7142,9 @@
               },
               "isHidden": {
                 "type": "boolean"
+              },
+              "locale": {
+                "type": "string"
               },
               "sortColumn": {
                 "maxLength": 255,
@@ -13571,6 +13686,9 @@
               "isHidden": {
                 "type": "boolean"
               },
+              "locale": {
+                "type": "string"
+              },
               "primary": {
                 "type": "boolean"
               },
@@ -13599,6 +13717,24 @@
               "title": {
                 "maxLength": 255,
                 "type": "string"
+              },
+              "translations": {
+                "items": {
+                  "properties": {
+                    "locale": {
+                      "type": "string"
+                    },
+                    "sourceColumn": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "locale",
+                    "sourceColumn"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
               },
               "valueType": {
                 "enum": [
@@ -15983,6 +16119,7 @@
                   "MAPBOX_TOKEN",
                   "AG_GRID_TOKEN",
                   "WEEK_START",
+                  "FISCAL_YEAR",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
                   "TIMEZONE_VALIDATION_ENABLED",
@@ -16000,11 +16137,15 @@
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
                   "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
+                  "ENABLE_DRILL_TO_URL_BY_DEFAULT",
                   "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
                   "ENABLE_AUTOMATION_EVALUATION_MODE",
                   "ENABLE_ACCESSIBILITY_MODE",
                   "REGISTERED_PLUGGABLE_APPLICATIONS",
-                  "DATA_LOCALE"
+                  "DATA_LOCALE",
+                  "LDM_DEFAULT_LOCALE",
+                  "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
+                  "SORT_CASE_SENSITIVE"
                 ],
                 "type": "string"
               }
@@ -16066,6 +16207,7 @@
                   "MAPBOX_TOKEN",
                   "AG_GRID_TOKEN",
                   "WEEK_START",
+                  "FISCAL_YEAR",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
                   "TIMEZONE_VALIDATION_ENABLED",
@@ -16083,11 +16225,15 @@
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
                   "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
+                  "ENABLE_DRILL_TO_URL_BY_DEFAULT",
                   "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
                   "ENABLE_AUTOMATION_EVALUATION_MODE",
                   "ENABLE_ACCESSIBILITY_MODE",
                   "REGISTERED_PLUGGABLE_APPLICATIONS",
-                  "DATA_LOCALE"
+                  "DATA_LOCALE",
+                  "LDM_DEFAULT_LOCALE",
+                  "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
+                  "SORT_CASE_SENSITIVE"
                 ],
                 "type": "string"
               }
@@ -16189,6 +16335,7 @@
                   "MAPBOX_TOKEN",
                   "AG_GRID_TOKEN",
                   "WEEK_START",
+                  "FISCAL_YEAR",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
                   "TIMEZONE_VALIDATION_ENABLED",
@@ -16206,11 +16353,15 @@
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
                   "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
+                  "ENABLE_DRILL_TO_URL_BY_DEFAULT",
                   "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
                   "ENABLE_AUTOMATION_EVALUATION_MODE",
                   "ENABLE_ACCESSIBILITY_MODE",
                   "REGISTERED_PLUGGABLE_APPLICATIONS",
-                  "DATA_LOCALE"
+                  "DATA_LOCALE",
+                  "LDM_DEFAULT_LOCALE",
+                  "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
+                  "SORT_CASE_SENSITIVE"
                 ],
                 "type": "string"
               }
@@ -17678,6 +17829,7 @@
                   "MAPBOX_TOKEN",
                   "AG_GRID_TOKEN",
                   "WEEK_START",
+                  "FISCAL_YEAR",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
                   "TIMEZONE_VALIDATION_ENABLED",
@@ -17695,11 +17847,15 @@
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
                   "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
+                  "ENABLE_DRILL_TO_URL_BY_DEFAULT",
                   "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
                   "ENABLE_AUTOMATION_EVALUATION_MODE",
                   "ENABLE_ACCESSIBILITY_MODE",
                   "REGISTERED_PLUGGABLE_APPLICATIONS",
-                  "DATA_LOCALE"
+                  "DATA_LOCALE",
+                  "LDM_DEFAULT_LOCALE",
+                  "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
+                  "SORT_CASE_SENSITIVE"
                 ],
                 "type": "string"
               }
@@ -17761,6 +17917,7 @@
                   "MAPBOX_TOKEN",
                   "AG_GRID_TOKEN",
                   "WEEK_START",
+                  "FISCAL_YEAR",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
                   "TIMEZONE_VALIDATION_ENABLED",
@@ -17778,11 +17935,15 @@
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
                   "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
+                  "ENABLE_DRILL_TO_URL_BY_DEFAULT",
                   "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
                   "ENABLE_AUTOMATION_EVALUATION_MODE",
                   "ENABLE_ACCESSIBILITY_MODE",
                   "REGISTERED_PLUGGABLE_APPLICATIONS",
-                  "DATA_LOCALE"
+                  "DATA_LOCALE",
+                  "LDM_DEFAULT_LOCALE",
+                  "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
+                  "SORT_CASE_SENSITIVE"
                 ],
                 "type": "string"
               }
@@ -19947,6 +20108,7 @@
                   "MAPBOX_TOKEN",
                   "AG_GRID_TOKEN",
                   "WEEK_START",
+                  "FISCAL_YEAR",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
                   "TIMEZONE_VALIDATION_ENABLED",
@@ -19964,11 +20126,15 @@
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
                   "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
+                  "ENABLE_DRILL_TO_URL_BY_DEFAULT",
                   "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
                   "ENABLE_AUTOMATION_EVALUATION_MODE",
                   "ENABLE_ACCESSIBILITY_MODE",
                   "REGISTERED_PLUGGABLE_APPLICATIONS",
-                  "DATA_LOCALE"
+                  "DATA_LOCALE",
+                  "LDM_DEFAULT_LOCALE",
+                  "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
+                  "SORT_CASE_SENSITIVE"
                 ],
                 "type": "string"
               }
@@ -20030,6 +20196,7 @@
                   "MAPBOX_TOKEN",
                   "AG_GRID_TOKEN",
                   "WEEK_START",
+                  "FISCAL_YEAR",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
                   "TIMEZONE_VALIDATION_ENABLED",
@@ -20047,11 +20214,15 @@
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
                   "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
+                  "ENABLE_DRILL_TO_URL_BY_DEFAULT",
                   "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
                   "ENABLE_AUTOMATION_EVALUATION_MODE",
                   "ENABLE_ACCESSIBILITY_MODE",
                   "REGISTERED_PLUGGABLE_APPLICATIONS",
-                  "DATA_LOCALE"
+                  "DATA_LOCALE",
+                  "LDM_DEFAULT_LOCALE",
+                  "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
+                  "SORT_CASE_SENSITIVE"
                 ],
                 "type": "string"
               }
@@ -20179,6 +20350,7 @@
                   "MAPBOX_TOKEN",
                   "AG_GRID_TOKEN",
                   "WEEK_START",
+                  "FISCAL_YEAR",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
                   "TIMEZONE_VALIDATION_ENABLED",
@@ -20196,11 +20368,15 @@
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
                   "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
+                  "ENABLE_DRILL_TO_URL_BY_DEFAULT",
                   "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
                   "ENABLE_AUTOMATION_EVALUATION_MODE",
                   "ENABLE_ACCESSIBILITY_MODE",
                   "REGISTERED_PLUGGABLE_APPLICATIONS",
-                  "DATA_LOCALE"
+                  "DATA_LOCALE",
+                  "LDM_DEFAULT_LOCALE",
+                  "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
+                  "SORT_CASE_SENSITIVE"
                 ],
                 "type": "string"
               }
@@ -20262,6 +20438,7 @@
                   "MAPBOX_TOKEN",
                   "AG_GRID_TOKEN",
                   "WEEK_START",
+                  "FISCAL_YEAR",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
                   "TIMEZONE_VALIDATION_ENABLED",
@@ -20279,11 +20456,15 @@
                   "ATTACHMENT_SIZE_LIMIT",
                   "ATTACHMENT_LINK_TTL",
                   "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
+                  "ENABLE_DRILL_TO_URL_BY_DEFAULT",
                   "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
                   "ENABLE_AUTOMATION_EVALUATION_MODE",
                   "ENABLE_ACCESSIBILITY_MODE",
                   "REGISTERED_PLUGGABLE_APPLICATIONS",
-                  "DATA_LOCALE"
+                  "DATA_LOCALE",
+                  "LDM_DEFAULT_LOCALE",
+                  "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
+                  "SORT_CASE_SENSITIVE"
                 ],
                 "type": "string"
               }
@@ -21511,6 +21692,7 @@
               "MAPBOX_TOKEN",
               "AG_GRID_TOKEN",
               "WEEK_START",
+              "FISCAL_YEAR",
               "SHOW_HIDDEN_CATALOG_ITEMS",
               "OPERATOR_OVERRIDES",
               "TIMEZONE_VALIDATION_ENABLED",
@@ -21528,11 +21710,15 @@
               "ATTACHMENT_SIZE_LIMIT",
               "ATTACHMENT_LINK_TTL",
               "AD_CATALOG_GROUPS_DEFAULT_EXPAND_STATE",
+              "ENABLE_DRILL_TO_URL_BY_DEFAULT",
               "ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS",
               "ENABLE_AUTOMATION_EVALUATION_MODE",
               "ENABLE_ACCESSIBILITY_MODE",
               "REGISTERED_PLUGGABLE_APPLICATIONS",
-              "DATA_LOCALE"
+              "DATA_LOCALE",
+              "LDM_DEFAULT_LOCALE",
+              "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
+              "SORT_CASE_SENSITIVE"
             ],
             "example": "TIMEZONE",
             "type": "string"

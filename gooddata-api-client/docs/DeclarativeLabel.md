@@ -11,8 +11,10 @@ Name | Type | Description | Notes
 **description** | **str** | Label description. | [optional] 
 **geo_area_config** | [**GeoAreaConfig**](GeoAreaConfig.md) |  | [optional] 
 **is_hidden** | **bool** | Determines if the label is hidden from AI features. | [optional] 
+**locale** | **str** | Default label locale. | [optional] 
 **source_column_data_type** | **str** | A type of the source column | [optional] 
 **tags** | **[str]** | A list of tags. | [optional] 
+**translations** | [**[DeclarativeLabelTranslation]**](DeclarativeLabelTranslation.md) | Other translations. | [optional] 
 **value_type** | **str** | Specific type of label | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 

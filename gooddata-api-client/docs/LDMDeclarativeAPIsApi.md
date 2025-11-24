@@ -164,18 +164,25 @@ with gooddata_api_client.ApiClient() as api_client:
                                     geo_area_config=GeoAreaConfig(
                                         collection=GeoCollection(
                                             id="id_example",
-                                            matching_property="matching_property_example",
                                         ),
                                     ),
                                     id="label.customer_name",
                                     is_hidden=False,
+                                    locale="en-US",
                                     source_column="customer_name",
                                     source_column_data_type="STRING",
                                     tags=["Customers"],
                                     title="Customer name",
+                                    translations=[
+                                        DeclarativeLabelTranslation(
+                                            locale="en-US",
+                                            source_column="customer_name_en",
+                                        ),
+                                    ],
                                     value_type="TEXT",
                                 ),
                             ],
+                            locale="en-US",
                             sort_column="customer_name",
                             sort_direction="ASC" | "DESC",
                             source_column="customer_name",

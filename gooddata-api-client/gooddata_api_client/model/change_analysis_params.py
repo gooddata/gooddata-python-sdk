@@ -97,6 +97,7 @@ class ChangeAnalysisParams(ModelNormal):
             'date_attribute': (AttributeItem,),  # noqa: E501
             'filters': ([ChangeAnalysisParamsFiltersInner],),  # noqa: E501
             'measure': (MeasureItem,),  # noqa: E501
+            'measure_title': (str,),  # noqa: E501
             'reference_period': (str,),  # noqa: E501
             'use_smart_attribute_selection': (bool,),  # noqa: E501
         }
@@ -112,6 +113,7 @@ class ChangeAnalysisParams(ModelNormal):
         'date_attribute': 'dateAttribute',  # noqa: E501
         'filters': 'filters',  # noqa: E501
         'measure': 'measure',  # noqa: E501
+        'measure_title': 'measureTitle',  # noqa: E501
         'reference_period': 'referencePeriod',  # noqa: E501
         'use_smart_attribute_selection': 'useSmartAttributeSelection',  # noqa: E501
     }
@@ -123,7 +125,7 @@ class ChangeAnalysisParams(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, analyzed_period, attributes, date_attribute, filters, measure, reference_period, use_smart_attribute_selection, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, analyzed_period, attributes, date_attribute, filters, measure, measure_title, reference_period, use_smart_attribute_selection, *args, **kwargs):  # noqa: E501
         """ChangeAnalysisParams - a model defined in OpenAPI
 
         Args:
@@ -132,6 +134,7 @@ class ChangeAnalysisParams(ModelNormal):
             date_attribute (AttributeItem):
             filters ([ChangeAnalysisParamsFiltersInner]): Optional filters to apply
             measure (MeasureItem):
+            measure_title (str): The title of the measure being analyzed
             reference_period (str): The reference time period
             use_smart_attribute_selection (bool): Whether to use smart attribute selection
 
@@ -202,6 +205,7 @@ class ChangeAnalysisParams(ModelNormal):
         self.date_attribute = date_attribute
         self.filters = filters
         self.measure = measure
+        self.measure_title = measure_title
         self.reference_period = reference_period
         self.use_smart_attribute_selection = use_smart_attribute_selection
         for var_name, var_value in kwargs.items():
@@ -224,7 +228,7 @@ class ChangeAnalysisParams(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, analyzed_period, attributes, date_attribute, filters, measure, reference_period, use_smart_attribute_selection, *args, **kwargs):  # noqa: E501
+    def __init__(self, analyzed_period, attributes, date_attribute, filters, measure, measure_title, reference_period, use_smart_attribute_selection, *args, **kwargs):  # noqa: E501
         """ChangeAnalysisParams - a model defined in OpenAPI
 
         Args:
@@ -233,6 +237,7 @@ class ChangeAnalysisParams(ModelNormal):
             date_attribute (AttributeItem):
             filters ([ChangeAnalysisParamsFiltersInner]): Optional filters to apply
             measure (MeasureItem):
+            measure_title (str): The title of the measure being analyzed
             reference_period (str): The reference time period
             use_smart_attribute_selection (bool): Whether to use smart attribute selection
 
@@ -301,6 +306,7 @@ class ChangeAnalysisParams(ModelNormal):
         self.date_attribute = date_attribute
         self.filters = filters
         self.measure = measure
+        self.measure_title = measure_title
         self.reference_period = reference_period
         self.use_smart_attribute_selection = use_smart_attribute_selection
         for var_name, var_value in kwargs.items():

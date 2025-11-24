@@ -32,7 +32,9 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.json_api_label_out_attributes_geo_area_config import JsonApiLabelOutAttributesGeoAreaConfig
+    from gooddata_api_client.model.json_api_label_out_attributes_translations_inner import JsonApiLabelOutAttributesTranslationsInner
     globals()['JsonApiLabelOutAttributesGeoAreaConfig'] = JsonApiLabelOutAttributesGeoAreaConfig
+    globals()['JsonApiLabelOutAttributesTranslationsInner'] = JsonApiLabelOutAttributesTranslationsInner
 
 
 class JsonApiLabelOutAttributes(ModelNormal):
@@ -119,11 +121,13 @@ class JsonApiLabelOutAttributes(ModelNormal):
             'description': (str,),  # noqa: E501
             'geo_area_config': (JsonApiLabelOutAttributesGeoAreaConfig,),  # noqa: E501
             'is_hidden': (bool,),  # noqa: E501
+            'locale': (str,),  # noqa: E501
             'primary': (bool,),  # noqa: E501
             'source_column': (str,),  # noqa: E501
             'source_column_data_type': (str,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
             'title': (str,),  # noqa: E501
+            'translations': ([JsonApiLabelOutAttributesTranslationsInner],),  # noqa: E501
             'value_type': (str,),  # noqa: E501
         }
 
@@ -137,11 +141,13 @@ class JsonApiLabelOutAttributes(ModelNormal):
         'description': 'description',  # noqa: E501
         'geo_area_config': 'geoAreaConfig',  # noqa: E501
         'is_hidden': 'isHidden',  # noqa: E501
+        'locale': 'locale',  # noqa: E501
         'primary': 'primary',  # noqa: E501
         'source_column': 'sourceColumn',  # noqa: E501
         'source_column_data_type': 'sourceColumnDataType',  # noqa: E501
         'tags': 'tags',  # noqa: E501
         'title': 'title',  # noqa: E501
+        'translations': 'translations',  # noqa: E501
         'value_type': 'valueType',  # noqa: E501
     }
 
@@ -190,11 +196,13 @@ class JsonApiLabelOutAttributes(ModelNormal):
             description (str): [optional]  # noqa: E501
             geo_area_config (JsonApiLabelOutAttributesGeoAreaConfig): [optional]  # noqa: E501
             is_hidden (bool): [optional]  # noqa: E501
+            locale (str): [optional]  # noqa: E501
             primary (bool): [optional]  # noqa: E501
             source_column (str): [optional]  # noqa: E501
             source_column_data_type (str): [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
+            translations ([JsonApiLabelOutAttributesTranslationsInner]): [optional]  # noqa: E501
             value_type (str): [optional]  # noqa: E501
         """
 
@@ -285,11 +293,13 @@ class JsonApiLabelOutAttributes(ModelNormal):
             description (str): [optional]  # noqa: E501
             geo_area_config (JsonApiLabelOutAttributesGeoAreaConfig): [optional]  # noqa: E501
             is_hidden (bool): [optional]  # noqa: E501
+            locale (str): [optional]  # noqa: E501
             primary (bool): [optional]  # noqa: E501
             source_column (str): [optional]  # noqa: E501
             source_column_data_type (str): [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
+            translations ([JsonApiLabelOutAttributesTranslationsInner]): [optional]  # noqa: E501
             value_type (str): [optional]  # noqa: E501
         """
 

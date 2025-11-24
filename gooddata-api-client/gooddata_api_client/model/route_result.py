@@ -64,6 +64,7 @@ class RouteResult(ModelNormal):
             'EXTEND_VISUALIZATION': "EXTEND_VISUALIZATION",
             'HOWTO': "HOWTO",
             'CHANGE_ANALYSIS': "CHANGE_ANALYSIS",
+            'ALERT': "ALERT",
         },
     }
 

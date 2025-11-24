@@ -31,7 +31,7 @@ Method | HTTP request | Description
 [**create_raw_export**](ActionsApi.md#create_raw_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/raw | (EXPERIMENTAL) Create raw export request
 [**create_slides_export**](ActionsApi.md#create_slides_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/slides | (EXPERIMENTAL) Create slides export request
 [**create_tabular_export**](ActionsApi.md#create_tabular_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/tabular | Create tabular export request
-[**created_by**](ActionsApi.md#created_by) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/createdBy | Get Analytics Catalog CreatedBy
+[**created_by**](ActionsApi.md#created_by) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/createdBy | Get Analytics Catalog CreatedBy Users
 [**dashboard_permissions**](ActionsApi.md#dashboard_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/permissions | Get Dashboard Permissions
 [**delete_organization_automations**](ActionsApi.md#delete_organization_automations) | **POST** /api/v1/actions/organization/automations/delete | Delete selected automations across all workspaces
 [**delete_workspace_automations**](ActionsApi.md#delete_workspace_automations) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/delete | Delete selected automations in the workspace
@@ -66,6 +66,7 @@ Method | HTTP request | Description
 [**manage_workspace_permissions**](ActionsApi.md#manage_workspace_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/managePermissions | Manage Permissions for a Workspace
 [**mark_as_read_notification**](ActionsApi.md#mark_as_read_notification) | **POST** /api/v1/actions/notifications/{notificationId}/markAsRead | Mark notification as read.
 [**mark_as_read_notification_all**](ActionsApi.md#mark_as_read_notification_all) | **POST** /api/v1/actions/notifications/markAsRead | Mark all notifications as read.
+[**memory_created_by_users**](ActionsApi.md#memory_created_by_users) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/memory/createdBy | Get AI Memory CreatedBy Users
 [**metadata_sync**](ActionsApi.md#metadata_sync) | **POST** /api/v1/actions/workspaces/{workspaceId}/metadataSync | (BETA) Sync Metadata to other services
 [**metadata_sync_organization**](ActionsApi.md#metadata_sync_organization) | **POST** /api/v1/actions/organization/metadataSync | (BETA) Sync organization scope Metadata to other services
 [**overridden_child_entities**](ActionsApi.md#overridden_child_entities) | **GET** /api/v1/actions/workspaces/{workspaceId}/overriddenChildEntities | Finds identifier overrides in workspace hierarchy.
@@ -140,6 +141,9 @@ with gooddata_api_client.ApiClient() as api_client:
         limit_create=3,
         limit_create_context=10,
         limit_search=5,
+        object_types=[
+            "attribute",
+        ],
         question="question_example",
         relevant_score_threshold=0.45,
         search_score_threshold=0.9,
@@ -307,6 +311,9 @@ with gooddata_api_client.ApiClient() as api_client:
         limit_create=3,
         limit_create_context=10,
         limit_search=5,
+        object_types=[
+            "attribute",
+        ],
         question="question_example",
         relevant_score_threshold=0.45,
         search_score_threshold=0.9,
@@ -2459,7 +2466,7 @@ No authorization required
 # **created_by**
 > AnalyticsCatalogCreatedBy created_by(workspace_id)
 
-Get Analytics Catalog CreatedBy
+Get Analytics Catalog CreatedBy Users
 
 Returns a list of Users who created any object for this workspace
 
@@ -2487,7 +2494,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Get Analytics Catalog CreatedBy
+        # Get Analytics Catalog CreatedBy Users
         api_response = api_instance.created_by(workspace_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -3084,6 +3091,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     columns=[
                         SqlColumn(
                             data_type="INT",
+                            description="Customer unique identifier",
                             name="customer_id",
                         ),
                     ],
@@ -3109,6 +3117,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     columns=[
                         DeclarativeColumn(
                             data_type="INT",
+                            description="Customer unique identifier",
                             is_primary_key=True,
                             name="customer_id",
                             referenced_table_column="customer_id",
@@ -3127,6 +3136,7 @@ with gooddata_api_client.ApiClient() as api_client:
         secondary_label_prefix="ls",
         separator="__",
         table_prefix="out_table",
+        translation_prefix="tr",
         view_prefix="out_view",
         wdf_prefix="wdf",
         workspace_id="workspace_id_example",
@@ -5110,6 +5120,73 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **memory_created_by_users**
+> MemoryItemCreatedByUsers memory_created_by_users(workspace_id)
+
+Get AI Memory CreatedBy Users
+
+Returns a list of Users who created any memory item for this workspace
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.memory_item_created_by_users import MemoryItemCreatedByUsers
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get AI Memory CreatedBy Users
+        api_response = api_instance.memory_created_by_users(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->memory_created_by_users: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+
+### Return type
+
+[**MemoryItemCreatedByUsers**](MemoryItemCreatedByUsers.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **metadata_sync**
 > metadata_sync(workspace_id)
 
@@ -6957,6 +7034,11 @@ with gooddata_api_client.ApiClient() as api_client:
                             DashboardFilter(),
                         ],
                         dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                        dashboard_tabs_filters_overrides={
+                            "key": [
+                                DashboardFilter(),
+                            ],
+                        },
                         file_name="result",
                         format="XLSX",
                         settings=DashboardExportSettings(

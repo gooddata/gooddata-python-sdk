@@ -12,6 +12,7 @@ Name | Type | Description | Notes
 **default_view** | [**LabelIdentifier**](LabelIdentifier.md) |  | [optional] 
 **description** | **str** | Attribute description. | [optional] 
 **is_hidden** | **bool** | If true, this attribute is hidden from AI search results. | [optional] 
+**locale** | **str** | Default locale for primary label. | [optional] 
 **sort_column** | **str** | Attribute sort column. | [optional] 
 **sort_direction** | **str** | Attribute sort direction. | [optional] 
 **source_column_data_type** | **str** | A type of the source column | [optional] 

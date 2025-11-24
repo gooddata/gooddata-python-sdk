@@ -101,6 +101,7 @@ class DashboardTabularExportRequestV2(ModelNormal):
             'file_name': (str,),  # noqa: E501
             'format': (str,),  # noqa: E501
             'dashboard_filters_override': ([DashboardFilter],),  # noqa: E501
+            'dashboard_tabs_filters_overrides': ({str: ([DashboardFilter],)},),  # noqa: E501
             'settings': (DashboardExportSettings,),  # noqa: E501
             'widget_ids': ([str],),  # noqa: E501
         }
@@ -115,6 +116,7 @@ class DashboardTabularExportRequestV2(ModelNormal):
         'file_name': 'fileName',  # noqa: E501
         'format': 'format',  # noqa: E501
         'dashboard_filters_override': 'dashboardFiltersOverride',  # noqa: E501
+        'dashboard_tabs_filters_overrides': 'dashboardTabsFiltersOverrides',  # noqa: E501
         'settings': 'settings',  # noqa: E501
         'widget_ids': 'widgetIds',  # noqa: E501
     }
@@ -166,6 +168,7 @@ class DashboardTabularExportRequestV2(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             dashboard_filters_override ([DashboardFilter]): List of filters that will be used instead of the default dashboard filters.. [optional]  # noqa: E501
+            dashboard_tabs_filters_overrides ({str: ([DashboardFilter],)}): Map of tab-specific filter overrides. Key is tabId, value is list of filters for that tab.. [optional]  # noqa: E501
             settings (DashboardExportSettings): [optional]  # noqa: E501
             widget_ids ([str]): List of widget identifiers to be exported. Note that only one widget is currently supported.. [optional]  # noqa: E501
         """
@@ -262,6 +265,7 @@ class DashboardTabularExportRequestV2(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             dashboard_filters_override ([DashboardFilter]): List of filters that will be used instead of the default dashboard filters.. [optional]  # noqa: E501
+            dashboard_tabs_filters_overrides ({str: ([DashboardFilter],)}): Map of tab-specific filter overrides. Key is tabId, value is list of filters for that tab.. [optional]  # noqa: E501
             settings (DashboardExportSettings): [optional]  # noqa: E501
             widget_ids ([str]): List of widget identifiers to be exported. Note that only one widget is currently supported.. [optional]  # noqa: E501
         """

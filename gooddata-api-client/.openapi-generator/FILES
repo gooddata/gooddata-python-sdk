@@ -38,8 +38,10 @@ docs/AnalyticsCatalogCreatedBy.md
 docs/AnalyticsCatalogTags.md
 docs/AnalyticsCatalogUser.md
 docs/AnalyticsModelApi.md
+docs/AnomalyDetection.md
 docs/AnomalyDetectionRequest.md
 docs/AnomalyDetectionResult.md
+docs/AnomalyDetectionWrapper.md
 docs/ApiEntitlement.md
 docs/AppearanceApi.md
 docs/ArithmeticMeasure.md
@@ -194,6 +196,7 @@ docs/DeclarativeIdentityProviderIdentifier.md
 docs/DeclarativeJwk.md
 docs/DeclarativeJwkSpecification.md
 docs/DeclarativeLabel.md
+docs/DeclarativeLabelTranslation.md
 docs/DeclarativeLdm.md
 docs/DeclarativeMetric.md
 docs/DeclarativeModel.md
@@ -621,6 +624,7 @@ docs/JsonApiLabelLinkage.md
 docs/JsonApiLabelOut.md
 docs/JsonApiLabelOutAttributes.md
 docs/JsonApiLabelOutAttributesGeoAreaConfig.md
+docs/JsonApiLabelOutAttributesTranslationsInner.md
 docs/JsonApiLabelOutDocument.md
 docs/JsonApiLabelOutList.md
 docs/JsonApiLabelOutRelationships.md
@@ -877,6 +881,8 @@ docs/MeasureItem.md
 docs/MeasureItemDefinition.md
 docs/MeasureResultHeader.md
 docs/MeasureValueFilter.md
+docs/MemoryItemCreatedByUsers.md
+docs/MemoryItemUser.md
 docs/MetadataSyncApi.md
 docs/Metric.md
 docs/MetricRecord.md
@@ -1189,8 +1195,10 @@ gooddata_api_client/model/alert_evaluation_row.py
 gooddata_api_client/model/analytics_catalog_created_by.py
 gooddata_api_client/model/analytics_catalog_tags.py
 gooddata_api_client/model/analytics_catalog_user.py
+gooddata_api_client/model/anomaly_detection.py
 gooddata_api_client/model/anomaly_detection_request.py
 gooddata_api_client/model/anomaly_detection_result.py
+gooddata_api_client/model/anomaly_detection_wrapper.py
 gooddata_api_client/model/api_entitlement.py
 gooddata_api_client/model/arithmetic_measure.py
 gooddata_api_client/model/arithmetic_measure_definition.py
@@ -1330,6 +1338,7 @@ gooddata_api_client/model/declarative_identity_provider_identifier.py
 gooddata_api_client/model/declarative_jwk.py
 gooddata_api_client/model/declarative_jwk_specification.py
 gooddata_api_client/model/declarative_label.py
+gooddata_api_client/model/declarative_label_translation.py
 gooddata_api_client/model/declarative_ldm.py
 gooddata_api_client/model/declarative_metric.py
 gooddata_api_client/model/declarative_model.py
@@ -1744,6 +1753,7 @@ gooddata_api_client/model/json_api_label_linkage.py
 gooddata_api_client/model/json_api_label_out.py
 gooddata_api_client/model/json_api_label_out_attributes.py
 gooddata_api_client/model/json_api_label_out_attributes_geo_area_config.py
+gooddata_api_client/model/json_api_label_out_attributes_translations_inner.py
 gooddata_api_client/model/json_api_label_out_document.py
 gooddata_api_client/model/json_api_label_out_list.py
 gooddata_api_client/model/json_api_label_out_relationships.py
@@ -1995,6 +2005,8 @@ gooddata_api_client/model/measure_item.py
 gooddata_api_client/model/measure_item_definition.py
 gooddata_api_client/model/measure_result_header.py
 gooddata_api_client/model/measure_value_filter.py
+gooddata_api_client/model/memory_item_created_by_users.py
+gooddata_api_client/model/memory_item_user.py
 gooddata_api_client/model/metric.py
 gooddata_api_client/model/metric_record.py
 gooddata_api_client/model/metric_value_change.py

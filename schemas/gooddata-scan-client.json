@@ -184,6 +184,12 @@
             "example": "INT",
             "type": "string"
           },
+          "description": {
+            "description": "Column description/comment from database",
+            "example": "Customer unique identifier",
+            "maxLength": 10000,
+            "type": "string"
+          },
           "isPrimaryKey": {
             "description": "Is column part of primary key?",
             "type": "boolean"
@@ -488,6 +494,11 @@
               "BOOLEAN"
             ],
             "example": "INT",
+            "type": "string"
+          },
+          "description": {
+            "description": "Column description/comment from database",
+            "example": "Customer unique identifier",
             "type": "string"
           },
           "name": {

@@ -99,6 +99,11 @@ with gooddata_api_client.ApiClient() as api_client:
                                 DashboardFilter(),
                             ],
                             dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                            dashboard_tabs_filters_overrides={
+                                "key": [
+                                    DashboardFilter(),
+                                ],
+                            },
                             file_name="result",
                             format="XLSX",
                             settings=DashboardExportSettings(
@@ -996,6 +1001,11 @@ with gooddata_api_client.ApiClient() as api_client:
                                 DashboardFilter(),
                             ],
                             dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                            dashboard_tabs_filters_overrides={
+                                "key": [
+                                    DashboardFilter(),
+                                ],
+                            },
                             file_name="result",
                             format="XLSX",
                             settings=DashboardExportSettings(
@@ -1478,6 +1488,11 @@ with gooddata_api_client.ApiClient() as api_client:
                             DashboardFilter(),
                         ],
                         dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                        dashboard_tabs_filters_overrides={
+                            "key": [
+                                DashboardFilter(),
+                            ],
+                        },
                         file_name="result",
                         format="XLSX",
                         settings=DashboardExportSettings(
@@ -1792,6 +1807,11 @@ with gooddata_api_client.ApiClient() as api_client:
                             DashboardFilter(),
                         ],
                         dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                        dashboard_tabs_filters_overrides={
+                            "key": [
+                                DashboardFilter(),
+                            ],
+                        },
                         file_name="result",
                         format="XLSX",
                         settings=DashboardExportSettings(
@@ -2623,6 +2643,11 @@ with gooddata_api_client.ApiClient() as api_client:
                                 DashboardFilter(),
                             ],
                             dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                            dashboard_tabs_filters_overrides={
+                                "key": [
+                                    DashboardFilter(),
+                                ],
+                            },
                             file_name="result",
                             format="XLSX",
                             settings=DashboardExportSettings(
