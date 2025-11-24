@@ -14,7 +14,6 @@ from gooddata_pipelines.provisioning.entities.users.models.users import (
     UserProfile,
 )
 from gooddata_pipelines.provisioning.provisioning import Provisioning
-from gooddata_pipelines.provisioning.utils.context_objects import UserContext
 
 # Type alias for user model instances
 UserModel: TypeAlias = UserFullLoad | UserIncrementalLoad
@@ -75,7 +74,7 @@ class UserProvisioner(Provisioning[UserFullLoad, UserIncrementalLoad]):
                 self._api._sdk.catalog_user.get_user_group(group)
             except NotFoundException:
                 #  Create the user gtoup if it does not exist
-                self._api.create_or_update_user_group(
+                self._api._sdk.catalog_user.create_or_update_user_group(
                     CatalogUserGroup.init(
                         user_group_id=group, user_group_name=group
                     ),
@@ -126,11 +125,6 @@ class UserProvisioner(Provisioning[UserFullLoad, UserIncrementalLoad]):
             )
             return
 
-        user_context = UserContext(
-            user_id=user.user_id,
-            user_groups=user.user_groups,
-        )
-
         upstream_user = self._try_get_user(user, model)
 
         if self._user_is_equal_upstream(user, upstream_user):
@@ -138,9 +132,7 @@ class UserProvisioner(Provisioning[UserFullLoad, UserIncrementalLoad]):
 
         self._get_or_create_user_groups(user.user_groups)
 
-        self._api.create_or_update_user(
-            user.to_sdk_obj(), **user_context.__dict__
-        )
+        self._api._sdk.catalog_user.create_or_update_user(user.to_sdk_obj())
         self.logger.info(f"User {user.user_id} created/updated successfully.")
 
     def _delete_user(self, user_id: str) -> None:
@@ -157,7 +149,7 @@ class UserProvisioner(Provisioning[UserFullLoad, UserIncrementalLoad]):
         except NotFoundException:
             return
 
-        self._api.delete_user(user_id)
+        self._api._sdk.catalog_user.delete_user(user_id)
         self.logger.info(f"Deleted user: {user_id}")
 
     def _manage_user(self, user: UserIncrementalLoad) -> None:
@@ -188,7 +180,9 @@ class UserProvisioner(Provisioning[UserFullLoad, UserIncrementalLoad]):
         self.protected_users.append(self._get_current_user_id())
 
         # Get all upstream users
-        catalog_upstream_users: list[CatalogUser] = self._api.list_users()
+        catalog_upstream_users: list[CatalogUser] = (
+            self._api._sdk.catalog_user.list_users()
+        )
 
         # Convert catalog users to user models
         upstream_users: list[UserFullLoad] = [

@@ -49,12 +49,15 @@ S3_CONFIG = BackupRestoreConfig(
 
 @pytest.fixture
 def backup_manager(mock_logger):
-    with (
-        mock.patch.object(BackupManager, "_api", create=True),
-        mock.patch(
-            "gooddata_pipelines.api.gooddata_api_wrapper.GoodDataApi.get_organization_id",
-            return_value="services",
-        ),
+    # Create mock SDK with organization_id
+    mock_sdk = mock.Mock()
+    mock_catalog_org = mock.Mock()
+    mock_catalog_org.organization_id = "services"
+    mock_sdk.catalog_organization = mock_catalog_org
+
+    with mock.patch(
+        "gooddata_pipelines.api.gooddata_api_wrapper.GoodDataSdk.create",
+        return_value=mock_sdk,
     ):
         manager = BackupManager.create(
             S3_CONFIG,

@@ -57,8 +57,8 @@ class UserGroupProvisioner(
             user_group_parent_ids=parent_user_groups,
         )
         try:
-            self._api.create_or_update_user_group(
-                catalog_user_group=catalog_user_group
+            self._api._sdk.catalog_user.create_or_update_user_group(
+                user_group=catalog_user_group
             )
             self.logger.info(
                 f"Created/Updated user group: {group_id} - {group_name}"
@@ -107,7 +107,7 @@ class UserGroupProvisioner(
         """Deletes user group from the project."""
         for group_id in group_ids_to_delete:
             try:
-                self._api.delete_user_group(group_id)
+                self._api._sdk.catalog_user.delete_user_group(group_id)
                 self.logger.info(f"Deleted user group: {group_id}")
             except Exception as e:
                 self.logger.error(
@@ -118,7 +118,9 @@ class UserGroupProvisioner(
     def _provision_incremental_load(self) -> None:
         """Runs incremental provisioning of user groups."""
         # Get existing user groups from GoodData Cloud
-        self.upstream_user_groups = self._api.list_user_groups()
+        self.upstream_user_groups = (
+            self._api._sdk.catalog_user.list_user_groups()
+        )
 
         # Create a set of upstream user group IDs
         upstream_group_ids: set[str] = {
@@ -182,7 +184,9 @@ class UserGroupProvisioner(
     def _provision_full_load(self) -> None:
         """Runs full load provisioning of user groups."""
         # Get upsream user groups
-        self.upstream_user_groups = self._api.list_user_groups()
+        self.upstream_user_groups = (
+            self._api._sdk.catalog_user.list_user_groups()
+        )
 
         # Create a set of upstream user group IDs
         upstream_group_ids: set[str] = {
