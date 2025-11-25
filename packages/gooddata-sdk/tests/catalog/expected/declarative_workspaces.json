@@ -2544,6 +2544,13 @@
                       "id": "geo__state__location",
                       "sourceColumn": "geo__state__location",
                       "sourceColumnDataType": "STRING",
+                      "locale": "en-US",
+                      "translations": [
+                        {
+                          "locale": "cs-CZ",
+                          "sourceColumn": "geo__state__location_cz"
+                        }
+                      ],
                       "tags": [
                         "Customers"
                       ],

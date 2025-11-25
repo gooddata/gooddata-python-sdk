@@ -1956,6 +1956,10 @@ interactions:
                             title: Location
                             description: Location
                             sourceColumnDataType: STRING
+                            locale: en-US
+                            translations:
+                              - locale: cs-CZ
+                                sourceColumn: geo__state__location_cz
                             tags:
                               - Customers
                             valueType: GEO
