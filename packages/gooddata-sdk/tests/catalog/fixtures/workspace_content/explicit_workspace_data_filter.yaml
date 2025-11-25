@@ -22,7 +22,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '6211'
+          - '6305'
         Content-Type:
           - application/json
         DATE: &id001
@@ -185,11 +185,15 @@ interactions:
                     labels:
                       - description: Location
                         id: geo__state__location
+                        locale: en-US
                         sourceColumn: geo__state__location
                         sourceColumnDataType: STRING
                         tags:
                           - Customers
                         title: Location
+                        translations:
+                          - locale: cs-CZ
+                            sourceColumn: geo__state__location_cz
                         valueType: GEO
                     sourceColumn: state
                     sourceColumnDataType: STRING
@@ -529,6 +533,10 @@ interactions:
                       tags:
                         - Customers
                       valueType: GEO
+                      locale: en-US
+                      translations:
+                        - locale: cs-CZ
+                          sourceColumn: geo__state__location_cz
                   sourceColumn: state
                   title: State
                   sourceColumnDataType: STRING
@@ -779,7 +787,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '6369'
+          - '6463'
         Content-Type:
           - application/json
         DATE: *id001
@@ -941,11 +949,15 @@ interactions:
                     labels:
                       - description: Location
                         id: geo__state__location
+                        locale: en-US
                         sourceColumn: geo__state__location
                         sourceColumnDataType: STRING
                         tags:
                           - Customers
                         title: Location
+                        translations:
+                          - locale: cs-CZ
+                            sourceColumn: geo__state__location_cz
                         valueType: GEO
                     sourceColumn: state
                     sourceColumnDataType: STRING
@@ -1162,7 +1174,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '20132'
+          - '20226'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -1656,9 +1668,9 @@ interactions:
                     type: dataset
                 labels:
                   data:
-                    - id: geo__state__location
-                      type: label
                     - id: state
+                      type: label
+                    - id: geo__state__location
                       type: label
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/state
@@ -1742,18 +1754,6 @@ interactions:
                     sourceColumns: null
                     sourceColumnDataTypes: null
                   - identifier:
-                      id: date
-                      type: dataset
-                    multivalue: false
-                    sources:
-                      - column: date
-                        dataType: DATE
-                        target:
-                          id: date
-                          type: date
-                    sourceColumns: null
-                    sourceColumnDataTypes: null
-                  - identifier:
                       id: products
                       type: dataset
                     multivalue: false
@@ -1777,14 +1777,26 @@ interactions:
                           type: attribute
                     sourceColumns: null
                     sourceColumnDataTypes: null
+                  - identifier:
+                      id: date
+                      type: dataset
+                    multivalue: false
+                    sources:
+                      - column: date
+                        dataType: DATE
+                        target:
+                          id: date
+                          type: date
+                    sourceColumns: null
+                    sourceColumnDataTypes: null
                 dataSourceTableId: demo-test-ds:order_lines
                 dataSourceTablePath:
                   - demo
                   - order_lines
                 workspaceDataFilterColumns:
-                  - name: wdf__region
-                    dataType: STRING
                   - name: wdf__state
+                    dataType: STRING
+                  - name: wdf__region
                     dataType: STRING
                 workspaceDataFilterReferences:
                   - filterId:
@@ -2016,6 +2028,10 @@ interactions:
                 sourceColumn: geo__state__location
                 sourceColumnDataType: STRING
                 valueType: GEO
+                locale: en-US
+                translations:
+                  - sourceColumn: geo__state__location_cz
+                    locale: cs-CZ
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/geo__state__location
             - id: product_id
@@ -2356,18 +2372,6 @@ interactions:
                     sourceColumns: null
                     sourceColumnDataTypes: null
                   - identifier:
-                      id: date
-                      type: dataset
-                    multivalue: false
-                    sources:
-                      - column: date
-                        dataType: DATE
-                        target:
-                          id: date
-                          type: date
-                    sourceColumns: null
-                    sourceColumnDataTypes: null
-                  - identifier:
                       id: products
                       type: dataset
                     multivalue: false
@@ -2391,15 +2395,27 @@ interactions:
                           type: attribute
                     sourceColumns: null
                     sourceColumnDataTypes: null
+                  - identifier:
+                      id: date
+                      type: dataset
+                    multivalue: false
+                    sources:
+                      - column: date
+                        dataType: DATE
+                        target:
+                          id: date
+                          type: date
+                    sourceColumns: null
+                    sourceColumnDataTypes: null
                 dataSourceTableId: demo-test-ds:order_lines
                 dataSourceTablePath:
                   - demo
                   - order_lines
                 areRelationsValid: true
                 workspaceDataFilterColumns:
-                  - name: wdf__region
-                    dataType: STRING
                   - name: wdf__state
+                    dataType: STRING
+                  - name: wdf__region
                     dataType: STRING
                 workspaceDataFilterReferences:
                   - filterId:
@@ -2782,7 +2798,7 @@ interactions:
               attributes:
                 title: '# of Active Customers'
                 areRelationsValid: true
-                createdAt: 2025-11-03 09:41
+                createdAt: 2025-11-26 12:05
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
@@ -2797,7 +2813,7 @@ interactions:
               attributes:
                 title: '# of Orders'
                 areRelationsValid: true
-                createdAt: 2025-11-03 09:41
+                createdAt: 2025-11-26 12:05
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/order_id})
@@ -2812,7 +2828,7 @@ interactions:
               attributes:
                 title: '# of Top Customers'
                 areRelationsValid: true
-                createdAt: 2025-11-03 09:41
+                createdAt: 2025-11-26 12:05
                 content:
                   format: '#,##0'
                   maql: 'SELECT {metric/amount_of_active_customers} WHERE (SELECT
@@ -2829,7 +2845,7 @@ interactions:
                 title: '# of Valid Orders'
                 description: ''
                 areRelationsValid: true
-                createdAt: 2025-11-03 09:41
+                createdAt: 2025-11-26 12:05
                 content:
                   format: '#,##0.00'
                   maql: SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status}
@@ -2845,7 +2861,7 @@ interactions:
               attributes:
                 title: Campaign Spend
                 areRelationsValid: true
-                createdAt: 2025-11-03 09:41
+                createdAt: 2025-11-26 12:05
                 content:
                   format: $#,##0
                   maql: SELECT SUM({fact/spend})
@@ -2860,7 +2876,7 @@ interactions:
               attributes:
                 title: Order Amount
                 areRelationsValid: true
-                createdAt: 2025-11-03 09:41
+                createdAt: 2025-11-26 12:05
                 content:
                   format: $#,##0
                   maql: SELECT SUM({fact/price}*{fact/quantity})
@@ -2875,7 +2891,7 @@ interactions:
               attributes:
                 title: '% Revenue'
                 areRelationsValid: true
-                createdAt: 2025-11-03 09:41
+                createdAt: 2025-11-26 12:05
                 content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / {metric/total_revenue}
@@ -2890,7 +2906,7 @@ interactions:
               attributes:
                 title: '% Revenue from Top 10 Customers'
                 areRelationsValid: true
-                createdAt: 2025-11-03 09:41
+                createdAt: 2025-11-26 12:05
                 content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
@@ -2906,7 +2922,7 @@ interactions:
               attributes:
                 title: '% Revenue from Top 10% Customers'
                 areRelationsValid: true
-                createdAt: 2025-11-03 09:41
+                createdAt: 2025-11-26 12:05
                 content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
@@ -2922,7 +2938,7 @@ interactions:
               attributes:
                 title: '% Revenue from Top 10% Products'
                 areRelationsValid: true
-                createdAt: 2025-11-03 09:41
+                createdAt: 2025-11-26 12:05
                 content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
@@ -2938,7 +2954,7 @@ interactions:
               attributes:
                 title: '% Revenue from Top 10 Products'
                 areRelationsValid: true
-                createdAt: 2025-11-03 09:41
+                createdAt: 2025-11-26 12:05
                 content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
@@ -2954,7 +2970,7 @@ interactions:
               attributes:
                 title: '% Revenue in Category'
                 areRelationsValid: true
-                createdAt: 2025-11-03 09:41
+                createdAt: 2025-11-26 12:05
                 content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
@@ -2970,7 +2986,7 @@ interactions:
               attributes:
                 title: '% Revenue per Product'
                 areRelationsValid: true
-                createdAt: 2025-11-03 09:41
+                createdAt: 2025-11-26 12:05
                 content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL
@@ -2987,7 +3003,7 @@ interactions:
                 title: Revenue
                 description: ''
                 areRelationsValid: true
-                createdAt: 2025-11-03 09:41
+                createdAt: 2025-11-26 12:05
                 content:
                   format: $#,##0
                   maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
@@ -3003,7 +3019,7 @@ interactions:
               attributes:
                 title: Revenue (Clothing)
                 areRelationsValid: true
-                createdAt: 2025-11-03 09:41
+                createdAt: 2025-11-26 12:05
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
@@ -3019,7 +3035,7 @@ interactions:
               attributes:
                 title: Revenue (Electronic)
                 areRelationsValid: true
-                createdAt: 2025-11-03 09:41
+                createdAt: 2025-11-26 12:05
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
@@ -3035,7 +3051,7 @@ interactions:
               attributes:
                 title: Revenue (Home)
                 areRelationsValid: true
-                createdAt: 2025-11-03 09:41
+                createdAt: 2025-11-26 12:05
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
@@ -3051,7 +3067,7 @@ interactions:
               attributes:
                 title: Revenue (Outdoor)
                 areRelationsValid: true
-                createdAt: 2025-11-03 09:41
+                createdAt: 2025-11-26 12:05
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
@@ -3067,7 +3083,7 @@ interactions:
               attributes:
                 title: Revenue per Customer
                 areRelationsValid: true
-                createdAt: 2025-11-03 09:41
+                createdAt: 2025-11-26 12:05
                 content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
@@ -3082,7 +3098,7 @@ interactions:
               attributes:
                 title: Revenue per Dollar Spent
                 areRelationsValid: true
-                createdAt: 2025-11-03 09:41
+                createdAt: 2025-11-26 12:05
                 content:
                   format: $#,##0.0
                   maql: SELECT {metric/revenue} / {metric/campaign_spend}
@@ -3097,7 +3113,7 @@ interactions:
               attributes:
                 title: Revenue / Top 10
                 areRelationsValid: true
-                createdAt: 2025-11-03 09:41
+                createdAt: 2025-11-26 12:05
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
@@ -3112,7 +3128,7 @@ interactions:
               attributes:
                 title: Revenue / Top 10%
                 areRelationsValid: true
-                createdAt: 2025-11-03 09:41
+                createdAt: 2025-11-26 12:05
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
@@ -3127,7 +3143,7 @@ interactions:
               attributes:
                 title: Total Revenue
                 areRelationsValid: true
-                createdAt: 2025-11-03 09:41
+                createdAt: 2025-11-26 12:05
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} BY ALL OTHER
@@ -3142,7 +3158,7 @@ interactions:
               attributes:
                 title: Total Revenue (No Filters)
                 areRelationsValid: true
-                createdAt: 2025-11-03 09:41
+                createdAt: 2025-11-26 12:05
                 content:
                   format: $#,##0
                   maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
@@ -4667,6 +4683,10 @@ interactions:
                             title: Location
                             description: Location
                             sourceColumnDataType: STRING
+                            locale: en-US
+                            translations:
+                              - locale: cs-CZ
+                                sourceColumn: geo__state__location_cz
                             tags:
                               - Customers
                             valueType: GEO
