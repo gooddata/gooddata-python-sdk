@@ -1,0 +1,54 @@
+---
+description: Python development - mypy-clean code patterns
+alwaysApply: false
+---
+
+# Python Development
+
+**Goal:** Ship mypy-clean code on first pass. No "write → validate → fix" loops.
+
+**Supported versions**: Python 3.10 and higher
+
+## Imports
+
+**Absolute imports only.** Relative imports break monorepo navigation.
+```python
+from gooddata_sdk.client import GoodDataSdk  # ✅
+from .client import GoodDataSdk               # ❌
+```
+
+**All imports at top of file.** After docstring and `from __future__ import annotations`.
+
+## Type-first Habits
+
+- Every def + local (esp empty list/dict/set) annotated; dataclasses fully typed.
+- Use `from __future__ import annotations` for forward references.
+- Guard external data (YAML/JSON) as `Any` then narrow types.
+
+## External Data (YAML/JSON)
+
+```python
+raw = yaml.safe_load(handle)
+if not isinstance(raw, dict):
+    raise ValueError("expected mapping")
+cfg: dict[str, object] = {str(k): v for k, v in raw.items()}
+```
+
+## Casts / Guards
+
+- Single authoritative `cast(...)` + reuse variable
+- Guard pattern: `if isinstance(mode_raw, str): mode = mode_raw else: raise ValueError("...")`
+- `typing.assert_never` for exhaustive branches
+
+## Validation flow (If MCP server installed)
+- Python-only chores: `validate_python(path)` (format, lint, types, test).
+- Mixed stacks: run Python + Kotlin validators separately; skip umbrella `validate` until new classifier routing lands.
+
+## Documentation
+
+**Google-style docstrings** for all public APIs.
+
+## Dependencies
+
+Required: general/general
+Related: technologies/testing, packages/*
