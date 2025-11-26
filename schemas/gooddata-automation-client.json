@@ -406,7 +406,7 @@
             "type": "array"
           },
           "filters": {
-            "description": "Various filter types to filter execution result.",
+            "description": "Various filter types to filter execution result. For anomaly detection, exactly one date filter (RelativeDateFilter or AbsoluteDateFilter) is required.",
             "items": {
               "$ref": "#/components/schemas/FilterDefinition"
             },
@@ -439,6 +439,9 @@
           },
           {
             "$ref": "#/components/schemas/RelativeWrapper"
+          },
+          {
+            "$ref": "#/components/schemas/AnomalyDetectionWrapper"
           }
         ],
         "type": "object"
@@ -540,6 +543,52 @@
             "$ref": "#/components/schemas/MetricRecord"
           }
         },
+        "type": "object"
+      },
+      "AnomalyDetection": {
+        "properties": {
+          "granularity": {
+            "description": "Date granularity for anomaly detection. Only time-based granularities are supported (MINUTE, HOUR, DAY, WEEK, MONTH, QUARTER, YEAR).",
+            "enum": [
+              "MINUTE",
+              "HOUR",
+              "DAY",
+              "WEEK",
+              "MONTH",
+              "QUARTER",
+              "YEAR"
+            ],
+            "type": "string"
+          },
+          "measure": {
+            "$ref": "#/components/schemas/LocalIdentifier"
+          },
+          "sensitivity": {
+            "default": "MEDIUM",
+            "description": "Sensitivity level for anomaly detection",
+            "enum": [
+              "LOW",
+              "MEDIUM",
+              "HIGH"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "granularity",
+          "measure"
+        ],
+        "type": "object"
+      },
+      "AnomalyDetectionWrapper": {
+        "properties": {
+          "anomaly": {
+            "$ref": "#/components/schemas/AnomalyDetection"
+          }
+        },
+        "required": [
+          "anomaly"
+        ],
         "type": "object"
       },
       "ArithmeticMeasure": {
@@ -737,6 +786,9 @@
         "properties": {
           "condition": {
             "oneOf": [
+              {
+                "$ref": "#/components/schemas/AnomalyDetectionWrapper"
+              },
               {
                 "$ref": "#/components/schemas/ComparisonWrapper"
               },
@@ -1280,6 +1332,16 @@
             "description": "Dashboard identifier",
             "example": "761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
             "type": "string"
+          },
+          "dashboardTabsFiltersOverrides": {
+            "additionalProperties": {
+              "items": {
+                "$ref": "#/components/schemas/DashboardFilter"
+              },
+              "type": "array"
+            },
+            "description": "Map of tab-specific filter overrides. Key is tabId, value is list of filters for that tab.",
+            "type": "object"
           },
           "fileName": {
             "description": "Filename of downloaded file without extension.",

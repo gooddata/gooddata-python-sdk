@@ -4,6 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**anomaly** | [**AnomalyDetection**](AnomalyDetection.md) |  | [optional] 
 **comparison** | [**Comparison**](Comparison.md) |  | [optional] 
 **range** | [**Range**](Range.md) |  | [optional] 
 **relative** | [**Relative**](Relative.md) |  | [optional] 

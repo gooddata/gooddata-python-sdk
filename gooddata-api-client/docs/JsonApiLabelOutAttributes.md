@@ -8,11 +8,13 @@ Name | Type | Description | Notes
 **description** | **str** |  | [optional] 
 **geo_area_config** | [**JsonApiLabelOutAttributesGeoAreaConfig**](JsonApiLabelOutAttributesGeoAreaConfig.md) |  | [optional] 
 **is_hidden** | **bool** |  | [optional] 
+**locale** | **str** |  | [optional] 
 **primary** | **bool** |  | [optional] 
 **source_column** | **str** |  | [optional] 
 **source_column_data_type** | **str** |  | [optional] 
 **tags** | **[str]** |  | [optional] 
 **title** | **str** |  | [optional] 
+**translations** | [**[JsonApiLabelOutAttributesTranslationsInner]**](JsonApiLabelOutAttributesTranslationsInner.md) |  | [optional] 
 **value_type** | **str** |  | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 
