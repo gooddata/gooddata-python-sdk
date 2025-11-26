@@ -1,0 +1,37 @@
+---
+description: GoodData Pandas package - pandas integration layer for GoodData SDK
+alwaysApply: false
+---
+
+# GoodData Pandas Package
+
+**Location**: `packages/gooddata-pandas/`
+
+## Owns
+
+- Pandas Series and DataFrame creation from GoodData data
+- Integration layer between GoodData SDK and pandas
+
+## Does NOT Own
+
+- Core SDK functionality → gooddata-sdk package
+
+## Architecture
+
+**Dependency**: Depends on `gooddata-sdk` core package.
+
+**Main class**: `GoodPandas` - extends SDK with pandas-specific operations
+
+## Usage
+
+```python
+from gooddata_pandas import GoodPandas
+
+gp = GoodPandas(host="https://example.gooddata.com", token="...")
+df = gp.data_frames(workspace_id="demo", insight_id="...")
+```
+
+## Dependencies
+
+Required: technologies/python, packages/gooddata-sdk
+Related: technologies/testing

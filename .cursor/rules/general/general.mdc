@@ -1,0 +1,70 @@
+---
+alwaysApply: true
+---
+
+# GoodData Python SDK Coding Guidelines
+
+Applies to all packages and code in this Python SDK workspace.
+Think in steps before changes. Search for relevant cursor rules based on the character of changes.
+
+## Core Principles
+
+**Search first, don't invent**: Always search this repository for everything related to the developer question. **Do not invent a new design for something that already exists!**
+
+**Code Principles**: **1** Simplicity, **2** Readability, **3** Performance (don't over-optimize), **4** Maintainability, **5** Testability, **6** Reusability, **7** Encapsulation & single responsibility
+
+## ⚠️ CRITICAL: AI Behavior Rules - ALWAYS ENFORCE
+
+**NO AUTO-IMPLEMENTATION**: 
+- Do not generate code changes unless user explicitly asks for it
+- NEVER create summary/documentation markdown files unless explicitly requested
+- Break complex tasks into smaller deliverable units
+
+**For complex tasks**:
+1. Implement ONLY the first task, then STOP
+2. Ask permission to continue, offering: (a) next task only, or (b) all remaining tasks
+3. Create todos but DO NOT auto-implement them
+4. When in doubt, ask before implementing
+
+## Code Validation
+
+**If gdc-ruler MCP server is available**: Use `validate_python` tool with this workspace path.
+```
+validate_python(path=".")  # From workspace root
+```
+
+**Otherwise**: Run manually:
+```bash
+make format-fix && make mypy && make test
+```
+
+**Scoped testing**: `TEST_ENVS=py312 ADD_ARGS="-k test_name" make test`
+
+See `technologies/testing` rule for VCR cassette workflow.
+
+## Package Structure
+
+**Workspace packages** (in `packages/`):
+- `gooddata-sdk` - Core SDK for GoodData Cloud
+- `gooddata-pandas` - Pandas integration layer
+- `gooddata-dbt`, `gooddata-flight-server`, `gooddata-flexconnect`, `gooddata-pipelines`
+- `tests-support` - Shared test utilities
+
+**Generated clients** (do NOT edit manually):
+- `gooddata-api-client` - Generated from OpenAPI specs
+
+## Dependencies
+
+**Internal**: Use `~={current_version}` for package dependencies.
+
+**Adding**: Add to `pyproject.toml`, run `uv lock`.
+
+## OpenAPI Client Generation
+
+**DO NOT manually edit** generated client code in `gooddata-*-client/` directories.
+
+See `.openapi-generator/README.md` for regeneration instructions.
+
+## Fast-Changing Dependencies
+
+**When suggesting third-party libraries**: Verify current APIs, prefer established libraries, check Python 3.10+ compatibility.

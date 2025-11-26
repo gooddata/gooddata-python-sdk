@@ -1,0 +1,48 @@
+---
+description: GoodData SDK core package - primary interface for GoodData Cloud
+alwaysApply: false
+---
+
+# GoodData SDK Package
+
+**Location**: `packages/gooddata-sdk/`
+
+## Owns
+
+- Core SDK client (`GoodDataSdk`) - main entry point
+- Catalog services (workspaces, data sources, users, permissions)
+- Compute services (execution, caching, export)
+- Visualization services (insights, dashboards)
+- Declarative API support (layout export/import)
+- Model management (LDM, PDM operations)
+
+## Does NOT Own
+
+- Pandas integration → gooddata-pandas package
+- dbt integration → gooddata-dbt package
+- Flight server → gooddata-flight-server package
+- API client generation → gooddata-api-client (generated)
+
+## Architecture
+
+**Service-based**: `catalog_*`, `compute_*`, `insights_*`, `tables_*`
+
+**Depends on**: `gooddata-api-client` (generated OpenAPI client)
+
+## SDK Usage
+
+```python
+from gooddata_sdk import GoodDataSdk
+
+sdk = GoodDataSdk.create(host="https://example.gooddata.com", token="...")
+workspaces = sdk.catalog_workspace.list_workspaces()
+```
+
+## Testing
+
+Uses vcrpy cassettes. See `technologies/testing` rule for workflow.
+
+## Dependencies
+
+Required: technologies/python, technologies/testing
+Related: packages/gooddata-pandas
