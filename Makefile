@@ -70,8 +70,11 @@ download:
 .PHONY: mypy
 mypy:
 	RESULT=0; \
-	for project in $(NO_CLIENT_GD_PROJECTS_DIRS); do $(MAKE) -C packages/$${project} $@ || RESULT=$$?; done; \
+	for project in $(NO_CLIENT_GD_PROJECTS_DIRS); do $(MAKE) -C packages/$${project} mypy || RESULT=$$?; done; \
 	exit $$RESULT
+
+.PHONY: types
+types: mypy
 
 .PHONY: test
 test:
