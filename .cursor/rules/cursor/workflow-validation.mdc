@@ -1,0 +1,19 @@
+---
+description: Cursor IDE workflow validation and rule management
+alwaysApply: true
+---
+
+# Cursor IDE Workflow Validation
+
+## Workflow Constraints
+
+- Include all rules related to the user question; if rules mention dependencies, include those too.
+- After fully answering, report the list of used rules.
+- Example: **Used rules**: general/general, technologies/python, packages/gooddata-sdk
+- Do not print rule previews or long plans.
+- Keep status updates to one short sentence.
+- Never inline full rule contents; reference by rule path only when needed.
+
+## Rule Search
+
+Always look for relevant cursor rules based on the character of changes.
