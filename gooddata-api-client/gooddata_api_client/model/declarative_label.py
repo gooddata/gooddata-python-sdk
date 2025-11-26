@@ -31,7 +31,9 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.declarative_label_translation import DeclarativeLabelTranslation
     from gooddata_api_client.model.geo_area_config import GeoAreaConfig
+    globals()['DeclarativeLabelTranslation'] = DeclarativeLabelTranslation
     globals()['GeoAreaConfig'] = GeoAreaConfig
 
 
@@ -131,8 +133,10 @@ class DeclarativeLabel(ModelNormal):
             'description': (str,),  # noqa: E501
             'geo_area_config': (GeoAreaConfig,),  # noqa: E501
             'is_hidden': (bool,),  # noqa: E501
+            'locale': (str,),  # noqa: E501
             'source_column_data_type': (str,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
+            'translations': ([DeclarativeLabelTranslation],),  # noqa: E501
             'value_type': (str,),  # noqa: E501
         }
 
@@ -148,8 +152,10 @@ class DeclarativeLabel(ModelNormal):
         'description': 'description',  # noqa: E501
         'geo_area_config': 'geoAreaConfig',  # noqa: E501
         'is_hidden': 'isHidden',  # noqa: E501
+        'locale': 'locale',  # noqa: E501
         'source_column_data_type': 'sourceColumnDataType',  # noqa: E501
         'tags': 'tags',  # noqa: E501
+        'translations': 'translations',  # noqa: E501
         'value_type': 'valueType',  # noqa: E501
     }
 
@@ -202,8 +208,10 @@ class DeclarativeLabel(ModelNormal):
             description (str): Label description.. [optional]  # noqa: E501
             geo_area_config (GeoAreaConfig): [optional]  # noqa: E501
             is_hidden (bool): Determines if the label is hidden from AI features.. [optional]  # noqa: E501
+            locale (str): Default label locale.. [optional]  # noqa: E501
             source_column_data_type (str): A type of the source column. [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
+            translations ([DeclarativeLabelTranslation]): Other translations.. [optional]  # noqa: E501
             value_type (str): Specific type of label. [optional]  # noqa: E501
         """
 
@@ -301,8 +309,10 @@ class DeclarativeLabel(ModelNormal):
             description (str): Label description.. [optional]  # noqa: E501
             geo_area_config (GeoAreaConfig): [optional]  # noqa: E501
             is_hidden (bool): Determines if the label is hidden from AI features.. [optional]  # noqa: E501
+            locale (str): Default label locale.. [optional]  # noqa: E501
             source_column_data_type (str): A type of the source column. [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
+            translations ([DeclarativeLabelTranslation]): Other translations.. [optional]  # noqa: E501
             value_type (str): Specific type of label. [optional]  # noqa: E501
         """
 

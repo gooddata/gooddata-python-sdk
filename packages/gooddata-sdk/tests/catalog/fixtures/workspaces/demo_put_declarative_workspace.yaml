@@ -50,7 +50,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 51835898c2dd2faed4742415326c8a50
+          traceId: 3cd6f68c102855d15528f4df8f80e6f8
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces
@@ -134,7 +134,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '33964'
+          - '34058'
         Content-Type:
           - application/json
         DATE: *id001
@@ -1616,11 +1616,15 @@ interactions:
                     labels:
                       - description: Location
                         id: geo__state__location
+                        locale: en-US
                         sourceColumn: geo__state__location
                         sourceColumnDataType: STRING
                         tags:
                           - Customers
                         title: Location
+                        translations:
+                          - locale: cs-CZ
+                            sourceColumn: geo__state__location_cz
                         valueType: GEO
                     sourceColumn: state
                     sourceColumnDataType: STRING
@@ -1960,6 +1964,10 @@ interactions:
                       tags:
                         - Customers
                       valueType: GEO
+                      locale: en-US
+                      translations:
+                        - locale: cs-CZ
+                          sourceColumn: geo__state__location_cz
                   sourceColumn: state
                   title: State
                   sourceColumnDataType: STRING
@@ -3514,7 +3522,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '33806'
+          - '33900'
         Content-Type:
           - application/json
         DATE: *id001
@@ -4996,11 +5004,15 @@ interactions:
                     labels:
                       - description: Location
                         id: geo__state__location
+                        locale: en-US
                         sourceColumn: geo__state__location
                         sourceColumnDataType: STRING
                         tags:
                           - Customers
                         title: Location
+                        translations:
+                          - locale: cs-CZ
+                            sourceColumn: geo__state__location_cz
                         valueType: GEO
                     sourceColumn: state
                     sourceColumnDataType: STRING
@@ -6696,6 +6708,10 @@ interactions:
                             title: Location
                             description: Location
                             sourceColumnDataType: STRING
+                            locale: en-US
+                            translations:
+                              - locale: cs-CZ
+                                sourceColumn: geo__state__location_cz
                             tags:
                               - Customers
                             valueType: GEO

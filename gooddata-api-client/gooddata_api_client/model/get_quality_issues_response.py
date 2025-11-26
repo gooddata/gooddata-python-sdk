@@ -65,6 +65,7 @@ class GetQualityIssuesResponse(ModelNormal):
             'COMPLETED': "COMPLETED",
             'FAILED': "FAILED",
             'NOT_FOUND': "NOT_FOUND",
+            'DISABLED': "DISABLED",
         },
     }
 

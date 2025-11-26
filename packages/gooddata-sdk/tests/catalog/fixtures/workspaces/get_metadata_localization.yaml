@@ -283,8 +283,9 @@ interactions:
           id="metric.percent_revenue_from_top_10_customers.title"><segment><source>%
           Revenue from Top 10 Customers</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_percent_customers"><unit
           id="metric.percent_revenue_from_top_10_percent_customers.title"><segment><source>%
-          Revenue from Top 10% Customers</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_percent_products"><unit
-          id="metric.percent_revenue_from_top_10_percent_products.title"><segment><source>%
+          Revenue from Top 10% Customers</source></segment></unit></group><group id="metric.revenue-outdoor"><unit
+          id="metric.revenue-outdoor.title"><segment><source>Revenue (Outdoor)</source></segment></unit></group><group
+          id="metric.percent_revenue_from_top_10_percent_products"><unit id="metric.percent_revenue_from_top_10_percent_products.title"><segment><source>%
           Revenue from Top 10% Products</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_products"><unit
           id="metric.percent_revenue_from_top_10_products.title"><segment><source>%
           Revenue from Top 10 Products</source></segment></unit></group><group id="metric.percent_revenue_in_category"><unit
@@ -298,12 +299,10 @@ interactions:
           (Clothing)</source></segment></unit></group><group id="metric.revenue-electronic"><unit
           id="metric.revenue-electronic.title"><segment><source>Revenue (Electronic)</source></segment></unit></group><group
           id="metric.revenue-home"><unit id="metric.revenue-home.title"><segment><source>Revenue
-          (Home)</source></segment></unit></group><group id="metric.revenue-outdoor"><unit
-          id="metric.revenue-outdoor.title"><segment><source>Revenue (Outdoor)</source></segment></unit></group><group
-          id="metric.revenue_per_customer"><unit id="metric.revenue_per_customer.title"><segment><source>Revenue
-          per Customer</source></segment></unit></group><group id="metric.revenue_per_dollar_spent"><unit
-          id="metric.revenue_per_dollar_spent.title"><segment><source>Revenue per
-          Dollar Spent</source></segment></unit></group><group id="metric.revenue_top_10"><unit
+          (Home)</source></segment></unit></group><group id="metric.revenue_per_customer"><unit
+          id="metric.revenue_per_customer.title"><segment><source>Revenue per Customer</source></segment></unit></group><group
+          id="metric.revenue_per_dollar_spent"><unit id="metric.revenue_per_dollar_spent.title"><segment><source>Revenue
+          per Dollar Spent</source></segment></unit></group><group id="metric.revenue_top_10"><unit
           id="metric.revenue_top_10.title"><segment><source>Revenue / Top 10</source></segment></unit></group><group
           id="metric.revenue_top_10_percent"><unit id="metric.revenue_top_10_percent.title"><segment><source>Revenue
           / Top 10%</source></segment></unit></group><group id="metric.total_revenue"><unit

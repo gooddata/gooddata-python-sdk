@@ -31,12 +31,16 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.anomaly_detection import AnomalyDetection
+    from gooddata_api_client.model.anomaly_detection_wrapper import AnomalyDetectionWrapper
     from gooddata_api_client.model.comparison import Comparison
     from gooddata_api_client.model.comparison_wrapper import ComparisonWrapper
     from gooddata_api_client.model.range import Range
     from gooddata_api_client.model.range_wrapper import RangeWrapper
     from gooddata_api_client.model.relative import Relative
     from gooddata_api_client.model.relative_wrapper import RelativeWrapper
+    globals()['AnomalyDetection'] = AnomalyDetection
+    globals()['AnomalyDetectionWrapper'] = AnomalyDetectionWrapper
     globals()['Comparison'] = Comparison
     globals()['ComparisonWrapper'] = ComparisonWrapper
     globals()['Range'] = Range
@@ -98,6 +102,7 @@ class AutomationAlertCondition(ModelComposed):
         """
         lazy_import()
         return {
+            'anomaly': (AnomalyDetection,),  # noqa: E501
             'comparison': (Comparison,),  # noqa: E501
             'range': (Range,),  # noqa: E501
             'relative': (Relative,),  # noqa: E501
@@ -109,6 +114,7 @@ class AutomationAlertCondition(ModelComposed):
 
 
     attribute_map = {
+        'anomaly': 'anomaly',  # noqa: E501
         'comparison': 'comparison',  # noqa: E501
         'range': 'range',  # noqa: E501
         'relative': 'relative',  # noqa: E501
@@ -153,6 +159,7 @@ class AutomationAlertCondition(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            anomaly (AnomalyDetection): [optional]  # noqa: E501
             comparison (Comparison): [optional]  # noqa: E501
             range (Range): [optional]  # noqa: E501
             relative (Relative): [optional]  # noqa: E501
@@ -259,6 +266,7 @@ class AutomationAlertCondition(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            anomaly (AnomalyDetection): [optional]  # noqa: E501
             comparison (Comparison): [optional]  # noqa: E501
             range (Range): [optional]  # noqa: E501
             relative (Relative): [optional]  # noqa: E501
@@ -333,6 +341,7 @@ class AutomationAlertCondition(ModelComposed):
           'allOf': [
           ],
           'oneOf': [
+              AnomalyDetectionWrapper,
               ComparisonWrapper,
               RangeWrapper,
               RelativeWrapper,
