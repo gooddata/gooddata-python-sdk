@@ -640,6 +640,9 @@
               "format": {
                 "$ref": "#/components/schemas/AttributeFormat"
               },
+              "geoAreaConfig": {
+                "$ref": "#/components/schemas/GeoAreaConfig"
+              },
               "granularity": {
                 "description": "Date granularity of the attribute, only filled for date attributes.",
                 "enum": [
@@ -2333,6 +2336,31 @@
         "required": [
           "objects",
           "reasoning"
+        ],
+        "type": "object"
+      },
+      "GeoAreaConfig": {
+        "description": "Configuration specific to geo area labels.",
+        "properties": {
+          "collection": {
+            "$ref": "#/components/schemas/GeoCollection"
+          }
+        },
+        "required": [
+          "collection"
+        ],
+        "type": "object"
+      },
+      "GeoCollection": {
+        "properties": {
+          "id": {
+            "description": "Geo collection identifier.",
+            "maxLength": 255,
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
         ],
         "type": "object"
       },

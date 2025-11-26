@@ -799,9 +799,8 @@
       "AnomalyDetection": {
         "properties": {
           "granularity": {
-            "description": "Date granularity for anomaly detection. Only time-based granularities are supported (MINUTE, HOUR, DAY, WEEK, MONTH, QUARTER, YEAR).",
+            "description": "Date granularity for anomaly detection. Only time-based granularities are supported (HOUR, DAY, WEEK, MONTH, QUARTER, YEAR).",
             "enum": [
-              "MINUTE",
               "HOUR",
               "DAY",
               "WEEK",
@@ -1181,6 +1180,9 @@
               },
               "format": {
                 "$ref": "#/components/schemas/AttributeFormat"
+              },
+              "geoAreaConfig": {
+                "$ref": "#/components/schemas/GeoAreaConfig"
               },
               "granularity": {
                 "description": "Date granularity of the attribute, only filled for date attributes.",
@@ -2852,6 +2854,16 @@
               "$ref": "#/components/schemas/DashboardFilter"
             },
             "type": "array"
+          },
+          "dashboardTabsFiltersOverrides": {
+            "additionalProperties": {
+              "items": {
+                "$ref": "#/components/schemas/DashboardFilter"
+              },
+              "type": "array"
+            },
+            "description": "Map of tab-specific filter overrides. Key is tabId, value is list of filters for that tab.",
+            "type": "object"
           },
           "fileName": {
             "description": "Filename of downloaded file without extension.",
@@ -5672,7 +5684,9 @@
               "DATA_LOCALE",
               "LDM_DEFAULT_LOCALE",
               "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
-              "SORT_CASE_SENSITIVE"
+              "SORT_CASE_SENSITIVE",
+              "METRIC_FORMAT_OVERRIDE",
+              "ENABLE_AI_ON_DATA"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -7072,6 +7086,91 @@
         ],
         "type": "object"
       },
+      "EntitySearchBody": {
+        "description": "Request body for entity search operations",
+        "properties": {
+          "filter": {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "nullable": true,
+            "type": "string"
+          },
+          "includes": {
+            "description": "List of related entities to include in the response",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true,
+            "type": "array"
+          },
+          "metaInclude": {
+            "description": "Set of metadata fields to include in the response",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true,
+            "type": "array",
+            "uniqueItems": true
+          },
+          "page": {
+            "$ref": "#/components/schemas/EntitySearchPage"
+          },
+          "sort": {
+            "description": "Sorting criteria (can specify multiple sort orders)",
+            "items": {
+              "$ref": "#/components/schemas/EntitySearchSort"
+            },
+            "nullable": true,
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "EntitySearchPage": {
+        "description": "Pagination information for entity search",
+        "properties": {
+          "index": {
+            "default": 0,
+            "description": "Zero-based page index",
+            "format": "int32",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "size": {
+            "default": 100,
+            "description": "Number of items per page",
+            "format": "int32",
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "index",
+          "size"
+        ],
+        "type": "object"
+      },
+      "EntitySearchSort": {
+        "description": "Sorting criteria for entity search",
+        "properties": {
+          "direction": {
+            "default": "ASC",
+            "description": "Sort direction",
+            "enum": [
+              "ASC",
+              "DESC"
+            ],
+            "type": "string"
+          },
+          "property": {
+            "description": "Property name to sort by",
+            "type": "string"
+          }
+        },
+        "required": [
+          "property"
+        ],
+        "type": "object"
+      },
       "ExecutionLinks": {
         "description": "Links to the execution result.",
         "properties": {
@@ -7802,6 +7901,7 @@
       "GeoCollection": {
         "properties": {
           "id": {
+            "description": "Geo collection identifier.",
             "maxLength": 255,
             "type": "string"
           }
@@ -9820,6 +9920,79 @@
           }
         ]
       },
+      "JsonApiAttributePatch": {
+        "description": "JSON:API representation of patching attribute entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "locale": {
+                "type": "string"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "relationships": {
+            "properties": {
+              "defaultView": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiLabelToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "attribute"
+            ],
+            "example": "attribute",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiAttributePatchDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiAttributePatch"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
       "JsonApiAttributeToManyLinkage": {
         "description": "References to other resource objects in a to-many (\\\"relationship\\\"). Relationships can be specified by including a member in a resource's links object.",
         "items": {
@@ -10993,6 +11166,41 @@
           "attributes",
           "id",
           "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiAutomationResultOutList": {
+        "description": "A JSON:API document with a list of resources",
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/JsonApiAutomationResultOutWithLinks"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "included": {
+            "description": "Included resources",
+            "items": {
+              "$ref": "#/components/schemas/JsonApiAutomationOutWithLinks"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "links": {
+            "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
         ],
         "type": "object"
       },
@@ -13330,6 +13538,60 @@
           }
         ]
       },
+      "JsonApiDatasetPatch": {
+        "description": "JSON:API representation of patching dataset entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "dataset"
+            ],
+            "example": "dataset",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiDatasetPatchDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiDatasetPatch"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
       "JsonApiDatasetToManyLinkage": {
         "description": "References to other resource objects in a to-many (\\\"relationship\\\"). Relationships can be specified by including a member in a resource's links object.",
         "items": {
@@ -14674,6 +14936,60 @@
             "$ref": "#/components/schemas/ObjectLinksContainer"
           }
         ]
+      },
+      "JsonApiFactPatch": {
+        "description": "JSON:API representation of patching fact entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "fact"
+            ],
+            "example": "fact",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiFactPatchDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiFactPatch"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
       },
       "JsonApiFactToManyLinkage": {
         "description": "References to other resource objects in a to-many (\\\"relationship\\\"). Relationships can be specified by including a member in a resource's links object.",
@@ -16339,6 +16655,81 @@
           }
         ]
       },
+      "JsonApiLabelPatch": {
+        "description": "JSON:API representation of patching label entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "locale": {
+                "type": "string"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              },
+              "translations": {
+                "items": {
+                  "properties": {
+                    "locale": {
+                      "type": "string"
+                    },
+                    "sourceColumn": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "locale",
+                    "sourceColumn"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "label"
+            ],
+            "example": "label",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiLabelPatchDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiLabelPatch"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
       "JsonApiLabelToManyLinkage": {
         "description": "References to other resource objects in a to-many (\\\"relationship\\\"). Relationships can be specified by including a member in a resource's links object.",
         "items": {
@@ -17098,6 +17489,14 @@
                   "maql": {
                     "maxLength": 10000,
                     "type": "string"
+                  },
+                  "metricType": {
+                    "description": "Categorizes metric semantics (e.g., currency).",
+                    "enum": [
+                      "UNSPECIFIED",
+                      "CURRENCY"
+                    ],
+                    "type": "string"
                   }
                 },
                 "required": [
@@ -17196,6 +17595,14 @@
                   },
                   "maql": {
                     "maxLength": 10000,
+                    "type": "string"
+                  },
+                  "metricType": {
+                    "description": "Categorizes metric semantics (e.g., currency).",
+                    "enum": [
+                      "UNSPECIFIED",
+                      "CURRENCY"
+                    ],
                     "type": "string"
                   }
                 },
@@ -17471,6 +17878,14 @@
                   "maql": {
                     "maxLength": 10000,
                     "type": "string"
+                  },
+                  "metricType": {
+                    "description": "Categorizes metric semantics (e.g., currency).",
+                    "enum": [
+                      "UNSPECIFIED",
+                      "CURRENCY"
+                    ],
+                    "type": "string"
                   }
                 },
                 "required": [
@@ -17547,6 +17962,14 @@
                   },
                   "maql": {
                     "maxLength": 10000,
+                    "type": "string"
+                  },
+                  "metricType": {
+                    "description": "Categorizes metric semantics (e.g., currency).",
+                    "enum": [
+                      "UNSPECIFIED",
+                      "CURRENCY"
+                    ],
                     "type": "string"
                   }
                 },
@@ -18603,7 +19026,9 @@
                   "DATA_LOCALE",
                   "LDM_DEFAULT_LOCALE",
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
-                  "SORT_CASE_SENSITIVE"
+                  "SORT_CASE_SENSITIVE",
+                  "METRIC_FORMAT_OVERRIDE",
+                  "ENABLE_AI_ON_DATA"
                 ],
                 "type": "string"
               }
@@ -18691,7 +19116,9 @@
                   "DATA_LOCALE",
                   "LDM_DEFAULT_LOCALE",
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
-                  "SORT_CASE_SENSITIVE"
+                  "SORT_CASE_SENSITIVE",
+                  "METRIC_FORMAT_OVERRIDE",
+                  "ENABLE_AI_ON_DATA"
                 ],
                 "type": "string"
               }
@@ -18819,7 +19246,9 @@
                   "DATA_LOCALE",
                   "LDM_DEFAULT_LOCALE",
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
-                  "SORT_CASE_SENSITIVE"
+                  "SORT_CASE_SENSITIVE",
+                  "METRIC_FORMAT_OVERRIDE",
+                  "ENABLE_AI_ON_DATA"
                 ],
                 "type": "string"
               }
@@ -20313,7 +20742,9 @@
                   "DATA_LOCALE",
                   "LDM_DEFAULT_LOCALE",
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
-                  "SORT_CASE_SENSITIVE"
+                  "SORT_CASE_SENSITIVE",
+                  "METRIC_FORMAT_OVERRIDE",
+                  "ENABLE_AI_ON_DATA"
                 ],
                 "type": "string"
               }
@@ -20401,7 +20832,9 @@
                   "DATA_LOCALE",
                   "LDM_DEFAULT_LOCALE",
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
-                  "SORT_CASE_SENSITIVE"
+                  "SORT_CASE_SENSITIVE",
+                  "METRIC_FORMAT_OVERRIDE",
+                  "ENABLE_AI_ON_DATA"
                 ],
                 "type": "string"
               }
@@ -22592,7 +23025,9 @@
                   "DATA_LOCALE",
                   "LDM_DEFAULT_LOCALE",
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
-                  "SORT_CASE_SENSITIVE"
+                  "SORT_CASE_SENSITIVE",
+                  "METRIC_FORMAT_OVERRIDE",
+                  "ENABLE_AI_ON_DATA"
                 ],
                 "type": "string"
               }
@@ -22680,7 +23115,9 @@
                   "DATA_LOCALE",
                   "LDM_DEFAULT_LOCALE",
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
-                  "SORT_CASE_SENSITIVE"
+                  "SORT_CASE_SENSITIVE",
+                  "METRIC_FORMAT_OVERRIDE",
+                  "ENABLE_AI_ON_DATA"
                 ],
                 "type": "string"
               }
@@ -22834,7 +23271,9 @@
                   "DATA_LOCALE",
                   "LDM_DEFAULT_LOCALE",
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
-                  "SORT_CASE_SENSITIVE"
+                  "SORT_CASE_SENSITIVE",
+                  "METRIC_FORMAT_OVERRIDE",
+                  "ENABLE_AI_ON_DATA"
                 ],
                 "type": "string"
               }
@@ -22922,7 +23361,9 @@
                   "DATA_LOCALE",
                   "LDM_DEFAULT_LOCALE",
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
-                  "SORT_CASE_SENSITIVE"
+                  "SORT_CASE_SENSITIVE",
+                  "METRIC_FORMAT_OVERRIDE",
+                  "ENABLE_AI_ON_DATA"
                 ],
                 "type": "string"
               }
@@ -24860,7 +25301,9 @@
               "DATA_LOCALE",
               "LDM_DEFAULT_LOCALE",
               "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
-              "SORT_CASE_SENSITIVE"
+              "SORT_CASE_SENSITIVE",
+              "METRIC_FORMAT_OVERRIDE",
+              "ENABLE_AI_ON_DATA"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -31792,6 +32235,12 @@
                   "format": "binary",
                   "type": "string"
                 }
+              },
+              "application/zip": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
               }
             },
             "description": "Binary export result.",
@@ -32032,6 +32481,12 @@
                   "type": "string"
                 }
               },
+              "application/zip": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              },
               "text/csv": {
                 "schema": {
                   "format": "binary",
@@ -32066,6 +32521,12 @@
                 }
               },
               "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              },
+              "application/zip": {
                 "schema": {
                   "format": "binary",
                   "type": "string"
@@ -32188,6 +32649,12 @@
                   "format": "binary",
                   "type": "string"
                 }
+              },
+              "application/zip": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
               }
             },
             "description": "Binary export result.",
@@ -32205,6 +32672,12 @@
           "202": {
             "content": {
               "application/pdf": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              },
+              "application/zip": {
                 "schema": {
                   "format": "binary",
                   "type": "string"
@@ -38363,6 +38836,73 @@
         ]
       }
     },
+    "/api/v1/entities/workspaces/{workspaceId}/aggregatedFacts/search": {
+      "post": {
+        "operationId": "searchEntities@AggregatedFacts",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "origin",
+            "required": false,
+            "schema": {
+              "default": "ALL",
+              "description": "Defines scope of origin of objects. All by default.",
+              "enum": [
+                "ALL",
+                "PARENTS",
+                "NATIVE"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntitySearchBody"
+              }
+            }
+          },
+          "description": "Search request body with filter, pagination, and sorting options",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiAggregatedFactOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Search request for AggregatedFact",
+        "tags": [
+          "entities",
+          "workspace-object-controller"
+        ]
+      }
+    },
     "/api/v1/entities/workspaces/{workspaceId}/aggregatedFacts/{objectId}": {
       "get": {
         "operationId": "getEntity@AggregatedFacts",
@@ -38693,6 +39233,79 @@
           "description": "Contains minimal permission level required to manage this object type.",
           "permissions": [
             "ANALYZE"
+          ]
+        }
+      }
+    },
+    "/api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/search": {
+      "post": {
+        "operationId": "searchEntities@AnalyticalDashboards",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "origin",
+            "required": false,
+            "schema": {
+              "default": "ALL",
+              "description": "Defines scope of origin of objects. All by default.",
+              "enum": [
+                "ALL",
+                "PARENTS",
+                "NATIVE"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntitySearchBody"
+              }
+            }
+          },
+          "description": "Search request body with filter, pagination, and sorting options",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiAnalyticalDashboardOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Search request for AnalyticalDashboard",
+        "tags": [
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
           ]
         }
       }
@@ -39262,6 +39875,79 @@
         }
       }
     },
+    "/api/v1/entities/workspaces/{workspaceId}/attributeHierarchies/search": {
+      "post": {
+        "operationId": "searchEntities@AttributeHierarchies",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "origin",
+            "required": false,
+            "schema": {
+              "default": "ALL",
+              "description": "Defines scope of origin of objects. All by default.",
+              "enum": [
+                "ALL",
+                "PARENTS",
+                "NATIVE"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntitySearchBody"
+              }
+            }
+          },
+          "description": "Search request body with filter, pagination, and sorting options",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiAttributeHierarchyOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Search request for AttributeHierarchy",
+        "tags": [
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
+      }
+    },
     "/api/v1/entities/workspaces/{workspaceId}/attributeHierarchies/{objectId}": {
       "delete": {
         "operationId": "deleteEntity@AttributeHierarchies",
@@ -39711,6 +40397,73 @@
         ]
       }
     },
+    "/api/v1/entities/workspaces/{workspaceId}/attributes/search": {
+      "post": {
+        "operationId": "searchEntities@Attributes",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "origin",
+            "required": false,
+            "schema": {
+              "default": "ALL",
+              "description": "Defines scope of origin of objects. All by default.",
+              "enum": [
+                "ALL",
+                "PARENTS",
+                "NATIVE"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntitySearchBody"
+              }
+            }
+          },
+          "description": "Search request body with filter, pagination, and sorting options",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiAttributeOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Search request for Attribute",
+        "tags": [
+          "entities",
+          "workspace-object-controller"
+        ]
+      }
+    },
     "/api/v1/entities/workspaces/{workspaceId}/attributes/{objectId}": {
       "get": {
         "operationId": "getEntity@Attributes",
@@ -39810,6 +40563,154 @@
         "summary": "Get an Attribute",
         "tags": [
           "Attributes",
+          "entities",
+          "workspace-object-controller"
+        ]
+      },
+      "patch": {
+        "operationId": "patchEntity@Attributes",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "title==someString;description==someString;dataset.id==321;defaultView.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "dataset,defaultView,labels,attributeHierarchies",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "datasets",
+                  "labels",
+                  "attributeHierarchies",
+                  "dataset",
+                  "defaultView",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiAttributePatchDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiAttributeOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Patch an Attribute (beta)",
+        "tags": [
+          "Attributes",
+          "entities",
+          "workspace-object-controller"
+        ]
+      }
+    },
+    "/api/v1/entities/workspaces/{workspaceId}/automationResults/search": {
+      "post": {
+        "operationId": "searchEntities@AutomationResults",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "origin",
+            "required": false,
+            "schema": {
+              "default": "ALL",
+              "description": "Defines scope of origin of objects. All by default.",
+              "enum": [
+                "ALL",
+                "PARENTS",
+                "NATIVE"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntitySearchBody"
+              }
+            }
+          },
+          "description": "Search request body with filter, pagination, and sorting options",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiAutomationResultOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Search request for AutomationResult",
+        "tags": [
           "entities",
           "workspace-object-controller"
         ]
@@ -40042,6 +40943,79 @@
           "description": "Contains minimal permission level required to manage this object type.",
           "permissions": [
             "CREATE_AUTOMATION"
+          ]
+        }
+      }
+    },
+    "/api/v1/entities/workspaces/{workspaceId}/automations/search": {
+      "post": {
+        "operationId": "searchEntities@Automations",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "origin",
+            "required": false,
+            "schema": {
+              "default": "ALL",
+              "description": "Defines scope of origin of objects. All by default.",
+              "enum": [
+                "ALL",
+                "PARENTS",
+                "NATIVE"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntitySearchBody"
+              }
+            }
+          },
+          "description": "Search request body with filter, pagination, and sorting options",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiAutomationOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Search request for Automation",
+        "tags": [
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
           ]
         }
       }
@@ -40562,6 +41536,79 @@
         ]
       }
     },
+    "/api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/search": {
+      "post": {
+        "operationId": "searchEntities@CustomApplicationSettings",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "origin",
+            "required": false,
+            "schema": {
+              "default": "ALL",
+              "description": "Defines scope of origin of objects. All by default.",
+              "enum": [
+                "ALL",
+                "PARENTS",
+                "NATIVE"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntitySearchBody"
+              }
+            }
+          },
+          "description": "Search request body with filter, pagination, and sorting options",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiCustomApplicationSettingOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Search request for CustomApplicationSetting",
+        "tags": [
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
+      }
+    },
     "/api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/{objectId}": {
       "delete": {
         "operationId": "deleteEntity@CustomApplicationSettings",
@@ -41021,6 +42068,79 @@
         }
       }
     },
+    "/api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/search": {
+      "post": {
+        "operationId": "searchEntities@DashboardPlugins",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "origin",
+            "required": false,
+            "schema": {
+              "default": "ALL",
+              "description": "Defines scope of origin of objects. All by default.",
+              "enum": [
+                "ALL",
+                "PARENTS",
+                "NATIVE"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntitySearchBody"
+              }
+            }
+          },
+          "description": "Search request body with filter, pagination, and sorting options",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiDashboardPluginOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Search request for DashboardPlugin",
+        "tags": [
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
+      }
+    },
     "/api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId}": {
       "delete": {
         "operationId": "deleteEntity@DashboardPlugins",
@@ -41468,6 +42588,73 @@
         ]
       }
     },
+    "/api/v1/entities/workspaces/{workspaceId}/datasets/search": {
+      "post": {
+        "operationId": "searchEntities@Datasets",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "origin",
+            "required": false,
+            "schema": {
+              "default": "ALL",
+              "description": "Defines scope of origin of objects. All by default.",
+              "enum": [
+                "ALL",
+                "PARENTS",
+                "NATIVE"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntitySearchBody"
+              }
+            }
+          },
+          "description": "Search request body with filter, pagination, and sorting options",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiDatasetOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Search request for Dataset",
+        "tags": [
+          "entities",
+          "workspace-object-controller"
+        ]
+      }
+    },
     "/api/v1/entities/workspaces/{workspaceId}/datasets/{objectId}": {
       "get": {
         "operationId": "getEntity@Datasets",
@@ -41566,6 +42753,88 @@
           }
         },
         "summary": "Get a Dataset",
+        "tags": [
+          "Datasets",
+          "entities",
+          "workspace-object-controller"
+        ]
+      },
+      "patch": {
+        "operationId": "patchEntity@Datasets",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "title==someString;description==someString",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "attributes,facts,aggregatedFacts,references,workspaceDataFilters",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "attributes",
+                  "facts",
+                  "aggregatedFacts",
+                  "datasets",
+                  "workspaceDataFilters",
+                  "references",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiDatasetPatchDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiDatasetOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Patch a Dataset (beta)",
         "tags": [
           "Datasets",
           "entities",
@@ -41796,6 +43065,79 @@
           "description": "Contains minimal permission level required to manage this object type.",
           "permissions": [
             "ANALYZE"
+          ]
+        }
+      }
+    },
+    "/api/v1/entities/workspaces/{workspaceId}/exportDefinitions/search": {
+      "post": {
+        "operationId": "searchEntities@ExportDefinitions",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "origin",
+            "required": false,
+            "schema": {
+              "default": "ALL",
+              "description": "Defines scope of origin of objects. All by default.",
+              "enum": [
+                "ALL",
+                "PARENTS",
+                "NATIVE"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntitySearchBody"
+              }
+            }
+          },
+          "description": "Search request body with filter, pagination, and sorting options",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiExportDefinitionOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Search request for ExportDefinition",
+        "tags": [
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
           ]
         }
       }
@@ -42267,6 +43609,79 @@
         }
       }
     },
+    "/api/v1/entities/workspaces/{workspaceId}/facts/search": {
+      "post": {
+        "operationId": "searchEntities@Facts",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "origin",
+            "required": false,
+            "schema": {
+              "default": "ALL",
+              "description": "Defines scope of origin of objects. All by default.",
+              "enum": [
+                "ALL",
+                "PARENTS",
+                "NATIVE"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntitySearchBody"
+              }
+            }
+          },
+          "description": "Search request body with filter, pagination, and sorting options",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiFactOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Search request for Fact",
+        "tags": [
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
+      }
+    },
     "/api/v1/entities/workspaces/{workspaceId}/facts/{objectId}": {
       "get": {
         "operationId": "getEntity@Facts",
@@ -42370,6 +43785,90 @@
           "description": "Contains minimal permission level required to view this object type.",
           "permissions": [
             "VIEW"
+          ]
+        }
+      },
+      "patch": {
+        "operationId": "patchEntity@Facts",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "title==someString;description==someString;dataset.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "dataset",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "datasets",
+                  "dataset",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiFactPatchDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiFactOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Patch a Fact (beta)",
+        "tags": [
+          "Facts",
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "ANALYZE"
           ]
         }
       }
@@ -42585,6 +44084,79 @@
           "description": "Contains minimal permission level required to manage this object type.",
           "permissions": [
             "ANALYZE"
+          ]
+        }
+      }
+    },
+    "/api/v1/entities/workspaces/{workspaceId}/filterContexts/search": {
+      "post": {
+        "operationId": "searchEntities@FilterContexts",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "origin",
+            "required": false,
+            "schema": {
+              "default": "ALL",
+              "description": "Defines scope of origin of objects. All by default.",
+              "enum": [
+                "ALL",
+                "PARENTS",
+                "NATIVE"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntitySearchBody"
+              }
+            }
+          },
+          "description": "Search request body with filter, pagination, and sorting options",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiFilterContextOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Search request for FilterContext",
+        "tags": [
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
           ]
         }
       }
@@ -43108,6 +44680,79 @@
         }
       }
     },
+    "/api/v1/entities/workspaces/{workspaceId}/filterViews/search": {
+      "post": {
+        "operationId": "searchEntities@FilterViews",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "origin",
+            "required": false,
+            "schema": {
+              "default": "ALL",
+              "description": "Defines scope of origin of objects. All by default.",
+              "enum": [
+                "ALL",
+                "PARENTS",
+                "NATIVE"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntitySearchBody"
+              }
+            }
+          },
+          "description": "Search request body with filter, pagination, and sorting options",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiFilterViewOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Search request for FilterView",
+        "tags": [
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
+      }
+    },
     "/api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId}": {
       "delete": {
         "operationId": "deleteEntity@FilterViews",
@@ -43538,6 +45183,79 @@
         }
       }
     },
+    "/api/v1/entities/workspaces/{workspaceId}/labels/search": {
+      "post": {
+        "operationId": "searchEntities@Labels",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "origin",
+            "required": false,
+            "schema": {
+              "default": "ALL",
+              "description": "Defines scope of origin of objects. All by default.",
+              "enum": [
+                "ALL",
+                "PARENTS",
+                "NATIVE"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntitySearchBody"
+              }
+            }
+          },
+          "description": "Search request body with filter, pagination, and sorting options",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiLabelOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Search request for Label",
+        "tags": [
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
+      }
+    },
     "/api/v1/entities/workspaces/{workspaceId}/labels/{objectId}": {
       "get": {
         "operationId": "getEntity@Labels",
@@ -43641,6 +45359,90 @@
           "description": "Contains minimal permission level required to view this object type.",
           "permissions": [
             "VIEW"
+          ]
+        }
+      },
+      "patch": {
+        "operationId": "patchEntity@Labels",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "title==someString;description==someString;attribute.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "attribute",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "attributes",
+                  "attribute",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiLabelPatchDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiLabelOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Patch a Label (beta)",
+        "tags": [
+          "Labels",
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "ANALYZE"
           ]
         }
       }
@@ -43838,6 +45640,73 @@
             "description": "Request successfully processed"
           }
         },
+        "tags": [
+          "entities",
+          "workspace-object-controller"
+        ]
+      }
+    },
+    "/api/v1/entities/workspaces/{workspaceId}/memoryItems/search": {
+      "post": {
+        "operationId": "searchEntities@MemoryItems",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "origin",
+            "required": false,
+            "schema": {
+              "default": "ALL",
+              "description": "Defines scope of origin of objects. All by default.",
+              "enum": [
+                "ALL",
+                "PARENTS",
+                "NATIVE"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntitySearchBody"
+              }
+            }
+          },
+          "description": "Search request body with filter, pagination, and sorting options",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiMemoryItemOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Search request for MemoryItem",
         "tags": [
           "entities",
           "workspace-object-controller"
@@ -44358,6 +46227,79 @@
           "description": "Contains minimal permission level required to manage this object type.",
           "permissions": [
             "MANAGE"
+          ]
+        }
+      }
+    },
+    "/api/v1/entities/workspaces/{workspaceId}/metrics/search": {
+      "post": {
+        "operationId": "searchEntities@Metrics",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "origin",
+            "required": false,
+            "schema": {
+              "default": "ALL",
+              "description": "Defines scope of origin of objects. All by default.",
+              "enum": [
+                "ALL",
+                "PARENTS",
+                "NATIVE"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntitySearchBody"
+              }
+            }
+          },
+          "description": "Search request body with filter, pagination, and sorting options",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiMetricOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Search request for Metric",
+        "tags": [
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
           ]
         }
       }
@@ -44917,6 +46859,73 @@
         ]
       }
     },
+    "/api/v1/entities/workspaces/{workspaceId}/userDataFilters/search": {
+      "post": {
+        "operationId": "searchEntities@UserDataFilters",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "origin",
+            "required": false,
+            "schema": {
+              "default": "ALL",
+              "description": "Defines scope of origin of objects. All by default.",
+              "enum": [
+                "ALL",
+                "PARENTS",
+                "NATIVE"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntitySearchBody"
+              }
+            }
+          },
+          "description": "Search request body with filter, pagination, and sorting options",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiUserDataFilterOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Search request for UserDataFilter",
+        "tags": [
+          "entities",
+          "workspace-object-controller"
+        ]
+      }
+    },
     "/api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId}": {
       "delete": {
         "operationId": "deleteEntity@UserDataFilters",
@@ -45457,6 +47466,79 @@
           "description": "Contains minimal permission level required to manage this object type.",
           "permissions": [
             "ANALYZE"
+          ]
+        }
+      }
+    },
+    "/api/v1/entities/workspaces/{workspaceId}/visualizationObjects/search": {
+      "post": {
+        "operationId": "searchEntities@VisualizationObjects",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "origin",
+            "required": false,
+            "schema": {
+              "default": "ALL",
+              "description": "Defines scope of origin of objects. All by default.",
+              "enum": [
+                "ALL",
+                "PARENTS",
+                "NATIVE"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntitySearchBody"
+              }
+            }
+          },
+          "description": "Search request body with filter, pagination, and sorting options",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiVisualizationObjectOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Search request for VisualizationObject",
+        "tags": [
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
           ]
         }
       }
@@ -46014,6 +48096,79 @@
         }
       }
     },
+    "/api/v1/entities/workspaces/{workspaceId}/workspaceDataFilterSettings/search": {
+      "post": {
+        "operationId": "searchEntities@WorkspaceDataFilterSettings",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "origin",
+            "required": false,
+            "schema": {
+              "default": "ALL",
+              "description": "Defines scope of origin of objects. All by default.",
+              "enum": [
+                "ALL",
+                "PARENTS",
+                "NATIVE"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntitySearchBody"
+              }
+            }
+          },
+          "description": "Search request body with filter, pagination, and sorting options",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiWorkspaceDataFilterSettingOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Search request for WorkspaceDataFilterSetting",
+        "tags": [
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
+      }
+    },
     "/api/v1/entities/workspaces/{workspaceId}/workspaceDataFilterSettings/{objectId}": {
       "delete": {
         "operationId": "deleteEntity@WorkspaceDataFilterSettings",
@@ -46549,6 +48704,79 @@
         }
       }
     },
+    "/api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters/search": {
+      "post": {
+        "operationId": "searchEntities@WorkspaceDataFilters",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "origin",
+            "required": false,
+            "schema": {
+              "default": "ALL",
+              "description": "Defines scope of origin of objects. All by default.",
+              "enum": [
+                "ALL",
+                "PARENTS",
+                "NATIVE"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntitySearchBody"
+              }
+            }
+          },
+          "description": "Search request body with filter, pagination, and sorting options",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiWorkspaceDataFilterOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Search request for WorkspaceDataFilter",
+        "tags": [
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
+      }
+    },
     "/api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters/{objectId}": {
       "delete": {
         "operationId": "deleteEntity@WorkspaceDataFilters",
@@ -47036,6 +49264,78 @@
           "entities",
           "workspace-object-controller"
         ]
+      }
+    },
+    "/api/v1/entities/workspaces/{workspaceId}/workspaceSettings/search": {
+      "post": {
+        "operationId": "searchEntities@WorkspaceSettings",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "origin",
+            "required": false,
+            "schema": {
+              "default": "ALL",
+              "description": "Defines scope of origin of objects. All by default.",
+              "enum": [
+                "ALL",
+                "PARENTS",
+                "NATIVE"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntitySearchBody"
+              }
+            }
+          },
+          "description": "Search request body with filter, pagination, and sorting options",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiWorkspaceSettingOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "tags": [
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
       }
     },
     "/api/v1/entities/workspaces/{workspaceId}/workspaceSettings/{objectId}": {

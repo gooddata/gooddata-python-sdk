@@ -548,9 +548,8 @@
       "AnomalyDetection": {
         "properties": {
           "granularity": {
-            "description": "Date granularity for anomaly detection. Only time-based granularities are supported (MINUTE, HOUR, DAY, WEEK, MONTH, QUARTER, YEAR).",
+            "description": "Date granularity for anomaly detection. Only time-based granularities are supported (HOUR, DAY, WEEK, MONTH, QUARTER, YEAR).",
             "enum": [
-              "MINUTE",
               "HOUR",
               "DAY",
               "WEEK",

@@ -123,9 +123,19 @@ else
   CONN_NETWORK_ARG="--network ${DOCKER_NETWORK_NAME}"
 fi
 
+detect_rootless_docker() {
+    docker info --format '{{json .SecurityOptions}}' 2>/dev/null | grep -q rootless
+}
+
+if detect_rootless_docker; then
+    RUN_AS="0:0"
+else
+    RUN_AS="$(id -u):$(id -g)"
+fi
+
 docker run --rm \
     -v "${ROOT_DIR}:/local" \
-    -u $(id -u ${USER}):$(id -g ${USER}) \
+    -u ${RUN_AS} \
     ${CONN_NETWORK_ARG} \
     openapitools/openapi-generator-cli:v6.0.1 generate \
     -c "/local/.openapi-generator/configs/${GD_API_CLIENT}.yaml" \

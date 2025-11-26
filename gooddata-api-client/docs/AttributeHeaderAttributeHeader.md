@@ -11,6 +11,7 @@ Name | Type | Description | Notes
 **local_identifier** | **str** | Local identifier of the attribute this header relates to. | 
 **primary_label** | [**RestApiIdentifier**](RestApiIdentifier.md) |  | 
 **format** | [**AttributeFormat**](AttributeFormat.md) |  | [optional] 
+**geo_area_config** | [**GeoAreaConfig**](GeoAreaConfig.md) |  | [optional] 
 **granularity** | **str** | Date granularity of the attribute, only filled for date attributes. | [optional] 
 **value_type** | **str** | Attribute value type. | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]

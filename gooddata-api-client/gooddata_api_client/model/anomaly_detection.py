@@ -61,7 +61,6 @@ class AnomalyDetection(ModelNormal):
 
     allowed_values = {
         ('granularity',): {
-            'MINUTE': "MINUTE",
             'HOUR': "HOUR",
             'DAY': "DAY",
             'WEEK': "WEEK",
@@ -129,7 +128,7 @@ class AnomalyDetection(ModelNormal):
         """AnomalyDetection - a model defined in OpenAPI
 
         Args:
-            granularity (str): Date granularity for anomaly detection. Only time-based granularities are supported (MINUTE, HOUR, DAY, WEEK, MONTH, QUARTER, YEAR).
+            granularity (str): Date granularity for anomaly detection. Only time-based granularities are supported (HOUR, DAY, WEEK, MONTH, QUARTER, YEAR).
             measure (LocalIdentifier):
 
         Keyword Args:
@@ -221,7 +220,7 @@ class AnomalyDetection(ModelNormal):
         """AnomalyDetection - a model defined in OpenAPI
 
         Args:
-            granularity (str): Date granularity for anomaly detection. Only time-based granularities are supported (MINUTE, HOUR, DAY, WEEK, MONTH, QUARTER, YEAR).
+            granularity (str): Date granularity for anomaly detection. Only time-based granularities are supported (HOUR, DAY, WEEK, MONTH, QUARTER, YEAR).
             measure (LocalIdentifier):
 
         Keyword Args:

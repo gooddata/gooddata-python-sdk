@@ -46,6 +46,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 content=JsonApiMetricInAttributesContent(
                     format="format_example",
                     maql="maql_example",
+                    metric_type="UNSPECIFIED",
                 ),
                 description="description_example",
                 is_hidden=True,
@@ -409,6 +410,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 content=JsonApiMetricInAttributesContent(
                     format="format_example",
                     maql="maql_example",
+                    metric_type="UNSPECIFIED",
                 ),
                 description="description_example",
                 is_hidden=True,
@@ -512,6 +514,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 content=JsonApiMetricInAttributesContent(
                     format="format_example",
                     maql="maql_example",
+                    metric_type="UNSPECIFIED",
                 ),
                 description="description_example",
                 is_hidden=True,
