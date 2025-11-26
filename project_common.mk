@@ -40,6 +40,9 @@ format-fix:
 mypy:
 	uv run tox $(TOX_FLAGS) -e mypy
 
+.PHONY: types
+types: mypy
+
 .PHONY: test
 test:
 	uv run tox -v $(TOX_FLAGS) $(LOCAL_TEST_ENVS) $(LOCAL_ADD_ARGS)
