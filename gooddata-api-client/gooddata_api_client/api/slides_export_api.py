@@ -149,7 +149,8 @@ class SlidesExportApi(object):
             headers_map={
                 'accept': [
                     'application/pdf',
-                    'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+                    'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                    'application/zip'
                 ],
                 'content_type': [],
             },

@@ -2525,7 +2525,8 @@ class ActionsApi(object):
             },
             headers_map={
                 'accept': [
-                    'application/pdf'
+                    'application/pdf',
+                    'application/zip'
                 ],
                 'content_type': [],
             },
@@ -3007,7 +3008,8 @@ class ActionsApi(object):
             headers_map={
                 'accept': [
                     'application/pdf',
-                    'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+                    'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                    'application/zip'
                 ],
                 'content_type': [],
             },
@@ -3119,6 +3121,7 @@ class ActionsApi(object):
                 'accept': [
                     'application/pdf',
                     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    'application/zip',
                     'text/csv',
                     'text/html'
                 ],

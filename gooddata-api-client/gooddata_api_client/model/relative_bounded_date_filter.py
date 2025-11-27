@@ -80,6 +80,9 @@ class RelativeBoundedDateFilter(ModelNormal):
             'GDC.TIME.HOUR_IN_DAY': "GDC.time.hour_in_day",
             'GDC.TIME.MINUTE': "GDC.time.minute",
             'GDC.TIME.MINUTE_IN_HOUR': "GDC.time.minute_in_hour",
+            'GDC.TIME.FISCAL_MONTH': "GDC.time.fiscal_month",
+            'GDC.TIME.FISCAL_QUARTER': "GDC.time.fiscal_quarter",
+            'GDC.TIME.FISCAL_YEAR': "GDC.time.fiscal_year",
         },
     }
 

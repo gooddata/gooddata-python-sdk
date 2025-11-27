@@ -43,6 +43,11 @@ with gooddata_api_client.ApiClient() as api_client:
         dashboard_filters_override=[
             DashboardFilter(),
         ],
+        dashboard_tabs_filters_overrides={
+            "key": [
+                DashboardFilter(),
+            ],
+        },
         file_name="result",
         format="XLSX",
         settings=DashboardExportSettings(
@@ -267,7 +272,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, text/csv, text/html
+ - **Accept**: application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/zip, text/csv, text/html
 
 
 ### HTTP response details

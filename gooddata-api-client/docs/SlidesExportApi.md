@@ -160,7 +160,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/pdf, application/vnd.openxmlformats-officedocument.presentationml.presentation
+ - **Accept**: application/pdf, application/vnd.openxmlformats-officedocument.presentationml.presentation, application/zip
 
 
 ### HTTP response details
