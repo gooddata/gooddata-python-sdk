@@ -151,6 +151,9 @@ _GRANULARITY: set[str] = {
     "DAY_OF_WEEK",
     "HOUR_OF_DAY",
     "MINUTE_OF_HOUR",
+    "FISCAL_MONTH",
+    "FISCAL_QUARTER",
+    "FISCAL_YEAR",
 }
 
 
