@@ -207,6 +207,7 @@ class TabularExportApi(object):
                 'accept': [
                     'application/pdf',
                     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    'application/zip',
                     'text/csv',
                     'text/html'
                 ],

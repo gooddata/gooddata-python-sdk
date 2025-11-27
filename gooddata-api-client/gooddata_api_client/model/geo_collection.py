@@ -108,7 +108,7 @@ class GeoCollection(ModelNormal):
         """GeoCollection - a model defined in OpenAPI
 
         Args:
-            id (str):
+            id (str): Geo collection identifier.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -197,7 +197,7 @@ class GeoCollection(ModelNormal):
         """GeoCollection - a model defined in OpenAPI
 
         Args:
-            id (str):
+            id (str): Geo collection identifier.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types

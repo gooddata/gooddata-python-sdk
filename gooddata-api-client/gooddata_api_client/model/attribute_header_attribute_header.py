@@ -32,8 +32,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.attribute_format import AttributeFormat
+    from gooddata_api_client.model.geo_area_config import GeoAreaConfig
     from gooddata_api_client.model.rest_api_identifier import RestApiIdentifier
     globals()['AttributeFormat'] = AttributeFormat
+    globals()['GeoAreaConfig'] = GeoAreaConfig
     globals()['RestApiIdentifier'] = RestApiIdentifier
 
 
@@ -79,6 +81,9 @@ class AttributeHeaderAttributeHeader(ModelNormal):
             'WEEK_OF_YEAR': "WEEK_OF_YEAR",
             'MONTH_OF_YEAR': "MONTH_OF_YEAR",
             'QUARTER_OF_YEAR': "QUARTER_OF_YEAR",
+            'FISCAL_MONTH': "FISCAL_MONTH",
+            'FISCAL_QUARTER': "FISCAL_QUARTER",
+            'FISCAL_YEAR': "FISCAL_YEAR",
         },
         ('value_type',): {
             'TEXT': "TEXT",
@@ -129,6 +134,7 @@ class AttributeHeaderAttributeHeader(ModelNormal):
             'local_identifier': (str,),  # noqa: E501
             'primary_label': (RestApiIdentifier,),  # noqa: E501
             'format': (AttributeFormat,),  # noqa: E501
+            'geo_area_config': (GeoAreaConfig,),  # noqa: E501
             'granularity': (str,),  # noqa: E501
             'value_type': (str,),  # noqa: E501
         }
@@ -146,6 +152,7 @@ class AttributeHeaderAttributeHeader(ModelNormal):
         'local_identifier': 'localIdentifier',  # noqa: E501
         'primary_label': 'primaryLabel',  # noqa: E501
         'format': 'format',  # noqa: E501
+        'geo_area_config': 'geoAreaConfig',  # noqa: E501
         'granularity': 'granularity',  # noqa: E501
         'value_type': 'valueType',  # noqa: E501
     }
@@ -200,6 +207,7 @@ class AttributeHeaderAttributeHeader(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             format (AttributeFormat): [optional]  # noqa: E501
+            geo_area_config (GeoAreaConfig): [optional]  # noqa: E501
             granularity (str): Date granularity of the attribute, only filled for date attributes.. [optional]  # noqa: E501
             value_type (str): Attribute value type.. [optional]  # noqa: E501
         """
@@ -302,6 +310,7 @@ class AttributeHeaderAttributeHeader(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             format (AttributeFormat): [optional]  # noqa: E501
+            geo_area_config (GeoAreaConfig): [optional]  # noqa: E501
             granularity (str): Date granularity of the attribute, only filled for date attributes.. [optional]  # noqa: E501
             value_type (str): Attribute value type.. [optional]  # noqa: E501
         """
