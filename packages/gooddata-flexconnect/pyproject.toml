@@ -1,7 +1,7 @@
 # (C) 2025 GoodData Corporation
 [project]
 name = "gooddata-flexconnect"
-version = "1.55.0"
+version = "1.56.0"
 description = "Build your own data source for GoodData Cloud and GoodData Cloud Native."
 readme = "README.md"
 license = "MIT"
@@ -29,8 +29,8 @@ keywords = [
 requires-python = ">=3.10"
 dependencies = [
     "dynaconf>=3.1.11,<4.0.0",
-    "gooddata-flight-server~=1.55.0",
-    "gooddata-sdk~=1.55.0",
+    "gooddata-flight-server~=1.56.0",
+    "gooddata-sdk~=1.56.0",
     "orjson>=3.9.15,<4.0.0",
     "pyarrow>=16.1.0",
     "structlog>=24.0.0,<25.0.0",
@@ -50,7 +50,7 @@ classifiers = [
 ]
 
 [project.urls]
-Documentation = "https://gooddata-flexconnect.readthedocs.io/en/v1.55.0"
+Documentation = "https://gooddata-flexconnect.readthedocs.io/en/v1.56.0"
 Source = "https://github.com/gooddata/gooddata-python-sdk"
 
 [dependency-groups]
