@@ -56,6 +56,10 @@ class JsonApiMetricInAttributesContent(ModelNormal):
     """
 
     allowed_values = {
+        ('metric_type',): {
+            'UNSPECIFIED': "UNSPECIFIED",
+            'CURRENCY': "CURRENCY",
+        },
     }
 
     validations = {
@@ -90,6 +94,7 @@ class JsonApiMetricInAttributesContent(ModelNormal):
         return {
             'maql': (str,),  # noqa: E501
             'format': (str,),  # noqa: E501
+            'metric_type': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -100,6 +105,7 @@ class JsonApiMetricInAttributesContent(ModelNormal):
     attribute_map = {
         'maql': 'maql',  # noqa: E501
         'format': 'format',  # noqa: E501
+        'metric_type': 'metricType',  # noqa: E501
     }
 
     read_only_vars = {
@@ -147,6 +153,7 @@ class JsonApiMetricInAttributesContent(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             format (str): [optional]  # noqa: E501
+            metric_type (str): Categorizes metric semantics (e.g., currency).. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -237,6 +244,7 @@ class JsonApiMetricInAttributesContent(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             format (str): [optional]  # noqa: E501
+            metric_type (str): Categorizes metric semantics (e.g., currency).. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

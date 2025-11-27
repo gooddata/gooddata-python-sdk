@@ -94,7 +94,10 @@ class JsonApiOrganizationSettingInAttributes(ModelNormal):
             'DATA_LOCALE': "DATA_LOCALE",
             'LDM_DEFAULT_LOCALE': "LDM_DEFAULT_LOCALE",
             'EXPORT_RESULT_POLLING_TIMEOUT_SECONDS': "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
+            'MAX_ZOOM_LEVEL': "MAX_ZOOM_LEVEL",
             'SORT_CASE_SENSITIVE': "SORT_CASE_SENSITIVE",
+            'METRIC_FORMAT_OVERRIDE': "METRIC_FORMAT_OVERRIDE",
+            'ENABLE_AI_ON_DATA': "ENABLE_AI_ON_DATA",
         },
     }
 

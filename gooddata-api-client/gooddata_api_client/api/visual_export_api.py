@@ -147,7 +147,8 @@ class VisualExportApi(object):
             },
             headers_map={
                 'accept': [
-                    'application/pdf'
+                    'application/pdf',
+                    'application/zip'
                 ],
                 'content_type': [],
             },

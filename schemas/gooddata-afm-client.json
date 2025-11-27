@@ -640,6 +640,9 @@
               "format": {
                 "$ref": "#/components/schemas/AttributeFormat"
               },
+              "geoAreaConfig": {
+                "$ref": "#/components/schemas/GeoAreaConfig"
+              },
               "granularity": {
                 "description": "Date granularity of the attribute, only filled for date attributes.",
                 "enum": [
@@ -658,7 +661,10 @@
                   "DAY_OF_YEAR",
                   "WEEK_OF_YEAR",
                   "MONTH_OF_YEAR",
-                  "QUARTER_OF_YEAR"
+                  "QUARTER_OF_YEAR",
+                  "FISCAL_MONTH",
+                  "FISCAL_QUARTER",
+                  "FISCAL_YEAR"
                 ],
                 "type": "string"
               },
@@ -830,7 +836,10 @@
               "DAY_OF_YEAR",
               "WEEK_OF_YEAR",
               "MONTH_OF_YEAR",
-              "QUARTER_OF_YEAR"
+              "QUARTER_OF_YEAR",
+              "FISCAL_MONTH",
+              "FISCAL_QUARTER",
+              "FISCAL_YEAR"
             ],
             "example": "DAY",
             "type": "string"
@@ -1621,7 +1630,10 @@
                   "DAY_OF_YEAR",
                   "WEEK_OF_YEAR",
                   "MONTH_OF_YEAR",
-                  "QUARTER_OF_YEAR"
+                  "QUARTER_OF_YEAR",
+                  "FISCAL_MONTH",
+                  "FISCAL_QUARTER",
+                  "FISCAL_YEAR"
                 ],
                 "type": "string"
               },
@@ -1912,7 +1924,10 @@
               "DAY_OF_YEAR",
               "WEEK_OF_YEAR",
               "MONTH_OF_YEAR",
-              "QUARTER_OF_YEAR"
+              "QUARTER_OF_YEAR",
+              "FISCAL_MONTH",
+              "FISCAL_QUARTER",
+              "FISCAL_YEAR"
             ],
             "type": "string"
           },
@@ -2336,6 +2351,31 @@
         ],
         "type": "object"
       },
+      "GeoAreaConfig": {
+        "description": "Configuration specific to geo area labels.",
+        "properties": {
+          "collection": {
+            "$ref": "#/components/schemas/GeoCollection"
+          }
+        },
+        "required": [
+          "collection"
+        ],
+        "type": "object"
+      },
+      "GeoCollection": {
+        "properties": {
+          "id": {
+            "description": "Geo collection identifier.",
+            "maxLength": 255,
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "type": "object"
+      },
       "GetQualityIssuesResponse": {
         "properties": {
           "issues": {
@@ -2459,7 +2499,10 @@
               "DAY_OF_YEAR",
               "WEEK_OF_YEAR",
               "MONTH_OF_YEAR",
-              "QUARTER_OF_YEAR"
+              "QUARTER_OF_YEAR",
+              "FISCAL_MONTH",
+              "FISCAL_QUARTER",
+              "FISCAL_YEAR"
             ],
             "type": "string"
           },
@@ -3263,7 +3306,10 @@
                   "DAY_OF_YEAR",
                   "WEEK_OF_YEAR",
                   "MONTH_OF_YEAR",
-                  "QUARTER_OF_YEAR"
+                  "QUARTER_OF_YEAR",
+                  "FISCAL_MONTH",
+                  "FISCAL_QUARTER",
+                  "FISCAL_YEAR"
                 ],
                 "example": "DAY",
                 "type": "string"

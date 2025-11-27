@@ -56,6 +56,9 @@ _GRANULARITY_CONVERSION = {
     "GDC.time.day_in_week": "DAY_OF_WEEK",
     "GDC.time.hour_in_day": "HOUR_OF_DAY",
     "GDC.time.minute_in_hour": "MINUTE_OF_HOUR",
+    "GDC.time.fiscal_month": "FISCAL_MONTH",
+    "GDC.time.fiscal_quarter": "FISCAL_QUARTER",
+    "GDC.time.fiscal_year": "FISCAL_YEAR",
 }
 
 _AGGREGATION_CONVERSION = {

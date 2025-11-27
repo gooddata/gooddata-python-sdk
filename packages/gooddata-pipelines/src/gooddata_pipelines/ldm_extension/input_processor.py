@@ -60,6 +60,9 @@ class LdmExtensionDataProcessor:
         "WEEK_OF_YEAR",
         "MONTH_OF_YEAR",
         "QUARTER_OF_YEAR",
+        "FISCAL_MONTH",
+        "FISCAL_QUARTER",
+        "FISCAL_YEAR",
     ]
 
     @staticmethod
