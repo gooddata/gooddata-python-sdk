@@ -469,7 +469,10 @@
               "DAY_OF_YEAR",
               "WEEK_OF_YEAR",
               "MONTH_OF_YEAR",
-              "QUARTER_OF_YEAR"
+              "QUARTER_OF_YEAR",
+              "FISCAL_MONTH",
+              "FISCAL_QUARTER",
+              "FISCAL_YEAR"
             ],
             "example": "DAY",
             "type": "string"
@@ -700,7 +703,10 @@
                   "GDC.time.hour",
                   "GDC.time.hour_in_day",
                   "GDC.time.minute",
-                  "GDC.time.minute_in_hour"
+                  "GDC.time.minute_in_hour",
+                  "GDC.time.fiscal_month",
+                  "GDC.time.fiscal_quarter",
+                  "GDC.time.fiscal_year"
                 ],
                 "type": "string"
               },
@@ -795,6 +801,16 @@
               "$ref": "#/components/schemas/DashboardFilter"
             },
             "type": "array"
+          },
+          "dashboardTabsFiltersOverrides": {
+            "additionalProperties": {
+              "items": {
+                "$ref": "#/components/schemas/DashboardFilter"
+              },
+              "type": "array"
+            },
+            "description": "Map of tab-specific filter overrides. Key is tabId, value is list of filters for that tab.",
+            "type": "object"
           },
           "fileName": {
             "description": "Filename of downloaded file without extension.",
@@ -1568,7 +1584,10 @@
               "GDC.time.hour",
               "GDC.time.hour_in_day",
               "GDC.time.minute",
-              "GDC.time.minute_in_hour"
+              "GDC.time.minute_in_hour",
+              "GDC.time.fiscal_month",
+              "GDC.time.fiscal_quarter",
+              "GDC.time.fiscal_year"
             ],
             "type": "string"
           },
@@ -1620,7 +1639,10 @@
                   "DAY_OF_YEAR",
                   "WEEK_OF_YEAR",
                   "MONTH_OF_YEAR",
-                  "QUARTER_OF_YEAR"
+                  "QUARTER_OF_YEAR",
+                  "FISCAL_MONTH",
+                  "FISCAL_QUARTER",
+                  "FISCAL_YEAR"
                 ],
                 "example": "DAY",
                 "type": "string"
@@ -2414,6 +2436,12 @@
                   "format": "binary",
                   "type": "string"
                 }
+              },
+              "application/zip": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
               }
             },
             "description": "Binary export result.",
@@ -2654,6 +2682,12 @@
                   "type": "string"
                 }
               },
+              "application/zip": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              },
               "text/csv": {
                 "schema": {
                   "format": "binary",
@@ -2688,6 +2722,12 @@
                 }
               },
               "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              },
+              "application/zip": {
                 "schema": {
                   "format": "binary",
                   "type": "string"
@@ -2810,6 +2850,12 @@
                   "format": "binary",
                   "type": "string"
                 }
+              },
+              "application/zip": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
               }
             },
             "description": "Binary export result.",
@@ -2827,6 +2873,12 @@
           "202": {
             "content": {
               "application/pdf": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              },
+              "application/zip": {
                 "schema": {
                   "format": "binary",
                   "type": "string"
