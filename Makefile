@@ -13,6 +13,9 @@ URL="${BASE_URL}/api/${API_VERSION}/schemas"
 
 include ci_tests.mk
 
+# Common command components
+RUFF = .venv/bin/ruff
+
 all:
 	echo "Nothing here yet."
 
@@ -23,24 +26,23 @@ dev:
 
 .PHONY: lint
 lint:
-	.venv/bin/ruff check .
+	$(RUFF) check .
 
 .PHONY: lint-fix
 lint-fix:
-	.venv/bin/ruff check . --fix
+	$(RUFF) check . --fix
 
 .PHONY: format
 format:
-	.venv/bin/ruff format --check .
-
-.PHONY: format-diff
-format-diff:
-	.venv/bin/ruff format --diff .
+	$(RUFF) format --check .
 
 .PHONY: format-fix
 format-fix:
-	.venv/bin/ruff format .
-	.venv/bin/ruff check . --fix --fixable I
+	$(RUFF) format .
+
+.PHONY: format-diff
+format-diff:
+	$(RUFF) format --diff .
 
 
 define download_client
@@ -50,8 +52,6 @@ endef
 define generate_client
 	./scripts/generate_client.sh gooddata-$(1)-client -f "/local/schemas/gooddata-$(1)-client.json"
 endef
-
-
 
 .PHONY: api-client
 api-client: download
