@@ -2,7 +2,7 @@
 
 # Common command components (run from workspace root, scoped to this package)
 ROOT_DIR = ../..
-RUFF = $(ROOT_DIR)/.venv/bin/ruff
+RUFF = ./.venv/bin/ruff
 PKG_PATH = packages/$(CURR_DIR_BASE_NAME)
 
 TOX_FLAGS =
