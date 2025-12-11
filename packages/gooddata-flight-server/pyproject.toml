@@ -1,7 +1,7 @@
 # (C) 2025 GoodData Corporation
 [project]
 name = "gooddata-flight-server"
-version = "1.56.0"
+version = "1.57.0"
 description = "Flight RPC server to host custom functions"
 readme = "README.md"
 license = "MIT"
@@ -52,7 +52,7 @@ classifiers = [
 ]
 
 [project.urls]
-Documentation = "https://gooddata-flight-server.readthedocs.io/en/v1.56.0"
+Documentation = "https://gooddata-flight-server.readthedocs.io/en/v1.57.0"
 Source = "https://github.com/gooddata/gooddata-python-sdk"
 
 [project.scripts]
