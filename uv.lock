@@ -726,7 +726,7 @@ trusted-deps = [
 
 [[package]]
 name = "gooddata-api-client"
-version = "1.56.0"
+version = "1.57.0"
 source = { editable = "gooddata-api-client" }
 dependencies = [
     { name = "python-dateutil" },
@@ -741,7 +741,7 @@ requires-dist = [
 
 [[package]]
 name = "gooddata-dbt"
-version = "1.56.0"
+version = "1.57.0"
 source = { editable = "packages/gooddata-dbt" }
 dependencies = [
     { name = "attrs" },
@@ -784,7 +784,7 @@ type = [
 
 [[package]]
 name = "gooddata-fdw"
-version = "1.56.0"
+version = "1.57.0"
 source = { editable = "packages/gooddata-fdw" }
 dependencies = [
     { name = "gooddata-sdk" },
@@ -823,7 +823,7 @@ type = [
 
 [[package]]
 name = "gooddata-flexconnect"
-version = "1.56.0"
+version = "1.57.0"
 source = { editable = "packages/gooddata-flexconnect" }
 dependencies = [
     { name = "dynaconf" },
@@ -868,7 +868,7 @@ type = [
 
 [[package]]
 name = "gooddata-flight-server"
-version = "1.56.0"
+version = "1.57.0"
 source = { editable = "packages/gooddata-flight-server" }
 dependencies = [
     { name = "dynaconf" },
@@ -915,7 +915,7 @@ type = [
 
 [[package]]
 name = "gooddata-pandas"
-version = "1.56.0"
+version = "1.57.0"
 source = { editable = "packages/gooddata-pandas" }
 dependencies = [
     { name = "gooddata-sdk" },
@@ -964,7 +964,7 @@ type = [
 
 [[package]]
 name = "gooddata-pipelines"
-version = "1.56.0"
+version = "1.57.0"
 source = { editable = "packages/gooddata-pipelines" }
 dependencies = [
     { name = "azure-identity" },
@@ -1019,7 +1019,7 @@ type = [
 
 [[package]]
 name = "gooddata-python-sdk-workspace"
-version = "1.56.0"
+version = "1.57.0"
 source = { virtual = "." }
 dependencies = [
     { name = "gooddata-api-client" },
@@ -1110,7 +1110,7 @@ type = [{ name = "mypy", specifier = "~=1.11.2" }]
 
 [[package]]
 name = "gooddata-sdk"
-version = "1.56.0"
+version = "1.57.0"
 source = { editable = "packages/gooddata-sdk" }
 dependencies = [
     { name = "attrs" },
