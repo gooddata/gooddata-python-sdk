@@ -57,6 +57,7 @@ class EntityIdentifier(ModelNormal):
 
     allowed_values = {
         ('type',): {
+            'AGGREGATEDFACT': "aggregatedFact",
             'ANALYTICALDASHBOARD': "analyticalDashboard",
             'ATTRIBUTE': "attribute",
             'ATTRIBUTEHIERARCHY': "attributeHierarchy",

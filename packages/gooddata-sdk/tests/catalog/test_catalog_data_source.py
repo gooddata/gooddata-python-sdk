@@ -87,8 +87,13 @@ def test_generate_logical_model(test_config: dict):
     """
     There is a bug in generate_logical_model. It returns in granularities sorted alphabetically,
     so it can not be compared  declarative_model == generated_declarative_model, because granularities are not the same.
+
+    Note: SQL-based datasets (with aggregated facts) are excluded from comparison since they're tested
+    separately in test_generate_logical_model_with_sql_datasets and can't be reproduced by generateLogicalModel.
     """
-    assert declarative_model.ldm.datasets == generated_declarative_model.ldm.datasets
+    # Filter out SQL-based datasets (those have sql property set, no data_source_table_id)
+    table_based_datasets = [ds for ds in declarative_model.ldm.datasets if ds.sql is None]
+    assert table_based_datasets == generated_declarative_model.ldm.datasets
     assert len(declarative_model.ldm.date_instances) == len(generated_declarative_model.ldm.date_instances)
 
 
@@ -106,8 +111,13 @@ def test_scan_pdm_and_generate_logical_model(test_config: dict):
     """
     There is a bug in generate_logical_model. It returns in granularities sorted alphabetically,
     so it can not be compared  declarative_model == generated_declarative_model, because granularities are not the same.
+
+    Note: SQL-based datasets (with aggregated facts) are excluded from comparison since they're tested
+    separately in test_scan_pdm_and_generate_logical_model_with_sql_datasets and can't be reproduced by scanning PDM.
     """
-    assert declarative_model.ldm.datasets == generated_declarative_model.ldm.datasets
+    # Filter out SQL-based datasets (those have sql property set, no data_source_table_id)
+    table_based_datasets = [ds for ds in declarative_model.ldm.datasets if ds.sql is None]
+    assert table_based_datasets == generated_declarative_model.ldm.datasets
     assert len(declarative_model.ldm.date_instances) == len(generated_declarative_model.ldm.date_instances)
 
 

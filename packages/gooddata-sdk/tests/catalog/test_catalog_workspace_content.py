@@ -29,7 +29,7 @@ from gooddata_sdk.utils import recreate_directory
 from tests_support.compare_utils import deep_eq
 from tests_support.vcrpy_utils import get_vcr
 
-from tests.catalog.test_catalog_workspace import _refresh_workspaces
+from tests.catalog.utils import _refresh_workspaces
 
 gd_vcr = get_vcr()
 
@@ -342,8 +342,9 @@ def test_get_dependent_entities_graph(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     response = sdk.catalog_workspace_content.get_dependent_entities_graph(workspace_id=test_config["workspace"])
 
-    assert len(response.graph.edges) == 171
-    assert len(response.graph.nodes) == 97
+    # Includes campaign_channels_per_category pre-aggregation dataset and its aggregatedFact
+    assert len(response.graph.edges) == 174
+    assert len(response.graph.nodes) == 101
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_dependent_entities_graph_from_entry_points.yaml"))
@@ -356,8 +357,9 @@ def test_get_dependent_entities_graph_from_entry_points(test_config):
         workspace_id=test_config["workspace"], dependent_entities_request=dependent_entities_request
     )
 
-    assert len(response.graph.edges) == 1
-    assert len(response.graph.nodes) == 2
+    # campaign_channel_id is referenced by campaign_channels dataset and campaign_channels_per_category pre-aggregation dataset
+    assert len(response.graph.edges) == 2
+    assert len(response.graph.nodes) == 3
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "ldm_store_load.yaml"))

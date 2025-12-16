@@ -13,6 +13,8 @@ from gooddata_api_client.model.json_api_export_template_post_optional_id_documen
     JsonApiExportTemplatePostOptionalIdDocument,
 )
 from gooddata_api_client.model.json_api_identity_provider_in_document import JsonApiIdentityProviderInDocument
+from gooddata_api_client.model.json_api_organization_patch import JsonApiOrganizationPatch
+from gooddata_api_client.model.json_api_organization_patch_document import JsonApiOrganizationPatchDocument
 from gooddata_api_client.model.json_api_organization_setting_in_document import JsonApiOrganizationSettingInDocument
 from gooddata_api_client.model.switch_identity_provider_request import SwitchIdentityProviderRequest
 
@@ -27,7 +29,6 @@ from gooddata_sdk.catalog.organization.entity_model.llm_endpoint import (
     CatalogLlmEndpointPatch,
     CatalogLlmEndpointPatchDocument,
 )
-from gooddata_sdk.catalog.organization.entity_model.organization import CatalogOrganizationDocument
 from gooddata_sdk.catalog.organization.entity_model.setting import CatalogOrganizationSetting
 from gooddata_sdk.catalog.organization.layout.identity_provider import CatalogDeclarativeIdentityProvider
 from gooddata_sdk.catalog.organization.layout.notification_channel import CatalogDeclarativeNotificationChannel
@@ -44,6 +45,9 @@ class CatalogOrganizationService(CatalogServiceBase):
     def update_name(self, name: str) -> None:
         """Updates the name of the organization.
 
+        Uses PATCH instead of PUT to avoid overwriting other organization properties
+        like the identity provider relationship.
+
         Args:
             name (str):
                 New name of the organization
@@ -52,12 +56,19 @@ class CatalogOrganizationService(CatalogServiceBase):
             None
         """
         organization = self.get_organization()
-        organization.attributes.name = name
-        organization_document = CatalogOrganizationDocument(data=organization)
-        self._entities_api.update_entity_organizations(organization.id, organization_document.to_api())
+        patch_data = JsonApiOrganizationPatch(
+            id=organization.id,
+            type="organization",
+            attributes={"name": name},
+        )
+        patch_document = JsonApiOrganizationPatchDocument(data=patch_data)
+        self._entities_api.patch_entity_organizations(organization.id, patch_document)
 
     def update_allowed_origins(self, allowed_origins: list[str]) -> None:
         """Updates the allowed origins of the organization.
+
+        Uses PATCH instead of PUT to avoid overwriting other organization properties
+        like the identity provider relationship.
 
         Args:
             allowed_origins (list[str]):
@@ -67,9 +78,13 @@ class CatalogOrganizationService(CatalogServiceBase):
             None
         """
         organization = self.get_organization()
-        organization.attributes.allowed_origins = allowed_origins
-        organization_document = CatalogOrganizationDocument(data=organization)
-        self._entities_api.update_entity_organizations(organization.id, organization_document.to_api())
+        patch_data = JsonApiOrganizationPatch(
+            id=organization.id,
+            type="organization",
+            attributes={"allowedOrigins": allowed_origins},
+        )
+        patch_document = JsonApiOrganizationPatchDocument(data=patch_data)
+        self._entities_api.patch_entity_organizations(organization.id, patch_document)
 
     def create_or_update_jwk(self, jwk: CatalogJwk) -> None:
         """Create a new jwk or overwrite an existing jwk with the same id.
