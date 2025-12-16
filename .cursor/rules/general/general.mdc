@@ -1,3 +1,4 @@
+# (C) 2025 GoodData Corporation
 ---
 alwaysApply: true
 ---
@@ -5,7 +6,7 @@ alwaysApply: true
 # GoodData Python SDK Coding Guidelines
 
 Applies to all packages and code in this Python SDK workspace.
-Think in steps before changes. Search for relevant cursor rules based on the character of changes.
+Think in steps before changes. Always search for relevant cursor rules based on the character of changes.
 
 ## Core Principles
 
@@ -15,10 +16,16 @@ Think in steps before changes. Search for relevant cursor rules based on the cha
 
 ## ⚠️ CRITICAL: AI Behavior Rules - ALWAYS ENFORCE
 
-**NO AUTO-IMPLEMENTATION**: 
+**NO AUTO-IMPLEMENTATION**:
+- Do not generate, rename or refactor what is not explicitly requested
 - Do not generate code changes unless user explicitly asks for it
-- NEVER create summary/documentation markdown files unless explicitly requested
+- NEVER create summary/documentation markdown files unless user explicitly requests it
+- NEVER update rule files for code issues - fix the code instead
 - Break complex tasks into smaller deliverable units
+
+**Documentation Quality**:
+- NEVER reference specific line numbers (e.g., "lines 45-340", "~line 60") in documentation or Cursor rules
+- Use descriptive structural locations instead (e.g., "in the outputs section", "at the top of the file")
 
 **For complex tasks**:
 1. Implement ONLY the first task, then STOP
@@ -28,19 +35,22 @@ Think in steps before changes. Search for relevant cursor rules based on the cha
 
 ## Code Validation
 
-**If gdc-ruler MCP server is available**: Use `validate_python` tool with this workspace path.
-```
-validate_python(path=".")  # From workspace root
+**MANDATORY after code changes**: Run validation from workspace root:
+```bash
+make format-fix && make lint && make mypy && make test
 ```
 
-**Otherwise**: Run manually:
-```bash
-make format-fix && make mypy && make test
-```
+**⚠️ CRITICAL: Do NOT use `read_lints` tool**:
+- `read_lints` is incompatible with our custom linting - it will fail
+- Use manual validation commands above
 
 **Scoped testing**: `TEST_ENVS=py312 ADD_ARGS="-k test_name" make test`
 
 See `technologies/testing` rule for VCR cassette workflow.
+
+## Testing Practices
+
+**Extend existing tests, don't create new ones**: When making incremental changes (new property, enum value, field), add to existing test fixtures rather than creating new tests.
 
 ## Package Structure
 
@@ -61,10 +71,15 @@ See `technologies/testing` rule for VCR cassette workflow.
 
 ## OpenAPI Client Generation
 
-**DO NOT manually edit** generated client code in `gooddata-*-client/` directories.
+**DO NOT manually edit** generated client code in `gooddata-api-client/` directories.
 
-See `.openapi-generator/README.md` for regeneration instructions.
+To regenerate: `make api-client`
 
-## Fast-Changing Dependencies
+## Library Integration
 
-**When suggesting third-party libraries**: Verify current APIs, prefer established libraries, check Python 3.10+ compatibility.
+**Hierarchy** (combat outdated LLM knowledge):
+1. **Internal GoodData packages** - ALWAYS preferred
+2. **Approved stable libraries** - Use versions from pyproject.toml
+3. **New/unknown libraries** - MANDATORY: web search for current docs/APIs before suggesting
+
+When suggesting third-party libraries: verify current APIs, prefer established libraries, explicitly state uncertainty.

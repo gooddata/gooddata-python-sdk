@@ -28,3 +28,6 @@ docs/resources/_gen
 docs/tmp/
 docs/versioned_docs
 docs/.hugo_build.lock
+
+# Export artifacts from Docker export-controller service
+packages/gooddata-sdk/tests/export/exports/default/

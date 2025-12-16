@@ -1,9 +1,10 @@
+# (C) 2025 GoodData Corporation
 ---
-description: Python development - mypy-clean code patterns
+description: Python development - mypy-clean code patterns and typing
 alwaysApply: false
 ---
 
-# Python Development
+# Python Development Guidelines
 
 **Goal:** Ship mypy-clean code on first pass. No "write → validate → fix" loops.
 
@@ -11,38 +12,42 @@ alwaysApply: false
 
 ## Imports
 
-**Absolute imports only.** Relative imports break monorepo navigation.
+**Use absolute imports only.** Relative imports break IDE navigation.
 ```python
 from gooddata_sdk.client import GoodDataSdk  # ✅
 from .client import GoodDataSdk               # ❌
 ```
 
-**All imports at top of file.** After docstring and `from __future__ import annotations`.
+**All imports must be at the top of the file.** Never import modules inside functions or in the middle of code. All `import` and `from ... import` statements must be placed at the top of the file, after the module docstring and `from __future__ import annotations` if present.
 
-## Type-first Habits
-
+## Type-first habits
 - Every def + local (esp empty list/dict/set) annotated; dataclasses fully typed.
 - Use `from __future__ import annotations` for forward references.
-- Guard external data (YAML/JSON) as `Any` then narrow types.
+- Helpers when default mutable needed:
+  ```python
+  def _new_set() -> set[str]:
+      return set()
+  ```
 
-## External Data (YAML/JSON)
+## External data (YAML/JSON/etc.)
+- Treat loader output as `Any`; guard then normalize keys:
+  ```python
+  raw = yaml.safe_load(handle)
+  if not isinstance(raw, dict):
+      raise ValueError("expected mapping")
+  cfg: dict[str, object] = {str(k): v for k, v in raw.items()}
+  ```
+- Narrow collections once: `entries = [x for x in cast(list[object], cfg.get("items", [])) if isinstance(x, str)]`.
+- Prefer `TypedDict`/dataclass when schema known.
 
-```python
-raw = yaml.safe_load(handle)
-if not isinstance(raw, dict):
-    raise ValueError("expected mapping")
-cfg: dict[str, object] = {str(k): v for k, v in raw.items()}
-```
+## Logging & diagnostics
+- Never log raw `Any`; cast or pre-format (`logger.warning("… %r", safe)`).
+- Avoid redundant `isinstance` after data narrowed; mypy flags it.
 
-## Casts / Guards
-
-- Single authoritative `cast(...)` + reuse variable
-- Guard pattern: `if isinstance(mode_raw, str): mode = mode_raw else: raise ValueError("...")`
-- `typing.assert_never` for exhaustive branches
-
-## Validation flow (If MCP server installed)
-- Python-only chores: `validate_python(path)` (format, lint, types, test).
-- Mixed stacks: run Python + Kotlin validators separately; skip umbrella `validate` until new classifier routing lands.
+## Casts / guards
+- Single authoritative `cast(...)` + reuse variable.
+- Guard pattern: `if isinstance(mode_raw, str): mode = mode_raw else: raise ValueError("mode str")`.
+- `typing.assert_never` for exhaustive branches.
 
 ## Documentation
 

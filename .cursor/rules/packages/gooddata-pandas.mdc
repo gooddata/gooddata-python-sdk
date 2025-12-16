@@ -1,3 +1,4 @@
+# (C) 2025 GoodData Corporation
 ---
 description: GoodData Pandas package - pandas integration layer for GoodData SDK
 alwaysApply: false
@@ -15,6 +16,7 @@ alwaysApply: false
 ## Does NOT Own
 
 - Core SDK functionality → gooddata-sdk package
+- API client → gooddata-api-client (generated)
 
 ## Architecture
 
@@ -30,6 +32,10 @@ from gooddata_pandas import GoodPandas
 gp = GoodPandas(host="https://example.gooddata.com", token="...")
 df = gp.data_frames(workspace_id="demo", insight_id="...")
 ```
+
+## Testing
+
+Uses vcrpy cassettes. See `technologies/testing` rule for workflow.
 
 ## Dependencies
 
