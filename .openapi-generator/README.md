@@ -15,9 +15,9 @@ if no such exists or updates existing client code.
 Use prepared `make` targets from repository root:
 - `make api-client`
 
-Predefined targets use `http://gooddata-cn-ce:3000` URL to fetch OpenAPI schema and connect generator container to
-the `gooddata-python-sdk_default` network. It is prepared to be executed against running `docker-compose.yaml`
-services.
+Predefined targets use `http://localhost:3000` URL to fetch OpenAPI schema. If you need to connect to the GoodData
+services running in docker-compose, you can use the `gooddata-python-sdk_default` network. The docker-compose.yaml
+in the repository root starts all required GoodData microservices for testing and development.
 
 When you need to point generator to different schema source, use `generate_client.sh` script directly.
 Below is the example for `gooddata-scan-client` and schema on URL `https://my-gd-cn`, execute it from

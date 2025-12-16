@@ -37,25 +37,19 @@ interactions:
           - PLACEHOLDER
         Expires:
           - '0'
-        Featurepolicy:
-          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
-            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
-            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - same-origin
+          - no-referrer
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - 1; mode=block
+          - '0'
       body:
         string:
           data:
@@ -106,25 +100,19 @@ interactions:
         DATE: *id001
         Expires:
           - '0'
-        Featurepolicy:
-          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
-            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
-            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - same-origin
+          - no-referrer
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - 1; mode=block
+          - '0'
       body:
         string:
           data:
@@ -159,25 +147,19 @@ interactions:
         DATE: *id001
         Expires:
           - '0'
-        Featurepolicy:
-          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
-            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
-            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - same-origin
+          - no-referrer
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - 1; mode=block
+          - '0'
       body:
         string: ''
   - request:
@@ -201,24 +183,18 @@ interactions:
         DATE: *id001
         Expires:
           - '0'
-        Featurepolicy:
-          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
-            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
-            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - same-origin
+          - no-referrer
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - 1; mode=block
+          - '0'
       body:
         string: ''

@@ -581,7 +581,7 @@ def test_get_declarative_workspace(test_config):
         workspace_id=test_config["workspace"], exclude=["ACTIVITY_INFO"]
     )
 
-    assert len(workspace.ldm.datasets) == 5
+    assert len(workspace.ldm.datasets) == 6
     assert len(workspace.ldm.date_instances) == 1
     assert len(workspace.analytics.analytical_dashboards) == 3
     assert len(workspace.analytics.dashboard_plugins) == 2

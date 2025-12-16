@@ -182,23 +182,104 @@ Tests triggered by `make` can be controlled via these environment variables:
   ```
 
 ### How to update vcrpy tests
-Some tests include HTTP call(s) to GD.CN instance. That tests are executed through
-[vcrpy](https://vcrpy.readthedocs.io/) so that GD.CN instance is needed either first time or when request is changed.
+Some tests include HTTP call(s) to GoodData instance. Those tests are executed through
+[vcrpy](https://vcrpy.readthedocs.io/) so that a GoodData instance is needed either the first time or when a request is changed.
 It has clear benefits:
-- ability to run the tests without GD.CN
+- ability to run the tests without a GoodData instance
 - request and response snapshot - it makes debugging of HTTP calls simple
 
-But there is one disadvantage. One needs GD.CN instance with the original setup to change tests.
-`docker-compose.yaml` in root of the repository is here to help. It starts:
-- GD.CN AIO in selected version
-- postgres with gooddata-fdw extension
-- service which setups GD.CN AIO demo project including PDM, LDM, metrics and visualizations
+But there is one disadvantage. One needs a GoodData instance with the original setup to change tests.
+`docker-compose.yaml` in the root of the repository is here to help.
+
+#### Prerequisites for Running Tests Locally
+
+1. **AWS ECR Login** - The docker-compose uses ECR images:
+   ```bash
+   aws ecr get-login-password | docker login --username AWS --password-stdin 020413372491.dkr.ecr.us-east-1.amazonaws.com
+   ```
+
+2. **GoodData License Key** - Get from the GoodData team and place it in the `./build/license` file:
+   ```bash
+   mkdir -p build
+   echo "<your_license_key>" > build/license
+   ```
+   The auth-service reads the license from this mounted location.
+
+#### What docker-compose starts
+
+The docker-compose starts a full GoodData microservices stack:
+
+**Infrastructure services:**
+- PostgreSQL (with demo databases: `md`, `dex`, `automation`, `gw`, `tiger`)
+- Redis (caching)
+- Apache Pulsar (messaging)
+- Traefik (routing)
+- Dex (OIDC authentication)
+
+**Core GoodData services:**
+- metadata-api, auth-service, calcique, sql-executor, result-cache
+- afm-exec-api, scan-model, api-gateway, api-gw
+- automation, export-controller, tabular-exporter
+- quiver (data processing engine)
+
+**Bootstrap services (run once):**
+- `metadata-organization-bootstrap` - Creates organization + admin user
+- `data-loader` - Loads demo data into PostgreSQL (with `--no-schema-versioning`)
+- `create-ds` - Registers data sources in metadata-api
+- `layout-uploader` - Uploads workspace hierarchy, analytics model, users, permissions
+
+#### The `--no-schema-versioning` Flag
+
+The data-loader uses `--no-schema-versioning` flag to ensure:
+- Schema names are consistent (e.g., `demo` not `demo_abc123`)
+- Fixture names don't have hash suffixes
+- VCR cassette tests produce reproducible results
+
+#### Starting GoodData for Tests
+
+```bash
+# Start all services
+docker compose up -d
+
+# Wait for bootstrap to complete (watch for "Layout upload completed successfully!")
+docker compose logs -f metadata-organization-bootstrap data-loader create-ds layout-uploader
+
+# Check service status
+docker compose ps
+
+# The GoodData API is available at http://localhost:3000
+# Default credentials: demo@example.com / demo123
+# API token: YWRtaW46Ym9vdHN0cmFwOmFkbWluMTIz
+```
+
+#### Updating vcrpy Cassettes
 
 When a vcrpy supported test needs to be updated:
-- start GD.CN using above `docker-compose.yaml`
-- delete original vcrpy cassette with `make remove-cassettes`
-- execute test
-- update a newly generated cassette to the git
+- Start GoodData using the above `docker-compose.yaml`
+- Wait for all bootstrap services to complete
+- Delete original vcrpy cassette with `make remove-cassettes`
+- Execute test
+- Commit the newly generated cassette to git
+
+#### Stopping and Cleanup
+
+```bash
+# Stop all services
+docker compose down
+
+# Full cleanup (remove volumes - required for fresh start)
+docker compose down -v
+```
+
+#### Running gooddata-fdw Tests
+
+The FDW (Foreign Data Wrapper) tests require an additional service. Start it with:
+
+```bash
+docker compose --profile fdw up -d
+```
+
+This starts a PostgreSQL instance with the gooddata-fdw extension on port 2543.
 
 ## Run continuous integration tests
 Tests in pull request (PR) are executed using docker. The following is done to make test environment as close
@@ -229,7 +310,7 @@ venv automatically. So when docker tox tests are executed after localhost tests 
   ```bash
   TEST_ENVS=py311,py310 ADD_ARGS="-k http_headers" make test-ci
   ```
-- run tests on localhost against all-in-one image started with docker-compose
+- run tests on localhost against microservices started with docker-compose
   ```bash
   RECREATE_ENVS=1 HOST_NETWORK=1 make test-ci
   ```

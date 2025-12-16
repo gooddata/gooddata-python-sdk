@@ -22,32 +22,26 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '8196'
+          - '8290'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: &id001
           - PLACEHOLDER
         Expires:
           - '0'
-        Featurepolicy:
-          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
-            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
-            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - same-origin
+          - no-referrer
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - 1; mode=block
+          - '0'
       body:
         string:
           data:
@@ -251,6 +245,10 @@ interactions:
                 sourceColumnDataType: STRING
                 valueType: GEO
                 areRelationsValid: true
+                locale: en-US
+                translations:
+                  - sourceColumn: geo__state__location_cz
+                    locale: cs-CZ
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/geo__state__location
               meta:

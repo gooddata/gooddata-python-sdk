@@ -1,3 +1,4 @@
+# (C) 2025 GoodData Corporation
 ---
 description: Validation and testing - VCR cassettes for HTTP snapshots
 alwaysApply: false
@@ -7,15 +8,10 @@ alwaysApply: false
 
 ## Validation Flow
 
-**If gdc-ruler MCP server is available**:
-```
-validate_python(path=".")                    # Full validation
-validate_python(path=".", steps=["format", "lint"])  # Quick check
-```
-
-**Manual commands** (from workspace root):
+**From workspace root**:
 ```bash
 make format-fix  # ruff format + fix
+make lint-fix    # ruff lint + fix
 make mypy        # Type check (aliased as `make types`)
 make test        # pytest via tox (all Python versions)
 ```
@@ -51,6 +47,10 @@ def test_get_workspace(sdk):
     workspace = sdk.catalog_workspace.get_workspace("demo")
     assert workspace.id == "demo"
 ```
+
+## Testing Practices
+
+**Extend existing tests, don't create new ones**: When making incremental changes (new property, enum value, field), add to existing test fixtures rather than creating new tests. If a test already validates round-trip, adding to the fixture is sufficient.
 
 ## Dependencies
 
