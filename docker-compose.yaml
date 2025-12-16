@@ -1,32 +1,1087 @@
-# (C) 2022 GoodData Corporation
-# docker-compose.yaml is dedicated to testing. All the tests are expected to be passing
-# against this docker compose.
+# (C) 2024 GoodData Corporation
+# Multi-service docker-compose for Python SDK testing.
+#
+# This replaces the old AIO approach with individual microservices matching gdc-nas architecture.
+# Uses ECR images only - no gdc-nas dependency required.
+#
+# ============================================================================
+# PREREQUISITES
+# ============================================================================
+# 1. AWS ECR login:
+#    aws ecr get-login-password | docker login --username AWS --password-stdin 020413372491.dkr.ecr.us-east-1.amazonaws.com
+#
+# 2. GoodData license key (get from GoodData team):
+#    export GDCN_LICENSE_KEY=<your_license_key>
+#
+# ============================================================================
+# WORKFLOW
+# ============================================================================
+# The services start in this order:
+#
+# 1. Infrastructure (postgres, redis, pulsar, dex, quiver, router)
+# 2. Core services (metadata-api, auth-service, calcique, etc.)
+# 3. Gateway services (api-gw, api-gateway)
+# 4. Bootstrap sequence:
+#    a) metadata-organization-bootstrap - Creates organization + admin user
+#    b) data-loader - Loads demo data into PostgreSQL (with --no-schema-versioning)
+#    c) create-ds - Registers data sources in metadata-api
+#    d) layout-uploader - Uploads workspace hierarchy, analytics model, users, permissions
+#
+# ============================================================================
+# NO-SCHEMA-VERSIONING (Critical for SDK tests)
+# ============================================================================
+# The data-loader uses --no-schema-versioning flag to ensure:
+# - Schema names are consistent (e.g., "demo" not "demo_abc123")
+# - Fixture names don't have hash suffixes
+# - VCR cassette tests produce reproducible results
+#
+# This flag is set in:
+# - data-loader service: ./data_load.py ... --no-schema-versioning
+# - create-ds service: ./create_data_sources.py ... --no-schema-versioning
+#
+# ============================================================================
+# USAGE
+# ============================================================================
+#   # Start all services:
+#   GDCN_LICENSE_KEY=<key> docker compose up -d
+#
+#   # Wait for bootstrap to complete:
+#   docker compose logs -f metadata-organization-bootstrap data-loader create-ds
+#
+#   # Check service status:
+#   docker compose ps
+#
+#   # Run SDK tests (after services are ready):
+#   make test
+#
+#   # Stop all services:
+#   docker compose down
+#
+#   # Full cleanup (remove volumes):
+#   docker compose down -v
 
-version: '3.7'
+x-java-opts: &java-opts
+  JAVA_OPTS: "${JAVA_OPTS:--Xmx128m --add-opens=java.base/sun.net=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED}"
+  LOGGING_APPENDER: logfmt
+  SPRING_CONFIG_ADDITIONAL_LOCATION: classpath:git.properties
+  MANAGEMENT_ZIPKIN_TRACING_EXPORT_ENABLED: "false"
+  GDC_TELEMETRY_ENABLED: "false"
+
+x-quiver-env-vars: &quiver-env-vars
+  QUIVER_LOCATION_ENDPOINTS: quiver:16001
+
+x-key-set:
+  &key-set '{"primaryKeyId":1207756424,"key":[{"keyData":{"typeUrl":"type.googleapis.com/google.crypto.tink.AesGcmKey","value":"GiDrmoEBcKNE3bbiglef0NiklmIvuSBf8NEgqH/3KEdOBQ==","keyMaterialType":"SYMMETRIC"},"status":"ENABLED","keyId":1207756424,"outputPrefixType":"TINK"}]}'
 
 services:
-  gooddata-cn-ce:
-    # Use the master tag, which points to the latest stable development
-    image: 020413372491.dkr.ecr.us-east-1.amazonaws.com/nas/gooddata-cn-ce:master
+  ## ============================================
+  ## Infrastructure Services
+  ## ============================================
+
+  postgres:
+    image: 020413372491.dkr.ecr.us-east-1.amazonaws.com/pullthrough/docker.io/library/postgres:14-alpine
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d rdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 5s
+    command: ["postgres", "-c", "max_connections=200"]
+    shm_size: '1gb'
     ports:
-      - "3000:3000"
-      - "5432:5432"
-    volumes:
-      - gooddata-cn-ce-data:/data
+      - "${PG_EXPOSED_PORT-5432}:5432"
     environment:
-      APP_LOGLEVEL: "INFO"
-      GDCN_LICENSE_KEY: ${GDCN_LICENSE_KEY}
-      GDCN_ENABLE_CSV_EXPORT_API: 1
-      GDC_FEATURES_VALUES_ENABLE_ANALYTICAL_DASHBOARD_PERMISSIONS: "true"
-      GDC_FEATURES_VALUES_ENABLE_METRIC_SQL_AND_DATA_EXPLAIN: 'ENABLED'
-      GDC_FEATURES_VALUES_ENABLE_ROLLUP_TOTALS: "true"
-      GDC_FEATURES_VALUES_ENABLE_ROLLUP_TOTALS_FOR_METRICS: "true"
+      POSTGRES_DB: rdb
+      POSTGRES_PASSWORD: passw0rd
+      POSTGRES_USER: postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./scripts/postgres:/docker-entrypoint-initdb.d:ro
+
+  pulsar:
+    image: 020413372491.dkr.ecr.us-east-1.amazonaws.com/pullthrough/docker.io/apachepulsar/pulsar:3.3.9
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://pulsar:8080/admin/v2/brokers/health >/dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 5s
+    ports:
+      - "${PULSAR_EXPOSED_PORT-6650}:6650"
+      - "${PULSAR_ADMIN_EXPOSED_PORT-8080}:8080"
+    volumes:
+      - pulsar-data:/pulsar/data
+    environment:
+      PULSAR_LOG_LEVEL: warn
+      PULSAR_MEM: '-Xms128m -Xmx256m -XX:MaxDirectMemorySize=256m'
+      PULSAR_STANDALONE_USE_ZOOKEEPER: "1"
+      subscriptionExpirationTimeMinutes: "5"
+      journalMaxBackups: "0"
+      systemTopicEnabled: "true"
+      topicLevelPoliciesEnabled: "true"
+    command: >
+      /bin/bash -c
+      "bin/apply-config-from-env.py conf/standalone.conf
+      && bin/pulsar standalone -nfw -nss"
+
+  pulsar-create-namespace:
+    image: 020413372491.dkr.ecr.us-east-1.amazonaws.com/pullthrough/docker.io/apachepulsar/pulsar:3.3.9
+    depends_on:
+      pulsar:
+        condition: service_healthy
+    entrypoint: |
+      sh -c '
+      until curl --output /dev/null -fs http://pulsar:8080/admin/v2/tenants ; do
+        echo waiting for pulsar to start...
+        sleep 5;
+      done;
+      bin/pulsar-admin --admin-url http://pulsar:8080 namespaces create public/default || true;
+      bin/pulsar-admin --admin-url http://pulsar:8080 tenants get gooddata ||
+        bin/pulsar-admin --admin-url http://pulsar:8080 tenants create gooddata;
+      bin/pulsar-admin --admin-url http://pulsar:8080 namespaces get-clusters gooddata/nas ||
+        bin/pulsar-admin --admin-url http://pulsar:8080 namespaces create gooddata/nas;
+      '
+
+  redis:
+    image: 020413372491.dkr.ecr.us-east-1.amazonaws.com/pullthrough/docker.io/library/redis:8.4.0-alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    ports:
+      - "${REDIS_EXPOSED_PORT-6379}:6379"
+    volumes:
+      - redis-data:/data
+    command: ["--maxmemory", "64m", "--maxmemory-policy", "allkeys-lru"]
+
+  router:
+    image: 020413372491.dkr.ecr.us-east-1.amazonaws.com/pullthrough/docker.io/library/traefik:v3.6
+    environment:
+      TRAEFIK_LOG_FORMAT: "common"
+      TRAEFIK_API_INSECURE: "true"
+      TRAEFIK_API_DASHBOARD: "true"
+      TRAEFIK_PROVIDERS_DOCKER: "true"
+      TRAEFIK_PROVIDERS_DOCKER_EXPOSEDBYDEFAULT: "false"
+      TRAEFIK_ENTRYPOINTS_WEB_ADDRESS: ":3000"
+      TRAEFIK_ENTRYPOINTS_TRAEFIK_ADDRESS: ":8081"
+      TRAEFIK_ACCESSLOG: "true"
+    ports:
+      - "${TRAEFIK_EXPOSED_PORT-3000}:3000"
+      - "${TRAEFIK_MGMT_EXPOSED_PORT-8081}:8081"
+    volumes:
+      - ${DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.middlewares.sec-headers.headers.customFrameOptionsValue=SAMEORIGIN"
+
+  ## ============================================
+  ## Core GoodData Microservices (from ECR)
+  ## ============================================
+
+  metadata-api:
+    image: 020413372491.dkr.ecr.us-east-1.amazonaws.com/nas/metadata-api:latest
+    tty: true
+    ports:
+      - "${METADATA_API_EXPOSED_PORT-9007}:9007"
+      - "${METADATA_API_MANAGEMENT_EXPOSED_PORT-9008}:9008"
+      - "${METADATA_API_GRPC_EXPOSED_PORT-6572}:6572"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      pulsar-create-namespace:
+        condition: service_completed_successfully
+      dex:
+        condition: service_started
+    environment:
+      <<: *java-opts
+      JAVA_OPTS: "${JAVA_OPTS:--Xmx2G}"
+      GDC_METADATA_ENCRYPTOR_KEYSET: *key-set
+      GRPC_DATASOURCEMETADATA_HOST: sql-executor
+      GRPC_DATASOURCEMETADATA_PORT: 6570
+      GRPC_LICENSE_HOST: auth-service
+      GRPC_LICENSE_PORT: 6573
+      GRPC_DEX_HOST: dex
+      GRPC_DEX_PORT: 5557
+      GRPC_CLIENT_FEDERATION_ENABLED: "false"
+      PULSAR_ADMINURL: http://pulsar:8080
+      PULSAR_PRODUCERS_MODEL_UPDATE_TOPIC: gooddata/nas/metadata.model
+      PULSAR_PRODUCERS_DATA_SOURCE_CHANGE_TOPIC: gooddata/nas/data-source.change
+      PULSAR_PRODUCERS_CACHE_COMMAND_TOPIC: gooddata/nas/metadata.cache-command
+      PULSAR_PRODUCERS_CACHE_SETTINGS_CHANGE_TOPIC: gooddata/nas/cache-settings.change
+      PULSAR_PRODUCERS_METADATA_SYNC_TOPIC: gooddata/nas/metadata.sync
+      PULSAR_CONSUMERS_CACHE_SETTINGS_BOOTSTRAP_TOPIC: gooddata/nas/cache-settings.bootstrap
+      PULSAR_CONSUMERS_CACHE_COMMAND_TOPIC: gooddata/nas/metadata.cache-command
+      PULSAR_CONSUMERS_METADATA_BACK_SYNC_TOPIC: gooddata/nas/metadata.back-sync
+      PULSAR_PULL_CONSUMERS_METADATA_SYNC_REQUEST_TOPICS: gooddata/nas/metadata.sync-request
+      PULSAR_SERVICEURL: pulsar://pulsar:6650
+      SPRING_DATASOURCE_URL: 'jdbc:postgresql://postgres:5432/md?reWriteBatchedInserts=true'
+      SPRING_DATASOURCE_PASSWORD: passw0rd
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_PROFILES_ACTIVE: localDex
+      GDC_TIGER_OAUTH2_LOCAL_CALLBACK_PORT: ${TRAEFIK_EXPOSED_PORT-3000}
+      GDCN_SETTING_ALLOW_UNSAFE_FLEX_CONNECT_ENDPOINTS: '{"value": true}'
+      GDC_FEATURES_VALUES_ENABLE_COMPOSITE_GRAIN: "true"
+      GDC_FEATURES_VALUES_ENABLE_USER_MANAGEMENT: "true"
       GDC_FEATURES_VALUES_ENABLE_SCHEDULING: "true"
       GDC_FEATURES_VALUES_ENABLE_ALERTING: "true"
       GDC_FEATURES_VALUES_ENABLE_SMTP: "true"
       GDC_FEATURES_VALUES_ENABLE_PRE_AGGREGATION_DATASETS: "true"
-#      In the case of failing tests (HTTP 500), you can increase the memory for the metadata API
-#      METADATA_API_JAVA_OPTS: "-Xmx1024m -Xms512m"
+      GDC_FEATURES_VALUES_ENABLE_DATA_LOCALIZATION: "true"
+      GDC_FEATURES_VALUES_ENABLE_SNOWFLAKE_KEY_PAIR_AUTHENTICATION: "true"
+
+  auth-service:
+    image: 020413372491.dkr.ecr.us-east-1.amazonaws.com/nas/auth-service:latest
+    tty: true
+    ports:
+      - "${AUTH_SERVICE_EXPOSED_PORT-9050}:9050"
+      - "${AUTH_SERVICE_MANAGEMENT_EXPOSED_PORT-9051}:9051"
+      - "${AUTH_SERVICE_GRPC_EXPOSED_PORT-6573}:6573"
+    depends_on:
+      metadata-api:
+        condition: service_started
+      dex:
+        condition: service_started
+      pulsar-create-namespace:
+        condition: service_completed_successfully
+    environment:
+      <<: *java-opts
+      GRPC_METADATA_HOST: metadata-api
+      GRPC_METADATA_PORT: 6572
+      PULSAR_ADMINURL: http://pulsar:8080
+      PULSAR_PRODUCERS_INVITEGENERATOR_ENABLED: "true"
+      PULSAR_PRODUCERS_INVITEGENERATOR_TOPIC: gooddata/nas/invitations
+      PULSAR_SERVICEURL: pulsar://pulsar:6650
+      SPRING_PROFILES_ACTIVE: localDex
+      GRPC_DEX_HOST: dex
+      GRPC_DEX_PORT: 5557
+    # Mount license file (valid until 2026-09-11)
+    # The auth-service reads the license from /secret/license file
+    volumes:
+      - ./build:/secret:ro
+
+  calcique:
+    image: 020413372491.dkr.ecr.us-east-1.amazonaws.com/nas/calcique:latest
+    tty: true
+    depends_on:
+      metadata-api:
+        condition: service_started
+      pulsar-create-namespace:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+    environment:
+      <<: *java-opts
+      PULSAR_ADMINURL: http://pulsar:8080
+      PULSAR_CONSUMERS_MODEL_UPDATE_TOPIC: gooddata/nas/metadata.model
+      PULSAR_CONSUMERS_MODEL_UPDATE_DEAD_LETTER_TOPIC: gooddata/nas/metadata.model.calcique.DLQ
+      PULSAR_CONSUMERS_DATA_SOURCE_CHANGE_TOPIC: gooddata/nas/data-source.change
+      PULSAR_CONSUMERS_DATA_SOURCE_CHANGE_DEAD_LETTER_TOPIC: gooddata/nas/data-source.change.calcique.DLQ
+      PULSAR_SERVICEURL: pulsar://pulsar:6650
+      GRPC_METADATA_HOST: metadata-api
+      GRPC_METADATA_PORT: 6572
+      GRPC_DATASOURCE_HOST: metadata-api
+      GRPC_DATASOURCE_PORT: 6572
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+      GDC_FEATURES_VALUES_ENABLE_DATA_LOCALIZATION: "true"
+    ports:
+      - "${CALCIQUE_MANAGEMENT_EXPOSED_PORT-9012}:9012"
+      - "${CALCIQUE_GRPC_EXPOSED_PORT-6577}:6577"
+
+  sql-executor:
+    image: 020413372491.dkr.ecr.us-east-1.amazonaws.com/nas/sql-executor:latest
+    tty: true
+    depends_on:
+      metadata-api:
+        condition: service_started
+      pulsar-create-namespace:
+        condition: service_completed_successfully
+      result-cache:
+        condition: service_started
+      auth-service:
+        condition: service_started
+      quiver:
+        condition: service_healthy
+    ports:
+      - "${SQL_EXECUTOR_GRPC_EXPOSED_PORT-6570}:6570"
+    environment:
+      <<: [*java-opts, *quiver-env-vars]
+      GRPC_METADATA_HOST: metadata-api
+      GRPC_METADATA_PORT: 6572
+      GRPC_DATASOURCE_HOST: metadata-api
+      GRPC_DATASOURCE_PORT: 6572
+      GRPC_GDSTORAGE_HOST: result-cache
+      GRPC_GDSTORAGE_PORT: 6567
+      GRPC_LICENSE_HOST: auth-service
+      GRPC_LICENSE_PORT: 6573
+      PULSAR_ADMINURL: http://pulsar:8080
+      PULSAR_CONSUMERS_DATA_SOURCE_CHANGE_TOPIC: gooddata/nas/data-source.change
+      PULSAR_CONSUMERS_SELECT_TOPIC: gooddata/nas/sql.select
+      PULSAR_CONSUMERS_SELECT_DEAD_LETTER_TOPIC: gooddata/nas/sql.select.DLQ
+      PULSAR_CONSUMERS_CANCEL_TOPIC: gooddata/nas/sql.cancel
+      PULSAR_CONSUMERS_CANCEL_SUBSCRIPTION_TYPE: exclusive
+      PULSAR_CONSUMERS_CANCEL_SUBSCRIPTION_NAME: sql-executor.cancel-sql
+      PULSAR_SERVICEURL: pulsar://pulsar:6650
+      QUIVER_DATA_SOURCE_FS_DATA_SOURCE_ID: ds-files
+
+  result-cache:
+    image: 020413372491.dkr.ecr.us-east-1.amazonaws.com/nas/result-cache:latest
+    tty: true
+    depends_on:
+      auth-service:
+        condition: service_started
+      calcique:
+        condition: service_started
+      pulsar-create-namespace:
+        condition: service_completed_successfully
+      quiver:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      <<: [*java-opts, *quiver-env-vars]
+      GRPC_CALCIQUE_HOST: calcique
+      GRPC_CALCIQUE_PORT: 6577
+      GRPC_METADATA_HOST: metadata-api
+      GRPC_METADATA_PORT: 6572
+      GRPC_DATASOURCE_HOST: metadata-api
+      GRPC_DATASOURCE_PORT: 6572
+      GRPC_LICENSE_HOST: auth-service
+      GRPC_LICENSE_PORT: 6573
+      PULSAR_ADMINURL: http://pulsar:8080
+      PULSAR_CONSUMERS_RESULT_TOPIC: gooddata/nas/result.xtab
+      PULSAR_CONSUMERS_RESULT_DEAD_LETTER_TOPIC: gooddata/nas/result.xtab.DLQ
+      PULSAR_PRODUCERS_RESULT_XTAB_TOPIC: gooddata/nas/result.xtab
+      PULSAR_PRODUCERS_SQLEXECUTOR_TOPIC: gooddata/nas/sql.select
+      PULSAR_PRODUCERS_SQLEXECUTORCANCEL_TOPIC: gooddata/nas/sql.cancel
+      PULSAR_PRODUCERS_SQLEXECUTORCANCEL_MESSAGE_TTL: 300
+      PULSAR_PRODUCERS_CACHE_SETTINGS_BOOTSTRAP_TOPIC: gooddata/nas/cache-settings.bootstrap
+      PULSAR_CONSUMERS_CACHE_SETTINGS_CHANGE_TOPIC: gooddata/nas/cache-settings.change
+      PULSAR_CONSUMERS_CACHE_SETTINGS_CHANGE_DEAD_LETTER_TOPIC: gooddata/nas/cache-settings.change.DLQ
+      PULSAR_PULL_CONSUMERS_INVALIDATION_TOPICS: gooddata/nas/data-source.change,gooddata/nas/metadata.model
+      PULSAR_SERVICEURL: pulsar://pulsar:6650
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+      GDC_WORKSPACE_BASELINE_CACHE: 0
+      GDC_TOTAL_CACHE_LIMIT: 0
+      QUIVER_DATA_SOURCE_FS_DATA_SOURCE_ID: ds-files
+      STORAGE_TYPE: fs
+      STORAGE_FS_ROOT_DIR: quiver
+    ports:
+      - "${RESULTCACHE_GRPC_EXPOSED_PORT-6567}:6567"
+      - "${RESULTCACHE_API_EXPOSED_PORT-9040}:9040"
+    volumes:
+      - ./quiver-ds:/quiver:Z
+
+  afm-exec-api:
+    image: 020413372491.dkr.ecr.us-east-1.amazonaws.com/nas/afm-exec-api:latest
+    tty: true
+    ports:
+      - "${AFM_EXEC_API_EXPOSED_PORT-9000}:9000"
+    depends_on:
+      pulsar-create-namespace:
+        condition: service_completed_successfully
+      calcique:
+        condition: service_started
+      metadata-api:
+        condition: service_started
+      result-cache:
+        condition: service_started
+      sql-executor:
+        condition: service_started
+      redis:
+        condition: service_healthy
+      quiver:
+        condition: service_healthy
+    environment:
+      <<: [*java-opts, *quiver-env-vars]
+      GRPC_CALCIQUE_HOST: calcique
+      GRPC_CALCIQUE_PORT: 6577
+      GRPC_METADATA_HOST: metadata-api
+      GRPC_METADATA_PORT: 6572
+      GRPC_RESULTCACHE_HOST: result-cache
+      GRPC_RESULTCACHE_PORT: 6567
+      GRPC_LICENSE_HOST: auth-service
+      GRPC_LICENSE_PORT: 6573
+      GRPC_SQLEXECUTOR_HOST: sql-executor
+      GRPC_SQLEXECUTOR_PORT: 6570
+      GRPC_DATASOURCE_HOST: metadata-api
+      GRPC_DATASOURCE_PORT: 6572
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+      PULSAR_ADMINURL: http://pulsar:8080
+      PULSAR_SERVICEURL: pulsar://pulsar:6650
+
+  scan-model:
+    image: 020413372491.dkr.ecr.us-east-1.amazonaws.com/nas/scan-model:latest
+    tty: true
+    ports:
+      - "${SCANMODEL_API_EXPOSED_PORT-9060}:9060"
+    depends_on:
+      sql-executor:
+        condition: service_started
+      metadata-api:
+        condition: service_started
+    environment:
+      <<: *java-opts
+      GRPC_METADATA_HOST: metadata-api
+      GRPC_METADATA_PORT: 6572
+      GRPC_DATASOURCE_HOST: metadata-api
+      GRPC_DATASOURCE_PORT: 6572
+      GRPC_DATASOURCEMETADATA_HOST: sql-executor
+      GRPC_DATASOURCEMETADATA_PORT: 6570
+      GRPC_LICENSE_HOST: auth-service
+      GRPC_LICENSE_PORT: 6573
+      GDC_FEATURES_VALUES_ENABLE_SNOWFLAKE_KEY_PAIR_AUTHENTICATION: "true"
+
+  ## ============================================
+  ## Gateway Services
+  ## ============================================
+
+  api-gateway:
+    image: 020413372491.dkr.ecr.us-east-1.amazonaws.com/nas/api-gateway:latest
+    tty: true
+    ports:
+      - "${API_GATEWAY_EXPOSED_PORT-9092}:9092"
+    depends_on:
+      metadata-api:
+        condition: service_started
+      analytical-designer:
+        condition: service_started
+      dashboards:
+        condition: service_started
+      ldm-modeler:
+        condition: service_started
+      home-ui:
+        condition: service_started
+      measure-editor:
+        condition: service_started
+      web-components:
+        condition: service_started
+    environment:
+      <<: *java-opts
+      SPRING_PROFILES_ACTIVE: default,docker-compose
+      GRPC_METADATA_HOST: metadata-api
+      GRPC_METADATA_PORT: 6572
+      GRPC_DATASOURCE_HOST: metadata-api
+      GRPC_DATASOURCE_PORT: 6572
+
+  api-gw:
+    image: 020413372491.dkr.ecr.us-east-1.amazonaws.com/nas/gateway-api-gw:latest
+    tty: true
+    ports:
+      - "${API_GW_EXPOSED_PORT-9201}:9201"
+      - "${API_GW_HEALTH_PORT-9203}:9203"
+    environment:
+      AFM_EXEC_SERVICE_HOST: afm-exec-api
+      AFM_EXEC_SERVICE_PORT: 9000
+      AUTH_SERVICE_HOST: auth-service
+      AUTH_SERVICE_PORT: 9050
+      AUTOMATION_HOST: automation
+      AUTOMATION_PORT: 9097
+      SCAN_MODEL_HOST: scan-model
+      SCAN_MODEL_PORT: 9060
+      # Export controller - required but SDK tests may not use it
+      EXPORT_CONTROLLER_HOST: export-controller
+      EXPORT_CONTROLLER_PORT: 6580
+      RESULT_CACHE_HOST: result-cache
+      RESULT_CACHE_PORT: 9040
+      API_GATEWAY_HOST: api-gateway
+      API_GATEWAY_PORT: 9092
+      METADATA_API_HOST: metadata-api
+      METADATA_API_PORT: 9007
+      # API docs and MCP server - optional for SDK tests
+      APIDOCS_HOST: apidocs
+      APIDOCS_PORT: 8080
+      MCP_SERVER_HOST: mcp-server
+      MCP_SERVER_PORT: 9200
+      GRPC_METADATA_HOST: metadata-api
+      GRPC_METADATA_PORT: 6572
+      GATEWAY_ORGANIZATION_RESOLVER_TYPE: GRPC_WITH_DB_VALIDATION
+      GATEWAY_R2DBC_URL: 'r2dbc:postgresql://postgres:5432/gw?reWriteBatchedInserts=true'
+      GATEWAY_DB_USERNAME: postgres
+      GATEWAY_DB_PASSWORD: passw0rd
+      GATEWAY_DB_POOL_INITIAL_SIZE: 1
+      GATEWAY_DB_POOL_MAX_SIZE: 4
+      GATEWAY_DB_POOL_MIN_IDLE: 0
+      GATEWAY_DB_POOL_MAX_LIFE_TIME: 300000
+      ORGANIZATION_CACHE_SIZE: 1000
+      CACHE_EXPIRE_AFTER_WRITE: 60
+      USER_CACHE_SIZE: 1000
+      USER_CACHE_EXPIRE_AFTER_WRITE: 60
+      ORGANIZATION_CACHE_METRICS: "true"
+      USER_CACHE_METRICS: "true"
+      CALL_FORWARDER_CONNECT_TIMEOUT: 1m
+      CALL_FORWARDER_SOCKET_TIMEOUT: 3m
+      CALL_FORWARDER_REQUEST_TIMEOUT: 4m
+      OTEL_SDK_DISABLED: "true"
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+      COROUTINES_DEBUG_METRICS_ENABLED: "true"
+      GDC_FEATURES_VALUES_ENABLE_COMPOSITE_GRAIN: "true"
+      GDC_FEATURES_VALUES_ENABLE_USER_MANAGEMENT: "true"
+      GDC_FEATURES_VALUES_ENABLE_SCHEDULING: "true"
+      GDC_FEATURES_VALUES_ENABLE_ALERTING: "true"
+      GDC_FEATURES_VALUES_ENABLE_SMTP: "true"
+      GDC_FEATURES_VALUES_ENABLE_PRE_AGGREGATION_DATASETS: "true"
+      GDC_FEATURES_VALUES_ENABLE_DATA_LOCALIZATION: "true"
+      GDC_FEATURES_VALUES_ENABLE_RAW_EXPORTS: "true"
+      GDC_FEATURES_VALUES_ENABLE_FLEXIBLE_DASHBOARD_LAYOUT: "true"
+      GDC_FEATURES_VALUES_ENABLE_SNOWFLAKE_KEY_PAIR_AUTHENTICATION: "true"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      gateway-md-sink:
+        condition: service_started
+      afm-exec-api:
+        condition: service_started
+      auth-service:
+        condition: service_started
+      automation:
+        condition: service_started
+      result-cache:
+        condition: service_started
+      scan-model:
+        condition: service_started
+      api-gateway:
+        condition: service_started
+      metadata-api:
+        condition: service_started
+      redis:
+        condition: service_healthy
+      apidocs:
+        condition: service_started
+      export-controller:
+        condition: service_started
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api-gw.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.api-gw.entrypoints=web"
+      - "traefik.http.routers.api-gw.priority=1"
+      - "traefik.http.services.api-gw.loadbalancer.server.port=9201"
+
+  gateway-md-sink:
+    image: 020413372491.dkr.ecr.us-east-1.amazonaws.com/nas/gateway-md-sink:latest
+    tty: true
+    depends_on:
+      postgres:
+        condition: service_healthy
+      pulsar-create-namespace:
+        condition: service_completed_successfully
+    ports:
+      - "${GATEWAY_MD_SINK_MANAGEMENT_EXPOSED_PORT-9099}:9099"
+    environment:
+      <<: *java-opts
+      PULSAR_ADMINURL: http://pulsar:8080
+      PULSAR_SERVICE_URL: pulsar://pulsar:6650
+      PULSAR_PRODUCERS_METADATA_SYNC_REQUEST_TOPIC: gooddata/nas/metadata.sync-request
+      PULSAR_PRODUCERS_METADATA_BACK_SYNC_TOPIC: gooddata/nas/metadata.back-sync
+      PULSAR_CONSUMERS_METADATA_SYNC_TOPIC: gooddata/nas/metadata.sync
+      PULSAR_CONSUMERS_METADATA_SYNC_DEAD_LETTER_TOPIC: gooddata/nas/metadata.sync.DLQ
+      SPRING_R2DBC_URL: 'r2dbc:postgresql://postgres:5432/gw?reWriteBatchedInserts=true'
+      SPRING_R2DBC_PASSWORD: passw0rd
+      SPRING_R2DBC_USERNAME: postgres
+
+  automation:
+    image: 020413372491.dkr.ecr.us-east-1.amazonaws.com/nas/automation:latest
+    tty: true
+    depends_on:
+      postgres:
+        condition: service_healthy
+      pulsar-create-namespace:
+        condition: service_completed_successfully
+    ports:
+      - "${AUTOMATION_API_EXPOSED_PORT-9097}:9097"
+    environment:
+      <<: [*java-opts, *quiver-env-vars]
+      GDC_AUTOMATION_ENCRYPTOR_KEYSET: *key-set
+      GDC_AUTOMATION_ENCRYPTOR_ENABLED: "true"
+      PULSAR_ADMINURL: http://pulsar:8080
+      PULSAR_SERVICEURL: pulsar://pulsar:6650
+      PULSAR_PRODUCERS_EXPORT_TABULAR_SCHEDULED_TOPIC: gooddata/nas/export-tabular-scheduled.request
+      PULSAR_PRODUCERS_EXPORT_VISUAL_SCHEDULED_TOPIC: gooddata/nas/export-visual-scheduled.request
+      PULSAR_PRODUCERS_METADATA_SYNC_REQUEST_TOPIC: gooddata/nas/metadata.sync-request
+      PULSAR_PRODUCERS_METADATA_BACK_SYNC_TOPIC: gooddata/nas/metadata.back-sync
+      PULSAR_CONSUMERS_METADATA_SYNC_TOPIC: gooddata/nas/metadata.sync
+      PULSAR_CONSUMERS_METADATA_SYNC_DEAD_LETTER_TOPIC: gooddata/nas/metadata.sync.DLQ
+      SPRING_DATASOURCE_URL: 'jdbc:postgresql://postgres:5432/automation?reWriteBatchedInserts=true'
+      SPRING_DATASOURCE_PASSWORD: passw0rd
+      SPRING_DATASOURCE_USERNAME: postgres
+      GRPC_METADATA_HOST: metadata-api
+      GRPC_METADATA_PORT: 6572
+      GRPC_AFMEXEC_HOST: afm-exec-api
+      GRPC_AFMEXEC_PORT: 6571
+      GRPC_RESULTCACHE_HOST: result-cache
+      GRPC_RESULTCACHE_PORT: 6567
+
+  ## ============================================
+  ## Export Services (for SDK export tests)
+  ## ============================================
+
+  tabular-exporter:
+    image: 020413372491.dkr.ecr.us-east-1.amazonaws.com/nas/tabular-exporter:latest
+    tty: true
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import socket; s = socket.socket(socket.AF_INET, socket.SOCK_STREAM); s.settimeout(2); exit(0 if s.connect_ex(('localhost', 6789)) == 0 else 1)"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    depends_on:
+      afm-exec-api:
+        condition: service_started
+      metadata-api:
+        condition: service_started
+    ports:
+      - "${TABULAR_EXPORTER_GRPC_EXPOSED_PORT-6789}:6789"
+      - "${TABULAR_EXPORTER_MANAGEMENT_EXPOSED_PORT-9131}:9131"
+    environment:
+      AFM_EXEC_API_URL: "http://afm-exec-api:9000"
+      MD_API_URL: "http://metadata-api:9007"
+      TABULAR_EXPORTER_LOGLEVEL: INFO
+
+  export-controller:
+    image: 020413372491.dkr.ecr.us-east-1.amazonaws.com/nas/export-controller:latest
+    tty: true
+    depends_on:
+      auth-service:
+        condition: service_started
+      metadata-api:
+        condition: service_started
+      afm-exec-api:
+        condition: service_started
+      pulsar-create-namespace:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+      result-cache:
+        condition: service_started
+      tabular-exporter:
+        condition: service_healthy
+    ports:
+      - "${EXPORT_CONTROLLER_API_EXPOSED_PORT-6580}:6580"
+      - "${EXPORT_CONTROLLER_MANAGEMENT_EXPOSED_PORT-6581}:6581"
+      - "${EXPORT_CONTROLLER_GRPC_EXPOSED_PORT-6578}:6578"
+    environment:
+      <<: *java-opts
+      GDC_TELEMETRY_ENABLED: "false"
+      GRPC_METADATA_HOST: metadata-api
+      GRPC_METADATA_PORT: 6572
+      GRPC_RESULTCACHE_HOST: result-cache
+      GRPC_RESULTCACHE_PORT: 6567
+      GRPC_TABULAREXPORTER_HOST: tabular-exporter
+      GRPC_TABULAREXPORTER_PORT: 6789
+      GRPC_EXPORTBUILDER_HOST: router
+      GRPC_EXPORTBUILDER_PORT: 6528
+      GRPC_CALCIQUE_HOST: calcique
+      GRPC_CALCIQUE_PORT: 6577
+      GRPC_AFMEXEC_HOST: afm-exec-api
+      GRPC_AFMEXEC_PORT: 6571
+      PULSAR_ADMINURL: http://pulsar:8080
+      PULSAR_SERVICEURL: pulsar://pulsar:6650
+      PULSAR_PRODUCERS_EXPORT_TABULAR_TOPIC: gooddata/nas/export-tabular.request
+      PULSAR_PRODUCERS_EXPORT_TABULAR_MESSAGE_TTL: 300
+      PULSAR_CONSUMERS_EXPORT_TABULAR_TOPIC: gooddata/nas/export-tabular.request
+      PULSAR_CONSUMERS_EXPORT_TABULAR_DEAD_LETTER_TOPIC: gooddata/nas/export-tabular.request.DLQ
+      PULSAR_CONSUMERS_EXPORT_TABULAR_SCHEDULED_TOPIC: gooddata/nas/export-tabular-scheduled.request
+      PULSAR_CONSUMERS_EXPORT_TABULAR_SCHEDULED_DEAD_LETTER_TOPIC: gooddata/nas/export-tabular-scheduled.request.DLQ
+      PULSAR_PRODUCERS_EXPORT_VISUAL_TOPIC: gooddata/nas/export-visual.request
+      PULSAR_PRODUCERS_EXPORT_VISUAL_MESSAGE_TTL: 300
+      PULSAR_CONSUMERS_EXPORT_VISUAL_TOPIC: gooddata/nas/export-visual.request
+      PULSAR_CONSUMERS_EXPORT_VISUAL_DEAD_LETTER_TOPIC: gooddata/nas/export-visual.request.DLQ
+      PULSAR_CONSUMERS_EXPORT_VISUAL_SCHEDULED_TOPIC: gooddata/nas/export-visual-scheduled.request
+      PULSAR_CONSUMERS_EXPORT_VISUAL_SCHEDULED_DEAD_LETTER_TOPIC: gooddata/nas/export-visual-scheduled.request.DLQ
+      PULSAR_PRODUCERS_EXPORT_SLIDESHOW_TOPIC: gooddata/nas/export-slideshow.request
+      PULSAR_PRODUCERS_EXPORT_SLIDESHOW_MESSAGE_TTL: 300
+      PULSAR_CONSUMERS_EXPORT_SLIDESHOW_TOPIC: gooddata/nas/export-slideshow.request
+      PULSAR_CONSUMERS_EXPORT_SLIDESHOW_DEAD_LETTER_TOPIC: gooddata/nas/export-slideshow.request.DLQ
+      PULSAR_CONSUMERS_EXPORT_SLIDESHOW_SCHEDULED_TOPIC: gooddata/nas/export-slideshow-scheduled.request
+      PULSAR_CONSUMERS_EXPORT_SLIDESHOW_SCHEDULED_DEAD_LETTER_TOPIC: gooddata/nas/export-slideshow-scheduled.request.DLQ
+      PULSAR_PRODUCERS_EXPORT_RAW_TOPIC: gooddata/nas/export-raw.request
+      PULSAR_PRODUCERS_EXPORT_RAW_MESSAGE_TTL: 300
+      PULSAR_CONSUMERS_EXPORT_RAW_TOPIC: gooddata/nas/export-raw.request
+      PULSAR_CONSUMERS_EXPORT_RAW_DEAD_LETTER_TOPIC: gooddata/nas/export-raw.request.DLQ
+      PULSAR_CONSUMERS_EXPORT_RAW_SCHEDULED_TOPIC: gooddata/nas/export-raw-scheduled.request
+      PULSAR_CONSUMERS_EXPORT_RAW_SCHEDULED_DEAD_LETTER_TOPIC: gooddata/nas/export-raw-scheduled.request.DLQ
+      PULSAR_PULLCONSUMERS_EXPORTRAW_TOPICS: gooddata/nas/export-raw.request
+      PULSAR_PULLCONSUMERS_EXPORTRAW_MAXCONCURRENTMESSAGES: 4
+      PULSAR_PULL_CONSUMERS_INVALIDATION_TOPICS: gooddata/nas/metadata.model
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+      GDC_FILE_STORAGE_BASE_URL: /tmp/exports
+      GDC_FEATURES_VALUES_ENABLE_KPI_DASHBOARD_EXPORT_PDF: "true"
+      GDC_FEATURES_VALUES_ENABLE_DASHBOARD_TABULAR_EXPORT: "true"
+      GDC_FEATURES_VALUES_ENABLE_RAW_EXPORTS: "true"
+      GDC_FEATURES_VALUES_ENABLE_CHUNKED_RAW_EXPORTS: "true"
+      GDC_EXPORT_CONTROLLER_USENEWFLOW: "true"
+      GDC_FEATURES_VALUES_ENABLE_NEW_SCHEDULED_EXPORT: "true"
+      GDC_FEATURES_VALUES_ENABLE_NEW_PDF_TABULAR_EXPORT: "true"
+    volumes:
+      - ./packages/gooddata-sdk/tests/export:/tmp/exports:Z
+
+  ## ============================================
+  ## Supplemental Services
+  ## ============================================
+
+  apidocs:
+    image: 020413372491.dkr.ecr.us-east-1.amazonaws.com/nas/apidocs:latest
+    ports:
+      - "${APIDOCS_EXPOSED_PORT-9999}:8080"
+
+  ## ============================================
+  ## External UI Applications (from ECR)
+  ## ============================================
+
+  analytical-designer:
+    image: 020413372491.dkr.ecr.us-east-1.amazonaws.com/nas/analytical-designer:latest
+    tty: true
+    ports:
+      - "${AD_EXPOSED_PORT-9300}:9300"
+
+  dashboards:
+    image: 020413372491.dkr.ecr.us-east-1.amazonaws.com/nas/dashboards:latest
+    tty: true
+    ports:
+      - "${KD_EXPOSED_PORT-9500}:9500"
+
+  ldm-modeler:
+    image: 020413372491.dkr.ecr.us-east-1.amazonaws.com/nas/ldm-modeler:latest
+    tty: true
+    ports:
+      - "${LDM_MODELER_EXPOSED_PORT-9400}:8080"
+
+  home-ui:
+    image: 020413372491.dkr.ecr.us-east-1.amazonaws.com/nas/home-ui:latest
+    tty: true
+    ports:
+      - "${HOME_UI_EXPOSED_PORT-9600}:9600"
+
+  measure-editor:
+    image: 020413372491.dkr.ecr.us-east-1.amazonaws.com/nas/measure-editor:latest
+    tty: true
+    ports:
+      - "${MEASURE_EDITOR_EXPOSED_PORT-9700}:9700"
+
+  web-components:
+    image: 020413372491.dkr.ecr.us-east-1.amazonaws.com/nas/web-components:latest
+    tty: true
+    ports:
+      - "${WC_EXPOSED_PORT-9800}:8080"
+
+  ## ============================================
+  ## Quiver (Data Processing Engine)
+  ## ============================================
+
+  quiver:
+    image: 020413372491.dkr.ecr.us-east-1.amazonaws.com/nas/quiver:v0.361.1
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://quiver:8877/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    tty: true
+    ports:
+      - "${QUIVER_EXPOSED_PORT-16001}:16001"
+    volumes:
+      - quiver-data:/data/
+      - ./quiver-ds:/data/file-storage:Z:ro
+      - ./scripts/quiver/quiver.conf.toml:/etc/quiver/quiver.conf.toml:ro
+    environment:
+      QUIVER_LISTEN_FLIGHT_HOST: 0.0.0.0
+      QUIVER_METRICS_HOST: 0.0.0.0
+      QUIVER_ADVERTISE_FLIGHT_HOST: quiver
+      QUIVER_MEMORY_CACHE_SIZE: "100M"
+      QUIVER_MMAP_CACHE_SIZE: "100M"
+      QUIVER_DISK_CACHE_SIZE: "1G"
+      QUIVER_DISK_DIR: "/data/disk-cache"
+      QUIVER_MODULES: '["quiver_shard", "quiver_policy", "quiver_dataframe", "quiver_connector", "quiver_sql_query"]'
+      QUIVER_DATAFRAME_OPS: '["gooddata_df_ops.crosstab_pl.op", "gooddata_df_ops.empty.op", "gooddata_df_ops.forecast.op", "gooddata_df_ops.clustering.op", "gooddata_df_ops.kda.op", "gooddata_df_ops.change_analysis.op", "gooddata_df_ops.anomaly_detection.op", "gooddata_df_ops.alerting_pl.op", "gooddata_df_ops.outlier_detection_pl.op"]'
+      QUIVER_PEER_FLIGHT_HOST: quiver
+      QUIVER_SECRETS_PROVIDERS: '["tiger_secrets_provider.provider"]'
+      QUIVER_TIGER_SECRETS__HOST: 'sql-executor'
+      QUIVER_TIGER_SECRETS__PORT: 6570
+      GLIBC_TUNABLES: "glibc.malloc.trim_threshold=128:glibc.malloc.arena_max=2"
+      PYTHONMALLOC: malloc
+      ACERO_ALIGNMENT_HANDLING: 'ignore'
+    command:
+      - --config
+      - /etc/quiver/quiver.conf.toml
+      - --init-cluster-config
+      - start
+      - --single-node
+      - --single-node-savefile
+      - ":memory:"
+      - --name
+      - quiver-node
+
+  ## ============================================
+  ## Dex (OIDC Provider)
+  ## ============================================
+
+  dex:
+    image: 020413372491.dkr.ecr.us-east-1.amazonaws.com/nas/dex:latest
+    entrypoint: ["sh", "-c"]
+    command:
+      - |
+        cat << 'EOF' > /tmp/dex-config.yaml
+        issuer: http://localhost:3000/dex
+        storage:
+          type: sqlite3
+          config:
+            file: /data/dex.db
+        web:
+          http: 0.0.0.0:5556
+        grpc:
+          addr: 0.0.0.0:5557
+          reflection: true
+        expiry:
+          deviceRequests: "24h"
+          signingKeys: "24h"
+          idTokens: "24h"
+        oauth2:
+          responseTypes: ["code", "token", "id_token"]
+          skipApprovalScreen: true
+        enablePasswordDB: true
+        staticPasswords: []
+        frontend:
+          theme: gdc
+          issuer: GoodData.CN
+          logoUrl: theme/logo.svg
+          dir: web/
+        EOF
+        exec /opt/dex/dex serve /tmp/dex-config.yaml
+    ports:
+      - 5556:5556
+      - 5557:5557
+    volumes:
+      - dex-data:/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dex.rule=PathPrefix(`/dex`)"
+      - "traefik.http.routers.dex.entrypoints=web"
+      - "traefik.http.services.dex.loadbalancer.server.port=5556"
+
+  ## ============================================
+  ## Data Loading Services (Bootstrap)
+  ## ============================================
+
+  # Organization bootstrap - Self-contained (no gdc-nas dependency)
+  # Creates organization via gRPC, then creates demo user via REST
+  metadata-organization-bootstrap:
+    image: 020413372491.dkr.ecr.us-east-1.amazonaws.com/pullthrough/docker.io/library/alpine:3.21
+    tty: true
+    depends_on:
+      auth-service:
+        condition: service_started
+      metadata-api:
+        condition: service_started
+      api-gw:
+        condition: service_started
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        set -e
+        # Install required tools
+        apk add --no-cache curl jq
+
+        # Download grpcurl binary
+        echo "Installing grpcurl..."
+        GRPCURL_VERSION="1.9.1"
+        wget -q -O /tmp/grpcurl.tar.gz "https://github.com/fullstorydev/grpcurl/releases/download/v$${GRPCURL_VERSION}/grpcurl_$${GRPCURL_VERSION}_linux_x86_64.tar.gz"
+        tar -xzf /tmp/grpcurl.tar.gz -C /usr/local/bin grpcurl
+        chmod +x /usr/local/bin/grpcurl
+        rm /tmp/grpcurl.tar.gz
+
+        echo "Waiting for metadata-api..."
+        until curl -sf http://metadata-api:9008/actuator/health/readiness >/dev/null 2>&1; do
+          echo "Waiting for metadata-api to be ready..."
+          sleep 5
+        done
+        echo "metadata-api is ready!"
+
+        echo "Waiting for api-gw..."
+        until curl -sf http://api-gw:9203/health/readiness >/dev/null 2>&1; do
+          echo "Waiting for api-gw to be ready..."
+          sleep 5
+        done
+        echo "api-gw is ready!"
+
+        # Generate token hash (using same format as gdc-nas bootstrap)
+        TOKEN_HASH='$$5$$1234567890123456$$ZhevF45HOczSVHwo7R6s60tQRjbx4/bhjTrYi317TKD'
+
+        echo "Creating organization via gRPC..."
+        echo '{
+          "organizations": [{
+            "id": "default",
+            "name": "Default Organization",
+            "hostname": "localhost",
+            "userGroup": {
+              "id": "adminGroup",
+              "user": {
+                "id": "admin"
+              }
+            },
+            "initialToken": {
+              "id": "bootstrap",
+              "cryptedToken": "'"$$TOKEN_HASH"'"
+            }
+          }]
+        }' | grpcurl -plaintext -H "Authorization: Basic Ym9vdHN0cmFwOlN1cGVyU2VjcmV0UGFzc3dvcmQ=" \
+          -d @ metadata-api:6572 tiger.MetadataStorePrivilegedService/ensureOrganizationsExists
+
+        echo "Organization created!"
+
+        echo "Waiting for auth-service..."
+        until curl -sf http://auth-service:9051/actuator/health/readiness >/dev/null 2>&1; do
+          echo "Waiting for auth-service to be ready..."
+          sleep 5
+        done
+        echo "auth-service is ready!"
+
+        # Create demo user via REST API
+        BOOTSTRAP_TOKEN="YWRtaW46Ym9vdHN0cmFwOmFkbWluMTIz"
+
+        echo "Creating dex user..."
+        AUTH_ID=$$(curl -sf -X POST \
+          -H "Content-type: application/json" \
+          -H "Host: localhost:3000" \
+          -H "Authorization: Bearer $$BOOTSTRAP_TOKEN" \
+          -d '{"email": "demo@example.com","password": "demo123","displayName": "Demo User"}' \
+          "http://api-gw:9201/api/v1/auth/users" 2>/dev/null | jq -r '.authenticationId // empty') || true
+
+        if [ -z "$$AUTH_ID" ]; then
+          echo "User might already exist, trying to get existing user..."
+          AUTH_ID=$$(curl -sf -X GET \
+            -H "Content-type: application/json" \
+            -H "Host: localhost:3000" \
+            -H "Authorization: Bearer $$BOOTSTRAP_TOKEN" \
+            "http://api-gw:9201/api/v1/auth/users/demo@example.com" 2>/dev/null | jq -r '.authenticationId // empty') || true
+        fi
+
+        echo "Auth ID: $$AUTH_ID"
+
+        if [ -n "$$AUTH_ID" ]; then
+          echo "Creating metadata user..."
+          curl -sf -X POST \
+            -H "Content-type: application/vnd.gooddata.api+json" \
+            -H "Host: localhost:3000" \
+            -H "Authorization: Bearer $$BOOTSTRAP_TOKEN" \
+            -d '{
+              "data": {
+                "id": "demo",
+                "type": "user",
+                "attributes": {
+                  "authenticationId": "'"$$AUTH_ID"'",
+                  "firstname": "Demo",
+                  "lastname": "User",
+                  "email": "demo@example.com"
+                },
+                "relationships": {
+                  "userGroups": {
+                    "data": [{"id": "adminGroup", "type": "userGroup"}]
+                  }
+                }
+              }
+            }' "http://api-gw:9201/api/v1/entities/users" 2>/dev/null || echo "User might already exist"
+        fi
+
+        echo "Bootstrap completed!"
+
+  # Data loader - populates PostgreSQL with demo data
+  # Uses --no-schema-versioning to create schemas without hash suffixes (e.g., "demo" not "demo_abc123")
+  # This is CRITICAL for Python SDK tests which expect consistent fixture names
+  data-loader:
+    image: 020413372491.dkr.ecr.us-east-1.amazonaws.com/nas/data-loader:master
+    pull_policy: always
+    tty: true
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DOWNLOAD_DATA_SETS: "yes"
+    # Call data_load.py directly with --no-schema-versioning flag
+    # This ensures schema names don't have hash suffixes (demo instead of demo_<hash>)
+    entrypoint: ["/bin/bash", "-c"]
+    command:
+      - |
+        set -ex
+        # Download fresh data if needed
+        if [ -n "$$DOWNLOAD_DATA_SETS" ]; then
+          ./data_load.py -w demo -d pg_local_docker --skip-load --skip-store-versions || true
+        fi
+        # Load data with --no-schema-versioning (critical for SDK tests)
+        ./data_load.py -w demo -d pg_local_docker --skip-download --skip-store-versions --no-schema-versioning --debug
+        echo "Data loading completed with --no-schema-versioning!"
+
+  # Create data sources in metadata-api
+  # This registers the data source so GoodData services can query the demo data
+  create-ds:
+    image: 020413372491.dkr.ecr.us-east-1.amazonaws.com/nas/data-loader:master
+    pull_policy: missing
+    tty: true
+    depends_on:
+      metadata-organization-bootstrap:
+        condition: service_completed_successfully
+      data-loader:
+        condition: service_completed_successfully
+    environment:
+      API_HOST: "localhost"
+      API_ENDPOINT: "http://api-gw:9201"
+      TIGER_API_TOKEN: YWRtaW46Ym9vdHN0cmFwOmFkbWluMTIz
+      DATABASES: "pg_local_docker"
+      WORKSPACES: "demo"
+    # Use --no-schema-versioning for consistent data source schema names
+    entrypoint: ["/bin/bash", "-c"]
+    command:
+      - |
+        set -ex
+        ./create_data_sources.py -w demo -d pg_local_docker -e http://api-gw:9201 --version-file /data_load/versions.json --no-schema-versioning --debug
+        echo "Data sources created with --no-schema-versioning!"
+
+  # Layout uploader - uploads workspace hierarchy, analytics model, users, and permissions
+  # This replaces the old upload_demo_layout.py script and runs automatically
+  # CRITICAL: This step is required for SDK tests to work properly
+  layout-uploader:
+    image: 020413372491.dkr.ecr.us-east-1.amazonaws.com/pullthrough/docker.io/library/python:3.14-alpine
+    tty: true
+    depends_on:
+      create-ds:
+        condition: service_completed_successfully
+    environment:
+      HOST: "http://api-gw:9201"
+      TOKEN: "YWRtaW46Ym9vdHN0cmFwOmFkbWluMTIz"
+      HEADER_HOST: "localhost"
+      FIXTURES_DIR: "/app/fixtures"
+    volumes:
+      - ./packages/tests-support/fixtures:/app/fixtures:ro
+      - ./packages/tests-support/upload_demo_layout.py:/app/upload_demo_layout.py:ro
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        set -ex
+        # Install required packages
+        pip install --quiet requests pyyaml
+
+        # Wait for api-gw to be ready
+        echo "Waiting for api-gw to be ready..."
+        until wget -q --spider http://api-gw:9203/health/readiness 2>/dev/null; do
+          sleep 2
+        done
+        echo "api-gw is ready!"
+
+        # Run the layout uploader
+        cd /app
+        python upload_demo_layout.py
+
+        echo "Layout upload completed successfully!"
+
+  ## ============================================
+  ## FDW Service (optional - for gooddata-fdw tests)
+  ## ============================================
+
   gooddata-fdw:
     build:
       context: .
@@ -37,24 +1092,13 @@ services:
       POSTGRES_DB: gooddata
       POSTGRES_USER: gooddata
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD-gooddata123}"
-    command: ["postgres", "-c", "shared_preload_libraries=foreign_table_exposer", "-c", "log_statement=all", "-c", "client_min_messages=DEBUG1", "-c", "log_min_messages=DEBUG1"]
-
-  upload-layout:
-    build:
-      context: .
-      dockerfile: packages/tests-support/Dockerfile
-    environment:
-      FIXTURES_DIR: /app/fixtures
-      HOST: "http://gooddata-cn-ce:3000"
-      HEADER_HOST: localhost
-    command: ["python3", "upload_demo_layout.py"]
-
-  docs:
-    build:
-      context: .
-      dockerfile: docs/Dockerfile
-    ports:
-      - "1313:1313"
+    command: ["postgres", "-c", "shared_preload_libraries=foreign_table_exposer", "-c", "log_statement=all"]
+    profiles:
+      - fdw
 
 volumes:
-  gooddata-cn-ce-data:
+  postgres-data:
+  pulsar-data:
+  redis-data:
+  quiver-data:
+  dex-data:
