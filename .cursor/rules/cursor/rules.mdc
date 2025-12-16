@@ -1,5 +1,6 @@
+# (C) 2025 GoodData Corporation
 ---
-description: How to create or update Cursor rule files - minimal templates and standards
+description: How to create or update Cursor rule files - includes minimal templates and standards
 alwaysApply: false
 ---
 
@@ -10,19 +11,21 @@ alwaysApply: false
 - `.cursor/rules/general/` - General rules (always applied)
 - `.cursor/rules/packages/` - Package-specific rules
 - `.cursor/rules/technologies/` - Technology rules (Python, testing)
+- `.cursor/rules/guides/shared/` - Shared conventions (commits, etc.)
 - `.cursor/rules/cursor/` - Cursor workflow and meta-rules
 
 ## Rule Creation Process
 
-1. **Ask for clarification** if codebase location unclear
+1. **Ask for clarification** if codebase location is unclear
 2. **Investigate the codebase** relevant to the rule
 3. **Look at similar existing rules** as examples (better than templates)
 4. **Keep it minimal** - target 25-40 lines max
 5. **Focus on proprietary knowledge** - not generic patterns
+6. **Remove anything that doesn't help Cursor** - do not put anything that doesn't help Cursor into any rule file
 
 ## Updating Existing Rules
 
-**CRITICAL**: Be MINIMAL. Add only what prevents actual errors.
+**CRITICAL**: When asked to extend rules, be MINIMAL. Add only what prevents actual errors.
 
 **DO (Minimal):**
 ```python
@@ -42,23 +45,42 @@ if TYPE_CHECKING:
 - ❌ Step-by-step tutorials
 - ❌ Verbose "correct vs wrong" comparisons
 
-**Rule of thumb**: If it didn't cause a validation error, don't add it.
+**Rule of thumb**: If it didn't cause a validation error, don't add it to the rule.
 
-**Target length**: 25-40 lines. If over 50 lines, too verbose.
+**Target length**: 25-40 lines. If over 50 lines, you're being too verbose.
 
-## Rule Structure
+## Rule Structure (All Types)
 
 **Essential sections:**
 - Description header (1 line)
 - Owns / Does NOT Own (clear boundaries)
-- Critical constraints (if any)
-- Dependencies
+- Critical constraints or anti-patterns (if any)
+- Dependencies (required rules to load together)
+
+**Optional sections:**
+- Integration (only if complex)
+- Proprietary patterns (only if non-obvious)
+- Essential commands (only if unique to this package)
+
+## Quality Criteria
+
+**Good rule (25-40 lines):**
+- ✅ Only proprietary/non-obvious knowledge
+- ✅ Clear package boundaries
+- ✅ Points to READMEs for details
+- ✅ Copy-paste ready patterns (minimal examples)
+
+**Bad rule (>50 lines):**
+- ❌ Generic technology descriptions
+- ❌ Long explanations or tutorials
+- ❌ Verbose examples with commentary
+- ❌ Information already in code/docs
 
 ## Rule Header Format
 
 ```markdown
 ---
-description: {Brief - used by Cursor for rule selection}
-alwaysApply: false  # (true only for general rules)
+description: {Brief but complete - used by Cursor for rule selection}
+alwaysApply: false  # (or true only for general rules)
 ---
 ```

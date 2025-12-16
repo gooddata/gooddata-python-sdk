@@ -1,0 +1,54 @@
+# (C) 2025 GoodData Corporation
+---
+description: Third-party library integration - preventing outdated LLM knowledge issues
+alwaysApply: false
+---
+
+# Third-Party Library Integration
+
+## ⚠️ CRITICAL: Preventing Outdated Knowledge Issues
+
+**LLMs may have outdated training data. Always verify current information before suggesting third-party libraries.**
+
+## Library Integration Hierarchy
+
+### ✅ PREFERRED: Internal GoodData Packages
+**ALWAYS use these instead of external alternatives:**
+- `gooddata-sdk` - Core SDK functionality
+- `gooddata-pandas` - Pandas integration
+- `gooddata-api-client` - Generated API client
+
+### 🟡 APPROVED: Stable External Libraries
+**Pre-approved (but verify versions in pyproject.toml):**
+- pandas, numpy - Data processing
+- attrs, cattrs - Data classes and serialization
+- requests, httpx - HTTP clients
+- pytest, vcrpy - Testing
+
+### 🔴 REQUIRES WEB SEARCH: Unknown/New Libraries
+**MANDATORY verification before suggesting:**
+- Any library not in approved lists above
+- Libraries from rapidly changing ecosystems (AI/ML, async frameworks)
+- Beta/alpha versions of any library
+- Libraries with major version changes in last 6 months
+
+## When to ALWAYS Search the Web
+
+**MANDATORY TRIGGERS:**
+1. New library integration (not in our approved stack)
+2. Version-specific APIs (libraries known to change frequently)
+3. Migration scenarios (upgrading between major versions)
+4. Deprecated warnings
+5. Fast-evolving ecosystems (Python AI/ML, async, type systems)
+6. Cloud provider SDKs (AWS, GCP, Azure)
+
+**Search Strategy:**
+- Search: "library-name current version documentation"
+- Look for: "library-name migration guide" or "breaking changes"
+- Check: Official GitHub repository for recent releases
+- Verify: API examples from official docs (not generic tutorials)
+
+## Dependencies
+
+Required: technologies/python
+Related: general/general
