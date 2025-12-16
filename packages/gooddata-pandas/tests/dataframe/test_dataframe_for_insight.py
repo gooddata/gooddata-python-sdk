@@ -13,7 +13,7 @@ _fixtures_dir = _current_dir / "fixtures"
 @gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_visualization_date.yaml"))
 def test_dataframe_for_visualization_date(gdf: DataFrameFactory):
     # 2 metrics grouped by date dimension with data for last 12 months
-    # exact numbers cannot be checked as date data are changed each AIO build
+    # exact numbers cannot be checked as date data are changed each build
     df = gdf.for_visualization(visualization_id="customers_trend")
 
     assert len(df) == 12

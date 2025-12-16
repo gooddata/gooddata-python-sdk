@@ -9,7 +9,7 @@ from gooddata_dbt.gooddata.api_wrapper import GoodDataApiWrapper
 
 
 class GoodDataSdkWrapper:
-    # Timeout=600 because supporting waiting for All-in-one image starts
+    # Timeout=600 because supporting waiting for GoodData services to start
     def __init__(
         self, args: argparse.Namespace, logger: Logger, profile: Optional[str] = None, timeout: int = 600
     ) -> None:

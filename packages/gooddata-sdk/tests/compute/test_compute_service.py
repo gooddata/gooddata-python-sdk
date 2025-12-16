@@ -8,7 +8,7 @@ from tests_support.vcrpy_utils import get_vcr
 
 # Skip all tests in this module
 pytest.skip(
-    "Skipping all tests in this module because it requires gen-ai which is not available in AIO.",
+    "Skipping all tests in this module because it requires gen-ai which is not available in the test environment.",
     allow_module_level=True,
 )
 

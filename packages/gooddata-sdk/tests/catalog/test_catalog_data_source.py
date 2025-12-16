@@ -652,7 +652,7 @@ def test_scan_model(test_config):
     with pytest.raises(ValueError):
         CatalogScanModelRequest(scan_tables=False, scan_views=False)
 
-    # TODO - how to simulate warnings in AIO?
+    # TODO - how to simulate warnings in the test environment?
     assert len(scan_result.warnings) == 0
 
 

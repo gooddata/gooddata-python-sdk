@@ -38,9 +38,12 @@ will find that the data in snapshots does not match the conventions of the API.
 
 ## Component tests with vcrpy
 
-The vcrpy simplifies mocking HTTP endpoints. The component tests use the AIO image environment and the demo
-workspace. The connection details are stored in [gd_test_config.yaml](gd_test_config.yaml). Tests accept command
-line parameter `--gd-test-config` to pass custom test configuration.
+The vcrpy simplifies mocking HTTP endpoints. The component tests use the GoodData microservices environment
+(started via `docker-compose.yaml` in the repository root) and the demo workspace. The connection details are
+stored in [gd_test_config.yaml](gd_test_config.yaml). Tests accept command line parameter `--gd-test-config`
+to pass custom test configuration.
+
+See [CONTRIBUTING.md](../../../CONTRIBUTING.md) for detailed instructions on setting up the test environment.
 
 Additionally, make sure that every time you use vcrpy, you configure the tool:
 - to not store the 'Authorization' token and 'user-agent' in the captured data
