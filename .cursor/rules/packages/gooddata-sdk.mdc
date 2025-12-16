@@ -1,3 +1,4 @@
+# (C) 2025 GoodData Corporation
 ---
 description: GoodData SDK core package - primary interface for GoodData Cloud
 alwaysApply: false
@@ -41,6 +42,8 @@ workspaces = sdk.catalog_workspace.list_workspaces()
 ## Testing
 
 Uses vcrpy cassettes. See `technologies/testing` rule for workflow.
+
+**Extend existing tests** when adding new functionality - don't create new test files for minor changes.
 
 ## Dependencies
 

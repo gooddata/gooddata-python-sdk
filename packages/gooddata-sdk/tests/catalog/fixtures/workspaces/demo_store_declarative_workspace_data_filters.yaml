@@ -29,25 +29,19 @@ interactions:
           - PLACEHOLDER
         Expires:
           - '0'
-        Featurepolicy:
-          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
-            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
-            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - same-origin
+          - no-referrer
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - 1; mode=block
+          - '0'
       body:
         string:
           workspaceDataFilters:
@@ -106,25 +100,19 @@ interactions:
         DATE: *id001
         Expires:
           - '0'
-        Featurepolicy:
-          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
-            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
-            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - same-origin
+          - no-referrer
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - 1; mode=block
+          - '0'
       body:
         string:
           workspaceDataFilters:
@@ -179,27 +167,21 @@ interactions:
         DATE: *id001
         Expires:
           - '0'
-        Featurepolicy:
-          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
-            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
-            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Location:
           - /api/v1/entities/admin/organizations/default
         Pragma:
           - no-cache
         Referrer-Policy:
-          - same-origin
+          - no-referrer
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - 1; mode=block
+          - '0'
       body:
         string: ''
   - request:
@@ -221,31 +203,25 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '200'
+          - '450'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
         Expires:
           - '0'
-        Featurepolicy:
-          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
-            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
-            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - same-origin
+          - no-referrer
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - 1; mode=block
+          - '0'
       body:
         string:
           data:
@@ -254,6 +230,17 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
+              allowedOrigins: []
+              earlyAccess: enableAlerting
+              earlyAccessValues:
+                - enableAlerting
+                - enableSmtp
+                - enablePreAggregationDatasets
+                - enableScheduling
+                - enableCompositeGrain
+                - enableUserManagement
+                - enableRawExports
+                - enableFlexibleDashboardLayout
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -279,27 +266,21 @@ interactions:
         DATE: *id001
         Expires:
           - '0'
-        Featurepolicy:
-          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
-            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
-            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Location:
           - /api/v1/entities/admin/organizations/default
         Pragma:
           - no-cache
         Referrer-Policy:
-          - same-origin
+          - no-referrer
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - 1; mode=block
+          - '0'
       body:
         string: ''
   - request:
@@ -321,31 +302,25 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '200'
+          - '450'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
         Expires:
           - '0'
-        Featurepolicy:
-          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
-            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
-            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - same-origin
+          - no-referrer
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - 1; mode=block
+          - '0'
       body:
         string:
           data:
@@ -354,5 +329,16 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
+              allowedOrigins: []
+              earlyAccess: enableAlerting
+              earlyAccessValues:
+                - enableAlerting
+                - enableSmtp
+                - enablePreAggregationDatasets
+                - enableScheduling
+                - enableCompositeGrain
+                - enableUserManagement
+                - enableRawExports
+                - enableFlexibleDashboardLayout
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default

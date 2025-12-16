@@ -61,17 +61,17 @@ def rest_op_default(op, url_path, data_json_path=None, raise_ex=True):
 
 
 def wait_platform_up():
-    # wait till GD.CN is up and ready to receive requests
-    print("Waiting till AIO GD.CN is up", flush=True)
+    # wait till GoodData is up and ready to receive requests
+    print("Waiting till GoodData is up", flush=True)
     while True:
         try:
             result = rest_op_jsonapi("get", f"api/{api_version}/entities/admin/organizations/default", raise_ex=False)
             if result is not None:
-                print("AIO GD.CN is up", flush=True)
+                print("GoodData is up", flush=True)
                 break
-            print("AIO GD.CN metadata does not responding", flush=True)
+            print("GoodData metadata is not responding", flush=True)
         except requests.exceptions.ConnectionError:
-            print("AIO GD.CN is not available", flush=True)
+            print("GoodData is not available", flush=True)
         time.sleep(4)
 
 
@@ -96,6 +96,30 @@ def update_layout():
     # TODO: use python-sdk support
     wait_platform_up()
 
+    # Enable feature flags required for SDK tests (user management, scheduling, etc.)
+    # IMPORTANT: Use PATCH instead of PUT to avoid overwriting the identityProvider relationship
+    # PUT would overwrite the entire organization entity, removing the identity provider link
+    print("Enabling feature flags on organization...", flush=True)
+    org_update = {
+        "data": {
+            "id": "default",
+            "type": "organization",
+            "attributes": {
+                "earlyAccessValues": [
+                    "enableUserManagement",
+                    "enableScheduling",
+                    "enableAlerting",
+                    "enableSmtp",
+                    "enableCompositeGrain",
+                    "enableRawExports",
+                    "enableFlexibleDashboardLayout",
+                    "enablePreAggregationDatasets",
+                ],
+            },
+        }
+    }
+    rest_op_jsonapi("patch", f"api/{api_version}/entities/admin/organizations/default", org_update)
+
     print("Uploading userGroups", flush=True)
     rest_op_default("put", f"api/{api_version}/layout/userGroups", user_groups)
 
@@ -107,6 +131,18 @@ def update_layout():
 
     print("Uploading test DS with physical model for demo", flush=True)
     rest_op_default("put", f"api/{api_version}/layout/dataSources", data_sources)
+
+    # Verify data sources were uploaded with permissions
+    print("Verifying data source permissions...", flush=True)
+    result = rest_op_default("get", f"api/{api_version}/layout/dataSources", raise_ex=False)
+    if result:
+        for ds in result.get("dataSources", []):
+            ds_id = ds.get("id")
+            perms = ds.get("permissions", [])
+            print(f"  Data source '{ds_id}' has {len(perms)} permissions", flush=True)
+            if ds_id == "demo-test-ds" and len(perms) == 0:
+                print("  WARNING: demo-test-ds missing permissions, retrying upload...", flush=True)
+                rest_op_default("put", f"api/{api_version}/layout/dataSources", data_sources)
 
     print("Uploading demo workspaces", flush=True)
     rest_op_default("put", f"api/{api_version}/layout/workspaces", hierarchy)

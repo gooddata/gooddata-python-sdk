@@ -1,0 +1,100 @@
+# (C) 2025 GoodData Corporation
+# Quiver configuration for Python SDK tests
+# Storage classes define how quiver handles different flight prefixes
+
+secrets_providers = ["tiger_secrets_provider.provider"]
+
+#######################################################################
+# Shard configuration
+#######################################################################
+
+memory_cache_size = "256M"
+mmap_cache_size = "512M"
+disk_cache_size = "2G"
+
+#######################################################################
+# Node configuration
+#######################################################################
+
+listen_flight_host = "0.0.0.0"
+advertise_flight_host = "quiver"
+server_work_dir = "/data/quiver"
+disk_dir = "/data/disk-cache"
+peer_flight_host = "quiver"
+
+#######################################################################
+# Dataframe configuration
+#######################################################################
+
+dataframe_mem_limit = "1G"
+dataframe_task_threads = 2
+dataframe_task_workers = 1
+
+#######################################################################
+# Storage and storage class configuration
+#######################################################################
+
+[storage_class.raw_cache]
+flight_prefix = "cache/raw"
+cache_tier.in_memory = { type = "memory", max_flight_size = "1M", upload_spill_to = "on_disk", spill_to = "on_disk", move_to = "on_disk", move_after = 30 }
+cache_tier.on_disk = { type = "disk" }
+upload_to_tier = 'in_memory'
+
+[storage_class.result_cache]
+flight_prefix = "cache/result"
+cache_tier.in_memory = { type = "memory", max_flight_size = "1M", upload_spill_to = "on_disk", spill_to = "on_disk", move_to = "on_disk", move_after = 30 }
+cache_tier.on_disk = { type = "disk" }
+upload_to_tier = 'in_memory'
+durability = "none"
+
+[storage_class.raw_cache_non_durable]
+flight_prefix = "cache/raw_non_durable"
+cache_tier.in_memory = { type = "memory", max_flight_size = "1M", upload_spill_to = "on_disk", spill_to = "on_disk", move_to = "on_disk", move_after = 30 }
+cache_tier.on_disk = { type = "disk" }
+upload_to_tier = 'in_memory'
+durability = "none"
+
+[storage_class.result_cache_non_durable]
+flight_prefix = "cache/result_non_durable"
+cache_tier.in_memory = { type = "memory", max_flight_size = "1M", upload_spill_to = "on_disk", spill_to = "on_disk", move_to = "on_disk", move_after = 30 }
+cache_tier.on_disk = { type = "disk" }
+upload_to_tier = 'in_memory'
+durability = "none"
+
+[storage_class.raw_cache_tmp]
+flight_prefix = "cache/raw_tmp"
+flight_ttl = 900
+cache_tier.in_memory = { type = "memory", max_flight_size = "1M", upload_spill_to = "on_disk", spill_to = "on_disk", move_to = "on_disk", move_after = 30 }
+cache_tier.on_disk = { type = "disk" }
+upload_to_tier = 'in_memory'
+durability = "none"
+
+[storage_class.result_cache_tmp]
+flight_prefix = "cache/result_tmp"
+flight_ttl = 900
+cache_tier.in_memory = { type = "memory", max_flight_size = "1M", upload_spill_to = "on_disk", spill_to = "on_disk", move_to = "on_disk", move_after = 30 }
+cache_tier.on_disk = { type = "disk" }
+upload_to_tier = 'in_memory'
+durability = "none"
+
+[storage_class.connector_cache]
+flight_prefix = "cache/connector"
+cache_tier.in_memory = { type = "memory", max_flight_size = "1M", upload_spill_to = "on_disk", spill_to = "on_disk", move_to = "on_disk", move_after = 30 }
+cache_tier.on_disk = { type = "disk" }
+upload_to_tier = 'in_memory'
+durability = "none"
+flight_ttl = 900
+
+[storage_class.files_cache]
+flight_prefix = "cache/files"
+cache_tier.on_disk = { type = "disk" }
+upload_to_tier = 'on_disk'
+durability = "none"
+flight_ttl = 900
+
+[storage_class.static_geo_collections]
+flight_prefix = "cache/static/geo"
+cache_tier.on_disk = { type = "disk" }
+upload_to_tier = 'on_disk'
+durability = "none"
+flight_ttl = 900

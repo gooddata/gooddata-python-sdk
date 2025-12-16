@@ -48,59 +48,31 @@ interactions:
         code: 200
         message: OK
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
+        Content-Length:
+          - '678'
         Content-Type:
           - application/json
         DATE: &id001
           - PLACEHOLDER
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
         Pragma:
           - no-cache
         Referrer-Policy:
           - no-referrer
-        Server:
-          - nginx
-        Transfer-Encoding:
-          - chunked
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-GDC-CANCEL-TOKEN:
-          - a3d5f31d-50a2-4e19-a8c7-646b01894d44
+        X-Gdc-Cancel-Token:
+          - 9f8aa214-5521-4d6e-aa2e-e039f368c091
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
+        X-Xss-Protection:
           - '0'
-        content-length:
-          - '657'
       body:
         string:
           executionResponse:
@@ -123,6 +95,7 @@ interactions:
                       format:
                         locale: en-US
                         pattern: MMM y
+                        timezone: Etc/UTC
                       valueType: TEXT
                 localIdentifier: dim_0
               - headers:
@@ -130,10 +103,10 @@ interactions:
                       - localIdentifier: metric1
                 localIdentifier: dim_1
             links:
-              executionResult: 662fd8c75e6b3ec34173d86c2290fc7e0c03958d:cf18b95dd1e0bc5e0bee5a9ea52f12804acae8af84d529f38142b5352d3e0c01
+              executionResult: d01aa4c6abc1964890e8f14384950161f8551006:2ff8b4bc32743b173ef416e77a0d12e91f50291352b0950ee4a228b6188b04ac
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/662fd8c75e6b3ec34173d86c2290fc7e0c03958d%3Acf18b95dd1e0bc5e0bee5a9ea52f12804acae8af84d529f38142b5352d3e0c01?offset=0%2C0&limit=512%2C256
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/d01aa4c6abc1964890e8f14384950161f8551006%3A2ff8b4bc32743b173ef416e77a0d12e91f50291352b0950ee4a228b6188b04ac?offset=0%2C0&limit=512%2C256
       body: null
       headers:
         Accept:
@@ -149,45 +122,19 @@ interactions:
         code: 200
         message: OK
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
+        Content-Length:
+          - '4471'
         Content-Type:
           - application/json
         DATE: *id001
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
         Pragma:
           - no-cache
         Referrer-Policy:
           - no-referrer
-        Server:
-          - nginx
-        Transfer-Encoding:
-          - chunked
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -195,10 +142,8 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
+        X-Xss-Protection:
           - '0'
-        content-length:
-          - '4470'
       body:
         string:
           data:
@@ -218,31 +163,31 @@ interactions:
             - - 111.0
             - - 130.0
             - - 115.0
-            - - 98.0
-            - - 133.0
-            - - 104.0
-            - - 126.0
-            - - 116.0
-            - - 106.0
-            - - 146.0
-            - - 150.0
-            - - 123.0
-            - - 83.0
+            - - 111.0
             - - 127.0
-            - - 136.0
-            - - 133.0
-            - - 146.0
-            - - 148.0
-            - - 138.0
-            - - 126.0
-            - - 138.0
-            - - 187.0
-            - - 215.0
-            - - 176.0
+            - - 102.0
+            - - 125.0
+            - - 114.0
+            - - 113.0
+            - - 139.0
+            - - 153.0
             - - 123.0
-            - - 229.0
-            - - 156.0
-            - - 152.0
+            - - 80.0
+            - - 125.0
+            - - 143.0
+            - - 135.0
+            - - 142.0
+            - - 143.0
+            - - 145.0
+            - - 121.0
+            - - 138.0
+            - - 193.0
+            - - 217.0
+            - - 173.0
+            - - 119.0
+            - - 236.0
+            - - 149.0
+            - - 149.0
             - - 153.0
             - - 168.0
             - - 151.0
@@ -482,58 +427,30 @@ interactions:
         code: 200
         message: OK
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
+        Content-Length:
+          - '678'
         Content-Type:
           - application/json
         DATE: *id001
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
         Pragma:
           - no-cache
         Referrer-Policy:
           - no-referrer
-        Server:
-          - nginx
-        Transfer-Encoding:
-          - chunked
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-GDC-CANCEL-TOKEN:
-          - 566e34b3-2576-45e5-a919-8725d3b3b4d6
+        X-Gdc-Cancel-Token:
+          - 783ddf01-ce23-4260-b122-a855a4f1ba9a
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
+        X-Xss-Protection:
           - '0'
-        content-length:
-          - '657'
       body:
         string:
           executionResponse:
@@ -556,6 +473,7 @@ interactions:
                       format:
                         locale: en-US
                         pattern: MMM y
+                        timezone: Etc/UTC
                       valueType: TEXT
                 localIdentifier: dim_0
               - headers:
@@ -563,10 +481,10 @@ interactions:
                       - localIdentifier: metric1
                 localIdentifier: dim_1
             links:
-              executionResult: 737e362db6c57170c52f51203f63238db1f6301e:613ef97f86d757999b08253548644b9d78f7ad18800e678926fe5457d21dd433
+              executionResult: 6690ec520bf740b07fc3f567e72b64281ea08716:0d697df6179440e9f9c3d98fd4359d359d061d3a3bd39e9fc61d3ebeefccae84
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/737e362db6c57170c52f51203f63238db1f6301e%3A613ef97f86d757999b08253548644b9d78f7ad18800e678926fe5457d21dd433?offset=0%2C0&limit=512%2C256
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/6690ec520bf740b07fc3f567e72b64281ea08716%3A0d697df6179440e9f9c3d98fd4359d359d061d3a3bd39e9fc61d3ebeefccae84?offset=0%2C0&limit=512%2C256
       body: null
       headers:
         Accept:
@@ -582,45 +500,19 @@ interactions:
         code: 200
         message: OK
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
+        Content-Length:
+          - '4317'
         Content-Type:
           - application/json
         DATE: *id001
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
         Pragma:
           - no-cache
         Referrer-Policy:
           - no-referrer
-        Server:
-          - nginx
-        Transfer-Encoding:
-          - chunked
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -628,10 +520,8 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
+        X-Xss-Protection:
           - '0'
-        content-length:
-          - '4317'
       body:
         string:
           data:
@@ -670,9 +560,9 @@ interactions:
             - - null
             - - 5.0
             - - 1.0
-            - - 11.0
-            - - 9.0
-            - - 8.0
+            - - 17.0
+            - - 6.0
+            - - 5.0
             - - 10.0
             - - 3.0
             - - null
@@ -911,58 +801,30 @@ interactions:
         code: 200
         message: OK
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
+        Content-Length:
+          - '678'
         Content-Type:
           - application/json
         DATE: *id001
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
         Pragma:
           - no-cache
         Referrer-Policy:
           - no-referrer
-        Server:
-          - nginx
-        Transfer-Encoding:
-          - chunked
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-GDC-CANCEL-TOKEN:
-          - 6f8ff1b8-18ea-47ad-95fd-4272cc2130fc
+        X-Gdc-Cancel-Token:
+          - 9b7d9142-4f8c-42e1-bc80-eb0537ab9014
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
+        X-Xss-Protection:
           - '0'
-        content-length:
-          - '657'
       body:
         string:
           executionResponse:
@@ -985,6 +847,7 @@ interactions:
                       format:
                         locale: en-US
                         pattern: MMM y
+                        timezone: Etc/UTC
                       valueType: TEXT
                 localIdentifier: dim_0
               - headers:
@@ -992,10 +855,10 @@ interactions:
                       - localIdentifier: metric1
                 localIdentifier: dim_1
             links:
-              executionResult: d796f90830b754933605261e94a4f90998d446a5:03316141342bad8591bb5ed3f21cbd6ce928e807f7b139ae4bc92c0c231958c3
+              executionResult: 611d0f2d91164c01372a4d04ce69e0df0c6ba215:c4e54126d35c89f7665d1accc17a36a98b649575d81962bc459130547af8d66e
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/d796f90830b754933605261e94a4f90998d446a5%3A03316141342bad8591bb5ed3f21cbd6ce928e807f7b139ae4bc92c0c231958c3?offset=0%2C0&limit=512%2C256
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/611d0f2d91164c01372a4d04ce69e0df0c6ba215%3Ac4e54126d35c89f7665d1accc17a36a98b649575d81962bc459130547af8d66e?offset=0%2C0&limit=512%2C256
       body: null
       headers:
         Accept:
@@ -1011,45 +874,19 @@ interactions:
         code: 200
         message: OK
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
+        Content-Length:
+          - '2759'
         Content-Type:
           - application/json
         DATE: *id001
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
         Pragma:
           - no-cache
         Referrer-Policy:
           - no-referrer
-        Server:
-          - nginx
-        Transfer-Encoding:
-          - chunked
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -1057,10 +894,8 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
+        X-Xss-Protection:
           - '0'
-        content-length:
-          - '2759'
       body:
         string:
           data:
@@ -1084,9 +919,9 @@ interactions:
             - - 5.0
             - - 5.0
             - - 1.0
-            - - 11.0
-            - - 9.0
-            - - 8.0
+            - - 17.0
+            - - 6.0
+            - - 5.0
             - - 10.0
             - - 3.0
             - - 1.0
