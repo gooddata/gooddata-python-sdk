@@ -22,32 +22,26 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '36381'
+          - '37189'
         Content-Type:
           - application/json
         DATE: &id001
           - PLACEHOLDER
         Expires:
           - '0'
-        Featurepolicy:
-          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
-            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
-            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - same-origin
+          - no-referrer
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - 1; mode=block
+          - '0'
       body:
         string:
           workspaceDataFilters:
@@ -1484,6 +1478,42 @@ interactions:
                       tags:
                         - Campaign channels
                       title: Campaign channels
+                    - aggregatedFacts:
+                        - description: Budget Agg
+                          id: budget_agg
+                          sourceColumn: budget
+                          sourceColumnDataType: INT
+                          sourceFactReference:
+                            operation: SUM
+                            reference:
+                              id: budget
+                              type: fact
+                          tags:
+                            - Campaign channels per category
+                      attributes: []
+                      description: Campaign channels per categories
+                      facts: []
+                      grain: []
+                      id: campaign_channels_per_category
+                      precedence: 1
+                      references:
+                        - identifier:
+                            id: campaign_channels
+                            type: dataset
+                          multivalue: false
+                          sources:
+                            - column: campaign_channel_id
+                              dataType: STRING
+                              target:
+                                id: campaign_channel_id
+                                type: attribute
+                      sql:
+                        dataSourceId: demo-test-ds
+                        statement: SELECT category, SUM(budget) FROM campaign_channels
+                          GROUP BY category
+                      tags:
+                        - Campaign channels per category
+                      title: Campaign channels per category
                     - aggregatedFacts: []
                       attributes:
                         - description: Campaign id
@@ -1844,31 +1874,25 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '36381'
+          - '37189'
         Content-Type:
           - application/json
         DATE: *id001
         Expires:
           - '0'
-        Featurepolicy:
-          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
-            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
-            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - same-origin
+          - no-referrer
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - 1; mode=block
+          - '0'
       body:
         string:
           workspaceDataFilters:
@@ -3305,6 +3329,42 @@ interactions:
                       tags:
                         - Campaign channels
                       title: Campaign channels
+                    - aggregatedFacts:
+                        - description: Budget Agg
+                          id: budget_agg
+                          sourceColumn: budget
+                          sourceColumnDataType: INT
+                          sourceFactReference:
+                            operation: SUM
+                            reference:
+                              id: budget
+                              type: fact
+                          tags:
+                            - Campaign channels per category
+                      attributes: []
+                      description: Campaign channels per categories
+                      facts: []
+                      grain: []
+                      id: campaign_channels_per_category
+                      precedence: 1
+                      references:
+                        - identifier:
+                            id: campaign_channels
+                            type: dataset
+                          multivalue: false
+                          sources:
+                            - column: campaign_channel_id
+                              dataType: STRING
+                              target:
+                                id: campaign_channel_id
+                                type: attribute
+                      sql:
+                        dataSourceId: demo-test-ds
+                        statement: SELECT category, SUM(budget) FROM campaign_channels
+                          GROUP BY category
+                      tags:
+                        - Campaign channels per category
+                      title: Campaign channels per category
                     - aggregatedFacts: []
                       attributes:
                         - description: Campaign id

@@ -86,59 +86,31 @@ interactions:
         code: 200
         message: OK
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
+        Content-Length:
+          - '1219'
         Content-Type:
           - application/json
         DATE: &id001
           - PLACEHOLDER
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
         Pragma:
           - no-cache
         Referrer-Policy:
           - no-referrer
-        Server:
-          - nginx
-        Transfer-Encoding:
-          - chunked
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-GDC-CANCEL-TOKEN:
-          - c2de2447-aa27-406a-afa1-66d48d4a32f2
+        X-Gdc-Cancel-Token:
+          - cb1922c6-c700-4f6f-9ce9-388e00e45326
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
+        X-Xss-Protection:
           - '0'
-        content-length:
-          - '1219'
       body:
         string:
           executionResponse:
@@ -198,10 +170,10 @@ interactions:
                       valueType: TEXT
                 localIdentifier: dim_1
             links:
-              executionResult: e9bc043a8362353f5c020ab96ae5bca451ed1149:ceca391d8311dbef56364a4d744b870e56dbf6628452505203a1d51b8e6bcfa9
+              executionResult: 725b5a57ee7433e72d5f60d8387442a0ccc9095e:ef38cb0b4a57c4af754666018bf954ff5f74add425e9932ae080da0f0fba794b
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/e9bc043a8362353f5c020ab96ae5bca451ed1149%3Aceca391d8311dbef56364a4d744b870e56dbf6628452505203a1d51b8e6bcfa9/metadata
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/725b5a57ee7433e72d5f60d8387442a0ccc9095e%3Aef38cb0b4a57c4af754666018bf954ff5f74add425e9932ae080da0f0fba794b/metadata
       body: null
       headers:
         Accept:
@@ -217,45 +189,19 @@ interactions:
         code: 200
         message: OK
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
+        Content-Length:
+          - '2511'
         Content-Type:
           - application/json
         DATE: *id001
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
         Pragma:
           - no-cache
         Referrer-Policy:
           - no-referrer
-        Server:
-          - nginx
-        Transfer-Encoding:
-          - chunked
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -263,10 +209,8 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
+        X-Xss-Protection:
           - '0'
-        content-length:
-          - '2511'
       body:
         string:
           afm:
@@ -368,7 +312,7 @@ interactions:
                       valueType: TEXT
                 localIdentifier: dim_1
             links:
-              executionResult: e9bc043a8362353f5c020ab96ae5bca451ed1149:ceca391d8311dbef56364a4d744b870e56dbf6628452505203a1d51b8e6bcfa9
+              executionResult: 725b5a57ee7433e72d5f60d8387442a0ccc9095e:ef38cb0b4a57c4af754666018bf954ff5f74add425e9932ae080da0f0fba794b
           resultSpec:
             dimensions:
               - localIdentifier: dim_0
@@ -398,10 +342,10 @@ interactions:
                     totalDimensionItems:
                       - state
                       - measureGroup
-          resultSize: 15292
+          resultSize: 15444
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/e9bc043a8362353f5c020ab96ae5bca451ed1149%3Aceca391d8311dbef56364a4d744b870e56dbf6628452505203a1d51b8e6bcfa9?offset=0%2C0&limit=100%2C100
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/725b5a57ee7433e72d5f60d8387442a0ccc9095e%3Aef38cb0b4a57c4af754666018bf954ff5f74add425e9932ae080da0f0fba794b?offset=0%2C0&limit=100%2C100
       body: null
       headers:
         Accept:
@@ -417,45 +361,19 @@ interactions:
         code: 200
         message: OK
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
+        Content-Length:
+          - '24913'
         Content-Type:
           - application/json
         DATE: *id001
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
         Pragma:
           - no-cache
         Referrer-Policy:
           - no-referrer
-        Server:
-          - nginx
-        Transfer-Encoding:
-          - chunked
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -463,47 +381,11 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
+        X-Xss-Protection:
           - '0'
-        content-length:
-          - '24918'
       body:
         string:
           data:
-            - - null
-              - null
-              - null
-              - null
-              - null
-              - null
-              - null
-              - null
-              - null
-              - null
-              - null
-              - null
-              - null
-              - 790.0
-              - 869.41
-              - 659.24
-              - 2664.71
-            - - null
-              - null
-              - null
-              - null
-              - null
-              - null
-              - null
-              - null
-              - null
-              - null
-              - null
-              - null
-              - null
-              - 963.08
-              - 890.67
-              - 926.38
-              - 2664.71
             - - null
               - null
               - null
@@ -538,6 +420,40 @@ interactions:
               - null
               - null
               - null
+            - - null
+              - null
+              - null
+              - null
+              - null
+              - null
+              - null
+              - null
+              - null
+              - null
+              - null
+              - null
+              - null
+              - 790.0
+              - 869.41
+              - 659.24
+              - 2664.71
+            - - null
+              - null
+              - null
+              - null
+              - null
+              - null
+              - null
+              - null
+              - null
+              - null
+              - null
+              - null
+              - null
+              - 963.08
+              - 890.67
+              - 926.38
+              - 2664.71
             - - null
               - null
               - null
@@ -2106,17 +2022,17 @@ interactions:
             - headerGroups:
                 - headers:
                     - attributeHeader:
-                        labelValue: AK
-                        primaryLabelValue: AK
-                    - attributeHeader:
-                        labelValue: AK
-                        primaryLabelValue: AK
-                    - attributeHeader:
                         labelValue: Alabama
                         primaryLabelValue: Alabama
                     - attributeHeader:
                         labelValue: Alabama
                         primaryLabelValue: Alabama
+                    - attributeHeader:
+                        labelValue: Alaska
+                        primaryLabelValue: Alaska
+                    - attributeHeader:
+                        labelValue: Alaska
+                        primaryLabelValue: Alaska
                     - attributeHeader:
                         labelValue: Arizona
                         primaryLabelValue: Arizona
@@ -2693,14 +2609,14 @@ interactions:
                         primaryLabelValue: Outdoor
           grandTotals:
             - data:
-                - - 4983.360000000001
-                  - null
-                - - null
-                  - 2664.71
                 - - 6198.55
                   - null
                 - - null
                   - 3837.42
+                - - 4983.360000000001
+                  - null
+                - - null
+                  - 2664.71
                 - - 10279.68
                   - null
                 - - null
@@ -2721,7 +2637,7 @@ interactions:
                   - null
                 - - null
                   - 1048.14
-                - - 3239.72
+                - - 3239.7200000000003
                   - null
                 - - null
                   - 1355.06
@@ -2749,7 +2665,7 @@ interactions:
                   - null
                 - - null
                   - 3205.41
-                - - 5982.700000000001
+                - - 5982.7
                   - null
                 - - null
                   - 3939.72
@@ -2813,11 +2729,11 @@ interactions:
                   - null
                 - - null
                   - 1129.66
-                - - 1328.9699999999998
+                - - 1328.97
                   - null
                 - - null
                   - 540.36
-                - - 21687.019999999997
+                - - 21687.02
                   - null
                 - - null
                   - 13727.01
@@ -2913,7 +2829,7 @@ interactions:
             dataSourceMessages: []
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/e9bc043a8362353f5c020ab96ae5bca451ed1149%3Aceca391d8311dbef56364a4d744b870e56dbf6628452505203a1d51b8e6bcfa9/metadata
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/725b5a57ee7433e72d5f60d8387442a0ccc9095e%3Aef38cb0b4a57c4af754666018bf954ff5f74add425e9932ae080da0f0fba794b/metadata
       body: null
       headers:
         Accept:
@@ -2929,45 +2845,19 @@ interactions:
         code: 200
         message: OK
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
+        Content-Length:
+          - '2511'
         Content-Type:
           - application/json
         DATE: *id001
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
         Pragma:
           - no-cache
         Referrer-Policy:
           - no-referrer
-        Server:
-          - nginx
-        Transfer-Encoding:
-          - chunked
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -2975,10 +2865,8 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
+        X-Xss-Protection:
           - '0'
-        content-length:
-          - '2511'
       body:
         string:
           afm:
@@ -3080,7 +2968,7 @@ interactions:
                       valueType: TEXT
                 localIdentifier: dim_1
             links:
-              executionResult: e9bc043a8362353f5c020ab96ae5bca451ed1149:ceca391d8311dbef56364a4d744b870e56dbf6628452505203a1d51b8e6bcfa9
+              executionResult: 725b5a57ee7433e72d5f60d8387442a0ccc9095e:ef38cb0b4a57c4af754666018bf954ff5f74add425e9932ae080da0f0fba794b
           resultSpec:
             dimensions:
               - localIdentifier: dim_0
@@ -3110,10 +2998,10 @@ interactions:
                     totalDimensionItems:
                       - state
                       - measureGroup
-          resultSize: 15292
+          resultSize: 15444
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/e9bc043a8362353f5c020ab96ae5bca451ed1149%3Aceca391d8311dbef56364a4d744b870e56dbf6628452505203a1d51b8e6bcfa9?offset=0%2C0&limit=100%2C100
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/725b5a57ee7433e72d5f60d8387442a0ccc9095e%3Aef38cb0b4a57c4af754666018bf954ff5f74add425e9932ae080da0f0fba794b?offset=0%2C0&limit=100%2C100
       body: null
       headers:
         Accept:
@@ -3129,45 +3017,19 @@ interactions:
         code: 200
         message: OK
       headers:
-        Access-Control-Allow-Credentials:
-          - 'true'
-        Access-Control-Expose-Headers:
-          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Security-Policy:
-          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
-            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdnjs.cloudflare.com;
-            img-src * data: blob:; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
-            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
-            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
-            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
-            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
-            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
-            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
-            *.wistia.net embedwistia-a.akamaihd.net'
+        Content-Length:
+          - '24913'
         Content-Type:
           - application/json
         DATE: *id001
         Expires:
           - '0'
-        GoodData-Deployment:
-          - aio
-        Permission-Policy:
-          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
-            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
-            'none';
         Pragma:
           - no-cache
         Referrer-Policy:
           - no-referrer
-        Server:
-          - nginx
-        Transfer-Encoding:
-          - chunked
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -3175,47 +3037,11 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
+        X-Xss-Protection:
           - '0'
-        content-length:
-          - '24918'
       body:
         string:
           data:
-            - - null
-              - null
-              - null
-              - null
-              - null
-              - null
-              - null
-              - null
-              - null
-              - null
-              - null
-              - null
-              - null
-              - 790.0
-              - 869.41
-              - 659.24
-              - 2664.71
-            - - null
-              - null
-              - null
-              - null
-              - null
-              - null
-              - null
-              - null
-              - null
-              - null
-              - null
-              - null
-              - null
-              - 963.08
-              - 890.67
-              - 926.38
-              - 2664.71
             - - null
               - null
               - null
@@ -3250,6 +3076,40 @@ interactions:
               - null
               - null
               - null
+            - - null
+              - null
+              - null
+              - null
+              - null
+              - null
+              - null
+              - null
+              - null
+              - null
+              - null
+              - null
+              - null
+              - 790.0
+              - 869.41
+              - 659.24
+              - 2664.71
+            - - null
+              - null
+              - null
+              - null
+              - null
+              - null
+              - null
+              - null
+              - null
+              - null
+              - null
+              - null
+              - null
+              - 963.08
+              - 890.67
+              - 926.38
+              - 2664.71
             - - null
               - null
               - null
@@ -4818,17 +4678,17 @@ interactions:
             - headerGroups:
                 - headers:
                     - attributeHeader:
-                        labelValue: AK
-                        primaryLabelValue: AK
-                    - attributeHeader:
-                        labelValue: AK
-                        primaryLabelValue: AK
-                    - attributeHeader:
                         labelValue: Alabama
                         primaryLabelValue: Alabama
                     - attributeHeader:
                         labelValue: Alabama
                         primaryLabelValue: Alabama
+                    - attributeHeader:
+                        labelValue: Alaska
+                        primaryLabelValue: Alaska
+                    - attributeHeader:
+                        labelValue: Alaska
+                        primaryLabelValue: Alaska
                     - attributeHeader:
                         labelValue: Arizona
                         primaryLabelValue: Arizona
@@ -5405,14 +5265,14 @@ interactions:
                         primaryLabelValue: Outdoor
           grandTotals:
             - data:
-                - - 4983.360000000001
-                  - null
-                - - null
-                  - 2664.71
                 - - 6198.55
                   - null
                 - - null
                   - 3837.42
+                - - 4983.360000000001
+                  - null
+                - - null
+                  - 2664.71
                 - - 10279.68
                   - null
                 - - null
@@ -5433,7 +5293,7 @@ interactions:
                   - null
                 - - null
                   - 1048.14
-                - - 3239.72
+                - - 3239.7200000000003
                   - null
                 - - null
                   - 1355.06
@@ -5461,7 +5321,7 @@ interactions:
                   - null
                 - - null
                   - 3205.41
-                - - 5982.700000000001
+                - - 5982.7
                   - null
                 - - null
                   - 3939.72
@@ -5525,11 +5385,11 @@ interactions:
                   - null
                 - - null
                   - 1129.66
-                - - 1328.9699999999998
+                - - 1328.97
                   - null
                 - - null
                   - 540.36
-                - - 21687.019999999997
+                - - 21687.02
                   - null
                 - - null
                   - 13727.01
