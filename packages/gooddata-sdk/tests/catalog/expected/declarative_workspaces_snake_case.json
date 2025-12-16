@@ -105,6 +105,58 @@
               ]
             },
             {
+              "id": "campaign_channels_per_category",
+              "title": "Campaign channels per category",
+              "grain": [],
+              "references": [
+                {
+                  "identifier": {
+                    "id": "campaign_channels"
+                  },
+                  "multivalue": false,
+                  "sources": [
+                    {
+                      "column": "campaign_channel_id",
+                      "target": {
+                        "id": "campaign_channel_id",
+                        "type": "attribute"
+                      },
+                      "data_type": "STRING"
+                    }
+                  ]
+                }
+              ],
+              "description": "Campaign channels per categories",
+              "attributes": [],
+              "facts": [],
+              "aggregated_facts": [
+                {
+                  "id": "budget_agg",
+                  "description": "Budget Agg",
+                  "source_column": "budget",
+                  "source_column_data_type": "INT",
+                  "source_fact_reference": {
+                    "operation": "SUM",
+                    "reference": {
+                      "id": "budget",
+                      "type": "fact"
+                    }
+                  },
+                  "tags": [
+                    "Campaign channels per category"
+                  ]
+                }
+              ],
+              "precedence": 1,
+              "sql": {
+                "data_source_id": "demo-test-ds",
+                "statement": "SELECT category, SUM(budget) FROM campaign_channels GROUP BY category"
+              },
+              "tags": [
+                "Campaign channels per category"
+              ]
+            },
+            {
               "id": "campaigns",
               "title": "Campaigns",
               "grain": [
