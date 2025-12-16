@@ -26,25 +26,19 @@ interactions:
           - PLACEHOLDER
         Expires:
           - '0'
-        Featurepolicy:
-          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
-            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
-            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - same-origin
+          - no-referrer
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - 1; mode=block
+          - '0'
       body:
         string: ''
   - request:
@@ -71,31 +65,25 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '40154'
+          - '40991'
         Content-Type:
           - application/xml
         DATE: *id001
         Expires:
           - '0'
-        Featurepolicy:
-          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
-            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
-            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - same-origin
+          - no-referrer
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - 1; mode=block
+          - '0'
       body:
         string: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><xliff xmlns="urn:oasis:names:tc:xliff:document:2.0"
           version="2.1" srcLang="en-US" trgLang="fr-FR"><file id="demo"><group id="analyticalDashboard"><group
@@ -218,7 +206,11 @@ interactions:
           id="dataset"><group id="dataset.campaign_channels"><unit id="dataset.campaign_channels.title"><segment><source>Campaign
           channels</source></segment></unit><unit id="dataset.campaign_channels.description"><segment><source>Campaign
           channels</source></segment></unit><unit id="dataset.campaign_channels.tags"><segment><source>Campaign
-          channels</source></segment></unit></group><group id="dataset.campaigns"><unit
+          channels</source></segment></unit></group><group id="dataset.campaign_channels_per_category"><unit
+          id="dataset.campaign_channels_per_category.title"><segment><source>Campaign
+          channels per category</source></segment></unit><unit id="dataset.campaign_channels_per_category.description"><segment><source>Campaign
+          channels per categories</source></segment></unit><unit id="dataset.campaign_channels_per_category.tags"><segment><source>Campaign
+          channels per category</source></segment></unit></group><group id="dataset.campaigns"><unit
           id="dataset.campaigns.title"><segment><source>Campaigns</source></segment></unit><unit
           id="dataset.campaigns.description"><segment><source>Campaigns</source></segment></unit><unit
           id="dataset.campaigns.tags"><segment><source>Campaigns</source></segment></unit></group><group
@@ -238,16 +230,20 @@ interactions:
           id="fact"><group id="fact.budget"><unit id="fact.budget.title"><segment><source>Budget</source></segment></unit><unit
           id="fact.budget.description"><segment><source>Budget</source></segment></unit><unit
           id="fact.budget.tags"><segment><source>Campaign channels</source></segment></unit></group><group
-          id="fact.spend"><unit id="fact.spend.title"><segment><source>Spend</source></segment></unit><unit
-          id="fact.spend.description"><segment><source>Spend</source></segment></unit><unit
-          id="fact.spend.tags"><segment><source>Campaign channels</source></segment></unit></group><group
           id="fact.price"><unit id="fact.price.title"><segment><source>Price</source></segment></unit><unit
           id="fact.price.description"><segment><source>Price</source></segment></unit><unit
           id="fact.price.tags"><segment><source>Order lines</source></segment></unit></group><group
           id="fact.quantity"><unit id="fact.quantity.title"><segment><source>Quantity</source></segment></unit><unit
           id="fact.quantity.description"><segment><source>Quantity</source></segment></unit><unit
-          id="fact.quantity.tags"><segment><source>Order lines</source></segment></unit></group></group><group
-          id="label"><group id="label.campaign_channel_id"><unit id="label.campaign_channel_id.title"><segment><source>Campaign
+          id="fact.quantity.tags"><segment><source>Order lines</source></segment></unit></group><group
+          id="fact.spend"><unit id="fact.spend.title"><segment><source>Spend</source></segment></unit><unit
+          id="fact.spend.description"><segment><source>Spend</source></segment></unit><unit
+          id="fact.spend.tags"><segment><source>Campaign channels</source></segment></unit></group></group><group
+          id="aggregatedFact"><group id="aggregatedFact.budget_agg"><unit id="aggregatedFact.budget_agg.title"><segment><source></source></segment></unit><unit
+          id="aggregatedFact.budget_agg.description"><segment><source>Budget Agg</source></segment></unit><unit
+          id="aggregatedFact.budget_agg.tags"><segment><source>Campaign channels per
+          category</source></segment></unit></group></group><group id="label"><group
+          id="label.campaign_channel_id"><unit id="label.campaign_channel_id.title"><segment><source>Campaign
           channel id</source></segment></unit><unit id="label.campaign_channel_id.description"><segment><source>Campaign
           channel id</source></segment></unit><unit id="label.campaign_channel_id.tags"><segment><source>Campaign
           channels</source></segment></unit></group><group id="label.campaign_channels.category"><unit
@@ -321,16 +317,15 @@ interactions:
           id="metric.amount_of_valid_orders.title"><segment><source># of Valid Orders</source></segment></unit><unit
           id="metric.amount_of_valid_orders.description"><segment><source></source></segment></unit></group><group
           id="metric.campaign_spend"><unit id="metric.campaign_spend.title"><segment><source>Campaign
-          Spend</source></segment></unit></group><group id="metric.order_amount"><unit
-          id="metric.order_amount.title"><segment><source>Order Amount</source></segment></unit></group><group
-          id="metric.percent_revenue"><unit id="metric.percent_revenue.title"><segment><source>%
-          Revenue</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_customers"><unit
+          Spend</source></segment></unit></group><group id="metric.percent_revenue"><unit
+          id="metric.percent_revenue.title"><segment><source>% Revenue</source></segment></unit></group><group
+          id="metric.order_amount"><unit id="metric.order_amount.title"><segment><source>Order
+          Amount</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_customers"><unit
           id="metric.percent_revenue_from_top_10_customers.title"><segment><source>%
           Revenue from Top 10 Customers</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_percent_customers"><unit
           id="metric.percent_revenue_from_top_10_percent_customers.title"><segment><source>%
-          Revenue from Top 10% Customers</source></segment></unit></group><group id="metric.revenue-outdoor"><unit
-          id="metric.revenue-outdoor.title"><segment><source>Revenue (Outdoor)</source></segment></unit></group><group
-          id="metric.percent_revenue_from_top_10_percent_products"><unit id="metric.percent_revenue_from_top_10_percent_products.title"><segment><source>%
+          Revenue from Top 10% Customers</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_percent_products"><unit
+          id="metric.percent_revenue_from_top_10_percent_products.title"><segment><source>%
           Revenue from Top 10% Products</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_products"><unit
           id="metric.percent_revenue_from_top_10_products.title"><segment><source>%
           Revenue from Top 10 Products</source></segment></unit></group><group id="metric.percent_revenue_in_category"><unit
@@ -344,10 +339,12 @@ interactions:
           (Clothing)</source></segment></unit></group><group id="metric.revenue-electronic"><unit
           id="metric.revenue-electronic.title"><segment><source>Revenue (Electronic)</source></segment></unit></group><group
           id="metric.revenue-home"><unit id="metric.revenue-home.title"><segment><source>Revenue
-          (Home)</source></segment></unit></group><group id="metric.revenue_per_customer"><unit
-          id="metric.revenue_per_customer.title"><segment><source>Revenue per Customer</source></segment></unit></group><group
-          id="metric.revenue_per_dollar_spent"><unit id="metric.revenue_per_dollar_spent.title"><segment><source>Revenue
-          per Dollar Spent</source></segment></unit></group><group id="metric.revenue_top_10"><unit
+          (Home)</source></segment></unit></group><group id="metric.revenue-outdoor"><unit
+          id="metric.revenue-outdoor.title"><segment><source>Revenue (Outdoor)</source></segment></unit></group><group
+          id="metric.revenue_per_customer"><unit id="metric.revenue_per_customer.title"><segment><source>Revenue
+          per Customer</source></segment></unit></group><group id="metric.revenue_per_dollar_spent"><unit
+          id="metric.revenue_per_dollar_spent.title"><segment><source>Revenue per
+          Dollar Spent</source></segment></unit></group><group id="metric.revenue_top_10"><unit
           id="metric.revenue_top_10.title"><segment><source>Revenue / Top 10</source></segment></unit></group><group
           id="metric.revenue_top_10_percent"><unit id="metric.revenue_top_10_percent.title"><segment><source>Revenue
           / Top 10%</source></segment></unit></group><group id="metric.total_revenue"><unit
@@ -530,31 +527,25 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '40154'
+          - '40991'
         Content-Type:
           - application/xml
         DATE: *id001
         Expires:
           - '0'
-        Featurepolicy:
-          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
-            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
-            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - same-origin
+          - no-referrer
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - 1; mode=block
+          - '0'
       body:
         string: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><xliff xmlns="urn:oasis:names:tc:xliff:document:2.0"
           version="2.1" srcLang="en-US" trgLang="fr-FR"><file id="demo"><group id="analyticalDashboard"><group
@@ -677,7 +668,11 @@ interactions:
           id="dataset"><group id="dataset.campaign_channels"><unit id="dataset.campaign_channels.title"><segment><source>Campaign
           channels</source></segment></unit><unit id="dataset.campaign_channels.description"><segment><source>Campaign
           channels</source></segment></unit><unit id="dataset.campaign_channels.tags"><segment><source>Campaign
-          channels</source></segment></unit></group><group id="dataset.campaigns"><unit
+          channels</source></segment></unit></group><group id="dataset.campaign_channels_per_category"><unit
+          id="dataset.campaign_channels_per_category.title"><segment><source>Campaign
+          channels per category</source></segment></unit><unit id="dataset.campaign_channels_per_category.description"><segment><source>Campaign
+          channels per categories</source></segment></unit><unit id="dataset.campaign_channels_per_category.tags"><segment><source>Campaign
+          channels per category</source></segment></unit></group><group id="dataset.campaigns"><unit
           id="dataset.campaigns.title"><segment><source>Campaigns</source></segment></unit><unit
           id="dataset.campaigns.description"><segment><source>Campaigns</source></segment></unit><unit
           id="dataset.campaigns.tags"><segment><source>Campaigns</source></segment></unit></group><group
@@ -697,16 +692,20 @@ interactions:
           id="fact"><group id="fact.budget"><unit id="fact.budget.title"><segment><source>Budget</source></segment></unit><unit
           id="fact.budget.description"><segment><source>Budget</source></segment></unit><unit
           id="fact.budget.tags"><segment><source>Campaign channels</source></segment></unit></group><group
-          id="fact.spend"><unit id="fact.spend.title"><segment><source>Spend</source></segment></unit><unit
-          id="fact.spend.description"><segment><source>Spend</source></segment></unit><unit
-          id="fact.spend.tags"><segment><source>Campaign channels</source></segment></unit></group><group
           id="fact.price"><unit id="fact.price.title"><segment><source>Price</source></segment></unit><unit
           id="fact.price.description"><segment><source>Price</source></segment></unit><unit
           id="fact.price.tags"><segment><source>Order lines</source></segment></unit></group><group
           id="fact.quantity"><unit id="fact.quantity.title"><segment><source>Quantity</source></segment></unit><unit
           id="fact.quantity.description"><segment><source>Quantity</source></segment></unit><unit
-          id="fact.quantity.tags"><segment><source>Order lines</source></segment></unit></group></group><group
-          id="label"><group id="label.campaign_channel_id"><unit id="label.campaign_channel_id.title"><segment><source>Campaign
+          id="fact.quantity.tags"><segment><source>Order lines</source></segment></unit></group><group
+          id="fact.spend"><unit id="fact.spend.title"><segment><source>Spend</source></segment></unit><unit
+          id="fact.spend.description"><segment><source>Spend</source></segment></unit><unit
+          id="fact.spend.tags"><segment><source>Campaign channels</source></segment></unit></group></group><group
+          id="aggregatedFact"><group id="aggregatedFact.budget_agg"><unit id="aggregatedFact.budget_agg.title"><segment><source></source></segment></unit><unit
+          id="aggregatedFact.budget_agg.description"><segment><source>Budget Agg</source></segment></unit><unit
+          id="aggregatedFact.budget_agg.tags"><segment><source>Campaign channels per
+          category</source></segment></unit></group></group><group id="label"><group
+          id="label.campaign_channel_id"><unit id="label.campaign_channel_id.title"><segment><source>Campaign
           channel id</source></segment></unit><unit id="label.campaign_channel_id.description"><segment><source>Campaign
           channel id</source></segment></unit><unit id="label.campaign_channel_id.tags"><segment><source>Campaign
           channels</source></segment></unit></group><group id="label.campaign_channels.category"><unit
@@ -780,16 +779,15 @@ interactions:
           id="metric.amount_of_valid_orders.title"><segment><source># of Valid Orders</source></segment></unit><unit
           id="metric.amount_of_valid_orders.description"><segment><source></source></segment></unit></group><group
           id="metric.campaign_spend"><unit id="metric.campaign_spend.title"><segment><source>Campaign
-          Spend</source></segment></unit></group><group id="metric.order_amount"><unit
-          id="metric.order_amount.title"><segment><source>Order Amount</source></segment></unit></group><group
-          id="metric.percent_revenue"><unit id="metric.percent_revenue.title"><segment><source>%
-          Revenue</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_customers"><unit
+          Spend</source></segment></unit></group><group id="metric.percent_revenue"><unit
+          id="metric.percent_revenue.title"><segment><source>% Revenue</source></segment></unit></group><group
+          id="metric.order_amount"><unit id="metric.order_amount.title"><segment><source>Order
+          Amount</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_customers"><unit
           id="metric.percent_revenue_from_top_10_customers.title"><segment><source>%
           Revenue from Top 10 Customers</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_percent_customers"><unit
           id="metric.percent_revenue_from_top_10_percent_customers.title"><segment><source>%
-          Revenue from Top 10% Customers</source></segment></unit></group><group id="metric.revenue-outdoor"><unit
-          id="metric.revenue-outdoor.title"><segment><source>Revenue (Outdoor)</source></segment></unit></group><group
-          id="metric.percent_revenue_from_top_10_percent_products"><unit id="metric.percent_revenue_from_top_10_percent_products.title"><segment><source>%
+          Revenue from Top 10% Customers</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_percent_products"><unit
+          id="metric.percent_revenue_from_top_10_percent_products.title"><segment><source>%
           Revenue from Top 10% Products</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_products"><unit
           id="metric.percent_revenue_from_top_10_products.title"><segment><source>%
           Revenue from Top 10 Products</source></segment></unit></group><group id="metric.percent_revenue_in_category"><unit
@@ -803,10 +801,12 @@ interactions:
           (Clothing)</source></segment></unit></group><group id="metric.revenue-electronic"><unit
           id="metric.revenue-electronic.title"><segment><source>Revenue (Electronic)</source></segment></unit></group><group
           id="metric.revenue-home"><unit id="metric.revenue-home.title"><segment><source>Revenue
-          (Home)</source></segment></unit></group><group id="metric.revenue_per_customer"><unit
-          id="metric.revenue_per_customer.title"><segment><source>Revenue per Customer</source></segment></unit></group><group
-          id="metric.revenue_per_dollar_spent"><unit id="metric.revenue_per_dollar_spent.title"><segment><source>Revenue
-          per Dollar Spent</source></segment></unit></group><group id="metric.revenue_top_10"><unit
+          (Home)</source></segment></unit></group><group id="metric.revenue-outdoor"><unit
+          id="metric.revenue-outdoor.title"><segment><source>Revenue (Outdoor)</source></segment></unit></group><group
+          id="metric.revenue_per_customer"><unit id="metric.revenue_per_customer.title"><segment><source>Revenue
+          per Customer</source></segment></unit></group><group id="metric.revenue_per_dollar_spent"><unit
+          id="metric.revenue_per_dollar_spent.title"><segment><source>Revenue per
+          Dollar Spent</source></segment></unit></group><group id="metric.revenue_top_10"><unit
           id="metric.revenue_top_10.title"><segment><source>Revenue / Top 10</source></segment></unit></group><group
           id="metric.revenue_top_10_percent"><unit id="metric.revenue_top_10_percent.title"><segment><source>Revenue
           / Top 10%</source></segment></unit></group><group id="metric.total_revenue"><unit
@@ -1113,6 +1113,12 @@ interactions:
         id="dataset.campaign_channels.description"><segment><source>Campaign channels</source><target>Campaign
         channels.</target></segment></unit><unit id="dataset.campaign_channels.tags"><segment><source>Campaign
         channels</source><target>Campaign channels.</target></segment></unit></group><group
+        id="dataset.campaign_channels_per_category"><unit id="dataset.campaign_channels_per_category.title"><segment><source>Campaign
+        channels per category</source><target>Campaign channels per category.</target></segment></unit><unit
+        id="dataset.campaign_channels_per_category.description"><segment><source>Campaign
+        channels per categories</source><target>Campaign channels per categories.</target></segment></unit><unit
+        id="dataset.campaign_channels_per_category.tags"><segment><source>Campaign
+        channels per category</source><target>Campaign channels per category.</target></segment></unit></group><group
         id="dataset.campaigns"><unit id="dataset.campaigns.title"><segment><source>Campaigns</source><target>Campaigns.</target></segment></unit><unit
         id="dataset.campaigns.description"><segment><source>Campaigns</source><target>Campaigns.</target></segment></unit><unit
         id="dataset.campaigns.tags"><segment><source>Campaigns</source><target>Campaigns.</target></segment></unit></group><group
@@ -1131,22 +1137,26 @@ interactions:
         id="fact"><group id="fact.budget"><unit id="fact.budget.title"><segment><source>Budget</source><target>Budget.</target></segment></unit><unit
         id="fact.budget.description"><segment><source>Budget</source><target>Budget.</target></segment></unit><unit
         id="fact.budget.tags"><segment><source>Campaign channels</source><target>Campaign
-        channels.</target></segment></unit></group><group id="fact.spend"><unit id="fact.spend.title"><segment><source>Spend</source><target>Spend.</target></segment></unit><unit
-        id="fact.spend.description"><segment><source>Spend</source><target>Spend.</target></segment></unit><unit
-        id="fact.spend.tags"><segment><source>Campaign channels</source><target>Campaign
         channels.</target></segment></unit></group><group id="fact.price"><unit id="fact.price.title"><segment><source>Price</source><target>Price.</target></segment></unit><unit
         id="fact.price.description"><segment><source>Price</source><target>Price.</target></segment></unit><unit
         id="fact.price.tags"><segment><source>Order lines</source><target>Order lines.</target></segment></unit></group><group
         id="fact.quantity"><unit id="fact.quantity.title"><segment><source>Quantity</source><target>Quantity.</target></segment></unit><unit
         id="fact.quantity.description"><segment><source>Quantity</source><target>Quantity.</target></segment></unit><unit
         id="fact.quantity.tags"><segment><source>Order lines</source><target>Order
-        lines.</target></segment></unit></group></group><group id="label"><group id="label.campaign_channel_id"><unit
-        id="label.campaign_channel_id.title"><segment><source>Campaign channel id</source><target>Campaign
-        channel id.</target></segment></unit><unit id="label.campaign_channel_id.description"><segment><source>Campaign
+        lines.</target></segment></unit></group><group id="fact.spend"><unit id="fact.spend.title"><segment><source>Spend</source><target>Spend.</target></segment></unit><unit
+        id="fact.spend.description"><segment><source>Spend</source><target>Spend.</target></segment></unit><unit
+        id="fact.spend.tags"><segment><source>Campaign channels</source><target>Campaign
+        channels.</target></segment></unit></group></group><group id="aggregatedFact"><group
+        id="aggregatedFact.budget_agg"><unit id="aggregatedFact.budget_agg.title"><segment><source
+        /></segment></unit><unit id="aggregatedFact.budget_agg.description"><segment><source>Budget
+        Agg</source><target>Budget Agg.</target></segment></unit><unit id="aggregatedFact.budget_agg.tags"><segment><source>Campaign
+        channels per category</source><target>Campaign channels per category.</target></segment></unit></group></group><group
+        id="label"><group id="label.campaign_channel_id"><unit id="label.campaign_channel_id.title"><segment><source>Campaign
         channel id</source><target>Campaign channel id.</target></segment></unit><unit
-        id="label.campaign_channel_id.tags"><segment><source>Campaign channels</source><target>Campaign
-        channels.</target></segment></unit></group><group id="label.campaign_channels.category"><unit
-        id="label.campaign_channels.category.title"><segment><source>Category</source><target>Category.</target></segment></unit><unit
+        id="label.campaign_channel_id.description"><segment><source>Campaign channel
+        id</source><target>Campaign channel id.</target></segment></unit><unit id="label.campaign_channel_id.tags"><segment><source>Campaign
+        channels</source><target>Campaign channels.</target></segment></unit></group><group
+        id="label.campaign_channels.category"><unit id="label.campaign_channels.category.title"><segment><source>Category</source><target>Category.</target></segment></unit><unit
         id="label.campaign_channels.category.description"><segment><source>Category</source><target>Category.</target></segment></unit><unit
         id="label.campaign_channels.category.tags"><segment><source>Campaign channels</source><target>Campaign
         channels.</target></segment></unit></group><group id="label.type"><unit id="label.type.title"><segment><source>Type</source><target>Type.</target></segment></unit><unit
@@ -1224,16 +1234,14 @@ interactions:
         id="metric.amount_of_valid_orders.description"><segment><source /></segment></unit></group><group
         id="metric.campaign_spend"><unit id="metric.campaign_spend.title"><segment><source>Campaign
         Spend</source><target>Campaign Spend.</target></segment></unit></group><group
-        id="metric.order_amount"><unit id="metric.order_amount.title"><segment><source>Order
-        Amount</source><target>Order Amount.</target></segment></unit></group><group
         id="metric.percent_revenue"><unit id="metric.percent_revenue.title"><segment><source>%
         Revenue</source><target>% Revenue.</target></segment></unit></group><group
+        id="metric.order_amount"><unit id="metric.order_amount.title"><segment><source>Order
+        Amount</source><target>Order Amount.</target></segment></unit></group><group
         id="metric.percent_revenue_from_top_10_customers"><unit id="metric.percent_revenue_from_top_10_customers.title"><segment><source>%
         Revenue from Top 10 Customers</source><target>% Revenue from Top 10 Customers.</target></segment></unit></group><group
         id="metric.percent_revenue_from_top_10_percent_customers"><unit id="metric.percent_revenue_from_top_10_percent_customers.title"><segment><source>%
         Revenue from Top 10% Customers</source><target>% Revenue from Top 10% Customers.</target></segment></unit></group><group
-        id="metric.revenue-outdoor"><unit id="metric.revenue-outdoor.title"><segment><source>Revenue
-        (Outdoor)</source><target>Revenue (Outdoor).</target></segment></unit></group><group
         id="metric.percent_revenue_from_top_10_percent_products"><unit id="metric.percent_revenue_from_top_10_percent_products.title"><segment><source>%
         Revenue from Top 10% Products</source><target>% Revenue from Top 10% Products.</target></segment></unit></group><group
         id="metric.percent_revenue_from_top_10_products"><unit id="metric.percent_revenue_from_top_10_products.title"><segment><source>%
@@ -1250,6 +1258,8 @@ interactions:
         (Electronic)</source><target>Revenue (Electronic).</target></segment></unit></group><group
         id="metric.revenue-home"><unit id="metric.revenue-home.title"><segment><source>Revenue
         (Home)</source><target>Revenue (Home).</target></segment></unit></group><group
+        id="metric.revenue-outdoor"><unit id="metric.revenue-outdoor.title"><segment><source>Revenue
+        (Outdoor)</source><target>Revenue (Outdoor).</target></segment></unit></group><group
         id="metric.revenue_per_customer"><unit id="metric.revenue_per_customer.title"><segment><source>Revenue
         per Customer</source><target>Revenue per Customer.</target></segment></unit></group><group
         id="metric.revenue_per_dollar_spent"><unit id="metric.revenue_per_dollar_spent.title"><segment><source>Revenue
@@ -1440,7 +1450,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '47730'
+          - '48782'
         Content-Type:
           - application/xml
     response:
@@ -1453,25 +1463,19 @@ interactions:
         DATE: *id001
         Expires:
           - '0'
-        Featurepolicy:
-          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
-            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
-            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - same-origin
+          - no-referrer
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - 1; mode=block
+          - '0'
       body:
         string: ''
   - request:
@@ -1498,31 +1502,25 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '47750'
+          - '48809'
         Content-Type:
           - application/xml
         DATE: *id001
         Expires:
           - '0'
-        Featurepolicy:
-          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
-            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
-            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - same-origin
+          - no-referrer
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - 1; mode=block
+          - '0'
       body:
         string: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><xliff xmlns="urn:oasis:names:tc:xliff:document:2.0"
           version="2.1" srcLang="en-US" trgLang="fr-FR"><file id="demo"><group id="analyticalDashboard"><group
@@ -1666,6 +1664,12 @@ interactions:
           id="dataset.campaign_channels.description"><segment><source>Campaign channels</source><target>Campaign
           channels.</target></segment></unit><unit id="dataset.campaign_channels.tags"><segment><source>Campaign
           channels</source><target>Campaign channels.</target></segment></unit></group><group
+          id="dataset.campaign_channels_per_category"><unit id="dataset.campaign_channels_per_category.title"><segment><source>Campaign
+          channels per category</source><target>Campaign channels per category.</target></segment></unit><unit
+          id="dataset.campaign_channels_per_category.description"><segment><source>Campaign
+          channels per categories</source><target>Campaign channels per categories.</target></segment></unit><unit
+          id="dataset.campaign_channels_per_category.tags"><segment><source>Campaign
+          channels per category</source><target>Campaign channels per category.</target></segment></unit></group><group
           id="dataset.campaigns"><unit id="dataset.campaigns.title"><segment><source>Campaigns</source><target>Campaigns.</target></segment></unit><unit
           id="dataset.campaigns.description"><segment><source>Campaigns</source><target>Campaigns.</target></segment></unit><unit
           id="dataset.campaigns.tags"><segment><source>Campaigns</source><target>Campaigns.</target></segment></unit></group><group
@@ -1685,10 +1689,6 @@ interactions:
           id="fact"><group id="fact.budget"><unit id="fact.budget.title"><segment><source>Budget</source><target>Budget.</target></segment></unit><unit
           id="fact.budget.description"><segment><source>Budget</source><target>Budget.</target></segment></unit><unit
           id="fact.budget.tags"><segment><source>Campaign channels</source><target>Campaign
-          channels.</target></segment></unit></group><group id="fact.spend"><unit
-          id="fact.spend.title"><segment><source>Spend</source><target>Spend.</target></segment></unit><unit
-          id="fact.spend.description"><segment><source>Spend</source><target>Spend.</target></segment></unit><unit
-          id="fact.spend.tags"><segment><source>Campaign channels</source><target>Campaign
           channels.</target></segment></unit></group><group id="fact.price"><unit
           id="fact.price.title"><segment><source>Price</source><target>Price.</target></segment></unit><unit
           id="fact.price.description"><segment><source>Price</source><target>Price.</target></segment></unit><unit
@@ -1697,8 +1697,15 @@ interactions:
           id="fact.quantity.title"><segment><source>Quantity</source><target>Quantity.</target></segment></unit><unit
           id="fact.quantity.description"><segment><source>Quantity</source><target>Quantity.</target></segment></unit><unit
           id="fact.quantity.tags"><segment><source>Order lines</source><target>Order
-          lines.</target></segment></unit></group></group><group id="label"><group
-          id="label.campaign_channel_id"><unit id="label.campaign_channel_id.title"><segment><source>Campaign
+          lines.</target></segment></unit></group><group id="fact.spend"><unit id="fact.spend.title"><segment><source>Spend</source><target>Spend.</target></segment></unit><unit
+          id="fact.spend.description"><segment><source>Spend</source><target>Spend.</target></segment></unit><unit
+          id="fact.spend.tags"><segment><source>Campaign channels</source><target>Campaign
+          channels.</target></segment></unit></group></group><group id="aggregatedFact"><group
+          id="aggregatedFact.budget_agg"><unit id="aggregatedFact.budget_agg.title"><segment><source></source></segment></unit><unit
+          id="aggregatedFact.budget_agg.description"><segment><source>Budget Agg</source><target>Budget
+          Agg.</target></segment></unit><unit id="aggregatedFact.budget_agg.tags"><segment><source>Campaign
+          channels per category</source><target>Campaign channels per category.</target></segment></unit></group></group><group
+          id="label"><group id="label.campaign_channel_id"><unit id="label.campaign_channel_id.title"><segment><source>Campaign
           channel id</source><target>Campaign channel id.</target></segment></unit><unit
           id="label.campaign_channel_id.description"><segment><source>Campaign channel
           id</source><target>Campaign channel id.</target></segment></unit><unit id="label.campaign_channel_id.tags"><segment><source>Campaign
@@ -1782,16 +1789,14 @@ interactions:
           id="metric.amount_of_valid_orders.description"><segment><source></source></segment></unit></group><group
           id="metric.campaign_spend"><unit id="metric.campaign_spend.title"><segment><source>Campaign
           Spend</source><target>Campaign Spend.</target></segment></unit></group><group
-          id="metric.order_amount"><unit id="metric.order_amount.title"><segment><source>Order
-          Amount</source><target>Order Amount.</target></segment></unit></group><group
           id="metric.percent_revenue"><unit id="metric.percent_revenue.title"><segment><source>%
           Revenue</source><target>% Revenue.</target></segment></unit></group><group
+          id="metric.order_amount"><unit id="metric.order_amount.title"><segment><source>Order
+          Amount</source><target>Order Amount.</target></segment></unit></group><group
           id="metric.percent_revenue_from_top_10_customers"><unit id="metric.percent_revenue_from_top_10_customers.title"><segment><source>%
           Revenue from Top 10 Customers</source><target>% Revenue from Top 10 Customers.</target></segment></unit></group><group
           id="metric.percent_revenue_from_top_10_percent_customers"><unit id="metric.percent_revenue_from_top_10_percent_customers.title"><segment><source>%
           Revenue from Top 10% Customers</source><target>% Revenue from Top 10% Customers.</target></segment></unit></group><group
-          id="metric.revenue-outdoor"><unit id="metric.revenue-outdoor.title"><segment><source>Revenue
-          (Outdoor)</source><target>Revenue (Outdoor).</target></segment></unit></group><group
           id="metric.percent_revenue_from_top_10_percent_products"><unit id="metric.percent_revenue_from_top_10_percent_products.title"><segment><source>%
           Revenue from Top 10% Products</source><target>% Revenue from Top 10% Products.</target></segment></unit></group><group
           id="metric.percent_revenue_from_top_10_products"><unit id="metric.percent_revenue_from_top_10_products.title"><segment><source>%
@@ -1808,6 +1813,8 @@ interactions:
           (Electronic)</source><target>Revenue (Electronic).</target></segment></unit></group><group
           id="metric.revenue-home"><unit id="metric.revenue-home.title"><segment><source>Revenue
           (Home)</source><target>Revenue (Home).</target></segment></unit></group><group
+          id="metric.revenue-outdoor"><unit id="metric.revenue-outdoor.title"><segment><source>Revenue
+          (Outdoor)</source><target>Revenue (Outdoor).</target></segment></unit></group><group
           id="metric.revenue_per_customer"><unit id="metric.revenue_per_customer.title"><segment><source>Revenue
           per Customer</source><target>Revenue per Customer.</target></segment></unit></group><group
           id="metric.revenue_per_dollar_spent"><unit id="metric.revenue_per_dollar_spent.title"><segment><source>Revenue
@@ -2016,25 +2023,19 @@ interactions:
         DATE: *id001
         Expires:
           - '0'
-        Featurepolicy:
-          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
-            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
-            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - same-origin
+          - no-referrer
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - 1; mode=block
+          - '0'
       body:
         string: ''
   - request:
@@ -2061,31 +2062,25 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '40154'
+          - '40991'
         Content-Type:
           - application/xml
         DATE: *id001
         Expires:
           - '0'
-        Featurepolicy:
-          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
-            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
-            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - same-origin
+          - no-referrer
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - 1; mode=block
+          - '0'
       body:
         string: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><xliff xmlns="urn:oasis:names:tc:xliff:document:2.0"
           version="2.1" srcLang="en-US" trgLang="fr-FR"><file id="demo"><group id="analyticalDashboard"><group
@@ -2208,7 +2203,11 @@ interactions:
           id="dataset"><group id="dataset.campaign_channels"><unit id="dataset.campaign_channels.title"><segment><source>Campaign
           channels</source></segment></unit><unit id="dataset.campaign_channels.description"><segment><source>Campaign
           channels</source></segment></unit><unit id="dataset.campaign_channels.tags"><segment><source>Campaign
-          channels</source></segment></unit></group><group id="dataset.campaigns"><unit
+          channels</source></segment></unit></group><group id="dataset.campaign_channels_per_category"><unit
+          id="dataset.campaign_channels_per_category.title"><segment><source>Campaign
+          channels per category</source></segment></unit><unit id="dataset.campaign_channels_per_category.description"><segment><source>Campaign
+          channels per categories</source></segment></unit><unit id="dataset.campaign_channels_per_category.tags"><segment><source>Campaign
+          channels per category</source></segment></unit></group><group id="dataset.campaigns"><unit
           id="dataset.campaigns.title"><segment><source>Campaigns</source></segment></unit><unit
           id="dataset.campaigns.description"><segment><source>Campaigns</source></segment></unit><unit
           id="dataset.campaigns.tags"><segment><source>Campaigns</source></segment></unit></group><group
@@ -2228,16 +2227,20 @@ interactions:
           id="fact"><group id="fact.budget"><unit id="fact.budget.title"><segment><source>Budget</source></segment></unit><unit
           id="fact.budget.description"><segment><source>Budget</source></segment></unit><unit
           id="fact.budget.tags"><segment><source>Campaign channels</source></segment></unit></group><group
-          id="fact.spend"><unit id="fact.spend.title"><segment><source>Spend</source></segment></unit><unit
-          id="fact.spend.description"><segment><source>Spend</source></segment></unit><unit
-          id="fact.spend.tags"><segment><source>Campaign channels</source></segment></unit></group><group
           id="fact.price"><unit id="fact.price.title"><segment><source>Price</source></segment></unit><unit
           id="fact.price.description"><segment><source>Price</source></segment></unit><unit
           id="fact.price.tags"><segment><source>Order lines</source></segment></unit></group><group
           id="fact.quantity"><unit id="fact.quantity.title"><segment><source>Quantity</source></segment></unit><unit
           id="fact.quantity.description"><segment><source>Quantity</source></segment></unit><unit
-          id="fact.quantity.tags"><segment><source>Order lines</source></segment></unit></group></group><group
-          id="label"><group id="label.campaign_channel_id"><unit id="label.campaign_channel_id.title"><segment><source>Campaign
+          id="fact.quantity.tags"><segment><source>Order lines</source></segment></unit></group><group
+          id="fact.spend"><unit id="fact.spend.title"><segment><source>Spend</source></segment></unit><unit
+          id="fact.spend.description"><segment><source>Spend</source></segment></unit><unit
+          id="fact.spend.tags"><segment><source>Campaign channels</source></segment></unit></group></group><group
+          id="aggregatedFact"><group id="aggregatedFact.budget_agg"><unit id="aggregatedFact.budget_agg.title"><segment><source></source></segment></unit><unit
+          id="aggregatedFact.budget_agg.description"><segment><source>Budget Agg</source></segment></unit><unit
+          id="aggregatedFact.budget_agg.tags"><segment><source>Campaign channels per
+          category</source></segment></unit></group></group><group id="label"><group
+          id="label.campaign_channel_id"><unit id="label.campaign_channel_id.title"><segment><source>Campaign
           channel id</source></segment></unit><unit id="label.campaign_channel_id.description"><segment><source>Campaign
           channel id</source></segment></unit><unit id="label.campaign_channel_id.tags"><segment><source>Campaign
           channels</source></segment></unit></group><group id="label.campaign_channels.category"><unit
@@ -2311,16 +2314,15 @@ interactions:
           id="metric.amount_of_valid_orders.title"><segment><source># of Valid Orders</source></segment></unit><unit
           id="metric.amount_of_valid_orders.description"><segment><source></source></segment></unit></group><group
           id="metric.campaign_spend"><unit id="metric.campaign_spend.title"><segment><source>Campaign
-          Spend</source></segment></unit></group><group id="metric.order_amount"><unit
-          id="metric.order_amount.title"><segment><source>Order Amount</source></segment></unit></group><group
-          id="metric.percent_revenue"><unit id="metric.percent_revenue.title"><segment><source>%
-          Revenue</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_customers"><unit
+          Spend</source></segment></unit></group><group id="metric.percent_revenue"><unit
+          id="metric.percent_revenue.title"><segment><source>% Revenue</source></segment></unit></group><group
+          id="metric.order_amount"><unit id="metric.order_amount.title"><segment><source>Order
+          Amount</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_customers"><unit
           id="metric.percent_revenue_from_top_10_customers.title"><segment><source>%
           Revenue from Top 10 Customers</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_percent_customers"><unit
           id="metric.percent_revenue_from_top_10_percent_customers.title"><segment><source>%
-          Revenue from Top 10% Customers</source></segment></unit></group><group id="metric.revenue-outdoor"><unit
-          id="metric.revenue-outdoor.title"><segment><source>Revenue (Outdoor)</source></segment></unit></group><group
-          id="metric.percent_revenue_from_top_10_percent_products"><unit id="metric.percent_revenue_from_top_10_percent_products.title"><segment><source>%
+          Revenue from Top 10% Customers</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_percent_products"><unit
+          id="metric.percent_revenue_from_top_10_percent_products.title"><segment><source>%
           Revenue from Top 10% Products</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_products"><unit
           id="metric.percent_revenue_from_top_10_products.title"><segment><source>%
           Revenue from Top 10 Products</source></segment></unit></group><group id="metric.percent_revenue_in_category"><unit
@@ -2334,10 +2336,12 @@ interactions:
           (Clothing)</source></segment></unit></group><group id="metric.revenue-electronic"><unit
           id="metric.revenue-electronic.title"><segment><source>Revenue (Electronic)</source></segment></unit></group><group
           id="metric.revenue-home"><unit id="metric.revenue-home.title"><segment><source>Revenue
-          (Home)</source></segment></unit></group><group id="metric.revenue_per_customer"><unit
-          id="metric.revenue_per_customer.title"><segment><source>Revenue per Customer</source></segment></unit></group><group
-          id="metric.revenue_per_dollar_spent"><unit id="metric.revenue_per_dollar_spent.title"><segment><source>Revenue
-          per Dollar Spent</source></segment></unit></group><group id="metric.revenue_top_10"><unit
+          (Home)</source></segment></unit></group><group id="metric.revenue-outdoor"><unit
+          id="metric.revenue-outdoor.title"><segment><source>Revenue (Outdoor)</source></segment></unit></group><group
+          id="metric.revenue_per_customer"><unit id="metric.revenue_per_customer.title"><segment><source>Revenue
+          per Customer</source></segment></unit></group><group id="metric.revenue_per_dollar_spent"><unit
+          id="metric.revenue_per_dollar_spent.title"><segment><source>Revenue per
+          Dollar Spent</source></segment></unit></group><group id="metric.revenue_top_10"><unit
           id="metric.revenue_top_10.title"><segment><source>Revenue / Top 10</source></segment></unit></group><group
           id="metric.revenue_top_10_percent"><unit id="metric.revenue_top_10_percent.title"><segment><source>Revenue
           / Top 10%</source></segment></unit></group><group id="metric.total_revenue"><unit

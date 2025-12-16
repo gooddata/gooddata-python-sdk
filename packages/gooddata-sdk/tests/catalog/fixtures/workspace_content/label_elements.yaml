@@ -39,25 +39,19 @@ interactions:
           - PLACEHOLDER
         Expires:
           - '0'
-        Featurepolicy:
-          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
-            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
-            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - same-origin
+          - no-referrer
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - 1; mode=block
+          - '0'
       body:
         string:
           primaryLabel:
@@ -73,7 +67,7 @@ interactions:
             count: 2
             offset: 0
             next: null
-          cacheId: 41ebaf418cc3ef5a200af9ad8a0c75d5
+          cacheId: 2662c7c21d55e9fc72c97f14a2288c22
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
@@ -108,25 +102,19 @@ interactions:
         DATE: *id001
         Expires:
           - '0'
-        Featurepolicy:
-          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
-            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
-            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - same-origin
+          - no-referrer
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - 1; mode=block
+          - '0'
       body:
         string:
           primaryLabel:
@@ -140,7 +128,7 @@ interactions:
             count: 1
             offset: 0
             next: null
-          cacheId: 8c0259ff5f02c150239a4a987a258b36
+          cacheId: 67199a5a8e5ca652c567d3553f1501f2
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
@@ -173,25 +161,19 @@ interactions:
         DATE: *id001
         Expires:
           - '0'
-        Featurepolicy:
-          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
-            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
-            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - same-origin
+          - no-referrer
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - 1; mode=block
+          - '0'
       body:
         string:
           primaryLabel:
@@ -209,7 +191,7 @@ interactions:
             count: 3
             offset: 0
             next: null
-          cacheId: cabc3add7c85a9095321707878ab06ad
+          cacheId: 4551bb866c5c474d7bb6919961008747
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
@@ -250,25 +232,19 @@ interactions:
         DATE: *id001
         Expires:
           - '0'
-        Featurepolicy:
-          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
-            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
-            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - same-origin
+          - no-referrer
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - 1; mode=block
+          - '0'
       body:
         string:
           primaryLabel:
@@ -280,7 +256,7 @@ interactions:
             count: 0
             offset: 0
             next: null
-          cacheId: c26e4f17ef09c92c2089d686d8c8baba
+          cacheId: 18e6a5488b910a563a35f1d50a5997d2
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
@@ -322,25 +298,19 @@ interactions:
         DATE: *id001
         Expires:
           - '0'
-        Featurepolicy:
-          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
-            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
-            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - same-origin
+          - no-referrer
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - 1; mode=block
+          - '0'
       body:
         string:
           primaryLabel:
@@ -352,7 +322,7 @@ interactions:
             count: 0
             offset: 0
             next: null
-          cacheId: 5fd809f7229d21085796e21fe6c57afd
+          cacheId: b4cba03fdf12393066b9ef4f108504e8
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
@@ -390,25 +360,19 @@ interactions:
         DATE: *id001
         Expires:
           - '0'
-        Featurepolicy:
-          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
-            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
-            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - same-origin
+          - no-referrer
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - 1; mode=block
+          - '0'
       body:
         string:
           primaryLabel:
@@ -424,7 +388,7 @@ interactions:
             count: 2
             offset: 0
             next: null
-          cacheId: 41ebaf418cc3ef5a200af9ad8a0c75d5
+          cacheId: 2662c7c21d55e9fc72c97f14a2288c22
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
@@ -458,25 +422,19 @@ interactions:
         DATE: *id001
         Expires:
           - '0'
-        Featurepolicy:
-          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
-            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
-            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - same-origin
+          - no-referrer
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - 1; mode=block
+          - '0'
       body:
         string:
           primaryLabel:
@@ -490,7 +448,7 @@ interactions:
             count: 1
             offset: 0
             next: null
-          cacheId: a196eaf096aaf3a357c6c728158acdd2
+          cacheId: 2a6c367d9b29273c81739b9c0b1af804
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
@@ -525,25 +483,19 @@ interactions:
         DATE: *id001
         Expires:
           - '0'
-        Featurepolicy:
-          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
-            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
-            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - same-origin
+          - no-referrer
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - 1; mode=block
+          - '0'
       body:
         string:
           primaryLabel:
@@ -559,7 +511,7 @@ interactions:
             count: 2
             offset: 0
             next: null
-          cacheId: 2b524295ce4b342741efbbbe0a724182
+          cacheId: 9e3e24378b965fcce791f16973dd6b21
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
@@ -593,25 +545,19 @@ interactions:
         DATE: *id001
         Expires:
           - '0'
-        Featurepolicy:
-          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
-            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
-            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - same-origin
+          - no-referrer
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - 1; mode=block
+          - '0'
       body:
         string:
           primaryLabel:
@@ -629,7 +575,7 @@ interactions:
             count: 3
             offset: 0
             next: null
-          cacheId: 2c8259801b42fbadcaad6477fc72df67
+          cacheId: 4e1c17392cb640a728efa5fafdcf0233
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements?offset=1&limit=1
@@ -662,25 +608,19 @@ interactions:
         DATE: *id001
         Expires:
           - '0'
-        Featurepolicy:
-          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
-            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
-            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - same-origin
+          - no-referrer
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - 1; mode=block
+          - '0'
       body:
         string:
           primaryLabel:
@@ -694,4 +634,4 @@ interactions:
             count: 1
             offset: 1
             next: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements?limit=1&offset=2
-          cacheId: cabc3add7c85a9095321707878ab06ad
+          cacheId: 4551bb866c5c474d7bb6919961008747
