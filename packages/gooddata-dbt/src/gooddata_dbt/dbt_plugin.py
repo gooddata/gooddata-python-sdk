@@ -21,7 +21,7 @@ from gooddata_dbt.logger import get_logger
 from gooddata_dbt.sdk_wrapper import GoodDataSdkWrapper
 from gooddata_dbt.utils import get_duration, report_message_to_git_vendor
 
-# TODO - upgrade AIO, cleanup, start from scratch, test everything
+# TODO - cleanup, start from scratch, test everything
 
 GOODDATA_LAYOUTS_DIR = Path("gooddata_layouts")
 

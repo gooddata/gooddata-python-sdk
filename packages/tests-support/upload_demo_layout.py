@@ -61,17 +61,17 @@ def rest_op_default(op, url_path, data_json_path=None, raise_ex=True):
 
 
 def wait_platform_up():
-    # wait till GD.CN is up and ready to receive requests
-    print("Waiting till AIO GD.CN is up", flush=True)
+    # wait till GoodData is up and ready to receive requests
+    print("Waiting till GoodData is up", flush=True)
     while True:
         try:
             result = rest_op_jsonapi("get", f"api/{api_version}/entities/admin/organizations/default", raise_ex=False)
             if result is not None:
-                print("AIO GD.CN is up", flush=True)
+                print("GoodData is up", flush=True)
                 break
-            print("AIO GD.CN metadata does not responding", flush=True)
+            print("GoodData metadata is not responding", flush=True)
         except requests.exceptions.ConnectionError:
-            print("AIO GD.CN is not available", flush=True)
+            print("GoodData is not available", flush=True)
         time.sleep(4)
 
 

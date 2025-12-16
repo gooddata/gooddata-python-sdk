@@ -11,7 +11,7 @@
 #    aws ecr get-login-password | docker login --username AWS --password-stdin 020413372491.dkr.ecr.us-east-1.amazonaws.com
 #
 # 2. GoodData license key (get from GoodData team):
-#    export GDCN_LICENSE_KEY=<your_license_key>
+#    mkdir -p build && echo "<your_license_key>" > build/license
 #
 # ============================================================================
 # WORKFLOW
@@ -43,10 +43,10 @@
 # USAGE
 # ============================================================================
 #   # Start all services:
-#   GDCN_LICENSE_KEY=<key> docker compose up -d
+#   docker compose up -d
 #
 #   # Wait for bootstrap to complete:
-#   docker compose logs -f metadata-organization-bootstrap data-loader create-ds
+#   docker compose logs -f metadata-organization-bootstrap data-loader create-ds layout-uploader
 #
 #   # Check service status:
 #   docker compose ps
