@@ -20,6 +20,7 @@ from gooddata_sdk import (
     CatalogDataSourceRedshift,
     CatalogDataSourceSnowflake,
     CatalogDataSourceVertica,
+    CatalogDeclarativeColumn,
     CatalogDeclarativeDataSources,
     CatalogDeclarativeModel,
     CatalogGenerateLdmRequest,
@@ -852,3 +853,196 @@ def test_jdbc_urls_creation(
         ),
     )
     assert data_source.url == url
+
+
+# CQ-1665: Tests for column description field
+class TestColumnDescription:
+    """Tests for column description field support (CQ-1665).
+
+    This feature exposes database column comments/descriptions through the scan model API
+    and uses them when generating LDM (Logical Data Model).
+    """
+
+    def test_sql_column_with_description(self):
+        """Test that SqlColumn can be created with a description field."""
+        column = SqlColumn(
+            name="customer_id",
+            data_type="INT",
+            description="Unique identifier for the customer",
+        )
+        assert column.name == "customer_id"
+        assert column.data_type == "INT"
+        assert column.description == "Unique identifier for the customer"
+
+    def test_sql_column_without_description(self):
+        """Test that SqlColumn works without description (backward compatibility)."""
+        column = SqlColumn(name="order_id", data_type="STRING")
+        assert column.name == "order_id"
+        assert column.data_type == "STRING"
+        assert column.description is None
+
+    def test_sql_column_with_none_description(self):
+        """Test that SqlColumn accepts explicit None description."""
+        column = SqlColumn(name="product_id", data_type="INT", description=None)
+        assert column.name == "product_id"
+        assert column.data_type == "INT"
+        assert column.description is None
+
+    def test_sql_column_with_empty_description(self):
+        """Test that SqlColumn accepts empty string description."""
+        column = SqlColumn(name="price", data_type="NUMERIC", description="")
+        assert column.name == "price"
+        assert column.data_type == "NUMERIC"
+        assert column.description == ""
+
+    def test_sql_column_to_api_conversion(self):
+        """Test that SqlColumn with description converts to API client correctly."""
+        column = SqlColumn(
+            name="amount",
+            data_type="NUMERIC",
+            description="Total transaction amount in USD",
+        )
+        api_column = column.to_api()
+        assert api_column.name == "amount"
+        assert api_column.data_type == "NUMERIC"
+        assert api_column.description == "Total transaction amount in USD"
+
+    def test_sql_column_from_api_conversion(self):
+        """Test that SqlColumn with description can be created from API client."""
+        from gooddata_api_client.model.sql_column import SqlColumn as ApiSqlColumn
+
+        api_column = ApiSqlColumn(
+            name="quantity",
+            data_type="INT",
+            description="Number of items purchased",
+        )
+        column = SqlColumn.from_api(api_column)
+        assert column.name == "quantity"
+        assert column.data_type == "INT"
+        assert column.description == "Number of items purchased"
+
+    def test_sql_column_equality_with_description(self):
+        """Test that SqlColumn equality includes description field."""
+        column1 = SqlColumn(name="id", data_type="INT", description="Primary key")
+        column2 = SqlColumn(name="id", data_type="INT", description="Primary key")
+        column3 = SqlColumn(name="id", data_type="INT", description="Different description")
+        column4 = SqlColumn(name="id", data_type="INT")
+
+        assert column1 == column2
+        assert column1 != column3
+        assert column1 != column4
+
+    def test_catalog_pdm_sql_with_column_descriptions(self):
+        """Test that CatalogPdmSql works with columns that have descriptions."""
+        pdm_sql = CatalogPdmSql(
+            statement="SELECT * FROM customers",
+            title="Customers with descriptions",
+            columns=[
+                SqlColumn(
+                    name="customer_id",
+                    data_type="INT",
+                    description="Unique customer identifier",
+                ),
+                SqlColumn(
+                    name="customer_name",
+                    data_type="STRING",
+                    description="Full name of the customer",
+                ),
+                SqlColumn(
+                    name="email",
+                    data_type="STRING",
+                    # No description - backward compatibility
+                ),
+            ],
+        )
+        assert len(pdm_sql.columns) == 3
+        assert pdm_sql.columns[0].description == "Unique customer identifier"
+        assert pdm_sql.columns[1].description == "Full name of the customer"
+        assert pdm_sql.columns[2].description is None
+
+
+class TestCatalogDeclarativeColumnDescription:
+    """Tests for CatalogDeclarativeColumn description field support (CQ-1665).
+
+    CatalogDeclarativeColumn represents a column in the Physical Data Model (PDM).
+    The description field stores the column comment/description from the database.
+    """
+
+    def test_declarative_column_with_description(self):
+        """Test that CatalogDeclarativeColumn can be created with a description."""
+        column = CatalogDeclarativeColumn(
+            name="customer_id",
+            data_type="INT",
+            description="Unique customer identifier",
+            is_primary_key=True,
+        )
+        assert column.name == "customer_id"
+        assert column.data_type == "INT"
+        assert column.description == "Unique customer identifier"
+        assert column.is_primary_key is True
+
+    def test_declarative_column_without_description(self):
+        """Test that CatalogDeclarativeColumn works without description (backward compatibility)."""
+        column = CatalogDeclarativeColumn(
+            name="order_id",
+            data_type="STRING",
+            is_primary_key=False,
+        )
+        assert column.name == "order_id"
+        assert column.data_type == "STRING"
+        assert column.description is None
+        assert column.is_primary_key is False
+
+    def test_declarative_column_with_all_fields(self):
+        """Test CatalogDeclarativeColumn with all fields including description."""
+        column = CatalogDeclarativeColumn(
+            name="foreign_key_id",
+            data_type="INT",
+            description="Reference to parent table",
+            is_primary_key=False,
+            referenced_table_id="parent_table",
+            referenced_table_column="id",
+        )
+        assert column.name == "foreign_key_id"
+        assert column.data_type == "INT"
+        assert column.description == "Reference to parent table"
+        assert column.is_primary_key is False
+        assert column.referenced_table_id == "parent_table"
+        assert column.referenced_table_column == "id"
+
+    def test_declarative_column_to_api_conversion(self):
+        """Test that CatalogDeclarativeColumn with description converts to API client correctly."""
+        column = CatalogDeclarativeColumn(
+            name="amount",
+            data_type="NUMERIC",
+            description="Transaction amount in base currency",
+        )
+        api_column = column.to_api()
+        assert api_column.name == "amount"
+        assert api_column.data_type == "NUMERIC"
+        assert api_column.description == "Transaction amount in base currency"
+
+    def test_declarative_column_from_api_conversion(self):
+        """Test that CatalogDeclarativeColumn with description can be created from API client."""
+        from gooddata_api_client.model.declarative_column import DeclarativeColumn
+
+        api_column = DeclarativeColumn(
+            name="quantity",
+            data_type="INT",
+            description="Number of items in the order",
+        )
+        column = CatalogDeclarativeColumn.from_api(api_column)
+        assert column.name == "quantity"
+        assert column.data_type == "INT"
+        assert column.description == "Number of items in the order"
+
+    def test_declarative_column_equality_with_description(self):
+        """Test that CatalogDeclarativeColumn equality includes description field."""
+        column1 = CatalogDeclarativeColumn(name="id", data_type="INT", description="Primary key")
+        column2 = CatalogDeclarativeColumn(name="id", data_type="INT", description="Primary key")
+        column3 = CatalogDeclarativeColumn(name="id", data_type="INT", description="Different")
+        column4 = CatalogDeclarativeColumn(name="id", data_type="INT")
+
+        assert column1 == column2
+        assert column1 != column3
+        assert column1 != column4
