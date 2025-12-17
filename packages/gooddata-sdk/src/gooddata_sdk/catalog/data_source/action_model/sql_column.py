@@ -11,6 +11,7 @@ from gooddata_sdk.catalog.base import Base
 class SqlColumn(Base):
     data_type: str
     name: str
+    description: str | None = None
 
     @staticmethod
     def client_class() -> type[ApiSqlColumn]:
