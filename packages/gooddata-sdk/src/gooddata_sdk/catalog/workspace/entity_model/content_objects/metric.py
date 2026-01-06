@@ -25,5 +25,20 @@ class CatalogMetric(AttrCatalogEntity):
     def is_hidden(self) -> Optional[bool]:
         return safeget(self.json_api_attributes, ["isHidden"])
 
+    @property
+    def metric_type(self) -> Optional[str]:
+        """
+        Returns the metric type classification.
+
+        Possible values:
+        - "UNSPECIFIED" - Default type for metrics without semantic classification
+        - "CURRENCY" - Metric represents a currency value
+        - None - Not set
+
+        Returns:
+            Optional[str]: The metric type or None if not set.
+        """
+        return safeget(self.json_api_attributes, ["content", "metricType"])
+
     def as_computable(self) -> Metric:
         return SimpleMetric(local_id=self.id, item=self.obj_id)
