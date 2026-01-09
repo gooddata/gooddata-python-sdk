@@ -30,6 +30,7 @@ class SeriesFactory:
         filter_by: Optional[Union[Filter, list[Filter]]] = None,
         on_execution_submitted: Optional[Callable[[Execution], None]] = None,
         is_cancellable: bool = False,
+        result_page_len: Optional[int] = None,
     ) -> pandas.Series:
         """Creates pandas Series from data points calculated from a single `data_by`.
 
@@ -68,6 +69,9 @@ class SeriesFactory:
 
             is_cancellable (bool, optional): Whether the execution should be cancelled when the connection is interrupted.
 
+            result_page_len (Optional[int]): Optional page size for result pagination.
+                Defaults to 1000. Larger values can improve performance for large result sets.
+
         Returns:
             pandas.Series: pandas series instance
         """
@@ -80,6 +84,7 @@ class SeriesFactory:
             filter_by=filter_by,
             on_execution_submitted=on_execution_submitted,
             is_cancellable=is_cancellable,
+            result_page_len=result_page_len,
         )
 
         _idx = make_pandas_index(index)
@@ -93,6 +98,7 @@ class SeriesFactory:
         filter_by: Optional[Union[Filter, list[Filter]]] = None,
         on_execution_submitted: Optional[Callable[[Execution], None]] = None,
         is_cancellable: bool = False,
+        result_page_len: Optional[int] = None,
     ) -> pandas.Series:
         """
         Creates a pandas.Series from data points calculated from a single `data_by` without constructing an index.
@@ -122,6 +128,8 @@ class SeriesFactory:
             on_execution_submitted (Optional[Callable[[Execution], None]]): Callback to call when the execution was
                 submitted to the backend.
             is_cancellable (bool, optional): Whether the execution should be cancelled when the connection is interrupted.
+            result_page_len (Optional[int]): Optional page size for result pagination.
+                Defaults to 1000. Larger values can improve performance for large result sets.
 
         Returns:
             pandas.Series: The resulting pandas Series instance.
@@ -140,6 +148,7 @@ class SeriesFactory:
             filter_by=filter_by,
             on_execution_submitted=on_execution_submitted,
             is_cancellable=is_cancellable,
+            result_page_len=result_page_len,
         )
 
         return pandas.Series(data=data["_series"])
