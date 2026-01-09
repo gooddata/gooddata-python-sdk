@@ -6,6 +6,7 @@ from typing import Optional
 
 import attr
 import attrs
+from attrs import define
 from gooddata_api_client.model.data_source_table_identifier import DataSourceTableIdentifier
 from gooddata_api_client.model.declarative_aggregated_fact import DeclarativeAggregatedFact
 from gooddata_api_client.model.declarative_attribute import DeclarativeAttribute
@@ -18,6 +19,8 @@ from gooddata_api_client.model.declarative_reference import DeclarativeReference
 from gooddata_api_client.model.declarative_reference_source import DeclarativeReferenceSource
 from gooddata_api_client.model.declarative_source_fact_reference import DeclarativeSourceFactReference
 from gooddata_api_client.model.declarative_workspace_data_filter_column import DeclarativeWorkspaceDataFilterColumn
+from gooddata_api_client.model.geo_area_config import GeoAreaConfig
+from gooddata_api_client.model.geo_collection import GeoCollection
 
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.catalog.identifier import (
@@ -167,10 +170,29 @@ class CatalogDeclarativeLabel(Base):
     is_hidden: Optional[bool] = None
     locale: Optional[str] = None
     translations: Optional[list[CatalogDeclarativeLabelTranslation]] = None
+    geo_area_config: Optional[CatalogGeoAreaConfig] = None
 
     @staticmethod
     def client_class() -> type[DeclarativeLabel]:
         return DeclarativeLabel
+
+
+@define(auto_attribs=True, kw_only=True)
+class CatalogGeoAreaConfig(Base):
+    collection: CatalogGeoCollectionIdentifier
+
+    @staticmethod
+    def client_class() -> type[GeoAreaConfig]:
+        return GeoAreaConfig
+
+
+@define(auto_attribs=True, kw_only=True)
+class CatalogGeoCollectionIdentifier(Base):
+    id: str
+
+    @staticmethod
+    def client_class() -> type[GeoCollection]:
+        return GeoCollection
 
 
 @attr.s(auto_attribs=True, kw_only=True)
