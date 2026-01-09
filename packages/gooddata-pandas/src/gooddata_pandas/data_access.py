@@ -358,6 +358,7 @@ def _extract_from_attributes_and_maybe_metrics(
     col_to_attr_idx: dict[str, int],
     col_to_metric_idx: dict[str, int],
     index_to_attr_idx: Optional[dict[str, int]] = None,
+    result_page_len: Optional[int] = None,
 ) -> tuple[dict, dict]:
     """
     Internal function that extracts data from execution response with attributes columns and
@@ -371,6 +372,8 @@ def _extract_from_attributes_and_maybe_metrics(
         col_to_metric_idx (dict[str, int]): A mapping of pandas column names to metric dimension indices.
         index_to_attr_idx (Optional[dict[str, int]]):
             An optional mapping of pandas index names to attribute dimension indices.
+        result_page_len (Optional[int]): Optional page size for result pagination.
+            Defaults to _RESULT_PAGE_LEN (1000). Larger values can improve performance for large result sets.
 
     Returns:
         tuple: A tuple containing the following dictionaries:
@@ -379,7 +382,8 @@ def _extract_from_attributes_and_maybe_metrics(
     """
     exec_def = execution.exec_def
     offset = [0 for _ in exec_def.dimensions]
-    limit = [len(exec_def.metrics), _RESULT_PAGE_LEN] if exec_def.has_metrics() else [_RESULT_PAGE_LEN]
+    page_len = result_page_len if result_page_len is not None else _RESULT_PAGE_LEN
+    limit = [len(exec_def.metrics), page_len] if exec_def.has_metrics() else [page_len]
     attribute_dim = 1 if exec_def.has_metrics() else 0
     result = execution.read_result(limit=limit, offset=offset)
     safe_index_to_attr_idx = index_to_attr_idx if index_to_attr_idx is not None else dict()
@@ -421,6 +425,7 @@ def compute_and_extract(
     filter_by: Optional[Union[Filter, list[Filter]]] = None,
     on_execution_submitted: Optional[Callable[[Execution], None]] = None,
     is_cancellable: bool = False,
+    result_page_len: Optional[int] = None,
 ) -> tuple[dict, dict]:
     """
     Convenience function that computes and extracts data from the execution response.
@@ -435,6 +440,8 @@ def compute_and_extract(
             submitted to the backend.
         is_cancellable (bool, optional): Whether the execution of this definition should be cancelled when
             the connection is interrupted.
+        result_page_len (Optional[int]): Optional page size for result pagination.
+            Defaults to 1000. Larger values can improve performance for large result sets.
 
     Returns:
         tuple: A tuple containing the following dictionaries:
@@ -472,4 +479,5 @@ def compute_and_extract(
             col_to_attr_idx,
             col_to_metric_idx,
             index_to_attr_idx,
+            result_page_len=result_page_len,
         )

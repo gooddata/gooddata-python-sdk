@@ -75,6 +75,7 @@ class DataFrameFactory:
         filter_by: Optional[Union[Filter, list[Filter]]] = None,
         on_execution_submitted: Optional[Callable[[Execution], None]] = None,
         is_cancellable: bool = False,
+        result_page_len: Optional[int] = None,
     ) -> pandas.DataFrame:
         """
         Creates a data frame indexed by values of the label. The data frame columns will be created from either
@@ -90,6 +91,8 @@ class DataFrameFactory:
             on_execution_submitted (Optional[Callable[[Execution], None]]): Callback to call when the execution was
                 submitted to the backend.
             is_cancellable (bool, optional): Whether the execution should be cancelled when the connection is interrupted.
+            result_page_len (Optional[int]): Optional page size for result pagination.
+                Defaults to 1000. Larger values can improve performance for large result sets.
 
         Returns:
             pandas.DataFrame: A DataFrame instance.
@@ -102,6 +105,7 @@ class DataFrameFactory:
             filter_by=filter_by,
             on_execution_submitted=on_execution_submitted,
             is_cancellable=is_cancellable,
+            result_page_len=result_page_len,
         )
 
         _idx = make_pandas_index(index)
@@ -114,6 +118,7 @@ class DataFrameFactory:
         filter_by: Optional[Union[Filter, list[Filter]]] = None,
         on_execution_submitted: Optional[Callable[[Execution], None]] = None,
         is_cancellable: bool = False,
+        result_page_len: Optional[int] = None,
     ) -> pandas.DataFrame:
         """
         Creates a data frame with columns created from metrics and or labels.
@@ -125,6 +130,8 @@ class DataFrameFactory:
             on_execution_submitted (Optional[Callable[[Execution], None]]): Callback to call when the execution was
                 submitted to the backend.
             is_cancellable (bool, optional): Whether the execution should be cancelled when the connection is interrupted.
+            result_page_len (Optional[int]): Optional page size for result pagination.
+                Defaults to 1000. Larger values can improve performance for large result sets.
 
         Returns:
             pandas.DataFrame: A DataFrame instance.
@@ -137,6 +144,7 @@ class DataFrameFactory:
             filter_by=filter_by,
             on_execution_submitted=on_execution_submitted,
             is_cancellable=is_cancellable,
+            result_page_len=result_page_len,
         )
 
         return pandas.DataFrame(data=data)
@@ -148,6 +156,7 @@ class DataFrameFactory:
         auto_index: bool = True,
         on_execution_submitted: Optional[Callable[[Execution], None]] = None,
         is_cancellable: bool = False,
+        result_page_len: Optional[int] = None,
     ) -> pandas.DataFrame:
         """
         Creates a data frame for named items. This is a convenience method that will create DataFrame with or
@@ -162,6 +171,8 @@ class DataFrameFactory:
             on_execution_submitted (Optional[Callable[[Execution], None]]): Callback to call when the execution was
                 submitted to the backend.
             is_cancellable (bool, optional): Whether the execution should be cancelled when the connection is interrupted.
+            result_page_len (Optional[int]): Optional page size for result pagination.
+                Defaults to 1000. Larger values can improve performance for large result sets.
 
         Returns:
             pandas.DataFrame: A DataFrame instance.
@@ -184,7 +195,11 @@ class DataFrameFactory:
         if not auto_index or not has_measures or not has_attributes:
             columns: ColumnsDef = {**resolved_attr_cols, **resolved_measure_cols}
 
-            return self.not_indexed(columns=columns, filter_by=filter_by)
+            return self.not_indexed(
+                columns=columns,
+                filter_by=filter_by,
+                result_page_len=result_page_len,
+            )
 
         return self.indexed(
             index_by=resolved_attr_cols,
@@ -192,6 +207,7 @@ class DataFrameFactory:
             filter_by=filter_by,
             on_execution_submitted=on_execution_submitted,
             is_cancellable=is_cancellable,
+            result_page_len=result_page_len,
         )
 
     def for_visualization(
@@ -200,6 +216,7 @@ class DataFrameFactory:
         auto_index: bool = True,
         on_execution_submitted: Optional[Callable[[Execution], None]] = None,
         is_cancellable: bool = False,
+        result_page_len: Optional[int] = None,
     ) -> pandas.DataFrame:
         """
         Creates a data frame with columns based on the content of the visualization with the provided identifier.
@@ -211,6 +228,8 @@ class DataFrameFactory:
             on_execution_submitted (Optional[Callable[[Execution], None]]): Callback to call when the execution was
                 submitted to the backend.
             is_cancellable (bool, optional): Whether the execution should be cancelled when the connection is interrupted.
+            result_page_len (Optional[int]): Optional page size for result pagination.
+                Defaults to 1000. Larger values can improve performance for large result sets.
 
         Returns:
             pandas.DataFrame: A DataFrame instance.
@@ -231,6 +250,7 @@ class DataFrameFactory:
             auto_index=auto_index,
             on_execution_submitted=on_execution_submitted,
             is_cancellable=is_cancellable,
+            result_page_len=result_page_len,
         )
 
     def for_created_visualization(
