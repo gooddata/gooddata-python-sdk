@@ -11,7 +11,9 @@ Name | Type | Description | Notes
 **password** | **str** | The SMTP server password. | [optional] 
 **port** | **int** | The SMTP server port. | [optional] 
 **username** | **str** | The SMTP server username. | [optional] 
+**has_secret_key** | **bool, none_type** | Flag indicating if webhook has a hmac secret key. | [optional] [readonly] 
 **has_token** | **bool, none_type** | Flag indicating if webhook has a token. | [optional] [readonly] 
+**secret_key** | **str, none_type** | Hmac secret key for the webhook signature. | [optional] 
 **token** | **str, none_type** | Bearer token for the webhook. | [optional] 
 **url** | **str** | The webhook URL. | [optional] 
 **type** | **str** | The destination type. | [optional]  if omitted the server will use the default value of "WEBHOOK"

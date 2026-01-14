@@ -132,7 +132,9 @@ class DeclarativeAttribute(ModelNormal):
             'default_view': (LabelIdentifier,),  # noqa: E501
             'description': (str,),  # noqa: E501
             'is_hidden': (bool,),  # noqa: E501
+            'is_nullable': (bool,),  # noqa: E501
             'locale': (str,),  # noqa: E501
+            'null_value': (str,),  # noqa: E501
             'sort_column': (str,),  # noqa: E501
             'sort_direction': (str,),  # noqa: E501
             'source_column_data_type': (str,),  # noqa: E501
@@ -152,7 +154,9 @@ class DeclarativeAttribute(ModelNormal):
         'default_view': 'defaultView',  # noqa: E501
         'description': 'description',  # noqa: E501
         'is_hidden': 'isHidden',  # noqa: E501
+        'is_nullable': 'isNullable',  # noqa: E501
         'locale': 'locale',  # noqa: E501
+        'null_value': 'nullValue',  # noqa: E501
         'sort_column': 'sortColumn',  # noqa: E501
         'sort_direction': 'sortDirection',  # noqa: E501
         'source_column_data_type': 'sourceColumnDataType',  # noqa: E501
@@ -209,7 +213,9 @@ class DeclarativeAttribute(ModelNormal):
             default_view (LabelIdentifier): [optional]  # noqa: E501
             description (str): Attribute description.. [optional]  # noqa: E501
             is_hidden (bool): If true, this attribute is hidden from AI search results.. [optional]  # noqa: E501
+            is_nullable (bool): Flag indicating whether the associated source column allows null values.. [optional]  # noqa: E501
             locale (str): Default locale for primary label.. [optional]  # noqa: E501
+            null_value (str): Value used in coalesce during joins instead of null.. [optional]  # noqa: E501
             sort_column (str): Attribute sort column.. [optional]  # noqa: E501
             sort_direction (str): Attribute sort direction.. [optional]  # noqa: E501
             source_column_data_type (str): A type of the source column. [optional]  # noqa: E501
@@ -312,7 +318,9 @@ class DeclarativeAttribute(ModelNormal):
             default_view (LabelIdentifier): [optional]  # noqa: E501
             description (str): Attribute description.. [optional]  # noqa: E501
             is_hidden (bool): If true, this attribute is hidden from AI search results.. [optional]  # noqa: E501
+            is_nullable (bool): Flag indicating whether the associated source column allows null values.. [optional]  # noqa: E501
             locale (str): Default locale for primary label.. [optional]  # noqa: E501
+            null_value (str): Value used in coalesce during joins instead of null.. [optional]  # noqa: E501
             sort_column (str): Attribute sort column.. [optional]  # noqa: E501
             sort_direction (str): Attribute sort direction.. [optional]  # noqa: E501
             source_column_data_type (str): A type of the source column. [optional]  # noqa: E501

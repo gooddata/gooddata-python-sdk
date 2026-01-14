@@ -79,7 +79,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -157,7 +157,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details

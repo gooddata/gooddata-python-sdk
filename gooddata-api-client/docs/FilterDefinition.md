@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **ranking_filter** | [**RankingFilterRankingFilter**](RankingFilterRankingFilter.md) |  | [optional] 
 **comparison_measure_value_filter** | [**ComparisonMeasureValueFilterComparisonMeasureValueFilter**](ComparisonMeasureValueFilterComparisonMeasureValueFilter.md) |  | [optional] 
 **range_measure_value_filter** | [**RangeMeasureValueFilterRangeMeasureValueFilter**](RangeMeasureValueFilterRangeMeasureValueFilter.md) |  | [optional] 
+**compound_measure_value_filter** | [**CompoundMeasureValueFilterCompoundMeasureValueFilter**](CompoundMeasureValueFilterCompoundMeasureValueFilter.md) |  | [optional] 
 **absolute_date_filter** | [**AbsoluteDateFilterAbsoluteDateFilter**](AbsoluteDateFilterAbsoluteDateFilter.md) |  | [optional] 
 **relative_date_filter** | [**RelativeDateFilterRelativeDateFilter**](RelativeDateFilterRelativeDateFilter.md) |  | [optional] 
 **negative_attribute_filter** | [**NegativeAttributeFilterNegativeAttributeFilter**](NegativeAttributeFilterNegativeAttributeFilter.md) |  | [optional] 

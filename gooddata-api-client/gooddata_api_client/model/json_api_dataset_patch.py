@@ -31,8 +31,8 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_dataset_patch_attributes import JsonApiDatasetPatchAttributes
-    globals()['JsonApiDatasetPatchAttributes'] = JsonApiDatasetPatchAttributes
+    from gooddata_api_client.model.json_api_attribute_patch_attributes import JsonApiAttributePatchAttributes
+    globals()['JsonApiAttributePatchAttributes'] = JsonApiAttributePatchAttributes
 
 
 class JsonApiDatasetPatch(ModelNormal):
@@ -98,7 +98,7 @@ class JsonApiDatasetPatch(ModelNormal):
         return {
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
-            'attributes': (JsonApiDatasetPatchAttributes,),  # noqa: E501
+            'attributes': (JsonApiAttributePatchAttributes,),  # noqa: E501
         }
 
     @cached_property
@@ -157,7 +157,7 @@ class JsonApiDatasetPatch(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiDatasetPatchAttributes): [optional]  # noqa: E501
+            attributes (JsonApiAttributePatchAttributes): [optional]  # noqa: E501
         """
 
         type = kwargs.get('type', "dataset")
@@ -250,7 +250,7 @@ class JsonApiDatasetPatch(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiDatasetPatchAttributes): [optional]  # noqa: E501
+            attributes (JsonApiAttributePatchAttributes): [optional]  # noqa: E501
         """
 
         type = kwargs.get('type', "dataset")

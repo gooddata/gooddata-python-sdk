@@ -5,7 +5,9 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **type** | **str** |  | 
+**has_secret_key** | **bool, none_type** | Flag indicating if webhook has a hmac secret key. | [optional] [readonly] 
 **has_token** | **bool, none_type** | Flag indicating if webhook has a token. | [optional] [readonly] 
+**secret_key** | **str, none_type** | Hmac secret key for the webhook signature. | [optional] 
 **token** | **str, none_type** | Bearer token for the webhook. | [optional] 
 **url** | **str** | The webhook URL. | [optional] 
 **from_email** | **str** | E-mail address to send notifications from. Currently this does not have any effect. E-mail &#39;no-reply@gooddata.com&#39; is used instead. | [optional]  if omitted the server will use the default value of no-reply@gooddata.com

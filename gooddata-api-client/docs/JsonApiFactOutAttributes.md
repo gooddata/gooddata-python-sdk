@@ -7,6 +7,8 @@ Name | Type | Description | Notes
 **are_relations_valid** | **bool** |  | [optional] 
 **description** | **str** |  | [optional] 
 **is_hidden** | **bool** |  | [optional] 
+**is_nullable** | **bool** |  | [optional] 
+**null_value** | **str** |  | [optional] 
 **source_column** | **str** |  | [optional] 
 **source_column_data_type** | **str** |  | [optional] 
 **tags** | **[str]** |  | [optional] 

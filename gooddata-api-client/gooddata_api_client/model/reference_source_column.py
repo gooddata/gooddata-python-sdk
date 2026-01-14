@@ -100,6 +100,8 @@ class ReferenceSourceColumn(ModelNormal):
             'column': (str,),  # noqa: E501
             'target': (DatasetGrain,),  # noqa: E501
             'data_type': (str,),  # noqa: E501
+            'is_nullable': (bool,),  # noqa: E501
+            'null_value': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -111,6 +113,8 @@ class ReferenceSourceColumn(ModelNormal):
         'column': 'column',  # noqa: E501
         'target': 'target',  # noqa: E501
         'data_type': 'dataType',  # noqa: E501
+        'is_nullable': 'isNullable',  # noqa: E501
+        'null_value': 'nullValue',  # noqa: E501
     }
 
     read_only_vars = {
@@ -159,6 +163,8 @@ class ReferenceSourceColumn(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             data_type (str): [optional]  # noqa: E501
+            is_nullable (bool): [optional]  # noqa: E501
+            null_value (str): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -251,6 +257,8 @@ class ReferenceSourceColumn(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             data_type (str): [optional]  # noqa: E501
+            is_nullable (bool): [optional]  # noqa: E501
+            null_value (str): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

@@ -1,4 +1,4 @@
-# (C) 2025 GoodData Corporation
+# (C) 2026 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -7,7 +7,7 @@ interactions:
       body: null
       headers:
         Accept:
-          - application/vnd.gooddata.api+json
+          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
@@ -24,7 +24,7 @@ interactions:
         Content-Length:
           - '3322'
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         DATE: &id001
           - PLACEHOLDER
         Expires:
@@ -164,20 +164,20 @@ interactions:
               type: metric
               attributes:
                 title: '# of Active Customers'
-                createdAt: 2025-08-07 11:45
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
+                createdAt: 2025-08-07 11:45
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/amount_of_active_customers
             - id: revenue_per_customer
               type: metric
               attributes:
                 title: Revenue per Customer
-                createdAt: 2025-08-07 11:45
                 content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
+                createdAt: 2025-08-07 11:45
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue_per_customer
             - id: date.month
@@ -276,7 +276,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-Gdc-Cancel-Token:
-          - 558877cc-a8ac-446f-a0bd-a192e62618fe
+          - 0d0763fe-8f80-4d03-b748-b8db8c9e2b00
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - '0'
@@ -315,14 +315,14 @@ interactions:
                       valueType: TEXT
                 localIdentifier: dim_1
             links:
-              executionResult: 13eafdc97f6ea0d219f0a12f2c4a153050c0efc8:4bdd8f1f02d0195def84fbbfaf72e6df2985222a0b246ae8f6c646bcd30cc823
+              executionResult: 44133fbe29b5b6a2ca8663cfbf803c297f5e38d4:41098d133f9039ccfe54e9b222a576e5dc22b0e19657e91bebd919b9a3576ca4
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3Din%3D%28date.month%29&page=0&size=500
       body: null
       headers:
         Accept:
-          - application/vnd.gooddata.api+json
+          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
@@ -339,7 +339,7 @@ interactions:
         Content-Length:
           - '1261'
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         DATE: *id001
         Expires:
           - '0'
@@ -410,7 +410,7 @@ interactions:
             next: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3D%3D%27date.month%27&page=1&size=500
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/13eafdc97f6ea0d219f0a12f2c4a153050c0efc8%3A4bdd8f1f02d0195def84fbbfaf72e6df2985222a0b246ae8f6c646bcd30cc823?offset=0%2C0&limit=2%2C1000
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/44133fbe29b5b6a2ca8663cfbf803c297f5e38d4%3A41098d133f9039ccfe54e9b222a576e5dc22b0e19657e91bebd919b9a3576ca4?offset=0%2C0&limit=2%2C1000
       body: null
       headers:
         Accept:
@@ -429,7 +429,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '1416'
+          - '1422'
         Content-Type:
           - application/json
         DATE: *id001
@@ -451,30 +451,30 @@ interactions:
       body:
         string:
           data:
-            - - 90
+            - - 55
+              - 57
+              - 62
               - 60
-              - 64
-              - 65
+              - 51
+              - 60
+              - 55
+              - 86
+              - 89
+              - 72
               - 56
-              - 54
-              - 59
-              - 76
-              - 99
-              - 107
-              - 91
-              - 56
-            - - 178.3658536585366
-              - 185.4194
-              - 146.6475
-              - 111.88542372881356
-              - 184.2714
-              - 228.0194117647059
-              - 110.62510204081633
-              - 208.63134328358208
-              - 194.15443181818182
-              - 215.70928571428573
-              - 152.4380487804878
-              - 348.0577777777778
+              - 90
+            - - 221.3849019607843
+              - 197.37653846153847
+              - 93.78964285714285
+              - 115.96454545454546
+              - 241.92872340425532
+              - 270.91346938775513
+              - 92.0542
+              - 251.6236842105263
+              - 204.48873417721518
+              - 187.41
+              - 160.19469387755103
+              - 178.3658536585366
           dimensionHeaders:
             - headerGroups:
                 - headers:
@@ -484,9 +484,6 @@ interactions:
                         measureIndex: 1
             - headerGroups:
                 - headers:
-                    - attributeHeader:
-                        labelValue: 2024-12
-                        primaryLabelValue: 2024-12
                     - attributeHeader:
                         labelValue: 2025-01
                         primaryLabelValue: 2025-01
@@ -520,6 +517,9 @@ interactions:
                     - attributeHeader:
                         labelValue: 2025-11
                         primaryLabelValue: 2025-11
+                    - attributeHeader:
+                        labelValue: 2025-12
+                        primaryLabelValue: 2025-12
           grandTotals: []
           paging:
             count:

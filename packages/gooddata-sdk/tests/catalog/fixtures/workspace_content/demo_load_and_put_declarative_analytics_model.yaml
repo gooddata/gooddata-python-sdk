@@ -1,4 +1,4 @@
-# (C) 2025 GoodData Corporation
+# (C) 2026 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -7,7 +7,7 @@ interactions:
       body: null
       headers:
         Accept:
-          - application/vnd.gooddata.api+json
+          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
@@ -44,7 +44,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 24441c56149ed0fa69b2fb7d8a9fc637
+          traceId: 8fe68a328cd6170f45d0d39834d2c4fa
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces
@@ -56,11 +56,11 @@ interactions:
             name: demo_testing
       headers:
         Accept:
-          - application/vnd.gooddata.api+json
+          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -75,7 +75,7 @@ interactions:
         Content-Length:
           - '167'
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         DATE: *id001
         Expires:
           - '0'
@@ -2295,6 +2295,8 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
           - '0'
+        Content-Type:
+          - application/vnd.gooddata.api+json
         DATE: *id001
         Expires:
           - '0'

@@ -10,8 +10,9 @@ Method | HTTP request | Description
 [**create_entity_custom_application_settings**](WorkspaceObjectControllerApi.md#create_entity_custom_application_settings) | **POST** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings | Post Custom Application Settings
 [**create_entity_dashboard_plugins**](WorkspaceObjectControllerApi.md#create_entity_dashboard_plugins) | **POST** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins | Post Plugins
 [**create_entity_export_definitions**](WorkspaceObjectControllerApi.md#create_entity_export_definitions) | **POST** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions | Post Export Definitions
-[**create_entity_filter_contexts**](WorkspaceObjectControllerApi.md#create_entity_filter_contexts) | **POST** /api/v1/entities/workspaces/{workspaceId}/filterContexts | Post Context Filters
+[**create_entity_filter_contexts**](WorkspaceObjectControllerApi.md#create_entity_filter_contexts) | **POST** /api/v1/entities/workspaces/{workspaceId}/filterContexts | Post Filter Context
 [**create_entity_filter_views**](WorkspaceObjectControllerApi.md#create_entity_filter_views) | **POST** /api/v1/entities/workspaces/{workspaceId}/filterViews | Post Filter views
+[**create_entity_knowledge_recommendations**](WorkspaceObjectControllerApi.md#create_entity_knowledge_recommendations) | **POST** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations | 
 [**create_entity_memory_items**](WorkspaceObjectControllerApi.md#create_entity_memory_items) | **POST** /api/v1/entities/workspaces/{workspaceId}/memoryItems | 
 [**create_entity_metrics**](WorkspaceObjectControllerApi.md#create_entity_metrics) | **POST** /api/v1/entities/workspaces/{workspaceId}/metrics | Post Metrics
 [**create_entity_user_data_filters**](WorkspaceObjectControllerApi.md#create_entity_user_data_filters) | **POST** /api/v1/entities/workspaces/{workspaceId}/userDataFilters | Post User Data Filters
@@ -25,8 +26,9 @@ Method | HTTP request | Description
 [**delete_entity_custom_application_settings**](WorkspaceObjectControllerApi.md#delete_entity_custom_application_settings) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/{objectId} | Delete a Custom Application Setting
 [**delete_entity_dashboard_plugins**](WorkspaceObjectControllerApi.md#delete_entity_dashboard_plugins) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | Delete a Plugin
 [**delete_entity_export_definitions**](WorkspaceObjectControllerApi.md#delete_entity_export_definitions) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/{objectId} | Delete an Export Definition
-[**delete_entity_filter_contexts**](WorkspaceObjectControllerApi.md#delete_entity_filter_contexts) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | Delete a Context Filter
+[**delete_entity_filter_contexts**](WorkspaceObjectControllerApi.md#delete_entity_filter_contexts) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | Delete a Filter Context
 [**delete_entity_filter_views**](WorkspaceObjectControllerApi.md#delete_entity_filter_views) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Delete Filter view
+[**delete_entity_knowledge_recommendations**](WorkspaceObjectControllerApi.md#delete_entity_knowledge_recommendations) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | 
 [**delete_entity_memory_items**](WorkspaceObjectControllerApi.md#delete_entity_memory_items) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | 
 [**delete_entity_metrics**](WorkspaceObjectControllerApi.md#delete_entity_metrics) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | Delete a Metric
 [**delete_entity_user_data_filters**](WorkspaceObjectControllerApi.md#delete_entity_user_data_filters) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId} | Delete a User Data Filter
@@ -44,8 +46,9 @@ Method | HTTP request | Description
 [**get_all_entities_datasets**](WorkspaceObjectControllerApi.md#get_all_entities_datasets) | **GET** /api/v1/entities/workspaces/{workspaceId}/datasets | Get all Datasets
 [**get_all_entities_export_definitions**](WorkspaceObjectControllerApi.md#get_all_entities_export_definitions) | **GET** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions | Get all Export Definitions
 [**get_all_entities_facts**](WorkspaceObjectControllerApi.md#get_all_entities_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/facts | Get all Facts
-[**get_all_entities_filter_contexts**](WorkspaceObjectControllerApi.md#get_all_entities_filter_contexts) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterContexts | Get all Context Filters
+[**get_all_entities_filter_contexts**](WorkspaceObjectControllerApi.md#get_all_entities_filter_contexts) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterContexts | Get all Filter Context
 [**get_all_entities_filter_views**](WorkspaceObjectControllerApi.md#get_all_entities_filter_views) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterViews | Get all Filter views
+[**get_all_entities_knowledge_recommendations**](WorkspaceObjectControllerApi.md#get_all_entities_knowledge_recommendations) | **GET** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations | 
 [**get_all_entities_labels**](WorkspaceObjectControllerApi.md#get_all_entities_labels) | **GET** /api/v1/entities/workspaces/{workspaceId}/labels | Get all Labels
 [**get_all_entities_memory_items**](WorkspaceObjectControllerApi.md#get_all_entities_memory_items) | **GET** /api/v1/entities/workspaces/{workspaceId}/memoryItems | 
 [**get_all_entities_metrics**](WorkspaceObjectControllerApi.md#get_all_entities_metrics) | **GET** /api/v1/entities/workspaces/{workspaceId}/metrics | Get all Metrics
@@ -64,8 +67,9 @@ Method | HTTP request | Description
 [**get_entity_datasets**](WorkspaceObjectControllerApi.md#get_entity_datasets) | **GET** /api/v1/entities/workspaces/{workspaceId}/datasets/{objectId} | Get a Dataset
 [**get_entity_export_definitions**](WorkspaceObjectControllerApi.md#get_entity_export_definitions) | **GET** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/{objectId} | Get an Export Definition
 [**get_entity_facts**](WorkspaceObjectControllerApi.md#get_entity_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/facts/{objectId} | Get a Fact
-[**get_entity_filter_contexts**](WorkspaceObjectControllerApi.md#get_entity_filter_contexts) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | Get a Context Filter
+[**get_entity_filter_contexts**](WorkspaceObjectControllerApi.md#get_entity_filter_contexts) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | Get a Filter Context
 [**get_entity_filter_views**](WorkspaceObjectControllerApi.md#get_entity_filter_views) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Get Filter view
+[**get_entity_knowledge_recommendations**](WorkspaceObjectControllerApi.md#get_entity_knowledge_recommendations) | **GET** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | 
 [**get_entity_labels**](WorkspaceObjectControllerApi.md#get_entity_labels) | **GET** /api/v1/entities/workspaces/{workspaceId}/labels/{objectId} | Get a Label
 [**get_entity_memory_items**](WorkspaceObjectControllerApi.md#get_entity_memory_items) | **GET** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | 
 [**get_entity_metrics**](WorkspaceObjectControllerApi.md#get_entity_metrics) | **GET** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | Get a Metric
@@ -83,8 +87,9 @@ Method | HTTP request | Description
 [**patch_entity_datasets**](WorkspaceObjectControllerApi.md#patch_entity_datasets) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/datasets/{objectId} | Patch a Dataset (beta)
 [**patch_entity_export_definitions**](WorkspaceObjectControllerApi.md#patch_entity_export_definitions) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/{objectId} | Patch an Export Definition
 [**patch_entity_facts**](WorkspaceObjectControllerApi.md#patch_entity_facts) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/facts/{objectId} | Patch a Fact (beta)
-[**patch_entity_filter_contexts**](WorkspaceObjectControllerApi.md#patch_entity_filter_contexts) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | Patch a Context Filter
+[**patch_entity_filter_contexts**](WorkspaceObjectControllerApi.md#patch_entity_filter_contexts) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | Patch a Filter Context
 [**patch_entity_filter_views**](WorkspaceObjectControllerApi.md#patch_entity_filter_views) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Patch Filter view
+[**patch_entity_knowledge_recommendations**](WorkspaceObjectControllerApi.md#patch_entity_knowledge_recommendations) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | 
 [**patch_entity_labels**](WorkspaceObjectControllerApi.md#patch_entity_labels) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/labels/{objectId} | Patch a Label (beta)
 [**patch_entity_memory_items**](WorkspaceObjectControllerApi.md#patch_entity_memory_items) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | 
 [**patch_entity_metrics**](WorkspaceObjectControllerApi.md#patch_entity_metrics) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | Patch a Metric
@@ -106,6 +111,7 @@ Method | HTTP request | Description
 [**search_entities_facts**](WorkspaceObjectControllerApi.md#search_entities_facts) | **POST** /api/v1/entities/workspaces/{workspaceId}/facts/search | Search request for Fact
 [**search_entities_filter_contexts**](WorkspaceObjectControllerApi.md#search_entities_filter_contexts) | **POST** /api/v1/entities/workspaces/{workspaceId}/filterContexts/search | Search request for FilterContext
 [**search_entities_filter_views**](WorkspaceObjectControllerApi.md#search_entities_filter_views) | **POST** /api/v1/entities/workspaces/{workspaceId}/filterViews/search | Search request for FilterView
+[**search_entities_knowledge_recommendations**](WorkspaceObjectControllerApi.md#search_entities_knowledge_recommendations) | **POST** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/search | 
 [**search_entities_labels**](WorkspaceObjectControllerApi.md#search_entities_labels) | **POST** /api/v1/entities/workspaces/{workspaceId}/labels/search | Search request for Label
 [**search_entities_memory_items**](WorkspaceObjectControllerApi.md#search_entities_memory_items) | **POST** /api/v1/entities/workspaces/{workspaceId}/memoryItems/search | Search request for MemoryItem
 [**search_entities_metrics**](WorkspaceObjectControllerApi.md#search_entities_metrics) | **POST** /api/v1/entities/workspaces/{workspaceId}/metrics/search | Search request for Metric
@@ -120,8 +126,9 @@ Method | HTTP request | Description
 [**update_entity_custom_application_settings**](WorkspaceObjectControllerApi.md#update_entity_custom_application_settings) | **PUT** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/{objectId} | Put a Custom Application Setting
 [**update_entity_dashboard_plugins**](WorkspaceObjectControllerApi.md#update_entity_dashboard_plugins) | **PUT** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | Put a Plugin
 [**update_entity_export_definitions**](WorkspaceObjectControllerApi.md#update_entity_export_definitions) | **PUT** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/{objectId} | Put an Export Definition
-[**update_entity_filter_contexts**](WorkspaceObjectControllerApi.md#update_entity_filter_contexts) | **PUT** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | Put a Context Filter
+[**update_entity_filter_contexts**](WorkspaceObjectControllerApi.md#update_entity_filter_contexts) | **PUT** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | Put a Filter Context
 [**update_entity_filter_views**](WorkspaceObjectControllerApi.md#update_entity_filter_views) | **PUT** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Put Filter views
+[**update_entity_knowledge_recommendations**](WorkspaceObjectControllerApi.md#update_entity_knowledge_recommendations) | **PUT** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | 
 [**update_entity_memory_items**](WorkspaceObjectControllerApi.md#update_entity_memory_items) | **PUT** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | 
 [**update_entity_metrics**](WorkspaceObjectControllerApi.md#update_entity_metrics) | **PUT** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | Put a Metric
 [**update_entity_user_data_filters**](WorkspaceObjectControllerApi.md#update_entity_user_data_filters) | **PUT** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId} | Put a User Data Filter
@@ -218,8 +225,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -317,8 +324,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -654,8 +661,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -744,8 +751,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -843,8 +850,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -950,8 +957,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -965,7 +972,7 @@ No authorization required
 # **create_entity_filter_contexts**
 > JsonApiFilterContextOutDocument create_entity_filter_contexts(workspace_id, json_api_filter_context_post_optional_id_document)
 
-Post Context Filters
+Post Filter Context
 
 ### Example
 
@@ -1013,7 +1020,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Post Context Filters
+        # Post Filter Context
         api_response = api_instance.create_entity_filter_contexts(workspace_id, json_api_filter_context_post_optional_id_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -1022,7 +1029,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Post Context Filters
+        # Post Filter Context
         api_response = api_instance.create_entity_filter_contexts(workspace_id, json_api_filter_context_post_optional_id_document, include=include, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -1049,8 +1056,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -1153,8 +1160,125 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**201** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **create_entity_knowledge_recommendations**
+> JsonApiKnowledgeRecommendationOutDocument create_entity_knowledge_recommendations(workspace_id, json_api_knowledge_recommendation_post_optional_id_document)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import workspace_object_controller_api
+from gooddata_api_client.model.json_api_knowledge_recommendation_out_document import JsonApiKnowledgeRecommendationOutDocument
+from gooddata_api_client.model.json_api_knowledge_recommendation_post_optional_id_document import JsonApiKnowledgeRecommendationPostOptionalIdDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = workspace_object_controller_api.WorkspaceObjectControllerApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    json_api_knowledge_recommendation_post_optional_id_document = JsonApiKnowledgeRecommendationPostOptionalIdDocument(
+        data=JsonApiKnowledgeRecommendationPostOptionalId(
+            attributes=JsonApiKnowledgeRecommendationInAttributes(
+                analytical_dashboard_title="Portfolio Health Insights",
+                analyzed_period="2023-07",
+                analyzed_value=None,
+                are_relations_valid=True,
+                comparison_type="MONTH",
+                confidence=None,
+                description="description_example",
+                direction="DECREASED",
+                metric_title="Revenue",
+                recommendations={},
+                reference_period="2023-06",
+                reference_value=None,
+                source_count=2,
+                tags=[
+                    "tags_example",
+                ],
+                title="title_example",
+                widget_id="widget-123",
+                widget_name="Revenue Trend",
+            ),
+            id="id1",
+            relationships=JsonApiKnowledgeRecommendationInRelationships(
+                analytical_dashboard=JsonApiAutomationInRelationshipsAnalyticalDashboard(
+                    data=JsonApiAnalyticalDashboardToOneLinkage(None),
+                ),
+                metric=JsonApiKnowledgeRecommendationInRelationshipsMetric(
+                    data=JsonApiMetricToOneLinkage(None),
+                ),
+            ),
+            type="knowledgeRecommendation",
+        ),
+    ) # JsonApiKnowledgeRecommendationPostOptionalIdDocument | 
+    include = [
+        "metric,analyticalDashboard",
+    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    meta_include = [
+        "metaInclude=origin,all",
+    ] # [str] | Include Meta objects. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.create_entity_knowledge_recommendations(workspace_id, json_api_knowledge_recommendation_post_optional_id_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling WorkspaceObjectControllerApi->create_entity_knowledge_recommendations: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.create_entity_knowledge_recommendations(workspace_id, json_api_knowledge_recommendation_post_optional_id_document, include=include, meta_include=meta_include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling WorkspaceObjectControllerApi->create_entity_knowledge_recommendations: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **json_api_knowledge_recommendation_post_optional_id_document** | [**JsonApiKnowledgeRecommendationPostOptionalIdDocument**](JsonApiKnowledgeRecommendationPostOptionalIdDocument.md)|  |
+ **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
+
+### Return type
+
+[**JsonApiKnowledgeRecommendationOutDocument**](JsonApiKnowledgeRecommendationOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -1255,8 +1379,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -1359,8 +1483,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -1466,8 +1590,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -1566,8 +1690,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -1668,8 +1792,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -1773,8 +1897,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -1863,8 +1987,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -2328,7 +2452,7 @@ No authorization required
 # **delete_entity_filter_contexts**
 > delete_entity_filter_contexts(workspace_id, object_id)
 
-Delete a Context Filter
+Delete a Filter Context
 
 ### Example
 
@@ -2355,7 +2479,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Delete a Context Filter
+        # Delete a Filter Context
         api_instance.delete_entity_filter_contexts(workspace_id, object_id)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling WorkspaceObjectControllerApi->delete_entity_filter_contexts: %s\n" % e)
@@ -2363,7 +2487,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Delete a Context Filter
+        # Delete a Filter Context
         api_instance.delete_entity_filter_contexts(workspace_id, object_id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling WorkspaceObjectControllerApi->delete_entity_filter_contexts: %s\n" % e)
@@ -2442,6 +2566,79 @@ with gooddata_api_client.ApiClient() as api_client:
         api_instance.delete_entity_filter_views(workspace_id, object_id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling WorkspaceObjectControllerApi->delete_entity_filter_views: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | Successfully deleted |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **delete_entity_knowledge_recommendations**
+> delete_entity_knowledge_recommendations(workspace_id, object_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import workspace_object_controller_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = workspace_object_controller_api.WorkspaceObjectControllerApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+    filter = "title==someString;description==someString;metric.id==321;analyticalDashboard.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_instance.delete_entity_knowledge_recommendations(workspace_id, object_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling WorkspaceObjectControllerApi->delete_entity_knowledge_recommendations: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_instance.delete_entity_knowledge_recommendations(workspace_id, object_id, filter=filter)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling WorkspaceObjectControllerApi->delete_entity_knowledge_recommendations: %s\n" % e)
 ```
 
 
@@ -3081,7 +3278,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -3177,7 +3374,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -3273,7 +3470,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -3369,7 +3566,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -3465,7 +3662,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -3557,7 +3754,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -3653,7 +3850,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -3749,7 +3946,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -3845,7 +4042,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -3941,7 +4138,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -3955,7 +4152,7 @@ No authorization required
 # **get_all_entities_filter_contexts**
 > JsonApiFilterContextOutList get_all_entities_filter_contexts(workspace_id)
 
-Get all Context Filters
+Get all Filter Context
 
 ### Example
 
@@ -3995,7 +4192,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Get all Context Filters
+        # Get all Filter Context
         api_response = api_instance.get_all_entities_filter_contexts(workspace_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -4004,7 +4201,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Get all Context Filters
+        # Get all Filter Context
         api_response = api_instance.get_all_entities_filter_contexts(workspace_id, origin=origin, filter=filter, include=include, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -4037,7 +4234,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -4133,7 +4330,101 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_all_entities_knowledge_recommendations**
+> JsonApiKnowledgeRecommendationOutList get_all_entities_knowledge_recommendations(workspace_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import workspace_object_controller_api
+from gooddata_api_client.model.json_api_knowledge_recommendation_out_list import JsonApiKnowledgeRecommendationOutList
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = workspace_object_controller_api.WorkspaceObjectControllerApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    origin = "ALL" # str |  (optional) if omitted the server will use the default value of "ALL"
+    filter = "title==someString;description==someString;metric.id==321;analyticalDashboard.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = [
+        "metric,analyticalDashboard",
+    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
+    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
+    sort = [
+        "sort_example",
+    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+    meta_include = [
+        "metaInclude=origin,page,all",
+    ] # [str] | Include Meta objects. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.get_all_entities_knowledge_recommendations(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling WorkspaceObjectControllerApi->get_all_entities_knowledge_recommendations: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.get_all_entities_knowledge_recommendations(workspace_id, origin=origin, filter=filter, include=include, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling WorkspaceObjectControllerApi->get_all_entities_knowledge_recommendations: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **origin** | **str**|  | [optional] if omitted the server will use the default value of "ALL"
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+ **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
+ **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
+ **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
+
+### Return type
+
+[**JsonApiKnowledgeRecommendationOutList**](JsonApiKnowledgeRecommendationOutList.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -4229,7 +4520,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -4323,7 +4614,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -4419,7 +4710,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -4515,7 +4806,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -4611,7 +4902,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -4707,7 +4998,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -4803,7 +5094,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -4895,7 +5186,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -4981,7 +5272,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -5069,7 +5360,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -5157,7 +5448,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -5245,7 +5536,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -5333,7 +5624,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -5417,7 +5708,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -5505,7 +5796,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -5593,7 +5884,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -5681,7 +5972,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -5769,7 +6060,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -5783,7 +6074,7 @@ No authorization required
 # **get_entity_filter_contexts**
 > JsonApiFilterContextOutDocument get_entity_filter_contexts(workspace_id, object_id)
 
-Get a Context Filter
+Get a Filter Context
 
 ### Example
 
@@ -5818,7 +6109,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Get a Context Filter
+        # Get a Filter Context
         api_response = api_instance.get_entity_filter_contexts(workspace_id, object_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -5827,7 +6118,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Get a Context Filter
+        # Get a Filter Context
         api_response = api_instance.get_entity_filter_contexts(workspace_id, object_id, filter=filter, include=include, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -5857,7 +6148,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -5941,7 +6232,93 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_entity_knowledge_recommendations**
+> JsonApiKnowledgeRecommendationOutDocument get_entity_knowledge_recommendations(workspace_id, object_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import workspace_object_controller_api
+from gooddata_api_client.model.json_api_knowledge_recommendation_out_document import JsonApiKnowledgeRecommendationOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = workspace_object_controller_api.WorkspaceObjectControllerApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+    filter = "title==someString;description==someString;metric.id==321;analyticalDashboard.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = [
+        "metric,analyticalDashboard",
+    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+    meta_include = [
+        "metaInclude=origin,all",
+    ] # [str] | Include Meta objects. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.get_entity_knowledge_recommendations(workspace_id, object_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling WorkspaceObjectControllerApi->get_entity_knowledge_recommendations: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.get_entity_knowledge_recommendations(workspace_id, object_id, filter=filter, include=include, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling WorkspaceObjectControllerApi->get_entity_knowledge_recommendations: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+ **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
+
+### Return type
+
+[**JsonApiKnowledgeRecommendationOutDocument**](JsonApiKnowledgeRecommendationOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -6029,7 +6406,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -6115,7 +6492,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -6203,7 +6580,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -6291,7 +6668,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -6379,7 +6756,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -6467,7 +6844,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -6555,7 +6932,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -6639,7 +7016,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -6737,8 +7114,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -6836,8 +7213,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -6880,7 +7257,6 @@ with gooddata_api_client.ApiClient() as api_client:
         data=JsonApiAttributePatch(
             attributes=JsonApiAttributePatchAttributes(
                 description="description_example",
-                locale="locale_example",
                 tags=[
                     "tags_example",
                 ],
@@ -6939,8 +7315,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -7276,8 +7652,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -7366,8 +7742,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -7465,8 +7841,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -7507,7 +7883,7 @@ with gooddata_api_client.ApiClient() as api_client:
     object_id = "objectId_example" # str | 
     json_api_dataset_patch_document = JsonApiDatasetPatchDocument(
         data=JsonApiDatasetPatch(
-            attributes=JsonApiDatasetPatchAttributes(
+            attributes=JsonApiAttributePatchAttributes(
                 description="description_example",
                 tags=[
                     "tags_example",
@@ -7562,8 +7938,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -7669,8 +8045,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -7711,7 +8087,7 @@ with gooddata_api_client.ApiClient() as api_client:
     object_id = "objectId_example" # str | 
     json_api_fact_patch_document = JsonApiFactPatchDocument(
         data=JsonApiFactPatch(
-            attributes=JsonApiDatasetPatchAttributes(
+            attributes=JsonApiAttributePatchAttributes(
                 description="description_example",
                 tags=[
                     "tags_example",
@@ -7766,8 +8142,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -7781,7 +8157,7 @@ No authorization required
 # **patch_entity_filter_contexts**
 > JsonApiFilterContextOutDocument patch_entity_filter_contexts(workspace_id, object_id, json_api_filter_context_patch_document)
 
-Patch a Context Filter
+Patch a Filter Context
 
 ### Example
 
@@ -7828,7 +8204,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Patch a Context Filter
+        # Patch a Filter Context
         api_response = api_instance.patch_entity_filter_contexts(workspace_id, object_id, json_api_filter_context_patch_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -7837,7 +8213,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Patch a Context Filter
+        # Patch a Filter Context
         api_response = api_instance.patch_entity_filter_contexts(workspace_id, object_id, json_api_filter_context_patch_document, filter=filter, include=include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -7865,8 +8241,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -7973,8 +8349,125 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **patch_entity_knowledge_recommendations**
+> JsonApiKnowledgeRecommendationOutDocument patch_entity_knowledge_recommendations(workspace_id, object_id, json_api_knowledge_recommendation_patch_document)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import workspace_object_controller_api
+from gooddata_api_client.model.json_api_knowledge_recommendation_patch_document import JsonApiKnowledgeRecommendationPatchDocument
+from gooddata_api_client.model.json_api_knowledge_recommendation_out_document import JsonApiKnowledgeRecommendationOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = workspace_object_controller_api.WorkspaceObjectControllerApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+    json_api_knowledge_recommendation_patch_document = JsonApiKnowledgeRecommendationPatchDocument(
+        data=JsonApiKnowledgeRecommendationPatch(
+            attributes=JsonApiKnowledgeRecommendationPatchAttributes(
+                analytical_dashboard_title="Portfolio Health Insights",
+                analyzed_period="2023-07",
+                analyzed_value=None,
+                are_relations_valid=True,
+                comparison_type="MONTH",
+                confidence=None,
+                description="description_example",
+                direction="DECREASED",
+                metric_title="Revenue",
+                recommendations={},
+                reference_period="2023-06",
+                reference_value=None,
+                source_count=2,
+                tags=[
+                    "tags_example",
+                ],
+                title="title_example",
+                widget_id="widget-123",
+                widget_name="Revenue Trend",
+            ),
+            id="id1",
+            relationships=JsonApiKnowledgeRecommendationOutRelationships(
+                analytical_dashboard=JsonApiAutomationInRelationshipsAnalyticalDashboard(
+                    data=JsonApiAnalyticalDashboardToOneLinkage(None),
+                ),
+                metric=JsonApiKnowledgeRecommendationInRelationshipsMetric(
+                    data=JsonApiMetricToOneLinkage(None),
+                ),
+            ),
+            type="knowledgeRecommendation",
+        ),
+    ) # JsonApiKnowledgeRecommendationPatchDocument | 
+    filter = "title==someString;description==someString;metric.id==321;analyticalDashboard.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = [
+        "metric,analyticalDashboard",
+    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.patch_entity_knowledge_recommendations(workspace_id, object_id, json_api_knowledge_recommendation_patch_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling WorkspaceObjectControllerApi->patch_entity_knowledge_recommendations: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.patch_entity_knowledge_recommendations(workspace_id, object_id, json_api_knowledge_recommendation_patch_document, filter=filter, include=include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling WorkspaceObjectControllerApi->patch_entity_knowledge_recommendations: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+ **json_api_knowledge_recommendation_patch_document** | [**JsonApiKnowledgeRecommendationPatchDocument**](JsonApiKnowledgeRecommendationPatchDocument.md)|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+
+### Return type
+
+[**JsonApiKnowledgeRecommendationOutDocument**](JsonApiKnowledgeRecommendationOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -8015,19 +8508,12 @@ with gooddata_api_client.ApiClient() as api_client:
     object_id = "objectId_example" # str | 
     json_api_label_patch_document = JsonApiLabelPatchDocument(
         data=JsonApiLabelPatch(
-            attributes=JsonApiLabelPatchAttributes(
+            attributes=JsonApiAttributePatchAttributes(
                 description="description_example",
-                locale="locale_example",
                 tags=[
                     "tags_example",
                 ],
                 title="title_example",
-                translations=[
-                    JsonApiLabelOutAttributesTranslationsInner(
-                        locale="locale_example",
-                        source_column="source_column_example",
-                    ),
-                ],
             ),
             id="id1",
             type="label",
@@ -8077,8 +8563,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -8179,8 +8665,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -8283,8 +8769,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -8390,8 +8876,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -8490,8 +8976,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -8592,8 +9078,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -8697,8 +9183,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -8787,8 +9273,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -8887,7 +9373,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -8986,7 +9472,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -9085,7 +9571,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -9184,7 +9670,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -9283,7 +9769,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -9382,7 +9868,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -9481,7 +9967,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -9580,7 +10066,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -9679,7 +10165,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -9778,7 +10264,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -9877,7 +10363,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -9976,7 +10462,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -10075,7 +10561,104 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **search_entities_knowledge_recommendations**
+> JsonApiKnowledgeRecommendationOutList search_entities_knowledge_recommendations(workspace_id, entity_search_body)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import workspace_object_controller_api
+from gooddata_api_client.model.json_api_knowledge_recommendation_out_list import JsonApiKnowledgeRecommendationOutList
+from gooddata_api_client.model.entity_search_body import EntitySearchBody
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = workspace_object_controller_api.WorkspaceObjectControllerApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    entity_search_body = EntitySearchBody(
+        filter="filter_example",
+        include=[
+            "include_example",
+        ],
+        meta_include=[
+            "meta_include_example",
+        ],
+        page=EntitySearchPage(
+            index=0,
+            size=100,
+        ),
+        sort=[
+            EntitySearchSort(
+                direction="ASC",
+                _property="_property_example",
+            ),
+        ],
+    ) # EntitySearchBody | Search request body with filter, pagination, and sorting options
+    origin = "ALL" # str |  (optional) if omitted the server will use the default value of "ALL"
+    x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.search_entities_knowledge_recommendations(workspace_id, entity_search_body)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling WorkspaceObjectControllerApi->search_entities_knowledge_recommendations: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.search_entities_knowledge_recommendations(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling WorkspaceObjectControllerApi->search_entities_knowledge_recommendations: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **entity_search_body** | [**EntitySearchBody**](EntitySearchBody.md)| Search request body with filter, pagination, and sorting options |
+ **origin** | **str**|  | [optional] if omitted the server will use the default value of "ALL"
+ **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+
+### Return type
+
+[**JsonApiKnowledgeRecommendationOutList**](JsonApiKnowledgeRecommendationOutList.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -10174,7 +10757,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -10273,7 +10856,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -10372,7 +10955,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -10471,7 +11054,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -10570,7 +11153,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -10669,7 +11252,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -10768,7 +11351,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -10865,7 +11448,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -10963,8 +11546,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -11062,8 +11645,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -11399,8 +11982,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -11489,8 +12072,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -11588,8 +12171,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -11695,8 +12278,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -11710,7 +12293,7 @@ No authorization required
 # **update_entity_filter_contexts**
 > JsonApiFilterContextOutDocument update_entity_filter_contexts(workspace_id, object_id, json_api_filter_context_in_document)
 
-Put a Context Filter
+Put a Filter Context
 
 ### Example
 
@@ -11757,7 +12340,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Put a Context Filter
+        # Put a Filter Context
         api_response = api_instance.update_entity_filter_contexts(workspace_id, object_id, json_api_filter_context_in_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -11766,7 +12349,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Put a Context Filter
+        # Put a Filter Context
         api_response = api_instance.update_entity_filter_contexts(workspace_id, object_id, json_api_filter_context_in_document, filter=filter, include=include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -11794,8 +12377,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -11902,8 +12485,125 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **update_entity_knowledge_recommendations**
+> JsonApiKnowledgeRecommendationOutDocument update_entity_knowledge_recommendations(workspace_id, object_id, json_api_knowledge_recommendation_in_document)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import workspace_object_controller_api
+from gooddata_api_client.model.json_api_knowledge_recommendation_out_document import JsonApiKnowledgeRecommendationOutDocument
+from gooddata_api_client.model.json_api_knowledge_recommendation_in_document import JsonApiKnowledgeRecommendationInDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = workspace_object_controller_api.WorkspaceObjectControllerApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+    json_api_knowledge_recommendation_in_document = JsonApiKnowledgeRecommendationInDocument(
+        data=JsonApiKnowledgeRecommendationIn(
+            attributes=JsonApiKnowledgeRecommendationInAttributes(
+                analytical_dashboard_title="Portfolio Health Insights",
+                analyzed_period="2023-07",
+                analyzed_value=None,
+                are_relations_valid=True,
+                comparison_type="MONTH",
+                confidence=None,
+                description="description_example",
+                direction="DECREASED",
+                metric_title="Revenue",
+                recommendations={},
+                reference_period="2023-06",
+                reference_value=None,
+                source_count=2,
+                tags=[
+                    "tags_example",
+                ],
+                title="title_example",
+                widget_id="widget-123",
+                widget_name="Revenue Trend",
+            ),
+            id="id1",
+            relationships=JsonApiKnowledgeRecommendationInRelationships(
+                analytical_dashboard=JsonApiAutomationInRelationshipsAnalyticalDashboard(
+                    data=JsonApiAnalyticalDashboardToOneLinkage(None),
+                ),
+                metric=JsonApiKnowledgeRecommendationInRelationshipsMetric(
+                    data=JsonApiMetricToOneLinkage(None),
+                ),
+            ),
+            type="knowledgeRecommendation",
+        ),
+    ) # JsonApiKnowledgeRecommendationInDocument | 
+    filter = "title==someString;description==someString;metric.id==321;analyticalDashboard.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = [
+        "metric,analyticalDashboard",
+    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.update_entity_knowledge_recommendations(workspace_id, object_id, json_api_knowledge_recommendation_in_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling WorkspaceObjectControllerApi->update_entity_knowledge_recommendations: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.update_entity_knowledge_recommendations(workspace_id, object_id, json_api_knowledge_recommendation_in_document, filter=filter, include=include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling WorkspaceObjectControllerApi->update_entity_knowledge_recommendations: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+ **json_api_knowledge_recommendation_in_document** | [**JsonApiKnowledgeRecommendationInDocument**](JsonApiKnowledgeRecommendationInDocument.md)|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+
+### Return type
+
+[**JsonApiKnowledgeRecommendationOutDocument**](JsonApiKnowledgeRecommendationOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -12004,8 +12704,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -12108,8 +12808,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -12215,8 +12915,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -12315,8 +13015,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -12417,8 +13117,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -12522,8 +13222,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -12612,8 +13312,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details

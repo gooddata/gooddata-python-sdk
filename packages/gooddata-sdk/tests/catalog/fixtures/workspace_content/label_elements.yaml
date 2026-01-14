@@ -1,4 +1,4 @@
-# (C) 2025 GoodData Corporation
+# (C) 2026 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -67,7 +67,7 @@ interactions:
             count: 2
             offset: 0
             next: null
-          cacheId: 2662c7c21d55e9fc72c97f14a2288c22
+          cacheId: d4ea27664a5cde4b91a74142b14800ee
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
@@ -128,7 +128,7 @@ interactions:
             count: 1
             offset: 0
             next: null
-          cacheId: 67199a5a8e5ca652c567d3553f1501f2
+          cacheId: 751aed4970d46630b112e385e6e2d5aa
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
@@ -191,7 +191,7 @@ interactions:
             count: 3
             offset: 0
             next: null
-          cacheId: 4551bb866c5c474d7bb6919961008747
+          cacheId: 8eaf8cf0f6d0e58b9bce591b60185b06
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
@@ -256,7 +256,7 @@ interactions:
             count: 0
             offset: 0
             next: null
-          cacheId: 18e6a5488b910a563a35f1d50a5997d2
+          cacheId: 71f54bf630c0ba35ff91e79a3f5325bc
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
@@ -322,7 +322,7 @@ interactions:
             count: 0
             offset: 0
             next: null
-          cacheId: b4cba03fdf12393066b9ef4f108504e8
+          cacheId: ac66e26e9a952b6c33378de994961843
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
@@ -388,7 +388,7 @@ interactions:
             count: 2
             offset: 0
             next: null
-          cacheId: 2662c7c21d55e9fc72c97f14a2288c22
+          cacheId: d4ea27664a5cde4b91a74142b14800ee
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
@@ -448,7 +448,7 @@ interactions:
             count: 1
             offset: 0
             next: null
-          cacheId: 2a6c367d9b29273c81739b9c0b1af804
+          cacheId: adf3c685b95a2d1f77a71b834d790691
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
@@ -511,7 +511,7 @@ interactions:
             count: 2
             offset: 0
             next: null
-          cacheId: 9e3e24378b965fcce791f16973dd6b21
+          cacheId: ff534925893bd619267098c82c7162b8
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
@@ -575,7 +575,7 @@ interactions:
             count: 3
             offset: 0
             next: null
-          cacheId: 4e1c17392cb640a728efa5fafdcf0233
+          cacheId: aaa25310763de300ac9efb2ed1679b76
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements?offset=1&limit=1
@@ -634,4 +634,4 @@ interactions:
             count: 1
             offset: 1
             next: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements?limit=1&offset=2
-          cacheId: 4551bb866c5c474d7bb6919961008747
+          cacheId: 8eaf8cf0f6d0e58b9bce591b60185b06

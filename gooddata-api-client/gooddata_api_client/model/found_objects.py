@@ -114,7 +114,7 @@ class FoundObjects(ModelNormal):
 
         Args:
             objects ([SearchResultObject]): List of objects found with a similarity search.
-            reasoning (str): Reasoning from LLM. Description of how and why the answer was generated.
+            reasoning (str): DEPRECATED: Use top-level reasoning.steps instead. Reasoning from LLM. Description of how and why the answer was generated.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -205,7 +205,7 @@ class FoundObjects(ModelNormal):
 
         Args:
             objects ([SearchResultObject]): List of objects found with a similarity search.
-            reasoning (str): Reasoning from LLM. Description of how and why the answer was generated.
+            reasoning (str): DEPRECATED: Use top-level reasoning.steps instead. Reasoning from LLM. Description of how and why the answer was generated.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types

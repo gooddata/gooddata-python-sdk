@@ -45,6 +45,7 @@ with gooddata_api_client.ApiClient() as api_client:
     json_api_data_source_in_document = JsonApiDataSourceInDocument(
         data=JsonApiDataSourceIn(
             attributes=JsonApiDataSourceInAttributes(
+                alternative_data_source_id="pg_local_docker-demo2",
                 cache_strategy="ALWAYS",
                 client_id="client_id_example",
                 client_secret="client_secret_example",
@@ -108,8 +109,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -262,7 +263,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -342,7 +343,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -422,7 +423,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -504,7 +505,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -547,6 +548,7 @@ with gooddata_api_client.ApiClient() as api_client:
     json_api_data_source_patch_document = JsonApiDataSourcePatchDocument(
         data=JsonApiDataSourcePatch(
             attributes=JsonApiDataSourcePatchAttributes(
+                alternative_data_source_id="pg_local_docker-demo2",
                 cache_strategy="ALWAYS",
                 client_id="client_id_example",
                 client_secret="client_secret_example",
@@ -609,8 +611,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -653,6 +655,7 @@ with gooddata_api_client.ApiClient() as api_client:
     json_api_data_source_in_document = JsonApiDataSourceInDocument(
         data=JsonApiDataSourceIn(
             attributes=JsonApiDataSourceInAttributes(
+                alternative_data_source_id="pg_local_docker-demo2",
                 cache_strategy="ALWAYS",
                 client_id="client_id_example",
                 client_secret="client_secret_example",
@@ -715,8 +718,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details

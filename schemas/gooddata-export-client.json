@@ -87,6 +87,9 @@
             "$ref": "#/components/schemas/RangeMeasureValueFilter"
           },
           {
+            "$ref": "#/components/schemas/CompoundMeasureValueFilter"
+          },
+          {
             "$ref": "#/components/schemas/RankingFilter"
           }
         ],
@@ -490,6 +493,40 @@
         ],
         "type": "object"
       },
+      "ComparisonCondition": {
+        "description": "Condition that compares the metric value to a given constant value using a comparison operator.",
+        "properties": {
+          "comparison": {
+            "properties": {
+              "operator": {
+                "enum": [
+                  "GREATER_THAN",
+                  "GREATER_THAN_OR_EQUAL_TO",
+                  "LESS_THAN",
+                  "LESS_THAN_OR_EQUAL_TO",
+                  "EQUAL_TO",
+                  "NOT_EQUAL_TO"
+                ],
+                "example": "GREATER_THAN",
+                "type": "string"
+              },
+              "value": {
+                "example": 100,
+                "type": "number"
+              }
+            },
+            "required": [
+              "operator",
+              "value"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "comparison"
+        ],
+        "type": "object"
+      },
       "ComparisonMeasureValueFilter": {
         "description": "Filter the result by comparing specified metric to given constant value, using given comparison operator.",
         "properties": {
@@ -543,6 +580,52 @@
         },
         "required": [
           "comparisonMeasureValueFilter"
+        ],
+        "type": "object"
+      },
+      "CompoundMeasureValueFilter": {
+        "description": "Filter the result by applying multiple comparison and/or range conditions combined with OR logic. If conditions list is empty, no filtering is applied (all rows are returned).",
+        "properties": {
+          "compoundMeasureValueFilter": {
+            "properties": {
+              "applyOnResult": {
+                "type": "boolean"
+              },
+              "conditions": {
+                "description": "List of conditions to apply. Conditions are combined with OR logic. Each condition can be either a comparison (e.g., > 100) or a range (e.g., BETWEEN 10 AND 50). If empty, no filtering is applied and all rows are returned.",
+                "items": {
+                  "$ref": "#/components/schemas/MeasureValueCondition"
+                },
+                "type": "array"
+              },
+              "dimensionality": {
+                "description": "References to the attributes to be used when filtering.",
+                "items": {
+                  "$ref": "#/components/schemas/AfmIdentifier"
+                },
+                "type": "array"
+              },
+              "localIdentifier": {
+                "type": "string"
+              },
+              "measure": {
+                "$ref": "#/components/schemas/AfmIdentifier"
+              },
+              "treatNullValuesAs": {
+                "description": "A value that will be substituted for null values in the metric for the comparisons.",
+                "example": 0,
+                "type": "number"
+              }
+            },
+            "required": [
+              "conditions",
+              "measure"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "compoundMeasureValueFilter"
         ],
         "type": "object"
       },
@@ -915,6 +998,9 @@
             "$ref": "#/components/schemas/RangeMeasureValueFilter"
           },
           {
+            "$ref": "#/components/schemas/CompoundMeasureValueFilter"
+          },
+          {
             "$ref": "#/components/schemas/AbsoluteDateFilter"
           },
           {
@@ -964,6 +1050,7 @@
                   "automation",
                   "automationResult",
                   "memoryItem",
+                  "knowledgeRecommendation",
                   "prompt",
                   "visualizationObject",
                   "filterContext",
@@ -1122,6 +1209,18 @@
         ],
         "type": "object"
       },
+      "MeasureValueCondition": {
+        "description": "A condition for filtering by measure value. Can be either a comparison or a range condition.",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/ComparisonCondition"
+          },
+          {
+            "$ref": "#/components/schemas/RangeCondition"
+          }
+        ],
+        "type": "object"
+      },
       "MeasureValueFilter": {
         "description": "Abstract filter definition type filtering by the value of the metric.",
         "oneOf": [
@@ -1130,6 +1229,9 @@
           },
           {
             "$ref": "#/components/schemas/RangeMeasureValueFilter"
+          },
+          {
+            "$ref": "#/components/schemas/CompoundMeasureValueFilter"
           }
         ],
         "type": "object"
@@ -1360,6 +1462,41 @@
         },
         "required": [
           "positiveAttributeFilter"
+        ],
+        "type": "object"
+      },
+      "RangeCondition": {
+        "description": "Condition that checks if the metric value is within a given range.",
+        "properties": {
+          "range": {
+            "properties": {
+              "from": {
+                "example": 100,
+                "type": "number"
+              },
+              "operator": {
+                "enum": [
+                  "BETWEEN",
+                  "NOT_BETWEEN"
+                ],
+                "example": "BETWEEN",
+                "type": "string"
+              },
+              "to": {
+                "example": 999,
+                "type": "number"
+              }
+            },
+            "required": [
+              "from",
+              "operator",
+              "to"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "range"
         ],
         "type": "object"
       },

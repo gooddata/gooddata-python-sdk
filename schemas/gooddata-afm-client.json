@@ -87,6 +87,9 @@
             "$ref": "#/components/schemas/RangeMeasureValueFilter"
           },
           {
+            "$ref": "#/components/schemas/CompoundMeasureValueFilter"
+          },
+          {
             "$ref": "#/components/schemas/RankingFilter"
           }
         ],
@@ -943,6 +946,14 @@
           "dateAttribute": {
             "$ref": "#/components/schemas/AttributeItem"
           },
+          "excludeTags": {
+            "description": "Exclude attributes with any of these tags. This filter applies to both auto-discovered and explicitly provided attributes.",
+            "items": {
+              "description": "Exclude attributes with any of these tags. This filter applies to both auto-discovered and explicitly provided attributes.",
+              "type": "string"
+            },
+            "type": "array"
+          },
           "filters": {
             "description": "Optional filters to apply.",
             "items": {
@@ -957,6 +968,14 @@
                   "$ref": "#/components/schemas/InlineFilterDefinition"
                 }
               ]
+            },
+            "type": "array"
+          },
+          "includeTags": {
+            "description": "Only include attributes with at least one of these tags. If empty, no inclusion filter is applied. This filter applies to both auto-discovered and explicitly provided attributes.",
+            "items": {
+              "description": "Only include attributes with at least one of these tags. If empty, no inclusion filter is applied. This filter applies to both auto-discovered and explicitly provided attributes.",
+              "type": "string"
             },
             "type": "array"
           },
@@ -1038,8 +1057,14 @@
             "maxLength": 2000,
             "type": "string"
           },
+          "reasoning": {
+            "$ref": "#/components/schemas/Reasoning"
+          },
           "routing": {
             "$ref": "#/components/schemas/RouteResult"
+          },
+          "semanticSearch": {
+            "$ref": "#/components/schemas/SearchResult"
           },
           "textResponse": {
             "description": "Text response for general questions.",
@@ -1231,8 +1256,14 @@
           "foundObjects": {
             "$ref": "#/components/schemas/FoundObjects"
           },
+          "reasoning": {
+            "$ref": "#/components/schemas/Reasoning"
+          },
           "routing": {
             "$ref": "#/components/schemas/RouteResult"
+          },
+          "semanticSearch": {
+            "$ref": "#/components/schemas/SearchResult"
           },
           "textResponse": {
             "description": "Text response for general questions.",
@@ -1345,6 +1376,40 @@
         ],
         "type": "object"
       },
+      "ComparisonCondition": {
+        "description": "Condition that compares the metric value to a given constant value using a comparison operator.",
+        "properties": {
+          "comparison": {
+            "properties": {
+              "operator": {
+                "enum": [
+                  "GREATER_THAN",
+                  "GREATER_THAN_OR_EQUAL_TO",
+                  "LESS_THAN",
+                  "LESS_THAN_OR_EQUAL_TO",
+                  "EQUAL_TO",
+                  "NOT_EQUAL_TO"
+                ],
+                "example": "GREATER_THAN",
+                "type": "string"
+              },
+              "value": {
+                "example": 100,
+                "type": "number"
+              }
+            },
+            "required": [
+              "operator",
+              "value"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "comparison"
+        ],
+        "type": "object"
+      },
       "ComparisonMeasureValueFilter": {
         "description": "Filter the result by comparing specified metric to given constant value, using given comparison operator.",
         "properties": {
@@ -1398,6 +1463,52 @@
         },
         "required": [
           "comparisonMeasureValueFilter"
+        ],
+        "type": "object"
+      },
+      "CompoundMeasureValueFilter": {
+        "description": "Filter the result by applying multiple comparison and/or range conditions combined with OR logic. If conditions list is empty, no filtering is applied (all rows are returned).",
+        "properties": {
+          "compoundMeasureValueFilter": {
+            "properties": {
+              "applyOnResult": {
+                "type": "boolean"
+              },
+              "conditions": {
+                "description": "List of conditions to apply. Conditions are combined with OR logic. Each condition can be either a comparison (e.g., > 100) or a range (e.g., BETWEEN 10 AND 50). If empty, no filtering is applied and all rows are returned.",
+                "items": {
+                  "$ref": "#/components/schemas/MeasureValueCondition"
+                },
+                "type": "array"
+              },
+              "dimensionality": {
+                "description": "References to the attributes to be used when filtering.",
+                "items": {
+                  "$ref": "#/components/schemas/AfmIdentifier"
+                },
+                "type": "array"
+              },
+              "localIdentifier": {
+                "type": "string"
+              },
+              "measure": {
+                "$ref": "#/components/schemas/AfmIdentifier"
+              },
+              "treatNullValuesAs": {
+                "description": "A value that will be substituted for null values in the metric for the comparisons.",
+                "example": 0,
+                "type": "number"
+              }
+            },
+            "required": [
+              "conditions",
+              "measure"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "compoundMeasureValueFilter"
         ],
         "type": "object"
       },
@@ -1498,7 +1609,7 @@
             "type": "array"
           },
           "reasoning": {
-            "description": "Reasoning from LLM. Description of how and why the answer was generated.",
+            "description": "DEPRECATED: Use top-level reasoning.steps instead. Reasoning from LLM. Description of how and why the answer was generated.",
             "type": "string"
           },
           "suggestions": {
@@ -2230,6 +2341,9 @@
             "$ref": "#/components/schemas/RangeMeasureValueFilter"
           },
           {
+            "$ref": "#/components/schemas/CompoundMeasureValueFilter"
+          },
+          {
             "$ref": "#/components/schemas/AbsoluteDateFilter"
           },
           {
@@ -2341,7 +2455,7 @@
             "type": "array"
           },
           "reasoning": {
-            "description": "Reasoning from LLM. Description of how and why the answer was generated.",
+            "description": "DEPRECATED: Use top-level reasoning.steps instead. Reasoning from LLM. Description of how and why the answer was generated.",
             "type": "string"
           }
         },
@@ -2355,7 +2469,7 @@
         "description": "Configuration specific to geo area labels.",
         "properties": {
           "collection": {
-            "$ref": "#/components/schemas/GeoCollection"
+            "$ref": "#/components/schemas/GeoCollectionIdentifier"
           }
         },
         "required": [
@@ -2363,11 +2477,20 @@
         ],
         "type": "object"
       },
-      "GeoCollection": {
+      "GeoCollectionIdentifier": {
         "properties": {
           "id": {
             "description": "Geo collection identifier.",
             "maxLength": 255,
+            "type": "string"
+          },
+          "kind": {
+            "default": "STATIC",
+            "description": "Type of geo collection.",
+            "enum": [
+              "STATIC",
+              "CUSTOM"
+            ],
             "type": "string"
           }
         },
@@ -2684,6 +2807,18 @@
         ],
         "type": "object"
       },
+      "MeasureValueCondition": {
+        "description": "A condition for filtering by measure value. Can be either a comparison or a range condition.",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/ComparisonCondition"
+          },
+          {
+            "$ref": "#/components/schemas/RangeCondition"
+          }
+        ],
+        "type": "object"
+      },
       "MeasureValueFilter": {
         "description": "Abstract filter definition type filtering by the value of the metric.",
         "oneOf": [
@@ -2692,6 +2827,9 @@
           },
           {
             "$ref": "#/components/schemas/RangeMeasureValueFilter"
+          },
+          {
+            "$ref": "#/components/schemas/CompoundMeasureValueFilter"
           }
         ],
         "type": "object"
@@ -2879,6 +3017,120 @@
         },
         "required": [
           "negativeAttributeFilter"
+        ],
+        "type": "object"
+      },
+      "OutlierDetectionRequest": {
+        "properties": {
+          "attributes": {
+            "description": "Attributes to be used in the computation.",
+            "items": {
+              "$ref": "#/components/schemas/AttributeItem"
+            },
+            "type": "array"
+          },
+          "auxMeasures": {
+            "description": "Metrics to be referenced from other AFM objects (e.g. filters) but not included in the result.",
+            "items": {
+              "$ref": "#/components/schemas/MeasureItem"
+            },
+            "type": "array"
+          },
+          "filters": {
+            "description": "Various filter types to filter the execution result.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/AbstractMeasureValueFilter"
+                },
+                {
+                  "$ref": "#/components/schemas/FilterDefinitionForSimpleMeasure"
+                },
+                {
+                  "$ref": "#/components/schemas/InlineFilterDefinition"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "granularity": {
+            "description": "Date granularity for anomaly detection. Only time-based granularities are supported (HOUR, DAY, WEEK, MONTH, QUARTER, YEAR).",
+            "enum": [
+              "HOUR",
+              "DAY",
+              "WEEK",
+              "MONTH",
+              "QUARTER",
+              "YEAR"
+            ],
+            "type": "string"
+          },
+          "measures": {
+            "items": {
+              "$ref": "#/components/schemas/MeasureItem"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "sensitivity": {
+            "description": "Sensitivity level for outlier detection",
+            "enum": [
+              "LOW",
+              "MEDIUM",
+              "HIGH"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "filters",
+          "granularity",
+          "measures",
+          "sensitivity"
+        ],
+        "type": "object"
+      },
+      "OutlierDetectionResponse": {
+        "properties": {
+          "links": {
+            "$ref": "#/components/schemas/ExecutionLinks"
+          }
+        },
+        "required": [
+          "links"
+        ],
+        "type": "object"
+      },
+      "OutlierDetectionResult": {
+        "properties": {
+          "attribute": {
+            "description": "Attribute values for outlier detection results.",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true,
+            "type": "array"
+          },
+          "values": {
+            "additionalProperties": {
+              "description": "Map of measure identifiers to their outlier detection values. Each value is a list of nullable numbers.",
+              "items": {
+                "description": "Map of measure identifiers to their outlier detection values. Each value is a list of nullable numbers.",
+                "nullable": true,
+                "type": "number"
+              },
+              "nullable": true,
+              "type": "array"
+            },
+            "description": "Map of measure identifiers to their outlier detection values. Each value is a list of nullable numbers.",
+            "nullable": true,
+            "type": "object"
+          }
+        },
+        "required": [
+          "attribute",
+          "values"
         ],
         "type": "object"
       },
@@ -3158,6 +3410,41 @@
         ],
         "type": "object"
       },
+      "RangeCondition": {
+        "description": "Condition that checks if the metric value is within a given range.",
+        "properties": {
+          "range": {
+            "properties": {
+              "from": {
+                "example": 100,
+                "type": "number"
+              },
+              "operator": {
+                "enum": [
+                  "BETWEEN",
+                  "NOT_BETWEEN"
+                ],
+                "example": "BETWEEN",
+                "type": "string"
+              },
+              "to": {
+                "example": 999,
+                "type": "number"
+              }
+            },
+            "required": [
+              "from",
+              "operator",
+              "to"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "range"
+        ],
+        "type": "object"
+      },
       "RangeMeasureValueFilter": {
         "description": "Filter the result by comparing specified metric to given range of values.",
         "properties": {
@@ -3265,6 +3552,47 @@
         },
         "required": [
           "rankingFilter"
+        ],
+        "type": "object"
+      },
+      "Reasoning": {
+        "description": "Reasoning wrapper containing steps taken during request handling.",
+        "properties": {
+          "answer": {
+            "description": "Final answer/reasoning from the use case result.",
+            "type": "string"
+          },
+          "steps": {
+            "description": "Steps taken during processing, showing the AI's reasoning process.",
+            "items": {
+              "$ref": "#/components/schemas/ReasoningStep"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "steps"
+        ],
+        "type": "object"
+      },
+      "ReasoningStep": {
+        "description": "Steps taken during processing, showing the AI's reasoning process.",
+        "properties": {
+          "thoughts": {
+            "description": "Detailed thoughts/messages within this step.",
+            "items": {
+              "$ref": "#/components/schemas/Thought"
+            },
+            "type": "array"
+          },
+          "title": {
+            "description": "Title describing this reasoning step.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "thoughts",
+          "title"
         ],
         "type": "object"
       },
@@ -3621,7 +3949,7 @@
       "SearchResult": {
         "properties": {
           "reasoning": {
-            "description": "If something is not working properly this field will contain explanation.",
+            "description": "DEPRECATED: Use top-level reasoning.steps instead. If something is not working properly this field will contain explanation.",
             "type": "string"
           },
           "relationships": {
@@ -3913,6 +4241,19 @@
         "required": [
           "label",
           "query"
+        ],
+        "type": "object"
+      },
+      "Thought": {
+        "description": "Detailed thoughts/messages within this step.",
+        "properties": {
+          "text": {
+            "description": "The text content of this thought.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
         ],
         "type": "object"
       },
@@ -4725,6 +5066,7 @@
         },
         "summary": "Applies all the given cancel tokens.",
         "tags": [
+          "Computation",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -5446,6 +5788,124 @@
           }
         },
         "summary": "(EXPERIMENTAL) Get key driver analysis result",
+        "tags": [
+          "Computation",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/detectOutliers": {
+      "post": {
+        "description": "(BETA) Computes outlier detection for the provided execution definition.",
+        "operationId": "outlierDetection",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Ignore all caches during execution of current request.",
+            "in": "header",
+            "name": "skip-cache",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OutlierDetectionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OutlierDetectionResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "(BETA) Outlier Detection",
+        "tags": [
+          "Computation",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/detectOutliers/result/{resultId}": {
+      "get": {
+        "description": "(BETA) Gets outlier detection result.",
+        "operationId": "outlierDetectionResult",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Result ID",
+            "example": "a9b28f9dc55f37ea9f4a5fb0c76895923591e781",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OutlierDetectionResult"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "(BETA) Outlier Detection Result",
         "tags": [
           "Computation",
           "actions"

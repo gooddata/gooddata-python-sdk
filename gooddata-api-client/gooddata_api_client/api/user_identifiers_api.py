@@ -111,6 +111,7 @@ class UserIdentifiersApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -172,6 +173,7 @@ class UserIdentifiersApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],

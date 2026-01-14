@@ -802,11 +802,11 @@ class Endpoint(object):
         """ This method is invoked when endpoints are called
         Example:
 
-        api_instance = AIApi()
-        api_instance.metadata_sync  # this is an instance of the class Endpoint
-        api_instance.metadata_sync()  # this invokes api_instance.metadata_sync.__call__()
+        api_instance = AACAnalyticsModelApi()
+        api_instance.get_analytics_model_aac  # this is an instance of the class Endpoint
+        api_instance.get_analytics_model_aac()  # this invokes api_instance.get_analytics_model_aac.__call__()
         which then invokes the callable functions stored in that endpoint at
-        api_instance.metadata_sync.callable or self.callable in this class
+        api_instance.get_analytics_model_aac.callable or self.callable in this class
 
         """
         return self.callable(self, *args, **kwargs)

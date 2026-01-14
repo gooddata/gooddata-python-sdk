@@ -6,6 +6,7 @@ Complete definition of an organization in a declarative form.
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **organization** | [**DeclarativeOrganizationInfo**](DeclarativeOrganizationInfo.md) |  | 
+**custom_geo_collections** | [**[DeclarativeCustomGeoCollection]**](DeclarativeCustomGeoCollection.md) |  | [optional] 
 **data_sources** | [**[DeclarativeDataSource]**](DeclarativeDataSource.md) |  | [optional] 
 **export_templates** | [**[DeclarativeExportTemplate]**](DeclarativeExportTemplate.md) |  | [optional] 
 **identity_providers** | [**[DeclarativeIdentityProvider]**](DeclarativeIdentityProvider.md) |  | [optional] 

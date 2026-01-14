@@ -121,7 +121,9 @@ class JsonApiLabelOutAttributes(ModelNormal):
             'description': (str,),  # noqa: E501
             'geo_area_config': (JsonApiLabelOutAttributesGeoAreaConfig,),  # noqa: E501
             'is_hidden': (bool,),  # noqa: E501
+            'is_nullable': (bool,),  # noqa: E501
             'locale': (str,),  # noqa: E501
+            'null_value': (str,),  # noqa: E501
             'primary': (bool,),  # noqa: E501
             'source_column': (str,),  # noqa: E501
             'source_column_data_type': (str,),  # noqa: E501
@@ -141,7 +143,9 @@ class JsonApiLabelOutAttributes(ModelNormal):
         'description': 'description',  # noqa: E501
         'geo_area_config': 'geoAreaConfig',  # noqa: E501
         'is_hidden': 'isHidden',  # noqa: E501
+        'is_nullable': 'isNullable',  # noqa: E501
         'locale': 'locale',  # noqa: E501
+        'null_value': 'nullValue',  # noqa: E501
         'primary': 'primary',  # noqa: E501
         'source_column': 'sourceColumn',  # noqa: E501
         'source_column_data_type': 'sourceColumnDataType',  # noqa: E501
@@ -196,7 +200,9 @@ class JsonApiLabelOutAttributes(ModelNormal):
             description (str): [optional]  # noqa: E501
             geo_area_config (JsonApiLabelOutAttributesGeoAreaConfig): [optional]  # noqa: E501
             is_hidden (bool): [optional]  # noqa: E501
+            is_nullable (bool): [optional]  # noqa: E501
             locale (str): [optional]  # noqa: E501
+            null_value (str): [optional]  # noqa: E501
             primary (bool): [optional]  # noqa: E501
             source_column (str): [optional]  # noqa: E501
             source_column_data_type (str): [optional]  # noqa: E501
@@ -293,7 +299,9 @@ class JsonApiLabelOutAttributes(ModelNormal):
             description (str): [optional]  # noqa: E501
             geo_area_config (JsonApiLabelOutAttributesGeoAreaConfig): [optional]  # noqa: E501
             is_hidden (bool): [optional]  # noqa: E501
+            is_nullable (bool): [optional]  # noqa: E501
             locale (str): [optional]  # noqa: E501
+            null_value (str): [optional]  # noqa: E501
             primary (bool): [optional]  # noqa: E501
             source_column (str): [optional]  # noqa: E501
             source_column_data_type (str): [optional]  # noqa: E501

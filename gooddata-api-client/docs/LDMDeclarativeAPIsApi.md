@@ -137,6 +137,8 @@ with gooddata_api_client.ApiClient() as api_client:
                         DeclarativeAggregatedFact(
                             description="A number of orders created by the customer - including all orders, even the non-delivered ones.",
                             id="fact.customer_order_count",
+                            is_nullable=False,
+                            null_value="0",
                             source_column="customer_order_count",
                             source_column_data_type="NUMERIC",
                             source_fact_reference=DeclarativeSourceFactReference(
@@ -158,17 +160,21 @@ with gooddata_api_client.ApiClient() as api_client:
                             description="Customer name including first and last name.",
                             id="attr.customers.customer_name",
                             is_hidden=False,
+                            is_nullable=False,
                             labels=[
                                 DeclarativeLabel(
                                     description="Customer name",
                                     geo_area_config=GeoAreaConfig(
-                                        collection=GeoCollection(
+                                        collection=GeoCollectionIdentifier(
                                             id="id_example",
+                                            kind="STATIC",
                                         ),
                                     ),
                                     id="label.customer_name",
                                     is_hidden=False,
+                                    is_nullable=False,
                                     locale="en-US",
+                                    null_value="empty_value",
                                     source_column="customer_name",
                                     source_column_data_type="STRING",
                                     tags=["Customers"],
@@ -183,6 +189,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                 ),
                             ],
                             locale="en-US",
+                            null_value="empty_value",
                             sort_column="customer_name",
                             sort_direction="ASC" | "DESC",
                             source_column="customer_name",
@@ -203,6 +210,8 @@ with gooddata_api_client.ApiClient() as api_client:
                             description="A number of orders created by the customer - including all orders, even the non-delivered ones.",
                             id="fact.customer_order_count",
                             is_hidden=False,
+                            is_nullable=False,
+                            null_value="0",
                             source_column="customer_order_count",
                             source_column_data_type="NUMERIC",
                             tags=["Customers"],
@@ -232,6 +241,8 @@ with gooddata_api_client.ApiClient() as api_client:
                                 DeclarativeReferenceSource(
                                     column="customer_id",
                                     data_type="STRING",
+                                    is_nullable=False,
+                                    null_value="empty_value",
                                     target=GrainIdentifier(
                                         id="attr.customers.customer_name",
                                         type="ATTRIBUTE",

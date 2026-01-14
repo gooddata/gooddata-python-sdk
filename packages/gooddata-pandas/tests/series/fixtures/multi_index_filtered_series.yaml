@@ -1,4 +1,4 @@
-# (C) 2025 GoodData Corporation
+# (C) 2026 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -83,7 +83,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-Gdc-Cancel-Token:
-          - 7e97a8f6-c9ef-4b5b-bd3c-3ced040798e2
+          - 287a2f77-c271-44c0-998a-0576b177daae
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - '0'
@@ -128,14 +128,14 @@ interactions:
                       valueType: TEXT
                 localIdentifier: dim_1
             links:
-              executionResult: 1f11d10ab4e1c177cf39aca767b33502c0b1f71e:2b1d07dad8ae5b1afb8cfad5e679e8dc6a7f3f34eaa758827e8b673887bdd792
+              executionResult: c505828ae66a66dd4cde16b8f94f73ca92b49886:c00b34233f84ec86b211b0f9dbfd9796e10cf21577b3d675181ae772f190883c
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3Din%3D%28region%2Cproducts.category%29&page=0&size=500
       body: null
       headers:
         Accept:
-          - application/vnd.gooddata.api+json
+          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
@@ -152,7 +152,7 @@ interactions:
         Content-Length:
           - '2689'
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         DATE: *id001
         Expires:
           - '0'
@@ -288,7 +288,7 @@ interactions:
             next: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3Din%3D%28%27region%27%2C%27products.category%27%29&page=1&size=500
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/1f11d10ab4e1c177cf39aca767b33502c0b1f71e%3A2b1d07dad8ae5b1afb8cfad5e679e8dc6a7f3f34eaa758827e8b673887bdd792?offset=0%2C0&limit=1%2C1000
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/c505828ae66a66dd4cde16b8f94f73ca92b49886%3Ac00b34233f84ec86b211b0f9dbfd9796e10cf21577b3d675181ae772f190883c?offset=0%2C0&limit=1%2C1000
       body: null
       headers:
         Accept:

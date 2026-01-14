@@ -93,9 +93,11 @@ class UsersEntityAPIsApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -246,6 +248,7 @@ class UsersEntityAPIsApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -319,6 +322,7 @@ class UsersEntityAPIsApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -397,9 +401,11 @@ class UsersEntityAPIsApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -477,9 +483,11 @@ class UsersEntityAPIsApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },

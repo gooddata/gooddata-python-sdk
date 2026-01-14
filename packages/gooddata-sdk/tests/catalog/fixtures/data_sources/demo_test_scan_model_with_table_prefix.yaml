@@ -1,4 +1,4 @@
-# (C) 2025 GoodData Corporation
+# (C) 2026 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -28,7 +28,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '922'
+          - '1121'
         Content-Type:
           - application/json
         DATE: &id001
@@ -54,39 +54,50 @@ interactions:
             tables:
               - columns:
                   - dataType: INT
+                    isNullable: true
                     isPrimaryKey: false
                     name: campaign_id
                     referencedTableColumn: campaign_id
                   - dataType: INT
+                    isNullable: true
                     isPrimaryKey: false
                     name: customer_id
                     referencedTableColumn: customer_id
                   - dataType: DATE
+                    isNullable: true
                     isPrimaryKey: false
                     name: date
                   - dataType: STRING
+                    isNullable: true
                     isPrimaryKey: false
                     name: order_id
                   - dataType: STRING
+                    isNullable: false
                     isPrimaryKey: true
                     name: order_line_id
                   - dataType: STRING
+                    isNullable: true
                     isPrimaryKey: false
                     name: order_status
                   - dataType: NUMERIC
+                    isNullable: true
                     isPrimaryKey: false
                     name: price
                   - dataType: INT
+                    isNullable: true
                     isPrimaryKey: false
                     name: product_id
                     referencedTableColumn: product_id
                   - dataType: NUMERIC
+                    isNullable: true
                     isPrimaryKey: false
                     name: quantity
                   - dataType: STRING
+                    isNullable: true
                     isPrimaryKey: false
                     name: wdf__region
                   - dataType: STRING
+                    isNullable: true
                     isPrimaryKey: false
                     name: wdf__state
                 id: order_lines

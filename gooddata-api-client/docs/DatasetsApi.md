@@ -7,6 +7,7 @@ Method | HTTP request | Description
 [**get_all_entities_datasets**](DatasetsApi.md#get_all_entities_datasets) | **GET** /api/v1/entities/workspaces/{workspaceId}/datasets | Get all Datasets
 [**get_entity_datasets**](DatasetsApi.md#get_entity_datasets) | **GET** /api/v1/entities/workspaces/{workspaceId}/datasets/{objectId} | Get a Dataset
 [**patch_entity_datasets**](DatasetsApi.md#patch_entity_datasets) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/datasets/{objectId} | Patch a Dataset (beta)
+[**search_entities_datasets**](DatasetsApi.md#search_entities_datasets) | **POST** /api/v1/entities/workspaces/{workspaceId}/datasets/search | Search request for Dataset
 
 
 # **get_all_entities_datasets**
@@ -94,7 +95,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -182,7 +183,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -223,7 +224,7 @@ with gooddata_api_client.ApiClient() as api_client:
     object_id = "objectId_example" # str | 
     json_api_dataset_patch_document = JsonApiDatasetPatchDocument(
         data=JsonApiDatasetPatch(
-            attributes=JsonApiDatasetPatchAttributes(
+            attributes=JsonApiAttributePatchAttributes(
                 description="description_example",
                 tags=[
                     "tags_example",
@@ -278,8 +279,107 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **search_entities_datasets**
+> JsonApiDatasetOutList search_entities_datasets(workspace_id, entity_search_body)
+
+Search request for Dataset
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import datasets_api
+from gooddata_api_client.model.json_api_dataset_out_list import JsonApiDatasetOutList
+from gooddata_api_client.model.entity_search_body import EntitySearchBody
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = datasets_api.DatasetsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    entity_search_body = EntitySearchBody(
+        filter="filter_example",
+        include=[
+            "include_example",
+        ],
+        meta_include=[
+            "meta_include_example",
+        ],
+        page=EntitySearchPage(
+            index=0,
+            size=100,
+        ),
+        sort=[
+            EntitySearchSort(
+                direction="ASC",
+                _property="_property_example",
+            ),
+        ],
+    ) # EntitySearchBody | Search request body with filter, pagination, and sorting options
+    origin = "ALL" # str |  (optional) if omitted the server will use the default value of "ALL"
+    x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Search request for Dataset
+        api_response = api_instance.search_entities_datasets(workspace_id, entity_search_body)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling DatasetsApi->search_entities_datasets: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Search request for Dataset
+        api_response = api_instance.search_entities_datasets(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling DatasetsApi->search_entities_datasets: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **entity_search_body** | [**EntitySearchBody**](EntitySearchBody.md)| Search request body with filter, pagination, and sorting options |
+ **origin** | **str**|  | [optional] if omitted the server will use the default value of "ALL"
+ **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+
+### Return type
+
+[**JsonApiDatasetOutList**](JsonApiDatasetOutList.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details

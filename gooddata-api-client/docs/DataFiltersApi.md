@@ -20,6 +20,9 @@ Method | HTTP request | Description
 [**patch_entity_user_data_filters**](DataFiltersApi.md#patch_entity_user_data_filters) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId} | Patch a User Data Filter
 [**patch_entity_workspace_data_filter_settings**](DataFiltersApi.md#patch_entity_workspace_data_filter_settings) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilterSettings/{objectId} | Patch a Settings for Workspace Data Filter
 [**patch_entity_workspace_data_filters**](DataFiltersApi.md#patch_entity_workspace_data_filters) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters/{objectId} | Patch a Workspace Data Filter
+[**search_entities_user_data_filters**](DataFiltersApi.md#search_entities_user_data_filters) | **POST** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/search | Search request for UserDataFilter
+[**search_entities_workspace_data_filter_settings**](DataFiltersApi.md#search_entities_workspace_data_filter_settings) | **POST** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilterSettings/search | Search request for WorkspaceDataFilterSetting
+[**search_entities_workspace_data_filters**](DataFiltersApi.md#search_entities_workspace_data_filters) | **POST** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters/search | Search request for WorkspaceDataFilter
 [**set_workspace_data_filters_layout**](DataFiltersApi.md#set_workspace_data_filters_layout) | **PUT** /api/v1/layout/workspaceDataFilters | Set all workspace data filters
 [**update_entity_user_data_filters**](DataFiltersApi.md#update_entity_user_data_filters) | **PUT** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId} | Put a User Data Filter
 [**update_entity_workspace_data_filter_settings**](DataFiltersApi.md#update_entity_workspace_data_filter_settings) | **PUT** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilterSettings/{objectId} | Put a Settings for Workspace Data Filter
@@ -121,8 +124,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -223,8 +226,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -328,8 +331,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -650,7 +653,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -746,7 +749,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -842,7 +845,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -930,7 +933,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -1018,7 +1021,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -1106,7 +1109,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -1275,8 +1278,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -1377,8 +1380,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -1482,8 +1485,305 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **search_entities_user_data_filters**
+> JsonApiUserDataFilterOutList search_entities_user_data_filters(workspace_id, entity_search_body)
+
+Search request for UserDataFilter
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import data_filters_api
+from gooddata_api_client.model.json_api_user_data_filter_out_list import JsonApiUserDataFilterOutList
+from gooddata_api_client.model.entity_search_body import EntitySearchBody
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = data_filters_api.DataFiltersApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    entity_search_body = EntitySearchBody(
+        filter="filter_example",
+        include=[
+            "include_example",
+        ],
+        meta_include=[
+            "meta_include_example",
+        ],
+        page=EntitySearchPage(
+            index=0,
+            size=100,
+        ),
+        sort=[
+            EntitySearchSort(
+                direction="ASC",
+                _property="_property_example",
+            ),
+        ],
+    ) # EntitySearchBody | Search request body with filter, pagination, and sorting options
+    origin = "ALL" # str |  (optional) if omitted the server will use the default value of "ALL"
+    x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Search request for UserDataFilter
+        api_response = api_instance.search_entities_user_data_filters(workspace_id, entity_search_body)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling DataFiltersApi->search_entities_user_data_filters: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Search request for UserDataFilter
+        api_response = api_instance.search_entities_user_data_filters(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling DataFiltersApi->search_entities_user_data_filters: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **entity_search_body** | [**EntitySearchBody**](EntitySearchBody.md)| Search request body with filter, pagination, and sorting options |
+ **origin** | **str**|  | [optional] if omitted the server will use the default value of "ALL"
+ **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+
+### Return type
+
+[**JsonApiUserDataFilterOutList**](JsonApiUserDataFilterOutList.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **search_entities_workspace_data_filter_settings**
+> JsonApiWorkspaceDataFilterSettingOutList search_entities_workspace_data_filter_settings(workspace_id, entity_search_body)
+
+Search request for WorkspaceDataFilterSetting
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import data_filters_api
+from gooddata_api_client.model.json_api_workspace_data_filter_setting_out_list import JsonApiWorkspaceDataFilterSettingOutList
+from gooddata_api_client.model.entity_search_body import EntitySearchBody
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = data_filters_api.DataFiltersApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    entity_search_body = EntitySearchBody(
+        filter="filter_example",
+        include=[
+            "include_example",
+        ],
+        meta_include=[
+            "meta_include_example",
+        ],
+        page=EntitySearchPage(
+            index=0,
+            size=100,
+        ),
+        sort=[
+            EntitySearchSort(
+                direction="ASC",
+                _property="_property_example",
+            ),
+        ],
+    ) # EntitySearchBody | Search request body with filter, pagination, and sorting options
+    origin = "ALL" # str |  (optional) if omitted the server will use the default value of "ALL"
+    x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Search request for WorkspaceDataFilterSetting
+        api_response = api_instance.search_entities_workspace_data_filter_settings(workspace_id, entity_search_body)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling DataFiltersApi->search_entities_workspace_data_filter_settings: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Search request for WorkspaceDataFilterSetting
+        api_response = api_instance.search_entities_workspace_data_filter_settings(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling DataFiltersApi->search_entities_workspace_data_filter_settings: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **entity_search_body** | [**EntitySearchBody**](EntitySearchBody.md)| Search request body with filter, pagination, and sorting options |
+ **origin** | **str**|  | [optional] if omitted the server will use the default value of "ALL"
+ **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+
+### Return type
+
+[**JsonApiWorkspaceDataFilterSettingOutList**](JsonApiWorkspaceDataFilterSettingOutList.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **search_entities_workspace_data_filters**
+> JsonApiWorkspaceDataFilterOutList search_entities_workspace_data_filters(workspace_id, entity_search_body)
+
+Search request for WorkspaceDataFilter
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import data_filters_api
+from gooddata_api_client.model.json_api_workspace_data_filter_out_list import JsonApiWorkspaceDataFilterOutList
+from gooddata_api_client.model.entity_search_body import EntitySearchBody
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = data_filters_api.DataFiltersApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    entity_search_body = EntitySearchBody(
+        filter="filter_example",
+        include=[
+            "include_example",
+        ],
+        meta_include=[
+            "meta_include_example",
+        ],
+        page=EntitySearchPage(
+            index=0,
+            size=100,
+        ),
+        sort=[
+            EntitySearchSort(
+                direction="ASC",
+                _property="_property_example",
+            ),
+        ],
+    ) # EntitySearchBody | Search request body with filter, pagination, and sorting options
+    origin = "ALL" # str |  (optional) if omitted the server will use the default value of "ALL"
+    x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Search request for WorkspaceDataFilter
+        api_response = api_instance.search_entities_workspace_data_filters(workspace_id, entity_search_body)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling DataFiltersApi->search_entities_workspace_data_filters: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Search request for WorkspaceDataFilter
+        api_response = api_instance.search_entities_workspace_data_filters(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling DataFiltersApi->search_entities_workspace_data_filters: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **entity_search_body** | [**EntitySearchBody**](EntitySearchBody.md)| Search request body with filter, pagination, and sorting options |
+ **origin** | **str**|  | [optional] if omitted the server will use the default value of "ALL"
+ **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+
+### Return type
+
+[**JsonApiWorkspaceDataFilterOutList**](JsonApiWorkspaceDataFilterOutList.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -1680,8 +1980,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -1782,8 +2082,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -1887,8 +2187,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details

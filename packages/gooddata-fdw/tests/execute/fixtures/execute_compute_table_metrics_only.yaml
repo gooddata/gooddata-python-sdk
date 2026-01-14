@@ -1,4 +1,4 @@
-# (C) 2025 GoodData Corporation
+# (C) 2026 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -89,7 +89,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-Gdc-Cancel-Token:
-          - 3e12f50b-9c17-4bd7-a4ac-3b927f23c465
+          - 30df2f82-55aa-4f9b-a57a-8cb2d2972c28
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - '0'
@@ -109,10 +109,10 @@ interactions:
                         name: Revenue
                 localIdentifier: dim_0
             links:
-              executionResult: aa7ae9064d0eaf7226a5e292862b1af67135fd9a:ac90408a7cf894b5890bb0cd69449e9286206dfacccc4133454285c631c62b41
+              executionResult: 4ec10dfdd8d2c92a6476c887d4bc0f79f233fa12:5f639f992d04037e9d9507f3c95035bbb34e469c6f774094d372d4ce1350a23a
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/aa7ae9064d0eaf7226a5e292862b1af67135fd9a%3Aac90408a7cf894b5890bb0cd69449e9286206dfacccc4133454285c631c62b41?offset=0&limit=256
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/4ec10dfdd8d2c92a6476c887d4bc0f79f233fa12%3A5f639f992d04037e9d9507f3c95035bbb34e469c6f774094d372d4ce1350a23a?offset=0&limit=256
       body: null
       headers:
         Accept:

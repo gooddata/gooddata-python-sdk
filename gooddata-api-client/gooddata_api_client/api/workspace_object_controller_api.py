@@ -72,6 +72,11 @@ from gooddata_api_client.model.json_api_filter_view_in_document import JsonApiFi
 from gooddata_api_client.model.json_api_filter_view_out_document import JsonApiFilterViewOutDocument
 from gooddata_api_client.model.json_api_filter_view_out_list import JsonApiFilterViewOutList
 from gooddata_api_client.model.json_api_filter_view_patch_document import JsonApiFilterViewPatchDocument
+from gooddata_api_client.model.json_api_knowledge_recommendation_in_document import JsonApiKnowledgeRecommendationInDocument
+from gooddata_api_client.model.json_api_knowledge_recommendation_out_document import JsonApiKnowledgeRecommendationOutDocument
+from gooddata_api_client.model.json_api_knowledge_recommendation_out_list import JsonApiKnowledgeRecommendationOutList
+from gooddata_api_client.model.json_api_knowledge_recommendation_patch_document import JsonApiKnowledgeRecommendationPatchDocument
+from gooddata_api_client.model.json_api_knowledge_recommendation_post_optional_id_document import JsonApiKnowledgeRecommendationPostOptionalIdDocument
 from gooddata_api_client.model.json_api_label_out_document import JsonApiLabelOutDocument
 from gooddata_api_client.model.json_api_label_out_list import JsonApiLabelOutList
 from gooddata_api_client.model.json_api_label_patch_document import JsonApiLabelPatchDocument
@@ -209,9 +214,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -297,9 +304,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -392,9 +401,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -465,9 +476,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -552,9 +565,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -645,9 +660,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -732,9 +749,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -803,9 +822,101 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
+                    'application/vnd.gooddata.api+json'
+                ]
+            },
+            api_client=api_client
+        )
+        self.create_entity_knowledge_recommendations_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiKnowledgeRecommendationOutDocument,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations',
+                'operation_id': 'create_entity_knowledge_recommendations',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'json_api_knowledge_recommendation_post_optional_id_document',
+                    'include',
+                    'meta_include',
+                ],
+                'required': [
+                    'workspace_id',
+                    'json_api_knowledge_recommendation_post_optional_id_document',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                    'include',
+                    'meta_include',
+                ],
+                'validation': [
+                    'meta_include',
+                ]
+            },
+            root_map={
+                'validations': {
+                    ('meta_include',): {
+
+                    },
+                },
+                'allowed_values': {
+                    ('include',): {
+
+                        "METRICS": "metrics",
+                        "ANALYTICALDASHBOARDS": "analyticalDashboards",
+                        "METRIC": "metric",
+                        "ANALYTICALDASHBOARD": "analyticalDashboard",
+                        "ALL": "ALL"
+                    },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
+                        "ALL": "ALL"
+                    },
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'json_api_knowledge_recommendation_post_optional_id_document':
+                        (JsonApiKnowledgeRecommendationPostOptionalIdDocument,),
+                    'include':
+                        ([str],),
+                    'meta_include':
+                        ([str],),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'include': 'include',
+                    'meta_include': 'metaInclude',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'json_api_knowledge_recommendation_post_optional_id_document': 'body',
+                    'include': 'query',
+                    'meta_include': 'query',
+                },
+                'collection_format_map': {
+                    'include': 'csv',
+                    'meta_include': 'csv',
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json',
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -890,9 +1001,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -982,9 +1095,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -1075,9 +1190,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -1167,9 +1284,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -1253,9 +1372,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -1339,9 +1460,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -1412,9 +1535,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -1832,6 +1957,64 @@ class WorkspaceObjectControllerApi(object):
                 'auth': [],
                 'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId}',
                 'operation_id': 'delete_entity_filter_views',
+                'http_method': 'DELETE',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'object_id',
+                    'filter',
+                ],
+                'required': [
+                    'workspace_id',
+                    'object_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'object_id':
+                        (str,),
+                    'filter':
+                        (str,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'object_id': 'objectId',
+                    'filter': 'filter',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'object_id': 'path',
+                    'filter': 'query',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.delete_entity_knowledge_recommendations_endpoint = _Endpoint(
+            settings={
+                'response_type': None,
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId}',
+                'operation_id': 'delete_entity_knowledge_recommendations',
                 'http_method': 'DELETE',
                 'servers': None,
             },
@@ -2404,6 +2587,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -2532,6 +2716,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -2652,6 +2837,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -2773,6 +2959,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -2900,6 +3087,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -3005,6 +3193,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -3124,6 +3313,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -3246,6 +3436,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -3371,6 +3562,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -3489,6 +3681,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -3608,6 +3801,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -3727,6 +3921,128 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.get_all_entities_knowledge_recommendations_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiKnowledgeRecommendationOutList,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations',
+                'operation_id': 'get_all_entities_knowledge_recommendations',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'origin',
+                    'filter',
+                    'include',
+                    'page',
+                    'size',
+                    'sort',
+                    'x_gdc_validate_relations',
+                    'meta_include',
+                ],
+                'required': [
+                    'workspace_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                    'origin',
+                    'include',
+                    'meta_include',
+                ],
+                'validation': [
+                    'meta_include',
+                ]
+            },
+            root_map={
+                'validations': {
+                    ('meta_include',): {
+
+                    },
+                },
+                'allowed_values': {
+                    ('origin',): {
+
+                        "ALL": "ALL",
+                        "PARENTS": "PARENTS",
+                        "NATIVE": "NATIVE"
+                    },
+                    ('include',): {
+
+                        "METRICS": "metrics",
+                        "ANALYTICALDASHBOARDS": "analyticalDashboards",
+                        "METRIC": "metric",
+                        "ANALYTICALDASHBOARD": "analyticalDashboard",
+                        "ALL": "ALL"
+                    },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "PAGE": "page",
+                        "ALL": "all",
+                        "ALL": "ALL"
+                    },
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'origin':
+                        (str,),
+                    'filter':
+                        (str,),
+                    'include':
+                        ([str],),
+                    'page':
+                        (int,),
+                    'size':
+                        (int,),
+                    'sort':
+                        ([str],),
+                    'x_gdc_validate_relations':
+                        (bool,),
+                    'meta_include':
+                        ([str],),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'origin': 'origin',
+                    'filter': 'filter',
+                    'include': 'include',
+                    'page': 'page',
+                    'size': 'size',
+                    'sort': 'sort',
+                    'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                    'meta_include': 'metaInclude',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'origin': 'query',
+                    'filter': 'query',
+                    'include': 'query',
+                    'page': 'query',
+                    'size': 'query',
+                    'sort': 'query',
+                    'x_gdc_validate_relations': 'header',
+                    'meta_include': 'query',
+                },
+                'collection_format_map': {
+                    'include': 'csv',
+                    'sort': 'multi',
+                    'meta_include': 'csv',
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -3845,6 +4161,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -3964,6 +4281,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -4088,6 +4406,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -4213,6 +4532,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -4337,6 +4657,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -4455,6 +4776,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -4573,6 +4895,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -4678,6 +5001,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -4775,6 +5099,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -4880,6 +5205,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -4977,6 +5303,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -5075,6 +5402,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -5179,6 +5507,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -5261,6 +5590,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -5357,6 +5687,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -5456,6 +5787,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -5558,6 +5890,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -5653,6 +5986,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -5749,6 +6083,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -5829,6 +6164,105 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.get_entity_knowledge_recommendations_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiKnowledgeRecommendationOutDocument,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId}',
+                'operation_id': 'get_entity_knowledge_recommendations',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'object_id',
+                    'filter',
+                    'include',
+                    'x_gdc_validate_relations',
+                    'meta_include',
+                ],
+                'required': [
+                    'workspace_id',
+                    'object_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                    'include',
+                    'meta_include',
+                ],
+                'validation': [
+                    'meta_include',
+                ]
+            },
+            root_map={
+                'validations': {
+                    ('meta_include',): {
+
+                    },
+                },
+                'allowed_values': {
+                    ('include',): {
+
+                        "METRICS": "metrics",
+                        "ANALYTICALDASHBOARDS": "analyticalDashboards",
+                        "METRIC": "metric",
+                        "ANALYTICALDASHBOARD": "analyticalDashboard",
+                        "ALL": "ALL"
+                    },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
+                        "ALL": "ALL"
+                    },
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'object_id':
+                        (str,),
+                    'filter':
+                        (str,),
+                    'include':
+                        ([str],),
+                    'x_gdc_validate_relations':
+                        (bool,),
+                    'meta_include':
+                        ([str],),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'object_id': 'objectId',
+                    'filter': 'filter',
+                    'include': 'include',
+                    'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                    'meta_include': 'metaInclude',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'object_id': 'path',
+                    'filter': 'query',
+                    'include': 'query',
+                    'x_gdc_validate_relations': 'header',
+                    'meta_include': 'query',
+                },
+                'collection_format_map': {
+                    'include': 'csv',
+                    'meta_include': 'csv',
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -5924,6 +6358,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -6020,6 +6455,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -6121,6 +6557,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -6223,6 +6660,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -6324,6 +6762,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -6419,6 +6858,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -6514,6 +6954,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -6596,6 +7037,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -6682,9 +7124,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -6764,9 +7208,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -6847,9 +7293,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -6936,9 +7384,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -7003,9 +7453,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -7084,9 +7536,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -7168,9 +7622,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -7255,9 +7711,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -7335,9 +7793,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -7416,9 +7876,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -7498,9 +7960,95 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
+                    'application/vnd.gooddata.api+json'
+                ]
+            },
+            api_client=api_client
+        )
+        self.patch_entity_knowledge_recommendations_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiKnowledgeRecommendationOutDocument,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId}',
+                'operation_id': 'patch_entity_knowledge_recommendations',
+                'http_method': 'PATCH',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'object_id',
+                    'json_api_knowledge_recommendation_patch_document',
+                    'filter',
+                    'include',
+                ],
+                'required': [
+                    'workspace_id',
+                    'object_id',
+                    'json_api_knowledge_recommendation_patch_document',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                    'include',
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                    ('include',): {
+
+                        "METRICS": "metrics",
+                        "ANALYTICALDASHBOARDS": "analyticalDashboards",
+                        "METRIC": "metric",
+                        "ANALYTICALDASHBOARD": "analyticalDashboard",
+                        "ALL": "ALL"
+                    },
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'object_id':
+                        (str,),
+                    'json_api_knowledge_recommendation_patch_document':
+                        (JsonApiKnowledgeRecommendationPatchDocument,),
+                    'filter':
+                        (str,),
+                    'include':
+                        ([str],),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'object_id': 'objectId',
+                    'filter': 'filter',
+                    'include': 'include',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'object_id': 'path',
+                    'json_api_knowledge_recommendation_patch_document': 'body',
+                    'filter': 'query',
+                    'include': 'query',
+                },
+                'collection_format_map': {
+                    'include': 'csv',
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json',
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -7578,9 +8126,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -7659,9 +8209,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -7745,9 +8297,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -7832,9 +8386,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -7918,9 +8474,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -7998,9 +8556,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -8078,9 +8638,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -8145,9 +8707,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -8218,6 +8782,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
@@ -8291,6 +8856,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
@@ -8364,6 +8930,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
@@ -8437,6 +9004,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
@@ -8510,6 +9078,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
@@ -8583,6 +9152,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
@@ -8656,6 +9226,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
@@ -8729,6 +9300,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
@@ -8802,6 +9374,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
@@ -8875,6 +9448,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
@@ -8948,6 +9522,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
@@ -9021,6 +9596,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
@@ -9094,6 +9670,81 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [
+                    'application/json'
+                ]
+            },
+            api_client=api_client
+        )
+        self.search_entities_knowledge_recommendations_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiKnowledgeRecommendationOutList,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/search',
+                'operation_id': 'search_entities_knowledge_recommendations',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'entity_search_body',
+                    'origin',
+                    'x_gdc_validate_relations',
+                ],
+                'required': [
+                    'workspace_id',
+                    'entity_search_body',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                    'origin',
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                    ('origin',): {
+
+                        "ALL": "ALL",
+                        "PARENTS": "PARENTS",
+                        "NATIVE": "NATIVE"
+                    },
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'entity_search_body':
+                        (EntitySearchBody,),
+                    'origin':
+                        (str,),
+                    'x_gdc_validate_relations':
+                        (bool,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'origin': 'origin',
+                    'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'entity_search_body': 'body',
+                    'origin': 'query',
+                    'x_gdc_validate_relations': 'header',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
@@ -9167,6 +9818,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
@@ -9240,6 +9892,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
@@ -9313,6 +9966,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
@@ -9386,6 +10040,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
@@ -9459,6 +10114,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
@@ -9532,6 +10188,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
@@ -9605,6 +10262,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
@@ -9678,6 +10336,7 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
@@ -9766,9 +10425,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -9848,9 +10509,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -9937,9 +10600,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -10004,9 +10669,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -10085,9 +10752,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -10172,9 +10841,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -10253,9 +10924,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -10335,9 +11008,95 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
+                    'application/vnd.gooddata.api+json'
+                ]
+            },
+            api_client=api_client
+        )
+        self.update_entity_knowledge_recommendations_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiKnowledgeRecommendationOutDocument,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId}',
+                'operation_id': 'update_entity_knowledge_recommendations',
+                'http_method': 'PUT',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'object_id',
+                    'json_api_knowledge_recommendation_in_document',
+                    'filter',
+                    'include',
+                ],
+                'required': [
+                    'workspace_id',
+                    'object_id',
+                    'json_api_knowledge_recommendation_in_document',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                    'include',
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                    ('include',): {
+
+                        "METRICS": "metrics",
+                        "ANALYTICALDASHBOARDS": "analyticalDashboards",
+                        "METRIC": "metric",
+                        "ANALYTICALDASHBOARD": "analyticalDashboard",
+                        "ALL": "ALL"
+                    },
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'object_id':
+                        (str,),
+                    'json_api_knowledge_recommendation_in_document':
+                        (JsonApiKnowledgeRecommendationInDocument,),
+                    'filter':
+                        (str,),
+                    'include':
+                        ([str],),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'object_id': 'objectId',
+                    'filter': 'filter',
+                    'include': 'include',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'object_id': 'path',
+                    'json_api_knowledge_recommendation_in_document': 'body',
+                    'filter': 'query',
+                    'include': 'query',
+                },
+                'collection_format_map': {
+                    'include': 'csv',
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json',
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -10416,9 +11175,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -10502,9 +11263,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -10589,9 +11352,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -10675,9 +11440,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -10755,9 +11522,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -10835,9 +11604,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -10902,9 +11673,11 @@ class WorkspaceObjectControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -11444,7 +12217,7 @@ class WorkspaceObjectControllerApi(object):
         json_api_filter_context_post_optional_id_document,
         **kwargs
     ):
-        """Post Context Filters  # noqa: E501
+        """Post Filter Context  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -11612,6 +12385,94 @@ class WorkspaceObjectControllerApi(object):
         kwargs['json_api_filter_view_in_document'] = \
             json_api_filter_view_in_document
         return self.create_entity_filter_views_endpoint.call_with_http_info(**kwargs)
+
+    def create_entity_knowledge_recommendations(
+        self,
+        workspace_id,
+        json_api_knowledge_recommendation_post_optional_id_document,
+        **kwargs
+    ):
+        """create_entity_knowledge_recommendations  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.create_entity_knowledge_recommendations(workspace_id, json_api_knowledge_recommendation_post_optional_id_document, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            json_api_knowledge_recommendation_post_optional_id_document (JsonApiKnowledgeRecommendationPostOptionalIdDocument):
+
+        Keyword Args:
+            include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
+            meta_include ([str]): Include Meta objects.. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiKnowledgeRecommendationOutDocument
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['json_api_knowledge_recommendation_post_optional_id_document'] = \
+            json_api_knowledge_recommendation_post_optional_id_document
+        return self.create_entity_knowledge_recommendations_endpoint.call_with_http_info(**kwargs)
 
     def create_entity_memory_items(
         self,
@@ -12756,7 +13617,7 @@ class WorkspaceObjectControllerApi(object):
         object_id,
         **kwargs
     ):
-        """Delete a Context Filter  # noqa: E501
+        """Delete a Filter Context  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -12923,6 +13784,93 @@ class WorkspaceObjectControllerApi(object):
         kwargs['object_id'] = \
             object_id
         return self.delete_entity_filter_views_endpoint.call_with_http_info(**kwargs)
+
+    def delete_entity_knowledge_recommendations(
+        self,
+        workspace_id,
+        object_id,
+        **kwargs
+    ):
+        """delete_entity_knowledge_recommendations  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.delete_entity_knowledge_recommendations(workspace_id, object_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            object_id (str):
+
+        Keyword Args:
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            None
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['object_id'] = \
+            object_id
+        return self.delete_entity_knowledge_recommendations_endpoint.call_with_http_info(**kwargs)
 
     def delete_entity_memory_items(
         self,
@@ -14437,7 +15385,7 @@ class WorkspaceObjectControllerApi(object):
         workspace_id,
         **kwargs
     ):
-        """Get all Context Filters  # noqa: E501
+        """Get all Filter Context  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -14611,6 +15559,96 @@ class WorkspaceObjectControllerApi(object):
         kwargs['workspace_id'] = \
             workspace_id
         return self.get_all_entities_filter_views_endpoint.call_with_http_info(**kwargs)
+
+    def get_all_entities_knowledge_recommendations(
+        self,
+        workspace_id,
+        **kwargs
+    ):
+        """get_all_entities_knowledge_recommendations  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.get_all_entities_knowledge_recommendations(workspace_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+
+        Keyword Args:
+            origin (str): [optional] if omitted the server will use the default value of "ALL"
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
+            page (int): Zero-based page index (0..N). [optional] if omitted the server will use the default value of 0
+            size (int): The size of the page to be returned. [optional] if omitted the server will use the default value of 20
+            sort ([str]): Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.. [optional]
+            x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
+            meta_include ([str]): Include Meta objects.. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiKnowledgeRecommendationOutList
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        return self.get_all_entities_knowledge_recommendations_endpoint.call_with_http_info(**kwargs)
 
     def get_all_entities_labels(
         self,
@@ -16236,7 +17274,7 @@ class WorkspaceObjectControllerApi(object):
         object_id,
         **kwargs
     ):
-        """Get a Context Filter  # noqa: E501
+        """Get a Filter Context  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -16408,6 +17446,96 @@ class WorkspaceObjectControllerApi(object):
         kwargs['object_id'] = \
             object_id
         return self.get_entity_filter_views_endpoint.call_with_http_info(**kwargs)
+
+    def get_entity_knowledge_recommendations(
+        self,
+        workspace_id,
+        object_id,
+        **kwargs
+    ):
+        """get_entity_knowledge_recommendations  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.get_entity_knowledge_recommendations(workspace_id, object_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            object_id (str):
+
+        Keyword Args:
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
+            x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
+            meta_include ([str]): Include Meta objects.. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiKnowledgeRecommendationOutDocument
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['object_id'] = \
+            object_id
+        return self.get_entity_knowledge_recommendations_endpoint.call_with_http_info(**kwargs)
 
     def get_entity_labels(
         self,
@@ -17962,7 +19090,7 @@ class WorkspaceObjectControllerApi(object):
         json_api_filter_context_patch_document,
         **kwargs
     ):
-        """Patch a Context Filter  # noqa: E501
+        """Patch a Filter Context  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -18138,6 +19266,98 @@ class WorkspaceObjectControllerApi(object):
         kwargs['json_api_filter_view_patch_document'] = \
             json_api_filter_view_patch_document
         return self.patch_entity_filter_views_endpoint.call_with_http_info(**kwargs)
+
+    def patch_entity_knowledge_recommendations(
+        self,
+        workspace_id,
+        object_id,
+        json_api_knowledge_recommendation_patch_document,
+        **kwargs
+    ):
+        """patch_entity_knowledge_recommendations  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.patch_entity_knowledge_recommendations(workspace_id, object_id, json_api_knowledge_recommendation_patch_document, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            object_id (str):
+            json_api_knowledge_recommendation_patch_document (JsonApiKnowledgeRecommendationPatchDocument):
+
+        Keyword Args:
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiKnowledgeRecommendationOutDocument
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['object_id'] = \
+            object_id
+        kwargs['json_api_knowledge_recommendation_patch_document'] = \
+            json_api_knowledge_recommendation_patch_document
+        return self.patch_entity_knowledge_recommendations_endpoint.call_with_http_info(**kwargs)
 
     def patch_entity_labels(
         self,
@@ -20018,6 +21238,94 @@ class WorkspaceObjectControllerApi(object):
             entity_search_body
         return self.search_entities_filter_views_endpoint.call_with_http_info(**kwargs)
 
+    def search_entities_knowledge_recommendations(
+        self,
+        workspace_id,
+        entity_search_body,
+        **kwargs
+    ):
+        """search_entities_knowledge_recommendations  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.search_entities_knowledge_recommendations(workspace_id, entity_search_body, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            entity_search_body (EntitySearchBody): Search request body with filter, pagination, and sorting options
+
+        Keyword Args:
+            origin (str): [optional] if omitted the server will use the default value of "ALL"
+            x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiKnowledgeRecommendationOutList
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['entity_search_body'] = \
+            entity_search_body
+        return self.search_entities_knowledge_recommendations_endpoint.call_with_http_info(**kwargs)
+
     def search_entities_labels(
         self,
         workspace_id,
@@ -21280,7 +22588,7 @@ class WorkspaceObjectControllerApi(object):
         json_api_filter_context_in_document,
         **kwargs
     ):
-        """Put a Context Filter  # noqa: E501
+        """Put a Filter Context  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -21456,6 +22764,98 @@ class WorkspaceObjectControllerApi(object):
         kwargs['json_api_filter_view_in_document'] = \
             json_api_filter_view_in_document
         return self.update_entity_filter_views_endpoint.call_with_http_info(**kwargs)
+
+    def update_entity_knowledge_recommendations(
+        self,
+        workspace_id,
+        object_id,
+        json_api_knowledge_recommendation_in_document,
+        **kwargs
+    ):
+        """update_entity_knowledge_recommendations  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.update_entity_knowledge_recommendations(workspace_id, object_id, json_api_knowledge_recommendation_in_document, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            object_id (str):
+            json_api_knowledge_recommendation_in_document (JsonApiKnowledgeRecommendationInDocument):
+
+        Keyword Args:
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiKnowledgeRecommendationOutDocument
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['object_id'] = \
+            object_id
+        kwargs['json_api_knowledge_recommendation_in_document'] = \
+            json_api_knowledge_recommendation_in_document
+        return self.update_entity_knowledge_recommendations_endpoint.call_with_http_info(**kwargs)
 
     def update_entity_memory_items(
         self,

@@ -117,6 +117,8 @@ class DeclarativeAggregatedFact(ModelNormal):
             'source_column': (str,),  # noqa: E501
             'source_fact_reference': (DeclarativeSourceFactReference,),  # noqa: E501
             'description': (str,),  # noqa: E501
+            'is_nullable': (bool,),  # noqa: E501
+            'null_value': (str,),  # noqa: E501
             'source_column_data_type': (str,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
         }
@@ -131,6 +133,8 @@ class DeclarativeAggregatedFact(ModelNormal):
         'source_column': 'sourceColumn',  # noqa: E501
         'source_fact_reference': 'sourceFactReference',  # noqa: E501
         'description': 'description',  # noqa: E501
+        'is_nullable': 'isNullable',  # noqa: E501
+        'null_value': 'nullValue',  # noqa: E501
         'source_column_data_type': 'sourceColumnDataType',  # noqa: E501
         'tags': 'tags',  # noqa: E501
     }
@@ -182,6 +186,8 @@ class DeclarativeAggregatedFact(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             description (str): Fact description.. [optional]  # noqa: E501
+            is_nullable (bool): Flag indicating whether the associated source column allows null values.. [optional]  # noqa: E501
+            null_value (str): Value used in coalesce during joins instead of null.. [optional]  # noqa: E501
             source_column_data_type (str): A type of the source column. [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
         """
@@ -278,6 +284,8 @@ class DeclarativeAggregatedFact(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             description (str): Fact description.. [optional]  # noqa: E501
+            is_nullable (bool): Flag indicating whether the associated source column allows null values.. [optional]  # noqa: E501
+            null_value (str): Value used in coalesce during joins instead of null.. [optional]  # noqa: E501
             source_column_data_type (str): A type of the source column. [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
         """

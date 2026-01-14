@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **name** | **str** | Name of the data source. | 
 **schema** | **str** | A scheme/database with the data. | 
 **type** | **str** | Type of database. | 
+**alternative_data_source_id** | **str, none_type** | Alternative data source ID. It is a weak reference meaning data source does not have to exist. All the entities (e.g. tables) from the data source must be available also in the alternative data source. It must be present in the same organization as the data source. | [optional] 
 **authentication_type** | **str, none_type** | Type of authentication used to connect to the database. | [optional] 
 **cache_strategy** | **str** | Determines how the results coming from a particular datasource should be cached. - ALWAYS: The results from the datasource should be cached normally (the default). - NEVER: The results from the datasource should never be cached. | [optional] 
 **client_id** | **str** | Id of client with permission to connect to the data source. | [optional] 

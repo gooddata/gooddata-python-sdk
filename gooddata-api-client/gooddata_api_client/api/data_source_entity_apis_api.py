@@ -100,9 +100,11 @@ class DataSourceEntityAPIsApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -242,6 +244,7 @@ class DataSourceEntityAPIsApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -323,6 +326,7 @@ class DataSourceEntityAPIsApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -401,6 +405,7 @@ class DataSourceEntityAPIsApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -479,6 +484,7 @@ class DataSourceEntityAPIsApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],
@@ -545,9 +551,11 @@ class DataSourceEntityAPIsApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },
@@ -613,9 +621,11 @@ class DataSourceEntityAPIsApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ]
             },

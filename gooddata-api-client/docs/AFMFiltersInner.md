@@ -6,6 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **comparison_measure_value_filter** | [**ComparisonMeasureValueFilterComparisonMeasureValueFilter**](ComparisonMeasureValueFilterComparisonMeasureValueFilter.md) |  | [optional] 
 **range_measure_value_filter** | [**RangeMeasureValueFilterRangeMeasureValueFilter**](RangeMeasureValueFilterRangeMeasureValueFilter.md) |  | [optional] 
+**compound_measure_value_filter** | [**CompoundMeasureValueFilterCompoundMeasureValueFilter**](CompoundMeasureValueFilterCompoundMeasureValueFilter.md) |  | [optional] 
 **ranking_filter** | [**RankingFilterRankingFilter**](RankingFilterRankingFilter.md) |  | [optional] 
 **absolute_date_filter** | [**AbsoluteDateFilterAbsoluteDateFilter**](AbsoluteDateFilterAbsoluteDateFilter.md) |  | [optional] 
 **relative_date_filter** | [**RelativeDateFilterRelativeDateFilter**](RelativeDateFilterRelativeDateFilter.md) |  | [optional] 

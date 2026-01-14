@@ -1,4 +1,4 @@
-# (C) 2025 GoodData Corporation
+# (C) 2026 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -7,7 +7,7 @@ interactions:
       body: null
       headers:
         Accept:
-          - application/vnd.gooddata.api+json
+          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
@@ -24,7 +24,7 @@ interactions:
         Content-Length:
           - '5006'
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         DATE: &id001
           - PLACEHOLDER
         Expires:
@@ -190,11 +190,11 @@ interactions:
               attributes:
                 title: Revenue
                 description: ''
-                createdAt: 2025-08-07 11:45
                 content:
                   format: $#,##0
                   maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
+                createdAt: 2025-08-07 11:45
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue
             - id: price
@@ -243,11 +243,11 @@ interactions:
               type: metric
               attributes:
                 title: '% Revenue in Category'
-                createdAt: 2025-08-07 11:45
                 content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
                     ALL OTHER)
+                createdAt: 2025-08-07 11:45
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_in_category
             - id: products.category
@@ -370,7 +370,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-Gdc-Cancel-Token:
-          - b7d71bf3-4a40-45cf-adc2-4114474b3a00
+          - 69544830-d861-45b7-a345-fd0353aa7c41
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - '0'
@@ -422,10 +422,10 @@ interactions:
                         name: Revenue
                 localIdentifier: dim_1
             links:
-              executionResult: 0d856b6c252afa3c65fede4a16d4ca2e4b6094b4:52150365bfa0763e90243c3b237846ef43d25616cf9cd60c9df9163309e2fde1
+              executionResult: 715fa2ca70ed41b95801db67a39f198f20bfe317:e2d1d6382ed7a0b4795ba06474bb6ed4ec69f0b56f64712d6bb3a93d5e4c24ee
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/0d856b6c252afa3c65fede4a16d4ca2e4b6094b4%3A52150365bfa0763e90243c3b237846ef43d25616cf9cd60c9df9163309e2fde1?offset=0%2C0&limit=512%2C256
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/715fa2ca70ed41b95801db67a39f198f20bfe317%3Ae2d1d6382ed7a0b4795ba06474bb6ed4ec69f0b56f64712d6bb3a93d5e4c24ee?offset=0%2C0&limit=512%2C256
       body: null
       headers:
         Accept:

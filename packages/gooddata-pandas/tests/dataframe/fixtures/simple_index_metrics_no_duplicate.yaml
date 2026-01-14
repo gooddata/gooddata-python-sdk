@@ -1,4 +1,4 @@
-# (C) 2025 GoodData Corporation
+# (C) 2026 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -79,7 +79,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-Gdc-Cancel-Token:
-          - b7472ce0-6c38-4ee3-868e-5b6b8b1dc539
+          - f6f2b765-2f1f-4fd6-940e-01433548718b
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - '0'
@@ -110,14 +110,14 @@ interactions:
                       valueType: TEXT
                 localIdentifier: dim_1
             links:
-              executionResult: e2b6145cd1d18325ac14baa17d0efca03cdc1240:4000dfba9da0be25c0573b364e5032e9a410dc92e59ed77eaaf9335b1fa98db7
+              executionResult: 4d086fc76458b69185aa9a11da77e99e6c0a62c8:4bbf2acc9963930e2d135363e470f4a30d8452452b4198c3d09a9cc473903d88
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3Din%3D%28region%29&page=0&size=500
       body: null
       headers:
         Accept:
-          - application/vnd.gooddata.api+json
+          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
@@ -134,7 +134,7 @@ interactions:
         Content-Length:
           - '1450'
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         DATE: *id001
         Expires:
           - '0'
@@ -215,7 +215,7 @@ interactions:
             next: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3D%3D%27region%27&page=1&size=500
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/e2b6145cd1d18325ac14baa17d0efca03cdc1240%3A4000dfba9da0be25c0573b364e5032e9a410dc92e59ed77eaaf9335b1fa98db7?offset=0%2C0&limit=2%2C1000
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/4d086fc76458b69185aa9a11da77e99e6c0a62c8%3A4bbf2acc9963930e2d135363e470f4a30d8452452b4198c3d09a9cc473903d88?offset=0%2C0&limit=2%2C1000
       body: null
       headers:
         Accept:

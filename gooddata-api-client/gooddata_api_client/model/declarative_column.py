@@ -106,6 +106,7 @@ class DeclarativeColumn(ModelNormal):
             'data_type': (str,),  # noqa: E501
             'name': (str,),  # noqa: E501
             'description': (str,),  # noqa: E501
+            'is_nullable': (bool,),  # noqa: E501
             'is_primary_key': (bool,),  # noqa: E501
             'referenced_table_column': (str,),  # noqa: E501
             'referenced_table_id': (str,),  # noqa: E501
@@ -120,6 +121,7 @@ class DeclarativeColumn(ModelNormal):
         'data_type': 'dataType',  # noqa: E501
         'name': 'name',  # noqa: E501
         'description': 'description',  # noqa: E501
+        'is_nullable': 'isNullable',  # noqa: E501
         'is_primary_key': 'isPrimaryKey',  # noqa: E501
         'referenced_table_column': 'referencedTableColumn',  # noqa: E501
         'referenced_table_id': 'referencedTableId',  # noqa: E501
@@ -171,6 +173,7 @@ class DeclarativeColumn(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             description (str): Column description/comment from database. [optional]  # noqa: E501
+            is_nullable (bool): Column is nullable. [optional]  # noqa: E501
             is_primary_key (bool): Is column part of primary key?. [optional]  # noqa: E501
             referenced_table_column (str): Referenced table (Foreign key). [optional]  # noqa: E501
             referenced_table_id (str): Referenced table (Foreign key). [optional]  # noqa: E501
@@ -266,6 +269,7 @@ class DeclarativeColumn(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             description (str): Column description/comment from database. [optional]  # noqa: E501
+            is_nullable (bool): Column is nullable. [optional]  # noqa: E501
             is_primary_key (bool): Is column part of primary key?. [optional]  # noqa: E501
             referenced_table_column (str): Referenced table (Foreign key). [optional]  # noqa: E501
             referenced_table_id (str): Referenced table (Foreign key). [optional]  # noqa: E501

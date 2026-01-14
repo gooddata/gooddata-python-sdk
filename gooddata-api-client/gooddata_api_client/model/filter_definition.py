@@ -35,6 +35,8 @@ def lazy_import():
     from gooddata_api_client.model.absolute_date_filter_absolute_date_filter import AbsoluteDateFilterAbsoluteDateFilter
     from gooddata_api_client.model.comparison_measure_value_filter import ComparisonMeasureValueFilter
     from gooddata_api_client.model.comparison_measure_value_filter_comparison_measure_value_filter import ComparisonMeasureValueFilterComparisonMeasureValueFilter
+    from gooddata_api_client.model.compound_measure_value_filter import CompoundMeasureValueFilter
+    from gooddata_api_client.model.compound_measure_value_filter_compound_measure_value_filter import CompoundMeasureValueFilterCompoundMeasureValueFilter
     from gooddata_api_client.model.inline_filter_definition import InlineFilterDefinition
     from gooddata_api_client.model.inline_filter_definition_inline import InlineFilterDefinitionInline
     from gooddata_api_client.model.negative_attribute_filter import NegativeAttributeFilter
@@ -51,6 +53,8 @@ def lazy_import():
     globals()['AbsoluteDateFilterAbsoluteDateFilter'] = AbsoluteDateFilterAbsoluteDateFilter
     globals()['ComparisonMeasureValueFilter'] = ComparisonMeasureValueFilter
     globals()['ComparisonMeasureValueFilterComparisonMeasureValueFilter'] = ComparisonMeasureValueFilterComparisonMeasureValueFilter
+    globals()['CompoundMeasureValueFilter'] = CompoundMeasureValueFilter
+    globals()['CompoundMeasureValueFilterCompoundMeasureValueFilter'] = CompoundMeasureValueFilterCompoundMeasureValueFilter
     globals()['InlineFilterDefinition'] = InlineFilterDefinition
     globals()['InlineFilterDefinitionInline'] = InlineFilterDefinitionInline
     globals()['NegativeAttributeFilter'] = NegativeAttributeFilter
@@ -122,6 +126,7 @@ class FilterDefinition(ModelComposed):
             'ranking_filter': (RankingFilterRankingFilter,),  # noqa: E501
             'comparison_measure_value_filter': (ComparisonMeasureValueFilterComparisonMeasureValueFilter,),  # noqa: E501
             'range_measure_value_filter': (RangeMeasureValueFilterRangeMeasureValueFilter,),  # noqa: E501
+            'compound_measure_value_filter': (CompoundMeasureValueFilterCompoundMeasureValueFilter,),  # noqa: E501
             'absolute_date_filter': (AbsoluteDateFilterAbsoluteDateFilter,),  # noqa: E501
             'relative_date_filter': (RelativeDateFilterRelativeDateFilter,),  # noqa: E501
             'negative_attribute_filter': (NegativeAttributeFilterNegativeAttributeFilter,),  # noqa: E501
@@ -138,6 +143,7 @@ class FilterDefinition(ModelComposed):
         'ranking_filter': 'rankingFilter',  # noqa: E501
         'comparison_measure_value_filter': 'comparisonMeasureValueFilter',  # noqa: E501
         'range_measure_value_filter': 'rangeMeasureValueFilter',  # noqa: E501
+        'compound_measure_value_filter': 'compoundMeasureValueFilter',  # noqa: E501
         'absolute_date_filter': 'absoluteDateFilter',  # noqa: E501
         'relative_date_filter': 'relativeDateFilter',  # noqa: E501
         'negative_attribute_filter': 'negativeAttributeFilter',  # noqa: E501
@@ -187,6 +193,7 @@ class FilterDefinition(ModelComposed):
             ranking_filter (RankingFilterRankingFilter): [optional]  # noqa: E501
             comparison_measure_value_filter (ComparisonMeasureValueFilterComparisonMeasureValueFilter): [optional]  # noqa: E501
             range_measure_value_filter (RangeMeasureValueFilterRangeMeasureValueFilter): [optional]  # noqa: E501
+            compound_measure_value_filter (CompoundMeasureValueFilterCompoundMeasureValueFilter): [optional]  # noqa: E501
             absolute_date_filter (AbsoluteDateFilterAbsoluteDateFilter): [optional]  # noqa: E501
             relative_date_filter (RelativeDateFilterRelativeDateFilter): [optional]  # noqa: E501
             negative_attribute_filter (NegativeAttributeFilterNegativeAttributeFilter): [optional]  # noqa: E501
@@ -298,6 +305,7 @@ class FilterDefinition(ModelComposed):
             ranking_filter (RankingFilterRankingFilter): [optional]  # noqa: E501
             comparison_measure_value_filter (ComparisonMeasureValueFilterComparisonMeasureValueFilter): [optional]  # noqa: E501
             range_measure_value_filter (RangeMeasureValueFilterRangeMeasureValueFilter): [optional]  # noqa: E501
+            compound_measure_value_filter (CompoundMeasureValueFilterCompoundMeasureValueFilter): [optional]  # noqa: E501
             absolute_date_filter (AbsoluteDateFilterAbsoluteDateFilter): [optional]  # noqa: E501
             relative_date_filter (RelativeDateFilterRelativeDateFilter): [optional]  # noqa: E501
             negative_attribute_filter (NegativeAttributeFilterNegativeAttributeFilter): [optional]  # noqa: E501
@@ -375,6 +383,7 @@ class FilterDefinition(ModelComposed):
           'oneOf': [
               AbsoluteDateFilter,
               ComparisonMeasureValueFilter,
+              CompoundMeasureValueFilter,
               InlineFilterDefinition,
               NegativeAttributeFilter,
               PositiveAttributeFilter,

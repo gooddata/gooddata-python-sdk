@@ -118,7 +118,7 @@ class CreatedVisualizations(ModelNormal):
 
         Args:
             objects ([CreatedVisualization]): List of created visualization objects
-            reasoning (str): Reasoning from LLM. Description of how and why the answer was generated.
+            reasoning (str): DEPRECATED: Use top-level reasoning.steps instead. Reasoning from LLM. Description of how and why the answer was generated.
             suggestions ([Suggestion]): List of suggestions for next steps. Filled when no visualization was created, suggests alternatives.
 
         Keyword Args:
@@ -211,7 +211,7 @@ class CreatedVisualizations(ModelNormal):
 
         Args:
             objects ([CreatedVisualization]): List of created visualization objects
-            reasoning (str): Reasoning from LLM. Description of how and why the answer was generated.
+            reasoning (str): DEPRECATED: Use top-level reasoning.steps instead. Reasoning from LLM. Description of how and why the answer was generated.
             suggestions ([Suggestion]): List of suggestions for next steps. Filled when no visualization was created, suggests alternatives.
 
         Keyword Args:

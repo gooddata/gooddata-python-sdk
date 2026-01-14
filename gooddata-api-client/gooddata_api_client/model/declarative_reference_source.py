@@ -106,6 +106,8 @@ class DeclarativeReferenceSource(ModelNormal):
             'column': (str,),  # noqa: E501
             'target': (GrainIdentifier,),  # noqa: E501
             'data_type': (str,),  # noqa: E501
+            'is_nullable': (bool,),  # noqa: E501
+            'null_value': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -117,6 +119,8 @@ class DeclarativeReferenceSource(ModelNormal):
         'column': 'column',  # noqa: E501
         'target': 'target',  # noqa: E501
         'data_type': 'dataType',  # noqa: E501
+        'is_nullable': 'isNullable',  # noqa: E501
+        'null_value': 'nullValue',  # noqa: E501
     }
 
     read_only_vars = {
@@ -165,6 +169,8 @@ class DeclarativeReferenceSource(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             data_type (str): A type of the source column.. [optional]  # noqa: E501
+            is_nullable (bool): Flag indicating whether the associated source column allows null values.. [optional]  # noqa: E501
+            null_value (str): Value used in coalesce during joins instead of null.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -257,6 +263,8 @@ class DeclarativeReferenceSource(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             data_type (str): A type of the source column.. [optional]  # noqa: E501
+            is_nullable (bool): Flag indicating whether the associated source column allows null values.. [optional]  # noqa: E501
+            null_value (str): Value used in coalesce during joins instead of null.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
