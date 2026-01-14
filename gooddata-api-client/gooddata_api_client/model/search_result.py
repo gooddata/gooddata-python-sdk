@@ -117,7 +117,7 @@ class SearchResult(ModelNormal):
         """SearchResult - a model defined in OpenAPI
 
         Args:
-            reasoning (str): If something is not working properly this field will contain explanation.
+            reasoning (str): DEPRECATED: Use top-level reasoning.steps instead. If something is not working properly this field will contain explanation.
             relationships ([SearchRelationshipObject]):
             results ([SearchResultObject]):
 
@@ -210,7 +210,7 @@ class SearchResult(ModelNormal):
         """SearchResult - a model defined in OpenAPI
 
         Args:
-            reasoning (str): If something is not working properly this field will contain explanation.
+            reasoning (str): DEPRECATED: Use top-level reasoning.steps instead. If something is not working properly this field will contain explanation.
             relationships ([SearchRelationshipObject]):
             results ([SearchResultObject]):
 

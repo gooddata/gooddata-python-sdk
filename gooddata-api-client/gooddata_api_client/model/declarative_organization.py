@@ -31,6 +31,7 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.declarative_custom_geo_collection import DeclarativeCustomGeoCollection
     from gooddata_api_client.model.declarative_data_source import DeclarativeDataSource
     from gooddata_api_client.model.declarative_export_template import DeclarativeExportTemplate
     from gooddata_api_client.model.declarative_identity_provider import DeclarativeIdentityProvider
@@ -41,6 +42,7 @@ def lazy_import():
     from gooddata_api_client.model.declarative_user_group import DeclarativeUserGroup
     from gooddata_api_client.model.declarative_workspace import DeclarativeWorkspace
     from gooddata_api_client.model.declarative_workspace_data_filter import DeclarativeWorkspaceDataFilter
+    globals()['DeclarativeCustomGeoCollection'] = DeclarativeCustomGeoCollection
     globals()['DeclarativeDataSource'] = DeclarativeDataSource
     globals()['DeclarativeExportTemplate'] = DeclarativeExportTemplate
     globals()['DeclarativeIdentityProvider'] = DeclarativeIdentityProvider
@@ -107,6 +109,7 @@ class DeclarativeOrganization(ModelNormal):
         lazy_import()
         return {
             'organization': (DeclarativeOrganizationInfo,),  # noqa: E501
+            'custom_geo_collections': ([DeclarativeCustomGeoCollection],),  # noqa: E501
             'data_sources': ([DeclarativeDataSource],),  # noqa: E501
             'export_templates': ([DeclarativeExportTemplate],),  # noqa: E501
             'identity_providers': ([DeclarativeIdentityProvider],),  # noqa: E501
@@ -125,6 +128,7 @@ class DeclarativeOrganization(ModelNormal):
 
     attribute_map = {
         'organization': 'organization',  # noqa: E501
+        'custom_geo_collections': 'customGeoCollections',  # noqa: E501
         'data_sources': 'dataSources',  # noqa: E501
         'export_templates': 'exportTemplates',  # noqa: E501
         'identity_providers': 'identityProviders',  # noqa: E501
@@ -180,6 +184,7 @@ class DeclarativeOrganization(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            custom_geo_collections ([DeclarativeCustomGeoCollection]): [optional]  # noqa: E501
             data_sources ([DeclarativeDataSource]): [optional]  # noqa: E501
             export_templates ([DeclarativeExportTemplate]): [optional]  # noqa: E501
             identity_providers ([DeclarativeIdentityProvider]): [optional]  # noqa: E501
@@ -278,6 +283,7 @@ class DeclarativeOrganization(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            custom_geo_collections ([DeclarativeCustomGeoCollection]): [optional]  # noqa: E501
             data_sources ([DeclarativeDataSource]): [optional]  # noqa: E501
             export_templates ([DeclarativeExportTemplate]): [optional]  # noqa: E501
             identity_providers ([DeclarativeIdentityProvider]): [optional]  # noqa: E501

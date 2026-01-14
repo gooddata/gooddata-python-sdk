@@ -1,4 +1,4 @@
-# (C) 2025 GoodData Corporation
+# (C) 2026 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -61,6 +61,8 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
           - '0'
+        Content-Type:
+          - application/vnd.gooddata.api+json
         DATE: *id001
         Expires:
           - '0'
@@ -100,7 +102,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '430'
+          - '450'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -127,6 +129,7 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
+              allowedOrigins: []
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting

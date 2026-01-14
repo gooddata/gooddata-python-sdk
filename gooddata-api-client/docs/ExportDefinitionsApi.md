@@ -9,6 +9,7 @@ Method | HTTP request | Description
 [**get_all_entities_export_definitions**](ExportDefinitionsApi.md#get_all_entities_export_definitions) | **GET** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions | Get all Export Definitions
 [**get_entity_export_definitions**](ExportDefinitionsApi.md#get_entity_export_definitions) | **GET** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/{objectId} | Get an Export Definition
 [**patch_entity_export_definitions**](ExportDefinitionsApi.md#patch_entity_export_definitions) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/{objectId} | Patch an Export Definition
+[**search_entities_export_definitions**](ExportDefinitionsApi.md#search_entities_export_definitions) | **POST** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/search | Search request for ExportDefinition
 [**update_entity_export_definitions**](ExportDefinitionsApi.md#update_entity_export_definitions) | **PUT** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/{objectId} | Put an Export Definition
 
 
@@ -107,8 +108,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -279,7 +280,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -367,7 +368,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -473,8 +474,107 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **search_entities_export_definitions**
+> JsonApiExportDefinitionOutList search_entities_export_definitions(workspace_id, entity_search_body)
+
+Search request for ExportDefinition
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import export_definitions_api
+from gooddata_api_client.model.json_api_export_definition_out_list import JsonApiExportDefinitionOutList
+from gooddata_api_client.model.entity_search_body import EntitySearchBody
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = export_definitions_api.ExportDefinitionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    entity_search_body = EntitySearchBody(
+        filter="filter_example",
+        include=[
+            "include_example",
+        ],
+        meta_include=[
+            "meta_include_example",
+        ],
+        page=EntitySearchPage(
+            index=0,
+            size=100,
+        ),
+        sort=[
+            EntitySearchSort(
+                direction="ASC",
+                _property="_property_example",
+            ),
+        ],
+    ) # EntitySearchBody | Search request body with filter, pagination, and sorting options
+    origin = "ALL" # str |  (optional) if omitted the server will use the default value of "ALL"
+    x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Search request for ExportDefinition
+        api_response = api_instance.search_entities_export_definitions(workspace_id, entity_search_body)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ExportDefinitionsApi->search_entities_export_definitions: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Search request for ExportDefinition
+        api_response = api_instance.search_entities_export_definitions(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ExportDefinitionsApi->search_entities_export_definitions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **entity_search_body** | [**EntitySearchBody**](EntitySearchBody.md)| Search request body with filter, pagination, and sorting options |
+ **origin** | **str**|  | [optional] if omitted the server will use the default value of "ALL"
+ **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+
+### Return type
+
+[**JsonApiExportDefinitionOutList**](JsonApiExportDefinitionOutList.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details
@@ -580,8 +680,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/vnd.gooddata.api+json
- - **Accept**: application/vnd.gooddata.api+json
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
 
 
 ### HTTP response details

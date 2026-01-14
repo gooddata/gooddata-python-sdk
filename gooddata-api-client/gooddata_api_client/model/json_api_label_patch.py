@@ -31,8 +31,8 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_label_patch_attributes import JsonApiLabelPatchAttributes
-    globals()['JsonApiLabelPatchAttributes'] = JsonApiLabelPatchAttributes
+    from gooddata_api_client.model.json_api_attribute_patch_attributes import JsonApiAttributePatchAttributes
+    globals()['JsonApiAttributePatchAttributes'] = JsonApiAttributePatchAttributes
 
 
 class JsonApiLabelPatch(ModelNormal):
@@ -98,7 +98,7 @@ class JsonApiLabelPatch(ModelNormal):
         return {
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
-            'attributes': (JsonApiLabelPatchAttributes,),  # noqa: E501
+            'attributes': (JsonApiAttributePatchAttributes,),  # noqa: E501
         }
 
     @cached_property
@@ -157,7 +157,7 @@ class JsonApiLabelPatch(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiLabelPatchAttributes): [optional]  # noqa: E501
+            attributes (JsonApiAttributePatchAttributes): [optional]  # noqa: E501
         """
 
         type = kwargs.get('type', "label")
@@ -250,7 +250,7 @@ class JsonApiLabelPatch(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiLabelPatchAttributes): [optional]  # noqa: E501
+            attributes (JsonApiAttributePatchAttributes): [optional]  # noqa: E501
         """
 
         type = kwargs.get('type', "label")

@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 **name** | **str** | User-facing name of the data source. | 
 **schema** | **str** | The schema to use as the root of the data for the data source. | 
 **type** | **str** | Type of the database providing the data for the data source. | 
+**alternative_data_source_id** | **str, none_type** | Alternative data source ID. It is a weak reference meaning data source does not have to exist. All the entities (e.g. tables) from the data source must be available also in the alternative data source. It must be present in the same organization as the data source. | [optional] 
 **authentication_type** | **str, none_type** | Type of authentication used to connect to the database. | [optional] 
 **cache_strategy** | **str, none_type** | Determines how the results coming from a particular datasource should be cached. | [optional] 
 **client_id** | **str, none_type** | The client id to use to connect to the database providing the data for the data source (for example a Databricks Service Account). | [optional] 

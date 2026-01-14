@@ -1,4 +1,4 @@
-# (C) 2025 GoodData Corporation
+# (C) 2026 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -7,7 +7,7 @@ interactions:
       body: null
       headers:
         Accept:
-          - application/vnd.gooddata.api+json
+          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
@@ -48,7 +48,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 3223b7b1ed8b8b624f299e8d31fb40fa
+          traceId: aa1d114185cb7a970bdef6c9551322af
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings
@@ -62,11 +62,11 @@ interactions:
             type: LOCALE
       headers:
         Accept:
-          - application/vnd.gooddata.api+json
+          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -81,7 +81,7 @@ interactions:
         Content-Length:
           - '283'
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         DATE: *id001
         Expires:
           - '0'
@@ -119,7 +119,7 @@ interactions:
       body: null
       headers:
         Accept:
-          - application/vnd.gooddata.api+json
+          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
@@ -159,7 +159,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: f15b4a07e037a17cec7f823175f77f06
+          traceId: c3ec2af54dba92ef69628b6978da0c41
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings
@@ -173,11 +173,11 @@ interactions:
             type: FORMAT_LOCALE
       headers:
         Accept:
-          - application/vnd.gooddata.api+json
+          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -192,7 +192,7 @@ interactions:
         Content-Length:
           - '290'
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         DATE: *id001
         Expires:
           - '0'
@@ -230,7 +230,7 @@ interactions:
       body: null
       headers:
         Accept:
-          - application/vnd.gooddata.api+json
+          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
@@ -247,7 +247,7 @@ interactions:
         Content-Length:
           - '771'
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         DATE: *id001
         Expires:
           - '0'
@@ -312,6 +312,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Content-Type:
+          - application/vnd.gooddata.api+json
         DATE: *id001
         Expires:
           - '0'
@@ -348,6 +350,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Content-Type:
+          - application/vnd.gooddata.api+json
         DATE: *id001
         Expires:
           - '0'
@@ -372,7 +376,7 @@ interactions:
       body: null
       headers:
         Accept:
-          - application/vnd.gooddata.api+json
+          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
@@ -389,7 +393,7 @@ interactions:
         Content-Length:
           - '215'
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         DATE: *id001
         Expires:
           - '0'

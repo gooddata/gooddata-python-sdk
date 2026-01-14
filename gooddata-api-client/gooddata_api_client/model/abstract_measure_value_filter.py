@@ -33,12 +33,16 @@ from gooddata_api_client.exceptions import ApiAttributeError
 def lazy_import():
     from gooddata_api_client.model.comparison_measure_value_filter import ComparisonMeasureValueFilter
     from gooddata_api_client.model.comparison_measure_value_filter_comparison_measure_value_filter import ComparisonMeasureValueFilterComparisonMeasureValueFilter
+    from gooddata_api_client.model.compound_measure_value_filter import CompoundMeasureValueFilter
+    from gooddata_api_client.model.compound_measure_value_filter_compound_measure_value_filter import CompoundMeasureValueFilterCompoundMeasureValueFilter
     from gooddata_api_client.model.range_measure_value_filter import RangeMeasureValueFilter
     from gooddata_api_client.model.range_measure_value_filter_range_measure_value_filter import RangeMeasureValueFilterRangeMeasureValueFilter
     from gooddata_api_client.model.ranking_filter import RankingFilter
     from gooddata_api_client.model.ranking_filter_ranking_filter import RankingFilterRankingFilter
     globals()['ComparisonMeasureValueFilter'] = ComparisonMeasureValueFilter
     globals()['ComparisonMeasureValueFilterComparisonMeasureValueFilter'] = ComparisonMeasureValueFilterComparisonMeasureValueFilter
+    globals()['CompoundMeasureValueFilter'] = CompoundMeasureValueFilter
+    globals()['CompoundMeasureValueFilterCompoundMeasureValueFilter'] = CompoundMeasureValueFilterCompoundMeasureValueFilter
     globals()['RangeMeasureValueFilter'] = RangeMeasureValueFilter
     globals()['RangeMeasureValueFilterRangeMeasureValueFilter'] = RangeMeasureValueFilterRangeMeasureValueFilter
     globals()['RankingFilter'] = RankingFilter
@@ -100,6 +104,7 @@ class AbstractMeasureValueFilter(ModelComposed):
         return {
             'comparison_measure_value_filter': (ComparisonMeasureValueFilterComparisonMeasureValueFilter,),  # noqa: E501
             'range_measure_value_filter': (RangeMeasureValueFilterRangeMeasureValueFilter,),  # noqa: E501
+            'compound_measure_value_filter': (CompoundMeasureValueFilterCompoundMeasureValueFilter,),  # noqa: E501
             'ranking_filter': (RankingFilterRankingFilter,),  # noqa: E501
         }
 
@@ -111,6 +116,7 @@ class AbstractMeasureValueFilter(ModelComposed):
     attribute_map = {
         'comparison_measure_value_filter': 'comparisonMeasureValueFilter',  # noqa: E501
         'range_measure_value_filter': 'rangeMeasureValueFilter',  # noqa: E501
+        'compound_measure_value_filter': 'compoundMeasureValueFilter',  # noqa: E501
         'ranking_filter': 'rankingFilter',  # noqa: E501
     }
 
@@ -155,6 +161,7 @@ class AbstractMeasureValueFilter(ModelComposed):
                                 _visited_composed_classes = (Animal,)
             comparison_measure_value_filter (ComparisonMeasureValueFilterComparisonMeasureValueFilter): [optional]  # noqa: E501
             range_measure_value_filter (RangeMeasureValueFilterRangeMeasureValueFilter): [optional]  # noqa: E501
+            compound_measure_value_filter (CompoundMeasureValueFilterCompoundMeasureValueFilter): [optional]  # noqa: E501
             ranking_filter (RankingFilterRankingFilter): [optional]  # noqa: E501
         """
 
@@ -261,6 +268,7 @@ class AbstractMeasureValueFilter(ModelComposed):
                                 _visited_composed_classes = (Animal,)
             comparison_measure_value_filter (ComparisonMeasureValueFilterComparisonMeasureValueFilter): [optional]  # noqa: E501
             range_measure_value_filter (RangeMeasureValueFilterRangeMeasureValueFilter): [optional]  # noqa: E501
+            compound_measure_value_filter (CompoundMeasureValueFilterCompoundMeasureValueFilter): [optional]  # noqa: E501
             ranking_filter (RankingFilterRankingFilter): [optional]  # noqa: E501
         """
 
@@ -334,6 +342,7 @@ class AbstractMeasureValueFilter(ModelComposed):
           ],
           'oneOf': [
               ComparisonMeasureValueFilter,
+              CompoundMeasureValueFilter,
               RangeMeasureValueFilter,
               RankingFilter,
           ],

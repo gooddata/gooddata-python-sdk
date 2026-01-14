@@ -115,6 +115,8 @@ class DeclarativeFact(ModelNormal):
             'title': (str,),  # noqa: E501
             'description': (str,),  # noqa: E501
             'is_hidden': (bool,),  # noqa: E501
+            'is_nullable': (bool,),  # noqa: E501
+            'null_value': (str,),  # noqa: E501
             'source_column_data_type': (str,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
         }
@@ -130,6 +132,8 @@ class DeclarativeFact(ModelNormal):
         'title': 'title',  # noqa: E501
         'description': 'description',  # noqa: E501
         'is_hidden': 'isHidden',  # noqa: E501
+        'is_nullable': 'isNullable',  # noqa: E501
+        'null_value': 'nullValue',  # noqa: E501
         'source_column_data_type': 'sourceColumnDataType',  # noqa: E501
         'tags': 'tags',  # noqa: E501
     }
@@ -182,6 +186,8 @@ class DeclarativeFact(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             description (str): Fact description.. [optional]  # noqa: E501
             is_hidden (bool): If true, this fact is hidden from AI search results.. [optional]  # noqa: E501
+            is_nullable (bool): Flag indicating whether the associated source column allows null values.. [optional]  # noqa: E501
+            null_value (str): Value used in coalesce during joins instead of null.. [optional]  # noqa: E501
             source_column_data_type (str): A type of the source column. [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
         """
@@ -279,6 +285,8 @@ class DeclarativeFact(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             description (str): Fact description.. [optional]  # noqa: E501
             is_hidden (bool): If true, this fact is hidden from AI search results.. [optional]  # noqa: E501
+            is_nullable (bool): Flag indicating whether the associated source column allows null values.. [optional]  # noqa: E501
+            null_value (str): Value used in coalesce during joins instead of null.. [optional]  # noqa: E501
             source_column_data_type (str): A type of the source column. [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
         """

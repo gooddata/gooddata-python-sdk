@@ -134,6 +134,7 @@ class AutomationOrganizationViewControllerApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/json',
                     'application/vnd.gooddata.api+json'
                 ],
                 'content_type': [],

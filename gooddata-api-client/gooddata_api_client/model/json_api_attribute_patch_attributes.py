@@ -89,7 +89,6 @@ class JsonApiAttributePatchAttributes(ModelNormal):
         """
         return {
             'description': (str,),  # noqa: E501
-            'locale': (str,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
             'title': (str,),  # noqa: E501
         }
@@ -101,7 +100,6 @@ class JsonApiAttributePatchAttributes(ModelNormal):
 
     attribute_map = {
         'description': 'description',  # noqa: E501
-        'locale': 'locale',  # noqa: E501
         'tags': 'tags',  # noqa: E501
         'title': 'title',  # noqa: E501
     }
@@ -148,7 +146,6 @@ class JsonApiAttributePatchAttributes(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             description (str): [optional]  # noqa: E501
-            locale (str): [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
         """
@@ -237,7 +234,6 @@ class JsonApiAttributePatchAttributes(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             description (str): [optional]  # noqa: E501
-            locale (str): [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
         """

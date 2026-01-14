@@ -11,7 +11,9 @@ Name | Type | Description | Notes
 **reference_period** | **str** | The reference time period (e.g., &#39;2025-01&#39;) | 
 **attributes** | [**[AttributeItem]**](AttributeItem.md) | Attributes to analyze for significant changes. If empty, valid attributes will be automatically discovered. | [optional] 
 **aux_measures** | [**[MeasureItem]**](MeasureItem.md) | Auxiliary measures | [optional] 
+**exclude_tags** | **[str]** | Exclude attributes with any of these tags. This filter applies to both auto-discovered and explicitly provided attributes. | [optional] 
 **filters** | [**[ChangeAnalysisParamsFiltersInner]**](ChangeAnalysisParamsFiltersInner.md) | Optional filters to apply. | [optional] 
+**include_tags** | **[str]** | Only include attributes with at least one of these tags. If empty, no inclusion filter is applied. This filter applies to both auto-discovered and explicitly provided attributes. | [optional] 
 **use_smart_attribute_selection** | **bool** | Whether to use smart attribute selection (LLM-based) instead of discovering all valid attributes. If true, GenAI will intelligently select the most relevant attributes for change analysis. If false or not set, all valid attributes will be discovered using Calcique. Smart attribute selection applies only when no attributes are provided. | [optional]  if omitted the server will use the default value of False
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 

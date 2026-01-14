@@ -1,4 +1,4 @@
-# (C) 2025 GoodData Corporation
+# (C) 2026 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -7,7 +7,7 @@ interactions:
       body: null
       headers:
         Accept:
-          - application/vnd.gooddata.api+json
+          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
@@ -24,7 +24,7 @@ interactions:
         Content-Length:
           - '491'
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         DATE: &id001
           - PLACEHOLDER
         Expires:
@@ -51,8 +51,8 @@ interactions:
                 url: jdbc:postgresql://postgres:5432/tiger?sslmode=prefer
                 username: postgres
                 authenticationType: USERNAME_PASSWORD
-                type: POSTGRESQL
                 name: demo-test-ds
+                type: POSTGRESQL
                 schema: demo
               links:
                 self: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds
@@ -65,7 +65,7 @@ interactions:
       body: null
       headers:
         Accept:
-          - application/vnd.gooddata.api+json
+          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
@@ -105,7 +105,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: c6a5cf6131842d1ac90249d6d7c10e0a
+          traceId: dc509f1924e5574585f7985cee3a5859
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources
@@ -122,11 +122,11 @@ interactions:
           type: dataSource
       headers:
         Accept:
-          - application/vnd.gooddata.api+json
+          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -141,7 +141,7 @@ interactions:
         Content-Length:
           - '319'
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         DATE: *id001
         Expires:
           - '0'
@@ -167,8 +167,8 @@ interactions:
               url: jdbc:postgresql://localhost:5432/demo?autosave=true&sslmode=prefer
               username: demouser
               authenticationType: USERNAME_PASSWORD
-              type: POSTGRESQL
               name: Test
+              type: POSTGRESQL
               schema: demo
           links:
             self: http://localhost:3000/api/v1/entities/dataSources/test
@@ -178,7 +178,7 @@ interactions:
       body: null
       headers:
         Accept:
-          - application/vnd.gooddata.api+json
+          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
@@ -195,7 +195,7 @@ interactions:
         Content-Length:
           - '319'
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         DATE: *id001
         Expires:
           - '0'
@@ -221,8 +221,8 @@ interactions:
               url: jdbc:postgresql://localhost:5432/demo?autosave=true&sslmode=prefer
               username: demouser
               authenticationType: USERNAME_PASSWORD
-              type: POSTGRESQL
               name: Test
+              type: POSTGRESQL
               schema: demo
           links:
             self: http://localhost:3000/api/v1/entities/dataSources/test
@@ -232,7 +232,7 @@ interactions:
       body: null
       headers:
         Accept:
-          - application/vnd.gooddata.api+json
+          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
@@ -249,7 +249,7 @@ interactions:
         Content-Length:
           - '319'
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         DATE: *id001
         Expires:
           - '0'
@@ -275,8 +275,8 @@ interactions:
               url: jdbc:postgresql://localhost:5432/demo?autosave=true&sslmode=prefer
               username: demouser
               authenticationType: USERNAME_PASSWORD
-              type: POSTGRESQL
               name: Test
+              type: POSTGRESQL
               schema: demo
           links:
             self: http://localhost:3000/api/v1/entities/dataSources/test
@@ -296,11 +296,11 @@ interactions:
           type: dataSource
       headers:
         Accept:
-          - application/vnd.gooddata.api+json
+          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -315,7 +315,7 @@ interactions:
         Content-Length:
           - '321'
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         DATE: *id001
         Expires:
           - '0'
@@ -341,8 +341,8 @@ interactions:
               url: jdbc:postgresql://localhost:5432/demo?autosave=false&sslmode=prefer
               username: demouser
               authenticationType: USERNAME_PASSWORD
-              type: POSTGRESQL
               name: Test2
+              type: POSTGRESQL
               schema: demo
           links:
             self: http://localhost:3000/api/v1/entities/dataSources/test
@@ -352,7 +352,7 @@ interactions:
       body: null
       headers:
         Accept:
-          - application/vnd.gooddata.api+json
+          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
@@ -369,7 +369,7 @@ interactions:
         Content-Length:
           - '804'
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         DATE: *id001
         Expires:
           - '0'
@@ -395,8 +395,8 @@ interactions:
                 url: jdbc:postgresql://postgres:5432/tiger?sslmode=prefer
                 username: postgres
                 authenticationType: USERNAME_PASSWORD
-                type: POSTGRESQL
                 name: demo-test-ds
+                type: POSTGRESQL
                 schema: demo
               links:
                 self: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds
@@ -406,8 +406,8 @@ interactions:
                 url: jdbc:postgresql://localhost:5432/demo?autosave=false&sslmode=prefer
                 username: demouser
                 authenticationType: USERNAME_PASSWORD
-                type: POSTGRESQL
                 name: Test2
+                type: POSTGRESQL
                 schema: demo
               links:
                 self: http://localhost:3000/api/v1/entities/dataSources/test
@@ -432,6 +432,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Content-Type:
+          - application/vnd.gooddata.api+json
         DATE: *id001
         Expires:
           - '0'
@@ -456,7 +458,7 @@ interactions:
       body: null
       headers:
         Accept:
-          - application/vnd.gooddata.api+json
+          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
@@ -473,7 +475,7 @@ interactions:
         Content-Length:
           - '491'
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         DATE: *id001
         Expires:
           - '0'
@@ -499,8 +501,8 @@ interactions:
                 url: jdbc:postgresql://postgres:5432/tiger?sslmode=prefer
                 username: postgres
                 authenticationType: USERNAME_PASSWORD
-                type: POSTGRESQL
                 name: demo-test-ds
+                type: POSTGRESQL
                 schema: demo
               links:
                 self: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds

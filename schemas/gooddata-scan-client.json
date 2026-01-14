@@ -190,6 +190,10 @@
             "maxLength": 10000,
             "type": "string"
           },
+          "isNullable": {
+            "description": "Column is nullable",
+            "type": "boolean"
+          },
           "isPrimaryKey": {
             "description": "Is column part of primary key?",
             "type": "boolean"

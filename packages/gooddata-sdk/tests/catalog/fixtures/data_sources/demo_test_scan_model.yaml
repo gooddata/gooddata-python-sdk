@@ -1,4 +1,4 @@
-# (C) 2025 GoodData Corporation
+# (C) 2026 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -27,7 +27,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '2372'
+          - '2863'
         Content-Type:
           - application/json
         DATE: &id001
@@ -53,23 +53,29 @@ interactions:
             tables:
               - columns:
                   - dataType: NUMERIC
+                    isNullable: true
                     isPrimaryKey: false
                     name: budget
                   - dataType: STRING
+                    isNullable: false
                     isPrimaryKey: true
                     name: campaign_channel_id
                   - dataType: INT
+                    isNullable: true
                     isPrimaryKey: false
                     name: campaign_id
                     referencedTableColumn: campaign_id
                     referencedTableId: campaigns
                   - dataType: STRING
+                    isNullable: true
                     isPrimaryKey: false
                     name: category
                   - dataType: NUMERIC
+                    isNullable: true
                     isPrimaryKey: false
                     name: spend
                   - dataType: STRING
+                    isNullable: true
                     isPrimaryKey: false
                     name: type
                 id: campaign_channels
@@ -79,9 +85,11 @@ interactions:
                 type: TABLE
               - columns:
                   - dataType: INT
+                    isNullable: false
                     isPrimaryKey: true
                     name: campaign_id
                   - dataType: STRING
+                    isNullable: true
                     isPrimaryKey: false
                     name: campaign_name
                 id: campaigns
@@ -91,18 +99,23 @@ interactions:
                 type: TABLE
               - columns:
                   - dataType: INT
+                    isNullable: false
                     isPrimaryKey: true
                     name: customer_id
                   - dataType: STRING
+                    isNullable: true
                     isPrimaryKey: false
                     name: customer_name
                   - dataType: STRING
+                    isNullable: true
                     isPrimaryKey: false
                     name: geo__state__location
                   - dataType: STRING
+                    isNullable: true
                     isPrimaryKey: false
                     name: region
                   - dataType: STRING
+                    isNullable: true
                     isPrimaryKey: false
                     name: state
                 id: customers
@@ -112,42 +125,53 @@ interactions:
                 type: TABLE
               - columns:
                   - dataType: INT
+                    isNullable: true
                     isPrimaryKey: false
                     name: campaign_id
                     referencedTableColumn: campaign_id
                     referencedTableId: campaigns
                   - dataType: INT
+                    isNullable: true
                     isPrimaryKey: false
                     name: customer_id
                     referencedTableColumn: customer_id
                     referencedTableId: customers
                   - dataType: DATE
+                    isNullable: true
                     isPrimaryKey: false
                     name: date
                   - dataType: STRING
+                    isNullable: true
                     isPrimaryKey: false
                     name: order_id
                   - dataType: STRING
+                    isNullable: false
                     isPrimaryKey: true
                     name: order_line_id
                   - dataType: STRING
+                    isNullable: true
                     isPrimaryKey: false
                     name: order_status
                   - dataType: NUMERIC
+                    isNullable: true
                     isPrimaryKey: false
                     name: price
                   - dataType: INT
+                    isNullable: true
                     isPrimaryKey: false
                     name: product_id
                     referencedTableColumn: product_id
                     referencedTableId: products
                   - dataType: NUMERIC
+                    isNullable: true
                     isPrimaryKey: false
                     name: quantity
                   - dataType: STRING
+                    isNullable: true
                     isPrimaryKey: false
                     name: wdf__region
                   - dataType: STRING
+                    isNullable: true
                     isPrimaryKey: false
                     name: wdf__state
                 id: order_lines
@@ -157,12 +181,15 @@ interactions:
                 type: TABLE
               - columns:
                   - dataType: STRING
+                    isNullable: true
                     isPrimaryKey: false
                     name: category
                   - dataType: INT
+                    isNullable: false
                     isPrimaryKey: true
                     name: product_id
                   - dataType: STRING
+                    isNullable: true
                     isPrimaryKey: false
                     name: product_name
                 id: products

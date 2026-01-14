@@ -1,4 +1,4 @@
-# (C) 2025 GoodData Corporation
+# (C) 2026 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -7,7 +7,7 @@ interactions:
       body: null
       headers:
         Accept:
-          - application/vnd.gooddata.api+json
+          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
@@ -24,7 +24,7 @@ interactions:
         Content-Length:
           - '1302'
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         DATE: &id001
           - PLACEHOLDER
         Expires:
@@ -58,7 +58,7 @@ interactions:
             - id: demo
               type: user
               attributes:
-                authenticationId: CiQ0NjFjNmYyYS1hMzg0LTQ3ODctODhjYy1kYzE3YmI1NTRhMzgSBWxvY2Fs
+                authenticationId: CiQ3MmJmOWI3My05MDkwLTRlNWEtOTc0Yi1kZTAyYzE0NDlhMGESBWxvY2Fs
                 firstname: Demo
                 lastname: User
                 email: demo@example.com
@@ -72,7 +72,7 @@ interactions:
             - id: demo2
               type: user
               attributes:
-                authenticationId: CiQwODI1YTc5My01ZjNkLTQ5MGUtYjRmMC0wNjdkNGIyODIyMTkSBWxvY2Fs
+                authenticationId: CiRmNjg4MWVhNy1jYzljLTQ0MmEtYjllMS02NDE3NTRmYzJlYzUSBWxvY2Fs
               relationships:
                 userGroups:
                   data:
@@ -101,7 +101,7 @@ interactions:
       body: null
       headers:
         Accept:
-          - application/vnd.gooddata.api+json
+          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
@@ -141,7 +141,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 1ca2af4b98860190d40181b34a0b3a7d
+          traceId: d053c51529741c1340d7c5d3c9309445
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/users
@@ -161,11 +161,11 @@ interactions:
                   type: userGroup
       headers:
         Accept:
-          - application/vnd.gooddata.api+json
+          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -180,7 +180,7 @@ interactions:
         Content-Length:
           - '227'
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         DATE: *id001
         Expires:
           - '0'
@@ -215,7 +215,7 @@ interactions:
       body: null
       headers:
         Accept:
-          - application/vnd.gooddata.api+json
+          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
@@ -232,7 +232,7 @@ interactions:
         Content-Length:
           - '490'
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         DATE: *id001
         Expires:
           - '0'
@@ -279,7 +279,7 @@ interactions:
       body: null
       headers:
         Accept:
-          - application/vnd.gooddata.api+json
+          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
@@ -296,7 +296,7 @@ interactions:
         Content-Length:
           - '1601'
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         DATE: *id001
         Expires:
           - '0'
@@ -329,7 +329,7 @@ interactions:
             - id: demo
               type: user
               attributes:
-                authenticationId: CiQ0NjFjNmYyYS1hMzg0LTQ3ODctODhjYy1kYzE3YmI1NTRhMzgSBWxvY2Fs
+                authenticationId: CiQ3MmJmOWI3My05MDkwLTRlNWEtOTc0Yi1kZTAyYzE0NDlhMGESBWxvY2Fs
                 firstname: Demo
                 lastname: User
                 email: demo@example.com
@@ -343,7 +343,7 @@ interactions:
             - id: demo2
               type: user
               attributes:
-                authenticationId: CiQwODI1YTc5My01ZjNkLTQ5MGUtYjRmMC0wNjdkNGIyODIyMTkSBWxvY2Fs
+                authenticationId: CiRmNjg4MWVhNy1jYzljLTQ0MmEtYjllMS02NDE3NTRmYzJlYzUSBWxvY2Fs
               relationships:
                 userGroups:
                   data:
@@ -398,6 +398,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Content-Type:
+          - application/vnd.gooddata.api+json
         DATE: *id001
         Expires:
           - '0'
@@ -422,7 +424,7 @@ interactions:
       body: null
       headers:
         Accept:
-          - application/vnd.gooddata.api+json
+          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
@@ -439,7 +441,7 @@ interactions:
         Content-Length:
           - '1302'
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         DATE: *id001
         Expires:
           - '0'
@@ -472,7 +474,7 @@ interactions:
             - id: demo
               type: user
               attributes:
-                authenticationId: CiQ0NjFjNmYyYS1hMzg0LTQ3ODctODhjYy1kYzE3YmI1NTRhMzgSBWxvY2Fs
+                authenticationId: CiQ3MmJmOWI3My05MDkwLTRlNWEtOTc0Yi1kZTAyYzE0NDlhMGESBWxvY2Fs
                 firstname: Demo
                 lastname: User
                 email: demo@example.com
@@ -486,7 +488,7 @@ interactions:
             - id: demo2
               type: user
               attributes:
-                authenticationId: CiQwODI1YTc5My01ZjNkLTQ5MGUtYjRmMC0wNjdkNGIyODIyMTkSBWxvY2Fs
+                authenticationId: CiRmNjg4MWVhNy1jYzljLTQ0MmEtYjllMS02NDE3NTRmYzJlYzUSBWxvY2Fs
               relationships:
                 userGroups:
                   data:

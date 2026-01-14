@@ -1,4 +1,4 @@
-# (C) 2025 GoodData Corporation
+# (C) 2026 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -7,7 +7,7 @@ interactions:
       body: null
       headers:
         Accept:
-          - application/vnd.gooddata.api+json
+          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
@@ -24,7 +24,7 @@ interactions:
         Content-Length:
           - '15271'
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         DATE: &id001
           - PLACEHOLDER
         Expires:
