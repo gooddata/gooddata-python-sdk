@@ -51,9 +51,9 @@ Source = "https://github.com/gooddata/gooddata-python-sdk"
 test = [
     "pytest~=8.3.4",
     "pytest-cov~=6.0.0",
-    "vcrpy~=7.0.0",
+    "vcrpy~=8.0.0",
     # TODO - Bump the version together with bumping the version of openapi generator
-    "urllib3==1.26.9",
+    "urllib3~=2.6.0",
     "pyyaml",
     "tests_support",
 ]
