@@ -995,6 +995,7 @@ services:
   # This is CRITICAL for Python SDK tests which expect consistent fixture names
   data-loader:
     image: 020413372491.dkr.ecr.us-east-1.amazonaws.com/nas/data-loader:master
+    platform: linux/amd64
     pull_policy: always
     tty: true
     depends_on:
