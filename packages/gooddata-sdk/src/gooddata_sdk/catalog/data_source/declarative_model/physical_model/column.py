@@ -13,6 +13,7 @@ from gooddata_sdk.catalog.base import Base
 class CatalogDeclarativeColumn(Base):
     name: str
     data_type: str
+    description: Optional[str] = None
     is_primary_key: Optional[bool] = None
     referenced_table_id: Optional[str] = None
     referenced_table_column: Optional[str] = None
