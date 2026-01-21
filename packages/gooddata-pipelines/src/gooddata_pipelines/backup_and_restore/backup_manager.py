@@ -164,6 +164,7 @@ class BackupManager(BaseManager):
         """
         exported = False
         for workspace_id in workspaces_to_export:
+            workspace_start_time = time.time()
             export_path = Path(
                 local_target_path,
                 self.org_id,
@@ -196,11 +197,24 @@ class BackupManager(BaseManager):
                 self._store_user_data_filters(
                     user_data_filters, export_path, workspace_id
                 )
-                self.logger.info(f"Stored export for {workspace_id}")
+
+                workspace_duration_ms = int(
+                    (time.time() - workspace_start_time) * 1000
+                )
+                zip_file_path = f"{self.org_id}/{workspace_id}.zip"
+
+                self.logger.info(
+                    f"Completed backup for workspace {workspace_id} "
+                    f"to {zip_file_path} in {workspace_duration_ms}ms"
+                )
                 exported = True
             except Exception as e:
+                workspace_duration_ms = int(
+                    (time.time() - workspace_start_time) * 1000
+                )
                 self.logger.error(
-                    f"Skipping {workspace_id}. {e.__class__.__name__} encountered: {e}"
+                    f"Skipping {workspace_id} after {workspace_duration_ms}ms. "
+                    f"{e.__class__.__name__} encountered: {e}"
                 )
 
         if not exported:
