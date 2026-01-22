@@ -1,4 +1,4 @@
-# (C) 2025 GoodData Corporation
+# (C) 2026 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -88,7 +88,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-Gdc-Cancel-Token:
-          - 6549e330-a06e-48d8-96af-c01f41835659
+          - 52a15b87-344a-459f-91fb-c1b3e2013287
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - '0'
@@ -149,10 +149,10 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_0
             links:
-              executionResult: 2b653c8a9037734bbac08f4e3dca0bb2c51fe1d1:f130869b05a2d722bea9a95fd380a42316d6df0a75a9fb505ebdf87317c58061
+              executionResult: 8ee95f1fdbbae6415bf69b7d5f32eb8bdfb75c9a:95e4dfca02ed87da101928de48bfec048b60c4033507f6d492a8ec5ebf03b6ad
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/2b653c8a9037734bbac08f4e3dca0bb2c51fe1d1%3Af130869b05a2d722bea9a95fd380a42316d6df0a75a9fb505ebdf87317c58061/metadata
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/8ee95f1fdbbae6415bf69b7d5f32eb8bdfb75c9a%3A95e4dfca02ed87da101928de48bfec048b60c4033507f6d492a8ec5ebf03b6ad/metadata
       body: null
       headers:
         Accept:
@@ -289,7 +289,7 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_0
             links:
-              executionResult: 2b653c8a9037734bbac08f4e3dca0bb2c51fe1d1:f130869b05a2d722bea9a95fd380a42316d6df0a75a9fb505ebdf87317c58061
+              executionResult: 8ee95f1fdbbae6415bf69b7d5f32eb8bdfb75c9a:95e4dfca02ed87da101928de48bfec048b60c4033507f6d492a8ec5ebf03b6ad
           resultSpec:
             dimensions:
               - localIdentifier: dim_0
@@ -303,7 +303,7 @@ interactions:
           resultSize: 2913
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/2b653c8a9037734bbac08f4e3dca0bb2c51fe1d1%3Af130869b05a2d722bea9a95fd380a42316d6df0a75a9fb505ebdf87317c58061?offset=0&limit=500
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/8ee95f1fdbbae6415bf69b7d5f32eb8bdfb75c9a%3A95e4dfca02ed87da101928de48bfec048b60c4033507f6d492a8ec5ebf03b6ad?offset=0&limit=500
       body: null
       headers:
         Accept:
@@ -4730,7 +4730,7 @@ interactions:
             dataSourceMessages: []
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/2b653c8a9037734bbac08f4e3dca0bb2c51fe1d1%3Af130869b05a2d722bea9a95fd380a42316d6df0a75a9fb505ebdf87317c58061/metadata
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/8ee95f1fdbbae6415bf69b7d5f32eb8bdfb75c9a%3A95e4dfca02ed87da101928de48bfec048b60c4033507f6d492a8ec5ebf03b6ad/metadata
       body: null
       headers:
         Accept:
@@ -4867,7 +4867,7 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_0
             links:
-              executionResult: 2b653c8a9037734bbac08f4e3dca0bb2c51fe1d1:f130869b05a2d722bea9a95fd380a42316d6df0a75a9fb505ebdf87317c58061
+              executionResult: 8ee95f1fdbbae6415bf69b7d5f32eb8bdfb75c9a:95e4dfca02ed87da101928de48bfec048b60c4033507f6d492a8ec5ebf03b6ad
           resultSpec:
             dimensions:
               - localIdentifier: dim_0
@@ -4881,7 +4881,7 @@ interactions:
           resultSize: 2913
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/2b653c8a9037734bbac08f4e3dca0bb2c51fe1d1%3Af130869b05a2d722bea9a95fd380a42316d6df0a75a9fb505ebdf87317c58061?offset=0&limit=500
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/8ee95f1fdbbae6415bf69b7d5f32eb8bdfb75c9a%3A95e4dfca02ed87da101928de48bfec048b60c4033507f6d492a8ec5ebf03b6ad?offset=0&limit=500
       body: null
       headers:
         Accept:

@@ -57,7 +57,6 @@ class DependentEntitiesNode(ModelNormal):
 
     allowed_values = {
         ('type',): {
-            'AGGREGATEDFACT': "aggregatedFact",
             'ANALYTICALDASHBOARD': "analyticalDashboard",
             'ATTRIBUTE': "attribute",
             'ATTRIBUTEHIERARCHY': "attributeHierarchy",
@@ -69,6 +68,7 @@ class DependentEntitiesNode(ModelNormal):
             'USERDATAFILTER': "userDataFilter",
             'AUTOMATION': "automation",
             'MEMORYITEM': "memoryItem",
+            'KNOWLEDGERECOMMENDATION': "knowledgeRecommendation",
             'VISUALIZATIONOBJECT': "visualizationObject",
             'FILTERCONTEXT': "filterContext",
             'FILTERVIEW': "filterView",
@@ -101,8 +101,7 @@ class DependentEntitiesNode(ModelNormal):
         return {
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
-            # title can be None for some entity types like aggregatedFact
-            'title': (str, none_type,),  # noqa: E501
+            'title': (str,),  # noqa: E501
         }
 
     @cached_property

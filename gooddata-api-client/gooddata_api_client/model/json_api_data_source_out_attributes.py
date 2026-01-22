@@ -110,6 +110,11 @@ class JsonApiDataSourceOutAttributes(ModelNormal):
         ('schema',): {
             'max_length': 255,
         },
+        ('alternative_data_source_id',): {
+            'regex': {
+                'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+            },
+        },
         ('client_id',): {
             'max_length': 255,
         },
@@ -147,6 +152,7 @@ class JsonApiDataSourceOutAttributes(ModelNormal):
             'name': (str,),  # noqa: E501
             'schema': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
+            'alternative_data_source_id': (str, none_type,),  # noqa: E501
             'authentication_type': (str, none_type,),  # noqa: E501
             'cache_strategy': (str, none_type,),  # noqa: E501
             'client_id': (str, none_type,),  # noqa: E501
@@ -165,6 +171,7 @@ class JsonApiDataSourceOutAttributes(ModelNormal):
         'name': 'name',  # noqa: E501
         'schema': 'schema',  # noqa: E501
         'type': 'type',  # noqa: E501
+        'alternative_data_source_id': 'alternativeDataSourceId',  # noqa: E501
         'authentication_type': 'authenticationType',  # noqa: E501
         'cache_strategy': 'cacheStrategy',  # noqa: E501
         'client_id': 'clientId',  # noqa: E501
@@ -220,6 +227,7 @@ class JsonApiDataSourceOutAttributes(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            alternative_data_source_id (str, none_type): Alternative data source ID. It is a weak reference meaning data source does not have to exist. All the entities (e.g. tables) from the data source must be available also in the alternative data source. It must be present in the same organization as the data source.. [optional]  # noqa: E501
             authentication_type (str, none_type): Type of authentication used to connect to the database.. [optional]  # noqa: E501
             cache_strategy (str, none_type): Determines how the results coming from a particular datasource should be cached.. [optional]  # noqa: E501
             client_id (str, none_type): The client id to use to connect to the database providing the data for the data source (for example a Databricks Service Account).. [optional]  # noqa: E501
@@ -320,6 +328,7 @@ class JsonApiDataSourceOutAttributes(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            alternative_data_source_id (str, none_type): Alternative data source ID. It is a weak reference meaning data source does not have to exist. All the entities (e.g. tables) from the data source must be available also in the alternative data source. It must be present in the same organization as the data source.. [optional]  # noqa: E501
             authentication_type (str, none_type): Type of authentication used to connect to the database.. [optional]  # noqa: E501
             cache_strategy (str, none_type): Determines how the results coming from a particular datasource should be cached.. [optional]  # noqa: E501
             client_id (str, none_type): The client id to use to connect to the database providing the data for the data source (for example a Databricks Service Account).. [optional]  # noqa: E501

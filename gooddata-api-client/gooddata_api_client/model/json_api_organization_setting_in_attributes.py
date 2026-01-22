@@ -61,6 +61,7 @@ class JsonApiOrganizationSettingInAttributes(ModelNormal):
             'ACTIVE_THEME': "ACTIVE_THEME",
             'ACTIVE_COLOR_PALETTE': "ACTIVE_COLOR_PALETTE",
             'ACTIVE_LLM_ENDPOINT': "ACTIVE_LLM_ENDPOINT",
+            'ACTIVE_CALENDARS': "ACTIVE_CALENDARS",
             'WHITE_LABELING': "WHITE_LABELING",
             'LOCALE': "LOCALE",
             'METADATA_LOCALE': "METADATA_LOCALE",
@@ -98,6 +99,8 @@ class JsonApiOrganizationSettingInAttributes(ModelNormal):
             'SORT_CASE_SENSITIVE': "SORT_CASE_SENSITIVE",
             'METRIC_FORMAT_OVERRIDE': "METRIC_FORMAT_OVERRIDE",
             'ENABLE_AI_ON_DATA': "ENABLE_AI_ON_DATA",
+            'API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE': "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
+            'ENABLE_NULL_JOINS': "ENABLE_NULL_JOINS",
         },
     }
 

@@ -75,6 +75,9 @@ class NotificationChannelDestination(ModelComposed):
     }
 
     validations = {
+        ('secret_key',): {
+            'max_length': 10000,
+        },
         ('token',): {
             'max_length': 10000,
         },
@@ -110,7 +113,9 @@ class NotificationChannelDestination(ModelComposed):
         lazy_import()
         return {
             'type': (str,),  # noqa: E501
+            'has_secret_key': (bool, none_type,),  # noqa: E501
             'has_token': (bool, none_type,),  # noqa: E501
+            'secret_key': (str, none_type,),  # noqa: E501
             'token': (str, none_type,),  # noqa: E501
             'url': (str,),  # noqa: E501
             'from_email': (str,),  # noqa: E501
@@ -128,7 +133,9 @@ class NotificationChannelDestination(ModelComposed):
 
     attribute_map = {
         'type': 'type',  # noqa: E501
+        'has_secret_key': 'hasSecretKey',  # noqa: E501
         'has_token': 'hasToken',  # noqa: E501
+        'secret_key': 'secretKey',  # noqa: E501
         'token': 'token',  # noqa: E501
         'url': 'url',  # noqa: E501
         'from_email': 'fromEmail',  # noqa: E501
@@ -140,6 +147,7 @@ class NotificationChannelDestination(ModelComposed):
     }
 
     read_only_vars = {
+        'has_secret_key',  # noqa: E501
         'has_token',  # noqa: E501
     }
 
@@ -180,7 +188,9 @@ class NotificationChannelDestination(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            has_secret_key (bool, none_type): Flag indicating if webhook has a hmac secret key.. [optional]  # noqa: E501
             has_token (bool, none_type): Flag indicating if webhook has a token.. [optional]  # noqa: E501
+            secret_key (str, none_type): Hmac secret key for the webhook signature.. [optional]  # noqa: E501
             token (str, none_type): Bearer token for the webhook.. [optional]  # noqa: E501
             url (str): The webhook URL.. [optional]  # noqa: E501
             from_email (str): E-mail address to send notifications from. Currently this does not have any effect. E-mail 'no-reply@gooddata.com' is used instead.. [optional] if omitted the server will use the default value of no-reply@gooddata.com  # noqa: E501
@@ -293,7 +303,9 @@ class NotificationChannelDestination(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            has_secret_key (bool, none_type): Flag indicating if webhook has a hmac secret key.. [optional]  # noqa: E501
             has_token (bool, none_type): Flag indicating if webhook has a token.. [optional]  # noqa: E501
+            secret_key (str, none_type): Hmac secret key for the webhook signature.. [optional]  # noqa: E501
             token (str, none_type): Bearer token for the webhook.. [optional]  # noqa: E501
             url (str): The webhook URL.. [optional]  # noqa: E501
             from_email (str): E-mail address to send notifications from. Currently this does not have any effect. E-mail 'no-reply@gooddata.com' is used instead.. [optional] if omitted the server will use the default value of no-reply@gooddata.com  # noqa: E501

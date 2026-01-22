@@ -1,4 +1,4 @@
-# (C) 2025 GoodData Corporation
+# (C) 2026 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -7,7 +7,7 @@ interactions:
       body: null
       headers:
         Accept:
-          - application/vnd.gooddata.api+json
+          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
@@ -48,7 +48,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 4e844d699a881e2a98d06254b1851826
+          traceId: 10396a527487d2c0f4cc699e32513694
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources
@@ -65,11 +65,11 @@ interactions:
           type: dataSource
       headers:
         Accept:
-          - application/vnd.gooddata.api+json
+          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -84,7 +84,7 @@ interactions:
         Content-Length:
           - '376'
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         DATE: *id001
         Expires:
           - '0'
@@ -110,8 +110,8 @@ interactions:
               url: jdbc:snowflake://gooddata.snowflakecomputing.com:443/?application=GoodData_GoodDataCN&db=TIGER&useProxy=true&warehouse=TIGER
               username: demouser
               authenticationType: USERNAME_PASSWORD
-              type: SNOWFLAKE
               name: Test
+              type: SNOWFLAKE
               schema: demo
           links:
             self: http://localhost:3000/api/v1/entities/dataSources/test
@@ -121,7 +121,7 @@ interactions:
       body: null
       headers:
         Accept:
-          - application/vnd.gooddata.api+json
+          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
@@ -138,7 +138,7 @@ interactions:
         Content-Length:
           - '376'
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         DATE: *id001
         Expires:
           - '0'
@@ -164,8 +164,8 @@ interactions:
               url: jdbc:snowflake://gooddata.snowflakecomputing.com:443/?application=GoodData_GoodDataCN&db=TIGER&useProxy=true&warehouse=TIGER
               username: demouser
               authenticationType: USERNAME_PASSWORD
-              type: SNOWFLAKE
               name: Test
+              type: SNOWFLAKE
               schema: demo
           links:
             self: http://localhost:3000/api/v1/entities/dataSources/test
@@ -187,6 +187,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Content-Type:
+          - application/vnd.gooddata.api+json
         DATE: *id001
         Expires:
           - '0'
@@ -211,7 +213,7 @@ interactions:
       body: null
       headers:
         Accept:
-          - application/vnd.gooddata.api+json
+          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
@@ -251,7 +253,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 518787d8e338aab0d5caa703142f7df5
+          traceId: a4f8c3a845a6f04781da846f358a1f54
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources
@@ -269,11 +271,11 @@ interactions:
           type: dataSource
       headers:
         Accept:
-          - application/vnd.gooddata.api+json
+          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -288,7 +290,7 @@ interactions:
         Content-Length:
           - '367'
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         DATE: *id001
         Expires:
           - '0'
@@ -314,8 +316,8 @@ interactions:
               url: jdbc:snowflake://gooddata.snowflakecomputing.com:443/?application=GoodData_GoodDataCN&db=TIGER&useProxy=true&warehouse=TIGER
               username: demouser
               authenticationType: KEY_PAIR
-              type: SNOWFLAKE
               name: Test
+              type: SNOWFLAKE
               schema: demo
           links:
             self: http://localhost:3000/api/v1/entities/dataSources/test
@@ -325,7 +327,7 @@ interactions:
       body: null
       headers:
         Accept:
-          - application/vnd.gooddata.api+json
+          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
@@ -342,7 +344,7 @@ interactions:
         Content-Length:
           - '367'
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         DATE: *id001
         Expires:
           - '0'
@@ -368,8 +370,8 @@ interactions:
               url: jdbc:snowflake://gooddata.snowflakecomputing.com:443/?application=GoodData_GoodDataCN&db=TIGER&useProxy=true&warehouse=TIGER
               username: demouser
               authenticationType: KEY_PAIR
-              type: SNOWFLAKE
               name: Test
+              type: SNOWFLAKE
               schema: demo
           links:
             self: http://localhost:3000/api/v1/entities/dataSources/test
@@ -391,6 +393,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Content-Type:
+          - application/vnd.gooddata.api+json
         DATE: *id001
         Expires:
           - '0'

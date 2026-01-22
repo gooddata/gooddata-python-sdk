@@ -93,7 +93,7 @@ class JsonApiMetricInAttributesContent(ModelNormal):
         """
         return {
             'maql': (str,),  # noqa: E501
-            'format': (str,),  # noqa: E501
+            'format': (str, none_type,),  # noqa: E501
             'metric_type': (str,),  # noqa: E501
         }
 
@@ -152,7 +152,7 @@ class JsonApiMetricInAttributesContent(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            format (str): [optional]  # noqa: E501
+            format (str, none_type): Excel-like format string with optional dynamic tokens. Filter value tokens: [$FILTER:<label_id>] for raw filter value passthrough. Currency tokens: [$CURRENCY:<label_id>] for currency symbol, with optional forms :symbol, :narrow, :code, :name. Locale abbreviations: [$K], [$M], [$B], [$T] for locale-specific scale abbreviations. Tokens are resolved at execution time based on AFM filters and user's format locale. Single-value filters only; multi-value filters use fallback values.. [optional]  # noqa: E501
             metric_type (str): Categorizes metric semantics (e.g., currency).. [optional]  # noqa: E501
         """
 
@@ -243,7 +243,7 @@ class JsonApiMetricInAttributesContent(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            format (str): [optional]  # noqa: E501
+            format (str, none_type): Excel-like format string with optional dynamic tokens. Filter value tokens: [$FILTER:<label_id>] for raw filter value passthrough. Currency tokens: [$CURRENCY:<label_id>] for currency symbol, with optional forms :symbol, :narrow, :code, :name. Locale abbreviations: [$K], [$M], [$B], [$T] for locale-specific scale abbreviations. Tokens are resolved at execution time based on AFM filters and user's format locale. Single-value filters only; multi-value filters use fallback values.. [optional]  # noqa: E501
             metric_type (str): Categorizes metric semantics (e.g., currency).. [optional]  # noqa: E501
         """
 

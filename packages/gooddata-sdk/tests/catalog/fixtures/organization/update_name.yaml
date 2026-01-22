@@ -1,4 +1,4 @@
-# (C) 2025 GoodData Corporation
+# (C) 2026 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -21,6 +21,8 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
           - '0'
+        Content-Type:
+          - application/vnd.gooddata.api+json
         DATE: &id001
           - PLACEHOLDER
         Expires:
@@ -61,7 +63,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '430'
+          - '450'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -88,6 +90,7 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
+              allowedOrigins: []
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -120,6 +123,8 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
           - '0'
+        Content-Type:
+          - application/vnd.gooddata.api+json
         DATE: *id001
         Expires:
           - '0'
@@ -159,7 +164,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '430'
+          - '450'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -186,6 +191,7 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
+              allowedOrigins: []
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -209,11 +215,11 @@ interactions:
             name: test_organization
       headers:
         Accept:
-          - application/vnd.gooddata.api+json
+          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -226,9 +232,9 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '427'
+          - '447'
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         DATE: *id001
         Expires:
           - '0'
@@ -253,6 +259,7 @@ interactions:
             attributes:
               name: test_organization
               hostname: localhost
+              allowedOrigins: []
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -285,6 +292,8 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
           - '0'
+        Content-Type:
+          - application/vnd.gooddata.api+json
         DATE: *id001
         Expires:
           - '0'
@@ -324,7 +333,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '427'
+          - '447'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -351,6 +360,7 @@ interactions:
             attributes:
               name: test_organization
               hostname: localhost
+              allowedOrigins: []
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -383,6 +393,8 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
           - '0'
+        Content-Type:
+          - application/vnd.gooddata.api+json
         DATE: *id001
         Expires:
           - '0'
@@ -422,7 +434,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '427'
+          - '447'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -449,6 +461,7 @@ interactions:
             attributes:
               name: test_organization
               hostname: localhost
+              allowedOrigins: []
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -472,11 +485,11 @@ interactions:
             name: Default Organization
       headers:
         Accept:
-          - application/vnd.gooddata.api+json
+          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -489,9 +502,9 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '430'
+          - '450'
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         DATE: *id001
         Expires:
           - '0'
@@ -516,6 +529,7 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
+              allowedOrigins: []
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -548,6 +562,8 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
           - '0'
+        Content-Type:
+          - application/vnd.gooddata.api+json
         DATE: *id001
         Expires:
           - '0'
@@ -587,7 +603,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '430'
+          - '450'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -614,6 +630,7 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
+              allowedOrigins: []
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting

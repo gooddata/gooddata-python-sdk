@@ -98,7 +98,9 @@ class ChangeAnalysisRequest(ModelNormal):
             'reference_period': (str,),  # noqa: E501
             'attributes': ([AttributeItem],),  # noqa: E501
             'aux_measures': ([MeasureItem],),  # noqa: E501
+            'exclude_tags': ([str],),  # noqa: E501
             'filters': ([ChangeAnalysisParamsFiltersInner],),  # noqa: E501
+            'include_tags': ([str],),  # noqa: E501
             'use_smart_attribute_selection': (bool,),  # noqa: E501
         }
 
@@ -114,7 +116,9 @@ class ChangeAnalysisRequest(ModelNormal):
         'reference_period': 'referencePeriod',  # noqa: E501
         'attributes': 'attributes',  # noqa: E501
         'aux_measures': 'auxMeasures',  # noqa: E501
+        'exclude_tags': 'excludeTags',  # noqa: E501
         'filters': 'filters',  # noqa: E501
+        'include_tags': 'includeTags',  # noqa: E501
         'use_smart_attribute_selection': 'useSmartAttributeSelection',  # noqa: E501
     }
 
@@ -167,7 +171,9 @@ class ChangeAnalysisRequest(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             attributes ([AttributeItem]): Attributes to analyze for significant changes. If empty, valid attributes will be automatically discovered.. [optional]  # noqa: E501
             aux_measures ([MeasureItem]): Auxiliary measures. [optional]  # noqa: E501
+            exclude_tags ([str]): Exclude attributes with any of these tags. This filter applies to both auto-discovered and explicitly provided attributes.. [optional]  # noqa: E501
             filters ([ChangeAnalysisParamsFiltersInner]): Optional filters to apply.. [optional]  # noqa: E501
+            include_tags ([str]): Only include attributes with at least one of these tags. If empty, no inclusion filter is applied. This filter applies to both auto-discovered and explicitly provided attributes.. [optional]  # noqa: E501
             use_smart_attribute_selection (bool): Whether to use smart attribute selection (LLM-based) instead of discovering all valid attributes. If true, GenAI will intelligently select the most relevant attributes for change analysis. If false or not set, all valid attributes will be discovered using Calcique. Smart attribute selection applies only when no attributes are provided.. [optional] if omitted the server will use the default value of False  # noqa: E501
         """
 
@@ -266,7 +272,9 @@ class ChangeAnalysisRequest(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             attributes ([AttributeItem]): Attributes to analyze for significant changes. If empty, valid attributes will be automatically discovered.. [optional]  # noqa: E501
             aux_measures ([MeasureItem]): Auxiliary measures. [optional]  # noqa: E501
+            exclude_tags ([str]): Exclude attributes with any of these tags. This filter applies to both auto-discovered and explicitly provided attributes.. [optional]  # noqa: E501
             filters ([ChangeAnalysisParamsFiltersInner]): Optional filters to apply.. [optional]  # noqa: E501
+            include_tags ([str]): Only include attributes with at least one of these tags. If empty, no inclusion filter is applied. This filter applies to both auto-discovered and explicitly provided attributes.. [optional]  # noqa: E501
             use_smart_attribute_selection (bool): Whether to use smart attribute selection (LLM-based) instead of discovering all valid attributes. If true, GenAI will intelligently select the most relevant attributes for change analysis. If false or not set, all valid attributes will be discovered using Calcique. Smart attribute selection applies only when no attributes are provided.. [optional] if omitted the server will use the default value of False  # noqa: E501
         """
 

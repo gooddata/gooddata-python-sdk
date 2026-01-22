@@ -105,6 +105,8 @@ class JsonApiAggregatedFactOutAttributes(ModelNormal):
             'operation': (str,),  # noqa: E501
             'are_relations_valid': (bool,),  # noqa: E501
             'description': (str,),  # noqa: E501
+            'is_nullable': (bool,),  # noqa: E501
+            'null_value': (str,),  # noqa: E501
             'source_column': (str,),  # noqa: E501
             'source_column_data_type': (str,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
@@ -119,6 +121,8 @@ class JsonApiAggregatedFactOutAttributes(ModelNormal):
         'operation': 'operation',  # noqa: E501
         'are_relations_valid': 'areRelationsValid',  # noqa: E501
         'description': 'description',  # noqa: E501
+        'is_nullable': 'isNullable',  # noqa: E501
+        'null_value': 'nullValue',  # noqa: E501
         'source_column': 'sourceColumn',  # noqa: E501
         'source_column_data_type': 'sourceColumnDataType',  # noqa: E501
         'tags': 'tags',  # noqa: E501
@@ -170,6 +174,8 @@ class JsonApiAggregatedFactOutAttributes(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             are_relations_valid (bool): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
+            is_nullable (bool): [optional]  # noqa: E501
+            null_value (str): [optional]  # noqa: E501
             source_column (str): [optional]  # noqa: E501
             source_column_data_type (str): [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501
@@ -264,6 +270,8 @@ class JsonApiAggregatedFactOutAttributes(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             are_relations_valid (bool): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
+            is_nullable (bool): [optional]  # noqa: E501
+            null_value (str): [optional]  # noqa: E501
             source_column (str): [optional]  # noqa: E501
             source_column_data_type (str): [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501

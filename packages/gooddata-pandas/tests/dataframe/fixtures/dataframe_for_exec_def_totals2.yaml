@@ -1,4 +1,4 @@
-# (C) 2025 GoodData Corporation
+# (C) 2026 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -107,7 +107,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-Gdc-Cancel-Token:
-          - 709dc236-b0b8-4af0-adad-85ee42fbc96a
+          - 34267e56-7ce7-496a-b829-53cc3003be98
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - '0'
@@ -170,10 +170,10 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: 2316d6af9b0d7fce47b28be18028201a73f2a52d:060bf8ba7ee99d98947b3d57519b77dedeb3cea456a885db08ca153cc1ec2e57
+              executionResult: a6828f6618d21d0e15be244a52b5a1407aac14bd:8821d6fba0c5366e5ef8542adc4e5fdbceb6d71e0507f70b15f1389e131691b8
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/2316d6af9b0d7fce47b28be18028201a73f2a52d%3A060bf8ba7ee99d98947b3d57519b77dedeb3cea456a885db08ca153cc1ec2e57/metadata
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/a6828f6618d21d0e15be244a52b5a1407aac14bd%3A8821d6fba0c5366e5ef8542adc4e5fdbceb6d71e0507f70b15f1389e131691b8/metadata
       body: null
       headers:
         Accept:
@@ -312,7 +312,7 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: 2316d6af9b0d7fce47b28be18028201a73f2a52d:060bf8ba7ee99d98947b3d57519b77dedeb3cea456a885db08ca153cc1ec2e57
+              executionResult: a6828f6618d21d0e15be244a52b5a1407aac14bd:8821d6fba0c5366e5ef8542adc4e5fdbceb6d71e0507f70b15f1389e131691b8
           resultSpec:
             dimensions:
               - localIdentifier: dim_0
@@ -345,7 +345,7 @@ interactions:
           resultSize: 15444
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/2316d6af9b0d7fce47b28be18028201a73f2a52d%3A060bf8ba7ee99d98947b3d57519b77dedeb3cea456a885db08ca153cc1ec2e57?offset=0%2C0&limit=100%2C100
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/a6828f6618d21d0e15be244a52b5a1407aac14bd%3A8821d6fba0c5366e5ef8542adc4e5fdbceb6d71e0507f70b15f1389e131691b8?offset=0%2C0&limit=100%2C100
       body: null
       headers:
         Accept:
@@ -2829,7 +2829,7 @@ interactions:
             dataSourceMessages: []
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/2316d6af9b0d7fce47b28be18028201a73f2a52d%3A060bf8ba7ee99d98947b3d57519b77dedeb3cea456a885db08ca153cc1ec2e57/metadata
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/a6828f6618d21d0e15be244a52b5a1407aac14bd%3A8821d6fba0c5366e5ef8542adc4e5fdbceb6d71e0507f70b15f1389e131691b8/metadata
       body: null
       headers:
         Accept:
@@ -2968,7 +2968,7 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: 2316d6af9b0d7fce47b28be18028201a73f2a52d:060bf8ba7ee99d98947b3d57519b77dedeb3cea456a885db08ca153cc1ec2e57
+              executionResult: a6828f6618d21d0e15be244a52b5a1407aac14bd:8821d6fba0c5366e5ef8542adc4e5fdbceb6d71e0507f70b15f1389e131691b8
           resultSpec:
             dimensions:
               - localIdentifier: dim_0
@@ -3001,7 +3001,7 @@ interactions:
           resultSize: 15444
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/2316d6af9b0d7fce47b28be18028201a73f2a52d%3A060bf8ba7ee99d98947b3d57519b77dedeb3cea456a885db08ca153cc1ec2e57?offset=0%2C0&limit=100%2C100
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/a6828f6618d21d0e15be244a52b5a1407aac14bd%3A8821d6fba0c5366e5ef8542adc4e5fdbceb6d71e0507f70b15f1389e131691b8?offset=0%2C0&limit=100%2C100
       body: null
       headers:
         Accept:

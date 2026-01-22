@@ -31,8 +31,8 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.geo_collection import GeoCollection
-    globals()['GeoCollection'] = GeoCollection
+    from gooddata_api_client.model.geo_collection_identifier import GeoCollectionIdentifier
+    globals()['GeoCollectionIdentifier'] = GeoCollectionIdentifier
 
 
 class JsonApiLabelOutAttributesGeoAreaConfig(ModelNormal):
@@ -88,7 +88,7 @@ class JsonApiLabelOutAttributesGeoAreaConfig(ModelNormal):
         """
         lazy_import()
         return {
-            'collection': (GeoCollection,),  # noqa: E501
+            'collection': (GeoCollectionIdentifier,),  # noqa: E501
         }
 
     @cached_property
@@ -111,7 +111,7 @@ class JsonApiLabelOutAttributesGeoAreaConfig(ModelNormal):
         """JsonApiLabelOutAttributesGeoAreaConfig - a model defined in OpenAPI
 
         Args:
-            collection (GeoCollection):
+            collection (GeoCollectionIdentifier):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -200,7 +200,7 @@ class JsonApiLabelOutAttributesGeoAreaConfig(ModelNormal):
         """JsonApiLabelOutAttributesGeoAreaConfig - a model defined in OpenAPI
 
         Args:
-            collection (GeoCollection):
+            collection (GeoCollectionIdentifier):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types

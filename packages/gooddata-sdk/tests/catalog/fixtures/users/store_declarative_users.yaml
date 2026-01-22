@@ -1,4 +1,4 @@
-# (C) 2025 GoodData Corporation
+# (C) 2026 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -51,7 +51,7 @@ interactions:
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiQ0NjFjNmYyYS1hMzg0LTQ3ODctODhjYy1kYzE3YmI1NTRhMzgSBWxvY2Fs
+            - authId: CiQ3MmJmOWI3My05MDkwLTRlNWEtOTc0Yi1kZTAyYzE0NDlhMGESBWxvY2Fs
               email: demo@example.com
               firstname: Demo
               id: demo
@@ -61,7 +61,7 @@ interactions:
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiQwODI1YTc5My01ZjNkLTQ5MGUtYjRmMC0wNjdkNGIyODIyMTkSBWxvY2Fs
+            - authId: CiRmNjg4MWVhNy1jYzljLTQ0MmEtYjllMS02NDE3NTRmYzJlYzUSBWxvY2Fs
               id: demo2
               permissions: []
               settings: []
@@ -117,7 +117,7 @@ interactions:
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiQ0NjFjNmYyYS1hMzg0LTQ3ODctODhjYy1kYzE3YmI1NTRhMzgSBWxvY2Fs
+            - authId: CiQ3MmJmOWI3My05MDkwLTRlNWEtOTc0Yi1kZTAyYzE0NDlhMGESBWxvY2Fs
               email: demo@example.com
               firstname: Demo
               id: demo
@@ -127,7 +127,7 @@ interactions:
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiQwODI1YTc5My01ZjNkLTQ5MGUtYjRmMC0wNjdkNGIyODIyMTkSBWxvY2Fs
+            - authId: CiRmNjg4MWVhNy1jYzljLTQ0MmEtYjllMS02NDE3NTRmYzJlYzUSBWxvY2Fs
               id: demo2
               permissions: []
               settings: []
@@ -154,6 +154,8 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
           - '0'
+        Content-Type:
+          - application/vnd.gooddata.api+json
         DATE: *id001
         Expires:
           - '0'
@@ -253,6 +255,8 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
           - '0'
+        Content-Type:
+          - application/vnd.gooddata.api+json
         DATE: *id001
         Expires:
           - '0'

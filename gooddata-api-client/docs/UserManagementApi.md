@@ -11,6 +11,8 @@ Method | HTTP request | Description
 [**list_permissions_for_user_group**](UserManagementApi.md#list_permissions_for_user_group) | **GET** /api/v1/actions/userManagement/userGroups/{userGroupId}/permissions | 
 [**list_user_groups**](UserManagementApi.md#list_user_groups) | **GET** /api/v1/actions/userManagement/userGroups | 
 [**list_users**](UserManagementApi.md#list_users) | **GET** /api/v1/actions/userManagement/users | 
+[**list_workspace_user_groups**](UserManagementApi.md#list_workspace_user_groups) | **GET** /api/v1/actions/workspaces/{workspaceId}/userGroups | 
+[**list_workspace_users**](UserManagementApi.md#list_workspace_users) | **GET** /api/v1/actions/workspaces/{workspaceId}/users | 
 [**manage_permissions_for_user**](UserManagementApi.md#manage_permissions_for_user) | **POST** /api/v1/actions/userManagement/users/{userId}/permissions | 
 [**manage_permissions_for_user_group**](UserManagementApi.md#manage_permissions_for_user_group) | **POST** /api/v1/actions/userManagement/userGroups/{userGroupId}/permissions | 
 [**remove_group_members**](UserManagementApi.md#remove_group_members) | **POST** /api/v1/actions/userManagement/userGroups/{userGroupId}/removeMembers | 
@@ -499,6 +501,162 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**UserManagementUsers**](UserManagementUsers.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **list_workspace_user_groups**
+> WorkspaceUserGroups list_workspace_user_groups(workspace_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import user_management_api
+from gooddata_api_client.model.workspace_user_groups import WorkspaceUserGroups
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = user_management_api.UserManagementApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    page = page=0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
+    size = size=20 # int | The size of the page to be returned. (optional) if omitted the server will use the default value of 20
+    name = "name=charles" # str | Filter by user name. Note that user name is case insensitive. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.list_workspace_user_groups(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling UserManagementApi->list_workspace_user_groups: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.list_workspace_user_groups(workspace_id, page=page, size=size, name=name)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling UserManagementApi->list_workspace_user_groups: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
+ **size** | **int**| The size of the page to be returned. | [optional] if omitted the server will use the default value of 20
+ **name** | **str**| Filter by user name. Note that user name is case insensitive. | [optional]
+
+### Return type
+
+[**WorkspaceUserGroups**](WorkspaceUserGroups.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **list_workspace_users**
+> WorkspaceUsers list_workspace_users(workspace_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import user_management_api
+from gooddata_api_client.model.workspace_users import WorkspaceUsers
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = user_management_api.UserManagementApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    page = page=0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
+    size = size=20 # int | The size of the page to be returned. (optional) if omitted the server will use the default value of 20
+    name = "name=charles" # str | Filter by user name. Note that user name is case insensitive. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.list_workspace_users(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling UserManagementApi->list_workspace_users: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.list_workspace_users(workspace_id, page=page, size=size, name=name)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling UserManagementApi->list_workspace_users: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
+ **size** | **int**| The size of the page to be returned. | [optional] if omitted the server will use the default value of 20
+ **name** | **str**| Filter by user name. Note that user name is case insensitive. | [optional]
+
+### Return type
+
+[**WorkspaceUsers**](WorkspaceUsers.md)
 
 ### Authorization
 
