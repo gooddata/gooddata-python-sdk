@@ -1,4 +1,4 @@
-# (C) 2025 GoodData Corporation
+# (C) 2026 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -54,37 +54,33 @@ interactions:
           translations are marked by the 'id' attribute, which is a hash combining
           the JSON path and the source text's value. Since this hash is hard to read,
           the source text includes extra details about its general location.</note></notes><segment
-          id="25a4c15df4128a679d8a8f00a668cae32a85d4e50a49303912793e766241e6d8"><source><mrk
-          id="1" type="free-form:path" value="$.layout.sections[*].items[*].widget.description"/></source></segment><segment
-          id="326a37df8debcb8b3eb56dd463b18ae119ff128dccf01159a66b9e0fa18fb445"><source><mrk
-          id="1" type="free-form:path" value="$.layout.sections[*].items[*].widget.title"/>Campaign
-          Spend</source></segment><segment id="e9761369f3f435e702624df3c85c1c078da3acbfd419c20b1f8ed8fc8270f939"><source><mrk
-          id="1" type="free-form:path" value="$.layout.sections[*].items[*].widget.title"/>Revenue
-          per $ vs Spend by Campaign</source></segment><segment id="d6f3e006c6e8d8769b0ededd383cd05237299cbf8fb614b22a82694d20dfc6b6"><source><mrk
+          id="d6f3e006c6e8d8769b0ededd383cd05237299cbf8fb614b22a82694d20dfc6b6"><source><mrk
           id="1" type="free-form:path" value="$.layout.sections[*].header.title"/>Spend
           breakdown and Revenue</source></segment><segment id="15ba24caffe3e1fc3b65d13cea56a26ce6690aa063b7caec20393f4995a7addb"><source><mrk
           id="1" type="free-form:path" value="$.layout.sections[*].header.description"/>The
           first insight shows a breakdown of spend by category and campaign. The second
           shows revenue per $ spend, for each campaign, to demonstrate, how campaigns
-          are successful.</source></segment></unit></group><group id="analyticalDashboard.dashboard_plugin"><unit
-          id="analyticalDashboard.dashboard_plugin.title"><segment><source>Dashboard
+          are successful.</source></segment><segment id="326a37df8debcb8b3eb56dd463b18ae119ff128dccf01159a66b9e0fa18fb445"><source><mrk
+          id="1" type="free-form:path" value="$.layout.sections[*].items[*].widget.title"/>Campaign
+          Spend</source></segment><segment id="e9761369f3f435e702624df3c85c1c078da3acbfd419c20b1f8ed8fc8270f939"><source><mrk
+          id="1" type="free-form:path" value="$.layout.sections[*].items[*].widget.title"/>Revenue
+          per $ vs Spend by Campaign</source></segment><segment id="25a4c15df4128a679d8a8f00a668cae32a85d4e50a49303912793e766241e6d8"><source><mrk
+          id="1" type="free-form:path" value="$.layout.sections[*].items[*].widget.description"/></source></segment></unit></group><group
+          id="analyticalDashboard.dashboard_plugin"><unit id="analyticalDashboard.dashboard_plugin.title"><segment><source>Dashboard
           plugin</source></segment></unit><unit id="analyticalDashboard.dashboard_plugin.free-form"><notes><note
           appliesTo="source">Free-form translations are marked by the 'id' attribute,
           which is a hash combining the JSON path and the source text's value. Since
           this hash is hard to read, the source text includes extra details about
-          its general location.</note></notes><segment id="25a4c15df4128a679d8a8f00a668cae32a85d4e50a49303912793e766241e6d8"><source><mrk
-          id="1" type="free-form:path" value="$.layout.sections[*].items[*].widget.description"/></source></segment><segment
-          id="36411fb5c652a3e399f2c30068820db93fb2a6b55eaa223965b61630aa34269f"><source><mrk
+          its general location.</note></notes><segment id="36411fb5c652a3e399f2c30068820db93fb2a6b55eaa223965b61630aa34269f"><source><mrk
           id="1" type="free-form:path" value="$.layout.sections[*].items[*].widget.title"/>DHO
-          simple</source></segment></unit></group><group id="analyticalDashboard.product_and_category"><unit
-          id="analyticalDashboard.product_and_category.title"><segment><source>Product
+          simple</source></segment><segment id="25a4c15df4128a679d8a8f00a668cae32a85d4e50a49303912793e766241e6d8"><source><mrk
+          id="1" type="free-form:path" value="$.layout.sections[*].items[*].widget.description"/></source></segment></unit></group><group
+          id="analyticalDashboard.product_and_category"><unit id="analyticalDashboard.product_and_category.title"><segment><source>Product
           &amp; Category</source></segment></unit><unit id="analyticalDashboard.product_and_category.description"><segment><source></source></segment></unit><unit
           id="analyticalDashboard.product_and_category.free-form"><notes><note appliesTo="source">Free-form
           translations are marked by the 'id' attribute, which is a hash combining
           the JSON path and the source text's value. Since this hash is hard to read,
           the source text includes extra details about its general location.</note></notes><segment
-          id="25a4c15df4128a679d8a8f00a668cae32a85d4e50a49303912793e766241e6d8"><source><mrk
-          id="1" type="free-form:path" value="$.layout.sections[*].items[*].widget.description"/></source></segment><segment
           id="e02985d6033c04e887f927f2bf54170ed02de38b08a6003df0171f02bba33637"><source><mrk
           id="1" type="free-form:path" value="$.layout.sections[*].items[*].widget.title"/>Top
           10 Products</source></segment><segment id="83d6b36029de90d9ceebddba1d5b52fb677ab61f0f50e1a168747879f1ae7374"><source><mrk
@@ -99,7 +95,9 @@ interactions:
           id="1" type="free-form:path" value="$.layout.sections[*].items[*].widget.title"/>Product
           Saleability</source></segment><segment id="a95b826fd4241f26e0ca81690a810d6eb8b7bf65dc2ac907175e91865064cfbd"><source><mrk
           id="1" type="free-form:path" value="$.layout.sections[*].items[*].widget.title"/>%
-          Revenue per Product by Customer and Category</source></segment></unit></group></group><group
+          Revenue per Product by Customer and Category</source></segment><segment
+          id="25a4c15df4128a679d8a8f00a668cae32a85d4e50a49303912793e766241e6d8"><source><mrk
+          id="1" type="free-form:path" value="$.layout.sections[*].items[*].widget.description"/></source></segment></unit></group></group><group
           id="attribute"><group id="attribute.campaign_channel_id"><unit id="attribute.campaign_channel_id.title"><segment><source>Campaign
           channel id</source></segment></unit><unit id="attribute.campaign_channel_id.description"><segment><source>Campaign
           channel id</source></segment></unit><unit id="attribute.campaign_channel_id.tags"><segment><source>Campaign
@@ -152,6 +150,9 @@ interactions:
           id="attribute.date.week"><unit id="attribute.date.week.title"><segment><source>Date
           - Week/Year</source></segment></unit><unit id="attribute.date.week.description"><segment><source>Week
           and Year (W52/2020)</source></segment></unit><unit id="attribute.date.week.tags"><segment><source>Date</source></segment></unit></group><group
+          id="attribute.state"><unit id="attribute.state.title"><segment><source>State</source></segment></unit><unit
+          id="attribute.state.description"><segment><source>State</source></segment></unit><unit
+          id="attribute.state.tags"><segment><source>Customers</source></segment></unit></group><group
           id="attribute.date.month"><unit id="attribute.date.month.title"><segment><source>Date
           - Month/Year</source></segment></unit><unit id="attribute.date.month.description"><segment><source>Month
           and Year (12/2020)</source></segment></unit><unit id="attribute.date.month.tags"><segment><source>Date</source></segment></unit></group><group
@@ -160,10 +161,7 @@ interactions:
           and Year (Q1/2020)</source></segment></unit><unit id="attribute.date.quarter.tags"><segment><source>Date</source></segment></unit></group><group
           id="attribute.date.year"><unit id="attribute.date.year.title"><segment><source>Date
           - Year</source></segment></unit><unit id="attribute.date.year.description"><segment><source>Year</source></segment></unit><unit
-          id="attribute.date.year.tags"><segment><source>Date</source></segment></unit></group><group
-          id="attribute.state"><unit id="attribute.state.title"><segment><source>State</source></segment></unit><unit
-          id="attribute.state.description"><segment><source>State</source></segment></unit><unit
-          id="attribute.state.tags"><segment><source>Customers</source></segment></unit></group></group><group
+          id="attribute.date.year.tags"><segment><source>Date</source></segment></unit></group></group><group
           id="dataset"><group id="dataset.campaign_channels"><unit id="dataset.campaign_channels.title"><segment><source>Campaign
           channels</source></segment></unit><unit id="dataset.campaign_channels.description"><segment><source>Campaign
           channels</source></segment></unit><unit id="dataset.campaign_channels.tags"><segment><source>Campaign
@@ -191,15 +189,15 @@ interactions:
           id="fact"><group id="fact.budget"><unit id="fact.budget.title"><segment><source>Budget</source></segment></unit><unit
           id="fact.budget.description"><segment><source>Budget</source></segment></unit><unit
           id="fact.budget.tags"><segment><source>Campaign channels</source></segment></unit></group><group
+          id="fact.spend"><unit id="fact.spend.title"><segment><source>Spend</source></segment></unit><unit
+          id="fact.spend.description"><segment><source>Spend</source></segment></unit><unit
+          id="fact.spend.tags"><segment><source>Campaign channels</source></segment></unit></group><group
           id="fact.price"><unit id="fact.price.title"><segment><source>Price</source></segment></unit><unit
           id="fact.price.description"><segment><source>Price</source></segment></unit><unit
           id="fact.price.tags"><segment><source>Order lines</source></segment></unit></group><group
           id="fact.quantity"><unit id="fact.quantity.title"><segment><source>Quantity</source></segment></unit><unit
           id="fact.quantity.description"><segment><source>Quantity</source></segment></unit><unit
-          id="fact.quantity.tags"><segment><source>Order lines</source></segment></unit></group><group
-          id="fact.spend"><unit id="fact.spend.title"><segment><source>Spend</source></segment></unit><unit
-          id="fact.spend.description"><segment><source>Spend</source></segment></unit><unit
-          id="fact.spend.tags"><segment><source>Campaign channels</source></segment></unit></group></group><group
+          id="fact.quantity.tags"><segment><source>Order lines</source></segment></unit></group></group><group
           id="aggregatedFact"><group id="aggregatedFact.budget_agg"><unit id="aggregatedFact.budget_agg.title"><segment><source></source></segment></unit><unit
           id="aggregatedFact.budget_agg.description"><segment><source>Budget Agg</source></segment></unit><unit
           id="aggregatedFact.budget_agg.tags"><segment><source>Campaign channels per
@@ -270,18 +268,20 @@ interactions:
           id="label.date.year"><unit id="label.date.year.title"><segment><source>Date
           - Year</source></segment></unit><unit id="label.date.year.description"><segment><source>Year</source></segment></unit><unit
           id="label.date.year.tags"><segment><source>Date</source></segment></unit></group></group><group
-          id="metric"><group id="metric.amount_of_active_customers"><unit id="metric.amount_of_active_customers.title"><segment><source>#
-          of Active Customers</source></segment></unit></group><group id="metric.amount_of_orders"><unit
+          id="metric"><group id="metric.total_revenue-no_filters"><unit id="metric.total_revenue-no_filters.title"><segment><source>Total
+          Revenue (No Filters)</source></segment></unit></group><group id="metric.amount_of_active_customers"><unit
+          id="metric.amount_of_active_customers.title"><segment><source># of Active
+          Customers</source></segment></unit></group><group id="metric.amount_of_orders"><unit
           id="metric.amount_of_orders.title"><segment><source># of Orders</source></segment></unit></group><group
           id="metric.amount_of_top_customers"><unit id="metric.amount_of_top_customers.title"><segment><source>#
           of Top Customers</source></segment></unit></group><group id="metric.amount_of_valid_orders"><unit
           id="metric.amount_of_valid_orders.title"><segment><source># of Valid Orders</source></segment></unit><unit
           id="metric.amount_of_valid_orders.description"><segment><source></source></segment></unit></group><group
           id="metric.campaign_spend"><unit id="metric.campaign_spend.title"><segment><source>Campaign
-          Spend</source></segment></unit></group><group id="metric.percent_revenue"><unit
-          id="metric.percent_revenue.title"><segment><source>% Revenue</source></segment></unit></group><group
-          id="metric.order_amount"><unit id="metric.order_amount.title"><segment><source>Order
-          Amount</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_customers"><unit
+          Spend</source></segment></unit></group><group id="metric.order_amount"><unit
+          id="metric.order_amount.title"><segment><source>Order Amount</source></segment></unit></group><group
+          id="metric.percent_revenue"><unit id="metric.percent_revenue.title"><segment><source>%
+          Revenue</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_customers"><unit
           id="metric.percent_revenue_from_top_10_customers.title"><segment><source>%
           Revenue from Top 10 Customers</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_percent_customers"><unit
           id="metric.percent_revenue_from_top_10_percent_customers.title"><segment><source>%
@@ -309,9 +309,15 @@ interactions:
           id="metric.revenue_top_10.title"><segment><source>Revenue / Top 10</source></segment></unit></group><group
           id="metric.revenue_top_10_percent"><unit id="metric.revenue_top_10_percent.title"><segment><source>Revenue
           / Top 10%</source></segment></unit></group><group id="metric.total_revenue"><unit
-          id="metric.total_revenue.title"><segment><source>Total Revenue</source></segment></unit></group><group
-          id="metric.total_revenue-no_filters"><unit id="metric.total_revenue-no_filters.title"><segment><source>Total
-          Revenue (No Filters)</source></segment></unit></group></group><group id="visualizationObject"><group
+          id="metric.total_revenue.title"><segment><source>Total Revenue</source></segment></unit></group></group><group
+          id="visualizationObject"><group id="visualizationObject.revenue_by_product"><unit
+          id="visualizationObject.revenue_by_product.title"><segment><source>Revenue
+          by Product</source></segment></unit><unit id="visualizationObject.revenue_by_product.free-form"><notes><note
+          appliesTo="source">Free-form translations are marked by the 'id' attribute,
+          which is a hash combining the JSON path and the source text's value. Since
+          this hash is hard to read, the source text includes extra details about
+          its general location.</note></notes><segment id="55ebf600c86d1a043d6d203235883b21007aebcc7c3daf7a5f9eaeea6761d9cf"><source><mrk
+          id="1" type="free-form:path" value="$.buckets[*].items[*].measure.title"/>Revenue</source></segment></unit></group><group
           id="visualizationObject.campaign_spend"><unit id="visualizationObject.campaign_spend.title"><segment><source>Campaign
           Spend</source></segment></unit><unit id="visualizationObject.campaign_spend.free-form"><notes><note
           appliesTo="source">Free-form translations are marked by the 'id' attribute,
@@ -415,13 +421,6 @@ interactions:
           this hash is hard to read, the source text includes extra details about
           its general location.</note></notes><segment id="55ebf600c86d1a043d6d203235883b21007aebcc7c3daf7a5f9eaeea6761d9cf"><source><mrk
           id="1" type="free-form:path" value="$.buckets[*].items[*].measure.title"/>Revenue</source></segment></unit></group><group
-          id="visualizationObject.revenue_by_product"><unit id="visualizationObject.revenue_by_product.title"><segment><source>Revenue
-          by Product</source></segment></unit><unit id="visualizationObject.revenue_by_product.free-form"><notes><note
-          appliesTo="source">Free-form translations are marked by the 'id' attribute,
-          which is a hash combining the JSON path and the source text's value. Since
-          this hash is hard to read, the source text includes extra details about
-          its general location.</note></notes><segment id="55ebf600c86d1a043d6d203235883b21007aebcc7c3daf7a5f9eaeea6761d9cf"><source><mrk
-          id="1" type="free-form:path" value="$.buckets[*].items[*].measure.title"/>Revenue</source></segment></unit></group><group
           id="visualizationObject.revenue_per_usd_vs_spend_by_campaign"><unit id="visualizationObject.revenue_per_usd_vs_spend_by_campaign.title"><segment><source>Revenue
           per $ vs Spend by Campaign</source></segment></unit><unit id="visualizationObject.revenue_per_usd_vs_spend_by_campaign.free-form"><notes><note
           appliesTo="source">Free-form translations are marked by the 'id' attribute,
@@ -475,37 +474,33 @@ interactions:
         translations are marked by the 'id' attribute, which is a hash combining the
         JSON path and the source text's value. Since this hash is hard to read, the
         source text includes extra details about its general location.</note></notes><segment
-        id="25a4c15df4128a679d8a8f00a668cae32a85d4e50a49303912793e766241e6d8"><source><mrk
-        id="1" type="free-form:path" value="$.layout.sections[*].items[*].widget.description"/></source></segment><segment
-        id="326a37df8debcb8b3eb56dd463b18ae119ff128dccf01159a66b9e0fa18fb445"><source><mrk
-        id="1" type="free-form:path" value="$.layout.sections[*].items[*].widget.title"/>Campaign
-        Spend</source></segment><segment id="e9761369f3f435e702624df3c85c1c078da3acbfd419c20b1f8ed8fc8270f939"><source><mrk
-        id="1" type="free-form:path" value="$.layout.sections[*].items[*].widget.title"/>Revenue
-        per $ vs Spend by Campaign</source></segment><segment id="d6f3e006c6e8d8769b0ededd383cd05237299cbf8fb614b22a82694d20dfc6b6"><source><mrk
+        id="d6f3e006c6e8d8769b0ededd383cd05237299cbf8fb614b22a82694d20dfc6b6"><source><mrk
         id="1" type="free-form:path" value="$.layout.sections[*].header.title"/>Spend
         breakdown and Revenue</source></segment><segment id="15ba24caffe3e1fc3b65d13cea56a26ce6690aa063b7caec20393f4995a7addb"><source><mrk
         id="1" type="free-form:path" value="$.layout.sections[*].header.description"/>The
         first insight shows a breakdown of spend by category and campaign. The second
         shows revenue per $ spend, for each campaign, to demonstrate, how campaigns
-        are successful.</source></segment></unit></group><group id="analyticalDashboard.dashboard_plugin"><unit
-        id="analyticalDashboard.dashboard_plugin.title"><segment><source>Dashboard
+        are successful.</source></segment><segment id="326a37df8debcb8b3eb56dd463b18ae119ff128dccf01159a66b9e0fa18fb445"><source><mrk
+        id="1" type="free-form:path" value="$.layout.sections[*].items[*].widget.title"/>Campaign
+        Spend</source></segment><segment id="e9761369f3f435e702624df3c85c1c078da3acbfd419c20b1f8ed8fc8270f939"><source><mrk
+        id="1" type="free-form:path" value="$.layout.sections[*].items[*].widget.title"/>Revenue
+        per $ vs Spend by Campaign</source></segment><segment id="25a4c15df4128a679d8a8f00a668cae32a85d4e50a49303912793e766241e6d8"><source><mrk
+        id="1" type="free-form:path" value="$.layout.sections[*].items[*].widget.description"/></source></segment></unit></group><group
+        id="analyticalDashboard.dashboard_plugin"><unit id="analyticalDashboard.dashboard_plugin.title"><segment><source>Dashboard
         plugin</source></segment></unit><unit id="analyticalDashboard.dashboard_plugin.free-form"><notes><note
         appliesTo="source">Free-form translations are marked by the 'id' attribute,
         which is a hash combining the JSON path and the source text's value. Since
         this hash is hard to read, the source text includes extra details about its
-        general location.</note></notes><segment id="25a4c15df4128a679d8a8f00a668cae32a85d4e50a49303912793e766241e6d8"><source><mrk
-        id="1" type="free-form:path" value="$.layout.sections[*].items[*].widget.description"/></source></segment><segment
-        id="36411fb5c652a3e399f2c30068820db93fb2a6b55eaa223965b61630aa34269f"><source><mrk
+        general location.</note></notes><segment id="36411fb5c652a3e399f2c30068820db93fb2a6b55eaa223965b61630aa34269f"><source><mrk
         id="1" type="free-form:path" value="$.layout.sections[*].items[*].widget.title"/>DHO
-        simple</source></segment></unit></group><group id="analyticalDashboard.product_and_category"><unit
-        id="analyticalDashboard.product_and_category.title"><segment><source>Product
+        simple</source></segment><segment id="25a4c15df4128a679d8a8f00a668cae32a85d4e50a49303912793e766241e6d8"><source><mrk
+        id="1" type="free-form:path" value="$.layout.sections[*].items[*].widget.description"/></source></segment></unit></group><group
+        id="analyticalDashboard.product_and_category"><unit id="analyticalDashboard.product_and_category.title"><segment><source>Product
         &amp; Category</source></segment></unit><unit id="analyticalDashboard.product_and_category.description"><segment><source></source></segment></unit><unit
         id="analyticalDashboard.product_and_category.free-form"><notes><note appliesTo="source">Free-form
         translations are marked by the 'id' attribute, which is a hash combining the
         JSON path and the source text's value. Since this hash is hard to read, the
         source text includes extra details about its general location.</note></notes><segment
-        id="25a4c15df4128a679d8a8f00a668cae32a85d4e50a49303912793e766241e6d8"><source><mrk
-        id="1" type="free-form:path" value="$.layout.sections[*].items[*].widget.description"/></source></segment><segment
         id="e02985d6033c04e887f927f2bf54170ed02de38b08a6003df0171f02bba33637"><source><mrk
         id="1" type="free-form:path" value="$.layout.sections[*].items[*].widget.title"/>Top
         10 Products</source></segment><segment id="83d6b36029de90d9ceebddba1d5b52fb677ab61f0f50e1a168747879f1ae7374"><source><mrk
@@ -520,7 +515,8 @@ interactions:
         id="1" type="free-form:path" value="$.layout.sections[*].items[*].widget.title"/>Product
         Saleability</source></segment><segment id="a95b826fd4241f26e0ca81690a810d6eb8b7bf65dc2ac907175e91865064cfbd"><source><mrk
         id="1" type="free-form:path" value="$.layout.sections[*].items[*].widget.title"/>%
-        Revenue per Product by Customer and Category</source></segment></unit></group></group><group
+        Revenue per Product by Customer and Category</source></segment><segment id="25a4c15df4128a679d8a8f00a668cae32a85d4e50a49303912793e766241e6d8"><source><mrk
+        id="1" type="free-form:path" value="$.layout.sections[*].items[*].widget.description"/></source></segment></unit></group></group><group
         id="attribute"><group id="attribute.campaign_channel_id"><unit id="attribute.campaign_channel_id.title"><segment><source>Campaign
         channel id</source></segment></unit><unit id="attribute.campaign_channel_id.description"><segment><source>Campaign
         channel id</source></segment></unit><unit id="attribute.campaign_channel_id.tags"><segment><source>Campaign
@@ -572,6 +568,9 @@ interactions:
         id="attribute.date.week"><unit id="attribute.date.week.title"><segment><source>Date
         - Week/Year</source></segment></unit><unit id="attribute.date.week.description"><segment><source>Week
         and Year (W52/2020)</source></segment></unit><unit id="attribute.date.week.tags"><segment><source>Date</source></segment></unit></group><group
+        id="attribute.state"><unit id="attribute.state.title"><segment><source>State</source></segment></unit><unit
+        id="attribute.state.description"><segment><source>State</source></segment></unit><unit
+        id="attribute.state.tags"><segment><source>Customers</source></segment></unit></group><group
         id="attribute.date.month"><unit id="attribute.date.month.title"><segment><source>Date
         - Month/Year</source></segment></unit><unit id="attribute.date.month.description"><segment><source>Month
         and Year (12/2020)</source></segment></unit><unit id="attribute.date.month.tags"><segment><source>Date</source></segment></unit></group><group
@@ -580,10 +579,7 @@ interactions:
         and Year (Q1/2020)</source></segment></unit><unit id="attribute.date.quarter.tags"><segment><source>Date</source></segment></unit></group><group
         id="attribute.date.year"><unit id="attribute.date.year.title"><segment><source>Date
         - Year</source></segment></unit><unit id="attribute.date.year.description"><segment><source>Year</source></segment></unit><unit
-        id="attribute.date.year.tags"><segment><source>Date</source></segment></unit></group><group
-        id="attribute.state"><unit id="attribute.state.title"><segment><source>State</source></segment></unit><unit
-        id="attribute.state.description"><segment><source>State</source></segment></unit><unit
-        id="attribute.state.tags"><segment><source>Customers</source></segment></unit></group></group><group
+        id="attribute.date.year.tags"><segment><source>Date</source></segment></unit></group></group><group
         id="dataset"><group id="dataset.campaign_channels"><unit id="dataset.campaign_channels.title"><segment><source>Campaign
         channels</source></segment></unit><unit id="dataset.campaign_channels.description"><segment><source>Campaign
         channels</source></segment></unit><unit id="dataset.campaign_channels.tags"><segment><source>Campaign
@@ -611,15 +607,15 @@ interactions:
         id="fact"><group id="fact.budget"><unit id="fact.budget.title"><segment><source>Budget</source></segment></unit><unit
         id="fact.budget.description"><segment><source>Budget</source></segment></unit><unit
         id="fact.budget.tags"><segment><source>Campaign channels</source></segment></unit></group><group
+        id="fact.spend"><unit id="fact.spend.title"><segment><source>Spend</source></segment></unit><unit
+        id="fact.spend.description"><segment><source>Spend</source></segment></unit><unit
+        id="fact.spend.tags"><segment><source>Campaign channels</source></segment></unit></group><group
         id="fact.price"><unit id="fact.price.title"><segment><source>Price</source></segment></unit><unit
         id="fact.price.description"><segment><source>Price</source></segment></unit><unit
         id="fact.price.tags"><segment><source>Order lines</source></segment></unit></group><group
         id="fact.quantity"><unit id="fact.quantity.title"><segment><source>Quantity</source></segment></unit><unit
         id="fact.quantity.description"><segment><source>Quantity</source></segment></unit><unit
-        id="fact.quantity.tags"><segment><source>Order lines</source></segment></unit></group><group
-        id="fact.spend"><unit id="fact.spend.title"><segment><source>Spend</source></segment></unit><unit
-        id="fact.spend.description"><segment><source>Spend</source></segment></unit><unit
-        id="fact.spend.tags"><segment><source>Campaign channels</source></segment></unit></group></group><group
+        id="fact.quantity.tags"><segment><source>Order lines</source></segment></unit></group></group><group
         id="aggregatedFact"><group id="aggregatedFact.budget_agg"><unit id="aggregatedFact.budget_agg.title"><segment><source></source></segment></unit><unit
         id="aggregatedFact.budget_agg.description"><segment><source>Budget Agg</source></segment></unit><unit
         id="aggregatedFact.budget_agg.tags"><segment><source>Campaign channels per
@@ -690,18 +686,20 @@ interactions:
         id="label.date.year"><unit id="label.date.year.title"><segment><source>Date
         - Year</source></segment></unit><unit id="label.date.year.description"><segment><source>Year</source></segment></unit><unit
         id="label.date.year.tags"><segment><source>Date</source></segment></unit></group></group><group
-        id="metric"><group id="metric.amount_of_active_customers"><unit id="metric.amount_of_active_customers.title"><segment><source>#
-        of Active Customers</source></segment></unit></group><group id="metric.amount_of_orders"><unit
+        id="metric"><group id="metric.total_revenue-no_filters"><unit id="metric.total_revenue-no_filters.title"><segment><source>Total
+        Revenue (No Filters)</source></segment></unit></group><group id="metric.amount_of_active_customers"><unit
+        id="metric.amount_of_active_customers.title"><segment><source># of Active
+        Customers</source></segment></unit></group><group id="metric.amount_of_orders"><unit
         id="metric.amount_of_orders.title"><segment><source># of Orders</source></segment></unit></group><group
         id="metric.amount_of_top_customers"><unit id="metric.amount_of_top_customers.title"><segment><source>#
         of Top Customers</source></segment></unit></group><group id="metric.amount_of_valid_orders"><unit
         id="metric.amount_of_valid_orders.title"><segment><source># of Valid Orders</source></segment></unit><unit
         id="metric.amount_of_valid_orders.description"><segment><source></source></segment></unit></group><group
         id="metric.campaign_spend"><unit id="metric.campaign_spend.title"><segment><source>Campaign
-        Spend</source></segment></unit></group><group id="metric.percent_revenue"><unit
-        id="metric.percent_revenue.title"><segment><source>% Revenue</source></segment></unit></group><group
-        id="metric.order_amount"><unit id="metric.order_amount.title"><segment><source>Order
-        Amount</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_customers"><unit
+        Spend</source></segment></unit></group><group id="metric.order_amount"><unit
+        id="metric.order_amount.title"><segment><source>Order Amount</source></segment></unit></group><group
+        id="metric.percent_revenue"><unit id="metric.percent_revenue.title"><segment><source>%
+        Revenue</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_customers"><unit
         id="metric.percent_revenue_from_top_10_customers.title"><segment><source>%
         Revenue from Top 10 Customers</source></segment></unit></group><group id="metric.percent_revenue_from_top_10_percent_customers"><unit
         id="metric.percent_revenue_from_top_10_percent_customers.title"><segment><source>%
@@ -729,9 +727,15 @@ interactions:
         id="metric.revenue_top_10.title"><segment><source>Revenue / Top 10</source></segment></unit></group><group
         id="metric.revenue_top_10_percent"><unit id="metric.revenue_top_10_percent.title"><segment><source>Revenue
         / Top 10%</source></segment></unit></group><group id="metric.total_revenue"><unit
-        id="metric.total_revenue.title"><segment><source>Total Revenue</source></segment></unit></group><group
-        id="metric.total_revenue-no_filters"><unit id="metric.total_revenue-no_filters.title"><segment><source>Total
-        Revenue (No Filters)</source></segment></unit></group></group><group id="visualizationObject"><group
+        id="metric.total_revenue.title"><segment><source>Total Revenue</source></segment></unit></group></group><group
+        id="visualizationObject"><group id="visualizationObject.revenue_by_product"><unit
+        id="visualizationObject.revenue_by_product.title"><segment><source>Revenue
+        by Product</source></segment></unit><unit id="visualizationObject.revenue_by_product.free-form"><notes><note
+        appliesTo="source">Free-form translations are marked by the 'id' attribute,
+        which is a hash combining the JSON path and the source text's value. Since
+        this hash is hard to read, the source text includes extra details about its
+        general location.</note></notes><segment id="55ebf600c86d1a043d6d203235883b21007aebcc7c3daf7a5f9eaeea6761d9cf"><source><mrk
+        id="1" type="free-form:path" value="$.buckets[*].items[*].measure.title"/>Revenue</source></segment></unit></group><group
         id="visualizationObject.campaign_spend"><unit id="visualizationObject.campaign_spend.title"><segment><source>Campaign
         Spend</source></segment></unit><unit id="visualizationObject.campaign_spend.free-form"><notes><note
         appliesTo="source">Free-form translations are marked by the 'id' attribute,
@@ -834,13 +838,6 @@ interactions:
         this hash is hard to read, the source text includes extra details about its
         general location.</note></notes><segment id="55ebf600c86d1a043d6d203235883b21007aebcc7c3daf7a5f9eaeea6761d9cf"><source><mrk
         id="1" type="free-form:path" value="$.buckets[*].items[*].measure.title"/>Revenue</source></segment></unit></group><group
-        id="visualizationObject.revenue_by_product"><unit id="visualizationObject.revenue_by_product.title"><segment><source>Revenue
-        by Product</source></segment></unit><unit id="visualizationObject.revenue_by_product.free-form"><notes><note
-        appliesTo="source">Free-form translations are marked by the 'id' attribute,
-        which is a hash combining the JSON path and the source text's value. Since
-        this hash is hard to read, the source text includes extra details about its
-        general location.</note></notes><segment id="55ebf600c86d1a043d6d203235883b21007aebcc7c3daf7a5f9eaeea6761d9cf"><source><mrk
-        id="1" type="free-form:path" value="$.buckets[*].items[*].measure.title"/>Revenue</source></segment></unit></group><group
         id="visualizationObject.revenue_per_usd_vs_spend_by_campaign"><unit id="visualizationObject.revenue_per_usd_vs_spend_by_campaign.title"><segment><source>Revenue
         per $ vs Spend by Campaign</source></segment></unit><unit id="visualizationObject.revenue_per_usd_vs_spend_by_campaign.free-form"><notes><note
         appliesTo="source">Free-form translations are marked by the 'id' attribute,
@@ -887,7 +884,7 @@ interactions:
         Accept:
           - '*/*'
         Accept-Encoding:
-          - gzip, deflate, br
+          - gzip, deflate, br, zstd
         Connection:
           - keep-alive
         Content-Length:

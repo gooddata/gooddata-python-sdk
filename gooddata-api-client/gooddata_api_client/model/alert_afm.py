@@ -125,7 +125,7 @@ class AlertAfm(ModelNormal):
         """AlertAfm - a model defined in OpenAPI
 
         Args:
-            filters ([FilterDefinition]): Various filter types to filter execution result. For anomaly detection, exactly one date filter (RelativeDateFilter or AbsoluteDateFilter) is required.
+            filters ([FilterDefinition]): Various filter types to filter execution result. For anomaly detection, exactly one dataset is specified in the condition. The AFM may contain multiple date filters for different datasets, but only the date filter matching the dataset from the condition is used for anomaly detection.
             measures ([MeasureItem]): Metrics to be computed. One metric if the alert condition is evaluated to a scalar. Two metrics when they should be evaluated to each other.
 
         Keyword Args:
@@ -218,7 +218,7 @@ class AlertAfm(ModelNormal):
         """AlertAfm - a model defined in OpenAPI
 
         Args:
-            filters ([FilterDefinition]): Various filter types to filter execution result. For anomaly detection, exactly one date filter (RelativeDateFilter or AbsoluteDateFilter) is required.
+            filters ([FilterDefinition]): Various filter types to filter execution result. For anomaly detection, exactly one dataset is specified in the condition. The AFM may contain multiple date filters for different datasets, but only the date filter matching the dataset from the condition is used for anomaly detection.
             measures ([MeasureItem]): Metrics to be computed. One metric if the alert condition is evaluated to a scalar. Two metrics when they should be evaluated to each other.
 
         Keyword Args:

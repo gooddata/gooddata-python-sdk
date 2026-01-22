@@ -1,4 +1,4 @@
-# (C) 2025 GoodData Corporation
+# (C) 2026 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -7,7 +7,7 @@ interactions:
       body: null
       headers:
         Accept:
-          - application/vnd.gooddata.api+json
+          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
@@ -24,7 +24,7 @@ interactions:
         Content-Length:
           - '3321'
         Content-Type:
-          - application/vnd.gooddata.api+json
+          - application/json
         DATE: &id001
           - PLACEHOLDER
         Expires:
@@ -120,7 +120,7 @@ interactions:
                       rotation: auto
                 version: '2'
                 visualizationUrl: local:combo2
-              createdAt: 2025-12-16 14:07
+              createdAt: 2026-01-21 17:09
             relationships:
               createdBy:
                 data:
@@ -164,20 +164,20 @@ interactions:
               type: metric
               attributes:
                 title: '# of Active Customers'
-                createdAt: 2025-12-16 14:07
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
+                createdAt: 2026-01-21 17:09
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/amount_of_active_customers
             - id: revenue_per_customer
               type: metric
               attributes:
                 title: Revenue per Customer
-                createdAt: 2025-12-16 14:07
                 content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
+                createdAt: 2026-01-21 17:09
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue_per_customer
             - id: date.month
@@ -240,10 +240,10 @@ interactions:
           - '0'
       body:
         string:
-          exportResult: 5bbcf124a4b21affa7dd9d75ad47b4f5b4c48430
+          exportResult: 54ac115b4556045d66fa269ad1a9c6a4d7a5cc21
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/5bbcf124a4b21affa7dd9d75ad47b4f5b4c48430
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/54ac115b4556045d66fa269ad1a9c6a4d7a5cc21
       body: null
       headers:
         Accept:
@@ -284,7 +284,7 @@ interactions:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/5bbcf124a4b21affa7dd9d75ad47b4f5b4c48430
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/54ac115b4556045d66fa269ad1a9c6a4d7a5cc21
       body: null
       headers:
         Accept:
@@ -325,7 +325,7 @@ interactions:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/5bbcf124a4b21affa7dd9d75ad47b4f5b4c48430
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/54ac115b4556045d66fa269ad1a9c6a4d7a5cc21
       body: null
       headers:
         Accept:
@@ -366,48 +366,7 @@ interactions:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/5bbcf124a4b21affa7dd9d75ad47b4f5b4c48430
-      body: null
-      headers:
-        Accept:
-          - application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
-            application/zip, text/csv, text/html
-        Accept-Encoding:
-          - br, gzip, deflate
-        X-GDC-VALIDATE-RELATIONS:
-          - 'true'
-        X-Requested-With:
-          - XMLHttpRequest
-    response:
-      status:
-        code: 202
-        message: Accepted
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '0'
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
-          - '0'
-      body:
-        string: ''
-  - request:
-      method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/5bbcf124a4b21affa7dd9d75ad47b4f5b4c48430
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/54ac115b4556045d66fa269ad1a9c6a4d7a5cc21
       body: null
       headers:
         Accept:
@@ -429,7 +388,7 @@ interactions:
         Content-Disposition:
           - attachment; filename="=?UTF-8?Q?Customers_Trend.csv?="; filename*=UTF-8''Customers%20Trend.csv
         Content-Length:
-          - '416'
+          - '413'
         Content-Type:
           - text/csv
         DATE: *id001
@@ -449,7 +408,7 @@ interactions:
         X-Xss-Protection:
           - '0'
       body:
-        string: "\uFEFF\"Date - Month/Year\",\"2025-01\",\"2025-02\",\"2025-03\",\"\
-          2025-04\",\"2025-05\",\"2025-06\",\"2025-07\",\"2025-08\",\"2025-09\",\"\
-          2025-10\",\"2025-11\",\"2025-12\"\n\"Active Customers\",60,64,65,56,54,59,76,99,107,91,56,61\n\
-          \"Revenue per Customer\",185.4194,146.6475,111.88542372881356,184.2714,228.0194117647059,110.62510204081633,208.63134328358208,194.15443181818182,215.70928571428573,152.4380487804878,348.0577777777778,227.9498275862069\n"
+        string: "\uFEFF\"Date - Month/Year\",\"2025-02\",\"2025-03\",\"2025-04\",\"\
+          2025-05\",\"2025-06\",\"2025-07\",\"2025-08\",\"2025-09\",\"2025-10\",\"\
+          2025-11\",\"2025-12\",\"2026-01\"\n\"Active Customers\",57,62,60,51,60,55,86,89,72,56,90,60\n\
+          \"Revenue per Customer\",197.37653846153847,93.78964285714285,115.96454545454546,241.92872340425532,270.91346938775513,92.0542,251.6236842105263,204.48873417721518,187.41,160.19469387755103,178.3658536585366,185.4194\n"

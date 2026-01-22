@@ -1,4 +1,4 @@
-# (C) 2025 GoodData Corporation
+# (C) 2026 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -113,7 +113,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '320'
+          - '341'
         Content-Type:
           - application/json
         DATE: *id001
@@ -139,6 +139,7 @@ interactions:
               customDashboardUrl: https://dashboard.site
               dashboardLinkVisibility: INTERNAL_ONLY
               destination:
+                hasSecretKey: false
                 hasToken: true
                 type: WEBHOOK
                 url: https://webhook.site

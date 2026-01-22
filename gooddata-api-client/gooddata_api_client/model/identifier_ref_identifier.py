@@ -71,6 +71,7 @@ class IdentifierRefIdentifier(ModelNormal):
             'AUTOMATION': "automation",
             'AUTOMATIONRESULT': "automationResult",
             'MEMORYITEM': "memoryItem",
+            'KNOWLEDGERECOMMENDATION': "knowledgeRecommendation",
             'PROMPT': "prompt",
             'VISUALIZATIONOBJECT': "visualizationObject",
             'FILTERCONTEXT': "filterContext",

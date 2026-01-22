@@ -78,6 +78,9 @@ class DeclarativeNotificationChannelDestination(ModelComposed):
     }
 
     validations = {
+        ('secret_key',): {
+            'max_length': 10000,
+        },
         ('token',): {
             'max_length': 10000,
         },
@@ -118,7 +121,9 @@ class DeclarativeNotificationChannelDestination(ModelComposed):
             'password': (str,),  # noqa: E501
             'port': (int,),  # noqa: E501
             'username': (str,),  # noqa: E501
+            'has_secret_key': (bool, none_type,),  # noqa: E501
             'has_token': (bool, none_type,),  # noqa: E501
+            'secret_key': (str, none_type,),  # noqa: E501
             'token': (str, none_type,),  # noqa: E501
             'url': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
@@ -136,13 +141,16 @@ class DeclarativeNotificationChannelDestination(ModelComposed):
         'password': 'password',  # noqa: E501
         'port': 'port',  # noqa: E501
         'username': 'username',  # noqa: E501
+        'has_secret_key': 'hasSecretKey',  # noqa: E501
         'has_token': 'hasToken',  # noqa: E501
+        'secret_key': 'secretKey',  # noqa: E501
         'token': 'token',  # noqa: E501
         'url': 'url',  # noqa: E501
         'type': 'type',  # noqa: E501
     }
 
     read_only_vars = {
+        'has_secret_key',  # noqa: E501
         'has_token',  # noqa: E501
     }
 
@@ -188,7 +196,9 @@ class DeclarativeNotificationChannelDestination(ModelComposed):
             password (str): The SMTP server password.. [optional]  # noqa: E501
             port (int): The SMTP server port.. [optional]  # noqa: E501
             username (str): The SMTP server username.. [optional]  # noqa: E501
+            has_secret_key (bool, none_type): Flag indicating if webhook has a hmac secret key.. [optional]  # noqa: E501
             has_token (bool, none_type): Flag indicating if webhook has a token.. [optional]  # noqa: E501
+            secret_key (str, none_type): Hmac secret key for the webhook signature.. [optional]  # noqa: E501
             token (str, none_type): Bearer token for the webhook.. [optional]  # noqa: E501
             url (str): The webhook URL.. [optional]  # noqa: E501
             type (str): The destination type.. [optional] if omitted the server will use the default value of "WEBHOOK"  # noqa: E501
@@ -301,7 +311,9 @@ class DeclarativeNotificationChannelDestination(ModelComposed):
             password (str): The SMTP server password.. [optional]  # noqa: E501
             port (int): The SMTP server port.. [optional]  # noqa: E501
             username (str): The SMTP server username.. [optional]  # noqa: E501
+            has_secret_key (bool, none_type): Flag indicating if webhook has a hmac secret key.. [optional]  # noqa: E501
             has_token (bool, none_type): Flag indicating if webhook has a token.. [optional]  # noqa: E501
+            secret_key (str, none_type): Hmac secret key for the webhook signature.. [optional]  # noqa: E501
             token (str, none_type): Bearer token for the webhook.. [optional]  # noqa: E501
             url (str): The webhook URL.. [optional]  # noqa: E501
             type (str): The destination type.. [optional] if omitted the server will use the default value of "WEBHOOK"  # noqa: E501

@@ -6,6 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**get_analytics_model**](LayoutApi.md#get_analytics_model) | **GET** /api/v1/layout/workspaces/{workspaceId}/analyticsModel | Get analytics model
 [**get_automations**](LayoutApi.md#get_automations) | **GET** /api/v1/layout/workspaces/{workspaceId}/automations | Get automations
+[**get_custom_geo_collections_layout**](LayoutApi.md#get_custom_geo_collections_layout) | **GET** /api/v1/layout/customGeoCollections | Get all custom geo collections layout
 [**get_data_source_permissions**](LayoutApi.md#get_data_source_permissions) | **GET** /api/v1/layout/dataSources/{dataSourceId}/permissions | Get permissions for the data source
 [**get_data_sources_layout**](LayoutApi.md#get_data_sources_layout) | **GET** /api/v1/layout/dataSources | Get all data sources
 [**get_export_templates_layout**](LayoutApi.md#get_export_templates_layout) | **GET** /api/v1/layout/exportTemplates | Get all export templates layout
@@ -32,6 +33,7 @@ Method | HTTP request | Description
 [**put_workspace_layout**](LayoutApi.md#put_workspace_layout) | **PUT** /api/v1/layout/workspaces/{workspaceId} | Set workspace layout
 [**set_analytics_model**](LayoutApi.md#set_analytics_model) | **PUT** /api/v1/layout/workspaces/{workspaceId}/analyticsModel | Set analytics model
 [**set_automations**](LayoutApi.md#set_automations) | **PUT** /api/v1/layout/workspaces/{workspaceId}/automations | Set automations
+[**set_custom_geo_collections**](LayoutApi.md#set_custom_geo_collections) | **PUT** /api/v1/layout/customGeoCollections | Set all custom geo collections
 [**set_data_source_permissions**](LayoutApi.md#set_data_source_permissions) | **PUT** /api/v1/layout/dataSources/{dataSourceId}/permissions | Set data source permissions.
 [**set_export_templates**](LayoutApi.md#set_export_templates) | **PUT** /api/v1/layout/exportTemplates | Set all export templates
 [**set_filter_views**](LayoutApi.md#set_filter_views) | **PUT** /api/v1/layout/workspaces/{workspaceId}/filterViews | Set filter views
@@ -205,6 +207,69 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Retrieved automations. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_custom_geo_collections_layout**
+> DeclarativeCustomGeoCollections get_custom_geo_collections_layout()
+
+Get all custom geo collections layout
+
+Gets complete layout of custom geo collections.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import layout_api
+from gooddata_api_client.model.declarative_custom_geo_collections import DeclarativeCustomGeoCollections
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = layout_api.LayoutApi(api_client)
+
+    # example, this endpoint has no required or optional parameters
+    try:
+        # Get all custom geo collections layout
+        api_response = api_instance.get_custom_geo_collections_layout()
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling LayoutApi->get_custom_geo_collections_layout: %s\n" % e)
+```
+
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**DeclarativeCustomGeoCollections**](DeclarativeCustomGeoCollections.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Retrieved layout of all custom geo collections. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -1518,6 +1583,7 @@ with gooddata_api_client.ApiClient() as api_client:
     declarative_data_sources = DeclarativeDataSources(
         data_sources=[
             DeclarativeDataSource(
+                alternative_data_source_id="pg_local_docker-demo2",
                 authentication_type="USERNAME_PASSWORD",
                 cache_strategy="ALWAYS",
                 client_id="client1234",
@@ -2088,6 +2154,8 @@ with gooddata_api_client.ApiClient() as api_client:
                         DeclarativeAggregatedFact(
                             description="A number of orders created by the customer - including all orders, even the non-delivered ones.",
                             id="fact.customer_order_count",
+                            is_nullable=False,
+                            null_value="0",
                             source_column="customer_order_count",
                             source_column_data_type="NUMERIC",
                             source_fact_reference=DeclarativeSourceFactReference(
@@ -2109,17 +2177,21 @@ with gooddata_api_client.ApiClient() as api_client:
                             description="Customer name including first and last name.",
                             id="attr.customers.customer_name",
                             is_hidden=False,
+                            is_nullable=False,
                             labels=[
                                 DeclarativeLabel(
                                     description="Customer name",
                                     geo_area_config=GeoAreaConfig(
-                                        collection=GeoCollection(
+                                        collection=GeoCollectionIdentifier(
                                             id="id_example",
+                                            kind="STATIC",
                                         ),
                                     ),
                                     id="label.customer_name",
                                     is_hidden=False,
+                                    is_nullable=False,
                                     locale="en-US",
+                                    null_value="empty_value",
                                     source_column="customer_name",
                                     source_column_data_type="STRING",
                                     tags=["Customers"],
@@ -2134,6 +2206,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                 ),
                             ],
                             locale="en-US",
+                            null_value="empty_value",
                             sort_column="customer_name",
                             sort_direction="ASC" | "DESC",
                             source_column="customer_name",
@@ -2154,6 +2227,8 @@ with gooddata_api_client.ApiClient() as api_client:
                             description="A number of orders created by the customer - including all orders, even the non-delivered ones.",
                             id="fact.customer_order_count",
                             is_hidden=False,
+                            is_nullable=False,
+                            null_value="0",
                             source_column="customer_order_count",
                             source_column_data_type="NUMERIC",
                             tags=["Customers"],
@@ -2183,6 +2258,8 @@ with gooddata_api_client.ApiClient() as api_client:
                                 DeclarativeReferenceSource(
                                     column="customer_id",
                                     data_type="STRING",
+                                    is_nullable=False,
+                                    null_value="empty_value",
                                     target=GrainIdentifier(
                                         id="attr.customers.customer_name",
                                         type="ATTRIBUTE",
@@ -2802,6 +2879,78 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **set_custom_geo_collections**
+> set_custom_geo_collections(declarative_custom_geo_collections)
+
+Set all custom geo collections
+
+Sets custom geo collections in organization.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import layout_api
+from gooddata_api_client.model.declarative_custom_geo_collections import DeclarativeCustomGeoCollections
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = layout_api.LayoutApi(api_client)
+    declarative_custom_geo_collections = DeclarativeCustomGeoCollections(
+        custom_geo_collections=[
+            DeclarativeCustomGeoCollection(
+                id="my-geo-collection",
+            ),
+        ],
+    ) # DeclarativeCustomGeoCollections | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Set all custom geo collections
+        api_instance.set_custom_geo_collections(declarative_custom_geo_collections)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling LayoutApi->set_custom_geo_collections: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **declarative_custom_geo_collections** | [**DeclarativeCustomGeoCollections**](DeclarativeCustomGeoCollections.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | All custom geo collections set. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **set_data_source_permissions**
 > set_data_source_permissions(data_source_id, declarative_data_source_permissions)
 
@@ -3245,6 +3394,8 @@ with gooddata_api_client.ApiClient() as api_client:
                         DeclarativeAggregatedFact(
                             description="A number of orders created by the customer - including all orders, even the non-delivered ones.",
                             id="fact.customer_order_count",
+                            is_nullable=False,
+                            null_value="0",
                             source_column="customer_order_count",
                             source_column_data_type="NUMERIC",
                             source_fact_reference=DeclarativeSourceFactReference(
@@ -3266,17 +3417,21 @@ with gooddata_api_client.ApiClient() as api_client:
                             description="Customer name including first and last name.",
                             id="attr.customers.customer_name",
                             is_hidden=False,
+                            is_nullable=False,
                             labels=[
                                 DeclarativeLabel(
                                     description="Customer name",
                                     geo_area_config=GeoAreaConfig(
-                                        collection=GeoCollection(
+                                        collection=GeoCollectionIdentifier(
                                             id="id_example",
+                                            kind="STATIC",
                                         ),
                                     ),
                                     id="label.customer_name",
                                     is_hidden=False,
+                                    is_nullable=False,
                                     locale="en-US",
+                                    null_value="empty_value",
                                     source_column="customer_name",
                                     source_column_data_type="STRING",
                                     tags=["Customers"],
@@ -3291,6 +3446,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                 ),
                             ],
                             locale="en-US",
+                            null_value="empty_value",
                             sort_column="customer_name",
                             sort_direction="ASC" | "DESC",
                             source_column="customer_name",
@@ -3311,6 +3467,8 @@ with gooddata_api_client.ApiClient() as api_client:
                             description="A number of orders created by the customer - including all orders, even the non-delivered ones.",
                             id="fact.customer_order_count",
                             is_hidden=False,
+                            is_nullable=False,
+                            null_value="0",
                             source_column="customer_order_count",
                             source_column_data_type="NUMERIC",
                             tags=["Customers"],
@@ -3340,6 +3498,8 @@ with gooddata_api_client.ApiClient() as api_client:
                                 DeclarativeReferenceSource(
                                     column="customer_id",
                                     data_type="STRING",
+                                    is_nullable=False,
+                                    null_value="empty_value",
                                     target=GrainIdentifier(
                                         id="attr.customers.customer_name",
                                         type="ATTRIBUTE",
@@ -3536,8 +3696,14 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = layout_api.LayoutApi(api_client)
     declarative_organization = DeclarativeOrganization(
+        custom_geo_collections=[
+            DeclarativeCustomGeoCollection(
+                id="my-geo-collection",
+            ),
+        ],
         data_sources=[
             DeclarativeDataSource(
+                alternative_data_source_id="pg_local_docker-demo2",
                 authentication_type="USERNAME_PASSWORD",
                 cache_strategy="ALWAYS",
                 client_id="client1234",
@@ -4288,6 +4454,8 @@ with gooddata_api_client.ApiClient() as api_client:
                                     DeclarativeAggregatedFact(
                                         description="A number of orders created by the customer - including all orders, even the non-delivered ones.",
                                         id="fact.customer_order_count",
+                                        is_nullable=False,
+                                        null_value="0",
                                         source_column="customer_order_count",
                                         source_column_data_type="NUMERIC",
                                         source_fact_reference=DeclarativeSourceFactReference(
@@ -4309,17 +4477,21 @@ with gooddata_api_client.ApiClient() as api_client:
                                         description="Customer name including first and last name.",
                                         id="attr.customers.customer_name",
                                         is_hidden=False,
+                                        is_nullable=False,
                                         labels=[
                                             DeclarativeLabel(
                                                 description="Customer name",
                                                 geo_area_config=GeoAreaConfig(
-                                                    collection=GeoCollection(
+                                                    collection=GeoCollectionIdentifier(
                                                         id="id_example",
+                                                        kind="STATIC",
                                                     ),
                                                 ),
                                                 id="label.customer_name",
                                                 is_hidden=False,
+                                                is_nullable=False,
                                                 locale="en-US",
+                                                null_value="empty_value",
                                                 source_column="customer_name",
                                                 source_column_data_type="STRING",
                                                 tags=["Customers"],
@@ -4334,6 +4506,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                             ),
                                         ],
                                         locale="en-US",
+                                        null_value="empty_value",
                                         sort_column="customer_name",
                                         sort_direction="ASC" | "DESC",
                                         source_column="customer_name",
@@ -4354,6 +4527,8 @@ with gooddata_api_client.ApiClient() as api_client:
                                         description="A number of orders created by the customer - including all orders, even the non-delivered ones.",
                                         id="fact.customer_order_count",
                                         is_hidden=False,
+                                        is_nullable=False,
+                                        null_value="0",
                                         source_column="customer_order_count",
                                         source_column_data_type="NUMERIC",
                                         tags=["Customers"],
@@ -4383,6 +4558,8 @@ with gooddata_api_client.ApiClient() as api_client:
                                             DeclarativeReferenceSource(
                                                 column="customer_id",
                                                 data_type="STRING",
+                                                is_nullable=False,
+                                                null_value="empty_value",
                                                 target=GrainIdentifier(
                                                     id="attr.customers.customer_name",
                                                     type="ATTRIBUTE",
@@ -5527,6 +5704,8 @@ with gooddata_api_client.ApiClient() as api_client:
                                     DeclarativeAggregatedFact(
                                         description="A number of orders created by the customer - including all orders, even the non-delivered ones.",
                                         id="fact.customer_order_count",
+                                        is_nullable=False,
+                                        null_value="0",
                                         source_column="customer_order_count",
                                         source_column_data_type="NUMERIC",
                                         source_fact_reference=DeclarativeSourceFactReference(
@@ -5548,17 +5727,21 @@ with gooddata_api_client.ApiClient() as api_client:
                                         description="Customer name including first and last name.",
                                         id="attr.customers.customer_name",
                                         is_hidden=False,
+                                        is_nullable=False,
                                         labels=[
                                             DeclarativeLabel(
                                                 description="Customer name",
                                                 geo_area_config=GeoAreaConfig(
-                                                    collection=GeoCollection(
+                                                    collection=GeoCollectionIdentifier(
                                                         id="id_example",
+                                                        kind="STATIC",
                                                     ),
                                                 ),
                                                 id="label.customer_name",
                                                 is_hidden=False,
+                                                is_nullable=False,
                                                 locale="en-US",
+                                                null_value="empty_value",
                                                 source_column="customer_name",
                                                 source_column_data_type="STRING",
                                                 tags=["Customers"],
@@ -5573,6 +5756,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                             ),
                                         ],
                                         locale="en-US",
+                                        null_value="empty_value",
                                         sort_column="customer_name",
                                         sort_direction="ASC" | "DESC",
                                         source_column="customer_name",
@@ -5593,6 +5777,8 @@ with gooddata_api_client.ApiClient() as api_client:
                                         description="A number of orders created by the customer - including all orders, even the non-delivered ones.",
                                         id="fact.customer_order_count",
                                         is_hidden=False,
+                                        is_nullable=False,
+                                        null_value="0",
                                         source_column="customer_order_count",
                                         source_column_data_type="NUMERIC",
                                         tags=["Customers"],
@@ -5622,6 +5808,8 @@ with gooddata_api_client.ApiClient() as api_client:
                                             DeclarativeReferenceSource(
                                                 column="customer_id",
                                                 data_type="STRING",
+                                                is_nullable=False,
+                                                null_value="empty_value",
                                                 target=GrainIdentifier(
                                                     id="attr.customers.customer_name",
                                                     type="ATTRIBUTE",

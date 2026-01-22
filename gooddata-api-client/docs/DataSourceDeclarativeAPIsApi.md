@@ -101,6 +101,7 @@ with gooddata_api_client.ApiClient() as api_client:
     declarative_data_sources = DeclarativeDataSources(
         data_sources=[
             DeclarativeDataSource(
+                alternative_data_source_id="pg_local_docker-demo2",
                 authentication_type="USERNAME_PASSWORD",
                 cache_strategy="ALWAYS",
                 client_id="client1234",
