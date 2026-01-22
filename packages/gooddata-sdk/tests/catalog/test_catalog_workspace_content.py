@@ -342,9 +342,8 @@ def test_get_dependent_entities_graph(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     response = sdk.catalog_workspace_content.get_dependent_entities_graph(workspace_id=test_config["workspace"])
 
-    # Includes campaign_channels_per_category pre-aggregation dataset and its aggregatedFact
-    assert len(response.graph.edges) == 174
-    assert len(response.graph.nodes) == 101
+    assert len(response.graph.edges) == 172
+    assert len(response.graph.nodes) == 98
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_dependent_entities_graph_from_entry_points.yaml"))

@@ -20,7 +20,7 @@ from gooddata_api_client.model.declarative_reference_source import DeclarativeRe
 from gooddata_api_client.model.declarative_source_fact_reference import DeclarativeSourceFactReference
 from gooddata_api_client.model.declarative_workspace_data_filter_column import DeclarativeWorkspaceDataFilterColumn
 from gooddata_api_client.model.geo_area_config import GeoAreaConfig
-from gooddata_api_client.model.geo_collection import GeoCollection
+from gooddata_api_client.model.geo_collection_identifier import GeoCollectionIdentifier
 
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.catalog.identifier import (
@@ -189,10 +189,11 @@ class CatalogGeoAreaConfig(Base):
 @define(auto_attribs=True, kw_only=True)
 class CatalogGeoCollectionIdentifier(Base):
     id: str
+    kind: Optional[str] = None
 
     @staticmethod
-    def client_class() -> type[GeoCollection]:
-        return GeoCollection
+    def client_class() -> type[GeoCollectionIdentifier]:
+        return GeoCollectionIdentifier
 
 
 @attr.s(auto_attribs=True, kw_only=True)
