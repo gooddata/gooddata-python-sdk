@@ -50,14 +50,14 @@ format-diff:
 
 .PHONY: mypy
 mypy:
-	uv run tox $(TOX_FLAGS) -e mypy
+	(cd $(ROOT_DIR); uv sync --group tox > /dev/null 2>&1) && $(ROOT_DIR)/.venv/bin/tox $(TOX_FLAGS) -e mypy
 
 .PHONY: types
 types: mypy
 
 .PHONY: test
 test:
-	uv run tox -v $(TOX_FLAGS) $(LOCAL_TEST_ENVS) $(LOCAL_ADD_ARGS)
+	(cd $(ROOT_DIR); uv sync --group tox > /dev/null 2>&1) && $(ROOT_DIR)/.venv/bin/tox -v $(TOX_FLAGS) $(LOCAL_TEST_ENVS) $(LOCAL_ADD_ARGS)
 
 .PHONY: test-ci
 test-ci:
