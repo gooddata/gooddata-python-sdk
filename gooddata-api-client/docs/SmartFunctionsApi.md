@@ -384,7 +384,13 @@ with gooddata_api_client.ApiClient() as api_client:
     workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
     search_request = SearchRequest(
         deep_search=False,
+        exclude_tags=[
+            "exclude_tags_example",
+        ],
         include_hidden=False,
+        include_tags=[
+            "include_tags_example",
+        ],
         limit=10,
         object_types=[
             "attribute",

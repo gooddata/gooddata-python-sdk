@@ -3894,10 +3894,26 @@
             "description": "Turn on deep search. If true, content of complex objects will be searched as well, e.g. metrics in visualizations.",
             "type": "boolean"
           },
+          "excludeTags": {
+            "description": "Exclude objects that contain any of the specified tags. This parameter only affects the search results. Objects with excluded tags are completely hidden from the results.",
+            "items": {
+              "description": "Tag to exclude.",
+              "type": "string"
+            },
+            "type": "array"
+          },
           "includeHidden": {
             "default": false,
             "description": "If true, includes hidden objects in search results. If false (default), excludes objects where isHidden=true.",
             "type": "boolean"
+          },
+          "includeTags": {
+            "description": "Include only objects that contain at least one of the specified tags (OR logic). This parameter only affects the search results. If an object has multiple tags, it will be included as long as it matches at least one tag from this parameter.",
+            "items": {
+              "description": "Tag to include.",
+              "type": "string"
+            },
+            "type": "array"
           },
           "limit": {
             "default": 10,

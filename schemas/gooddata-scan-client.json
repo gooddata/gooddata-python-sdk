@@ -646,7 +646,8 @@
               "FLEXCONNECT",
               "STARROCKS",
               "ATHENA",
-              "MONGODB"
+              "MONGODB",
+              "CRATEDB"
             ],
             "example": "POSTGRESQL",
             "type": "string"
