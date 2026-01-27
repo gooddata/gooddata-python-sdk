@@ -5,12 +5,14 @@
         {
           "data_type": "NUMERIC",
           "isPrimaryKey": false,
-          "name": "budget"
+          "name": "budget",
+          "isNullable": true
         },
         {
           "data_type": "STRING",
           "isPrimaryKey": true,
-          "name": "campaign_channel_id"
+          "name": "campaign_channel_id",
+          "isNullable": false
         },
         {
           "data_type": "INT",
@@ -22,17 +24,20 @@
         {
           "data_type": "STRING",
           "isPrimaryKey": false,
-          "name": "category"
+          "name": "category",
+          "isNullable": true
         },
         {
           "data_type": "NUMERIC",
           "isPrimaryKey": false,
-          "name": "spend"
+          "name": "spend",
+          "isNullable": true
         },
         {
           "data_type": "STRING",
           "isPrimaryKey": false,
-          "name": "type"
+          "name": "type",
+          "isNullable": true
         }
       ],
       "id": "campaign_channels",
@@ -47,12 +52,14 @@
         {
           "data_type": "INT",
           "isPrimaryKey": true,
-          "name": "campaign_id"
+          "name": "campaign_id",
+          "isNullable": false
         },
         {
           "data_type": "STRING",
           "isPrimaryKey": false,
-          "name": "campaign_name"
+          "name": "campaign_name",
+          "isNullable": true
         }
       ],
       "id": "campaigns",
@@ -67,27 +74,32 @@
         {
           "data_type": "INT",
           "isPrimaryKey": true,
-          "name": "customer_id"
+          "name": "customer_id",
+          "isNullable": false
         },
         {
           "data_type": "STRING",
           "isPrimaryKey": false,
-          "name": "customer_name"
+          "name": "customer_name",
+          "isNullable": true
         },
         {
           "data_type": "STRING",
           "isPrimaryKey": false,
-          "name": "geo__state__location"
+          "name": "geo__state__location",
+          "isNullable": true
         },
         {
           "data_type": "STRING",
           "isPrimaryKey": false,
-          "name": "region"
+          "name": "region",
+          "isNullable": true
         },
         {
           "data_type": "STRING",
           "isPrimaryKey": false,
-          "name": "state"
+          "name": "state",
+          "isNullable": true
         }
       ],
       "id": "customers",
@@ -121,22 +133,26 @@
         {
           "data_type": "STRING",
           "isPrimaryKey": false,
-          "name": "order_id"
+          "name": "order_id",
+          "isNullable": true
         },
         {
           "data_type": "STRING",
           "isPrimaryKey": true,
-          "name": "order_line_id"
+          "name": "order_line_id",
+          "isNullable": false
         },
         {
           "data_type": "STRING",
           "isPrimaryKey": false,
-          "name": "order_status"
+          "name": "order_status",
+          "isNullable": true
         },
         {
           "data_type": "NUMERIC",
           "isPrimaryKey": false,
-          "name": "price"
+          "name": "price",
+          "isNullable": true
         },
         {
           "data_type": "INT",
@@ -148,7 +164,8 @@
         {
           "data_type": "NUMERIC",
           "isPrimaryKey": false,
-          "name": "quantity"
+          "name": "quantity",
+          "isNullable": true
         },
         {
           "data_type": "STRING",
@@ -173,17 +190,20 @@
         {
           "data_type": "STRING",
           "isPrimaryKey": false,
-          "name": "category"
+          "name": "category",
+          "isNullable": true
         },
         {
           "data_type": "INT",
           "isPrimaryKey": true,
-          "name": "product_id"
+          "name": "product_id",
+          "isNullable": false
         },
         {
           "data_type": "STRING",
           "isPrimaryKey": false,
-          "name": "product_name"
+          "name": "product_name",
+          "isNullable": true
         }
       ],
       "id": "products",

@@ -1,0 +1,11 @@
+# (C) 2022 GoodData Corporation
+id: demo-bigquery-ds
+name: demo-bigquery-ds
+schema: demo
+type: BIGQUERY
+parameters:
+    - name: "projectId"
+      value: "projectId-value-override"
+decodedParameters:
+    - name: "clientEmail"
+      value: "fake email"

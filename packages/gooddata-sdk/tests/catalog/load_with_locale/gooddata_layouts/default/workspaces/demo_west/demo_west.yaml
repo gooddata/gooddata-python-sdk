@@ -1,0 +1,9 @@
+# (C) 2022 GoodData Corporation
+hierarchyPermissions: []
+id: demo_west
+name: Demo West
+parent:
+  id: demo
+  type: workspace
+permissions: []
+settings: []

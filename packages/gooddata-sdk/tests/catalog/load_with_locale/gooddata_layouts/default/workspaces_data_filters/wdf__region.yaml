@@ -1,0 +1,15 @@
+# (C) 2022 GoodData Corporation
+columnName: wdf__region
+id: wdf__region
+title: Customer region
+workspace:
+  id: demo
+  type: workspace
+workspaceDataFilterSettings:
+  - filterValues:
+      - West
+    id: region_west
+    title: Region West
+    workspace:
+      id: demo_west
+      type: workspace

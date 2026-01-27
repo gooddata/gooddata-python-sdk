@@ -16,6 +16,8 @@ class CatalogDeclarativeColumn(Base):
     is_primary_key: Optional[bool] = None
     referenced_table_id: Optional[str] = None
     referenced_table_column: Optional[str] = None
+    is_nullable: Optional[bool] = None
+    null_value: Optional[str] = None
 
     @staticmethod
     def client_class() -> type[DeclarativeColumn]:

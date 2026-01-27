@@ -84,7 +84,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-Gdc-Cancel-Token:
-          - 74561851-dc05-4a83-966f-f9fbdb3bdaab
+          - 77a78c05-07bc-417a-acd2-e5a373e990c8
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - '0'
@@ -132,14 +132,14 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: fcfc51868d431ce87ceea5c8a7a00224c985f40f:b6bb69a3a4658ee9c8337a31a5aee00b80ab65ed0cbd1fbf81c0f4fff95ad785
+              executionResult: 59f7aefab2d00b74fa3a4c11cbac489c428f3821:89cf1613841e33f7827271ab772cb58cec5c84726953632ed42136c1e8d44e00
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular
       body:
         fileName: test_xlsx
         format: XLSX
-        executionResult: fcfc51868d431ce87ceea5c8a7a00224c985f40f:b6bb69a3a4658ee9c8337a31a5aee00b80ab65ed0cbd1fbf81c0f4fff95ad785
+        executionResult: 59f7aefab2d00b74fa3a4c11cbac489c428f3821:89cf1613841e33f7827271ab772cb58cec5c84726953632ed42136c1e8d44e00
         customOverride:
           labels:
             region:
@@ -191,10 +191,10 @@ interactions:
           - '0'
       body:
         string:
-          exportResult: 2eb344259fd1aa5ec2788302b6f541bd16af2a86
+          exportResult: b6b26dcb53a44e81f5f1abcfca6d250eda05761c
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/2eb344259fd1aa5ec2788302b6f541bd16af2a86
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/b6b26dcb53a44e81f5f1abcfca6d250eda05761c
       body: null
       headers:
         Accept:
@@ -235,7 +235,7 @@ interactions:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/2eb344259fd1aa5ec2788302b6f541bd16af2a86
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/b6b26dcb53a44e81f5f1abcfca6d250eda05761c
       body: null
       headers:
         Accept:
@@ -276,7 +276,7 @@ interactions:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/2eb344259fd1aa5ec2788302b6f541bd16af2a86
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/b6b26dcb53a44e81f5f1abcfca6d250eda05761c
       body: null
       headers:
         Accept:
@@ -317,89 +317,7 @@ interactions:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/2eb344259fd1aa5ec2788302b6f541bd16af2a86
-      body: null
-      headers:
-        Accept:
-          - application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
-            application/zip, text/csv, text/html
-        Accept-Encoding:
-          - br, gzip, deflate
-        X-GDC-VALIDATE-RELATIONS:
-          - 'true'
-        X-Requested-With:
-          - XMLHttpRequest
-    response:
-      status:
-        code: 202
-        message: Accepted
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '0'
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
-          - '0'
-      body:
-        string: ''
-  - request:
-      method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/2eb344259fd1aa5ec2788302b6f541bd16af2a86
-      body: null
-      headers:
-        Accept:
-          - application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
-            application/zip, text/csv, text/html
-        Accept-Encoding:
-          - br, gzip, deflate
-        X-GDC-VALIDATE-RELATIONS:
-          - 'true'
-        X-Requested-With:
-          - XMLHttpRequest
-    response:
-      status:
-        code: 202
-        message: Accepted
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '0'
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
-          - '0'
-      body:
-        string: ''
-  - request:
-      method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/2eb344259fd1aa5ec2788302b6f541bd16af2a86
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/b6b26dcb53a44e81f5f1abcfca6d250eda05761c
       body: null
       headers:
         Accept:
@@ -549,13 +467,13 @@ interactions:
           dr6GmVPXn68zRmWfmasr0+J3SI4IG2TV28zst1A06yalI3Lc6aDZpuoahv3/8OTjrph8zh4PFoLc
           88wirtb0tUfBxtupcM5Hbd1scd1b+1GbwuEDZV/QuKnw2WK+HfADiD6aT5QIEvFSqyy/+eYQdG5p
           xmWs/tkxahGC1op4X+TwqTm7scLZZ4t7c2d7Bl97Z7vaXi5RWzvI5KulP5748D7I3oGD0oQpWbxN
-          egBHze7sLwPgYy9It/4GUEsDBBQAAAAIAAAAPwClIpnsJQEAAFACAAARAAAAZG9jUHJvcHMvY29y
-          ZS54bWydks1OwzAQhO88ReR7YidFBawklQD1RCUkikDcLHvbWsQ/sg1p3h4nadNW6onjema/nV25
-          XOxVk/yC89LoCuUZQQloboTU2wq9r5fpPUp8YFqwxmioUAceLeqbklvKjYNXZyy4IMEnEaQ95bZC
-          uxAsxdjzHSjms+jQUdwYp1iIpdtiy/g32wIuCJljBYEJFhjugamdiOiAFHxC2h/XDADBMTSgQAeP
-          8yzHJ28Ap/zVhkE5cyoZOgtXrUdxcu+9nIxt22btbLDG/Dn+XL28DaumUven4oDqUnDKHbBgXF3i
-          8yIermE+rOKJNxLEYxf1K2+HRcY+EEkMQMe4R+Vj9vS8XqK6IMU8JUWaz9Y5obd3lDx89SMv+k9A
-          dRjyb+IRMOa+/AT1H1BLAwQUAAAACAAAAD8ABHFFY3sBAAATAwAAEAAAAGRvY1Byb3BzL2FwcC54
+          egBHze7sLwPgYy9It/4GUEsDBBQAAAAIAAAAPwAsol27JQEAAFACAAARAAAAZG9jUHJvcHMvY29y
+          ZS54bWydkstqwzAQRff9CqO9LT+oaYXtQFuyaqDQlJbshDRxRK0HklrHf1/FSZwEvOpydO+cuTOo
+          WuxlF/2CdUKrGmVJiiJQTHOh2hp9rJfxA4qcp4rTTiuo0QAOLZq7ihnCtIU3qw1YL8BFAaQcYaZG
+          O+8NwdixHUjqkuBQQdxqK6kPpW2xoeybtoDzNC2xBE859RQfgLGZiOiE5GxCmh/bjQDOMHQgQXmH
+          syTDF68HK91sw6hcOaXwg4FZ61mc3HsnJmPf90lfjNaQP8Nfq9f3cdVYqMOpGKCm4owwC9Rr21T4
+          ugiH66jzq3DirQD+NAR95u20yLEPeBQCkGPcs/JZPL+sl6jJ07yM0zzOynV2T/KSFI+bw8ib/gtQ
+          nob8m3gGHHPffoLmD1BLAwQUAAAACAAAAD8ABHFFY3sBAAATAwAAEAAAAGRvY1Byb3BzL2FwcC54
           bWydUsFO4zAQvfMVke/UabVaocoxWpVd9bCISi1wXBln0lh1bMszRClfj5OqIYU94dObN0/PzzMW
           t11jsxYiGu8KNp/lLAOnfWncvmCPuz/XNyxDUq5U1jso2BGQ3corsYk+QCQDmCUHhwWricKSc9Q1
           NApnqe1Sp/KxUZTKuOe+qoyGO69fG3DEF3n+k0NH4Eoor8NoyE6Oy5a+a1p63efDp90xJD8pfoVg
@@ -572,6 +490,6 @@ interactions:
           AAAAAACAgbMMAAB4bC9zaGFyZWRTdHJpbmdzLnhtbFBLAQIUAxQAAAAIAAAAPwBdnzo03wIAAIwP
           AAANAAAAAAAAAAAAAACAgfcOAAB4bC9zdHlsZXMueG1sUEsBAhQDFAAAAAgAAAA/ABj6RlSwBQAA
           UhsAABMAAAAAAAAAAAAAAICBARIAAHhsL3RoZW1lL3RoZW1lMS54bWxQSwECFAMUAAAACAAAAD8A
-          pSKZ7CUBAABQAgAAEQAAAAAAAAAAAAAAgIHiFwAAZG9jUHJvcHMvY29yZS54bWxQSwECFAMUAAAA
+          LKJduyUBAABQAgAAEQAAAAAAAAAAAAAAgIHiFwAAZG9jUHJvcHMvY29yZS54bWxQSwECFAMUAAAA
           CAAAAD8ABHFFY3sBAAATAwAAEAAAAAAAAAAAAAAAgIE2GQAAZG9jUHJvcHMvYXBwLnhtbFBLBQYA
           AAAACgAKAIACAADfGgAAAAA=
