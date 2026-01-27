@@ -64,7 +64,6 @@ download:
 	$(call download_client,afm)
 	$(call download_client,metadata)
 	$(call download_client,scan)
-	$(call download_client,"export")
 	$(call download_client,automation)
 
 .PHONY: mypy

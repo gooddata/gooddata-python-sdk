@@ -97,8 +97,11 @@ class AacQueryFilter(ModelNormal):
             'attribute': (str,),  # noqa: E501
             'bottom': (int,),  # noqa: E501
             'condition': (str,),  # noqa: E501
+            'dimensionality': ([str],),  # noqa: E501
+            'display_as': (str,),  # noqa: E501
             '_from': (AacDashboardFilterFrom,),  # noqa: E501
             'granularity': (str,),  # noqa: E501
+            'null_values_as_zero': (bool,),  # noqa: E501
             'state': (AacFilterState,),  # noqa: E501
             'to': (AacDashboardFilterFrom,),  # noqa: E501
             'top': (int,),  # noqa: E501
@@ -117,8 +120,11 @@ class AacQueryFilter(ModelNormal):
         'attribute': 'attribute',  # noqa: E501
         'bottom': 'bottom',  # noqa: E501
         'condition': 'condition',  # noqa: E501
+        'dimensionality': 'dimensionality',  # noqa: E501
+        'display_as': 'display_as',  # noqa: E501
         '_from': 'from',  # noqa: E501
         'granularity': 'granularity',  # noqa: E501
+        'null_values_as_zero': 'null_values_as_zero',  # noqa: E501
         'state': 'state',  # noqa: E501
         'to': 'to',  # noqa: E501
         'top': 'top',  # noqa: E501
@@ -174,8 +180,11 @@ class AacQueryFilter(ModelNormal):
             attribute (str): Attribute for ranking filter (identifier or localId).. [optional]  # noqa: E501
             bottom (int): Bottom N for ranking filter.. [optional]  # noqa: E501
             condition (str): Condition for metric value filter.. [optional]  # noqa: E501
+            dimensionality ([str]): Dimensionality for metric value filter.. [optional]  # noqa: E501
+            display_as (str): Display as label (attribute filter).. [optional]  # noqa: E501
             _from (AacDashboardFilterFrom): [optional]  # noqa: E501
             granularity (str): Date granularity (date filter).. [optional]  # noqa: E501
+            null_values_as_zero (bool): Null values are treated as zero (metric value filter).. [optional]  # noqa: E501
             state (AacFilterState): [optional]  # noqa: E501
             to (AacDashboardFilterFrom): [optional]  # noqa: E501
             top (int): Top N for ranking filter.. [optional]  # noqa: E501
@@ -274,8 +283,11 @@ class AacQueryFilter(ModelNormal):
             attribute (str): Attribute for ranking filter (identifier or localId).. [optional]  # noqa: E501
             bottom (int): Bottom N for ranking filter.. [optional]  # noqa: E501
             condition (str): Condition for metric value filter.. [optional]  # noqa: E501
+            dimensionality ([str]): Dimensionality for metric value filter.. [optional]  # noqa: E501
+            display_as (str): Display as label (attribute filter).. [optional]  # noqa: E501
             _from (AacDashboardFilterFrom): [optional]  # noqa: E501
             granularity (str): Date granularity (date filter).. [optional]  # noqa: E501
+            null_values_as_zero (bool): Null values are treated as zero (metric value filter).. [optional]  # noqa: E501
             state (AacFilterState): [optional]  # noqa: E501
             to (AacDashboardFilterFrom): [optional]  # noqa: E501
             top (int): Top N for ranking filter.. [optional]  # noqa: E501

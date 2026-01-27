@@ -6,7 +6,9 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **question** | **str** | Keyword/sentence is input for search. | 
 **deep_search** | **bool** | Turn on deep search. If true, content of complex objects will be searched as well, e.g. metrics in visualizations. | [optional]  if omitted the server will use the default value of False
+**exclude_tags** | **[str]** | Exclude objects that contain any of the specified tags. This parameter only affects the search results. Objects with excluded tags are completely hidden from the results. | [optional] 
 **include_hidden** | **bool** | If true, includes hidden objects in search results. If false (default), excludes objects where isHidden&#x3D;true. | [optional]  if omitted the server will use the default value of False
+**include_tags** | **[str]** | Include only objects that contain at least one of the specified tags (OR logic). This parameter only affects the search results. If an object has multiple tags, it will be included as long as it matches at least one tag from this parameter. | [optional] 
 **limit** | **int** | Maximum number of results to return. There is a hard limit and the actual number of returned results may be lower than what is requested. | [optional]  if omitted the server will use the default value of 10
 **object_types** | **[str]** | List of object types to search for. | [optional] 
 **relevant_score_threshold** | **float** | Score, above which we return found objects. Below this score objects are not relevant. | [optional]  if omitted the server will use the default value of 0.3
