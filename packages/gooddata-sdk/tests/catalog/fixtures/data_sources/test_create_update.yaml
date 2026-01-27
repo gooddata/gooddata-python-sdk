@@ -22,7 +22,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '491'
+          - '533'
         Content-Type:
           - application/json
         DATE: &id001
@@ -49,6 +49,7 @@ interactions:
                 url: jdbc:postgresql://postgres:5432/tiger?sslmode=prefer
                 username: postgres
                 authenticationType: USERNAME_PASSWORD
+                alternativeDataSourceId: ds-put-abc-id
                 name: demo-test-ds
                 type: POSTGRESQL
                 schema: demo
@@ -105,7 +106,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 8220a43d2295190be319b9bba0fa3a9e
+          traceId: f6096509921bc44f358b9d340fc53c83
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources
@@ -367,7 +368,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '804'
+          - '846'
         Content-Type:
           - application/json
         DATE: *id001
@@ -393,6 +394,7 @@ interactions:
                 url: jdbc:postgresql://postgres:5432/tiger?sslmode=prefer
                 username: postgres
                 authenticationType: USERNAME_PASSWORD
+                alternativeDataSourceId: ds-put-abc-id
                 name: demo-test-ds
                 type: POSTGRESQL
                 schema: demo
@@ -473,7 +475,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '491'
+          - '533'
         Content-Type:
           - application/json
         DATE: *id001
@@ -499,6 +501,7 @@ interactions:
                 url: jdbc:postgresql://postgres:5432/tiger?sslmode=prefer
                 username: postgres
                 authenticationType: USERNAME_PASSWORD
+                alternativeDataSourceId: ds-put-abc-id
                 name: demo-test-ds
                 type: POSTGRESQL
                 schema: demo

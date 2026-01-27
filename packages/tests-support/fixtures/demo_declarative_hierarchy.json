@@ -2519,6 +2519,7 @@
                   "labels": [],
                   "sourceColumn": "campaign_channel_id",
                   "sourceColumnDataType": "STRING",
+                  "isNullable": false,
                   "tags": [
                     "Campaign channels"
                   ],
@@ -2533,7 +2534,8 @@
                   "tags": [
                     "Campaign channels"
                   ],
-                  "title": "Category"
+                  "title": "Category",
+                  "isNullable": true
                 },
                 {
                   "description": "Type",
@@ -2544,7 +2546,8 @@
                   "tags": [
                     "Campaign channels"
                   ],
-                  "title": "Type"
+                  "title": "Type",
+                  "isNullable": true
                 }
               ],
               "dataSourceTableId": {
@@ -2566,7 +2569,8 @@
                   "tags": [
                     "Campaign channels"
                   ],
-                  "title": "Budget"
+                  "title": "Budget",
+                  "isNullable": true
                 },
                 {
                   "description": "Spend",
@@ -2576,7 +2580,8 @@
                   "tags": [
                     "Campaign channels"
                   ],
-                  "title": "Spend"
+                  "title": "Spend",
+                  "isNullable": true
                 }
               ],
               "grain": [
@@ -2674,7 +2679,8 @@
                   "tags": [
                     "Campaigns"
                   ],
-                  "title": "Campaign id"
+                  "title": "Campaign id",
+                  "isNullable": false
                 },
                 {
                   "description": "Campaign name",
@@ -2685,7 +2691,8 @@
                   "tags": [
                     "Campaigns"
                   ],
-                  "title": "Campaign name"
+                  "title": "Campaign name",
+                  "isNullable": true
                 }
               ],
               "dataSourceTableId": {
@@ -2724,7 +2731,8 @@
                   "tags": [
                     "Customers"
                   ],
-                  "title": "Customer id"
+                  "title": "Customer id",
+                  "isNullable": false
                 },
                 {
                   "description": "Customer name",
@@ -2735,7 +2743,8 @@
                   "tags": [
                     "Customers"
                   ],
-                  "title": "Customer name"
+                  "title": "Customer name",
+                  "isNullable": true
                 },
                 {
                   "description": "Region",
@@ -2746,7 +2755,8 @@
                   "tags": [
                     "Customers"
                   ],
-                  "title": "Region"
+                  "title": "Region",
+                  "isNullable": true
                 },
                 {
                   "description": "State",
@@ -2761,7 +2771,8 @@
                         "Customers"
                       ],
                       "title": "Location",
-                      "valueType": "GEO"
+                      "valueType": "GEO",
+                      "isNullable": true
                     }
                   ],
                   "sourceColumn": "state",
@@ -2769,7 +2780,8 @@
                   "tags": [
                     "Customers"
                   ],
-                  "title": "State"
+                  "title": "State",
+                  "isNullable": true
                 }
               ],
               "dataSourceTableId": {
@@ -2808,7 +2820,8 @@
                   "tags": [
                     "Order lines"
                   ],
-                  "title": "Order id"
+                  "title": "Order id",
+                  "isNullable": true
                 },
                 {
                   "description": "Order line id",
@@ -2819,7 +2832,8 @@
                   "tags": [
                     "Order lines"
                   ],
-                  "title": "Order line id"
+                  "title": "Order line id",
+                  "isNullable": false
                 },
                 {
                   "description": "Order status",
@@ -2830,7 +2844,8 @@
                   "tags": [
                     "Order lines"
                   ],
-                  "title": "Order status"
+                  "title": "Order status",
+                  "isNullable": true
                 }
               ],
               "dataSourceTableId": {
@@ -2852,7 +2867,8 @@
                   "tags": [
                     "Order lines"
                   ],
-                  "title": "Price"
+                  "title": "Price",
+                  "isNullable": true
                 },
                 {
                   "description": "Quantity",
@@ -2862,7 +2878,8 @@
                   "tags": [
                     "Order lines"
                   ],
-                  "title": "Quantity"
+                  "title": "Quantity",
+                  "isNullable": true
                 }
               ],
               "grain": [
@@ -2979,7 +2996,8 @@
                   "tags": [
                     "Products"
                   ],
-                  "title": "Product id"
+                  "title": "Product id",
+                  "isNullable": false
                 },
                 {
                   "description": "Product name",
@@ -2990,7 +3008,8 @@
                   "tags": [
                     "Products"
                   ],
-                  "title": "Product name"
+                  "title": "Product name",
+                  "isNullable": true
                 },
                 {
                   "description": "Category",
@@ -3001,7 +3020,8 @@
                   "tags": [
                     "Products"
                   ],
-                  "title": "Category"
+                  "title": "Category",
+                  "isNullable": true
                 }
               ],
               "dataSourceTableId": {

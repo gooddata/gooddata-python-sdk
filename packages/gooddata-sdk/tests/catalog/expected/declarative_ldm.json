@@ -247,19 +247,12 @@
               {
                 "description": "Location",
                 "id": "geo__state__location",
-                "locale": "en-US",
                 "sourceColumn": "geo__state__location",
                 "sourceColumnDataType": "STRING",
                 "tags": [
                   "Customers"
                 ],
                 "title": "Location",
-                "translations": [
-                  {
-                    "locale": "cs-CZ",
-                    "sourceColumn": "geo__state__location_cz"
-                  }
-                ],
                 "valueType": "GEO"
               }
             ],

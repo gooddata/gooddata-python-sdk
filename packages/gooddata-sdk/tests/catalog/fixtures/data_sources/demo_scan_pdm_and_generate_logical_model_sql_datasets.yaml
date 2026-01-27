@@ -245,23 +245,29 @@ interactions:
                 - dataType: NUMERIC
                   name: budget
                   isPrimaryKey: false
+                  isNullable: true
                 - dataType: STRING
                   name: campaign_channel_id
                   isPrimaryKey: true
+                  isNullable: false
                 - dataType: INT
                   name: campaign_id
                   isPrimaryKey: false
                   referencedTableId: campaigns
                   referencedTableColumn: campaign_id
+                  isNullable: true
                 - dataType: STRING
                   name: category
                   isPrimaryKey: false
+                  isNullable: true
                 - dataType: NUMERIC
                   name: spend
                   isPrimaryKey: false
+                  isNullable: true
                 - dataType: STRING
                   name: type
                   isPrimaryKey: false
+                  isNullable: true
               id: campaign_channels
               path:
                 - demo
@@ -271,9 +277,11 @@ interactions:
                 - dataType: INT
                   name: campaign_id
                   isPrimaryKey: true
+                  isNullable: false
                 - dataType: STRING
                   name: campaign_name
                   isPrimaryKey: false
+                  isNullable: true
               id: campaigns
               path:
                 - demo
@@ -283,18 +291,23 @@ interactions:
                 - dataType: INT
                   name: customer_id
                   isPrimaryKey: true
+                  isNullable: false
                 - dataType: STRING
                   name: customer_name
                   isPrimaryKey: false
+                  isNullable: true
                 - dataType: STRING
                   name: geo__state__location
                   isPrimaryKey: false
+                  isNullable: true
                 - dataType: STRING
                   name: region
                   isPrimaryKey: false
+                  isNullable: true
                 - dataType: STRING
                   name: state
                   isPrimaryKey: false
+                  isNullable: true
               id: customers
               path:
                 - demo
@@ -306,40 +319,51 @@ interactions:
                   isPrimaryKey: false
                   referencedTableId: campaigns
                   referencedTableColumn: campaign_id
+                  isNullable: true
                 - dataType: INT
                   name: customer_id
                   isPrimaryKey: false
                   referencedTableId: customers
                   referencedTableColumn: customer_id
+                  isNullable: true
                 - dataType: DATE
                   name: date
                   isPrimaryKey: false
+                  isNullable: true
                 - dataType: STRING
                   name: order_id
                   isPrimaryKey: false
+                  isNullable: true
                 - dataType: STRING
                   name: order_line_id
                   isPrimaryKey: true
+                  isNullable: false
                 - dataType: STRING
                   name: order_status
                   isPrimaryKey: false
+                  isNullable: true
                 - dataType: NUMERIC
                   name: price
                   isPrimaryKey: false
+                  isNullable: true
                 - dataType: INT
                   name: product_id
                   isPrimaryKey: false
                   referencedTableId: products
                   referencedTableColumn: product_id
+                  isNullable: true
                 - dataType: NUMERIC
                   name: quantity
                   isPrimaryKey: false
+                  isNullable: true
                 - dataType: STRING
                   name: wdf__region
                   isPrimaryKey: false
+                  isNullable: true
                 - dataType: STRING
                   name: wdf__state
                   isPrimaryKey: false
+                  isNullable: true
               id: order_lines
               path:
                 - demo
@@ -349,17 +373,21 @@ interactions:
                 - dataType: STRING
                   name: category
                   isPrimaryKey: false
+                  isNullable: true
                 - dataType: INT
                   name: product_id
                   isPrimaryKey: true
+                  isNullable: false
                 - dataType: STRING
                   name: product_name
                   isPrimaryKey: false
+                  isNullable: true
               id: products
               path:
                 - demo
                 - products
               type: TABLE
+        translationPrefix: tr
       headers:
         Accept:
           - application/json
@@ -379,7 +407,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '9798'
+          - '10253'
         Content-Type:
           - application/json
         DATE: *id001
@@ -406,6 +434,7 @@ interactions:
                 attributes:
                   - description: Campaign channel id
                     id: campaign_channel_id
+                    isNullable: false
                     labels: []
                     sourceColumn: campaign_channel_id
                     sourceColumnDataType: STRING
@@ -414,6 +443,7 @@ interactions:
                     title: Campaign channel id
                   - description: Category
                     id: campaign_channels.category
+                    isNullable: true
                     labels: []
                     sourceColumn: category
                     sourceColumnDataType: STRING
@@ -422,6 +452,7 @@ interactions:
                     title: Category
                   - description: Type
                     id: type
+                    isNullable: true
                     labels: []
                     sourceColumn: type
                     sourceColumnDataType: STRING
@@ -439,6 +470,7 @@ interactions:
                 facts:
                   - description: Budget
                     id: budget
+                    isNullable: true
                     sourceColumn: budget
                     sourceColumnDataType: NUMERIC
                     tags:
@@ -446,6 +478,7 @@ interactions:
                     title: Budget
                   - description: Spend
                     id: spend
+                    isNullable: true
                     sourceColumn: spend
                     sourceColumnDataType: NUMERIC
                     tags:
@@ -463,6 +496,7 @@ interactions:
                     sources:
                       - column: campaign_id
                         dataType: INT
+                        isNullable: true
                         target:
                           id: campaigns.campaign_id
                           type: attribute
@@ -473,6 +507,7 @@ interactions:
                 attributes:
                   - description: Campaign name
                     id: campaign_name
+                    isNullable: true
                     labels: []
                     sourceColumn: campaign_name
                     sourceColumnDataType: STRING
@@ -481,6 +516,7 @@ interactions:
                     title: Campaign name
                   - description: Campaign id
                     id: campaigns.campaign_id
+                    isNullable: false
                     labels: []
                     sourceColumn: campaign_id
                     sourceColumnDataType: INT
@@ -508,6 +544,7 @@ interactions:
                 attributes:
                   - description: Customer id
                     id: customers.customer_id
+                    isNullable: false
                     labels: []
                     sourceColumn: customer_id
                     sourceColumnDataType: INT
@@ -516,6 +553,7 @@ interactions:
                     title: Customer id
                   - description: Customer name
                     id: customers.customer_name
+                    isNullable: true
                     labels: []
                     sourceColumn: customer_name
                     sourceColumnDataType: STRING
@@ -524,6 +562,7 @@ interactions:
                     title: Customer name
                   - description: Region
                     id: customers.region
+                    isNullable: true
                     labels: []
                     sourceColumn: region
                     sourceColumnDataType: STRING
@@ -532,9 +571,11 @@ interactions:
                     title: Region
                   - description: State
                     id: customers.state
+                    isNullable: true
                     labels:
                       - description: Location
                         id: geo__state__location
+                        isNullable: true
                         sourceColumn: geo__state__location
                         sourceColumnDataType: STRING
                         tags:
@@ -567,6 +608,7 @@ interactions:
                 attributes:
                   - description: Order id
                     id: order_lines.order_id
+                    isNullable: true
                     labels: []
                     sourceColumn: order_id
                     sourceColumnDataType: STRING
@@ -575,6 +617,7 @@ interactions:
                     title: Order id
                   - description: Order line id
                     id: order_lines.order_line_id
+                    isNullable: false
                     labels: []
                     sourceColumn: order_line_id
                     sourceColumnDataType: STRING
@@ -583,6 +626,7 @@ interactions:
                     title: Order line id
                   - description: Order status
                     id: order_lines.order_status
+                    isNullable: true
                     labels: []
                     sourceColumn: order_status
                     sourceColumnDataType: STRING
@@ -600,6 +644,7 @@ interactions:
                 facts:
                   - description: Price
                     id: order_lines.price
+                    isNullable: true
                     sourceColumn: price
                     sourceColumnDataType: NUMERIC
                     tags:
@@ -607,6 +652,7 @@ interactions:
                     title: Price
                   - description: Quantity
                     id: order_lines.quantity
+                    isNullable: true
                     sourceColumn: quantity
                     sourceColumnDataType: NUMERIC
                     tags:
@@ -624,6 +670,7 @@ interactions:
                     sources:
                       - column: campaign_id
                         dataType: INT
+                        isNullable: true
                         target:
                           id: campaigns.campaign_id
                           type: attribute
@@ -634,6 +681,7 @@ interactions:
                     sources:
                       - column: customer_id
                         dataType: INT
+                        isNullable: true
                         target:
                           id: customers.customer_id
                           type: attribute
@@ -644,6 +692,7 @@ interactions:
                     sources:
                       - column: date
                         dataType: DATE
+                        isNullable: true
                         target:
                           id: date
                           type: date
@@ -654,6 +703,7 @@ interactions:
                     sources:
                       - column: product_id
                         dataType: INT
+                        isNullable: true
                         target:
                           id: products.product_id
                           type: attribute
@@ -669,6 +719,7 @@ interactions:
                 attributes:
                   - description: Product name
                     id: product_name
+                    isNullable: true
                     labels: []
                     sourceColumn: product_name
                     sourceColumnDataType: STRING
@@ -677,6 +728,7 @@ interactions:
                     title: Product name
                   - description: Category
                     id: products.category
+                    isNullable: true
                     labels: []
                     sourceColumn: category
                     sourceColumnDataType: STRING
@@ -685,6 +737,7 @@ interactions:
                     title: Category
                   - description: Product id
                     id: products.product_id
+                    isNullable: false
                     labels: []
                     sourceColumn: product_id
                     sourceColumnDataType: INT

@@ -22,7 +22,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '34883'
+          - '34789'
         Content-Type:
           - application/json
         DATE: &id001
@@ -1536,15 +1536,11 @@ interactions:
                     labels:
                       - description: Location
                         id: geo__state__location
-                        locale: en-US
                         sourceColumn: geo__state__location
                         sourceColumnDataType: STRING
                         tags:
                           - Customers
                         title: Location
-                        translations:
-                          - locale: cs-CZ
-                            sourceColumn: geo__state__location_cz
                         valueType: GEO
                     sourceColumn: state
                     sourceColumnDataType: STRING
@@ -1856,7 +1852,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '34883'
+          - '34789'
         Content-Type:
           - application/json
         DATE: *id001
@@ -3369,15 +3365,11 @@ interactions:
                     labels:
                       - description: Location
                         id: geo__state__location
-                        locale: en-US
                         sourceColumn: geo__state__location
                         sourceColumnDataType: STRING
                         tags:
                           - Customers
                         title: Location
-                        translations:
-                          - locale: cs-CZ
-                            sourceColumn: geo__state__location_cz
                         valueType: GEO
                     sourceColumn: state
                     sourceColumnDataType: STRING

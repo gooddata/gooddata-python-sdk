@@ -1,0 +1,6 @@
+# (C) 2022 GoodData Corporation
+content:
+  format: '#,##0.0%'
+  maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL {attribute/product_id})
+id: percent_revenue_per_product
+title: '% Revenue per Product'

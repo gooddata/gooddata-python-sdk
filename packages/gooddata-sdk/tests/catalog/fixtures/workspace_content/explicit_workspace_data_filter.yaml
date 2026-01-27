@@ -22,7 +22,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '7113'
+          - '7019'
         Content-Type:
           - application/json
         DATE: &id001
@@ -215,15 +215,11 @@ interactions:
                     labels:
                       - description: Location
                         id: geo__state__location
-                        locale: en-US
                         sourceColumn: geo__state__location
                         sourceColumnDataType: STRING
                         tags:
                           - Customers
                         title: Location
-                        translations:
-                          - locale: cs-CZ
-                            sourceColumn: geo__state__location_cz
                         valueType: GEO
                     sourceColumn: state
                     sourceColumnDataType: STRING
@@ -599,10 +595,6 @@ interactions:
                       tags:
                         - Customers
                       valueType: GEO
-                      locale: en-US
-                      translations:
-                        - locale: cs-CZ
-                          sourceColumn: geo__state__location_cz
                   sourceColumn: state
                   title: State
                   sourceColumnDataType: STRING
@@ -847,7 +839,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '7271'
+          - '7177'
         Content-Type:
           - application/json
         DATE: *id001
@@ -1039,15 +1031,11 @@ interactions:
                     labels:
                       - description: Location
                         id: geo__state__location
-                        locale: en-US
                         sourceColumn: geo__state__location
                         sourceColumnDataType: STRING
                         tags:
                           - Customers
                         title: Location
-                        translations:
-                          - locale: cs-CZ
-                            sourceColumn: geo__state__location_cz
                         valueType: GEO
                     sourceColumn: state
                     sourceColumnDataType: STRING
@@ -1264,7 +1252,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '20401'
+          - '20307'
         Content-Type:
           - application/json
         DATE: *id001
@@ -1884,9 +1872,9 @@ interactions:
                   - demo
                   - order_lines
                 workspaceDataFilterColumns:
-                  - name: wdf__region
-                    dataType: STRING
                   - name: wdf__state
+                    dataType: STRING
+                  - name: wdf__region
                     dataType: STRING
                 workspaceDataFilterReferences:
                   - filterId:
@@ -2120,10 +2108,6 @@ interactions:
                 sourceColumn: geo__state__location
                 sourceColumnDataType: STRING
                 valueType: GEO
-                locale: en-US
-                translations:
-                  - sourceColumn: geo__state__location_cz
-                    locale: cs-CZ
               id: geo__state__location
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/geo__state__location
@@ -2549,9 +2533,9 @@ interactions:
                   - order_lines
                 areRelationsValid: true
                 workspaceDataFilterColumns:
-                  - name: wdf__region
-                    dataType: STRING
                   - name: wdf__state
+                    dataType: STRING
+                  - name: wdf__region
                     dataType: STRING
                 workspaceDataFilterReferences:
                   - filterId:
@@ -2942,7 +2926,7 @@ interactions:
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
-                createdAt: 2026-02-13 10:44
+                createdAt: 2026-02-16 15:26
               id: amount_of_active_customers
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/amount_of_active_customers
@@ -2957,7 +2941,7 @@ interactions:
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/order_id})
-                createdAt: 2026-02-13 10:44
+                createdAt: 2026-02-16 15:26
               id: amount_of_orders
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/amount_of_orders
@@ -2973,7 +2957,7 @@ interactions:
                   format: '#,##0'
                   maql: 'SELECT {metric/amount_of_active_customers} WHERE (SELECT
                     {metric/revenue} BY {attribute/customer_id}) >  10000 '
-                createdAt: 2026-02-13 10:44
+                createdAt: 2026-02-16 15:26
               id: amount_of_top_customers
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/amount_of_top_customers
@@ -2990,7 +2974,7 @@ interactions:
                   format: '#,##0.00'
                   maql: SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
-                createdAt: 2026-02-13 10:44
+                createdAt: 2026-02-16 15:26
               id: amount_of_valid_orders
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/amount_of_valid_orders
@@ -3005,7 +2989,7 @@ interactions:
                 content:
                   format: $#,##0
                   maql: SELECT SUM({fact/spend})
-                createdAt: 2026-02-13 10:44
+                createdAt: 2026-02-16 15:26
               id: campaign_spend
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/campaign_spend
@@ -3020,7 +3004,7 @@ interactions:
                 content:
                   format: $#,##0
                   maql: SELECT SUM({fact/price}*{fact/quantity})
-                createdAt: 2026-02-13 10:44
+                createdAt: 2026-02-16 15:26
               id: order_amount
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/order_amount
@@ -3035,7 +3019,7 @@ interactions:
                 content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / {metric/total_revenue}
-                createdAt: 2026-02-13 10:44
+                createdAt: 2026-02-16 15:26
               id: percent_revenue
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue
@@ -3051,7 +3035,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2026-02-13 10:44
+                createdAt: 2026-02-16 15:26
               id: percent_revenue_from_top_10_customers
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_customers
@@ -3067,7 +3051,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2026-02-13 10:44
+                createdAt: 2026-02-16 15:26
               id: percent_revenue_from_top_10_percent_customers
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_percent_customers
@@ -3083,7 +3067,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2026-02-13 10:44
+                createdAt: 2026-02-16 15:26
               id: percent_revenue_from_top_10_percent_products
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_percent_products
@@ -3099,7 +3083,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2026-02-13 10:44
+                createdAt: 2026-02-16 15:26
               id: percent_revenue_from_top_10_products
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_products
@@ -3115,7 +3099,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
                     ALL OTHER)
-                createdAt: 2026-02-13 10:44
+                createdAt: 2026-02-16 15:26
               id: percent_revenue_in_category
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_in_category
@@ -3131,7 +3115,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL
                     {attribute/product_id})
-                createdAt: 2026-02-13 10:44
+                createdAt: 2026-02-16 15:26
               id: percent_revenue_per_product
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_per_product
@@ -3148,7 +3132,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
-                createdAt: 2026-02-13 10:44
+                createdAt: 2026-02-16 15:26
               id: revenue
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue
@@ -3164,7 +3148,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Clothing")
-                createdAt: 2026-02-13 10:44
+                createdAt: 2026-02-16 15:26
               id: revenue-clothing
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue-clothing
@@ -3180,7 +3164,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ( "Electronics")
-                createdAt: 2026-02-13 10:44
+                createdAt: 2026-02-16 15:26
               id: revenue-electronic
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue-electronic
@@ -3196,7 +3180,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Home")
-                createdAt: 2026-02-13 10:44
+                createdAt: 2026-02-16 15:26
               id: revenue-home
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue-home
@@ -3212,7 +3196,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Outdoor")
-                createdAt: 2026-02-13 10:44
+                createdAt: 2026-02-16 15:26
               id: revenue-outdoor
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue-outdoor
@@ -3227,7 +3211,7 @@ interactions:
                 content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
-                createdAt: 2026-02-13 10:44
+                createdAt: 2026-02-16 15:26
               id: revenue_per_customer
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue_per_customer
@@ -3242,7 +3226,7 @@ interactions:
                 content:
                   format: $#,##0.0
                   maql: SELECT {metric/revenue} / {metric/campaign_spend}
-                createdAt: 2026-02-13 10:44
+                createdAt: 2026-02-16 15:26
               id: revenue_per_dollar_spent
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue_per_dollar_spent
@@ -3257,7 +3241,7 @@ interactions:
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
-                createdAt: 2026-02-13 10:44
+                createdAt: 2026-02-16 15:26
               id: revenue_top_10
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue_top_10
@@ -3272,7 +3256,7 @@ interactions:
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
-                createdAt: 2026-02-13 10:44
+                createdAt: 2026-02-16 15:26
               id: revenue_top_10_percent
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue_top_10_percent
@@ -3287,7 +3271,7 @@ interactions:
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} BY ALL OTHER
-                createdAt: 2026-02-13 10:44
+                createdAt: 2026-02-16 15:26
               id: total_revenue
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/total_revenue
@@ -3302,7 +3286,7 @@ interactions:
                 content:
                   format: $#,##0
                   maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
-                createdAt: 2026-02-13 10:44
+                createdAt: 2026-02-16 15:26
               id: total_revenue-no_filters
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/total_revenue-no_filters
@@ -4863,10 +4847,6 @@ interactions:
                             title: Location
                             description: Location
                             sourceColumnDataType: STRING
-                            locale: en-US
-                            translations:
-                              - locale: cs-CZ
-                                sourceColumn: geo__state__location_cz
                             tags:
                               - Customers
                             valueType: GEO
