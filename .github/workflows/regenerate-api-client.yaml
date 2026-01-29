@@ -1,0 +1,178 @@
+# (C) 2026 GoodData Corporation
+# This workflow regenerates the API client from the latest OpenAPI schema and updates VCR cassettes.
+# It creates a PR with the updated API client and cassettes.
+
+name: Regenerate API Client
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch_name:
+        description: 'Branch name for the PR'
+        required: false
+        default: 'chore/regenerate-api-client'
+      pr_title:
+        description: 'PR title'
+        required: false
+        default: 'chore: Regenerate API client'
+
+# Security: Only allow running on protected branches to prevent secret exfiltration
+# via malicious Makefile modifications on feature branches
+env:
+  ALLOWED_BRANCHES: 'refs/heads/master refs/heads/main'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  regenerate-api-client:
+    name: Regenerate API Client
+    runs-on:
+      group: infra1-runners-arc
+      labels: runners-cxa-xlarge
+    timeout-minutes: 30
+
+    steps:
+      - name: Verify branch is allowed
+        run: |
+          echo "Current ref: ${{ github.ref }}"
+          if [[ ! " ${{ env.ALLOWED_BRANCHES }} " =~ " ${{ github.ref }} " ]]; then
+            echo "::error::This workflow can only be run on protected branches (master/main) to prevent credential hijacking."
+            echo "::error::Current branch '${{ github.ref }}' is not in the allowed list."
+            exit 1
+          fi
+          echo "Branch verification passed."
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get AWS ECR Vault Secrets
+        id: secrets
+        uses: hashicorp/vault-action@v3
+        with:
+          url: ${{ vars.VAULT_URL }}
+          method: jwt
+          path: jwt/github
+          role: ecr-pull
+          secrets: |
+            secret/data/v2/data-special/infra1-user-ecr-rw aws_ecr_access_key | AWS_ACCESS_KEY ;
+            secret/data/v2/data-special/infra1-user-ecr-rw aws_ecr_secret_key | AWS_SECRET_KEY ;
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_KEY }}
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Create license file
+        run: |
+          mkdir -p build
+          echo "${{ secrets.GOODDATA_LICENSE_KEY }}" > build/license
+
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Start Docker Compose services
+        run: |
+          docker compose up -d
+          echo "Docker Compose services started"
+
+      - name: Wait for all services to be ready
+        run: |
+          echo "Waiting for bootstrap services to complete..."
+
+          # Wait for layout-uploader to complete (last bootstrap step)
+          echo "Waiting for layout-uploader to complete..."
+          timeout 600 bash -c '
+            while true; do
+              status=$(docker compose ps layout-uploader --format json 2>/dev/null | jq -r ".State" 2>/dev/null || echo "unknown")
+              exit_code=$(docker compose ps layout-uploader --format json 2>/dev/null | jq -r ".ExitCode" 2>/dev/null || echo "-1")
+
+              if [ "$status" = "exited" ] && [ "$exit_code" = "0" ]; then
+                echo "layout-uploader completed successfully!"
+                break
+              elif [ "$status" = "exited" ] && [ "$exit_code" != "0" ]; then
+                echo "layout-uploader failed with exit code $exit_code"
+                docker compose logs layout-uploader
+                exit 1
+              fi
+
+              echo "layout-uploader status: $status, waiting..."
+              sleep 10
+            done
+          '
+
+          # Verify api-gw is healthy
+          echo "Verifying api-gw is ready..."
+          timeout 60 bash -c '
+            while ! curl -sf http://localhost:3000/api/v1/entities/admin/organizations 2>/dev/null; do
+              echo "Waiting for api-gw to respond..."
+              sleep 5
+            done
+          '
+          echo "All services are ready!"
+
+      - name: Set up Python
+        uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.14"
+
+      - name: Generate API client
+        run: make api-client
+
+      - name: Remove existing cassettes
+        run: make remove-cassettes
+
+      - name: Install development dependencies
+        run: make dev
+
+      - name: Run tests to regenerate cassettes
+        run: make test
+        env:
+          HOST: "http://localhost:3000"
+          TOKEN: "YWRtaW46Ym9vdHN0cmFwOmFkbWluMTIz"
+
+      - name: Show Docker Compose logs on failure
+        if: failure()
+        run: |
+          echo "=== Docker Compose Status ==="
+          docker compose ps
+          echo ""
+          echo "=== Docker Compose Logs ==="
+          docker compose logs --tail=100
+
+      - name: Stop Docker Compose services
+        if: always()
+        run: docker compose down -v
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: Regenerate API client"
+          branch: ${{ inputs.branch_name }}
+          delete-branch: true
+          title: ${{ inputs.pr_title }}
+          body: |
+            ## Summary
+            This PR regenerates the API client from the latest OpenAPI schema and updates VCR cassettes.
+
+            ## Changes
+            - Regenerated API client from latest OpenAPI schema
+            - Updated VCR cassette fixtures to match current API responses
+
+            ## Test Plan
+            - [x] Tests passed against live GoodData instance
+            - [ ] Review API client changes
+            - [ ] Review cassette changes for expected API modifications
+          labels: |
+            automated
+            api-client
