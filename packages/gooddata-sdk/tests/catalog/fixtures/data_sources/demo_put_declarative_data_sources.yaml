@@ -22,30 +22,37 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '359'
+          - '401'
         Content-Type:
           - application/json
         DATE: &id001
           - PLACEHOLDER
         Expires:
           - '0'
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - '0'
+          - 1; mode=block
       body:
         string:
           dataSources:
-            - authenticationType: USERNAME_PASSWORD
+            - alternativeDataSourceId: ds-put-abc-id
+              authenticationType: USERNAME_PASSWORD
               id: demo-test-ds
               name: demo-test-ds
               permissions:
@@ -82,6 +89,7 @@ interactions:
                   type: userGroup
                 name: USE
             authenticationType: USERNAME_PASSWORD
+            alternativeDataSourceId: ds-put-abc-id
             password: passw0rd
       headers:
         Accept-Encoding:
@@ -102,19 +110,25 @@ interactions:
         DATE: *id001
         Expires:
           - '0'
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - '0'
+          - 1; mode=block
       body:
         string: ''
   - request:
@@ -138,29 +152,36 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '359'
+          - '401'
         Content-Type:
           - application/json
         DATE: *id001
         Expires:
           - '0'
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - '0'
+          - 1; mode=block
       body:
         string:
           dataSources:
-            - authenticationType: USERNAME_PASSWORD
+            - alternativeDataSourceId: ds-put-abc-id
+              authenticationType: USERNAME_PASSWORD
               id: demo-test-ds
               name: demo-test-ds
               permissions:
@@ -196,6 +217,7 @@ interactions:
                   id: demoGroup
                   type: userGroup
                 name: USE
+            alternativeDataSourceId: ds-put-abc-id
             password: passw0rd
       headers:
         Accept-Encoding:
@@ -216,18 +238,24 @@ interactions:
         DATE: *id001
         Expires:
           - '0'
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - '0'
+          - 1; mode=block
       body:
         string: ''
