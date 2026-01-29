@@ -141,6 +141,7 @@ class CatalogDeclarativeDataSource(Base):
     permissions: list[CatalogDeclarativeDataSourcePermission] = attr.field(factory=list)
     client_id: Optional[str] = None
     authentication_type: Optional[str] = None
+    alternative_data_source_id: Optional[str] = None
 
     def to_test_request(
         self,

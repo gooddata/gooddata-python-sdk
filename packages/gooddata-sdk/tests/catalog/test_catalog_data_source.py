@@ -307,6 +307,8 @@ def test_catalog_create_data_source_redshift_spec(test_config):
                 password="demopass",
             ),
             url_params=[("autosave", "true")],
+            # Undefined data source id is perfectly ok
+            alternative_data_source_id="ds-abc-id",
         ),
     )
 
@@ -413,9 +415,16 @@ def test_catalog_patch_data_source(test_config):
 
         _create_default_data_source(sdk)
 
-        sdk.catalog_data_source.patch_data_source_attributes(data_source_id="test", attributes={"name": "Test2"})
+        sdk.catalog_data_source.patch_data_source_attributes(
+            data_source_id="test",
+            attributes={
+                "name": "Test2",
+                "alternative_data_source_id": "ds-patch-abc-id",
+            },
+        )
         patched_data_source = sdk.catalog_data_source.get_data_source("test")
         assert patched_data_source.name == "Test2"
+        assert patched_data_source.alternative_data_source_id == "ds-patch-abc-id"
     finally:
         sdk.catalog_data_source.delete_data_source("test")
 

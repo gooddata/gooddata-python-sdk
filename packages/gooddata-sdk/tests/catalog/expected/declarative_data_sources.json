@@ -22,7 +22,8 @@
       "schema": "demo",
       "type": "POSTGRESQL",
       "url": "jdbc:postgresql://postgres:5432/tiger?sslmode=prefer",
-      "username": "postgres"
+      "username": "postgres",
+      "alternativeDataSourceId": "ds-put-abc-id"
     }
   ]
 }

@@ -29,31 +29,37 @@ interactions:
           - PLACEHOLDER
         Expires:
           - '0'
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - '0'
+          - 1; mode=block
       body:
         string:
           data:
-            id: demo-test-ds
-            type: dataSource
             attributes:
               url: jdbc:postgresql://postgres:5432/tiger?sslmode=prefer
               username: postgres
               authenticationType: USERNAME_PASSWORD
-              name: demo-test-ds
               type: POSTGRESQL
+              name: demo-test-ds
               schema: demo
+            id: demo-test-ds
+            type: dataSource
           links:
             self: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds
   - request:
@@ -92,32 +98,38 @@ interactions:
         DATE: *id001
         Expires:
           - '0'
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - '0'
+          - 1; mode=block
       body:
         string:
           data:
-            id: demo-test-ds
-            type: dataSource
             attributes:
               url: jdbc:postgresql://postgres:5432/tiger?sslmode=prefer
               username: postgres
               cacheStrategy: NEVER
               authenticationType: USERNAME_PASSWORD
-              name: demo-test-ds
               type: POSTGRESQL
+              name: demo-test-ds
               schema: demo
+            id: demo-test-ds
+            type: dataSource
           links:
             self: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds
   - request:
@@ -147,32 +159,38 @@ interactions:
         DATE: *id001
         Expires:
           - '0'
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - '0'
+          - 1; mode=block
       body:
         string:
           data:
-            id: demo-test-ds
-            type: dataSource
             attributes:
               url: jdbc:postgresql://postgres:5432/tiger?sslmode=prefer
               username: postgres
               cacheStrategy: NEVER
               authenticationType: USERNAME_PASSWORD
-              name: demo-test-ds
               type: POSTGRESQL
+              name: demo-test-ds
               schema: demo
+            id: demo-test-ds
+            type: dataSource
           links:
             self: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds
   - request:
@@ -195,6 +213,7 @@ interactions:
                   id: demoGroup
                   type: userGroup
                 name: USE
+            alternativeDataSourceId: ds-put-abc-id
             password: passw0rd
       headers:
         Accept-Encoding:
@@ -215,18 +234,24 @@ interactions:
         DATE: *id001
         Expires:
           - '0'
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - '0'
+          - 1; mode=block
       body:
         string: ''
