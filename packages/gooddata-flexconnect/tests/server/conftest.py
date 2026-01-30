@@ -5,7 +5,7 @@ import socket
 from collections.abc import Iterable
 from contextlib import closing
 from pathlib import Path
-from typing import Union
+from typing import Iterator, Union
 
 import pytest
 from gooddata_flexconnect.function.flight_methods import (
@@ -39,7 +39,7 @@ def server(
     methods: Union[FlightServerMethods, FlightServerMethodsFactory],
     tls: bool = False,
     mtls: bool = False,
-) -> GoodDataFlightServer:
+) -> Iterator[GoodDataFlightServer]:
     port = _find_free_port()
     os.environ["GOODDATA_FLIGHT_SERVER__LISTEN_PORT"] = str(port)
     os.environ["GOODDATA_FLIGHT_SERVER__ADVERTISE_HOST"] = "localhost"
@@ -75,7 +75,7 @@ def flexconnect_server(
     modules: Iterable[str],
     tls: bool = False,
     mtls: bool = False,
-) -> GoodDataFlightServer:
+) -> Iterator[GoodDataFlightServer]:
     funs = ", ".join([f'"{module}"' for module in modules])
     funs = f"[{funs}]"
 

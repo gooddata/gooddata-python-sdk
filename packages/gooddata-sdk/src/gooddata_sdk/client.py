@@ -119,13 +119,13 @@ class GoodDataApiClient:
             method (HttpMethod): The HTTP method to be used for the request.
 
         Returns:
-            None
+            requests.Response: The response from the HTTP request.
 
         Raises:
             NotImplementedError: If the specified HTTP method is not supported.
         """
         if method == HttpMethod.POST:
-            self._do_post_request(data, endpoint, content_type)
+            return self._do_post_request(data, endpoint, content_type)
         else:
             raise NotImplementedError("Currently only supports the POST method.")
 

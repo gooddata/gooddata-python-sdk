@@ -67,18 +67,18 @@ except ImportError as e:
         def __init__(
             self,
             table_name: str,
-            columns: list[ColumnDefinition],  # type: ignore
-            options: dict[str, str],  # type: ignore
+            columns: list[ColumnDefinition],
+            options: dict[str, str],
         ) -> None:
             self.table_name = table_name
             self.columns = columns
             self.options = options
-            self.col_idx = dict([(c.column_name, c) for c in columns])  # type: ignore
+            self.col_idx = dict([(c.column_name, c) for c in columns])
 
     TableDefinition = TableDefinitionStub
 
     class ForeignDataWrapperStub:
-        def __init__(self, options: dict[str, str], columns: dict[str, ColumnDefinition]) -> None:  # type: ignore
+        def __init__(self, options: dict[str, str], columns: dict[str, ColumnDefinition]) -> None:
             self.options = options
             self.columns = columns
 
@@ -90,10 +90,10 @@ except ImportError as e:
             options: dict[str, str],
             restriction_type: Optional[str],
             restricts: list[str],
-        ) -> list[TableDefinition]:  # type: ignore
+        ) -> list[TableDefinition]:
             return NotImplemented
 
-        def execute(self, quals: list[Qual], columns: list[str], sortkeys: Optional[list[Any]] = None):  # type: ignore
+        def execute(self, quals: list[Qual], columns: list[str], sortkeys: Optional[list[Any]] = None):
             pass
 
     ForeignDataWrapper = ForeignDataWrapperStub

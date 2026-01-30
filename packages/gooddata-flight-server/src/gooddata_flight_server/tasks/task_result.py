@@ -343,14 +343,17 @@ class _ReaderTaskResult(FlightDataTaskResult):
         self._on_close = on_close
 
     def get_schema(self) -> pyarrow.Schema:
+        assert self._reader is not None, "Reader must be initialized"
         return self._reader.schema
 
     def _get_data(self) -> Union[Iterable[ArrowData], ArrowData]:
+        assert self._reader is not None, "Reader must be initialized"
         return self._reader
 
     def _close(self) -> None:
         try:
-            self._reader.close()
+            if self._reader is not None:
+                self._reader.close()
         except Exception:
             _LOGGER.warning("reader_close_failed", exc_info=True)
         finally:

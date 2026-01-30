@@ -46,5 +46,6 @@ def test_make_ldm():
     declarative_datasets = tables.make_declarative_datasets(data_source_id, [MODEL_ID])
     ldm = CatalogDeclarativeModel.from_dict({"ldm": declarative_datasets}, camel_case=False)
 
+    assert ldm.ldm is not None
     assert len(ldm.ldm.datasets) == 4
     assert len(ldm.ldm.date_instances) == 4

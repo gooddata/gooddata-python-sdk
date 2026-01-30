@@ -33,7 +33,7 @@ def test_not_index_label_series(gds: SeriesFactory):
 @gd_vcr.use_cassette(str(_fixtures_dir / "not_indexed_metric_series_with_granularity.yaml"))
 def test_not_indexed_metric_series_with_granularity(gds: SeriesFactory):
     series = gds.not_indexed(
-        granularity=dict(reg="label/region"),
+        granularity={"reg": "label/region"},
         data_by="fact/price",
     )
 
@@ -44,7 +44,7 @@ def test_not_indexed_metric_series_with_granularity(gds: SeriesFactory):
 @gd_vcr.use_cassette(str(_fixtures_dir / "not_indexed_label_series_with_granularity.yaml"))
 def test_not_index_label_series_with_granularity(gds: SeriesFactory):
     series = gds.not_indexed(
-        granularity=dict(reg="label/region"),
+        granularity={"reg": "label/region"},
         data_by="label/products.category",
     )
 

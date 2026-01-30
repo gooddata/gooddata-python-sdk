@@ -1,7 +1,7 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
 
-from typing import Any, Callable, Optional, Union
+from typing import Any, Callable, Optional, Union, cast
 
 from gooddata_sdk import (
     Attribute,
@@ -124,7 +124,10 @@ class ExecutionDefinitionBuilder:
         if index_by is None:
             return
 
-        _index_by = {self._DEFAULT_INDEX_NAME: index_by} if not isinstance(index_by, dict) else index_by
+        if isinstance(index_by, dict):
+            _index_by: dict[str, LabelItemDef] = cast(dict[str, LabelItemDef], index_by)
+        else:
+            _index_by = {self._DEFAULT_INDEX_NAME: index_by}
 
         for index_name, index_def in _index_by.items():
             if isinstance(index_def, str) and (index_def in self._col_to_attr_idx):

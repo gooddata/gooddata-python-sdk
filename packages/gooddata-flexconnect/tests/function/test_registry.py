@@ -15,11 +15,11 @@ def fake_ctx():
     # need to ensure that the functions are registered correctly and that
     # their on_load() initializers are called
     return ServerContext(
-        config=None,
+        config=None,  # type: ignore[arg-type]
         location=pyarrow.flight.Location.for_grpc_tcp("localhost", 6666),
-        settings=None,
-        task_executor=None,
-        health=None,
+        settings=None,  # type: ignore[arg-type]
+        task_executor=None,  # type: ignore[arg-type]
+        health=None,  # type: ignore[arg-type]
     )
 
 
