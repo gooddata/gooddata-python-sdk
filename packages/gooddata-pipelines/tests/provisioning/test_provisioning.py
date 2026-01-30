@@ -28,7 +28,7 @@ WORKSPACE_DATA_TO_FAIL = [
         workspace_id="workspace_id1",
         workspace_name="workspace_title1",
     ),
-    WorkspaceIncrementalLoad(  # type: ignore
+    WorkspaceIncrementalLoad(
         parent_id="client_id1",
         workspace_id="workspace_id1",
         workspace_name="workspace_title1",

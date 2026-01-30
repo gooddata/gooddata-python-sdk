@@ -121,7 +121,7 @@ class _TaskExecutionCallbacks(abc.ABC):
     def process_task_result(
         self,
         task_execution: "_TaskExecution",
-        result: Future,
+        future: Future,
     ) -> TaskExecutionResult:
         """
         This will be called when the task run itself completes. It is guaranteed
@@ -231,6 +231,7 @@ class _TaskExecution:
 
     def on_result_done(self, fut: Future) -> None:
         assert fut == self._result_future
+        assert self._result_future is not None
 
         with self._lock:
             execution_result = self._cb.process_task_result(self, self._result_future)

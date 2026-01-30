@@ -26,10 +26,12 @@ def test_error_info_limits1():
     error = ErrorInfo.for_reason(666, "error" * 500).with_detail("detail" * 500)
 
     assert "truncated" in error.msg
+    assert error.detail is not None
     assert "truncated" in error.detail
 
     error = ErrorInfo(code=666, msg="error" * 500, detail="detail" * 500)
     assert "truncated" in error.msg
+    assert error.detail is not None
     assert "truncated" in error.detail
 
 
@@ -62,6 +64,7 @@ def test_serde_error_with_retry():
     assert deserialized.msg == error.msg
     assert deserialized.detail == error.detail
     assert deserialized.body == error.body
+    assert deserialized.body is not None
 
     deserialized_retry = RetryInfo.from_bytes(deserialized.body)
     assert deserialized_retry.flight_info == retry.flight_info

@@ -398,6 +398,7 @@ def get_namespace_from_xliff(xliff_content: str) -> dict:
     """
     tree = ET.ElementTree(ET.fromstring(xliff_content))
     root = tree.getroot()
+    assert root is not None, "XLIFF content must have a root element"
     return {"ns": root.tag.split("}")[0].strip("{")}
 
 
