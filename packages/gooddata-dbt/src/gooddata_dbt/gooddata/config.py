@@ -36,7 +36,7 @@ class GoodDataConfigProduct(Base):
     id: str
     name: str
     environment_setup_id: str
-    model_ids: list[str] = attr.field(default=list)
+    model_ids: list[str] = attr.field(factory=list)
     localization: Optional[GoodDataConfigLocalization] = None
     skip_tests: Optional[list[str]] = None
 
@@ -44,7 +44,7 @@ class GoodDataConfigProduct(Base):
 @attrs.define(auto_attribs=True, kw_only=True)
 class GoodDataConfigOrganization(Base):
     gooddata_profile: str
-    data_product_ids: list[str] = attr.field(default=list)
+    data_product_ids: list[str] = attr.field(factory=list)
 
 
 @attrs.define(auto_attribs=True, kw_only=True)

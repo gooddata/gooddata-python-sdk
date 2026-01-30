@@ -27,7 +27,7 @@ class Converter:
     def to_external_type(self, value: str) -> Any:
         typed_value = self.to_type(value)
         if self._EXTERNAL_CONVERSION_FNC:
-            return self._EXTERNAL_CONVERSION_FNC(typed_value)  # type: ignore
+            return self._EXTERNAL_CONVERSION_FNC(typed_value)
         else:
             return typed_value
 

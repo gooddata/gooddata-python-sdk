@@ -131,4 +131,8 @@ class AzureStorage(BackupStorage):
         blob_client = self._container_client.get_blob_client(blob.name)
 
         with open(local_target_path, "wb") as download_file:
-            download_file.write(blob_client.download_blob().readall())
+            blob_data = blob_client.download_blob().readall()
+            assert isinstance(blob_data, bytes), (
+                f"Expected bytes got `{type(blob_data)}`."
+            )
+            download_file.write(blob_data)

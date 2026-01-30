@@ -22,7 +22,7 @@ class _LongRunningFun(FlexConnectFunction):
     def call(
         self,
         parameters: dict,
-        columns: tuple[str, ...],
+        columns: Optional[tuple[str, ...]],
         headers: dict[str, list[str]],
     ) -> ArrowData:
         # sleep is intentionally setup to be longer than the deadline for

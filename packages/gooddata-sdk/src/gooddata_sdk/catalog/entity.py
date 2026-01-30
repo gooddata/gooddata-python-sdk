@@ -256,7 +256,7 @@ class BasicCredentials(Credentials):
         return cls.USER_KEY in entity
 
     @classmethod
-    def from_api(cls, attributes: dict[str, Any]) -> BasicCredentials:
+    def from_api(cls, attributes: dict[str, Any]) -> BasicCredentials:  # type: ignore[override]
         # Credentials are not returned from security reasons
         return cls(
             username=attributes[cls.USER_KEY],
@@ -277,7 +277,7 @@ class KeyPairCredentials(Credentials):
         return cls.USER_KEY in entity and cls.PRIVATE_KEY in entity
 
     @classmethod
-    def from_api(cls, attributes: dict[str, Any]) -> KeyPairCredentials:
+    def from_api(cls, attributes: dict[str, Any]) -> KeyPairCredentials:  # type: ignore[override]
         # Credentials are not returned for security reasons
         return cls(
             username=attributes[cls.USER_KEY],
@@ -297,7 +297,7 @@ class ClientSecretCredentials(Credentials):
         return cls.CLIENT_ID in entity and cls.CLIENT_SECRET in entity
 
     @classmethod
-    def from_api(cls, attributes: dict[str, Any]) -> ClientSecretCredentials:
+    def from_api(cls, attributes: dict[str, Any]) -> ClientSecretCredentials:  # type: ignore[override]
         # Credentials are not returned for security reasons
         return cls(
             client_id=attributes[cls.CLIENT_ID],

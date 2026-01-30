@@ -258,6 +258,7 @@ class FlightRpcService:
     def _shutdown_server(self) -> None:
         self._logger.info("flight_service_shutdown")
         # this will block until server stops
+        assert self._server is not None, "Server must be initialized before shutdown"
         self._server.shutdown()
         self._logger.info("flight_service_finished")
 

@@ -34,7 +34,7 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
         self._executor = ExecutorFactory.create(InitData(gd_sdk, self._server_options, self._table_options, columns))
         self._executor.validate_columns_def()
 
-    def execute(self, quals: list[Qual], columns: list[str], sortkeys: Optional[list[Any]] = None):  # type: ignore
+    def execute(self, quals: list[Qual], columns: list[str], sortkeys: Optional[list[Any]] = None):
         _log_debug(f"query in fdw with {self._server_options}; {self._table_options}; columns {columns}; quals={quals}")
         try:
             return self._executor.execute(quals, columns, sortkeys)
@@ -50,7 +50,7 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
         options: dict[str, str],
         restriction_type: Optional[str],
         restricts: list[str],
-    ) -> list[TableDefinition]:  # type: ignore
+    ) -> list[TableDefinition]:
         _log_info(
             f"import fdw {schema} (srv_options={srv_options}, "
             f"options={options}, restriction_type={restriction_type}, restricts={restricts})"
@@ -76,14 +76,14 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
             raise e
 
     @property
-    def rowid_column(self):  # type: ignore
+    def rowid_column(self):
         return super().rowid_column
 
-    def insert(self, values):  # type: ignore
+    def insert(self, values):
         return super().insert(values)
 
-    def update(self, oldvalues, newvalues):  # type: ignore
+    def update(self, oldvalues, newvalues):
         return super().update(oldvalues, newvalues)
 
-    def delete(self, oldvalues):  # type: ignore
+    def delete(self, oldvalues):
         return super().delete(oldvalues)

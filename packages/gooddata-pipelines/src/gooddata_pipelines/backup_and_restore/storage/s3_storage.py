@@ -24,7 +24,7 @@ class S3Storage(BackupStorage):
         self._session = self._create_boto_session(self._config)
         self._client = self._session.client("s3")
         self._resource = self._session.resource("s3")
-        self._bucket = self._resource.Bucket(self._config.bucket)  # type: ignore [missing library stubs]
+        self._bucket = self._resource.Bucket(self._config.bucket)
 
         self._verify_connection()
 

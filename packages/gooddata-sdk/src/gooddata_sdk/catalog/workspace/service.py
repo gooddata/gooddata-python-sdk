@@ -870,6 +870,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
         ET.register_namespace("", namespace["ns"])
         tree = ET.ElementTree(ET.fromstring(xliff_content))
         root = tree.getroot()
+        assert root is not None, "XLIFF content must have a root element"
 
         # Segment is always parent of source/target - no need to find parents
         for segment in root.findall(".//ns:segment", namespaces=namespace):

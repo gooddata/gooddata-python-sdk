@@ -80,9 +80,9 @@ class JsonApiEntityBase:
     relationships: Optional[dict[str, Any]] = attr.field(repr=False, default=None)
     meta: Optional[dict[str, Any]] = attr.field(repr=False, default=None)
     links: Optional[dict[str, Any]] = attr.field(repr=False, default=None)
-    related_entities_data: list[dict[str, Any]] = attr.field(repr=False, default=list)
-    related_entities_side_loads: list[dict[str, Any]] = attr.field(repr=False, default=list)
-    side_loads: list[dict[str, Any]] = attr.field(repr=False, default=list)
+    related_entities_data: list[dict[str, Any]] = attr.field(repr=False, factory=list)
+    related_entities_side_loads: list[dict[str, Any]] = attr.field(repr=False, factory=list)
+    side_loads: list[dict[str, Any]] = attr.field(repr=False, factory=list)
 
     @classmethod
     def from_api(
