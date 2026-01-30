@@ -29,26 +29,32 @@ interactions:
           - PLACEHOLDER
         Expires:
           - '0'
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - '0'
+          - 1; mode=block
       body:
         string:
           detail: The requested endpoint does not exist or you do not have permission
             to access it.
           status: 404
           title: Not Found
-          traceId: 7f546aeaa7efbd57a9d8254b888b8330
+          traceId: 8e289f07f5ccfdd4d16b772d23579887
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources
@@ -61,6 +67,7 @@ interactions:
             username: demouser
             password: demopass
             url: jdbc:redshift://aws.endpoint:5439/demo?autosave=true
+            alternativeDataSourceId: ds-abc-id
           id: test
           type: dataSource
       headers:
@@ -82,37 +89,44 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '304'
+          - '342'
         Content-Type:
           - application/json
         DATE: *id001
         Expires:
           - '0'
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - '0'
+          - 1; mode=block
       body:
         string:
           data:
-            id: test
-            type: dataSource
             attributes:
               url: jdbc:redshift://aws.endpoint:5439/demo?autosave=true
               username: demouser
               authenticationType: USERNAME_PASSWORD
-              name: Test2
+              alternativeDataSourceId: ds-abc-id
               type: REDSHIFT
+              name: Test2
               schema: demo
+            id: test
+            type: dataSource
           links:
             self: http://localhost:3000/api/v1/entities/dataSources/test
   - request:
@@ -136,37 +150,44 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '304'
+          - '342'
         Content-Type:
           - application/json
         DATE: *id001
         Expires:
           - '0'
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - '0'
+          - 1; mode=block
       body:
         string:
           data:
-            id: test
-            type: dataSource
             attributes:
               url: jdbc:redshift://aws.endpoint:5439/demo?autosave=true
               username: demouser
               authenticationType: USERNAME_PASSWORD
-              name: Test2
+              alternativeDataSourceId: ds-abc-id
               type: REDSHIFT
+              name: Test2
               schema: demo
+            id: test
+            type: dataSource
           links:
             self: http://localhost:3000/api/v1/entities/dataSources/test
   - request:
@@ -192,18 +213,24 @@ interactions:
         DATE: *id001
         Expires:
           - '0'
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
         Pragma:
           - no-cache
         Referrer-Policy:
-          - no-referrer
+          - same-origin
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - '0'
+          - 1; mode=block
       body:
         string: ''
