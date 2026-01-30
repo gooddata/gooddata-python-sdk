@@ -43,7 +43,7 @@ lint = [
     "ruff==0.9.5",
 ]
 type = [
-    "mypy~=1.11.2"
+    "ty>=0.0.14",
 ]
 test = [
     # Common test dependencies used across all workspace packages
@@ -126,6 +126,10 @@ docstring-code-format = true
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
+
+[tool.ty.environment]
+# Ignore missing imports for external packages without type stubs
+extra-paths = []
 
 [tool.tbump]
 # Uncomment this if your project is hosted on GitHub:
