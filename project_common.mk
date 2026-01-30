@@ -48,12 +48,12 @@ format-fix:
 format-diff:
 	(cd $(ROOT_DIR); $(RUFF) format --diff $(PKG_PATH))
 
-.PHONY: mypy
-mypy:
-	uv run tox $(TOX_FLAGS) -e mypy
+.PHONY: type-check
+type-check:
+	uv run tox $(TOX_FLAGS) -e type-check
 
 .PHONY: types
-types: mypy
+types: type-check
 
 .PHONY: test
 test:
