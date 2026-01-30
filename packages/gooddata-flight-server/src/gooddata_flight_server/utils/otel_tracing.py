@@ -43,7 +43,7 @@ def _create_console_span_exporter() -> SpanExporter:
 
 def _create_zipkin_span_exporter() -> SpanExporter:
     from opentelemetry.exporter.zipkin.json import (
-        ZipkinExporter,  # type: ignore
+        ZipkinExporter,
     )
 
     return ZipkinExporter()
@@ -51,7 +51,7 @@ def _create_zipkin_span_exporter() -> SpanExporter:
 
 def _create_otlp_grpc_exporter() -> SpanExporter:
     from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import (
-        OTLPSpanExporter,  # type: ignore
+        OTLPSpanExporter,
     )
 
     return OTLPSpanExporter()
@@ -59,7 +59,7 @@ def _create_otlp_grpc_exporter() -> SpanExporter:
 
 def _create_otlp_http_exporter() -> SpanExporter:
     from opentelemetry.exporter.otlp.proto.http.trace_exporter import (
-        OTLPSpanExporter,  # type: ignore
+        OTLPSpanExporter,
     )
 
     return OTLPSpanExporter()
@@ -88,12 +88,8 @@ def _create_resource(config: OtelConfig) -> Resource:
     #
     # https://opentelemetry.io/docs/specs/semconv/resource/process/#python-runtimes
     vinfo = sys.implementation.version
-    process_runtime_version = ".".join(
-        map(
-            str,
-            vinfo[:3] if vinfo.releaselevel == "final" and not vinfo.serial else vinfo,
-        )
-    )
+    version_tuple = vinfo[:3] if vinfo.releaselevel == "final" and not vinfo.serial else vinfo
+    process_runtime_version = ".".join(str(v) for v in version_tuple)
 
     service_instance_id = config.service_instance_id or _default_service_instance_id()
 

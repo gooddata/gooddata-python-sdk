@@ -52,6 +52,6 @@ jobs:
       - name: Install dependencies
         run: |
           uv sync --only-group tox --only-group type
-      - name: mypy check
+      - name: type check
         run: |
-          make mypy
+          make type-check

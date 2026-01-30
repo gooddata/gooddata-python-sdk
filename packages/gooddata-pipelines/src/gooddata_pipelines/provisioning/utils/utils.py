@@ -51,7 +51,8 @@ class AttributesMixin:
                     self._add_to_dict(attributes, key, value)
             elif hasattr(context_object, "__dict__"):
                 # Generic handling for other objects
-                for key, value in context_object.__dict__.items():
+                obj_dict = getattr(context_object, "__dict__", {})
+                for key, value in obj_dict.items():
                     self._add_to_dict(attributes, key, value)
             else:
                 attributes[f"object_{index}"] = str(context_object)

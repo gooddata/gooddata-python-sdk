@@ -6,7 +6,7 @@ import opentelemetry.propagate as otelpropagate
 import pyarrow.flight
 import structlog
 from opentelemetry import trace
-from opentelemetry.semconv.trace import SpanAttributes
+from opentelemetry.semconv._incubating.attributes import rpc_attributes
 from opentelemetry.trace import SpanKind, StatusCode, use_span
 from typing_extensions import TypeAlias
 
@@ -112,9 +112,9 @@ class OtelMiddleware(pyarrow.flight.ServerMiddleware):
             kind=SpanKind.SERVER,
             context=self._otel_ctx,
             attributes={
-                SpanAttributes.RPC_SYSTEM: "grpc",
-                SpanAttributes.RPC_SERVICE: "FlightRPC",
-                SpanAttributes.RPC_METHOD: method_name,
+                rpc_attributes.RPC_SYSTEM: "grpc",
+                rpc_attributes.RPC_SERVICE: "FlightRPC",
+                rpc_attributes.RPC_METHOD: method_name,
             },
         )
 

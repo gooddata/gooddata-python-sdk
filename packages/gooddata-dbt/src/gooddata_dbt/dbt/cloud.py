@@ -291,12 +291,12 @@ class DbtConnection(DbtCloudBase):
                 else:
                     return record
         else:
-            result = {}  # type: ignore
+            result = {}
             for key, value in data.items():
                 if isinstance(value, dict):
-                    result[self.string_camel_to_snake(key)] = self.dict_camel_to_snake(value)  # type: ignore
+                    result[self.string_camel_to_snake(key)] = self.dict_camel_to_snake(value)
                 else:
-                    result[self.string_camel_to_snake(key)] = value  # type: ignore
+                    result[self.string_camel_to_snake(key)] = value
         return result
 
     def get_last_execution(self, environment_id: str, model_count: int) -> list[DbtExecution]:

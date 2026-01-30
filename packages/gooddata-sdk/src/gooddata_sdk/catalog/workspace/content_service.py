@@ -4,7 +4,7 @@ from __future__ import annotations
 import copy
 import functools
 from pathlib import Path
-from typing import Literal, Optional, Union
+from typing import Literal, Optional, Union, cast
 
 import gooddata_api_client.models as afm_models
 from gooddata_api_client.model.elements_request import ElementsRequest
@@ -573,9 +573,10 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         """
         if isinstance(ctx, ExecutionDefinition):
             afm = compute_model_to_api_model(attributes=ctx.attributes, metrics=ctx.metrics, filters=ctx.filters)
+        elif isinstance(ctx, list):
+            afm = self._prepare_afm_for_availability(cast(list[ValidObjectTypes], ctx))
         else:
-            _ctx = ctx if isinstance(ctx, list) else [ctx]
-            afm = self._prepare_afm_for_availability(_ctx)
+            afm = self._prepare_afm_for_availability([ctx])
 
         query = afm_models.AfmValidObjectsQuery(afm=afm, types=["facts", "attributes", "measures"])
         response = self._actions_api.compute_valid_objects(workspace_id=workspace_id, afm_valid_objects_query=query)
