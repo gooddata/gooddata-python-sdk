@@ -4,7 +4,7 @@ import os
 import socket
 from contextlib import closing
 from pathlib import Path
-from typing import Union
+from typing import Iterator, Union
 
 import pytest
 from gooddata_flight_server.server.base import FlightServerMethodsFactory
@@ -42,7 +42,7 @@ def server(
     methods: Union[FlightServerMethods, FlightServerMethodsFactory],
     tls: bool = False,
     mtls: bool = False,
-) -> GoodDataFlightServer:
+) -> Iterator[GoodDataFlightServer]:
     port = _find_free_port()
     os.environ["GOODDATA_FLIGHT_SERVER__LISTEN_PORT"] = str(port)
     os.environ["GOODDATA_FLIGHT_SERVER__ADVERTISE_HOST"] = "localhost"

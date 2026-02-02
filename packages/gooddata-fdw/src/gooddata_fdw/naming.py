@@ -60,7 +60,7 @@ class InsightColumnNamingStrategy:
     def col_name_for_attribute(self, attr: sdk.VisualizationAttribute) -> str:
         raise NotImplementedError()
 
-    def col_name_for_metric(self, attr: sdk.VisualizationMetric) -> str:
+    def col_name_for_metric(self, metric: sdk.VisualizationMetric) -> str:
         raise NotImplementedError()
 
 

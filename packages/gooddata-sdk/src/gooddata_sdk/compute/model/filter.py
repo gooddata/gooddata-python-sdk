@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from datetime import datetime
 from importlib.util import find_spec
-from typing import Any, Optional, Union
+from typing import Any, Optional, Union, cast
 
 import attrs
 from gooddata_api_client.model.inline_filter_definition_inline import InlineFilterDefinitionInline
@@ -474,7 +474,8 @@ class MetricValueFilter(Filter):
         metric_id = self.metric.id if isinstance(self.metric, ObjId) else self.metric
         if self.operator in ["BETWEEN", "NOT_BETWEEN"] and len(self.values) == 2:
             not_between = "not" if self.operator == "NOT_BETWEEN" else ""
-            return f"{labels.get(metric_id, metric_id)}: {not_between}between {self.values[0]} - {self.values[1]}"
+            values = cast(tuple[float, float], self.values)
+            return f"{labels.get(metric_id, metric_id)}: {not_between}between {values[0]} - {values[1]}"
         else:
             return (
                 f"{labels.get(metric_id, metric_id)}: "

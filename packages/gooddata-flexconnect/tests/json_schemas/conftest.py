@@ -2,9 +2,9 @@
 from pathlib import Path
 from typing import Any
 
+import orjson
 import pytest
 from jsonschema.validators import Draft202012Validator
-from orjson import orjson
 from referencing import Registry, Resource
 
 SCHEMAS = Path("json_schemas")

@@ -20,8 +20,9 @@ def log_and_reraise_exception(message: str) -> Callable:
             try:
                 return fn(*method_args, **method_kwargs)
             except Exception:
+                fn_name = getattr(fn, "__name__", repr(fn))
                 logger.error(
-                    f"{message}, {fn.__name__}, Args: {method_args}, Kwargs: {method_kwargs}"
+                    f"{message}, {fn_name}, Args: {method_args}, Kwargs: {method_kwargs}"
                 )
                 raise
 
