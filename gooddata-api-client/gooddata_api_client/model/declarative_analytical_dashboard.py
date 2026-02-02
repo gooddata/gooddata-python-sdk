@@ -88,6 +88,9 @@ class DeclarativeAnalyticalDashboard(ModelNormal):
                 'pattern': r'[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}',  # noqa: E501
             },
         },
+        ('summary',): {
+            'max_length': 10000,
+        },
         ('tags',): {
         },
     }
@@ -124,6 +127,7 @@ class DeclarativeAnalyticalDashboard(ModelNormal):
             'modified_at': (str, none_type,),  # noqa: E501
             'modified_by': (DeclarativeUserIdentifier,),  # noqa: E501
             'permissions': ([DeclarativeAnalyticalDashboardPermissionsInner],),  # noqa: E501
+            'summary': (str,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
         }
 
@@ -142,6 +146,7 @@ class DeclarativeAnalyticalDashboard(ModelNormal):
         'modified_at': 'modifiedAt',  # noqa: E501
         'modified_by': 'modifiedBy',  # noqa: E501
         'permissions': 'permissions',  # noqa: E501
+        'summary': 'summary',  # noqa: E501
         'tags': 'tags',  # noqa: E501
     }
 
@@ -197,6 +202,7 @@ class DeclarativeAnalyticalDashboard(ModelNormal):
             modified_at (str, none_type): Time of the last entity modification.. [optional]  # noqa: E501
             modified_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
             permissions ([DeclarativeAnalyticalDashboardPermissionsInner]): A list of permissions.. [optional]  # noqa: E501
+            summary (str): AI-generated summary of the dashboard content. [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
         """
 
@@ -297,6 +303,7 @@ class DeclarativeAnalyticalDashboard(ModelNormal):
             modified_at (str, none_type): Time of the last entity modification.. [optional]  # noqa: E501
             modified_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
             permissions ([DeclarativeAnalyticalDashboardPermissionsInner]): A list of permissions.. [optional]  # noqa: E501
+            summary (str): AI-generated summary of the dashboard content. [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
         """
 

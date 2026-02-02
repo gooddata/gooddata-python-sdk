@@ -171,6 +171,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 are_relations_valid=True,
                 content={},
                 description="description_example",
+                summary="summary_example",
                 tags=[
                     "tags_example",
                 ],
@@ -463,6 +464,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                     ),
                                 },
                             ),
+                            delimiter="o",
                             execution=AFM(
                                 attributes=[
                                     AttributeItem(
@@ -547,6 +549,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             metadata=JsonNode(),
                             related_dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
                             settings=Settings(
+                                delimiter="o",
                                 export_info=True,
                                 merge_headers=True,
                                 page_orientation="PORTRAIT",
@@ -998,7 +1001,7 @@ with gooddata_api_client.ApiClient() as api_client:
     workspace_id = "workspaceId_example" # str | 
     json_api_filter_context_post_optional_id_document = JsonApiFilterContextPostOptionalIdDocument(
         data=JsonApiFilterContextPostOptionalId(
-            attributes=JsonApiAnalyticalDashboardInAttributes(
+            attributes=JsonApiFilterContextInAttributes(
                 are_relations_valid=True,
                 content={},
                 description="description_example",
@@ -1429,6 +1432,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 ),
                 description="description_example",
                 is_hidden=True,
+                is_hidden_from_kda=True,
                 tags=[
                     "tags_example",
                 ],
@@ -7061,6 +7065,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 are_relations_valid=True,
                 content={},
                 description="description_example",
+                summary="summary_example",
                 tags=[
                     "tags_example",
                 ],
@@ -7455,6 +7460,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                     ),
                                 },
                             ),
+                            delimiter="o",
                             execution=AFM(
                                 attributes=[
                                     AttributeItem(
@@ -7539,6 +7545,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             metadata=JsonNode(),
                             related_dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
                             settings=Settings(
+                                delimiter="o",
                                 export_info=True,
                                 merge_headers=True,
                                 page_orientation="PORTRAIT",
@@ -8184,7 +8191,7 @@ with gooddata_api_client.ApiClient() as api_client:
     object_id = "objectId_example" # str | 
     json_api_filter_context_patch_document = JsonApiFilterContextPatchDocument(
         data=JsonApiFilterContextPatch(
-            attributes=JsonApiAnalyticalDashboardPatchAttributes(
+            attributes=JsonApiFilterContextPatchAttributes(
                 are_relations_valid=True,
                 content={},
                 description="description_example",
@@ -8716,6 +8723,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 ),
                 description="description_example",
                 is_hidden=True,
+                is_hidden_from_kda=True,
                 tags=[
                     "tags_example",
                 ],
@@ -11493,6 +11501,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 are_relations_valid=True,
                 content={},
                 description="description_example",
+                summary="summary_example",
                 tags=[
                     "tags_example",
                 ],
@@ -11785,6 +11794,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                     ),
                                 },
                             ),
+                            delimiter="o",
                             execution=AFM(
                                 attributes=[
                                     AttributeItem(
@@ -11869,6 +11879,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             metadata=JsonNode(),
                             related_dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
                             settings=Settings(
+                                delimiter="o",
                                 export_info=True,
                                 merge_headers=True,
                                 page_orientation="PORTRAIT",
@@ -12320,7 +12331,7 @@ with gooddata_api_client.ApiClient() as api_client:
     object_id = "objectId_example" # str | 
     json_api_filter_context_in_document = JsonApiFilterContextInDocument(
         data=JsonApiFilterContextIn(
-            attributes=JsonApiAnalyticalDashboardInAttributes(
+            attributes=JsonApiFilterContextInAttributes(
                 are_relations_valid=True,
                 content={},
                 description="description_example",
@@ -12755,6 +12766,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 ),
                 description="description_example",
                 is_hidden=True,
+                is_hidden_from_kda=True,
                 tags=[
                     "tags_example",
                 ],

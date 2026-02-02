@@ -150,6 +150,7 @@ with gooddata_api_client.ApiClient() as api_client:
         metadata=JsonNode(),
         related_dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
         settings=Settings(
+            delimiter="o",
             export_info=True,
             merge_headers=True,
             page_orientation="PORTRAIT",

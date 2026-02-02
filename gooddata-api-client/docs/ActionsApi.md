@@ -468,8 +468,21 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = actions_api.ActionsApi(api_client)
     workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
     search_request = SearchRequest(
+        allowed_relationship_types=[
+            AllowedRelationshipType(
+                allow_orphans=True,
+                source_type="attribute",
+                target_type="attribute",
+            ),
+        ],
         deep_search=False,
+        exclude_tags=[
+            "exclude_tags_example",
+        ],
         include_hidden=False,
+        include_tags=[
+            "include_tags_example",
+        ],
         limit=10,
         object_types=[
             "attribute",
@@ -2413,6 +2426,7 @@ with gooddata_api_client.ApiClient() as api_client:
         metadata=JsonNode(),
         related_dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
         settings=Settings(
+            delimiter="o",
             export_info=True,
             merge_headers=True,
             page_orientation="PORTRAIT",
@@ -6157,11 +6171,13 @@ configuration = gooddata_api_client.Configuration(
 with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = actions_api.ActionsApi(api_client)
+    exclude_user_settings = False # bool | If true, user-level settings are excluded from resolution. (optional) if omitted the server will use the default value of False
 
-    # example, this endpoint has no required or optional parameters
+    # example passing only required values which don't have defaults set
+    # and optional values
     try:
         # Values for all settings without workspace.
-        api_response = api_instance.resolve_all_settings_without_workspace()
+        api_response = api_instance.resolve_all_settings_without_workspace(exclude_user_settings=exclude_user_settings)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling ActionsApi->resolve_all_settings_without_workspace: %s\n" % e)
@@ -6169,7 +6185,10 @@ with gooddata_api_client.ApiClient() as api_client:
 
 
 ### Parameters
-This endpoint does not need any parameter.
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **exclude_user_settings** | **bool**| If true, user-level settings are excluded from resolution. | [optional] if omitted the server will use the default value of False
 
 ### Return type
 
@@ -6363,11 +6382,21 @@ with gooddata_api_client.ApiClient() as api_client:
     resolve_settings_request = ResolveSettingsRequest(
         settings=["timezone"],
     ) # ResolveSettingsRequest | 
+    exclude_user_settings = False # bool | If true, user-level settings are excluded from resolution. (optional) if omitted the server will use the default value of False
 
     # example passing only required values which don't have defaults set
     try:
         # Values for selected settings without workspace.
         api_response = api_instance.resolve_settings_without_workspace(resolve_settings_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->resolve_settings_without_workspace: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Values for selected settings without workspace.
+        api_response = api_instance.resolve_settings_without_workspace(resolve_settings_request, exclude_user_settings=exclude_user_settings)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling ActionsApi->resolve_settings_without_workspace: %s\n" % e)
@@ -6379,6 +6408,7 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **resolve_settings_request** | [**ResolveSettingsRequest**](ResolveSettingsRequest.md)|  |
+ **exclude_user_settings** | **bool**| If true, user-level settings are excluded from resolution. | [optional] if omitted the server will use the default value of False
 
 ### Return type
 
@@ -7502,6 +7532,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                 ),
                             },
                         ),
+                        delimiter="o",
                         execution=AFM(
                             attributes=[
                                 AttributeItem(
@@ -7586,6 +7617,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         metadata=JsonNode(),
                         related_dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
                         settings=Settings(
+                            delimiter="o",
                             export_info=True,
                             merge_headers=True,
                             page_orientation="PORTRAIT",
@@ -8459,11 +8491,21 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = actions_api.ActionsApi(api_client)
     workspace_id = "workspaceId_example" # str | 
+    exclude_user_settings = False # bool | If true, user-level settings are excluded from resolution. (optional) if omitted the server will use the default value of False
 
     # example passing only required values which don't have defaults set
     try:
         # Values for all settings.
         api_response = api_instance.workspace_resolve_all_settings(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->workspace_resolve_all_settings: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Values for all settings.
+        api_response = api_instance.workspace_resolve_all_settings(workspace_id, exclude_user_settings=exclude_user_settings)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling ActionsApi->workspace_resolve_all_settings: %s\n" % e)
@@ -8475,6 +8517,7 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
+ **exclude_user_settings** | **bool**| If true, user-level settings are excluded from resolution. | [optional] if omitted the server will use the default value of False
 
 ### Return type
 
@@ -8530,11 +8573,21 @@ with gooddata_api_client.ApiClient() as api_client:
     resolve_settings_request = ResolveSettingsRequest(
         settings=["timezone"],
     ) # ResolveSettingsRequest | 
+    exclude_user_settings = False # bool | If true, user-level settings are excluded from resolution. (optional) if omitted the server will use the default value of False
 
     # example passing only required values which don't have defaults set
     try:
         # Values for selected settings.
         api_response = api_instance.workspace_resolve_settings(workspace_id, resolve_settings_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->workspace_resolve_settings: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Values for selected settings.
+        api_response = api_instance.workspace_resolve_settings(workspace_id, resolve_settings_request, exclude_user_settings=exclude_user_settings)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling ActionsApi->workspace_resolve_settings: %s\n" % e)
@@ -8547,6 +8600,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
  **resolve_settings_request** | [**ResolveSettingsRequest**](ResolveSettingsRequest.md)|  |
+ **exclude_user_settings** | **bool**| If true, user-level settings are excluded from resolution. | [optional] if omitted the server will use the default value of False
 
 ### Return type
 

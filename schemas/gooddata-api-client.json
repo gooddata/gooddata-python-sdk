@@ -190,98 +190,176 @@
         ],
         "type": "object"
       },
-      "AacDashboard": {
-        "description": "AAC dashboard definition.",
+      "AacContainerWidget": {
+        "allOf": [
+          {
+            "not": {
+              "required": [
+                "visualization"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "content"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "visualizations"
+              ]
+            }
+          }
+        ],
         "properties": {
-          "active_tab_id": {
-            "description": "Active tab ID for tabbed dashboards.",
+          "additionalProperties": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/JsonNode"
+            },
+            "type": "object",
+            "writeOnly": true
+          },
+          "columns": {
+            "description": "Widget width in grid columns (GAAC).",
+            "format": "int32",
+            "type": "integer"
+          },
+          "container": {
+            "description": "Container widget identifier.",
             "type": "string"
           },
-          "cross_filtering": {
-            "description": "Whether cross filtering is enabled.",
-            "type": "boolean"
+          "content": {
+            "description": "Rich text content.",
+            "type": "string"
+          },
+          "date": {
+            "description": "Date dataset for filtering.",
+            "type": "string"
           },
           "description": {
-            "description": "Dashboard description.",
-            "type": "string"
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "enum": [
+                  false
+                ],
+                "type": "boolean"
+              },
+              {
+                "enum": [
+                  "inherit"
+                ],
+                "type": "string"
+              }
+            ]
+          },
+          "drill_down": {
+            "$ref": "#/components/schemas/JsonNode"
           },
           "enable_section_headers": {
-            "description": "Whether section headers are enabled.",
+            "description": "Whether section headers are enabled for container widgets.",
             "type": "boolean"
           },
-          "filter_views": {
-            "description": "Whether filter views are enabled.",
-            "type": "boolean"
-          },
-          "filters": {
-            "additionalProperties": {
-              "$ref": "#/components/schemas/AacDashboardFilter"
-            },
-            "description": "Dashboard filters.",
-            "type": "object"
-          },
-          "id": {
-            "description": "Unique identifier of the dashboard.",
-            "example": "sales-overview",
-            "type": "string"
-          },
-          "permissions": {
-            "$ref": "#/components/schemas/AacDashboardPermissions"
-          },
-          "plugins": {
-            "description": "Dashboard plugins.",
+          "ignore_dashboard_filters": {
+            "description": "Deprecated. Use ignoredFilters instead.",
             "items": {
-              "$ref": "#/components/schemas/AacDashboardPluginLink"
+              "description": "Deprecated. Use ignoredFilters instead.",
+              "type": "string"
             },
             "type": "array"
           },
+          "ignored_filters": {
+            "description": "A list of dashboard filters to be ignored for this widget (GAAC).",
+            "items": {
+              "description": "A list of dashboard filters to be ignored for this widget (GAAC).",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "interactions": {
+            "description": "Widget interactions (GAAC).",
+            "items": {
+              "$ref": "#/components/schemas/JsonNode"
+            },
+            "type": "array"
+          },
+          "layout_direction": {
+            "description": "Layout direction for container widgets.",
+            "type": "string"
+          },
+          "metric": {
+            "description": "Inline metric reference.",
+            "type": "string"
+          },
+          "rows": {
+            "description": "Widget height in grid rows (GAAC).",
+            "format": "int32",
+            "type": "integer"
+          },
           "sections": {
-            "description": "Dashboard sections (for non-tabbed dashboards).",
+            "description": "Nested sections for layout widgets.",
             "items": {
               "$ref": "#/components/schemas/AacSection"
             },
             "type": "array"
           },
-          "tabs": {
-            "description": "Dashboard tabs (for tabbed dashboards).",
+          "size": {
+            "$ref": "#/components/schemas/AacWidgetSize"
+          },
+          "title": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "enum": [
+                  false
+                ],
+                "type": "boolean"
+              }
+            ]
+          },
+          "type": {
+            "description": "Widget type.",
+            "example": "visualization",
+            "type": "string"
+          },
+          "visualization": {
+            "description": "Visualization ID reference.",
+            "type": "string"
+          },
+          "visualizations": {
+            "description": "Visualization switcher items.",
             "items": {
-              "$ref": "#/components/schemas/AacTab"
+              "$ref": "#/components/schemas/AacWidget"
             },
             "type": "array"
           },
-          "tags": {
-            "description": "Metadata tags.",
-            "items": {
-              "description": "Metadata tags.",
-              "type": "string"
-            },
-            "type": "array",
-            "uniqueItems": true
-          },
-          "title": {
-            "description": "Human readable title.",
-            "example": "Sales Overview",
-            "type": "string"
-          },
-          "type": {
-            "description": "Dashboard type discriminator.",
-            "example": "dashboard",
-            "type": "string"
-          },
-          "user_filters_reset": {
-            "description": "Whether user can reset custom filters.",
-            "type": "boolean"
-          },
-          "user_filters_save": {
-            "description": "Whether user filter settings are stored.",
+          "zoom_data": {
+            "description": "Enable zooming to the data for certain visualization types (GAAC).",
             "type": "boolean"
           }
         },
         "required": [
-          "id",
-          "type"
+          "sections"
         ],
         "type": "object"
+      },
+      "AacDashboard": {
+        "description": "AAC dashboard definition.",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/AacDashboardWithTabs"
+          },
+          {
+            "$ref": "#/components/schemas/AacDashboardWithoutTabs"
+          }
+        ]
       },
       "AacDashboardFilter": {
         "description": "Tab-specific filters.",
@@ -394,6 +472,230 @@
         },
         "required": [
           "id"
+        ],
+        "type": "object"
+      },
+      "AacDashboardWithTabs": {
+        "allOf": [
+          {
+            "not": {
+              "required": [
+                "sections"
+              ]
+            }
+          }
+        ],
+        "properties": {
+          "active_tab_id": {
+            "description": "Active tab ID for tabbed dashboards.",
+            "type": "string"
+          },
+          "cross_filtering": {
+            "description": "Whether cross filtering is enabled.",
+            "type": "boolean"
+          },
+          "description": {
+            "description": "Dashboard description.",
+            "type": "string"
+          },
+          "enable_section_headers": {
+            "description": "Whether section headers are enabled.",
+            "type": "boolean"
+          },
+          "filter_views": {
+            "description": "Whether filter views are enabled.",
+            "type": "boolean"
+          },
+          "filters": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/AacDashboardFilter"
+            },
+            "description": "Dashboard filters.",
+            "type": "object"
+          },
+          "id": {
+            "description": "Unique identifier of the dashboard.",
+            "example": "sales-overview",
+            "type": "string"
+          },
+          "permissions": {
+            "$ref": "#/components/schemas/AacDashboardPermissions"
+          },
+          "plugins": {
+            "description": "Dashboard plugins.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "$ref": "#/components/schemas/AacDashboardPluginLink"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "sections": {
+            "description": "Dashboard sections (for non-tabbed dashboards).",
+            "items": {
+              "$ref": "#/components/schemas/AacSection"
+            },
+            "type": "array"
+          },
+          "tabs": {
+            "description": "Dashboard tabs (for tabbed dashboards).",
+            "items": {
+              "$ref": "#/components/schemas/AacTab"
+            },
+            "type": "array"
+          },
+          "tags": {
+            "description": "Metadata tags.",
+            "items": {
+              "description": "Metadata tags.",
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "title": {
+            "description": "Human readable title.",
+            "example": "Sales Overview",
+            "type": "string"
+          },
+          "type": {
+            "description": "Dashboard type discriminator.",
+            "example": "dashboard",
+            "type": "string"
+          },
+          "user_filters_reset": {
+            "description": "Whether user can reset custom filters.",
+            "type": "boolean"
+          },
+          "user_filters_save": {
+            "description": "Whether user filter settings are stored.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "tabs",
+          "type"
+        ],
+        "type": "object"
+      },
+      "AacDashboardWithoutTabs": {
+        "allOf": [
+          {
+            "not": {
+              "required": [
+                "tabs"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "active_tab_id"
+              ]
+            }
+          }
+        ],
+        "properties": {
+          "active_tab_id": {
+            "description": "Active tab ID for tabbed dashboards.",
+            "type": "string"
+          },
+          "cross_filtering": {
+            "description": "Whether cross filtering is enabled.",
+            "type": "boolean"
+          },
+          "description": {
+            "description": "Dashboard description.",
+            "type": "string"
+          },
+          "enable_section_headers": {
+            "description": "Whether section headers are enabled.",
+            "type": "boolean"
+          },
+          "filter_views": {
+            "description": "Whether filter views are enabled.",
+            "type": "boolean"
+          },
+          "filters": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/AacDashboardFilter"
+            },
+            "description": "Dashboard filters.",
+            "type": "object"
+          },
+          "id": {
+            "description": "Unique identifier of the dashboard.",
+            "example": "sales-overview",
+            "type": "string"
+          },
+          "permissions": {
+            "$ref": "#/components/schemas/AacDashboardPermissions"
+          },
+          "plugins": {
+            "description": "Dashboard plugins.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "$ref": "#/components/schemas/AacDashboardPluginLink"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "sections": {
+            "description": "Dashboard sections (for non-tabbed dashboards).",
+            "items": {
+              "$ref": "#/components/schemas/AacSection"
+            },
+            "type": "array"
+          },
+          "tabs": {
+            "description": "Dashboard tabs (for tabbed dashboards).",
+            "items": {
+              "$ref": "#/components/schemas/AacTab"
+            },
+            "type": "array"
+          },
+          "tags": {
+            "description": "Metadata tags.",
+            "items": {
+              "description": "Metadata tags.",
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "title": {
+            "description": "Human readable title.",
+            "example": "Sales Overview",
+            "type": "string"
+          },
+          "type": {
+            "description": "Dashboard type discriminator.",
+            "example": "dashboard",
+            "type": "string"
+          },
+          "user_filters_reset": {
+            "description": "Whether user can reset custom filters.",
+            "type": "boolean"
+          },
+          "user_filters_save": {
+            "description": "Whether user filter settings are stored.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "type"
         ],
         "type": "object"
       },
@@ -822,6 +1124,10 @@
             "description": "Deprecated. Use showInAiResults instead.",
             "type": "boolean"
           },
+          "is_hidden_from_kda": {
+            "description": "Whether to hide from key driver analysis.",
+            "type": "boolean"
+          },
           "maql": {
             "description": "MAQL expression defining the metric.",
             "example": "SELECT SUM({fact/amount})",
@@ -969,7 +1275,7 @@
         "type": "object"
       },
       "AacQueryFilter": {
-        "description": "Query filters map: localId -> filter definition.",
+        "description": "Layer filters.",
         "properties": {
           "additionalProperties": {
             "additionalProperties": {
@@ -991,6 +1297,18 @@
             "description": "Condition for metric value filter.",
             "type": "string"
           },
+          "dimensionality": {
+            "description": "Dimensionality for metric value filter.",
+            "items": {
+              "description": "Dimensionality for metric value filter.",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "display_as": {
+            "description": "Display as label (attribute filter).",
+            "type": "string"
+          },
           "from": {
             "oneOf": [
               {
@@ -1005,6 +1323,10 @@
           "granularity": {
             "description": "Date granularity (date filter).",
             "type": "string"
+          },
+          "null_values_as_zero": {
+            "description": "Null values are treated as zero (metric value filter).",
+            "type": "boolean"
           },
           "state": {
             "$ref": "#/components/schemas/AacFilterState"
@@ -1100,6 +1422,166 @@
         ],
         "type": "object"
       },
+      "AacRichTextWidget": {
+        "allOf": [
+          {
+            "not": {
+              "required": [
+                "visualization"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "sections"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "visualizations"
+              ]
+            }
+          }
+        ],
+        "properties": {
+          "additionalProperties": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/JsonNode"
+            },
+            "type": "object",
+            "writeOnly": true
+          },
+          "columns": {
+            "description": "Widget width in grid columns (GAAC).",
+            "format": "int32",
+            "type": "integer"
+          },
+          "container": {
+            "description": "Container widget identifier.",
+            "type": "string"
+          },
+          "content": {
+            "description": "Rich text content.",
+            "type": "string"
+          },
+          "date": {
+            "description": "Date dataset for filtering.",
+            "type": "string"
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "enum": [
+                  false
+                ],
+                "type": "boolean"
+              },
+              {
+                "enum": [
+                  "inherit"
+                ],
+                "type": "string"
+              }
+            ]
+          },
+          "drill_down": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "enable_section_headers": {
+            "description": "Whether section headers are enabled for container widgets.",
+            "type": "boolean"
+          },
+          "ignore_dashboard_filters": {
+            "description": "Deprecated. Use ignoredFilters instead.",
+            "items": {
+              "description": "Deprecated. Use ignoredFilters instead.",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "ignored_filters": {
+            "description": "A list of dashboard filters to be ignored for this widget (GAAC).",
+            "items": {
+              "description": "A list of dashboard filters to be ignored for this widget (GAAC).",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "interactions": {
+            "description": "Widget interactions (GAAC).",
+            "items": {
+              "$ref": "#/components/schemas/JsonNode"
+            },
+            "type": "array"
+          },
+          "layout_direction": {
+            "description": "Layout direction for container widgets.",
+            "type": "string"
+          },
+          "metric": {
+            "description": "Inline metric reference.",
+            "type": "string"
+          },
+          "rows": {
+            "description": "Widget height in grid rows (GAAC).",
+            "format": "int32",
+            "type": "integer"
+          },
+          "sections": {
+            "description": "Nested sections for layout widgets.",
+            "items": {
+              "$ref": "#/components/schemas/AacSection"
+            },
+            "type": "array"
+          },
+          "size": {
+            "$ref": "#/components/schemas/AacWidgetSize"
+          },
+          "title": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "enum": [
+                  false
+                ],
+                "type": "boolean"
+              }
+            ]
+          },
+          "type": {
+            "description": "Widget type.",
+            "example": "visualization",
+            "type": "string"
+          },
+          "visualization": {
+            "description": "Visualization ID reference.",
+            "type": "string"
+          },
+          "visualizations": {
+            "description": "Visualization switcher items.",
+            "items": {
+              "$ref": "#/components/schemas/AacWidget"
+            },
+            "type": "array"
+          },
+          "zoom_data": {
+            "description": "Enable zooming to the data for certain visualization types (GAAC).",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "content"
+        ],
+        "type": "object"
+      },
       "AacSection": {
         "description": "Sections within the tab.",
         "properties": {
@@ -1159,6 +1641,126 @@
       },
       "AacVisualization": {
         "description": "AAC visualization definition.",
+        "discriminator": {
+          "mapping": {
+            "area_chart": "#/components/schemas/AacVisualizationStackedBuckets",
+            "bar_chart": "#/components/schemas/AacVisualizationStackedBuckets",
+            "bubble_chart": "#/components/schemas/AacVisualizationBubbleBuckets",
+            "bullet_chart": "#/components/schemas/AacVisualizationBasicBuckets",
+            "column_chart": "#/components/schemas/AacVisualizationStackedBuckets",
+            "combo_chart": "#/components/schemas/AacVisualizationBasicBuckets",
+            "dependency_wheel_chart": "#/components/schemas/AacVisualizationDependencyBuckets",
+            "donut_chart": "#/components/schemas/AacVisualizationBasicBuckets",
+            "funnel_chart": "#/components/schemas/AacVisualizationBasicBuckets",
+            "geo_area_chart": "#/components/schemas/AacVisualizationGeoBuckets",
+            "geo_chart": "#/components/schemas/AacVisualizationGeoBuckets",
+            "headline_chart": "#/components/schemas/AacVisualizationBasicBuckets",
+            "heatmap_chart": "#/components/schemas/AacVisualizationTableBuckets",
+            "line_chart": "#/components/schemas/AacVisualizationTrendBuckets",
+            "pie_chart": "#/components/schemas/AacVisualizationBasicBuckets",
+            "pyramid_chart": "#/components/schemas/AacVisualizationBasicBuckets",
+            "repeater_chart": "#/components/schemas/AacVisualizationTableBuckets",
+            "sankey_chart": "#/components/schemas/AacVisualizationDependencyBuckets",
+            "scatter_chart": "#/components/schemas/AacVisualizationScatterBuckets",
+            "table": "#/components/schemas/AacVisualizationTableBuckets",
+            "treemap_chart": "#/components/schemas/AacVisualizationBasicBuckets",
+            "waterfall_chart": "#/components/schemas/AacVisualizationBasicBuckets"
+          },
+          "propertyName": "type"
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/AacVisualizationTableBuckets"
+          },
+          {
+            "$ref": "#/components/schemas/AacVisualizationStackedBuckets"
+          },
+          {
+            "$ref": "#/components/schemas/AacVisualizationScatterBuckets"
+          },
+          {
+            "$ref": "#/components/schemas/AacVisualizationBubbleBuckets"
+          },
+          {
+            "$ref": "#/components/schemas/AacVisualizationTrendBuckets"
+          },
+          {
+            "$ref": "#/components/schemas/AacVisualizationGeoBuckets"
+          },
+          {
+            "$ref": "#/components/schemas/AacVisualizationBasicBuckets"
+          },
+          {
+            "$ref": "#/components/schemas/AacVisualizationDependencyBuckets"
+          }
+        ]
+      },
+      "AacVisualizationBasicBuckets": {
+        "allOf": [
+          {
+            "not": {
+              "required": [
+                "rows"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "columns"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "from"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "to"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "stack_by"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "trend_by"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "size_by"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "attributes"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "layers"
+              ]
+            }
+          }
+        ],
         "properties": {
           "additionalProperties": {
             "additionalProperties": {
@@ -1167,25 +1769,8 @@
             "type": "object",
             "writeOnly": true
           },
-          "attribute": {
-            "description": "Attribute bucket (for repeater).",
-            "items": {
-              "oneOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "object"
-                },
-                {
-                  "type": "null"
-                }
-              ]
-            },
-            "type": "array"
-          },
-          "color": {
-            "description": "Color bucket.",
+          "attributes": {
+            "description": "Attributes bucket (for scatter).",
             "items": {
               "oneOf": [
                 {
@@ -1225,6 +1810,9 @@
             "description": "Visualization description.",
             "type": "string"
           },
+          "from": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
           "id": {
             "description": "Unique identifier of the visualization.",
             "example": "sales-by-region",
@@ -1234,20 +1822,10 @@
             "description": "Deprecated. Use showInAiResults instead.",
             "type": "boolean"
           },
-          "location": {
-            "description": "Location bucket (for geo charts).",
+          "layers": {
+            "description": "Visualization data layers (for geo charts).",
             "items": {
-              "oneOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "object"
-                },
-                {
-                  "type": "null"
-                }
-              ]
+              "$ref": "#/components/schemas/AacVisualizationLayer"
             },
             "type": "array"
           },
@@ -1268,45 +1846,11 @@
             },
             "type": "array"
           },
-          "primary_measures": {
-            "description": "Primary measures bucket.",
-            "items": {
-              "oneOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "object"
-                },
-                {
-                  "type": "null"
-                }
-              ]
-            },
-            "type": "array"
-          },
           "query": {
             "$ref": "#/components/schemas/AacQuery"
           },
           "rows": {
             "description": "Rows bucket (for tables).",
-            "items": {
-              "oneOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "object"
-                },
-                {
-                  "type": "null"
-                }
-              ]
-            },
-            "type": "array"
-          },
-          "secondary_measures": {
-            "description": "Secondary measures bucket.",
             "items": {
               "oneOf": [
                 {
@@ -1343,8 +1887,8 @@
             "description": "Whether to show in AI results.",
             "type": "boolean"
           },
-          "size": {
-            "description": "Size bucket.",
+          "size_by": {
+            "description": "Size by metrics bucket.",
             "items": {
               "oneOf": [
                 {
@@ -1360,8 +1904,8 @@
             },
             "type": "array"
           },
-          "stack": {
-            "description": "Stack bucket.",
+          "stack_by": {
+            "description": "Stack by attributes bucket.",
             "items": {
               "oneOf": [
                 {
@@ -1391,8 +1935,11 @@
             "example": "Sales by Region",
             "type": "string"
           },
-          "trend": {
-            "description": "Trend bucket.",
+          "to": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "trend_by": {
+            "description": "Trend by attributes bucket.",
             "items": {
               "oneOf": [
                 {
@@ -1409,32 +1956,17 @@
             "type": "array"
           },
           "type": {
-            "description": "Visualization type.",
             "enum": [
-              "table",
-              "bar_chart",
-              "column_chart",
-              "line_chart",
-              "area_chart",
-              "scatter_chart",
-              "bubble_chart",
-              "pie_chart",
-              "donut_chart",
-              "treemap_chart",
-              "pyramid_chart",
-              "funnel_chart",
-              "heatmap_chart",
               "bullet_chart",
-              "waterfall_chart",
-              "dependency_wheel_chart",
-              "sankey_chart",
-              "headline_chart",
               "combo_chart",
-              "geo_chart",
-              "geo_area_chart",
-              "repeater_chart"
+              "donut_chart",
+              "funnel_chart",
+              "headline_chart",
+              "pie_chart",
+              "pyramid_chart",
+              "treemap_chart",
+              "waterfall_chart"
             ],
-            "example": "bar_chart",
             "type": "string"
           },
           "view_by": {
@@ -1462,8 +1994,1544 @@
         ],
         "type": "object"
       },
-      "AacWidget": {
-        "description": "Widgets in the section.",
+      "AacVisualizationBubbleBuckets": {
+        "allOf": [
+          {
+            "not": {
+              "required": [
+                "rows"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "columns"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "from"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "to"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "stack_by"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "trend_by"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "attributes"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "layers"
+              ]
+            }
+          }
+        ],
+        "properties": {
+          "additionalProperties": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/JsonNode"
+            },
+            "type": "object",
+            "writeOnly": true
+          },
+          "attributes": {
+            "description": "Attributes bucket (for scatter).",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "columns": {
+            "description": "Columns bucket (for tables).",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "config": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "description": {
+            "description": "Visualization description.",
+            "type": "string"
+          },
+          "from": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "id": {
+            "description": "Unique identifier of the visualization.",
+            "example": "sales-by-region",
+            "type": "string"
+          },
+          "is_hidden": {
+            "description": "Deprecated. Use showInAiResults instead.",
+            "type": "boolean"
+          },
+          "layers": {
+            "description": "Visualization data layers (for geo charts).",
+            "items": {
+              "$ref": "#/components/schemas/AacVisualizationLayer"
+            },
+            "type": "array"
+          },
+          "metrics": {
+            "description": "Metrics bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "query": {
+            "$ref": "#/components/schemas/AacQuery"
+          },
+          "rows": {
+            "description": "Rows bucket (for tables).",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "segment_by": {
+            "description": "Segment by attributes bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "show_in_ai_results": {
+            "description": "Whether to show in AI results.",
+            "type": "boolean"
+          },
+          "size_by": {
+            "description": "Size by metrics bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "stack_by": {
+            "description": "Stack by attributes bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "tags": {
+            "description": "Metadata tags.",
+            "items": {
+              "description": "Metadata tags.",
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "title": {
+            "description": "Human readable title.",
+            "example": "Sales by Region",
+            "type": "string"
+          },
+          "to": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "trend_by": {
+            "description": "Trend by attributes bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "type": {
+            "enum": [
+              "bubble_chart"
+            ],
+            "type": "string"
+          },
+          "view_by": {
+            "description": "View by attributes bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "query",
+          "type"
+        ],
+        "type": "object"
+      },
+      "AacVisualizationDependencyBuckets": {
+        "allOf": [
+          {
+            "not": {
+              "required": [
+                "rows"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "columns"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "stack_by"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "trend_by"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "size_by"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "attributes"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "layers"
+              ]
+            }
+          }
+        ],
+        "properties": {
+          "additionalProperties": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/JsonNode"
+            },
+            "type": "object",
+            "writeOnly": true
+          },
+          "attributes": {
+            "description": "Attributes bucket (for scatter).",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "columns": {
+            "description": "Columns bucket (for tables).",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "config": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "description": {
+            "description": "Visualization description.",
+            "type": "string"
+          },
+          "from": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "id": {
+            "description": "Unique identifier of the visualization.",
+            "example": "sales-by-region",
+            "type": "string"
+          },
+          "is_hidden": {
+            "description": "Deprecated. Use showInAiResults instead.",
+            "type": "boolean"
+          },
+          "layers": {
+            "description": "Visualization data layers (for geo charts).",
+            "items": {
+              "$ref": "#/components/schemas/AacVisualizationLayer"
+            },
+            "type": "array"
+          },
+          "metrics": {
+            "description": "Metrics bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "query": {
+            "$ref": "#/components/schemas/AacQuery"
+          },
+          "rows": {
+            "description": "Rows bucket (for tables).",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "segment_by": {
+            "description": "Segment by attributes bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "show_in_ai_results": {
+            "description": "Whether to show in AI results.",
+            "type": "boolean"
+          },
+          "size_by": {
+            "description": "Size by metrics bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "stack_by": {
+            "description": "Stack by attributes bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "tags": {
+            "description": "Metadata tags.",
+            "items": {
+              "description": "Metadata tags.",
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "title": {
+            "description": "Human readable title.",
+            "example": "Sales by Region",
+            "type": "string"
+          },
+          "to": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "trend_by": {
+            "description": "Trend by attributes bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "type": {
+            "enum": [
+              "dependency_wheel_chart",
+              "sankey_chart"
+            ],
+            "type": "string"
+          },
+          "view_by": {
+            "description": "View by attributes bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "query",
+          "type"
+        ],
+        "type": "object"
+      },
+      "AacVisualizationGeoBuckets": {
+        "allOf": [
+          {
+            "not": {
+              "required": [
+                "rows"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "columns"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "from"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "to"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "stack_by"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "trend_by"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "size_by"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "attributes"
+              ]
+            }
+          }
+        ],
+        "properties": {
+          "additionalProperties": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/JsonNode"
+            },
+            "type": "object",
+            "writeOnly": true
+          },
+          "attributes": {
+            "description": "Attributes bucket (for scatter).",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "columns": {
+            "description": "Columns bucket (for tables).",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "config": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "description": {
+            "description": "Visualization description.",
+            "type": "string"
+          },
+          "from": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "id": {
+            "description": "Unique identifier of the visualization.",
+            "example": "sales-by-region",
+            "type": "string"
+          },
+          "is_hidden": {
+            "description": "Deprecated. Use showInAiResults instead.",
+            "type": "boolean"
+          },
+          "layers": {
+            "description": "Visualization data layers (for geo charts).",
+            "items": {
+              "$ref": "#/components/schemas/AacVisualizationLayer"
+            },
+            "type": "array"
+          },
+          "metrics": {
+            "description": "Metrics bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "query": {
+            "$ref": "#/components/schemas/AacQuery"
+          },
+          "rows": {
+            "description": "Rows bucket (for tables).",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "segment_by": {
+            "description": "Segment by attributes bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "show_in_ai_results": {
+            "description": "Whether to show in AI results.",
+            "type": "boolean"
+          },
+          "size_by": {
+            "description": "Size by metrics bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "stack_by": {
+            "description": "Stack by attributes bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "tags": {
+            "description": "Metadata tags.",
+            "items": {
+              "description": "Metadata tags.",
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "title": {
+            "description": "Human readable title.",
+            "example": "Sales by Region",
+            "type": "string"
+          },
+          "to": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "trend_by": {
+            "description": "Trend by attributes bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "type": {
+            "enum": [
+              "geo_chart",
+              "geo_area_chart"
+            ],
+            "type": "string"
+          },
+          "view_by": {
+            "description": "View by attributes bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "query",
+          "type"
+        ],
+        "type": "object"
+      },
+      "AacVisualizationLayer": {
+        "description": "Visualization data layers (for geo charts).",
+        "properties": {
+          "additionalProperties": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/JsonNode"
+            },
+            "type": "object",
+            "writeOnly": true
+          },
+          "config": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "filters": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/AacQueryFilter"
+            },
+            "description": "Layer filters.",
+            "type": "object"
+          },
+          "id": {
+            "description": "Unique identifier of the layer.",
+            "type": "string"
+          },
+          "metrics": {
+            "description": "Layer metrics.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "segment_by": {
+            "description": "Layer segment by.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "sorts": {
+            "description": "Layer sorting definitions.",
+            "items": {
+              "$ref": "#/components/schemas/JsonNode"
+            },
+            "type": "array"
+          },
+          "title": {
+            "description": "Layer title.",
+            "type": "string"
+          },
+          "type": {
+            "description": "Layer type.",
+            "example": "pushpin",
+            "type": "string"
+          },
+          "view_by": {
+            "description": "Layer view by.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "type": "object"
+      },
+      "AacVisualizationScatterBuckets": {
+        "allOf": [
+          {
+            "not": {
+              "required": [
+                "rows"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "columns"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "from"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "to"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "stack_by"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "trend_by"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "size_by"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "layers"
+              ]
+            }
+          }
+        ],
+        "properties": {
+          "additionalProperties": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/JsonNode"
+            },
+            "type": "object",
+            "writeOnly": true
+          },
+          "attributes": {
+            "description": "Attributes bucket (for scatter).",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "columns": {
+            "description": "Columns bucket (for tables).",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "config": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "description": {
+            "description": "Visualization description.",
+            "type": "string"
+          },
+          "from": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "id": {
+            "description": "Unique identifier of the visualization.",
+            "example": "sales-by-region",
+            "type": "string"
+          },
+          "is_hidden": {
+            "description": "Deprecated. Use showInAiResults instead.",
+            "type": "boolean"
+          },
+          "layers": {
+            "description": "Visualization data layers (for geo charts).",
+            "items": {
+              "$ref": "#/components/schemas/AacVisualizationLayer"
+            },
+            "type": "array"
+          },
+          "metrics": {
+            "description": "Metrics bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "query": {
+            "$ref": "#/components/schemas/AacQuery"
+          },
+          "rows": {
+            "description": "Rows bucket (for tables).",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "segment_by": {
+            "description": "Segment by attributes bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "show_in_ai_results": {
+            "description": "Whether to show in AI results.",
+            "type": "boolean"
+          },
+          "size_by": {
+            "description": "Size by metrics bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "stack_by": {
+            "description": "Stack by attributes bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "tags": {
+            "description": "Metadata tags.",
+            "items": {
+              "description": "Metadata tags.",
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "title": {
+            "description": "Human readable title.",
+            "example": "Sales by Region",
+            "type": "string"
+          },
+          "to": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "trend_by": {
+            "description": "Trend by attributes bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "type": {
+            "enum": [
+              "scatter_chart"
+            ],
+            "type": "string"
+          },
+          "view_by": {
+            "description": "View by attributes bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "query",
+          "type"
+        ],
+        "type": "object"
+      },
+      "AacVisualizationStackedBuckets": {
+        "allOf": [
+          {
+            "not": {
+              "required": [
+                "rows"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "columns"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "from"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "to"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "trend_by"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "size_by"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "attributes"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "layers"
+              ]
+            }
+          }
+        ],
+        "properties": {
+          "additionalProperties": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/JsonNode"
+            },
+            "type": "object",
+            "writeOnly": true
+          },
+          "attributes": {
+            "description": "Attributes bucket (for scatter).",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "columns": {
+            "description": "Columns bucket (for tables).",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "config": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "description": {
+            "description": "Visualization description.",
+            "type": "string"
+          },
+          "from": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "id": {
+            "description": "Unique identifier of the visualization.",
+            "example": "sales-by-region",
+            "type": "string"
+          },
+          "is_hidden": {
+            "description": "Deprecated. Use showInAiResults instead.",
+            "type": "boolean"
+          },
+          "layers": {
+            "description": "Visualization data layers (for geo charts).",
+            "items": {
+              "$ref": "#/components/schemas/AacVisualizationLayer"
+            },
+            "type": "array"
+          },
+          "metrics": {
+            "description": "Metrics bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "query": {
+            "$ref": "#/components/schemas/AacQuery"
+          },
+          "rows": {
+            "description": "Rows bucket (for tables).",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "segment_by": {
+            "description": "Segment by attributes bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "show_in_ai_results": {
+            "description": "Whether to show in AI results.",
+            "type": "boolean"
+          },
+          "size_by": {
+            "description": "Size by metrics bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "stack_by": {
+            "description": "Stack by attributes bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "tags": {
+            "description": "Metadata tags.",
+            "items": {
+              "description": "Metadata tags.",
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "title": {
+            "description": "Human readable title.",
+            "example": "Sales by Region",
+            "type": "string"
+          },
+          "to": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "trend_by": {
+            "description": "Trend by attributes bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "type": {
+            "enum": [
+              "bar_chart",
+              "column_chart",
+              "area_chart"
+            ],
+            "type": "string"
+          },
+          "view_by": {
+            "description": "View by attributes bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "query",
+          "type"
+        ],
+        "type": "object"
+      },
+      "AacVisualizationSwitcherWidget": {
+        "allOf": [
+          {
+            "not": {
+              "required": [
+                "visualization"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "content"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "sections"
+              ]
+            }
+          }
+        ],
         "properties": {
           "additionalProperties": {
             "additionalProperties": {
@@ -1476,6 +3544,10 @@
             "description": "Widget width in grid columns (GAAC).",
             "format": "int32",
             "type": "integer"
+          },
+          "container": {
+            "description": "Container widget identifier.",
+            "type": "string"
           },
           "content": {
             "description": "Rich text content.",
@@ -1495,11 +3567,21 @@
                   false
                 ],
                 "type": "boolean"
+              },
+              {
+                "enum": [
+                  "inherit"
+                ],
+                "type": "string"
               }
             ]
           },
           "drill_down": {
             "$ref": "#/components/schemas/JsonNode"
+          },
+          "enable_section_headers": {
+            "description": "Whether section headers are enabled for container widgets.",
+            "type": "boolean"
           },
           "ignore_dashboard_filters": {
             "description": "Deprecated. Use ignoredFilters instead.",
@@ -1523,6 +3605,10 @@
               "$ref": "#/components/schemas/JsonNode"
             },
             "type": "array"
+          },
+          "layout_direction": {
+            "description": "Layout direction for container widgets.",
+            "type": "string"
           },
           "metric": {
             "description": "Inline metric reference.",
@@ -1565,12 +3651,761 @@
             "description": "Visualization ID reference.",
             "type": "string"
           },
+          "visualizations": {
+            "items": {
+              "$ref": "#/components/schemas/AacVisualizationWidget"
+            },
+            "type": "array"
+          },
           "zoom_data": {
             "description": "Enable zooming to the data for certain visualization types (GAAC).",
             "type": "boolean"
           }
         },
+        "required": [
+          "visualizations"
+        ],
         "type": "object"
+      },
+      "AacVisualizationTableBuckets": {
+        "allOf": [
+          {
+            "not": {
+              "required": [
+                "from"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "to"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "stack_by"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "trend_by"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "size_by"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "attributes"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "layers"
+              ]
+            }
+          }
+        ],
+        "properties": {
+          "additionalProperties": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/JsonNode"
+            },
+            "type": "object",
+            "writeOnly": true
+          },
+          "attributes": {
+            "description": "Attributes bucket (for scatter).",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "columns": {
+            "description": "Columns bucket (for tables).",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "config": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "description": {
+            "description": "Visualization description.",
+            "type": "string"
+          },
+          "from": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "id": {
+            "description": "Unique identifier of the visualization.",
+            "example": "sales-by-region",
+            "type": "string"
+          },
+          "is_hidden": {
+            "description": "Deprecated. Use showInAiResults instead.",
+            "type": "boolean"
+          },
+          "layers": {
+            "description": "Visualization data layers (for geo charts).",
+            "items": {
+              "$ref": "#/components/schemas/AacVisualizationLayer"
+            },
+            "type": "array"
+          },
+          "metrics": {
+            "description": "Metrics bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "query": {
+            "$ref": "#/components/schemas/AacQuery"
+          },
+          "rows": {
+            "description": "Rows bucket (for tables).",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "segment_by": {
+            "description": "Segment by attributes bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "show_in_ai_results": {
+            "description": "Whether to show in AI results.",
+            "type": "boolean"
+          },
+          "size_by": {
+            "description": "Size by metrics bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "stack_by": {
+            "description": "Stack by attributes bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "tags": {
+            "description": "Metadata tags.",
+            "items": {
+              "description": "Metadata tags.",
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "title": {
+            "description": "Human readable title.",
+            "example": "Sales by Region",
+            "type": "string"
+          },
+          "to": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "trend_by": {
+            "description": "Trend by attributes bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "type": {
+            "enum": [
+              "table",
+              "heatmap_chart",
+              "repeater_chart"
+            ],
+            "type": "string"
+          },
+          "view_by": {
+            "description": "View by attributes bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "query",
+          "type"
+        ],
+        "type": "object"
+      },
+      "AacVisualizationTrendBuckets": {
+        "allOf": [
+          {
+            "not": {
+              "required": [
+                "rows"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "columns"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "from"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "to"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "stack_by"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "size_by"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "attributes"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "layers"
+              ]
+            }
+          }
+        ],
+        "properties": {
+          "additionalProperties": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/JsonNode"
+            },
+            "type": "object",
+            "writeOnly": true
+          },
+          "attributes": {
+            "description": "Attributes bucket (for scatter).",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "columns": {
+            "description": "Columns bucket (for tables).",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "config": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "description": {
+            "description": "Visualization description.",
+            "type": "string"
+          },
+          "from": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "id": {
+            "description": "Unique identifier of the visualization.",
+            "example": "sales-by-region",
+            "type": "string"
+          },
+          "is_hidden": {
+            "description": "Deprecated. Use showInAiResults instead.",
+            "type": "boolean"
+          },
+          "layers": {
+            "description": "Visualization data layers (for geo charts).",
+            "items": {
+              "$ref": "#/components/schemas/AacVisualizationLayer"
+            },
+            "type": "array"
+          },
+          "metrics": {
+            "description": "Metrics bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "query": {
+            "$ref": "#/components/schemas/AacQuery"
+          },
+          "rows": {
+            "description": "Rows bucket (for tables).",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "segment_by": {
+            "description": "Segment by attributes bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "show_in_ai_results": {
+            "description": "Whether to show in AI results.",
+            "type": "boolean"
+          },
+          "size_by": {
+            "description": "Size by metrics bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "stack_by": {
+            "description": "Stack by attributes bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "tags": {
+            "description": "Metadata tags.",
+            "items": {
+              "description": "Metadata tags.",
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "title": {
+            "description": "Human readable title.",
+            "example": "Sales by Region",
+            "type": "string"
+          },
+          "to": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "trend_by": {
+            "description": "Trend by attributes bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "type": {
+            "enum": [
+              "line_chart"
+            ],
+            "type": "string"
+          },
+          "view_by": {
+            "description": "View by attributes bucket.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "query",
+          "type"
+        ],
+        "type": "object"
+      },
+      "AacVisualizationWidget": {
+        "allOf": [
+          {
+            "not": {
+              "required": [
+                "content"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "sections"
+              ]
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "visualizations"
+              ]
+            }
+          }
+        ],
+        "properties": {
+          "additionalProperties": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/JsonNode"
+            },
+            "type": "object",
+            "writeOnly": true
+          },
+          "columns": {
+            "description": "Widget width in grid columns (GAAC).",
+            "format": "int32",
+            "type": "integer"
+          },
+          "container": {
+            "description": "Container widget identifier.",
+            "type": "string"
+          },
+          "content": {
+            "description": "Rich text content.",
+            "type": "string"
+          },
+          "date": {
+            "description": "Date dataset for filtering.",
+            "type": "string"
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "enum": [
+                  false
+                ],
+                "type": "boolean"
+              },
+              {
+                "enum": [
+                  "inherit"
+                ],
+                "type": "string"
+              }
+            ]
+          },
+          "drill_down": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "enable_section_headers": {
+            "description": "Whether section headers are enabled for container widgets.",
+            "type": "boolean"
+          },
+          "ignore_dashboard_filters": {
+            "description": "Deprecated. Use ignoredFilters instead.",
+            "items": {
+              "description": "Deprecated. Use ignoredFilters instead.",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "ignored_filters": {
+            "description": "A list of dashboard filters to be ignored for this widget (GAAC).",
+            "items": {
+              "description": "A list of dashboard filters to be ignored for this widget (GAAC).",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "interactions": {
+            "description": "Widget interactions (GAAC).",
+            "items": {
+              "$ref": "#/components/schemas/JsonNode"
+            },
+            "type": "array"
+          },
+          "layout_direction": {
+            "description": "Layout direction for container widgets.",
+            "type": "string"
+          },
+          "metric": {
+            "description": "Inline metric reference.",
+            "type": "string"
+          },
+          "rows": {
+            "description": "Widget height in grid rows (GAAC).",
+            "format": "int32",
+            "type": "integer"
+          },
+          "sections": {
+            "description": "Nested sections for layout widgets.",
+            "items": {
+              "$ref": "#/components/schemas/AacSection"
+            },
+            "type": "array"
+          },
+          "size": {
+            "$ref": "#/components/schemas/AacWidgetSize"
+          },
+          "title": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "enum": [
+                  false
+                ],
+                "type": "boolean"
+              }
+            ]
+          },
+          "type": {
+            "description": "Widget type.",
+            "example": "visualization",
+            "type": "string"
+          },
+          "visualization": {
+            "description": "Visualization ID reference.",
+            "type": "string"
+          },
+          "visualizations": {
+            "description": "Visualization switcher items.",
+            "items": {
+              "$ref": "#/components/schemas/AacWidget"
+            },
+            "type": "array"
+          },
+          "zoom_data": {
+            "description": "Enable zooming to the data for certain visualization types (GAAC).",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "visualization"
+        ],
+        "type": "object"
+      },
+      "AacWidget": {
+        "description": "Widgets in the section.",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/AacVisualizationWidget"
+          },
+          {
+            "$ref": "#/components/schemas/AacRichTextWidget"
+          },
+          {
+            "$ref": "#/components/schemas/AacVisualizationSwitcherWidget"
+          },
+          {
+            "$ref": "#/components/schemas/AacContainerWidget"
+          }
+        ]
       },
       "AacWidgetSize": {
         "description": "Deprecated widget size (legacy AAC).",
@@ -1639,6 +4474,10 @@
                 "example": "2020-07-01 18:23",
                 "pattern": "^\\d{4}-\\d{1,2}-\\d{1,2}( \\d{1,2}:\\d{1,2})?$",
                 "type": "string"
+              },
+              "includeEmptyValues": {
+                "description": "If true, rows with undefined (NULL) date values will be included in the result. The filter becomes: (date_condition) OR (date IS NULL). If false or not set, standard behavior applies (NULLs excluded by the date condition).",
+                "type": "boolean"
               },
               "localIdentifier": {
                 "type": "string"
@@ -2269,6 +5108,49 @@
         },
         "type": "object"
       },
+      "AllowedRelationshipType": {
+        "description": "Allowed relationship type combination.",
+        "properties": {
+          "allowOrphans": {
+            "default": true,
+            "description": "If true, allows target objects that are not part of any relationship (orphans) to be included in results. If false, orphan target objects will be excluded even if they directly match the search query. Default is true (orphans are allowed).",
+            "type": "boolean"
+          },
+          "sourceType": {
+            "description": "Source object type (e.g., 'dashboard', 'visualization', 'metric').",
+            "enum": [
+              "attribute",
+              "metric",
+              "fact",
+              "label",
+              "date",
+              "dataset",
+              "visualization",
+              "dashboard"
+            ],
+            "type": "string"
+          },
+          "targetType": {
+            "description": "Target object type (e.g., 'visualization', 'metric', 'attribute').",
+            "enum": [
+              "attribute",
+              "metric",
+              "fact",
+              "label",
+              "date",
+              "dataset",
+              "visualization",
+              "dashboard"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "sourceType",
+          "targetType"
+        ],
+        "type": "object"
+      },
       "AnalyticsCatalogCreatedBy": {
         "properties": {
           "reasoning": {
@@ -2453,7 +5335,8 @@
               "ScheduledActionMinimumRecurrenceMinutes",
               "FederatedIdentityManagement",
               "AuditLogging",
-              "ControlledFeatureRollout"
+              "ControlledFeatureRollout",
+              "AiLake"
             ],
             "type": "string"
           },
@@ -4332,6 +7215,9 @@
                 ],
                 "type": "string"
               },
+              "includeEmptyValues": {
+                "type": "boolean"
+              },
               "localIdentifier": {
                 "type": "string"
               },
@@ -4767,6 +7653,34 @@
         ],
         "type": "object"
       },
+      "DatabaseInstance": {
+        "description": "A single AI Lake Database instance",
+        "properties": {
+          "id": {
+            "description": "Id of the AI Lake Database instance",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of the AI Lake Database instance",
+            "type": "string"
+          },
+          "storageIds": {
+            "description": "Set of ids of the storage instances this database instance should access.",
+            "items": {
+              "description": "Set of ids of the storage instances this database instance should access.",
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "storageIds"
+        ],
+        "type": "object"
+      },
       "DatasetGrain": {
         "properties": {
           "id": {
@@ -5053,6 +7967,11 @@
             },
             "type": "array"
           },
+          "summary": {
+            "description": "AI-generated summary of the dashboard content",
+            "maxLength": 10000,
+            "type": "string"
+          },
           "tags": {
             "description": "A list of tags.",
             "example": [
@@ -5243,6 +8162,13 @@
             "description": "A list of filter contexts available in the model.",
             "items": {
               "$ref": "#/components/schemas/DeclarativeFilterContext"
+            },
+            "type": "array"
+          },
+          "memoryItems": {
+            "description": "A list of AI memory items available in the workspace.",
+            "items": {
+              "$ref": "#/components/schemas/DeclarativeMemoryItem"
             },
             "type": "array"
           },
@@ -5937,7 +8863,8 @@
               "FLEXCONNECT",
               "STARROCKS",
               "ATHENA",
-              "MONGODB"
+              "MONGODB",
+              "CRATEDB"
             ],
             "example": "POSTGRESQL",
             "type": "string"
@@ -6840,6 +9767,97 @@
         },
         "type": "object"
       },
+      "DeclarativeMemoryItem": {
+        "properties": {
+          "createdAt": {
+            "description": "Time of the entity creation.",
+            "example": "2023-07-20 12:30",
+            "nullable": true,
+            "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
+            "type": "string"
+          },
+          "createdBy": {
+            "$ref": "#/components/schemas/DeclarativeUserIdentifier"
+          },
+          "description": {
+            "description": "Memory item description.",
+            "example": "Context about sales data for AI assistant.",
+            "maxLength": 10000,
+            "type": "string"
+          },
+          "id": {
+            "description": "Memory item ID.",
+            "example": "sales-context",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "instruction": {
+            "description": "The text that will be injected into the system prompt.",
+            "example": "When discussing sales, always consider quarterly trends.",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "isDisabled": {
+            "description": "Whether memory item is disabled.",
+            "example": false,
+            "type": "boolean"
+          },
+          "keywords": {
+            "description": "Set of unique strings used for semantic similarity filtering.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "modifiedAt": {
+            "description": "Time of the last entity modification.",
+            "example": "2023-07-20 12:30",
+            "nullable": true,
+            "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
+            "type": "string"
+          },
+          "modifiedBy": {
+            "$ref": "#/components/schemas/DeclarativeUserIdentifier"
+          },
+          "strategy": {
+            "description": "Strategy defining when the memory item should be applied",
+            "enum": [
+              "ALWAYS",
+              "AUTO"
+            ],
+            "example": "AUTO",
+            "type": "string"
+          },
+          "tags": {
+            "description": "A list of tags.",
+            "example": [
+              "AI",
+              "Context"
+            ],
+            "items": {
+              "description": "A list of tags.",
+              "example": "[\"AI\",\"Context\"]",
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "title": {
+            "description": "Memory item title.",
+            "example": "Sales Context",
+            "maxLength": 255,
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "instruction",
+          "strategy",
+          "title"
+        ],
+        "type": "object"
+      },
       "DeclarativeMetric": {
         "properties": {
           "content": {
@@ -6869,6 +9887,11 @@
           },
           "isHidden": {
             "description": "If true, this metric is hidden from AI search results.",
+            "example": false,
+            "type": "boolean"
+          },
+          "isHiddenFromKda": {
+            "description": "If true, this metric is hidden from key drive analysis.",
             "example": false,
             "type": "boolean"
           },
@@ -7452,7 +10475,8 @@
               "ENABLE_AI_ON_DATA",
               "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
               "ENABLE_NULL_JOINS",
-              "EXPORT_CSV_CUSTOM_DELIMITER"
+              "EXPORT_CSV_CUSTOM_DELIMITER",
+              "ENABLE_QUERY_TAGS"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -8810,7 +11834,8 @@
                 "ScheduledActionMinimumRecurrenceMinutes",
                 "FederatedIdentityManagement",
                 "AuditLogging",
-                "ControlledFeatureRollout"
+                "ControlledFeatureRollout",
+                "AiLake"
               ],
               "type": "string"
             },
@@ -9288,6 +12313,28 @@
         ],
         "type": "object"
       },
+      "FailedOperation": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Operation"
+          },
+          {
+            "properties": {
+              "error": {
+                "$ref": "#/components/schemas/OperationError"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "description": "Operation that has failed",
+        "required": [
+          "error",
+          "id",
+          "kind"
+        ],
+        "type": "object"
+      },
       "File": {
         "properties": {
           "any": {
@@ -9707,6 +12754,7 @@
             "description": "Status of the latest triggered quality check process",
             "enum": [
               "RUNNING",
+              "SYNCING",
               "COMPLETED",
               "FAILED",
               "NOT_FOUND",
@@ -10380,6 +13428,11 @@
                 "maxLength": 10000,
                 "type": "string"
               },
+              "summary": {
+                "description": "AI-generated summary of the dashboard content",
+                "maxLength": 10000,
+                "type": "string"
+              },
               "tags": {
                 "items": {
                   "type": "string"
@@ -10477,6 +13530,11 @@
               },
               "modifiedAt": {
                 "format": "date-time",
+                "type": "string"
+              },
+              "summary": {
+                "description": "AI-generated summary of the dashboard content",
+                "maxLength": 10000,
                 "type": "string"
               },
               "tags": {
@@ -10789,6 +13847,11 @@
                 "maxLength": 10000,
                 "type": "string"
               },
+              "summary": {
+                "description": "AI-generated summary of the dashboard content",
+                "maxLength": 10000,
+                "type": "string"
+              },
               "tags": {
                 "items": {
                   "type": "string"
@@ -10855,6 +13918,11 @@
                 "type": "object"
               },
               "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "summary": {
+                "description": "AI-generated summary of the dashboard content",
                 "maxLength": 10000,
                 "type": "string"
               },
@@ -14421,7 +17489,8 @@
                   "FLEXCONNECT",
                   "STARROCKS",
                   "ATHENA",
-                  "MONGODB"
+                  "MONGODB",
+                  "CRATEDB"
                 ],
                 "type": "string"
               }
@@ -14637,7 +17706,8 @@
                   "FLEXCONNECT",
                   "STARROCKS",
                   "ATHENA",
-                  "MONGODB"
+                  "MONGODB",
+                  "CRATEDB"
                 ],
                 "type": "string"
               },
@@ -14811,7 +17881,8 @@
                   "FLEXCONNECT",
                   "STARROCKS",
                   "ATHENA",
-                  "MONGODB"
+                  "MONGODB",
+                  "CRATEDB"
                 ],
                 "type": "string"
               },
@@ -15039,7 +18110,8 @@
                   "FLEXCONNECT",
                   "STARROCKS",
                   "ATHENA",
-                  "MONGODB"
+                  "MONGODB",
+                  "CRATEDB"
                 ],
                 "type": "string"
               },
@@ -20245,6 +23317,9 @@
               "isHidden": {
                 "type": "boolean"
               },
+              "isHiddenFromKda": {
+                "type": "boolean"
+              },
               "tags": {
                 "items": {
                   "type": "string"
@@ -20356,6 +23431,9 @@
                 "type": "string"
               },
               "isHidden": {
+                "type": "boolean"
+              },
+              "isHiddenFromKda": {
                 "type": "boolean"
               },
               "modifiedAt": {
@@ -20638,6 +23716,9 @@
               "isHidden": {
                 "type": "boolean"
               },
+              "isHiddenFromKda": {
+                "type": "boolean"
+              },
               "tags": {
                 "items": {
                   "type": "string"
@@ -20723,6 +23804,9 @@
                 "type": "string"
               },
               "isHidden": {
+                "type": "boolean"
+              },
+              "isHiddenFromKda": {
                 "type": "boolean"
               },
               "tags": {
@@ -21782,7 +24866,8 @@
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
                   "ENABLE_NULL_JOINS",
-                  "EXPORT_CSV_CUSTOM_DELIMITER"
+                  "EXPORT_CSV_CUSTOM_DELIMITER",
+                  "ENABLE_QUERY_TAGS"
                 ],
                 "type": "string"
               }
@@ -21877,7 +24962,8 @@
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
                   "ENABLE_NULL_JOINS",
-                  "EXPORT_CSV_CUSTOM_DELIMITER"
+                  "EXPORT_CSV_CUSTOM_DELIMITER",
+                  "ENABLE_QUERY_TAGS"
                 ],
                 "type": "string"
               }
@@ -22012,7 +25098,8 @@
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
                   "ENABLE_NULL_JOINS",
-                  "EXPORT_CSV_CUSTOM_DELIMITER"
+                  "EXPORT_CSV_CUSTOM_DELIMITER",
+                  "ENABLE_QUERY_TAGS"
                 ],
                 "type": "string"
               }
@@ -23513,7 +26600,8 @@
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
                   "ENABLE_NULL_JOINS",
-                  "EXPORT_CSV_CUSTOM_DELIMITER"
+                  "EXPORT_CSV_CUSTOM_DELIMITER",
+                  "ENABLE_QUERY_TAGS"
                 ],
                 "type": "string"
               }
@@ -23608,7 +26696,8 @@
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
                   "ENABLE_NULL_JOINS",
-                  "EXPORT_CSV_CUSTOM_DELIMITER"
+                  "EXPORT_CSV_CUSTOM_DELIMITER",
+                  "ENABLE_QUERY_TAGS"
                 ],
                 "type": "string"
               }
@@ -25806,7 +28895,8 @@
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
                   "ENABLE_NULL_JOINS",
-                  "EXPORT_CSV_CUSTOM_DELIMITER"
+                  "EXPORT_CSV_CUSTOM_DELIMITER",
+                  "ENABLE_QUERY_TAGS"
                 ],
                 "type": "string"
               }
@@ -25901,7 +28991,8 @@
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
                   "ENABLE_NULL_JOINS",
-                  "EXPORT_CSV_CUSTOM_DELIMITER"
+                  "EXPORT_CSV_CUSTOM_DELIMITER",
+                  "ENABLE_QUERY_TAGS"
                 ],
                 "type": "string"
               }
@@ -26062,7 +29153,8 @@
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
                   "ENABLE_NULL_JOINS",
-                  "EXPORT_CSV_CUSTOM_DELIMITER"
+                  "EXPORT_CSV_CUSTOM_DELIMITER",
+                  "ENABLE_QUERY_TAGS"
                 ],
                 "type": "string"
               }
@@ -26157,7 +29249,8 @@
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
                   "ENABLE_NULL_JOINS",
-                  "EXPORT_CSV_CUSTOM_DELIMITER"
+                  "EXPORT_CSV_CUSTOM_DELIMITER",
+                  "ENABLE_QUERY_TAGS"
                 ],
                 "type": "string"
               }
@@ -26955,6 +30048,64 @@
         },
         "type": "object"
       },
+      "Operation": {
+        "description": "Represents a Long-Running Operation: a process that takes some time to complete.",
+        "discriminator": {
+          "mapping": {
+            "failed": "#/components/schemas/FailedOperation",
+            "pending": "#/components/schemas/PendingOperation",
+            "succeeded": "#/components/schemas/SucceededOperation"
+          },
+          "propertyName": "status"
+        },
+        "properties": {
+          "id": {
+            "description": "Id of the operation",
+            "type": "string"
+          },
+          "kind": {
+            "description": "Type of the long-running operation. \n* `provision-database` — Provisioning of an AI Lake database. \n* `deprovision-database` — Deprovisioning (deletion) of an AI Lake database.\n",
+            "enum": [
+              "provision-database",
+              "deprovision-database"
+            ],
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "status"
+        ],
+        "type": "object"
+      },
+      "OperationError": {
+        "description": "Error information for a failed operation",
+        "properties": {
+          "detail": {
+            "description": "Human-readable error details",
+            "type": "string"
+          },
+          "status": {
+            "description": "HTTP status code",
+            "format": "int32",
+            "type": "integer"
+          },
+          "title": {
+            "description": "Human-readable error name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "detail",
+          "status",
+          "title"
+        ],
+        "type": "object"
+      },
       "OrganizationAutomationIdentifier": {
         "properties": {
           "id": {
@@ -27313,6 +30464,19 @@
         ],
         "type": "object"
       },
+      "PendingOperation": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Operation"
+          }
+        ],
+        "description": "Operation that is still pending",
+        "required": [
+          "id",
+          "kind"
+        ],
+        "type": "object"
+      },
       "PermissionsAssignment": {
         "properties": {
           "assignees": {
@@ -27554,6 +30718,29 @@
         ],
         "type": "object"
       },
+      "ProvisionDatabaseInstanceRequest": {
+        "description": "Request to provision a new AILake Database instance",
+        "properties": {
+          "name": {
+            "description": "Name of the database instance",
+            "type": "string"
+          },
+          "storageIds": {
+            "description": "Set of ids of the storage instances this database instance should access.",
+            "items": {
+              "description": "Set of ids of the storage instances this database instance should access.",
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "name",
+          "storageIds"
+        ],
+        "type": "object"
+      },
       "QualityIssue": {
         "description": "List of quality issues (available when status is COMPLETED)",
         "properties": {
@@ -27648,6 +30835,7 @@
             "description": "Current status of the calculation",
             "enum": [
               "RUNNING",
+              "SYNCING",
               "COMPLETED",
               "FAILED",
               "NOT_FOUND",
@@ -27895,6 +31083,13 @@
         "properties": {
           "customOverride": {
             "$ref": "#/components/schemas/RawCustomOverride"
+          },
+          "delimiter": {
+            "description": "Set column delimiter. (CSV)",
+            "maxLength": 1,
+            "minLength": 1,
+            "pattern": "^[^\r\n\"]$",
+            "type": "string"
           },
           "execution": {
             "$ref": "#/components/schemas/AFM"
@@ -28179,6 +31374,10 @@
                 "example": "DAY",
                 "type": "string"
               },
+              "includeEmptyValues": {
+                "description": "If true, rows with undefined (NULL) date values will be included in the result. The filter becomes: (date_condition) OR (date IS NULL). If false or not set, standard behavior applies (NULLs excluded by the date condition).",
+                "type": "boolean"
+              },
               "localIdentifier": {
                 "type": "string"
               },
@@ -28322,7 +31521,8 @@
               "ENABLE_AI_ON_DATA",
               "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
               "ENABLE_NULL_JOINS",
-              "EXPORT_CSV_CUSTOM_DELIMITER"
+              "EXPORT_CSV_CUSTOM_DELIMITER",
+              "ENABLE_QUERY_TAGS"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -28721,19 +31921,42 @@
       },
       "SearchRequest": {
         "properties": {
+          "allowedRelationshipTypes": {
+            "description": "Filter relationships and results based on allowed relationship type combinations. When specified, only relationships matching the allowed types are returned, and results are filtered to include only direct matches or objects reachable via allowed relationships. When null or omitted, all relationships and results are returned (default behavior). Note: This filtering happens after the initial search, so the number of returned results may be lower than the requested limit if some results are filtered out.",
+            "items": {
+              "$ref": "#/components/schemas/AllowedRelationshipType"
+            },
+            "type": "array"
+          },
           "deepSearch": {
             "default": false,
             "description": "Turn on deep search. If true, content of complex objects will be searched as well, e.g. metrics in visualizations.",
             "type": "boolean"
+          },
+          "excludeTags": {
+            "description": "Exclude objects that contain any of the specified tags. This parameter only affects the search results. Objects with excluded tags are completely hidden from the results.",
+            "items": {
+              "description": "Tag to exclude.",
+              "type": "string"
+            },
+            "type": "array"
           },
           "includeHidden": {
             "default": false,
             "description": "If true, includes hidden objects in search results. If false (default), excludes objects where isHidden=true.",
             "type": "boolean"
           },
+          "includeTags": {
+            "description": "Include only objects that contain at least one of the specified tags (OR logic). This parameter only affects the search results. If an object has multiple tags, it will be included as long as it matches at least one tag from this parameter.",
+            "items": {
+              "description": "Tag to include.",
+              "type": "string"
+            },
+            "type": "array"
+          },
           "limit": {
             "default": 10,
-            "description": "Maximum number of results to return. There is a hard limit and the actual number of returned results may be lower than what is requested.",
+            "description": "Maximum number of results to return. There is a hard limit and the actual number of returned results may be lower than what is requested. This can happen when post-search filters are applied (e.g., reranker threshold filtering or allowedRelationshipTypes filtering), which may exclude some results after the initial search.",
             "format": "int32",
             "type": "integer"
           },
@@ -28905,6 +32128,13 @@
       "Settings": {
         "description": "Additional settings.",
         "properties": {
+          "delimiter": {
+            "description": "Set column delimiter. (CSV)",
+            "maxLength": 1,
+            "minLength": 1,
+            "pattern": "^[^\r\n\"]$",
+            "type": "string"
+          },
           "exportInfo": {
             "default": false,
             "description": "If true, the export will contain the information about the export – exported date, filters, etc. Works only with `visualizationObject`. (XLSX, PDF)",
@@ -29382,6 +32612,28 @@
         ],
         "type": "object"
       },
+      "SucceededOperation": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Operation"
+          },
+          {
+            "properties": {
+              "result": {
+                "description": "Operation-specific result payload, can be missing for operations like delete",
+                "type": "object"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "description": "Operation that has succeeded",
+        "required": [
+          "id",
+          "kind"
+        ],
+        "type": "object"
+      },
       "Suggestion": {
         "description": "List of suggestions for next steps. Filled when no visualization was created, suggests alternatives.",
         "properties": {
@@ -29609,7 +32861,8 @@
               "FLEXCONNECT",
               "STARROCKS",
               "ATHENA",
-              "MONGODB"
+              "MONGODB",
+              "CRATEDB"
             ],
             "example": "POSTGRESQL",
             "type": "string"
@@ -29914,6 +33167,9 @@
           "processId",
           "status"
         ],
+        "type": "object"
+      },
+      "Unit": {
         "type": "object"
       },
       "UserAssignee": {
@@ -32374,6 +35630,18 @@
       "get": {
         "description": "Resolves values for all settings without workspace by current user, organization, or default settings.",
         "operationId": "resolveAllSettingsWithoutWorkspace",
+        "parameters": [
+          {
+            "description": "If true, user-level settings are excluded from resolution.",
+            "in": "query",
+            "name": "excludeUserSettings",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "content": {
@@ -32398,6 +35666,18 @@
       "post": {
         "description": "Resolves values for selected settings without workspace by current user, organization, or default settings.",
         "operationId": "resolveSettingsWithoutWorkspace",
+        "parameters": [
+          {
+            "description": "If true, user-level settings are excluded from resolution.",
+            "in": "query",
+            "name": "excludeUserSettings",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -34109,9 +37389,9 @@
           "actions"
         ],
         "x-gdc-security-info": {
-          "description": "Permissions required to analyze data.",
+          "description": "Permissions required to view data.",
           "permissions": [
-            "ANALYZE"
+            "VIEW"
           ]
         }
       }
@@ -36376,6 +39656,16 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "If true, user-level settings are excluded from resolution.",
+            "in": "query",
+            "name": "excludeUserSettings",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
           }
         ],
         "responses": {
@@ -36415,6 +39705,16 @@
             "required": true,
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "description": "If true, user-level settings are excluded from resolution.",
+            "in": "query",
+            "name": "excludeUserSettings",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
             }
           }
         ],
@@ -36765,6 +40065,226 @@
           "User management",
           "actions"
         ]
+      }
+    },
+    "/api/v1/ailake/database/instance": {
+      "post": {
+        "description": "(BETA) Creates a new database in the organization's AI Lake. Returns an operation-id in the operation-id header the client can use to poll for the progress.",
+        "operationId": "provisionAiLakeDatabaseInstance",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "operation-id",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProvisionDatabaseInstanceRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unit"
+                }
+              }
+            },
+            "description": "Accepted",
+            "headers": {
+              "operation-id": {
+                "description": "Operation ID to use for polling.",
+                "example": "e9fd5d74-8a1b-46bd-ac60-bd91e9206897",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                },
+                "style": "simple"
+              },
+              "operation-location": {
+                "description": "Operation location URL that can be used for polling.",
+                "example": "/api/v1/ailake/operation/e9fd5d74-8a1b-46bd-ac60-bd91e9206897",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                },
+                "style": "simple"
+              }
+            }
+          }
+        },
+        "summary": "(BETA) Create a new AILake Database instance",
+        "tags": [
+          "AI Lake"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to provision an AI Lake database instance.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
+    "/api/v1/ailake/database/instance/{instanceId}": {
+      "delete": {
+        "description": "(BETA) Deletes an existing database in the organization's AI Lake. Returns an operation-id in the operation-id header the client can use to poll for the progress.",
+        "operationId": "deprovisionAiLakeDatabaseInstance",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "operation-id",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unit"
+                }
+              }
+            },
+            "description": "Accepted",
+            "headers": {
+              "operation-id": {
+                "description": "Operation ID to use for polling.",
+                "example": "e9fd5d74-8a1b-46bd-ac60-bd91e9206897",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                },
+                "style": "simple"
+              },
+              "operation-location": {
+                "description": "Operation location URL that can be used for polling.",
+                "example": "/api/v1/ailake/operation/e9fd5d74-8a1b-46bd-ac60-bd91e9206897",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                },
+                "style": "simple"
+              }
+            }
+          }
+        },
+        "summary": "(BETA) Delete an existing AILake Database instance",
+        "tags": [
+          "AI Lake"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to provision an AI Lake database instance.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      },
+      "get": {
+        "description": "(BETA) Retrieve details of the specified AI Lake database instance in the organization's AI Lake.",
+        "operationId": "getAiLakeDatabaseInstance",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DatabaseInstance"
+                }
+              }
+            },
+            "description": "AI Lake database instance successfully retrieved"
+          }
+        },
+        "summary": "(BETA) Get the specified AILake Database instance",
+        "tags": [
+          "AI Lake"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to get an AI Lake database instance.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
+    "/api/v1/ailake/operation/{operationId}": {
+      "get": {
+        "description": "(BETA) Retrieves details of a Long Running Operation specified by the operation-id.",
+        "operationId": "getAiLakeOperation",
+        "parameters": [
+          {
+            "description": "Operation ID",
+            "example": "e9fd5d74-8a1b-46bd-ac60-bd91e9206897",
+            "in": "path",
+            "name": "operationId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/FailedOperation"
+                    },
+                    {
+                      "$ref": "#/components/schemas/PendingOperation"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SucceededOperation"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "AI Lake Long Running Operation details successfully retrieved"
+          }
+        },
+        "summary": "(BETA) Get Long Running Operation details",
+        "tags": [
+          "AI Lake"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to get details of a Long Running Operation.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
       }
     },
     "/api/v1/entities/admin/cookieSecurityConfigurations/{id}": {
@@ -57105,6 +60625,10 @@
     }
   ],
   "tags": [
+    {
+      "description": "| APIs for interaction with the AI Lake",
+      "name": "AI Lake"
+    },
     {
       "description": "Use case APIs for user management",
       "name": "User management"

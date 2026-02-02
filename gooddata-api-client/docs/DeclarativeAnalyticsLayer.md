@@ -10,6 +10,7 @@ Name | Type | Description | Notes
 **dashboard_plugins** | [**[DeclarativeDashboardPlugin]**](DeclarativeDashboardPlugin.md) | A list of dashboard plugins available in the model. | [optional] 
 **export_definitions** | [**[DeclarativeExportDefinition]**](DeclarativeExportDefinition.md) | A list of export definitions. | [optional] 
 **filter_contexts** | [**[DeclarativeFilterContext]**](DeclarativeFilterContext.md) | A list of filter contexts available in the model. | [optional] 
+**memory_items** | [**[DeclarativeMemoryItem]**](DeclarativeMemoryItem.md) | A list of AI memory items available in the workspace. | [optional] 
 **metrics** | [**[DeclarativeMetric]**](DeclarativeMetric.md) | A list of metrics available in the model. | [optional] 
 **visualization_objects** | [**[DeclarativeVisualizationObject]**](DeclarativeVisualizationObject.md) | A list of visualization objects available in the model. | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]

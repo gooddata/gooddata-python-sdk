@@ -5,15 +5,19 @@ docs/AACLogicalDataModelApi.md
 docs/AFM.md
 docs/AFMFiltersInner.md
 docs/AIApi.md
+docs/AILakeApi.md
 docs/APITokensApi.md
 docs/AacAnalyticsModel.md
 docs/AacApi.md
 docs/AacAttributeHierarchy.md
+docs/AacContainerWidget.md
 docs/AacDashboard.md
 docs/AacDashboardFilter.md
 docs/AacDashboardFilterFrom.md
 docs/AacDashboardPermissions.md
 docs/AacDashboardPluginLink.md
+docs/AacDashboardWithTabs.md
+docs/AacDashboardWithoutTabs.md
 docs/AacDataset.md
 docs/AacDatasetPrimaryKey.md
 docs/AacDateDataset.md
@@ -32,11 +36,22 @@ docs/AacQueryFieldsValue.md
 docs/AacQueryFilter.md
 docs/AacReference.md
 docs/AacReferenceSource.md
+docs/AacRichTextWidget.md
 docs/AacSection.md
 docs/AacTab.md
 docs/AacVisualization.md
+docs/AacVisualizationBasicBuckets.md
+docs/AacVisualizationBubbleBuckets.md
+docs/AacVisualizationDependencyBuckets.md
+docs/AacVisualizationGeoBuckets.md
+docs/AacVisualizationLayer.md
+docs/AacVisualizationScatterBuckets.md
+docs/AacVisualizationStackedBuckets.md
+docs/AacVisualizationSwitcherWidget.md
+docs/AacVisualizationTableBuckets.md
+docs/AacVisualizationTrendBuckets.md
+docs/AacVisualizationWidget.md
 docs/AacWidget.md
-docs/AacWidgetDescription.md
 docs/AacWidgetSize.md
 docs/AacWorkspaceDataFilter.md
 docs/AbsoluteDateFilter.md
@@ -69,6 +84,7 @@ docs/AlertCondition.md
 docs/AlertConditionOperand.md
 docs/AlertDescription.md
 docs/AlertEvaluationRow.md
+docs/AllowedRelationshipType.md
 docs/AnalyticsCatalogCreatedBy.md
 docs/AnalyticsCatalogTags.md
 docs/AnalyticsCatalogUser.md
@@ -183,6 +199,7 @@ docs/DataSourceParameter.md
 docs/DataSourcePermissionAssignment.md
 docs/DataSourceSchemata.md
 docs/DataSourceTableIdentifier.md
+docs/DatabaseInstance.md
 docs/DatasetGrain.md
 docs/DatasetReferenceIdentifier.md
 docs/DatasetWorkspaceDataFilterIdentifier.md
@@ -238,6 +255,7 @@ docs/DeclarativeJwkSpecification.md
 docs/DeclarativeLabel.md
 docs/DeclarativeLabelTranslation.md
 docs/DeclarativeLdm.md
+docs/DeclarativeMemoryItem.md
 docs/DeclarativeMetric.md
 docs/DeclarativeModel.md
 docs/DeclarativeNotificationChannel.md
@@ -322,6 +340,8 @@ docs/ExportResult.md
 docs/ExportTemplatesApi.md
 docs/FactIdentifier.md
 docs/FactsApi.md
+docs/FailedOperation.md
+docs/FailedOperationAllOf.md
 docs/File.md
 docs/Filter.md
 docs/FilterBy.md
@@ -340,6 +360,7 @@ docs/GenerateLogicalDataModelApi.md
 docs/GeoAreaConfig.md
 docs/GeoCollectionIdentifier.md
 docs/GeographicDataApi.md
+docs/GetAiLakeOperation200Response.md
 docs/GetImageExport202ResponseInner.md
 docs/GetQualityIssuesResponse.md
 docs/GrainIdentifier.md
@@ -634,6 +655,7 @@ docs/JsonApiFactPatchDocument.md
 docs/JsonApiFactToManyLinkage.md
 docs/JsonApiFactToOneLinkage.md
 docs/JsonApiFilterContextIn.md
+docs/JsonApiFilterContextInAttributes.md
 docs/JsonApiFilterContextInDocument.md
 docs/JsonApiFilterContextLinkage.md
 docs/JsonApiFilterContextOut.md
@@ -643,6 +665,7 @@ docs/JsonApiFilterContextOutList.md
 docs/JsonApiFilterContextOutRelationships.md
 docs/JsonApiFilterContextOutWithLinks.md
 docs/JsonApiFilterContextPatch.md
+docs/JsonApiFilterContextPatchAttributes.md
 docs/JsonApiFilterContextPatchDocument.md
 docs/JsonApiFilterContextPostOptionalId.md
 docs/JsonApiFilterContextPostOptionalIdDocument.md
@@ -987,6 +1010,8 @@ docs/NotificationsMeta.md
 docs/NotificationsMetaTotal.md
 docs/ObjectLinks.md
 docs/ObjectLinksContainer.md
+docs/Operation.md
+docs/OperationError.md
 docs/OptionsApi.md
 docs/OrganizationApi.md
 docs/OrganizationAutomationIdentifier.md
@@ -1007,6 +1032,7 @@ docs/PdfTableStyle.md
 docs/PdfTableStyleProperty.md
 docs/PdmLdmRequest.md
 docs/PdmSql.md
+docs/PendingOperation.md
 docs/PermissionsApi.md
 docs/PermissionsAssignment.md
 docs/PermissionsForAssignee.md
@@ -1024,6 +1050,7 @@ docs/PopDateMeasureDefinitionOverPeriodMeasure.md
 docs/PopMeasureDefinition.md
 docs/PositiveAttributeFilter.md
 docs/PositiveAttributeFilterPositiveAttributeFilter.md
+docs/ProvisionDatabaseInstanceRequest.md
 docs/QualityIssue.md
 docs/QualityIssueObject.md
 docs/QualityIssuesCalculationStatusResponse.md
@@ -1095,6 +1122,8 @@ docs/SortKeyValueValue.md
 docs/SqlColumn.md
 docs/SqlQuery.md
 docs/SqlQueryAllOf.md
+docs/SucceededOperation.md
+docs/SucceededOperationAllOf.md
 docs/Suggestion.md
 docs/SwitchIdentityProviderRequest.md
 docs/Table.md
@@ -1181,6 +1210,7 @@ gooddata_api_client/api/aac_api.py
 gooddata_api_client/api/aac_logical_data_model_api.py
 gooddata_api_client/api/actions_api.py
 gooddata_api_client/api/ai_api.py
+gooddata_api_client/api/ai_lake_api.py
 gooddata_api_client/api/analytics_model_api.py
 gooddata_api_client/api/api_tokens_api.py
 gooddata_api_client/api/appearance_api.py
@@ -1260,11 +1290,14 @@ gooddata_api_client/exceptions.py
 gooddata_api_client/model/__init__.py
 gooddata_api_client/model/aac_analytics_model.py
 gooddata_api_client/model/aac_attribute_hierarchy.py
+gooddata_api_client/model/aac_container_widget.py
 gooddata_api_client/model/aac_dashboard.py
 gooddata_api_client/model/aac_dashboard_filter.py
 gooddata_api_client/model/aac_dashboard_filter_from.py
 gooddata_api_client/model/aac_dashboard_permissions.py
 gooddata_api_client/model/aac_dashboard_plugin_link.py
+gooddata_api_client/model/aac_dashboard_with_tabs.py
+gooddata_api_client/model/aac_dashboard_without_tabs.py
 gooddata_api_client/model/aac_dataset.py
 gooddata_api_client/model/aac_dataset_primary_key.py
 gooddata_api_client/model/aac_date_dataset.py
@@ -1283,11 +1316,22 @@ gooddata_api_client/model/aac_query_fields_value.py
 gooddata_api_client/model/aac_query_filter.py
 gooddata_api_client/model/aac_reference.py
 gooddata_api_client/model/aac_reference_source.py
+gooddata_api_client/model/aac_rich_text_widget.py
 gooddata_api_client/model/aac_section.py
 gooddata_api_client/model/aac_tab.py
 gooddata_api_client/model/aac_visualization.py
+gooddata_api_client/model/aac_visualization_basic_buckets.py
+gooddata_api_client/model/aac_visualization_bubble_buckets.py
+gooddata_api_client/model/aac_visualization_dependency_buckets.py
+gooddata_api_client/model/aac_visualization_geo_buckets.py
+gooddata_api_client/model/aac_visualization_layer.py
+gooddata_api_client/model/aac_visualization_scatter_buckets.py
+gooddata_api_client/model/aac_visualization_stacked_buckets.py
+gooddata_api_client/model/aac_visualization_switcher_widget.py
+gooddata_api_client/model/aac_visualization_table_buckets.py
+gooddata_api_client/model/aac_visualization_trend_buckets.py
+gooddata_api_client/model/aac_visualization_widget.py
 gooddata_api_client/model/aac_widget.py
-gooddata_api_client/model/aac_widget_description.py
 gooddata_api_client/model/aac_widget_size.py
 gooddata_api_client/model/aac_workspace_data_filter.py
 gooddata_api_client/model/absolute_date_filter.py
@@ -1321,6 +1365,7 @@ gooddata_api_client/model/alert_condition.py
 gooddata_api_client/model/alert_condition_operand.py
 gooddata_api_client/model/alert_description.py
 gooddata_api_client/model/alert_evaluation_row.py
+gooddata_api_client/model/allowed_relationship_type.py
 gooddata_api_client/model/analytics_catalog_created_by.py
 gooddata_api_client/model/analytics_catalog_tags.py
 gooddata_api_client/model/analytics_catalog_user.py
@@ -1421,6 +1466,7 @@ gooddata_api_client/model/data_source_parameter.py
 gooddata_api_client/model/data_source_permission_assignment.py
 gooddata_api_client/model/data_source_schemata.py
 gooddata_api_client/model/data_source_table_identifier.py
+gooddata_api_client/model/database_instance.py
 gooddata_api_client/model/dataset_grain.py
 gooddata_api_client/model/dataset_reference_identifier.py
 gooddata_api_client/model/dataset_workspace_data_filter_identifier.py
@@ -1475,6 +1521,7 @@ gooddata_api_client/model/declarative_jwk_specification.py
 gooddata_api_client/model/declarative_label.py
 gooddata_api_client/model/declarative_label_translation.py
 gooddata_api_client/model/declarative_ldm.py
+gooddata_api_client/model/declarative_memory_item.py
 gooddata_api_client/model/declarative_metric.py
 gooddata_api_client/model/declarative_model.py
 gooddata_api_client/model/declarative_notification_channel.py
@@ -1553,6 +1600,8 @@ gooddata_api_client/model/export_request.py
 gooddata_api_client/model/export_response.py
 gooddata_api_client/model/export_result.py
 gooddata_api_client/model/fact_identifier.py
+gooddata_api_client/model/failed_operation.py
+gooddata_api_client/model/failed_operation_all_of.py
 gooddata_api_client/model/file.py
 gooddata_api_client/model/filter.py
 gooddata_api_client/model/filter_by.py
@@ -1567,6 +1616,7 @@ gooddata_api_client/model/frequency_properties.py
 gooddata_api_client/model/generate_ldm_request.py
 gooddata_api_client/model/geo_area_config.py
 gooddata_api_client/model/geo_collection_identifier.py
+gooddata_api_client/model/get_ai_lake_operation200_response.py
 gooddata_api_client/model/get_image_export202_response_inner.py
 gooddata_api_client/model/get_quality_issues_response.py
 gooddata_api_client/model/grain_identifier.py
@@ -1856,6 +1906,7 @@ gooddata_api_client/model/json_api_fact_patch_document.py
 gooddata_api_client/model/json_api_fact_to_many_linkage.py
 gooddata_api_client/model/json_api_fact_to_one_linkage.py
 gooddata_api_client/model/json_api_filter_context_in.py
+gooddata_api_client/model/json_api_filter_context_in_attributes.py
 gooddata_api_client/model/json_api_filter_context_in_document.py
 gooddata_api_client/model/json_api_filter_context_linkage.py
 gooddata_api_client/model/json_api_filter_context_out.py
@@ -1865,6 +1916,7 @@ gooddata_api_client/model/json_api_filter_context_out_list.py
 gooddata_api_client/model/json_api_filter_context_out_relationships.py
 gooddata_api_client/model/json_api_filter_context_out_with_links.py
 gooddata_api_client/model/json_api_filter_context_patch.py
+gooddata_api_client/model/json_api_filter_context_patch_attributes.py
 gooddata_api_client/model/json_api_filter_context_patch_document.py
 gooddata_api_client/model/json_api_filter_context_post_optional_id.py
 gooddata_api_client/model/json_api_filter_context_post_optional_id_document.py
@@ -2200,6 +2252,8 @@ gooddata_api_client/model/notifications_meta.py
 gooddata_api_client/model/notifications_meta_total.py
 gooddata_api_client/model/object_links.py
 gooddata_api_client/model/object_links_container.py
+gooddata_api_client/model/operation.py
+gooddata_api_client/model/operation_error.py
 gooddata_api_client/model/organization_automation_identifier.py
 gooddata_api_client/model/organization_automation_management_bulk_request.py
 gooddata_api_client/model/organization_permission_assignment.py
@@ -2214,6 +2268,7 @@ gooddata_api_client/model/pdf_table_style.py
 gooddata_api_client/model/pdf_table_style_property.py
 gooddata_api_client/model/pdm_ldm_request.py
 gooddata_api_client/model/pdm_sql.py
+gooddata_api_client/model/pending_operation.py
 gooddata_api_client/model/permissions_assignment.py
 gooddata_api_client/model/permissions_for_assignee.py
 gooddata_api_client/model/permissions_for_assignee_all_of.py
@@ -2229,6 +2284,7 @@ gooddata_api_client/model/pop_date_measure_definition_over_period_measure.py
 gooddata_api_client/model/pop_measure_definition.py
 gooddata_api_client/model/positive_attribute_filter.py
 gooddata_api_client/model/positive_attribute_filter_positive_attribute_filter.py
+gooddata_api_client/model/provision_database_instance_request.py
 gooddata_api_client/model/quality_issue.py
 gooddata_api_client/model/quality_issue_object.py
 gooddata_api_client/model/quality_issues_calculation_status_response.py
@@ -2295,6 +2351,8 @@ gooddata_api_client/model/sort_key_value_value.py
 gooddata_api_client/model/sql_column.py
 gooddata_api_client/model/sql_query.py
 gooddata_api_client/model/sql_query_all_of.py
+gooddata_api_client/model/succeeded_operation.py
+gooddata_api_client/model/succeeded_operation_all_of.py
 gooddata_api_client/model/suggestion.py
 gooddata_api_client/model/switch_identity_provider_request.py
 gooddata_api_client/model/table.py

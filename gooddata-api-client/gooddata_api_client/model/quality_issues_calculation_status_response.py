@@ -62,6 +62,7 @@ class QualityIssuesCalculationStatusResponse(ModelNormal):
     allowed_values = {
         ('status',): {
             'RUNNING': "RUNNING",
+            'SYNCING': "SYNCING",
             'COMPLETED': "COMPLETED",
             'FAILED': "FAILED",
             'NOT_FOUND': "NOT_FOUND",
