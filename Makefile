@@ -67,14 +67,14 @@ download:
 	$(call download_client,"export")
 	$(call download_client,automation)
 
-.PHONY: mypy
-mypy:
+.PHONY: type-check
+type-check:
 	RESULT=0; \
-	for project in $(NO_CLIENT_GD_PROJECTS_DIRS); do $(MAKE) -C packages/$${project} mypy || RESULT=$$?; done; \
+	for project in $(NO_CLIENT_GD_PROJECTS_DIRS); do $(MAKE) -C packages/$${project} type-check || RESULT=$$?; done; \
 	exit $$RESULT
 
 .PHONY: types
-types: mypy
+types: type-check
 
 .PHONY: test
 test:

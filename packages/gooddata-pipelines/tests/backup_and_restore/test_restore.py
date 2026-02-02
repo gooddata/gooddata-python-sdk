@@ -48,7 +48,7 @@ def s3_storage(mocker, conf_s3: BackupRestoreConfig) -> S3Storage:
 @pytest.fixture()
 def s3_bucket(mocker, s3_storage: S3Storage):
     bucket = mocker.MagicMock()
-    s3_storage._bucket = bucket  # type: ignore[attr-defined]
+    s3_storage._bucket = bucket
     return bucket
 
 

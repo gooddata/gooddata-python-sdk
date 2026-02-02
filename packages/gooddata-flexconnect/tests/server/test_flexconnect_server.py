@@ -184,6 +184,7 @@ def test_cancellable_function_with_polling(call_options_with_polling):
         assert_error_code(ErrorCode.POLL, e.value)
 
         error_info = ErrorInfo.from_bytes(e.value.extra_info)
+        assert error_info.body is not None
         retry_info = RetryInfo.from_bytes(error_info.body)
 
         # use the retry info to poll again for the result,
@@ -233,6 +234,7 @@ def test_cancellable_function_with_call_deadline(call_options_with_polling):
         assert_error_code(ErrorCode.POLL, e.value)
 
         error_info = ErrorInfo.from_bytes(e.value.extra_info)
+        assert error_info.body is not None
         retry_info = RetryInfo.from_bytes(error_info.body)
 
         # the next poll still returns polling info
@@ -272,6 +274,7 @@ def test_cancellable_function_with_cancellation(call_options_with_polling):
         assert_error_code(ErrorCode.POLL, e.value)
 
         error_info = ErrorInfo.from_bytes(e.value.extra_info)
+        assert error_info.body is not None
         retry_info = RetryInfo.from_bytes(error_info.body)
 
         # use the poll info to cancel the task

@@ -117,7 +117,7 @@ def test_get_wdf_settings_for_workspace_invalid_payload(
 def test_get_actual_wdf_setting_id_and_values(wdf_manager) -> None:
     """Test getting the actual WDF setting ID and values."""
     data: dict[str, Any] = WDF_VALID_PAYLOAD["data"][0]
-    actual_wdf_settings: list[WDFSetting] = [WDFSetting(**data)]
+    actual_wdf_settings: list[WDFSetting] = [WDFSetting(**data)]  # type: ignore[arg-type]
     wdf_id: str = "expected_wdf_id"
 
     actual_wdf_setting_id, actual_wdf_values = (
@@ -151,7 +151,7 @@ def test_get_actual_wdf_setting_id_and_values_no_actuals(wdf_manager) -> None:
 def test_get_actual_wdf_setting_id_and_values_no_match(wdf_manager) -> None:
     """Should raise ValueError if no match is found"""
     data: dict[str, Any] = WDF_VALID_PAYLOAD["data"][0]
-    actual_wdf_settings: list[WDFSetting] = [WDFSetting(**data)]
+    actual_wdf_settings: list[WDFSetting] = [WDFSetting(**data)]  # type: ignore[arg-type]
     wdf_id: str = "non_existent_wdf_id"
 
     with pytest.raises(WorkspaceException):

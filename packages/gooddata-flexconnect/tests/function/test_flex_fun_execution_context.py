@@ -22,6 +22,7 @@ def test_report_execution_context_deser(sample_report_execution_context_dict):
     """
     deserialized = ExecutionContext.from_dict(sample_report_execution_context_dict)
 
+    assert deserialized is not None
     assert deserialized.execution_type == ExecutionType.REPORT
     assert deserialized.organization_id == "default"
     assert deserialized.label_elements_execution_request is None
@@ -42,6 +43,7 @@ def test_label_elements_execution_context_deser(sample_label_execution_context_d
     """
     deserialized = ExecutionContext.from_dict(sample_label_execution_context_dict)
 
+    assert deserialized is not None
     assert deserialized.execution_type == ExecutionType.LABEL_ELEMENTS
     assert deserialized.organization_id == "default"
     assert deserialized.report_execution_request is None
@@ -49,7 +51,9 @@ def test_label_elements_execution_context_deser(sample_label_execution_context_d
     assert deserialized.label_elements_execution_request is not None
     assert isinstance(deserialized.label_elements_execution_request.filter_by, CatalogFilterBy)
     assert deserialized.label_elements_execution_request.filter_by.label_type == "REQUESTED"
+    assert deserialized.label_elements_execution_request.depends_on is not None
     assert isinstance(deserialized.label_elements_execution_request.depends_on[0], CatalogDependsOn)
+    assert deserialized.label_elements_execution_request.validate_by is not None
     assert isinstance(deserialized.label_elements_execution_request.validate_by[0], CatalogValidateByItem)
 
     assert isinstance(deserialized.attributes[0], ExecutionContextAttribute)

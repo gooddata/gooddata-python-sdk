@@ -10,7 +10,7 @@ class MockMethods(FlightServerMethods):
 
 # the function is decorated with the `flight_server_methods` decorator
 # but has a wrong signature
-@flight_server_methods
+@flight_server_methods  # type: ignore[arg-type]
 def mockMethodsFactory(ctx: ServerContext, extra_parameter: str) -> MockMethods:
     print(extra_parameter)
     return MockMethods(ctx)
