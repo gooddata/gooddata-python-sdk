@@ -56,6 +56,10 @@
                 "pattern": "^\\d{4}-\\d{1,2}-\\d{1,2}( \\d{1,2}:\\d{1,2})?$",
                 "type": "string"
               },
+              "includeEmptyValues": {
+                "description": "If true, rows with undefined (NULL) date values will be included in the result. The filter becomes: (date_condition) OR (date IS NULL). If false or not set, standard behavior applies (NULLs excluded by the date condition).",
+                "type": "boolean"
+              },
               "localIdentifier": {
                 "type": "string"
               },
@@ -421,6 +425,49 @@
         },
         "required": [
           "items"
+        ],
+        "type": "object"
+      },
+      "AllowedRelationshipType": {
+        "description": "Allowed relationship type combination.",
+        "properties": {
+          "allowOrphans": {
+            "default": true,
+            "description": "If true, allows target objects that are not part of any relationship (orphans) to be included in results. If false, orphan target objects will be excluded even if they directly match the search query. Default is true (orphans are allowed).",
+            "type": "boolean"
+          },
+          "sourceType": {
+            "description": "Source object type (e.g., 'dashboard', 'visualization', 'metric').",
+            "enum": [
+              "attribute",
+              "metric",
+              "fact",
+              "label",
+              "date",
+              "dataset",
+              "visualization",
+              "dashboard"
+            ],
+            "type": "string"
+          },
+          "targetType": {
+            "description": "Target object type (e.g., 'visualization', 'metric', 'attribute').",
+            "enum": [
+              "attribute",
+              "metric",
+              "fact",
+              "label",
+              "date",
+              "dataset",
+              "visualization",
+              "dashboard"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "sourceType",
+          "targetType"
         ],
         "type": "object"
       },
@@ -1674,6 +1721,34 @@
         },
         "type": "object"
       },
+      "DatabaseInstance": {
+        "description": "A single AI Lake Database instance",
+        "properties": {
+          "id": {
+            "description": "Id of the AI Lake Database instance",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of the AI Lake Database instance",
+            "type": "string"
+          },
+          "storageIds": {
+            "description": "Set of ids of the storage instances this database instance should access.",
+            "items": {
+              "description": "Set of ids of the storage instances this database instance should access.",
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "storageIds"
+        ],
+        "type": "object"
+      },
       "DateAbsoluteFilter": {
         "allOf": [
           {
@@ -2306,6 +2381,28 @@
         },
         "type": "object"
       },
+      "FailedOperation": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Operation"
+          },
+          {
+            "properties": {
+              "error": {
+                "$ref": "#/components/schemas/OperationError"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "description": "Operation that has failed",
+        "required": [
+          "error",
+          "id",
+          "kind"
+        ],
+        "type": "object"
+      },
       "Filter": {
         "description": "List of filters to be applied to the new visualization",
         "type": "object"
@@ -2512,6 +2609,7 @@
             "description": "Status of the latest triggered quality check process",
             "enum": [
               "RUNNING",
+              "SYNCING",
               "COMPLETED",
               "FAILED",
               "NOT_FOUND",
@@ -3020,6 +3118,64 @@
         ],
         "type": "object"
       },
+      "Operation": {
+        "description": "Represents a Long-Running Operation: a process that takes some time to complete.",
+        "discriminator": {
+          "mapping": {
+            "failed": "#/components/schemas/FailedOperation",
+            "pending": "#/components/schemas/PendingOperation",
+            "succeeded": "#/components/schemas/SucceededOperation"
+          },
+          "propertyName": "status"
+        },
+        "properties": {
+          "id": {
+            "description": "Id of the operation",
+            "type": "string"
+          },
+          "kind": {
+            "description": "Type of the long-running operation. \n* `provision-database` — Provisioning of an AI Lake database. \n* `deprovision-database` — Deprovisioning (deletion) of an AI Lake database.\n",
+            "enum": [
+              "provision-database",
+              "deprovision-database"
+            ],
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "status"
+        ],
+        "type": "object"
+      },
+      "OperationError": {
+        "description": "Error information for a failed operation",
+        "properties": {
+          "detail": {
+            "description": "Human-readable error details",
+            "type": "string"
+          },
+          "status": {
+            "description": "HTTP status code",
+            "format": "int32",
+            "type": "integer"
+          },
+          "title": {
+            "description": "Human-readable error name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "detail",
+          "status",
+          "title"
+        ],
+        "type": "object"
+      },
       "OutlierDetectionRequest": {
         "properties": {
           "attributes": {
@@ -3168,6 +3324,19 @@
         ],
         "type": "object"
       },
+      "PendingOperation": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Operation"
+          }
+        ],
+        "description": "Operation that is still pending",
+        "required": [
+          "id",
+          "kind"
+        ],
+        "type": "object"
+      },
       "PopDataset": {
         "description": "Combination of the date data set to use and how many periods ago to calculate the previous period for.",
         "properties": {
@@ -3303,6 +3472,29 @@
         ],
         "type": "object"
       },
+      "ProvisionDatabaseInstanceRequest": {
+        "description": "Request to provision a new AILake Database instance",
+        "properties": {
+          "name": {
+            "description": "Name of the database instance",
+            "type": "string"
+          },
+          "storageIds": {
+            "description": "Set of ids of the storage instances this database instance should access.",
+            "items": {
+              "description": "Set of ids of the storage instances this database instance should access.",
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "name",
+          "storageIds"
+        ],
+        "type": "object"
+      },
       "QualityIssue": {
         "description": "List of quality issues (available when status is COMPLETED)",
         "properties": {
@@ -3397,6 +3589,7 @@
             "description": "Current status of the calculation",
             "enum": [
               "RUNNING",
+              "SYNCING",
               "COMPLETED",
               "FAILED",
               "NOT_FOUND",
@@ -3641,6 +3834,10 @@
                 ],
                 "example": "DAY",
                 "type": "string"
+              },
+              "includeEmptyValues": {
+                "description": "If true, rows with undefined (NULL) date values will be included in the result. The filter becomes: (date_condition) OR (date IS NULL). If false or not set, standard behavior applies (NULLs excluded by the date condition).",
+                "type": "boolean"
               },
               "localIdentifier": {
                 "type": "string"
@@ -3889,19 +4086,42 @@
       },
       "SearchRequest": {
         "properties": {
+          "allowedRelationshipTypes": {
+            "description": "Filter relationships and results based on allowed relationship type combinations. When specified, only relationships matching the allowed types are returned, and results are filtered to include only direct matches or objects reachable via allowed relationships. When null or omitted, all relationships and results are returned (default behavior). Note: This filtering happens after the initial search, so the number of returned results may be lower than the requested limit if some results are filtered out.",
+            "items": {
+              "$ref": "#/components/schemas/AllowedRelationshipType"
+            },
+            "type": "array"
+          },
           "deepSearch": {
             "default": false,
             "description": "Turn on deep search. If true, content of complex objects will be searched as well, e.g. metrics in visualizations.",
             "type": "boolean"
+          },
+          "excludeTags": {
+            "description": "Exclude objects that contain any of the specified tags. This parameter only affects the search results. Objects with excluded tags are completely hidden from the results.",
+            "items": {
+              "description": "Tag to exclude.",
+              "type": "string"
+            },
+            "type": "array"
           },
           "includeHidden": {
             "default": false,
             "description": "If true, includes hidden objects in search results. If false (default), excludes objects where isHidden=true.",
             "type": "boolean"
           },
+          "includeTags": {
+            "description": "Include only objects that contain at least one of the specified tags (OR logic). This parameter only affects the search results. If an object has multiple tags, it will be included as long as it matches at least one tag from this parameter.",
+            "items": {
+              "description": "Tag to include.",
+              "type": "string"
+            },
+            "type": "array"
+          },
           "limit": {
             "default": 10,
-            "description": "Maximum number of results to return. There is a hard limit and the actual number of returned results may be lower than what is requested.",
+            "description": "Maximum number of results to return. There is a hard limit and the actual number of returned results may be lower than what is requested. This can happen when post-search filters are applied (e.g., reranker threshold filtering or allowedRelationshipTypes filtering), which may exclude some results after the initial search.",
             "format": "int32",
             "type": "integer"
           },
@@ -4226,6 +4446,28 @@
         ],
         "type": "object"
       },
+      "SucceededOperation": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Operation"
+          },
+          {
+            "properties": {
+              "result": {
+                "description": "Operation-specific result payload, can be missing for operations like delete",
+                "type": "object"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "description": "Operation that has succeeded",
+        "required": [
+          "id",
+          "kind"
+        ],
+        "type": "object"
+      },
       "Suggestion": {
         "description": "List of suggestions for next steps. Filled when no visualization was created, suggests alternatives.",
         "properties": {
@@ -4368,6 +4610,9 @@
           "processId",
           "status"
         ],
+        "type": "object"
+      },
+      "Unit": {
         "type": "object"
       },
       "UserContext": {
@@ -5172,9 +5417,9 @@
           "actions"
         ],
         "x-gdc-security-info": {
-          "description": "Permissions required to analyze data.",
+          "description": "Permissions required to view data.",
           "permissions": [
-            "ANALYZE"
+            "VIEW"
           ]
         }
       }
@@ -6295,6 +6540,226 @@
           "actions"
         ]
       }
+    },
+    "/api/v1/ailake/database/instance": {
+      "post": {
+        "description": "(BETA) Creates a new database in the organization's AI Lake. Returns an operation-id in the operation-id header the client can use to poll for the progress.",
+        "operationId": "provisionAiLakeDatabaseInstance",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "operation-id",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProvisionDatabaseInstanceRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unit"
+                }
+              }
+            },
+            "description": "Accepted",
+            "headers": {
+              "operation-id": {
+                "description": "Operation ID to use for polling.",
+                "example": "e9fd5d74-8a1b-46bd-ac60-bd91e9206897",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                },
+                "style": "simple"
+              },
+              "operation-location": {
+                "description": "Operation location URL that can be used for polling.",
+                "example": "/api/v1/ailake/operation/e9fd5d74-8a1b-46bd-ac60-bd91e9206897",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                },
+                "style": "simple"
+              }
+            }
+          }
+        },
+        "summary": "(BETA) Create a new AILake Database instance",
+        "tags": [
+          "AI Lake"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to provision an AI Lake database instance.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
+    "/api/v1/ailake/database/instance/{instanceId}": {
+      "delete": {
+        "description": "(BETA) Deletes an existing database in the organization's AI Lake. Returns an operation-id in the operation-id header the client can use to poll for the progress.",
+        "operationId": "deprovisionAiLakeDatabaseInstance",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "operation-id",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unit"
+                }
+              }
+            },
+            "description": "Accepted",
+            "headers": {
+              "operation-id": {
+                "description": "Operation ID to use for polling.",
+                "example": "e9fd5d74-8a1b-46bd-ac60-bd91e9206897",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                },
+                "style": "simple"
+              },
+              "operation-location": {
+                "description": "Operation location URL that can be used for polling.",
+                "example": "/api/v1/ailake/operation/e9fd5d74-8a1b-46bd-ac60-bd91e9206897",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                },
+                "style": "simple"
+              }
+            }
+          }
+        },
+        "summary": "(BETA) Delete an existing AILake Database instance",
+        "tags": [
+          "AI Lake"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to provision an AI Lake database instance.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      },
+      "get": {
+        "description": "(BETA) Retrieve details of the specified AI Lake database instance in the organization's AI Lake.",
+        "operationId": "getAiLakeDatabaseInstance",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DatabaseInstance"
+                }
+              }
+            },
+            "description": "AI Lake database instance successfully retrieved"
+          }
+        },
+        "summary": "(BETA) Get the specified AILake Database instance",
+        "tags": [
+          "AI Lake"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to get an AI Lake database instance.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
+    "/api/v1/ailake/operation/{operationId}": {
+      "get": {
+        "description": "(BETA) Retrieves details of a Long Running Operation specified by the operation-id.",
+        "operationId": "getAiLakeOperation",
+        "parameters": [
+          {
+            "description": "Operation ID",
+            "example": "e9fd5d74-8a1b-46bd-ac60-bd91e9206897",
+            "in": "path",
+            "name": "operationId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/FailedOperation"
+                    },
+                    {
+                      "$ref": "#/components/schemas/PendingOperation"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SucceededOperation"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "AI Lake Long Running Operation details successfully retrieved"
+          }
+        },
+        "summary": "(BETA) Get Long Running Operation details",
+        "tags": [
+          "AI Lake"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to get details of a Long Running Operation.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
     }
   },
   "servers": [
@@ -6304,6 +6769,10 @@
     }
   ],
   "tags": [
+    {
+      "description": "| APIs for interaction with the AI Lake",
+      "name": "AI Lake"
+    },
     {
       "description": "| execution of some form of computation (RPC over JSON)",
       "name": "actions"

@@ -45,9 +45,7 @@ interactions:
       body:
         string:
           data:
-            - id: campaign_name
-              type: attribute
-              attributes:
+            - attributes:
                 title: Campaign name
                 description: Campaign name
                 tags:
@@ -55,6 +53,13 @@ interactions:
                 areRelationsValid: true
                 sourceColumn: campaign_name
                 sourceColumnDataType: STRING
+              id: campaign_name
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_name
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
               relationships:
                 dataset:
                   data:
@@ -64,16 +69,9 @@ interactions:
                   data:
                     - id: campaign_name
                       type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_name
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
+              type: attribute
           included:
-            - id: campaigns
-              type: dataset
-              attributes:
+            - attributes:
                 title: Campaigns
                 description: Campaigns
                 tags:
@@ -86,11 +84,11 @@ interactions:
                   - demo
                   - campaigns
                 type: NORMAL
+              id: campaigns
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/campaigns
-            - id: campaign_name
-              type: label
-              attributes:
+              type: dataset
+            - attributes:
                 title: Campaign name
                 description: Campaign name
                 tags:
@@ -99,8 +97,10 @@ interactions:
                 sourceColumn: campaign_name
                 sourceColumnDataType: STRING
                 valueType: TEXT
+              id: campaign_name
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_name
+              type: label
           links:
             self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3D%3D%27campaign_name%27&page=0&size=500
             next: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3D%3D%27campaign_name%27&page=1&size=500
@@ -147,9 +147,7 @@ interactions:
       body:
         string:
           data:
-            - id: region
-              type: attribute
-              attributes:
+            - attributes:
                 title: Region
                 description: Region
                 tags:
@@ -157,6 +155,13 @@ interactions:
                 areRelationsValid: true
                 sourceColumn: region
                 sourceColumnDataType: STRING
+              id: region
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/region
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
               relationships:
                 dataset:
                   data:
@@ -166,16 +171,9 @@ interactions:
                   data:
                     - id: region
                       type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/region
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
+              type: attribute
           included:
-            - id: customers
-              type: dataset
-              attributes:
+            - attributes:
                 title: Customers
                 description: Customers
                 tags:
@@ -188,11 +186,11 @@ interactions:
                   - demo
                   - customers
                 type: NORMAL
+              id: customers
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/customers
-            - id: region
-              type: label
-              attributes:
+              type: dataset
+            - attributes:
                 title: Region
                 description: Region
                 tags:
@@ -201,8 +199,10 @@ interactions:
                 sourceColumn: region
                 sourceColumnDataType: STRING
                 valueType: TEXT
+              id: region
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/region
+              type: label
           links:
             self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3D%3D%27region%27&page=0&size=500
             next: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3D%3D%27region%27&page=1&size=500

@@ -42,7 +42,7 @@ with gooddata_api_client.ApiClient() as api_client:
     workspace_id = "workspaceId_example" # str | 
     json_api_filter_context_post_optional_id_document = JsonApiFilterContextPostOptionalIdDocument(
         data=JsonApiFilterContextPostOptionalId(
-            attributes=JsonApiAnalyticalDashboardInAttributes(
+            attributes=JsonApiFilterContextInAttributes(
                 are_relations_valid=True,
                 content={},
                 description="description_example",
@@ -401,7 +401,7 @@ with gooddata_api_client.ApiClient() as api_client:
     object_id = "objectId_example" # str | 
     json_api_filter_context_patch_document = JsonApiFilterContextPatchDocument(
         data=JsonApiFilterContextPatch(
-            attributes=JsonApiAnalyticalDashboardPatchAttributes(
+            attributes=JsonApiFilterContextPatchAttributes(
                 are_relations_valid=True,
                 content={},
                 description="description_example",
@@ -599,7 +599,7 @@ with gooddata_api_client.ApiClient() as api_client:
     object_id = "objectId_example" # str | 
     json_api_filter_context_in_document = JsonApiFilterContextInDocument(
         data=JsonApiFilterContextIn(
-            attributes=JsonApiAnalyticalDashboardInAttributes(
+            attributes=JsonApiFilterContextInAttributes(
                 are_relations_valid=True,
                 content={},
                 description="description_example",

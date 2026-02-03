@@ -1,6 +1,6 @@
 # AacQueryFilter
 
-Query filters map: localId -> filter definition.
+Layer filters.
 
 ## Properties
 Name | Type | Description | Notes
@@ -10,8 +10,11 @@ Name | Type | Description | Notes
 **attribute** | **str** | Attribute for ranking filter (identifier or localId). | [optional] 
 **bottom** | **int** | Bottom N for ranking filter. | [optional] 
 **condition** | **str** | Condition for metric value filter. | [optional] 
+**dimensionality** | **[str]** | Dimensionality for metric value filter. | [optional] 
+**display_as** | **str** | Display as label (attribute filter). | [optional] 
 **_from** | [**AacDashboardFilterFrom**](AacDashboardFilterFrom.md) |  | [optional] 
 **granularity** | **str** | Date granularity (date filter). | [optional] 
+**null_values_as_zero** | **bool** | Null values are treated as zero (metric value filter). | [optional] 
 **state** | [**AacFilterState**](AacFilterState.md) |  | [optional] 
 **to** | [**AacDashboardFilterFrom**](AacDashboardFilterFrom.md) |  | [optional] 
 **top** | **int** | Top N for ranking filter. | [optional] 

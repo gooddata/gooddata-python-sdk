@@ -98,6 +98,7 @@ class JsonApiMetricPatchAttributes(ModelNormal):
             'content': (JsonApiMetricInAttributesContent,),  # noqa: E501
             'description': (str,),  # noqa: E501
             'is_hidden': (bool,),  # noqa: E501
+            'is_hidden_from_kda': (bool,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
             'title': (str,),  # noqa: E501
         }
@@ -112,6 +113,7 @@ class JsonApiMetricPatchAttributes(ModelNormal):
         'content': 'content',  # noqa: E501
         'description': 'description',  # noqa: E501
         'is_hidden': 'isHidden',  # noqa: E501
+        'is_hidden_from_kda': 'isHiddenFromKda',  # noqa: E501
         'tags': 'tags',  # noqa: E501
         'title': 'title',  # noqa: E501
     }
@@ -161,6 +163,7 @@ class JsonApiMetricPatchAttributes(ModelNormal):
             content (JsonApiMetricInAttributesContent): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             is_hidden (bool): [optional]  # noqa: E501
+            is_hidden_from_kda (bool): [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
         """
@@ -252,6 +255,7 @@ class JsonApiMetricPatchAttributes(ModelNormal):
             content (JsonApiMetricInAttributesContent): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             is_hidden (bool): [optional]  # noqa: E501
+            is_hidden_from_kda (bool): [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
         """

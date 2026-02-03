@@ -46,6 +46,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 are_relations_valid=True,
                 content={},
                 description="description_example",
+                summary="summary_example",
                 tags=[
                     "tags_example",
                 ],
@@ -405,6 +406,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 are_relations_valid=True,
                 content={},
                 description="description_example",
+                summary="summary_example",
                 tags=[
                     "tags_example",
                 ],
@@ -603,6 +605,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 are_relations_valid=True,
                 content={},
                 description="description_example",
+                summary="summary_example",
                 tags=[
                     "tags_example",
                 ],

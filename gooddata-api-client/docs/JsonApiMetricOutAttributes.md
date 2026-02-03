@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **created_at** | **datetime** |  | [optional] 
 **description** | **str** |  | [optional] 
 **is_hidden** | **bool** |  | [optional] 
+**is_hidden_from_kda** | **bool** |  | [optional] 
 **modified_at** | **datetime** |  | [optional] 
 **tags** | **[str]** |  | [optional] 
 **title** | **str** |  | [optional] 

@@ -32,10 +32,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.json_api_aggregated_fact_out_meta import JsonApiAggregatedFactOutMeta
-    from gooddata_api_client.model.json_api_analytical_dashboard_in_attributes import JsonApiAnalyticalDashboardInAttributes
+    from gooddata_api_client.model.json_api_filter_context_in_attributes import JsonApiFilterContextInAttributes
     from gooddata_api_client.model.json_api_filter_context_out_relationships import JsonApiFilterContextOutRelationships
     globals()['JsonApiAggregatedFactOutMeta'] = JsonApiAggregatedFactOutMeta
-    globals()['JsonApiAnalyticalDashboardInAttributes'] = JsonApiAnalyticalDashboardInAttributes
+    globals()['JsonApiFilterContextInAttributes'] = JsonApiFilterContextInAttributes
     globals()['JsonApiFilterContextOutRelationships'] = JsonApiFilterContextOutRelationships
 
 
@@ -100,7 +100,7 @@ class JsonApiFilterContextOut(ModelNormal):
         """
         lazy_import()
         return {
-            'attributes': (JsonApiAnalyticalDashboardInAttributes,),  # noqa: E501
+            'attributes': (JsonApiFilterContextInAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
             'meta': (JsonApiAggregatedFactOutMeta,),  # noqa: E501
@@ -131,7 +131,7 @@ class JsonApiFilterContextOut(ModelNormal):
         """JsonApiFilterContextOut - a model defined in OpenAPI
 
         Args:
-            attributes (JsonApiAnalyticalDashboardInAttributes):
+            attributes (JsonApiFilterContextInAttributes):
             id (str): API identifier of an object
 
         Keyword Args:
@@ -227,7 +227,7 @@ class JsonApiFilterContextOut(ModelNormal):
         """JsonApiFilterContextOut - a model defined in OpenAPI
 
         Args:
-            attributes (JsonApiAnalyticalDashboardInAttributes):
+            attributes (JsonApiFilterContextInAttributes):
             id (str): API identifier of an object
 
         Keyword Args:

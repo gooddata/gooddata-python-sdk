@@ -44,7 +44,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 641cb9b9dead2218886cdc0257c4d4f2
+          traceId: d67df258f0aa9e1b0fb6bd9f343bbb6d
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces
@@ -95,10 +95,10 @@ interactions:
       body:
         string:
           data:
-            id: test_put_declarative_analytics_model
-            type: workspace
             attributes:
               name: test_put_declarative_analytics_model
+            id: test_put_declarative_analytics_model
+            type: workspace
           links:
             self: http://localhost:3000/api/v1/entities/workspaces/test_put_declarative_analytics_model
   - request:

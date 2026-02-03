@@ -45,8 +45,6 @@ interactions:
       body:
         string:
           data:
-            id: revenue_and_quantity_by_product_and_category
-            type: visualizationObject
             attributes:
               title: Revenue and Quantity by Product and Category
               areRelationsValid: true
@@ -143,7 +141,12 @@ interactions:
                       direction: asc
                 version: '2'
                 visualizationUrl: local:table
-              createdAt: 2025-08-07 11:45
+              createdAt: 2026-02-03 13:15
+            id: revenue_and_quantity_by_product_and_category
+            meta:
+              origin:
+                originId: demo
+                originType: NATIVE
             relationships:
               createdBy:
                 data:
@@ -169,48 +172,43 @@ interactions:
                     type: label
                   - id: customer_name
                     type: label
-            meta:
-              origin:
-                originType: NATIVE
-                originId: demo
+            type: visualizationObject
           included:
-            - id: quantity
-              type: fact
-              attributes:
+            - attributes:
                 title: Quantity
                 description: Quantity
                 tags:
                   - Order lines
                 sourceColumn: quantity
                 sourceColumnDataType: NUMERIC
+              id: quantity
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/facts/quantity
-            - id: revenue
-              type: metric
-              attributes:
+              type: fact
+            - attributes:
                 title: Revenue
                 description: ''
                 content:
                   format: $#,##0
                   maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
-                createdAt: 2025-08-07 11:45
+                createdAt: 2026-02-03 13:15
+              id: revenue
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue
-            - id: price
-              type: fact
-              attributes:
+              type: metric
+            - attributes:
                 title: Price
                 description: Price
                 tags:
                   - Order lines
                 sourceColumn: price
                 sourceColumnDataType: NUMERIC
+              id: price
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/facts/price
-            - id: product_name
-              type: label
-              attributes:
+              type: fact
+            - attributes:
                 title: Product name
                 description: Product name
                 tags:
@@ -219,16 +217,16 @@ interactions:
                 sourceColumn: product_name
                 sourceColumnDataType: STRING
                 valueType: TEXT
+              id: product_name
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/product_name
-            - id: admin
-              type: userIdentifier
-              attributes: {}
+              type: label
+            - attributes: {}
+              id: admin
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/userIdentifiers/admin
-            - id: customer_name
-              type: label
-              attributes:
+              type: userIdentifier
+            - attributes:
                 title: Customer name
                 description: Customer name
                 tags:
@@ -237,22 +235,22 @@ interactions:
                 sourceColumn: customer_name
                 sourceColumnDataType: STRING
                 valueType: TEXT
+              id: customer_name
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/customer_name
-            - id: percent_revenue_in_category
-              type: metric
-              attributes:
+              type: label
+            - attributes:
                 title: '% Revenue in Category'
                 content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
                     ALL OTHER)
-                createdAt: 2025-08-07 11:45
+                createdAt: 2026-02-03 13:15
+              id: percent_revenue_in_category
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_in_category
-            - id: products.category
-              type: label
-              attributes:
+              type: metric
+            - attributes:
                 title: Category
                 description: Category
                 tags:
@@ -261,8 +259,10 @@ interactions:
                 sourceColumn: category
                 sourceColumnDataType: STRING
                 valueType: TEXT
+              id: products.category
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/products.category
+              type: label
           links:
             self: http://localhost:3000/api/v1/entities/workspaces/demo/visualizationObjects/revenue_and_quantity_by_product_and_category?include=ALL
   - request:
@@ -370,7 +370,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-Gdc-Cancel-Token:
-          - 69544830-d861-45b7-a345-fd0353aa7c41
+          - 54d74f09-52b4-421f-a235-cf30804e9662
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - '0'
@@ -422,10 +422,10 @@ interactions:
                         name: Revenue
                 localIdentifier: dim_1
             links:
-              executionResult: 715fa2ca70ed41b95801db67a39f198f20bfe317:e2d1d6382ed7a0b4795ba06474bb6ed4ec69f0b56f64712d6bb3a93d5e4c24ee
+              executionResult: f6ca7eab333460cb2590f3f5e55c47646e141e04:021965d4a9a0b12b74d781ddca1d58908af28f84f12cc6243a26e8201f359302
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/715fa2ca70ed41b95801db67a39f198f20bfe317%3Ae2d1d6382ed7a0b4795ba06474bb6ed4ec69f0b56f64712d6bb3a93d5e4c24ee?offset=0%2C0&limit=512%2C256
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/f6ca7eab333460cb2590f3f5e55c47646e141e04%3A021965d4a9a0b12b74d781ddca1d58908af28f84f12cc6243a26e8201f359302?offset=0%2C0&limit=512%2C256
       body: null
       headers:
         Accept:
