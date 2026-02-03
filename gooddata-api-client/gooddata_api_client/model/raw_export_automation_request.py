@@ -74,6 +74,13 @@ class RawExportAutomationRequest(ModelNormal):
     }
 
     validations = {
+        ('delimiter',): {
+            'max_length': 1,
+            'min_length': 1,
+            'regex': {
+                'pattern': r'^[^\r\n"]$',  # noqa: E501
+            },
+        },
     }
 
     @cached_property
@@ -103,6 +110,7 @@ class RawExportAutomationRequest(ModelNormal):
             'file_name': (str,),  # noqa: E501
             'format': (str,),  # noqa: E501
             'custom_override': (RawCustomOverride,),  # noqa: E501
+            'delimiter': (str,),  # noqa: E501
             'execution_settings': (ExecutionSettings,),  # noqa: E501
             'metadata': (JsonNode,),  # noqa: E501
         }
@@ -117,6 +125,7 @@ class RawExportAutomationRequest(ModelNormal):
         'file_name': 'fileName',  # noqa: E501
         'format': 'format',  # noqa: E501
         'custom_override': 'customOverride',  # noqa: E501
+        'delimiter': 'delimiter',  # noqa: E501
         'execution_settings': 'executionSettings',  # noqa: E501
         'metadata': 'metadata',  # noqa: E501
     }
@@ -168,6 +177,7 @@ class RawExportAutomationRequest(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             custom_override (RawCustomOverride): [optional]  # noqa: E501
+            delimiter (str): Set column delimiter. (CSV). [optional]  # noqa: E501
             execution_settings (ExecutionSettings): [optional]  # noqa: E501
             metadata (JsonNode): [optional]  # noqa: E501
         """
@@ -264,6 +274,7 @@ class RawExportAutomationRequest(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             custom_override (RawCustomOverride): [optional]  # noqa: E501
+            delimiter (str): Set column delimiter. (CSV). [optional]  # noqa: E501
             execution_settings (ExecutionSettings): [optional]  # noqa: E501
             metadata (JsonNode): [optional]  # noqa: E501
         """

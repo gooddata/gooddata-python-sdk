@@ -72,6 +72,13 @@ class Settings(ModelNormal):
     }
 
     validations = {
+        ('delimiter',): {
+            'max_length': 1,
+            'min_length': 1,
+            'regex': {
+                'pattern': r'^[^\r\n"]$',  # noqa: E501
+            },
+        },
     }
 
     @cached_property
@@ -97,6 +104,7 @@ class Settings(ModelNormal):
         """
         lazy_import()
         return {
+            'delimiter': (str,),  # noqa: E501
             'export_info': (bool,),  # noqa: E501
             'merge_headers': (bool,),  # noqa: E501
             'page_orientation': (str,),  # noqa: E501
@@ -114,6 +122,7 @@ class Settings(ModelNormal):
 
 
     attribute_map = {
+        'delimiter': 'delimiter',  # noqa: E501
         'export_info': 'exportInfo',  # noqa: E501
         'merge_headers': 'mergeHeaders',  # noqa: E501
         'page_orientation': 'pageOrientation',  # noqa: E501
@@ -166,6 +175,7 @@ class Settings(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            delimiter (str): Set column delimiter. (CSV). [optional]  # noqa: E501
             export_info (bool): If true, the export will contain the information about the export – exported date, filters, etc. Works only with `visualizationObject`. (XLSX, PDF). [optional] if omitted the server will use the default value of False  # noqa: E501
             merge_headers (bool): Merge equal headers in neighbouring cells. (XLSX). [optional]  # noqa: E501
             page_orientation (str): Set page orientation. (PDF). [optional] if omitted the server will use the default value of "PORTRAIT"  # noqa: E501
@@ -260,6 +270,7 @@ class Settings(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            delimiter (str): Set column delimiter. (CSV). [optional]  # noqa: E501
             export_info (bool): If true, the export will contain the information about the export – exported date, filters, etc. Works only with `visualizationObject`. (XLSX, PDF). [optional] if omitted the server will use the default value of False  # noqa: E501
             merge_headers (bool): Merge equal headers in neighbouring cells. (XLSX). [optional]  # noqa: E501
             page_orientation (str): Set page orientation. (PDF). [optional] if omitted the server will use the default value of "PORTRAIT"  # noqa: E501

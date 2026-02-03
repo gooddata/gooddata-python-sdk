@@ -66,6 +66,10 @@
                 "pattern": "^\\d{4}-\\d{1,2}-\\d{1,2}( \\d{1,2}:\\d{1,2})?$",
                 "type": "string"
               },
+              "includeEmptyValues": {
+                "description": "If true, rows with undefined (NULL) date values will be included in the result. The filter becomes: (date_condition) OR (date IS NULL). If false or not set, standard behavior applies (NULLs excluded by the date condition).",
+                "type": "boolean"
+              },
               "localIdentifier": {
                 "type": "string"
               },
@@ -1327,6 +1331,9 @@
                   "GDC.time.fiscal_year"
                 ],
                 "type": "string"
+              },
+              "includeEmptyValues": {
+                "type": "boolean"
               },
               "localIdentifier": {
                 "type": "string"
@@ -2591,6 +2598,13 @@
           "customOverride": {
             "$ref": "#/components/schemas/RawCustomOverride"
           },
+          "delimiter": {
+            "description": "Set column delimiter. (CSV)",
+            "maxLength": 1,
+            "minLength": 1,
+            "pattern": "^[^\\r\\n\"]$",
+            "type": "string"
+          },
           "execution": {
             "$ref": "#/components/schemas/AFM"
           },
@@ -2741,6 +2755,10 @@
                 "example": "DAY",
                 "type": "string"
               },
+              "includeEmptyValues": {
+                "description": "If true, rows with undefined (NULL) date values will be included in the result. The filter becomes: (date_condition) OR (date IS NULL). If false or not set, standard behavior applies (NULLs excluded by the date condition).",
+                "type": "boolean"
+              },
               "localIdentifier": {
                 "type": "string"
               },
@@ -2779,6 +2797,13 @@
       "Settings": {
         "description": "Additional settings.",
         "properties": {
+          "delimiter": {
+            "description": "Set column delimiter. (CSV)",
+            "maxLength": 1,
+            "minLength": 1,
+            "pattern": "^[^\\r\\n\"]$",
+            "type": "string"
+          },
           "exportInfo": {
             "default": false,
             "description": "If true, the export will contain the information about the export – exported date, filters, etc. Works only with `visualizationObject`. (XLSX, PDF)",

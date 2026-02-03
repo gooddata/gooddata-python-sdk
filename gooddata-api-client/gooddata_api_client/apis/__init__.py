@@ -17,6 +17,7 @@
 from gooddata_api_client.api.aac_analytics_model_api import AACAnalyticsModelApi
 from gooddata_api_client.api.aac_logical_data_model_api import AACLogicalDataModelApi
 from gooddata_api_client.api.ai_api import AIApi
+from gooddata_api_client.api.ai_lake_api import AILakeApi
 from gooddata_api_client.api.api_tokens_api import APITokensApi
 from gooddata_api_client.api.analytics_model_api import AnalyticsModelApi
 from gooddata_api_client.api.appearance_api import AppearanceApi

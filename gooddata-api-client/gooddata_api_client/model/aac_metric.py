@@ -90,6 +90,7 @@ class AacMetric(ModelNormal):
             'description': (str,),  # noqa: E501
             'format': (str,),  # noqa: E501
             'is_hidden': (bool,),  # noqa: E501
+            'is_hidden_from_kda': (bool,),  # noqa: E501
             'show_in_ai_results': (bool,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
             'title': (str,),  # noqa: E501
@@ -107,6 +108,7 @@ class AacMetric(ModelNormal):
         'description': 'description',  # noqa: E501
         'format': 'format',  # noqa: E501
         'is_hidden': 'is_hidden',  # noqa: E501
+        'is_hidden_from_kda': 'is_hidden_from_kda',  # noqa: E501
         'show_in_ai_results': 'show_in_ai_results',  # noqa: E501
         'tags': 'tags',  # noqa: E501
         'title': 'title',  # noqa: E501
@@ -161,6 +163,7 @@ class AacMetric(ModelNormal):
             description (str): Metric description.. [optional]  # noqa: E501
             format (str): Default format for metric values.. [optional]  # noqa: E501
             is_hidden (bool): Deprecated. Use showInAiResults instead.. [optional]  # noqa: E501
+            is_hidden_from_kda (bool): Whether to hide from key driver analysis.. [optional]  # noqa: E501
             show_in_ai_results (bool): Whether to show in AI results.. [optional]  # noqa: E501
             tags ([str]): Metadata tags.. [optional]  # noqa: E501
             title (str): Human readable title.. [optional]  # noqa: E501
@@ -260,6 +263,7 @@ class AacMetric(ModelNormal):
             description (str): Metric description.. [optional]  # noqa: E501
             format (str): Default format for metric values.. [optional]  # noqa: E501
             is_hidden (bool): Deprecated. Use showInAiResults instead.. [optional]  # noqa: E501
+            is_hidden_from_kda (bool): Whether to hide from key driver analysis.. [optional]  # noqa: E501
             show_in_ai_results (bool): Whether to show in AI results.. [optional]  # noqa: E501
             tags ([str]): Metadata tags.. [optional]  # noqa: E501
             title (str): Human readable title.. [optional]  # noqa: E501

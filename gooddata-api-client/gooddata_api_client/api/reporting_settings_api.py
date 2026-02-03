@@ -48,6 +48,7 @@ class ReportingSettingsApi(object):
             },
             params_map={
                 'all': [
+                    'exclude_user_settings',
                 ],
                 'required': [],
                 'nullable': [
@@ -63,10 +64,14 @@ class ReportingSettingsApi(object):
                 'allowed_values': {
                 },
                 'openapi_types': {
+                    'exclude_user_settings':
+                        (bool,),
                 },
                 'attribute_map': {
+                    'exclude_user_settings': 'excludeUserSettings',
                 },
                 'location_map': {
+                    'exclude_user_settings': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -91,6 +96,7 @@ class ReportingSettingsApi(object):
             params_map={
                 'all': [
                     'resolve_settings_request',
+                    'exclude_user_settings',
                 ],
                 'required': [
                     'resolve_settings_request',
@@ -110,11 +116,15 @@ class ReportingSettingsApi(object):
                 'openapi_types': {
                     'resolve_settings_request':
                         (ResolveSettingsRequest,),
+                    'exclude_user_settings':
+                        (bool,),
                 },
                 'attribute_map': {
+                    'exclude_user_settings': 'excludeUserSettings',
                 },
                 'location_map': {
                     'resolve_settings_request': 'body',
+                    'exclude_user_settings': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -145,6 +155,7 @@ class ReportingSettingsApi(object):
 
 
         Keyword Args:
+            exclude_user_settings (bool): If true, user-level settings are excluded from resolution.. [optional] if omitted the server will use the default value of False
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -226,6 +237,7 @@ class ReportingSettingsApi(object):
             resolve_settings_request (ResolveSettingsRequest):
 
         Keyword Args:
+            exclude_user_settings (bool): If true, user-level settings are excluded from resolution.. [optional] if omitted the server will use the default value of False
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object

@@ -11,6 +11,7 @@ Name | Type | Description | Notes
 **description** | **str** | Metric description. | [optional] 
 **format** | **str** | Default format for metric values. | [optional] 
 **is_hidden** | **bool** | Deprecated. Use showInAiResults instead. | [optional] 
+**is_hidden_from_kda** | **bool** | Whether to hide from key driver analysis. | [optional] 
 **show_in_ai_results** | **bool** | Whether to show in AI results. | [optional] 
 **tags** | **[str]** | Metadata tags. | [optional] 
 **title** | **str** | Human readable title. | [optional] 

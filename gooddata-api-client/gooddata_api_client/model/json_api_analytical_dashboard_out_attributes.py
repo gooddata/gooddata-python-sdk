@@ -62,6 +62,9 @@ class JsonApiAnalyticalDashboardOutAttributes(ModelNormal):
         ('description',): {
             'max_length': 10000,
         },
+        ('summary',): {
+            'max_length': 10000,
+        },
         ('title',): {
             'max_length': 255,
         },
@@ -93,6 +96,7 @@ class JsonApiAnalyticalDashboardOutAttributes(ModelNormal):
             'created_at': (datetime,),  # noqa: E501
             'description': (str,),  # noqa: E501
             'modified_at': (datetime,),  # noqa: E501
+            'summary': (str,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
             'title': (str,),  # noqa: E501
         }
@@ -108,6 +112,7 @@ class JsonApiAnalyticalDashboardOutAttributes(ModelNormal):
         'created_at': 'createdAt',  # noqa: E501
         'description': 'description',  # noqa: E501
         'modified_at': 'modifiedAt',  # noqa: E501
+        'summary': 'summary',  # noqa: E501
         'tags': 'tags',  # noqa: E501
         'title': 'title',  # noqa: E501
     }
@@ -160,6 +165,7 @@ class JsonApiAnalyticalDashboardOutAttributes(ModelNormal):
             created_at (datetime): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             modified_at (datetime): [optional]  # noqa: E501
+            summary (str): AI-generated summary of the dashboard content. [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
         """
@@ -255,6 +261,7 @@ class JsonApiAnalyticalDashboardOutAttributes(ModelNormal):
             created_at (datetime): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             modified_at (datetime): [optional]  # noqa: E501
+            summary (str): AI-generated summary of the dashboard content. [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
         """

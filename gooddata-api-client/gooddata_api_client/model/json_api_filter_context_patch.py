@@ -31,8 +31,8 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_analytical_dashboard_patch_attributes import JsonApiAnalyticalDashboardPatchAttributes
-    globals()['JsonApiAnalyticalDashboardPatchAttributes'] = JsonApiAnalyticalDashboardPatchAttributes
+    from gooddata_api_client.model.json_api_filter_context_patch_attributes import JsonApiFilterContextPatchAttributes
+    globals()['JsonApiFilterContextPatchAttributes'] = JsonApiFilterContextPatchAttributes
 
 
 class JsonApiFilterContextPatch(ModelNormal):
@@ -96,7 +96,7 @@ class JsonApiFilterContextPatch(ModelNormal):
         """
         lazy_import()
         return {
-            'attributes': (JsonApiAnalyticalDashboardPatchAttributes,),  # noqa: E501
+            'attributes': (JsonApiFilterContextPatchAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
         }
@@ -123,7 +123,7 @@ class JsonApiFilterContextPatch(ModelNormal):
         """JsonApiFilterContextPatch - a model defined in OpenAPI
 
         Args:
-            attributes (JsonApiAnalyticalDashboardPatchAttributes):
+            attributes (JsonApiFilterContextPatchAttributes):
             id (str): API identifier of an object
 
         Keyword Args:
@@ -217,7 +217,7 @@ class JsonApiFilterContextPatch(ModelNormal):
         """JsonApiFilterContextPatch - a model defined in OpenAPI
 
         Args:
-            attributes (JsonApiAnalyticalDashboardPatchAttributes):
+            attributes (JsonApiFilterContextPatchAttributes):
             id (str): API identifier of an object
 
         Keyword Args:

@@ -32,13 +32,13 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.json_api_aggregated_fact_out_meta import JsonApiAggregatedFactOutMeta
-    from gooddata_api_client.model.json_api_analytical_dashboard_in_attributes import JsonApiAnalyticalDashboardInAttributes
+    from gooddata_api_client.model.json_api_filter_context_in_attributes import JsonApiFilterContextInAttributes
     from gooddata_api_client.model.json_api_filter_context_out import JsonApiFilterContextOut
     from gooddata_api_client.model.json_api_filter_context_out_relationships import JsonApiFilterContextOutRelationships
     from gooddata_api_client.model.object_links import ObjectLinks
     from gooddata_api_client.model.object_links_container import ObjectLinksContainer
     globals()['JsonApiAggregatedFactOutMeta'] = JsonApiAggregatedFactOutMeta
-    globals()['JsonApiAnalyticalDashboardInAttributes'] = JsonApiAnalyticalDashboardInAttributes
+    globals()['JsonApiFilterContextInAttributes'] = JsonApiFilterContextInAttributes
     globals()['JsonApiFilterContextOut'] = JsonApiFilterContextOut
     globals()['JsonApiFilterContextOutRelationships'] = JsonApiFilterContextOutRelationships
     globals()['ObjectLinks'] = ObjectLinks
@@ -106,7 +106,7 @@ class JsonApiFilterContextOutWithLinks(ModelComposed):
         """
         lazy_import()
         return {
-            'attributes': (JsonApiAnalyticalDashboardInAttributes,),  # noqa: E501
+            'attributes': (JsonApiFilterContextInAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
             'meta': (JsonApiAggregatedFactOutMeta,),  # noqa: E501
@@ -137,7 +137,7 @@ class JsonApiFilterContextOutWithLinks(ModelComposed):
         """JsonApiFilterContextOutWithLinks - a model defined in OpenAPI
 
         Keyword Args:
-            attributes (JsonApiAnalyticalDashboardInAttributes):
+            attributes (JsonApiFilterContextInAttributes):
             id (str): API identifier of an object
             type (str): Object type. defaults to "filterContext", must be one of ["filterContext", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
@@ -247,7 +247,7 @@ class JsonApiFilterContextOutWithLinks(ModelComposed):
         """JsonApiFilterContextOutWithLinks - a model defined in OpenAPI
 
         Keyword Args:
-            attributes (JsonApiAnalyticalDashboardInAttributes):
+            attributes (JsonApiFilterContextInAttributes):
             id (str): API identifier of an object
             type (str): Object type. defaults to "filterContext", must be one of ["filterContext", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types

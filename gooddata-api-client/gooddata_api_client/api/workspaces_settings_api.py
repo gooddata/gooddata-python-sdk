@@ -1128,6 +1128,7 @@ class WorkspacesSettingsApi(object):
             params_map={
                 'all': [
                     'workspace_id',
+                    'exclude_user_settings',
                 ],
                 'required': [
                     'workspace_id',
@@ -1147,12 +1148,16 @@ class WorkspacesSettingsApi(object):
                 'openapi_types': {
                     'workspace_id':
                         (str,),
+                    'exclude_user_settings':
+                        (bool,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
+                    'exclude_user_settings': 'excludeUserSettings',
                 },
                 'location_map': {
                     'workspace_id': 'path',
+                    'exclude_user_settings': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -1178,6 +1183,7 @@ class WorkspacesSettingsApi(object):
                 'all': [
                     'workspace_id',
                     'resolve_settings_request',
+                    'exclude_user_settings',
                 ],
                 'required': [
                     'workspace_id',
@@ -1200,13 +1206,17 @@ class WorkspacesSettingsApi(object):
                         (str,),
                     'resolve_settings_request':
                         (ResolveSettingsRequest,),
+                    'exclude_user_settings':
+                        (bool,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
+                    'exclude_user_settings': 'excludeUserSettings',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'resolve_settings_request': 'body',
+                    'exclude_user_settings': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -2484,6 +2494,7 @@ class WorkspacesSettingsApi(object):
             workspace_id (str):
 
         Keyword Args:
+            exclude_user_settings (bool): If true, user-level settings are excluded from resolution.. [optional] if omitted the server will use the default value of False
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -2569,6 +2580,7 @@ class WorkspacesSettingsApi(object):
             resolve_settings_request (ResolveSettingsRequest):
 
         Keyword Args:
+            exclude_user_settings (bool): If true, user-level settings are excluded from resolution.. [optional] if omitted the server will use the default value of False
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object

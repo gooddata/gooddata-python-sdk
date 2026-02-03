@@ -51,6 +51,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 ),
                 description="description_example",
                 is_hidden=True,
+                is_hidden_from_kda=True,
                 tags=[
                     "tags_example",
                 ],
@@ -415,6 +416,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 ),
                 description="description_example",
                 is_hidden=True,
+                is_hidden_from_kda=True,
                 tags=[
                     "tags_example",
                 ],
@@ -618,6 +620,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 ),
                 description="description_example",
                 is_hidden=True,
+                is_hidden_from_kda=True,
                 tags=[
                     "tags_example",
                 ],

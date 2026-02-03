@@ -84,6 +84,7 @@ class EntitlementsRequest(ModelNormal):
             'FEDERATEDIDENTITYMANAGEMENT': "FederatedIdentityManagement",
             'AUDITLOGGING': "AuditLogging",
             'CONTROLLEDFEATUREROLLOUT': "ControlledFeatureRollout",
+            'AILAKE': "AiLake",
         },
     }
 

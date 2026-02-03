@@ -31,8 +31,8 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_analytical_dashboard_in_attributes import JsonApiAnalyticalDashboardInAttributes
-    globals()['JsonApiAnalyticalDashboardInAttributes'] = JsonApiAnalyticalDashboardInAttributes
+    from gooddata_api_client.model.json_api_filter_context_in_attributes import JsonApiFilterContextInAttributes
+    globals()['JsonApiFilterContextInAttributes'] = JsonApiFilterContextInAttributes
 
 
 class JsonApiFilterContextPostOptionalId(ModelNormal):
@@ -96,7 +96,7 @@ class JsonApiFilterContextPostOptionalId(ModelNormal):
         """
         lazy_import()
         return {
-            'attributes': (JsonApiAnalyticalDashboardInAttributes,),  # noqa: E501
+            'attributes': (JsonApiFilterContextInAttributes,),  # noqa: E501
             'type': (str,),  # noqa: E501
             'id': (str,),  # noqa: E501
         }
@@ -123,7 +123,7 @@ class JsonApiFilterContextPostOptionalId(ModelNormal):
         """JsonApiFilterContextPostOptionalId - a model defined in OpenAPI
 
         Args:
-            attributes (JsonApiAnalyticalDashboardInAttributes):
+            attributes (JsonApiFilterContextInAttributes):
 
         Keyword Args:
             type (str): Object type. defaults to "filterContext", must be one of ["filterContext", ]  # noqa: E501
@@ -216,7 +216,7 @@ class JsonApiFilterContextPostOptionalId(ModelNormal):
         """JsonApiFilterContextPostOptionalId - a model defined in OpenAPI
 
         Args:
-            attributes (JsonApiAnalyticalDashboardInAttributes):
+            attributes (JsonApiFilterContextInAttributes):
 
         Keyword Args:
             type (str): Object type. defaults to "filterContext", must be one of ["filterContext", ]  # noqa: E501

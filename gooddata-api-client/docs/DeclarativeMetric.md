@@ -11,6 +11,7 @@ Name | Type | Description | Notes
 **created_by** | [**DeclarativeUserIdentifier**](DeclarativeUserIdentifier.md) |  | [optional] 
 **description** | **str** | Metric description. | [optional] 
 **is_hidden** | **bool** | If true, this metric is hidden from AI search results. | [optional] 
+**is_hidden_from_kda** | **bool** | If true, this metric is hidden from key drive analysis. | [optional] 
 **modified_at** | **str, none_type** | Time of the last entity modification. | [optional] 
 **modified_by** | [**DeclarativeUserIdentifier**](DeclarativeUserIdentifier.md) |  | [optional] 
 **tags** | **[str]** | A list of tags. | [optional] 

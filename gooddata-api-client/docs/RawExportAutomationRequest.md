@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **file_name** | **str** | Filename of downloaded file without extension. | 
 **format** | **str** | Requested resulting file type. | 
 **custom_override** | [**RawCustomOverride**](RawCustomOverride.md) |  | [optional] 
+**delimiter** | **str** | Set column delimiter. (CSV) | [optional] 
 **execution_settings** | [**ExecutionSettings**](ExecutionSettings.md) |  | [optional] 
 **metadata** | [**JsonNode**](JsonNode.md) |  | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
