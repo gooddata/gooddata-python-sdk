@@ -49,6 +49,7 @@ test = [
     # Common test dependencies used across all workspace packages
     "pytest~=8.3.4",
     "pytest-cov~=6.0.0",
+    "pytest-json-report==1.5.0",
     # Additional test dependencies used by multiple packages
     "pytest-snapshot==0.9.0",
     "pytest-order~=1.3.0",

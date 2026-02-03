@@ -33,6 +33,7 @@ line-length = 80
 test = [
     "pytest (>=8.3.5,<9.0.0)",
     "pytest-cov~=6.0.0",
+    "pytest-json-report==1.5.0",
     "pytest-mock (>=3.14.0,<4.0.0)",
     "moto (>=5.1.6,<6.0.0)",
     "orjson (>=3.11.3,<4.0.0)",

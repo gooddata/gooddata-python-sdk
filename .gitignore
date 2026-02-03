@@ -12,6 +12,9 @@ packages/gooddata-sdk/tests/catalog/translate
 .vscode
 .ruff_cache
 
+# Pytest JSON reports
+**/.json-report-*.json
+
 # Python build artifacts
 .tox
 *.egg-info
