@@ -41,10 +41,10 @@ interactions:
       body:
         string:
           data:
-            id: demo
-            type: workspace
             attributes:
               name: Demo
+            id: demo
+            type: workspace
           links:
             self: http://localhost:3000/api/v1/entities/workspaces/demo?include=workspaces
   - request:
@@ -86,21 +86,21 @@ interactions:
       body:
         string:
           data:
-            id: demo_west
-            type: workspace
             attributes:
               name: Demo West
+            id: demo_west
             relationships:
               parent:
                 data:
                   id: demo
                   type: workspace
+            type: workspace
           included:
-            - id: demo
-              type: workspace
-              attributes:
+            - attributes:
                 name: Demo
+              id: demo
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo
+              type: workspace
           links:
             self: http://localhost:3000/api/v1/entities/workspaces/demo_west?include=workspaces

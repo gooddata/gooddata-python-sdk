@@ -44,7 +44,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 45b3acdd1c790ae5520313c8fc8cf96c
+          traceId: ed93ba4369d0512e9380887e3bbd2d02
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces
@@ -95,10 +95,10 @@ interactions:
       body:
         string:
           data:
-            id: demo_testing
-            type: workspace
             attributes:
               name: demo_testing
+            id: demo_testing
+            type: workspace
           links:
             self: http://localhost:3000/api/v1/entities/workspaces/demo_testing
   - request:
@@ -595,8 +595,6 @@ interactions:
       body:
         string:
           data:
-            id: default
-            type: organization
             attributes:
               name: Default Organization
               hostname: localhost
@@ -611,6 +609,8 @@ interactions:
                 - enableUserManagement
                 - enableRawExports
                 - enableFlexibleDashboardLayout
+            id: default
+            type: organization
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:

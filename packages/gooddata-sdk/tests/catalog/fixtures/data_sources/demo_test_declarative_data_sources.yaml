@@ -22,7 +22,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '359'
+          - '401'
         Content-Type:
           - application/json
         DATE: &id001
@@ -45,7 +45,8 @@ interactions:
       body:
         string:
           dataSources:
-            - authenticationType: USERNAME_PASSWORD
+            - alternativeDataSourceId: ds-put-abc-id
+              authenticationType: USERNAME_PASSWORD
               id: demo-test-ds
               name: demo-test-ds
               permissions:
@@ -165,5 +166,5 @@ interactions:
         string:
           queryDurationMillis:
             createCacheTable: 0
-            simpleSelect: 5
+            simpleSelect: 2
           successful: true

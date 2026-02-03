@@ -45,9 +45,7 @@ interactions:
       body:
         string:
           data:
-            - id: budget
-              type: fact
-              attributes:
+            - attributes:
                 title: Budget
                 description: Budget
                 tags:
@@ -55,15 +53,15 @@ interactions:
                 sourceColumn: budget
                 sourceColumnDataType: NUMERIC
                 areRelationsValid: true
+              id: budget
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/facts/budget
               meta:
                 origin:
-                  originType: NATIVE
                   originId: demo
-            - id: price
+                  originType: NATIVE
               type: fact
-              attributes:
+            - attributes:
                 title: Price
                 description: Price
                 tags:
@@ -71,15 +69,15 @@ interactions:
                 sourceColumn: price
                 sourceColumnDataType: NUMERIC
                 areRelationsValid: true
+              id: price
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/facts/price
               meta:
                 origin:
-                  originType: NATIVE
                   originId: demo
-            - id: quantity
+                  originType: NATIVE
               type: fact
-              attributes:
+            - attributes:
                 title: Quantity
                 description: Quantity
                 tags:
@@ -87,15 +85,15 @@ interactions:
                 sourceColumn: quantity
                 sourceColumnDataType: NUMERIC
                 areRelationsValid: true
+              id: quantity
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/facts/quantity
               meta:
                 origin:
-                  originType: NATIVE
                   originId: demo
-            - id: spend
+                  originType: NATIVE
               type: fact
-              attributes:
+            - attributes:
                 title: Spend
                 description: Spend
                 tags:
@@ -103,12 +101,14 @@ interactions:
                 sourceColumn: spend
                 sourceColumnDataType: NUMERIC
                 areRelationsValid: true
+              id: spend
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/facts/spend
               meta:
                 origin:
-                  originType: NATIVE
                   originId: demo
+                  originType: NATIVE
+              type: fact
           links:
             self: http://localhost:3000/api/v1/entities/workspaces/demo/facts?page=0&size=500
             next: http://localhost:3000/api/v1/entities/workspaces/demo/facts?page=1&size=500

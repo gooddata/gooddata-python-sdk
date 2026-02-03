@@ -53,12 +53,12 @@ interactions:
       body:
         string:
           data:
-            id: endpoint1
-            type: llmEndpoint
             attributes:
               provider: OPENAI
               llmModel: gpt-4o
               title: Test Endpoint
+            id: endpoint1
+            type: llmEndpoint
           links:
             self: http://localhost:3000/api/v1/entities/llmEndpoints/endpoint1
   - request:
@@ -145,7 +145,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 1491302ee8569b5b883f71835c27117f
+          traceId: a2916ba16f8ef6ed0b8cdafbe848fda8
   - request:
       method: DELETE
       uri: http://localhost:3000/api/v1/entities/llmEndpoints/endpoint1
