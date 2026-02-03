@@ -45,21 +45,21 @@ interactions:
       body:
         string:
           data:
-            id: demo2
-            type: user
             attributes:
-              authenticationId: CiRmNjg4MWVhNy1jYzljLTQ0MmEtYjllMS02NDE3NTRmYzJlYzUSBWxvY2Fs
+              authenticationId: CiQxZDYzMzNmNC1lNDdhLTRiNTctOGEzYy1hNjFjMjM3MDI0OTISBWxvY2Fs
+            id: demo2
             relationships:
               userGroups:
                 data:
                   - id: demoGroup
                     type: userGroup
+            type: user
           included:
-            - id: demoGroup
-              type: userGroup
-              attributes:
+            - attributes:
                 name: demo group
+              id: demoGroup
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
+              type: userGroup
           links:
             self: http://localhost:3000/api/v1/entities/users/demo2?include=userGroups

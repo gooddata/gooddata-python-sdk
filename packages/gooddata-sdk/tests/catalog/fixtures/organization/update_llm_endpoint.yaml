@@ -53,12 +53,12 @@ interactions:
       body:
         string:
           data:
-            id: endpoint1
-            type: llmEndpoint
             attributes:
               provider: OPENAI
               llmModel: gpt-4o
               title: Initial Title
+            id: endpoint1
+            type: llmEndpoint
           links:
             self: http://localhost:3000/api/v1/entities/llmEndpoints/endpoint1
   - request:
@@ -111,12 +111,12 @@ interactions:
       body:
         string:
           data:
-            id: endpoint1
-            type: llmEndpoint
             attributes:
               provider: OPENAI
               llmModel: gpt-4o
               title: Updated Title
+            id: endpoint1
+            type: llmEndpoint
           links:
             self: http://localhost:3000/api/v1/entities/llmEndpoints/endpoint1
   - request:
@@ -174,14 +174,14 @@ interactions:
       body:
         string:
           data:
-            id: endpoint1
-            type: llmEndpoint
             attributes:
               provider: OPENAI
               baseUrl: https://api.updated.com
               llmOrganization: org2
               llmModel: gpt-3.5
               title: Updated Title 2
+            id: endpoint1
+            type: llmEndpoint
           links:
             self: http://localhost:3000/api/v1/entities/llmEndpoints/endpoint1
   - request:
@@ -234,14 +234,14 @@ interactions:
       body:
         string:
           data:
-            id: endpoint1
-            type: llmEndpoint
             attributes:
               provider: OPENAI
               baseUrl: https://api.updated.com
               llmOrganization: org2
               llmModel: gpt-3.5
               title: New Title
+            id: endpoint1
+            type: llmEndpoint
           links:
             self: http://localhost:3000/api/v1/entities/llmEndpoints/endpoint1
   - request:

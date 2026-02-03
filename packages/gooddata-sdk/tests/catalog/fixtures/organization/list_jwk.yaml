@@ -48,7 +48,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 51c8a15141cdcf61dcc2ff70c1d410c1
+          traceId: 8964504192d7dcf3508a36141f21e058
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/jwks
@@ -108,8 +108,6 @@ interactions:
       body:
         string:
           data:
-            id: demoJwk1
-            type: jwk
             attributes:
               content:
                 kty: RSA
@@ -121,6 +119,8 @@ interactions:
                 e: AQAB
                 kid: kid1
                 x5t: tGg2yZgC0sVyvaK49GenyQB7cuA
+            id: demoJwk1
+            type: jwk
           links:
             self: http://localhost:3000/api/v1/entities/jwks/demoJwk1
   - request:
@@ -169,7 +169,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 6fceca428ae1db70254d3c6ec59e053d
+          traceId: dabeea4af44d8630dc82c13d808567df
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/jwks
@@ -229,8 +229,6 @@ interactions:
       body:
         string:
           data:
-            id: demoJwk2
-            type: jwk
             attributes:
               content:
                 kty: RSA
@@ -242,6 +240,8 @@ interactions:
                 e: AQAB
                 kid: kid2
                 x5t: tGg2yZgC0sVyvaK49GenyQB7cuA
+            id: demoJwk2
+            type: jwk
           links:
             self: http://localhost:3000/api/v1/entities/jwks/demoJwk2
   - request:
@@ -287,9 +287,7 @@ interactions:
       body:
         string:
           data:
-            - id: demoJwk1
-              type: jwk
-              attributes:
+            - attributes:
                 content:
                   kty: RSA
                   alg: RS256
@@ -300,11 +298,11 @@ interactions:
                   e: AQAB
                   kid: kid1
                   x5t: tGg2yZgC0sVyvaK49GenyQB7cuA
+              id: demoJwk1
               links:
                 self: http://localhost:3000/api/v1/entities/jwks/demoJwk1
-            - id: demoJwk2
               type: jwk
-              attributes:
+            - attributes:
                 content:
                   kty: RSA
                   alg: RS256
@@ -315,8 +313,10 @@ interactions:
                   e: AQAB
                   kid: kid2
                   x5t: tGg2yZgC0sVyvaK49GenyQB7cuA
+              id: demoJwk2
               links:
                 self: http://localhost:3000/api/v1/entities/jwks/demoJwk2
+              type: jwk
           links:
             self: http://localhost:3000/api/v1/entities/jwks?page=0&size=500
             next: http://localhost:3000/api/v1/entities/jwks?page=1&size=500

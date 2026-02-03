@@ -44,7 +44,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 5dd8a499c75a938c808df6f58f7d587b
+          traceId: f37e146f14638465c6bf6ee7b70739ac
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces
@@ -95,10 +95,10 @@ interactions:
       body:
         string:
           data:
-            id: demo_testing
-            type: workspace
             attributes:
               name: demo_testing
+            id: demo_testing
+            type: workspace
           links:
             self: http://localhost:3000/api/v1/entities/workspaces/demo_testing
   - request:
@@ -533,7 +533,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '491'
+          - '533'
         Content-Type:
           - application/json
         DATE: *id001
@@ -555,17 +555,18 @@ interactions:
       body:
         string:
           data:
-            - id: demo-test-ds
-              type: dataSource
-              attributes:
+            - attributes:
                 url: jdbc:postgresql://postgres:5432/tiger?sslmode=prefer
                 username: postgres
                 authenticationType: USERNAME_PASSWORD
+                alternativeDataSourceId: ds-put-abc-id
                 name: demo-test-ds
                 type: POSTGRESQL
                 schema: demo
+              id: demo-test-ds
               links:
                 self: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds
+              type: dataSource
           links:
             self: http://localhost:3000/api/v1/entities/dataSources?page=0&size=500
             next: http://localhost:3000/api/v1/entities/dataSources?page=1&size=500
@@ -991,7 +992,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '491'
+          - '533'
         Content-Type:
           - application/json
         DATE: *id001
@@ -1013,17 +1014,18 @@ interactions:
       body:
         string:
           data:
-            - id: demo-test-ds
-              type: dataSource
-              attributes:
+            - attributes:
                 url: jdbc:postgresql://postgres:5432/tiger?sslmode=prefer
                 username: postgres
                 authenticationType: USERNAME_PASSWORD
+                alternativeDataSourceId: ds-put-abc-id
                 name: demo-test-ds
                 type: POSTGRESQL
                 schema: demo
+              id: demo-test-ds
               links:
                 self: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds
+              type: dataSource
           links:
             self: http://localhost:3000/api/v1/entities/dataSources?page=0&size=500
             next: http://localhost:3000/api/v1/entities/dataSources?page=1&size=500

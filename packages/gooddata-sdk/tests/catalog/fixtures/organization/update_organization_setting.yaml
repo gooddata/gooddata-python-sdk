@@ -54,12 +54,12 @@ interactions:
       body:
         string:
           data:
-            id: test_setting
-            type: organizationSetting
             attributes:
               content:
                 value: fr-FR
               type: LOCALE
+            id: test_setting
+            type: organizationSetting
           links:
             self: http://localhost:3000/api/v1/entities/organizationSettings/test_setting
   - request:
@@ -114,12 +114,12 @@ interactions:
       body:
         string:
           data:
-            id: test_setting
-            type: organizationSetting
             attributes:
               content:
                 value: en-GB
               type: LOCALE
+            id: test_setting
+            type: organizationSetting
           links:
             self: http://localhost:3000/api/v1/entities/organizationSettings/test_setting
   - request:
@@ -165,12 +165,12 @@ interactions:
       body:
         string:
           data:
-            id: test_setting
-            type: organizationSetting
             attributes:
               content:
                 value: en-GB
               type: LOCALE
+            id: test_setting
+            type: organizationSetting
           links:
             self: http://localhost:3000/api/v1/entities/organizationSettings/test_setting
   - request:

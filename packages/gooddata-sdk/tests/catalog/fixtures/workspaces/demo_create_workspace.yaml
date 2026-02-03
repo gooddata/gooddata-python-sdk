@@ -45,47 +45,47 @@ interactions:
       body:
         string:
           data:
-            - id: demo
-              type: workspace
-              attributes:
+            - attributes:
                 name: Demo
+              id: demo
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo
-            - id: demo_west
               type: workspace
-              attributes:
+            - attributes:
                 name: Demo West
+              id: demo_west
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo_west
               relationships:
                 parent:
                   data:
                     id: demo
                     type: workspace
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo_west
-            - id: demo_west_california
               type: workspace
-              attributes:
+            - attributes:
                 name: Demo West California
+              id: demo_west_california
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo_west_california
               relationships:
                 parent:
                   data:
                     id: demo_west
                     type: workspace
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo_west_california
-          included:
-            - id: demo
               type: workspace
-              attributes:
+          included:
+            - attributes:
                 name: Demo
+              id: demo
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo
-            - id: demo_west
               type: workspace
-              attributes:
+            - attributes:
                 name: Demo West
+              id: demo_west
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo_west
+              type: workspace
           links:
             self: http://localhost:3000/api/v1/entities/workspaces?include=workspaces&page=0&size=500
             next: http://localhost:3000/api/v1/entities/workspaces?include=workspaces&page=1&size=500
@@ -131,7 +131,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 6030f0b466bda1e6813fa63d22f78512
+          traceId: b5f9056cfe6f428e44f199f9dc293e8b
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces
@@ -187,10 +187,10 @@ interactions:
       body:
         string:
           data:
-            id: test
-            type: workspace
             attributes:
               name: Test
+            id: test
+            type: workspace
           links:
             self: http://localhost:3000/api/v1/entities/workspaces/test
   - request:
@@ -236,58 +236,58 @@ interactions:
       body:
         string:
           data:
-            - id: demo
-              type: workspace
-              attributes:
+            - attributes:
                 name: Demo
+              id: demo
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo
-            - id: demo_west
               type: workspace
-              attributes:
+            - attributes:
                 name: Demo West
+              id: demo_west
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo_west
               relationships:
                 parent:
                   data:
                     id: demo
                     type: workspace
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo_west
-            - id: demo_west_california
               type: workspace
-              attributes:
+            - attributes:
                 name: Demo West California
+              id: demo_west_california
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo_west_california
               relationships:
                 parent:
                   data:
                     id: demo_west
                     type: workspace
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo_west_california
-            - id: test
               type: workspace
-              attributes:
+            - attributes:
                 name: Test
+              id: test
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/test
               relationships:
                 parent:
                   data:
                     id: demo
                     type: workspace
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/test
-          included:
-            - id: demo
               type: workspace
-              attributes:
+          included:
+            - attributes:
                 name: Demo
+              id: demo
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo
-            - id: demo_west
               type: workspace
-              attributes:
+            - attributes:
                 name: Demo West
+              id: demo_west
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo_west
+              type: workspace
           links:
             self: http://localhost:3000/api/v1/entities/workspaces?include=workspaces&page=0&size=500
             next: http://localhost:3000/api/v1/entities/workspaces?include=workspaces&page=1&size=500
@@ -330,22 +330,22 @@ interactions:
       body:
         string:
           data:
-            id: test
-            type: workspace
             attributes:
               name: Test
+            id: test
             relationships:
               parent:
                 data:
                   id: demo
                   type: workspace
+            type: workspace
           included:
-            - id: demo
-              type: workspace
-              attributes:
+            - attributes:
                 name: Demo
+              id: demo
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo
+              type: workspace
           links:
             self: http://localhost:3000/api/v1/entities/workspaces/test?include=workspaces
   - request:

@@ -48,7 +48,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 5ab058fc20b22be8a2d33a7690f574e8
+          traceId: 23c724364a3164f23d1929926ae0eea2
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings
@@ -101,16 +101,16 @@ interactions:
       body:
         string:
           data:
-            id: test_setting
-            type: workspaceSetting
             attributes:
               content:
                 value: fr-FR
               type: LOCALE
+            id: test_setting
             meta:
               origin:
-                originType: NATIVE
                 originId: demo
+                originType: NATIVE
+            type: workspaceSetting
           links:
             self: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings/test_setting
   - request:
@@ -156,16 +156,16 @@ interactions:
       body:
         string:
           data:
-            id: test_setting
-            type: workspaceSetting
             attributes:
               content:
                 value: fr-FR
               type: LOCALE
+            id: test_setting
             meta:
               origin:
-                originType: NATIVE
                 originId: demo
+                originType: NATIVE
+            type: workspaceSetting
           links:
             self: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings/test_setting
   - request:

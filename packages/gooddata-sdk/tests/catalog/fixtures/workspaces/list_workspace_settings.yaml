@@ -48,7 +48,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: aa1d114185cb7a970bdef6c9551322af
+          traceId: ee31efa0b43b6942ff4052aca45d7ef9
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings
@@ -101,16 +101,16 @@ interactions:
       body:
         string:
           data:
-            id: test_setting_1
-            type: workspaceSetting
             attributes:
               content:
                 value: fr-FR
               type: LOCALE
+            id: test_setting_1
             meta:
               origin:
-                originType: NATIVE
                 originId: demo
+                originType: NATIVE
+            type: workspaceSetting
           links:
             self: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings/test_setting_1
   - request:
@@ -159,7 +159,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: c3ec2af54dba92ef69628b6978da0c41
+          traceId: b82d50d5b27af64a406a05e6ad795ea9
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings
@@ -212,16 +212,16 @@ interactions:
       body:
         string:
           data:
-            id: test_setting_2
-            type: workspaceSetting
             attributes:
               content:
                 value: en-US
               type: FORMAT_LOCALE
+            id: test_setting_2
             meta:
               origin:
-                originType: NATIVE
                 originId: demo
+                originType: NATIVE
+            type: workspaceSetting
           links:
             self: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings/test_setting_2
   - request:
@@ -267,30 +267,30 @@ interactions:
       body:
         string:
           data:
-            - id: test_setting_1
-              type: workspaceSetting
-              attributes:
+            - attributes:
                 content:
                   value: fr-FR
                 type: LOCALE
+              id: test_setting_1
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings/test_setting_1
               meta:
                 origin:
-                  originType: NATIVE
                   originId: demo
-            - id: test_setting_2
+                  originType: NATIVE
               type: workspaceSetting
-              attributes:
+            - attributes:
                 content:
                   value: en-US
                 type: FORMAT_LOCALE
+              id: test_setting_2
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings/test_setting_2
               meta:
                 origin:
-                  originType: NATIVE
                   originId: demo
+                  originType: NATIVE
+              type: workspaceSetting
           links:
             self: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings?page=0&size=500
             next: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings?page=1&size=500

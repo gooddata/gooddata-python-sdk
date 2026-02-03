@@ -48,7 +48,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 843a0bd5652c357a890993bafadf1219
+          traceId: 516434795a199e8e1c96e0a9e38ad3e1
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/jwks
@@ -108,8 +108,6 @@ interactions:
       body:
         string:
           data:
-            id: demoJwk
-            type: jwk
             attributes:
               content:
                 kty: RSA
@@ -121,6 +119,8 @@ interactions:
                 e: AQAB
                 kid: Gkncy6f9BSp7wdav8w4SNZE1yt0
                 x5t: tGg2yZgC0sVyvaK49GenyQB7cuA
+            id: demoJwk
+            type: jwk
           links:
             self: http://localhost:3000/api/v1/entities/jwks/demoJwk
   - request:
@@ -166,8 +166,6 @@ interactions:
       body:
         string:
           data:
-            id: demoJwk
-            type: jwk
             attributes:
               content:
                 kty: RSA
@@ -179,6 +177,8 @@ interactions:
                 e: AQAB
                 kid: Gkncy6f9BSp7wdav8w4SNZE1yt0
                 x5t: tGg2yZgC0sVyvaK49GenyQB7cuA
+            id: demoJwk
+            type: jwk
           links:
             self: http://localhost:3000/api/v1/entities/jwks/demoJwk
   - request:

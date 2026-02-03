@@ -45,9 +45,9 @@ interactions:
       body:
         string:
           data:
-            id: demoGroup
-            type: userGroup
             attributes:
               name: demo group
+            id: demoGroup
+            type: userGroup
           links:
             self: http://localhost:3000/api/v1/entities/userGroups/demoGroup?include=ALL

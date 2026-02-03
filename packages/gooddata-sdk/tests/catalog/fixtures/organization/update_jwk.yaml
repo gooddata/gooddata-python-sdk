@@ -48,7 +48,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: ef2e253e7d70eb79c800c5324d8c7880
+          traceId: dec7656625aa28ab6e36a32c22329801
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/jwks
@@ -108,8 +108,6 @@ interactions:
       body:
         string:
           data:
-            id: demoJwk
-            type: jwk
             attributes:
               content:
                 kty: RSA
@@ -121,6 +119,8 @@ interactions:
                 e: AQAB
                 kid: Gkncy6f9BSp7wdav8w4SNZE1yt0
                 x5t: tGg2yZgC0sVyvaK49GenyQB7cuA
+            id: demoJwk
+            type: jwk
           links:
             self: http://localhost:3000/api/v1/entities/jwks/demoJwk
   - request:
@@ -166,8 +166,6 @@ interactions:
       body:
         string:
           data:
-            id: demoJwk
-            type: jwk
             attributes:
               content:
                 kty: RSA
@@ -179,6 +177,8 @@ interactions:
                 e: AQAB
                 kid: Gkncy6f9BSp7wdav8w4SNZE1yt0
                 x5t: tGg2yZgC0sVyvaK49GenyQB7cuA
+            id: demoJwk
+            type: jwk
           links:
             self: http://localhost:3000/api/v1/entities/jwks/demoJwk
   - request:
@@ -240,8 +240,6 @@ interactions:
       body:
         string:
           data:
-            id: demoJwk
-            type: jwk
             attributes:
               content:
                 kty: RSA
@@ -253,6 +251,8 @@ interactions:
                 e: AQAB
                 kid: Gkncy6f9BSp7wdav8w4SNZE1yt0
                 x5t: tGg2yZgC0sVyvaK49GenyQB7cuA
+            id: demoJwk
+            type: jwk
           links:
             self: http://localhost:3000/api/v1/entities/jwks/demoJwk
   - request:
@@ -298,8 +298,6 @@ interactions:
       body:
         string:
           data:
-            id: demoJwk
-            type: jwk
             attributes:
               content:
                 kty: RSA
@@ -311,6 +309,8 @@ interactions:
                 e: AQAB
                 kid: Gkncy6f9BSp7wdav8w4SNZE1yt0
                 x5t: tGg2yZgC0sVyvaK49GenyQB7cuA
+            id: demoJwk
+            type: jwk
           links:
             self: http://localhost:3000/api/v1/entities/jwks/demoJwk
   - request:

@@ -94,7 +94,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 56039b17ad8ed63b854b395f4fdeee9c
+          traceId: c4d75f5e4021594943869476db62e7d9
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces/demo/userDataFilters
@@ -151,15 +151,15 @@ interactions:
       body:
         string:
           data:
-            id: newUserDataFilter
-            type: userDataFilter
             attributes:
               title: test_new_user_data_filter
               maql: '{label/order_status} IN ("returned")'
+            id: newUserDataFilter
             meta:
               origin:
-                originType: NATIVE
                 originId: demo
+                originType: NATIVE
+            type: userDataFilter
           links:
             self: http://localhost:3000/api/v1/entities/workspaces/demo/userDataFilters/newUserDataFilter
   - request:
@@ -205,12 +205,17 @@ interactions:
       body:
         string:
           data:
-            - id: newUserDataFilter
-              type: userDataFilter
-              attributes:
+            - attributes:
                 title: test_new_user_data_filter
                 areRelationsValid: true
                 maql: '{label/order_status} IN ("returned")'
+              id: newUserDataFilter
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/userDataFilters/newUserDataFilter
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
               relationships:
                 userGroup:
                   data:
@@ -220,16 +225,9 @@ interactions:
                   data:
                     - id: order_status
                       type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/userDataFilters/newUserDataFilter
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
+              type: userDataFilter
           included:
-            - id: order_status
-              type: label
-              attributes:
+            - attributes:
                 title: Order status
                 description: Order status
                 tags:
@@ -238,14 +236,16 @@ interactions:
                 sourceColumn: order_status
                 sourceColumnDataType: STRING
                 valueType: TEXT
+              id: order_status
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_status
-            - id: demoGroup
-              type: userGroup
-              attributes:
+              type: label
+            - attributes:
                 name: demo group
+              id: demoGroup
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/userGroups/demoGroup
+              type: userGroup
           links:
             self: http://localhost:3000/api/v1/entities/workspaces/demo/userDataFilters?include=ALL&page=0&size=500
             next: http://localhost:3000/api/v1/entities/workspaces/demo/userDataFilters?include=ALL&page=1&size=500
@@ -292,12 +292,15 @@ interactions:
       body:
         string:
           data:
-            id: newUserDataFilter
-            type: userDataFilter
             attributes:
               title: test_new_user_data_filter
               areRelationsValid: true
               maql: '{label/order_status} IN ("returned")'
+            id: newUserDataFilter
+            meta:
+              origin:
+                originId: demo
+                originType: NATIVE
             relationships:
               userGroup:
                 data:
@@ -307,14 +310,9 @@ interactions:
                 data:
                   - id: order_status
                     type: label
-            meta:
-              origin:
-                originType: NATIVE
-                originId: demo
+            type: userDataFilter
           included:
-            - id: order_status
-              type: label
-              attributes:
+            - attributes:
                 title: Order status
                 description: Order status
                 tags:
@@ -323,14 +321,16 @@ interactions:
                 sourceColumn: order_status
                 sourceColumnDataType: STRING
                 valueType: TEXT
+              id: order_status
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_status
-            - id: demoGroup
-              type: userGroup
-              attributes:
+              type: label
+            - attributes:
                 name: demo group
+              id: demoGroup
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/userGroups/demoGroup
+              type: userGroup
           links:
             self: http://localhost:3000/api/v1/entities/workspaces/demo/userDataFilters/newUserDataFilter?include=ALL
   - request:

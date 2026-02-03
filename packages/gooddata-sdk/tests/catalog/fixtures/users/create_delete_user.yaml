@@ -45,53 +45,53 @@ interactions:
       body:
         string:
           data:
-            - id: admin
-              type: user
-              attributes: {}
+            - attributes: {}
+              id: admin
+              links:
+                self: http://localhost:3000/api/v1/entities/users/admin
               relationships:
                 userGroups:
                   data:
                     - id: adminGroup
                       type: userGroup
-              links:
-                self: http://localhost:3000/api/v1/entities/users/admin
-            - id: demo
               type: user
-              attributes:
-                authenticationId: CiQ3MmJmOWI3My05MDkwLTRlNWEtOTc0Yi1kZTAyYzE0NDlhMGESBWxvY2Fs
+            - attributes:
+                authenticationId: CiRmMWY0ZWM0YS0zOThjLTRmMDctYTBiZC0wYzgzMTAyYTUxZDkSBWxvY2Fs
                 firstname: Demo
                 lastname: User
                 email: demo@example.com
+              id: demo
+              links:
+                self: http://localhost:3000/api/v1/entities/users/demo
               relationships:
                 userGroups:
                   data:
                     - id: adminGroup
                       type: userGroup
-              links:
-                self: http://localhost:3000/api/v1/entities/users/demo
-            - id: demo2
               type: user
-              attributes:
-                authenticationId: CiRmNjg4MWVhNy1jYzljLTQ0MmEtYjllMS02NDE3NTRmYzJlYzUSBWxvY2Fs
+            - attributes:
+                authenticationId: CiQxZDYzMzNmNC1lNDdhLTRiNTctOGEzYy1hNjFjMjM3MDI0OTISBWxvY2Fs
+              id: demo2
+              links:
+                self: http://localhost:3000/api/v1/entities/users/demo2
               relationships:
                 userGroups:
                   data:
                     - id: demoGroup
                       type: userGroup
-              links:
-                self: http://localhost:3000/api/v1/entities/users/demo2
+              type: user
           included:
-            - id: adminGroup
-              type: userGroup
-              attributes: {}
+            - attributes: {}
+              id: adminGroup
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/adminGroup
-            - id: demoGroup
               type: userGroup
-              attributes:
+            - attributes:
                 name: demo group
+              id: demoGroup
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
+              type: userGroup
           links:
             self: http://localhost:3000/api/v1/entities/users?include=userGroups&page=0&size=500
             next: http://localhost:3000/api/v1/entities/users?include=userGroups&page=1&size=500
@@ -141,7 +141,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: d053c51529741c1340d7c5d3c9309445
+          traceId: 4fe3ac01c1002d7ef492302e7070564e
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/users
@@ -200,13 +200,13 @@ interactions:
       body:
         string:
           data:
-            id: newUser
-            type: user
             attributes:
               authenticationId: newUser_auth_id
               firstname: john
               lastname: doe
               email: john.doe@email.com
+            id: newUser
+            type: user
           links:
             self: http://localhost:3000/api/v1/entities/users/newUser
   - request:
@@ -252,25 +252,25 @@ interactions:
       body:
         string:
           data:
-            id: newUser
-            type: user
             attributes:
               authenticationId: newUser_auth_id
               firstname: john
               lastname: doe
               email: john.doe@email.com
+            id: newUser
             relationships:
               userGroups:
                 data:
                   - id: demoGroup
                     type: userGroup
+            type: user
           included:
-            - id: demoGroup
-              type: userGroup
-              attributes:
+            - attributes:
                 name: demo group
+              id: demoGroup
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
+              type: userGroup
           links:
             self: http://localhost:3000/api/v1/entities/users/newUser?include=userGroups
   - request:
@@ -316,67 +316,67 @@ interactions:
       body:
         string:
           data:
-            - id: admin
-              type: user
-              attributes: {}
+            - attributes: {}
+              id: admin
+              links:
+                self: http://localhost:3000/api/v1/entities/users/admin
               relationships:
                 userGroups:
                   data:
                     - id: adminGroup
                       type: userGroup
-              links:
-                self: http://localhost:3000/api/v1/entities/users/admin
-            - id: demo
               type: user
-              attributes:
-                authenticationId: CiQ3MmJmOWI3My05MDkwLTRlNWEtOTc0Yi1kZTAyYzE0NDlhMGESBWxvY2Fs
+            - attributes:
+                authenticationId: CiRmMWY0ZWM0YS0zOThjLTRmMDctYTBiZC0wYzgzMTAyYTUxZDkSBWxvY2Fs
                 firstname: Demo
                 lastname: User
                 email: demo@example.com
+              id: demo
+              links:
+                self: http://localhost:3000/api/v1/entities/users/demo
               relationships:
                 userGroups:
                   data:
                     - id: adminGroup
                       type: userGroup
-              links:
-                self: http://localhost:3000/api/v1/entities/users/demo
-            - id: demo2
               type: user
-              attributes:
-                authenticationId: CiRmNjg4MWVhNy1jYzljLTQ0MmEtYjllMS02NDE3NTRmYzJlYzUSBWxvY2Fs
+            - attributes:
+                authenticationId: CiQxZDYzMzNmNC1lNDdhLTRiNTctOGEzYy1hNjFjMjM3MDI0OTISBWxvY2Fs
+              id: demo2
+              links:
+                self: http://localhost:3000/api/v1/entities/users/demo2
               relationships:
                 userGroups:
                   data:
                     - id: demoGroup
                       type: userGroup
-              links:
-                self: http://localhost:3000/api/v1/entities/users/demo2
-            - id: newUser
               type: user
-              attributes:
+            - attributes:
                 authenticationId: newUser_auth_id
                 firstname: john
                 lastname: doe
                 email: john.doe@email.com
+              id: newUser
+              links:
+                self: http://localhost:3000/api/v1/entities/users/newUser
               relationships:
                 userGroups:
                   data:
                     - id: demoGroup
                       type: userGroup
-              links:
-                self: http://localhost:3000/api/v1/entities/users/newUser
+              type: user
           included:
-            - id: adminGroup
-              type: userGroup
-              attributes: {}
+            - attributes: {}
+              id: adminGroup
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/adminGroup
-            - id: demoGroup
               type: userGroup
-              attributes:
+            - attributes:
                 name: demo group
+              id: demoGroup
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
+              type: userGroup
           links:
             self: http://localhost:3000/api/v1/entities/users?include=userGroups&page=0&size=500
             next: http://localhost:3000/api/v1/entities/users?include=userGroups&page=1&size=500
@@ -461,53 +461,53 @@ interactions:
       body:
         string:
           data:
-            - id: admin
-              type: user
-              attributes: {}
+            - attributes: {}
+              id: admin
+              links:
+                self: http://localhost:3000/api/v1/entities/users/admin
               relationships:
                 userGroups:
                   data:
                     - id: adminGroup
                       type: userGroup
-              links:
-                self: http://localhost:3000/api/v1/entities/users/admin
-            - id: demo
               type: user
-              attributes:
-                authenticationId: CiQ3MmJmOWI3My05MDkwLTRlNWEtOTc0Yi1kZTAyYzE0NDlhMGESBWxvY2Fs
+            - attributes:
+                authenticationId: CiRmMWY0ZWM0YS0zOThjLTRmMDctYTBiZC0wYzgzMTAyYTUxZDkSBWxvY2Fs
                 firstname: Demo
                 lastname: User
                 email: demo@example.com
+              id: demo
+              links:
+                self: http://localhost:3000/api/v1/entities/users/demo
               relationships:
                 userGroups:
                   data:
                     - id: adminGroup
                       type: userGroup
-              links:
-                self: http://localhost:3000/api/v1/entities/users/demo
-            - id: demo2
               type: user
-              attributes:
-                authenticationId: CiRmNjg4MWVhNy1jYzljLTQ0MmEtYjllMS02NDE3NTRmYzJlYzUSBWxvY2Fs
+            - attributes:
+                authenticationId: CiQxZDYzMzNmNC1lNDdhLTRiNTctOGEzYy1hNjFjMjM3MDI0OTISBWxvY2Fs
+              id: demo2
+              links:
+                self: http://localhost:3000/api/v1/entities/users/demo2
               relationships:
                 userGroups:
                   data:
                     - id: demoGroup
                       type: userGroup
-              links:
-                self: http://localhost:3000/api/v1/entities/users/demo2
+              type: user
           included:
-            - id: adminGroup
-              type: userGroup
-              attributes: {}
+            - attributes: {}
+              id: adminGroup
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/adminGroup
-            - id: demoGroup
               type: userGroup
-              attributes:
+            - attributes:
                 name: demo group
+              id: demoGroup
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
+              type: userGroup
           links:
             self: http://localhost:3000/api/v1/entities/users?include=userGroups&page=0&size=500
             next: http://localhost:3000/api/v1/entities/users?include=userGroups&page=1&size=500

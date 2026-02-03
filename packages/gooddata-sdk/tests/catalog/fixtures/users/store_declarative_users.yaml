@@ -51,7 +51,7 @@ interactions:
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiQ3MmJmOWI3My05MDkwLTRlNWEtOTc0Yi1kZTAyYzE0NDlhMGESBWxvY2Fs
+            - authId: CiRmMWY0ZWM0YS0zOThjLTRmMDctYTBiZC0wYzgzMTAyYTUxZDkSBWxvY2Fs
               email: demo@example.com
               firstname: Demo
               id: demo
@@ -61,7 +61,7 @@ interactions:
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiRmNjg4MWVhNy1jYzljLTQ0MmEtYjllMS02NDE3NTRmYzJlYzUSBWxvY2Fs
+            - authId: CiQxZDYzMzNmNC1lNDdhLTRiNTctOGEzYy1hNjFjMjM3MDI0OTISBWxvY2Fs
               id: demo2
               permissions: []
               settings: []
@@ -117,7 +117,7 @@ interactions:
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiQ3MmJmOWI3My05MDkwLTRlNWEtOTc0Yi1kZTAyYzE0NDlhMGESBWxvY2Fs
+            - authId: CiRmMWY0ZWM0YS0zOThjLTRmMDctYTBiZC0wYzgzMTAyYTUxZDkSBWxvY2Fs
               email: demo@example.com
               firstname: Demo
               id: demo
@@ -127,7 +127,7 @@ interactions:
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiRmNjg4MWVhNy1jYzljLTQ0MmEtYjllMS02NDE3NTRmYzJlYzUSBWxvY2Fs
+            - authId: CiQxZDYzMzNmNC1lNDdhLTRiNTctOGEzYy1hNjFjMjM3MDI0OTISBWxvY2Fs
               id: demo2
               permissions: []
               settings: []
@@ -195,7 +195,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '450'
+          - '430'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -217,12 +217,9 @@ interactions:
       body:
         string:
           data:
-            id: default
-            type: organization
             attributes:
               name: Default Organization
               hostname: localhost
-              allowedOrigins: []
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -233,6 +230,8 @@ interactions:
                 - enableUserManagement
                 - enableRawExports
                 - enableFlexibleDashboardLayout
+            id: default
+            type: organization
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -296,7 +295,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '450'
+          - '430'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -318,12 +317,9 @@ interactions:
       body:
         string:
           data:
-            id: default
-            type: organization
             attributes:
               name: Default Organization
               hostname: localhost
-              allowedOrigins: []
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -334,5 +330,7 @@ interactions:
                 - enableUserManagement
                 - enableRawExports
                 - enableFlexibleDashboardLayout
+            id: default
+            type: organization
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default

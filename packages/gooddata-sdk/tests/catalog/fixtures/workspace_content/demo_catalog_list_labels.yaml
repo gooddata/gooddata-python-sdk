@@ -45,9 +45,7 @@ interactions:
       body:
         string:
           data:
-            - id: campaign_channel_id
-              type: label
-              attributes:
+            - attributes:
                 title: Campaign channel id
                 description: Campaign channel id
                 tags:
@@ -57,15 +55,15 @@ interactions:
                 sourceColumnDataType: STRING
                 valueType: TEXT
                 areRelationsValid: true
+              id: campaign_channel_id
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_channel_id
               meta:
                 origin:
-                  originType: NATIVE
                   originId: demo
-            - id: campaign_channels.category
+                  originType: NATIVE
               type: label
-              attributes:
+            - attributes:
                 title: Category
                 description: Category
                 tags:
@@ -75,15 +73,15 @@ interactions:
                 sourceColumnDataType: STRING
                 valueType: TEXT
                 areRelationsValid: true
+              id: campaign_channels.category
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_channels.category
               meta:
                 origin:
-                  originType: NATIVE
                   originId: demo
-            - id: campaign_id
+                  originType: NATIVE
               type: label
-              attributes:
+            - attributes:
                 title: Campaign id
                 description: Campaign id
                 tags:
@@ -93,15 +91,15 @@ interactions:
                 sourceColumnDataType: INT
                 valueType: TEXT
                 areRelationsValid: true
+              id: campaign_id
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_id
               meta:
                 origin:
-                  originType: NATIVE
                   originId: demo
-            - id: campaign_name
+                  originType: NATIVE
               type: label
-              attributes:
+            - attributes:
                 title: Campaign name
                 description: Campaign name
                 tags:
@@ -111,15 +109,15 @@ interactions:
                 sourceColumnDataType: STRING
                 valueType: TEXT
                 areRelationsValid: true
+              id: campaign_name
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_name
               meta:
                 origin:
-                  originType: NATIVE
                   originId: demo
-            - id: customer_id
+                  originType: NATIVE
               type: label
-              attributes:
+            - attributes:
                 title: Customer id
                 description: Customer id
                 tags:
@@ -129,15 +127,15 @@ interactions:
                 sourceColumnDataType: INT
                 valueType: TEXT
                 areRelationsValid: true
+              id: customer_id
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/customer_id
               meta:
                 origin:
-                  originType: NATIVE
                   originId: demo
-            - id: customer_name
+                  originType: NATIVE
               type: label
-              attributes:
+            - attributes:
                 title: Customer name
                 description: Customer name
                 tags:
@@ -147,15 +145,15 @@ interactions:
                 sourceColumnDataType: STRING
                 valueType: TEXT
                 areRelationsValid: true
+              id: customer_name
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/customer_name
               meta:
                 origin:
-                  originType: NATIVE
                   originId: demo
-            - id: date.day
+                  originType: NATIVE
               type: label
-              attributes:
+            - attributes:
                 title: Date - Date
                 description: Date
                 tags:
@@ -163,15 +161,15 @@ interactions:
                 primary: true
                 sourceColumn: ''
                 areRelationsValid: true
+              id: date.day
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.day
               meta:
                 origin:
-                  originType: NATIVE
                   originId: demo
-            - id: date.month
+                  originType: NATIVE
               type: label
-              attributes:
+            - attributes:
                 title: Date - Month/Year
                 description: Month and Year (12/2020)
                 tags:
@@ -179,15 +177,15 @@ interactions:
                 primary: true
                 sourceColumn: ''
                 areRelationsValid: true
+              id: date.month
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.month
               meta:
                 origin:
-                  originType: NATIVE
                   originId: demo
-            - id: date.quarter
+                  originType: NATIVE
               type: label
-              attributes:
+            - attributes:
                 title: Date - Quarter/Year
                 description: Quarter and Year (Q1/2020)
                 tags:
@@ -195,15 +193,15 @@ interactions:
                 primary: true
                 sourceColumn: ''
                 areRelationsValid: true
+              id: date.quarter
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.quarter
               meta:
                 origin:
-                  originType: NATIVE
                   originId: demo
-            - id: date.week
+                  originType: NATIVE
               type: label
-              attributes:
+            - attributes:
                 title: Date - Week/Year
                 description: Week and Year (W52/2020)
                 tags:
@@ -211,15 +209,15 @@ interactions:
                 primary: true
                 sourceColumn: ''
                 areRelationsValid: true
+              id: date.week
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.week
               meta:
                 origin:
-                  originType: NATIVE
                   originId: demo
-            - id: date.year
+                  originType: NATIVE
               type: label
-              attributes:
+            - attributes:
                 title: Date - Year
                 description: Year
                 tags:
@@ -227,15 +225,15 @@ interactions:
                 primary: true
                 sourceColumn: ''
                 areRelationsValid: true
+              id: date.year
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.year
               meta:
                 origin:
-                  originType: NATIVE
                   originId: demo
-            - id: geo__state__location
+                  originType: NATIVE
               type: label
-              attributes:
+            - attributes:
                 title: Location
                 description: Location
                 tags:
@@ -249,15 +247,15 @@ interactions:
                 translations:
                   - sourceColumn: geo__state__location_cz
                     locale: cs-CZ
+              id: geo__state__location
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/geo__state__location
               meta:
                 origin:
-                  originType: NATIVE
                   originId: demo
-            - id: order_id
+                  originType: NATIVE
               type: label
-              attributes:
+            - attributes:
                 title: Order id
                 description: Order id
                 tags:
@@ -267,15 +265,15 @@ interactions:
                 sourceColumnDataType: STRING
                 valueType: TEXT
                 areRelationsValid: true
+              id: order_id
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_id
               meta:
                 origin:
-                  originType: NATIVE
                   originId: demo
-            - id: order_line_id
+                  originType: NATIVE
               type: label
-              attributes:
+            - attributes:
                 title: Order line id
                 description: Order line id
                 tags:
@@ -285,15 +283,15 @@ interactions:
                 sourceColumnDataType: STRING
                 valueType: TEXT
                 areRelationsValid: true
+              id: order_line_id
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_line_id
               meta:
                 origin:
-                  originType: NATIVE
                   originId: demo
-            - id: order_status
+                  originType: NATIVE
               type: label
-              attributes:
+            - attributes:
                 title: Order status
                 description: Order status
                 tags:
@@ -303,15 +301,15 @@ interactions:
                 sourceColumnDataType: STRING
                 valueType: TEXT
                 areRelationsValid: true
+              id: order_status
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_status
               meta:
                 origin:
-                  originType: NATIVE
                   originId: demo
-            - id: product_id
+                  originType: NATIVE
               type: label
-              attributes:
+            - attributes:
                 title: Product id
                 description: Product id
                 tags:
@@ -321,15 +319,15 @@ interactions:
                 sourceColumnDataType: INT
                 valueType: TEXT
                 areRelationsValid: true
+              id: product_id
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/product_id
               meta:
                 origin:
-                  originType: NATIVE
                   originId: demo
-            - id: product_name
+                  originType: NATIVE
               type: label
-              attributes:
+            - attributes:
                 title: Product name
                 description: Product name
                 tags:
@@ -339,15 +337,15 @@ interactions:
                 sourceColumnDataType: STRING
                 valueType: TEXT
                 areRelationsValid: true
+              id: product_name
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/product_name
               meta:
                 origin:
-                  originType: NATIVE
                   originId: demo
-            - id: products.category
+                  originType: NATIVE
               type: label
-              attributes:
+            - attributes:
                 title: Category
                 description: Category
                 tags:
@@ -357,15 +355,15 @@ interactions:
                 sourceColumnDataType: STRING
                 valueType: TEXT
                 areRelationsValid: true
+              id: products.category
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/products.category
               meta:
                 origin:
-                  originType: NATIVE
                   originId: demo
-            - id: region
+                  originType: NATIVE
               type: label
-              attributes:
+            - attributes:
                 title: Region
                 description: Region
                 tags:
@@ -375,15 +373,15 @@ interactions:
                 sourceColumnDataType: STRING
                 valueType: TEXT
                 areRelationsValid: true
+              id: region
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/region
               meta:
                 origin:
-                  originType: NATIVE
                   originId: demo
-            - id: state
+                  originType: NATIVE
               type: label
-              attributes:
+            - attributes:
                 title: State
                 description: State
                 tags:
@@ -393,15 +391,15 @@ interactions:
                 sourceColumnDataType: STRING
                 valueType: TEXT
                 areRelationsValid: true
+              id: state
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/state
               meta:
                 origin:
-                  originType: NATIVE
                   originId: demo
-            - id: type
+                  originType: NATIVE
               type: label
-              attributes:
+            - attributes:
                 title: Type
                 description: Type
                 tags:
@@ -411,12 +409,14 @@ interactions:
                 sourceColumnDataType: STRING
                 valueType: TEXT
                 areRelationsValid: true
+              id: type
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/type
               meta:
                 origin:
-                  originType: NATIVE
                   originId: demo
+                  originType: NATIVE
+              type: label
           links:
             self: http://localhost:3000/api/v1/entities/workspaces/demo/labels?page=0&size=500
             next: http://localhost:3000/api/v1/entities/workspaces/demo/labels?page=1&size=500
