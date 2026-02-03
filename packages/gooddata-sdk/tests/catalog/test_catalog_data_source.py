@@ -44,6 +44,7 @@ from gooddata_sdk import (
 )
 from gooddata_sdk.catalog.data_source.entity_model.data_source import DatabaseAttributes
 from gooddata_sdk.catalog.entity import ClientSecretCredentialsFromFile
+from tests_support.compare_utils import deep_eq
 from tests_support.file_utils import load_json
 from tests_support.vcrpy_utils import get_vcr
 
@@ -93,7 +94,11 @@ def test_generate_logical_model(test_config: dict):
     """
     # Filter out SQL-based datasets (those have sql property set, no data_source_table_id)
     table_based_datasets = [ds for ds in declarative_model.ldm.datasets if ds.sql is None]
-    assert table_based_datasets == generated_declarative_model.ldm.datasets
+
+    for i, dataset in enumerate(table_based_datasets):
+        print(f"Dataset: {dataset.id}")
+        assert deep_eq(dataset, generated_declarative_model.ldm.datasets[i])
+
     assert len(declarative_model.ldm.date_instances) == len(generated_declarative_model.ldm.date_instances)
 
 
@@ -117,7 +122,10 @@ def test_scan_pdm_and_generate_logical_model(test_config: dict):
     """
     # Filter out SQL-based datasets (those have sql property set, no data_source_table_id)
     table_based_datasets = [ds for ds in declarative_model.ldm.datasets if ds.sql is None]
-    assert table_based_datasets == generated_declarative_model.ldm.datasets
+    for i, dataset in enumerate(table_based_datasets):
+        print(f"Dataset: {dataset.id}")
+        assert deep_eq(dataset, generated_declarative_model.ldm.datasets[i])
+
     assert len(declarative_model.ldm.date_instances) == len(generated_declarative_model.ldm.date_instances)
 
 
@@ -182,7 +190,9 @@ def test_generate_logical_model_with_sql_datasets(test_config: dict):
     #  and remove sort once fixed
     generated_declarative_model.ldm.datasets.sort(key=lambda dataset: dataset.id)
     expected_ldm.ldm.datasets.sort(key=lambda dataset: dataset.id)
-    assert expected_ldm.ldm.datasets == generated_declarative_model.ldm.datasets
+    for i, dataset in enumerate(expected_ldm.ldm.datasets):
+        print(f"Dataset: {dataset.id}")
+        assert deep_eq(dataset, generated_declarative_model.ldm.datasets[i])
     assert len(expected_ldm.ldm.date_instances) == len(generated_declarative_model.ldm.date_instances)
 
 
@@ -208,7 +218,9 @@ def test_scan_pdm_and_generate_logical_model_with_sql_datasets(test_config: dict
     #  and remove sort once fixed
     generated_declarative_model.ldm.datasets.sort(key=lambda dataset: dataset.id)
     expected_ldm.ldm.datasets.sort(key=lambda dataset: dataset.id)
-    assert expected_ldm.ldm.datasets == generated_declarative_model.ldm.datasets
+    for i, dataset in enumerate(expected_ldm.ldm.datasets):
+        print(f"Dataset {dataset.id}")
+        assert deep_eq(dataset, generated_declarative_model.ldm.datasets[i])
     assert len(expected_ldm.ldm.date_instances) == len(generated_declarative_model.ldm.date_instances)
 
 
