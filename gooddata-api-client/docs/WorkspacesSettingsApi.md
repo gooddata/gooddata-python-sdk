@@ -1288,11 +1288,21 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = workspaces_settings_api.WorkspacesSettingsApi(api_client)
     workspace_id = "workspaceId_example" # str | 
+    exclude_user_settings = False # bool | If true, user-level settings are excluded from resolution. (optional) if omitted the server will use the default value of False
 
     # example passing only required values which don't have defaults set
     try:
         # Values for all settings.
         api_response = api_instance.workspace_resolve_all_settings(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling WorkspacesSettingsApi->workspace_resolve_all_settings: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Values for all settings.
+        api_response = api_instance.workspace_resolve_all_settings(workspace_id, exclude_user_settings=exclude_user_settings)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling WorkspacesSettingsApi->workspace_resolve_all_settings: %s\n" % e)
@@ -1304,6 +1314,7 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
+ **exclude_user_settings** | **bool**| If true, user-level settings are excluded from resolution. | [optional] if omitted the server will use the default value of False
 
 ### Return type
 
@@ -1359,11 +1370,21 @@ with gooddata_api_client.ApiClient() as api_client:
     resolve_settings_request = ResolveSettingsRequest(
         settings=["timezone"],
     ) # ResolveSettingsRequest | 
+    exclude_user_settings = False # bool | If true, user-level settings are excluded from resolution. (optional) if omitted the server will use the default value of False
 
     # example passing only required values which don't have defaults set
     try:
         # Values for selected settings.
         api_response = api_instance.workspace_resolve_settings(workspace_id, resolve_settings_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling WorkspacesSettingsApi->workspace_resolve_settings: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Values for selected settings.
+        api_response = api_instance.workspace_resolve_settings(workspace_id, resolve_settings_request, exclude_user_settings=exclude_user_settings)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling WorkspacesSettingsApi->workspace_resolve_settings: %s\n" % e)
@@ -1376,6 +1397,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
  **resolve_settings_request** | [**ResolveSettingsRequest**](ResolveSettingsRequest.md)|  |
+ **exclude_user_settings** | **bool**| If true, user-level settings are excluded from resolution. | [optional] if omitted the server will use the default value of False
 
 ### Return type
 

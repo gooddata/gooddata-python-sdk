@@ -35,11 +35,13 @@ configuration = gooddata_api_client.Configuration(
 with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = reporting_settings_api.ReportingSettingsApi(api_client)
+    exclude_user_settings = False # bool | If true, user-level settings are excluded from resolution. (optional) if omitted the server will use the default value of False
 
-    # example, this endpoint has no required or optional parameters
+    # example passing only required values which don't have defaults set
+    # and optional values
     try:
         # Values for all settings without workspace.
-        api_response = api_instance.resolve_all_settings_without_workspace()
+        api_response = api_instance.resolve_all_settings_without_workspace(exclude_user_settings=exclude_user_settings)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling ReportingSettingsApi->resolve_all_settings_without_workspace: %s\n" % e)
@@ -47,7 +49,10 @@ with gooddata_api_client.ApiClient() as api_client:
 
 
 ### Parameters
-This endpoint does not need any parameter.
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **exclude_user_settings** | **bool**| If true, user-level settings are excluded from resolution. | [optional] if omitted the server will use the default value of False
 
 ### Return type
 
@@ -102,11 +107,21 @@ with gooddata_api_client.ApiClient() as api_client:
     resolve_settings_request = ResolveSettingsRequest(
         settings=["timezone"],
     ) # ResolveSettingsRequest | 
+    exclude_user_settings = False # bool | If true, user-level settings are excluded from resolution. (optional) if omitted the server will use the default value of False
 
     # example passing only required values which don't have defaults set
     try:
         # Values for selected settings without workspace.
         api_response = api_instance.resolve_settings_without_workspace(resolve_settings_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ReportingSettingsApi->resolve_settings_without_workspace: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Values for selected settings without workspace.
+        api_response = api_instance.resolve_settings_without_workspace(resolve_settings_request, exclude_user_settings=exclude_user_settings)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling ReportingSettingsApi->resolve_settings_without_workspace: %s\n" % e)
@@ -118,6 +133,7 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **resolve_settings_request** | [**ResolveSettingsRequest**](ResolveSettingsRequest.md)|  |
+ **exclude_user_settings** | **bool**| If true, user-level settings are excluded from resolution. | [optional] if omitted the server will use the default value of False
 
 ### Return type
 

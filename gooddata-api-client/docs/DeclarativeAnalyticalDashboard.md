@@ -13,6 +13,7 @@ Name | Type | Description | Notes
 **modified_at** | **str, none_type** | Time of the last entity modification. | [optional] 
 **modified_by** | [**DeclarativeUserIdentifier**](DeclarativeUserIdentifier.md) |  | [optional] 
 **permissions** | [**[DeclarativeAnalyticalDashboardPermissionsInner]**](DeclarativeAnalyticalDashboardPermissionsInner.md) | A list of permissions. | [optional] 
+**summary** | **str** | AI-generated summary of the dashboard content | [optional] 
 **tags** | **[str]** | A list of tags. | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 
