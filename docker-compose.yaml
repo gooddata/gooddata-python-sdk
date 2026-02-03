@@ -530,6 +530,7 @@ services:
       GDC_FEATURES_VALUES_ENABLE_RAW_EXPORTS: "true"
       GDC_FEATURES_VALUES_ENABLE_FLEXIBLE_DASHBOARD_LAYOUT: "true"
       GDC_FEATURES_VALUES_ENABLE_SNOWFLAKE_KEY_PAIR_AUTHENTICATION: "true"
+      GDC_FEATURES_VALUES_ENABLE_DATA_SOURCE_ROUTING: "true"
     depends_on:
       postgres:
         condition: service_healthy
