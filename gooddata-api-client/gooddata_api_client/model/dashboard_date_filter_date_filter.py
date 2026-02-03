@@ -130,6 +130,7 @@ class DashboardDateFilterDateFilter(ModelNormal):
             'bounded_filter': (RelativeBoundedDateFilter,),  # noqa: E501
             'data_set': (IdentifierRef,),  # noqa: E501
             '_from': (AacDashboardFilterFrom,),  # noqa: E501
+            'include_empty_values': (bool,),  # noqa: E501
             'local_identifier': (str,),  # noqa: E501
             'to': (AacDashboardFilterFrom,),  # noqa: E501
         }
@@ -146,6 +147,7 @@ class DashboardDateFilterDateFilter(ModelNormal):
         'bounded_filter': 'boundedFilter',  # noqa: E501
         'data_set': 'dataSet',  # noqa: E501
         '_from': 'from',  # noqa: E501
+        'include_empty_values': 'includeEmptyValues',  # noqa: E501
         'local_identifier': 'localIdentifier',  # noqa: E501
         'to': 'to',  # noqa: E501
     }
@@ -199,6 +201,7 @@ class DashboardDateFilterDateFilter(ModelNormal):
             bounded_filter (RelativeBoundedDateFilter): [optional]  # noqa: E501
             data_set (IdentifierRef): [optional]  # noqa: E501
             _from (AacDashboardFilterFrom): [optional]  # noqa: E501
+            include_empty_values (bool): [optional]  # noqa: E501
             local_identifier (str): [optional]  # noqa: E501
             to (AacDashboardFilterFrom): [optional]  # noqa: E501
         """
@@ -296,6 +299,7 @@ class DashboardDateFilterDateFilter(ModelNormal):
             bounded_filter (RelativeBoundedDateFilter): [optional]  # noqa: E501
             data_set (IdentifierRef): [optional]  # noqa: E501
             _from (AacDashboardFilterFrom): [optional]  # noqa: E501
+            include_empty_values (bool): [optional]  # noqa: E501
             local_identifier (str): [optional]  # noqa: E501
             to (AacDashboardFilterFrom): [optional]  # noqa: E501
         """

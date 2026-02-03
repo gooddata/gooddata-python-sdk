@@ -96,10 +96,10 @@ interactions:
       body:
         string:
           data:
+            attributes:
+              bearerToken: ZGVtbzp0ZXN0X3Rva2VuOlBUV0UyNUR3U2JkK1VFTFlOYWhMZExxcnR5QUlma3l6
             id: test_token
             type: apiToken
-            attributes:
-              bearerToken: ZGVtbzp0ZXN0X3Rva2VuOitVbERrQldGZjJRYlJJRnV6amJkZUVFTSthUWlNVEtM
           links:
             self: http://localhost:3000/api/v1/entities/users/demo/apiTokens/test_token
   - request:
@@ -145,9 +145,9 @@ interactions:
       body:
         string:
           data:
+            attributes: {}
             id: test_token
             type: apiToken
-            attributes: {}
           links:
             self: http://localhost:3000/api/v1/entities/users/demo/apiTokens/test_token
   - request:
@@ -193,11 +193,11 @@ interactions:
       body:
         string:
           data:
-            - id: test_token
-              type: apiToken
-              attributes: {}
+            - attributes: {}
+              id: test_token
               links:
                 self: http://localhost:3000/api/v1/entities/users/demo/apiTokens/test_token
+              type: apiToken
           links:
             self: http://localhost:3000/api/v1/entities/users/demo/apiTokens?page=0&size=500
             next: http://localhost:3000/api/v1/entities/users/demo/apiTokens?page=1&size=500

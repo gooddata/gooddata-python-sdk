@@ -45,9 +45,7 @@ interactions:
       body:
         string:
           data:
-            - id: budget_agg
-              type: aggregatedFact
-              attributes:
+            - attributes:
                 description: Budget Agg
                 tags:
                   - Campaign channels per category
@@ -55,12 +53,14 @@ interactions:
                 sourceColumnDataType: INT
                 areRelationsValid: true
                 operation: SUM
+              id: budget_agg
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/aggregatedFacts/budget_agg
               meta:
                 origin:
-                  originType: NATIVE
                   originId: demo
+                  originType: NATIVE
+              type: aggregatedFact
           links:
             self: http://localhost:3000/api/v1/entities/workspaces/demo/aggregatedFacts?page=0&size=500
             next: http://localhost:3000/api/v1/entities/workspaces/demo/aggregatedFacts?page=1&size=500

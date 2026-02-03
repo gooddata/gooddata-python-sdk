@@ -84,6 +84,7 @@ class ApiEntitlement(ModelNormal):
             'FEDERATEDIDENTITYMANAGEMENT': "FederatedIdentityManagement",
             'AUDITLOGGING': "AuditLogging",
             'CONTROLLEDFEATUREROLLOUT': "ControlledFeatureRollout",
+            'AILAKE': "AiLake",
         },
     }
 

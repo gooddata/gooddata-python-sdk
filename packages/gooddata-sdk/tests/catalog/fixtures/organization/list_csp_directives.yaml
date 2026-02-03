@@ -53,11 +53,11 @@ interactions:
       body:
         string:
           data:
-            id: font-src
-            type: cspDirective
             attributes:
               sources:
                 - https://test.com
+            id: font-src
+            type: cspDirective
           links:
             self: http://localhost:3000/api/v1/entities/cspDirectives/font-src
   - request:
@@ -111,11 +111,11 @@ interactions:
       body:
         string:
           data:
-            id: script-src
-            type: cspDirective
             attributes:
               sources:
                 - https://test2.com
+            id: script-src
+            type: cspDirective
           links:
             self: http://localhost:3000/api/v1/entities/cspDirectives/script-src
   - request:
@@ -161,20 +161,20 @@ interactions:
       body:
         string:
           data:
-            - id: font-src
-              type: cspDirective
-              attributes:
+            - attributes:
                 sources:
                   - https://test.com
+              id: font-src
               links:
                 self: http://localhost:3000/api/v1/entities/cspDirectives/font-src
-            - id: script-src
               type: cspDirective
-              attributes:
+            - attributes:
                 sources:
                   - https://test2.com
+              id: script-src
               links:
                 self: http://localhost:3000/api/v1/entities/cspDirectives/script-src
+              type: cspDirective
           links:
             self: http://localhost:3000/api/v1/entities/cspDirectives?page=0&size=500
             next: http://localhost:3000/api/v1/entities/cspDirectives?page=1&size=500

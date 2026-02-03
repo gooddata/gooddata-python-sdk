@@ -56,7 +56,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-Gdc-Cancel-Token:
-          - b9fbf665-ca6b-4884-b088-8b845ce59f62
+          - a73592b0-513c-4b92-9d94-cc92213431c5
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - '0'
@@ -82,7 +82,7 @@ interactions:
                       valueType: TEXT
                 localIdentifier: dim_0
             links:
-              executionResult: 122f5a204f4ab18b060ca01c16e06d67eb75582d:d8fa71521f059404e12667a92accb39028bd21d47f52cf1c434362039b6f95bf
+              executionResult: 7f158a2303c13652050437140c2abcf436a0003d:a01a4f63f282410b5f34fb54c2f981bdf93a3da7f07957573027e2757aacbbf7
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3Din%3D%28region%29&page=0&size=500
@@ -126,9 +126,7 @@ interactions:
       body:
         string:
           data:
-            - id: region
-              type: attribute
-              attributes:
+            - attributes:
                 title: Region
                 description: Region
                 tags:
@@ -136,6 +134,13 @@ interactions:
                 areRelationsValid: true
                 sourceColumn: region
                 sourceColumnDataType: STRING
+              id: region
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/region
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
               relationships:
                 dataset:
                   data:
@@ -145,16 +150,9 @@ interactions:
                   data:
                     - id: region
                       type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/region
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
+              type: attribute
           included:
-            - id: customers
-              type: dataset
-              attributes:
+            - attributes:
                 title: Customers
                 description: Customers
                 tags:
@@ -167,11 +165,11 @@ interactions:
                   - demo
                   - customers
                 type: NORMAL
+              id: customers
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/customers
-            - id: region
-              type: label
-              attributes:
+              type: dataset
+            - attributes:
                 title: Region
                 description: Region
                 tags:
@@ -180,14 +178,16 @@ interactions:
                 sourceColumn: region
                 sourceColumnDataType: STRING
                 valueType: TEXT
+              id: region
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/region
+              type: label
           links:
             self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3D%3D%27region%27&page=0&size=500
             next: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3D%3D%27region%27&page=1&size=500
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/122f5a204f4ab18b060ca01c16e06d67eb75582d%3Ad8fa71521f059404e12667a92accb39028bd21d47f52cf1c434362039b6f95bf?offset=0&limit=1000
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/7f158a2303c13652050437140c2abcf436a0003d%3Aa01a4f63f282410b5f34fb54c2f981bdf93a3da7f07957573027e2757aacbbf7?offset=0&limit=1000
       body: null
       headers:
         Accept:

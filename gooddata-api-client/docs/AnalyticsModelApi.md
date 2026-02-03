@@ -144,6 +144,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     permissions=[
                         DeclarativeAnalyticalDashboardPermissionsInner(None),
                     ],
+                    summary="summary_example",
                     tags=["Revenues"],
                     title="Revenues analysis",
                 ),
@@ -214,6 +215,30 @@ with gooddata_api_client.ApiClient() as api_client:
                     title="Filter Context for Sales team",
                 ),
             ],
+            memory_items=[
+                DeclarativeMemoryItem(
+                    created_at="2023-07-20 12:30",
+                    created_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
+                    description="Context about sales data for AI assistant.",
+                    id="sales-context",
+                    instruction="When discussing sales, always consider quarterly trends.",
+                    is_disabled=False,
+                    keywords=[
+                        "keywords_example",
+                    ],
+                    modified_at="2023-07-20 12:30",
+                    modified_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
+                    strategy="AUTO",
+                    tags=["AI","Context"],
+                    title="Sales Context",
+                ),
+            ],
             metrics=[
                 DeclarativeMetric(
                     content=JsonNode(),
@@ -225,6 +250,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     description="Sales for all the data available.",
                     id="total-sales",
                     is_hidden=False,
+                    is_hidden_from_kda=False,
                     modified_at="["2023-07-20 12:30"]",
                     modified_by=DeclarativeUserIdentifier(
                         id="employee123",

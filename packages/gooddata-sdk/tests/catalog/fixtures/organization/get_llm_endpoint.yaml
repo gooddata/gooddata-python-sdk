@@ -53,12 +53,12 @@ interactions:
       body:
         string:
           data:
-            id: endpoint1
-            type: llmEndpoint
             attributes:
               provider: OPENAI
               llmModel: gpt-4o
               title: Test Endpoint
+            id: endpoint1
+            type: llmEndpoint
           links:
             self: http://localhost:3000/api/v1/entities/llmEndpoints/endpoint1
   - request:
@@ -104,12 +104,12 @@ interactions:
       body:
         string:
           data:
-            id: endpoint1
-            type: llmEndpoint
             attributes:
               provider: OPENAI
               llmModel: gpt-4o
               title: Test Endpoint
+            id: endpoint1
+            type: llmEndpoint
           links:
             self: http://localhost:3000/api/v1/entities/llmEndpoints/endpoint1
   - request:

@@ -53,12 +53,12 @@ interactions:
       body:
         string:
           data:
-            id: endpoint1
-            type: llmEndpoint
             attributes:
               provider: OPENAI
               llmModel: gpt-4o
               title: Test Endpoint 1
+            id: endpoint1
+            type: llmEndpoint
           links:
             self: http://localhost:3000/api/v1/entities/llmEndpoints/endpoint1
   - request:
@@ -112,12 +112,12 @@ interactions:
       body:
         string:
           data:
-            id: endpoint2
-            type: llmEndpoint
             attributes:
               provider: OPENAI
               llmModel: gpt-4o
               title: Test Endpoint 2
+            id: endpoint2
+            type: llmEndpoint
           links:
             self: http://localhost:3000/api/v1/entities/llmEndpoints/endpoint2
   - request:
@@ -163,22 +163,22 @@ interactions:
       body:
         string:
           data:
-            - id: endpoint1
-              type: llmEndpoint
-              attributes:
+            - attributes:
                 provider: OPENAI
                 llmModel: gpt-4o
                 title: Test Endpoint 1
+              id: endpoint1
               links:
                 self: http://localhost:3000/api/v1/entities/llmEndpoints/endpoint1
-            - id: endpoint2
               type: llmEndpoint
-              attributes:
+            - attributes:
                 provider: OPENAI
                 llmModel: gpt-4o
                 title: Test Endpoint 2
+              id: endpoint2
               links:
                 self: http://localhost:3000/api/v1/entities/llmEndpoints/endpoint2
+              type: llmEndpoint
           links:
             self: http://localhost:3000/api/v1/entities/llmEndpoints?page=0&size=20
             next: http://localhost:3000/api/v1/entities/llmEndpoints?page=1&size=20
@@ -225,14 +225,14 @@ interactions:
       body:
         string:
           data:
-            - id: endpoint1
-              type: llmEndpoint
-              attributes:
+            - attributes:
                 provider: OPENAI
                 llmModel: gpt-4o
                 title: Test Endpoint 1
+              id: endpoint1
               links:
                 self: http://localhost:3000/api/v1/entities/llmEndpoints/endpoint1
+              type: llmEndpoint
           links:
             self: http://localhost:3000/api/v1/entities/llmEndpoints?filter=title%3D%3D%27Test+Endpoint+1%27&page=0&size=1
             next: http://localhost:3000/api/v1/entities/llmEndpoints?filter=title%3D%3D%27Test+Endpoint+1%27&page=1&size=1

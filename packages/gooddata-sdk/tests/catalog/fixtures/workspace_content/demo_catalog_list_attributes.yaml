@@ -45,9 +45,7 @@ interactions:
       body:
         string:
           data:
-            - id: campaign_channel_id
-              type: attribute
-              attributes:
+            - attributes:
                 title: Campaign channel id
                 description: Campaign channel id
                 tags:
@@ -55,20 +53,20 @@ interactions:
                 areRelationsValid: true
                 sourceColumn: campaign_channel_id
                 sourceColumnDataType: STRING
+              id: campaign_channel_id
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_channel_id
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
               relationships:
                 labels:
                   data:
                     - id: campaign_channel_id
                       type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_channel_id
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: campaign_channels.category
               type: attribute
-              attributes:
+            - attributes:
                 title: Category
                 description: Category
                 tags:
@@ -76,20 +74,20 @@ interactions:
                 areRelationsValid: true
                 sourceColumn: category
                 sourceColumnDataType: STRING
+              id: campaign_channels.category
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_channels.category
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
               relationships:
                 labels:
                   data:
                     - id: campaign_channels.category
                       type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_channels.category
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: campaign_id
               type: attribute
-              attributes:
+            - attributes:
                 title: Campaign id
                 description: Campaign id
                 tags:
@@ -97,20 +95,20 @@ interactions:
                 areRelationsValid: true
                 sourceColumn: campaign_id
                 sourceColumnDataType: INT
+              id: campaign_id
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_id
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
               relationships:
                 labels:
                   data:
                     - id: campaign_id
                       type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_id
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: campaign_name
               type: attribute
-              attributes:
+            - attributes:
                 title: Campaign name
                 description: Campaign name
                 tags:
@@ -118,20 +116,20 @@ interactions:
                 areRelationsValid: true
                 sourceColumn: campaign_name
                 sourceColumnDataType: STRING
+              id: campaign_name
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_name
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
               relationships:
                 labels:
                   data:
                     - id: campaign_name
                       type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_name
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: customer_id
               type: attribute
-              attributes:
+            - attributes:
                 title: Customer id
                 description: Customer id
                 tags:
@@ -139,20 +137,20 @@ interactions:
                 areRelationsValid: true
                 sourceColumn: customer_id
                 sourceColumnDataType: INT
+              id: customer_id
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/customer_id
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
               relationships:
                 labels:
                   data:
                     - id: customer_id
                       type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/customer_id
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: customer_name
               type: attribute
-              attributes:
+            - attributes:
                 title: Customer name
                 description: Customer name
                 tags:
@@ -160,120 +158,120 @@ interactions:
                 areRelationsValid: true
                 sourceColumn: customer_name
                 sourceColumnDataType: STRING
+              id: customer_name
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/customer_name
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
               relationships:
                 labels:
                   data:
                     - id: customer_name
                       type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/customer_name
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: date.day
               type: attribute
-              attributes:
+            - attributes:
                 title: Date - Date
                 description: Date
                 tags:
                   - Date
                 granularity: DAY
                 areRelationsValid: true
+              id: date.day
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.day
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
               relationships:
                 labels:
                   data:
                     - id: date.day
                       type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.day
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: date.month
               type: attribute
-              attributes:
+            - attributes:
                 title: Date - Month/Year
                 description: Month and Year (12/2020)
                 tags:
                   - Date
                 granularity: MONTH
                 areRelationsValid: true
+              id: date.month
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.month
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
               relationships:
                 labels:
                   data:
                     - id: date.month
                       type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.month
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: date.quarter
               type: attribute
-              attributes:
+            - attributes:
                 title: Date - Quarter/Year
                 description: Quarter and Year (Q1/2020)
                 tags:
                   - Date
                 granularity: QUARTER
                 areRelationsValid: true
+              id: date.quarter
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.quarter
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
               relationships:
                 labels:
                   data:
                     - id: date.quarter
                       type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.quarter
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: date.week
               type: attribute
-              attributes:
+            - attributes:
                 title: Date - Week/Year
                 description: Week and Year (W52/2020)
                 tags:
                   - Date
                 granularity: WEEK
                 areRelationsValid: true
+              id: date.week
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.week
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
               relationships:
                 labels:
                   data:
                     - id: date.week
                       type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.week
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: date.year
               type: attribute
-              attributes:
+            - attributes:
                 title: Date - Year
                 description: Year
                 tags:
                   - Date
                 granularity: YEAR
                 areRelationsValid: true
+              id: date.year
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.year
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
               relationships:
                 labels:
                   data:
                     - id: date.year
                       type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.year
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: order_id
               type: attribute
-              attributes:
+            - attributes:
                 title: Order id
                 description: Order id
                 tags:
@@ -281,20 +279,20 @@ interactions:
                 areRelationsValid: true
                 sourceColumn: order_id
                 sourceColumnDataType: STRING
+              id: order_id
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_id
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
               relationships:
                 labels:
                   data:
                     - id: order_id
                       type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_id
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: order_line_id
               type: attribute
-              attributes:
+            - attributes:
                 title: Order line id
                 description: Order line id
                 tags:
@@ -302,20 +300,20 @@ interactions:
                 areRelationsValid: true
                 sourceColumn: order_line_id
                 sourceColumnDataType: STRING
+              id: order_line_id
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_line_id
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
               relationships:
                 labels:
                   data:
                     - id: order_line_id
                       type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_line_id
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: order_status
               type: attribute
-              attributes:
+            - attributes:
                 title: Order status
                 description: Order status
                 tags:
@@ -323,20 +321,20 @@ interactions:
                 areRelationsValid: true
                 sourceColumn: order_status
                 sourceColumnDataType: STRING
+              id: order_status
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_status
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
               relationships:
                 labels:
                   data:
                     - id: order_status
                       type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_status
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: product_id
               type: attribute
-              attributes:
+            - attributes:
                 title: Product id
                 description: Product id
                 tags:
@@ -344,20 +342,20 @@ interactions:
                 areRelationsValid: true
                 sourceColumn: product_id
                 sourceColumnDataType: INT
+              id: product_id
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/product_id
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
               relationships:
                 labels:
                   data:
                     - id: product_id
                       type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/product_id
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: product_name
               type: attribute
-              attributes:
+            - attributes:
                 title: Product name
                 description: Product name
                 tags:
@@ -365,20 +363,20 @@ interactions:
                 areRelationsValid: true
                 sourceColumn: product_name
                 sourceColumnDataType: STRING
+              id: product_name
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/product_name
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
               relationships:
                 labels:
                   data:
                     - id: product_name
                       type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/product_name
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: products.category
               type: attribute
-              attributes:
+            - attributes:
                 title: Category
                 description: Category
                 tags:
@@ -386,20 +384,20 @@ interactions:
                 areRelationsValid: true
                 sourceColumn: category
                 sourceColumnDataType: STRING
+              id: products.category
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/products.category
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
               relationships:
                 labels:
                   data:
                     - id: products.category
                       type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/products.category
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: region
               type: attribute
-              attributes:
+            - attributes:
                 title: Region
                 description: Region
                 tags:
@@ -407,20 +405,20 @@ interactions:
                 areRelationsValid: true
                 sourceColumn: region
                 sourceColumnDataType: STRING
+              id: region
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/region
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
               relationships:
                 labels:
                   data:
                     - id: region
                       type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/region
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: state
               type: attribute
-              attributes:
+            - attributes:
                 title: State
                 description: State
                 tags:
@@ -428,22 +426,22 @@ interactions:
                 areRelationsValid: true
                 sourceColumn: state
                 sourceColumnDataType: STRING
-              relationships:
-                labels:
-                  data:
-                    - id: geo__state__location
-                      type: label
-                    - id: state
-                      type: label
+              id: state
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/state
               meta:
                 origin:
-                  originType: NATIVE
                   originId: demo
-            - id: type
+                  originType: NATIVE
+              relationships:
+                labels:
+                  data:
+                    - id: state
+                      type: label
+                    - id: geo__state__location
+                      type: label
               type: attribute
-              attributes:
+            - attributes:
                 title: Type
                 description: Type
                 tags:
@@ -451,21 +449,21 @@ interactions:
                 areRelationsValid: true
                 sourceColumn: type
                 sourceColumnDataType: STRING
+              id: type
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/type
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
               relationships:
                 labels:
                   data:
                     - id: type
                       type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/type
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
+              type: attribute
           included:
-            - id: product_name
-              type: label
-              attributes:
+            - attributes:
                 title: Product name
                 description: Product name
                 tags:
@@ -474,11 +472,11 @@ interactions:
                 sourceColumn: product_name
                 sourceColumnDataType: STRING
                 valueType: TEXT
+              id: product_name
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/product_name
-            - id: order_status
               type: label
-              attributes:
+            - attributes:
                 title: Order status
                 description: Order status
                 tags:
@@ -487,11 +485,11 @@ interactions:
                 sourceColumn: order_status
                 sourceColumnDataType: STRING
                 valueType: TEXT
+              id: order_status
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_status
-            - id: campaign_name
               type: label
-              attributes:
+            - attributes:
                 title: Campaign name
                 description: Campaign name
                 tags:
@@ -500,22 +498,22 @@ interactions:
                 sourceColumn: campaign_name
                 sourceColumnDataType: STRING
                 valueType: TEXT
+              id: campaign_name
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_name
-            - id: date.week
               type: label
-              attributes:
+            - attributes:
                 title: Date - Week/Year
                 description: Week and Year (W52/2020)
                 tags:
                   - Date
                 primary: true
                 sourceColumn: ''
+              id: date.week
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.week
-            - id: geo__state__location
               type: label
-              attributes:
+            - attributes:
                 title: Location
                 description: Location
                 tags:
@@ -528,11 +526,11 @@ interactions:
                 translations:
                   - sourceColumn: geo__state__location_cz
                     locale: cs-CZ
+              id: geo__state__location
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/geo__state__location
-            - id: product_id
               type: label
-              attributes:
+            - attributes:
                 title: Product id
                 description: Product id
                 tags:
@@ -541,11 +539,11 @@ interactions:
                 sourceColumn: product_id
                 sourceColumnDataType: INT
                 valueType: TEXT
+              id: product_id
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/product_id
-            - id: order_line_id
               type: label
-              attributes:
+            - attributes:
                 title: Order line id
                 description: Order line id
                 tags:
@@ -554,33 +552,33 @@ interactions:
                 sourceColumn: order_line_id
                 sourceColumnDataType: STRING
                 valueType: TEXT
+              id: order_line_id
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_line_id
-            - id: date.month
               type: label
-              attributes:
+            - attributes:
                 title: Date - Month/Year
                 description: Month and Year (12/2020)
                 tags:
                   - Date
                 primary: true
                 sourceColumn: ''
+              id: date.month
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.month
-            - id: date.quarter
               type: label
-              attributes:
+            - attributes:
                 title: Date - Quarter/Year
                 description: Quarter and Year (Q1/2020)
                 tags:
                   - Date
                 primary: true
                 sourceColumn: ''
+              id: date.quarter
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.quarter
-            - id: campaign_channel_id
               type: label
-              attributes:
+            - attributes:
                 title: Campaign channel id
                 description: Campaign channel id
                 tags:
@@ -589,22 +587,22 @@ interactions:
                 sourceColumn: campaign_channel_id
                 sourceColumnDataType: STRING
                 valueType: TEXT
+              id: campaign_channel_id
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_channel_id
-            - id: date.day
               type: label
-              attributes:
+            - attributes:
                 title: Date - Date
                 description: Date
                 tags:
                   - Date
                 primary: true
                 sourceColumn: ''
+              id: date.day
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.day
-            - id: order_id
               type: label
-              attributes:
+            - attributes:
                 title: Order id
                 description: Order id
                 tags:
@@ -613,11 +611,11 @@ interactions:
                 sourceColumn: order_id
                 sourceColumnDataType: STRING
                 valueType: TEXT
+              id: order_id
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_id
-            - id: campaign_channels.category
               type: label
-              attributes:
+            - attributes:
                 title: Category
                 description: Category
                 tags:
@@ -626,11 +624,11 @@ interactions:
                 sourceColumn: category
                 sourceColumnDataType: STRING
                 valueType: TEXT
+              id: campaign_channels.category
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_channels.category
-            - id: customer_name
               type: label
-              attributes:
+            - attributes:
                 title: Customer name
                 description: Customer name
                 tags:
@@ -639,11 +637,11 @@ interactions:
                 sourceColumn: customer_name
                 sourceColumnDataType: STRING
                 valueType: TEXT
+              id: customer_name
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/customer_name
-            - id: type
               type: label
-              attributes:
+            - attributes:
                 title: Type
                 description: Type
                 tags:
@@ -652,11 +650,11 @@ interactions:
                 sourceColumn: type
                 sourceColumnDataType: STRING
                 valueType: TEXT
+              id: type
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/type
-            - id: region
               type: label
-              attributes:
+            - attributes:
                 title: Region
                 description: Region
                 tags:
@@ -665,11 +663,11 @@ interactions:
                 sourceColumn: region
                 sourceColumnDataType: STRING
                 valueType: TEXT
+              id: region
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/region
-            - id: customer_id
               type: label
-              attributes:
+            - attributes:
                 title: Customer id
                 description: Customer id
                 tags:
@@ -678,22 +676,22 @@ interactions:
                 sourceColumn: customer_id
                 sourceColumnDataType: INT
                 valueType: TEXT
+              id: customer_id
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/customer_id
-            - id: date.year
               type: label
-              attributes:
+            - attributes:
                 title: Date - Year
                 description: Year
                 tags:
                   - Date
                 primary: true
                 sourceColumn: ''
+              id: date.year
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.year
-            - id: state
               type: label
-              attributes:
+            - attributes:
                 title: State
                 description: State
                 tags:
@@ -702,11 +700,11 @@ interactions:
                 sourceColumn: state
                 sourceColumnDataType: STRING
                 valueType: TEXT
+              id: state
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/state
-            - id: products.category
               type: label
-              attributes:
+            - attributes:
                 title: Category
                 description: Category
                 tags:
@@ -715,11 +713,11 @@ interactions:
                 sourceColumn: category
                 sourceColumnDataType: STRING
                 valueType: TEXT
+              id: products.category
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/products.category
-            - id: campaign_id
               type: label
-              attributes:
+            - attributes:
                 title: Campaign id
                 description: Campaign id
                 tags:
@@ -728,8 +726,10 @@ interactions:
                 sourceColumn: campaign_id
                 sourceColumnDataType: INT
                 valueType: TEXT
+              id: campaign_id
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_id
+              type: label
           links:
             self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels&page=0&size=500
             next: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels&page=1&size=500

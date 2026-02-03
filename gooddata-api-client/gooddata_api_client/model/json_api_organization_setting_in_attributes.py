@@ -102,6 +102,7 @@ class JsonApiOrganizationSettingInAttributes(ModelNormal):
             'API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE': "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
             'ENABLE_NULL_JOINS': "ENABLE_NULL_JOINS",
             'EXPORT_CSV_CUSTOM_DELIMITER': "EXPORT_CSV_CUSTOM_DELIMITER",
+            'ENABLE_QUERY_TAGS': "ENABLE_QUERY_TAGS",
         },
     }
 

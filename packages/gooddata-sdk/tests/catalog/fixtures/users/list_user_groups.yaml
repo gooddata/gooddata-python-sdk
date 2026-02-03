@@ -45,50 +45,50 @@ interactions:
       body:
         string:
           data:
-            - id: adminGroup
-              type: userGroup
-              attributes: {}
+            - attributes: {}
+              id: adminGroup
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/adminGroup
-            - id: adminQA1Group
               type: userGroup
-              attributes: {}
+            - attributes: {}
+              id: adminQA1Group
+              links:
+                self: http://localhost:3000/api/v1/entities/userGroups/adminQA1Group
               relationships:
                 parents:
                   data:
                     - id: adminGroup
                       type: userGroup
-              links:
-                self: http://localhost:3000/api/v1/entities/userGroups/adminQA1Group
-            - id: demoGroup
               type: userGroup
-              attributes:
+            - attributes:
                 name: demo group
+              id: demoGroup
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
-            - id: visitorsGroup
               type: userGroup
-              attributes:
+            - attributes:
                 name: visitors
+              id: visitorsGroup
+              links:
+                self: http://localhost:3000/api/v1/entities/userGroups/visitorsGroup
               relationships:
                 parents:
                   data:
                     - id: demoGroup
                       type: userGroup
-              links:
-                self: http://localhost:3000/api/v1/entities/userGroups/visitorsGroup
-          included:
-            - id: adminGroup
               type: userGroup
-              attributes: {}
+          included:
+            - attributes: {}
+              id: adminGroup
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/adminGroup
-            - id: demoGroup
               type: userGroup
-              attributes:
+            - attributes:
                 name: demo group
+              id: demoGroup
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
+              type: userGroup
           links:
             self: http://localhost:3000/api/v1/entities/userGroups?include=userGroups&page=0&size=500
             next: http://localhost:3000/api/v1/entities/userGroups?include=userGroups&page=1&size=500
