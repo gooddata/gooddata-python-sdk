@@ -44,3 +44,4 @@ jobs:
               - 'Makefile'
               - Dockerfile
               - pyproject.toml
+              - 'gooddata-api-client/**'
