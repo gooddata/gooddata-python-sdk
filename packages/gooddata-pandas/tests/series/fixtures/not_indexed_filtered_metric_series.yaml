@@ -1,4 +1,3 @@
-# (C) 2026 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -61,7 +60,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-Gdc-Cancel-Token:
-          - 5829860d-042f-4c61-abd1-985973c43081
+          - 927e3ade-acf7-41ce-b7b0-a442ad4121f4
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - '0'
@@ -74,10 +73,10 @@ interactions:
                       - localIdentifier: 27c4b665b9d047b1a66a149714f1c596
                 localIdentifier: dim_0
             links:
-              executionResult: 11b4f7de55bcc7cec60351816f1f56f55b34c89d:1cdb7da794f0f353a2cdb11ab9b49fe2149700ea891df3db44893d0b7e43274e
+              executionResult: 0f7f19179a8fc7b238e2ec2ab11dda77a5e3781f:cec24b80b4b92d81c22847a6d378ef42269028412cda5d5fb9b473b09e883146
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/11b4f7de55bcc7cec60351816f1f56f55b34c89d%3A1cdb7da794f0f353a2cdb11ab9b49fe2149700ea891df3db44893d0b7e43274e?offset=0&limit=1
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/0f7f19179a8fc7b238e2ec2ab11dda77a5e3781f%3Acec24b80b4b92d81c22847a6d378ef42269028412cda5d5fb9b473b09e883146?offset=0&limit=1
       body: null
       headers:
         Accept:
@@ -201,7 +200,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-Gdc-Cancel-Token:
-          - f0f28a20-e648-4baa-8e78-e195d1d833c8
+          - 8ce97683-ae54-45f5-a71c-4bb19acdd461
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - '0'
@@ -214,10 +213,10 @@ interactions:
                       - localIdentifier: 27c4b665b9d047b1a66a149714f1c596
                 localIdentifier: dim_0
             links:
-              executionResult: 58e06b27f86d820f1740025a91f64a400260390f:3cd9db52524fb227e078a94f05466ad67bd8e9e9ae9354b42866e9d96c2b130d
+              executionResult: 7be800670f14b77b493b948f9361110e4ebc4216:8a5da779b7050a262bd4001f350c7a13e5d41497010735331aa7267327b7143c
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/58e06b27f86d820f1740025a91f64a400260390f%3A3cd9db52524fb227e078a94f05466ad67bd8e9e9ae9354b42866e9d96c2b130d?offset=0&limit=1
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/7be800670f14b77b493b948f9361110e4ebc4216%3A8a5da779b7050a262bd4001f350c7a13e5d41497010735331aa7267327b7143c?offset=0&limit=1
       body: null
       headers:
         Accept:

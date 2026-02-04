@@ -1,4 +1,3 @@
-# (C) 2026 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -51,7 +50,7 @@ interactions:
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiRmMWY0ZWM0YS0zOThjLTRmMDctYTBiZC0wYzgzMTAyYTUxZDkSBWxvY2Fs
+            - authId: CiQwODQwMjI5Ni0zNjZiLTQyNzctODM0Mi0zZmE2YzY0MWQwYzMSBWxvY2Fs
               email: demo@example.com
               firstname: Demo
               id: demo
@@ -61,7 +60,7 @@ interactions:
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiQxZDYzMzNmNC1lNDdhLTRiNTctOGEzYy1hNjFjMjM3MDI0OTISBWxvY2Fs
+            - authId: CiQ0ZGY4NTEyNi01MDY4LTRlOWItODkxMS0yMWViYzFhNmU4YjMSBWxvY2Fs
               id: demo2
               permissions: []
               settings: []
@@ -122,7 +121,7 @@ interactions:
                       type: userGroup
               type: user
             - attributes:
-                authenticationId: CiRmMWY0ZWM0YS0zOThjLTRmMDctYTBiZC0wYzgzMTAyYTUxZDkSBWxvY2Fs
+                authenticationId: CiQwODQwMjI5Ni0zNjZiLTQyNzctODM0Mi0zZmE2YzY0MWQwYzMSBWxvY2Fs
                 firstname: Demo
                 lastname: User
                 email: demo@example.com
@@ -136,7 +135,7 @@ interactions:
                       type: userGroup
               type: user
             - attributes:
-                authenticationId: CiQxZDYzMzNmNC1lNDdhLTRiNTctOGEzYy1hNjFjMjM3MDI0OTISBWxvY2Fs
+                authenticationId: CiQ0ZGY4NTEyNi01MDY4LTRlOWItODkxMS0yMWViYzFhNmU4YjMSBWxvY2Fs
               id: demo2
               links:
                 self: http://localhost:3000/api/v1/entities/users/demo2
@@ -176,14 +175,14 @@ interactions:
             email: demo@example.com
             firstname: Demo
             lastname: User
-            authId: CiRmMWY0ZWM0YS0zOThjLTRmMDctYTBiZC0wYzgzMTAyYTUxZDkSBWxvY2Fs
+            authId: CiQwODQwMjI5Ni0zNjZiLTQyNzctODM0Mi0zZmE2YzY0MWQwYzMSBWxvY2Fs
             userGroups:
               - id: adminGroup
                 type: userGroup
             settings: []
             permissions: []
           - id: demo2
-            authId: CiQxZDYzMzNmNC1lNDdhLTRiNTctOGEzYy1hNjFjMjM3MDI0OTISBWxvY2Fs
+            authId: CiQ0ZGY4NTEyNi01MDY4LTRlOWItODkxMS0yMWViYzFhNmU4YjMSBWxvY2Fs
             userGroups:
               - id: demoGroup
                 type: userGroup
@@ -272,7 +271,7 @@ interactions:
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiRmMWY0ZWM0YS0zOThjLTRmMDctYTBiZC0wYzgzMTAyYTUxZDkSBWxvY2Fs
+            - authId: CiQwODQwMjI5Ni0zNjZiLTQyNzctODM0Mi0zZmE2YzY0MWQwYzMSBWxvY2Fs
               email: demo@example.com
               firstname: Demo
               id: demo
@@ -282,7 +281,7 @@ interactions:
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiQxZDYzMzNmNC1lNDdhLTRiNTctOGEzYy1hNjFjMjM3MDI0OTISBWxvY2Fs
+            - authId: CiQ0ZGY4NTEyNi01MDY4LTRlOWItODkxMS0yMWViYzFhNmU4YjMSBWxvY2Fs
               id: demo2
               permissions: []
               settings: []
@@ -304,14 +303,14 @@ interactions:
             email: demo@example.com
             firstname: Demo
             lastname: User
-            authId: CiRmMWY0ZWM0YS0zOThjLTRmMDctYTBiZC0wYzgzMTAyYTUxZDkSBWxvY2Fs
+            authId: CiQwODQwMjI5Ni0zNjZiLTQyNzctODM0Mi0zZmE2YzY0MWQwYzMSBWxvY2Fs
             userGroups:
               - id: adminGroup
                 type: userGroup
             settings: []
             permissions: []
           - id: demo2
-            authId: CiQxZDYzMzNmNC1lNDdhLTRiNTctOGEzYy1hNjFjMjM3MDI0OTISBWxvY2Fs
+            authId: CiQ0ZGY4NTEyNi01MDY4LTRlOWItODkxMS0yMWViYzFhNmU4YjMSBWxvY2Fs
             userGroups:
               - id: demoGroup
                 type: userGroup

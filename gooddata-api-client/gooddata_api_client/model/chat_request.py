@@ -31,7 +31,9 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.allowed_relationship_type import AllowedRelationshipType
     from gooddata_api_client.model.user_context import UserContext
+    globals()['AllowedRelationshipType'] = AllowedRelationshipType
     globals()['UserContext'] = UserContext
 
 
@@ -102,6 +104,7 @@ class ChatRequest(ModelNormal):
         lazy_import()
         return {
             'question': (str,),  # noqa: E501
+            'allowed_relationship_types': ([AllowedRelationshipType],),  # noqa: E501
             'include_hidden': (bool,),  # noqa: E501
             'limit_create': (int,),  # noqa: E501
             'limit_create_context': (int,),  # noqa: E501
@@ -121,6 +124,7 @@ class ChatRequest(ModelNormal):
 
     attribute_map = {
         'question': 'question',  # noqa: E501
+        'allowed_relationship_types': 'allowedRelationshipTypes',  # noqa: E501
         'include_hidden': 'includeHidden',  # noqa: E501
         'limit_create': 'limitCreate',  # noqa: E501
         'limit_create_context': 'limitCreateContext',  # noqa: E501
@@ -177,6 +181,7 @@ class ChatRequest(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            allowed_relationship_types ([AllowedRelationshipType]): Filter relationships and search results based on allowed relationship type combinations. When specified, only relationships matching the allowed types are returned (e.g. for view-only users).. [optional]  # noqa: E501
             include_hidden (bool): If true, includes hidden objects in search and visualization building. If false (default), excludes objects where isHidden=true.. [optional] if omitted the server will use the default value of False  # noqa: E501
             limit_create (int): Maximum number of created results.. [optional] if omitted the server will use the default value of 3  # noqa: E501
             limit_create_context (int): Maximum number of relevant objects included into context for LLM (for each object type).. [optional] if omitted the server will use the default value of 10  # noqa: E501
@@ -276,6 +281,7 @@ class ChatRequest(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            allowed_relationship_types ([AllowedRelationshipType]): Filter relationships and search results based on allowed relationship type combinations. When specified, only relationships matching the allowed types are returned (e.g. for view-only users).. [optional]  # noqa: E501
             include_hidden (bool): If true, includes hidden objects in search and visualization building. If false (default), excludes objects where isHidden=true.. [optional] if omitted the server will use the default value of False  # noqa: E501
             limit_create (int): Maximum number of created results.. [optional] if omitted the server will use the default value of 3  # noqa: E501
             limit_create_context (int): Maximum number of relevant objects included into context for LLM (for each object type).. [optional] if omitted the server will use the default value of 10  # noqa: E501

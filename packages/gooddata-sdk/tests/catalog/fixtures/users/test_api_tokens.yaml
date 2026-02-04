@@ -1,4 +1,3 @@
-# (C) 2026 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -97,7 +96,7 @@ interactions:
         string:
           data:
             attributes:
-              bearerToken: ZGVtbzp0ZXN0X3Rva2VuOlBUV0UyNUR3U2JkK1VFTFlOYWhMZExxcnR5QUlma3l6
+              bearerToken: ZGVtbzp0ZXN0X3Rva2VuOkZuVVluMWtqUm9ydjM1ZENEK2lmM3djWmN5WktGbUNa
             id: test_token
             type: apiToken
           links:
