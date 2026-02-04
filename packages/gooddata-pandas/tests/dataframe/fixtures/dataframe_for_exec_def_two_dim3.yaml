@@ -1,4 +1,3 @@
-# (C) 2026 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -90,7 +89,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-Gdc-Cancel-Token:
-          - 01844ba2-7652-4677-99a3-780289937ffa
+          - 171f1202-e716-4d99-9e7d-b33ae059b23b
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - '0'
@@ -153,10 +152,10 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: eb65bbf21dd114e788d1b53d4bce730ba581b0d6:6795fb8cfa442579b1550a1db0876b308886962adc142d0f57e246d177d1b8c1
+              executionResult: 545aa21d3930b03790aaf9628537aa1722c246d5:1d6bbb5c0b434552f8401f81bae07f5f73514a97ec627b0c67f9879462c27569
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/eb65bbf21dd114e788d1b53d4bce730ba581b0d6%3A6795fb8cfa442579b1550a1db0876b308886962adc142d0f57e246d177d1b8c1/metadata
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/545aa21d3930b03790aaf9628537aa1722c246d5%3A1d6bbb5c0b434552f8401f81bae07f5f73514a97ec627b0c67f9879462c27569/metadata
       body: null
       headers:
         Accept:
@@ -295,7 +294,7 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: eb65bbf21dd114e788d1b53d4bce730ba581b0d6:6795fb8cfa442579b1550a1db0876b308886962adc142d0f57e246d177d1b8c1
+              executionResult: 545aa21d3930b03790aaf9628537aa1722c246d5:1d6bbb5c0b434552f8401f81bae07f5f73514a97ec627b0c67f9879462c27569
           resultSpec:
             dimensions:
               - localIdentifier: dim_0
@@ -312,7 +311,7 @@ interactions:
           resultSize: 3152
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/eb65bbf21dd114e788d1b53d4bce730ba581b0d6%3A6795fb8cfa442579b1550a1db0876b308886962adc142d0f57e246d177d1b8c1?offset=0%2C0&limit=100%2C100
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/545aa21d3930b03790aaf9628537aa1722c246d5%3A1d6bbb5c0b434552f8401f81bae07f5f73514a97ec627b0c67f9879462c27569?offset=0%2C0&limit=100%2C100
       body: null
       headers:
         Accept:
@@ -1539,7 +1538,7 @@ interactions:
             dataSourceMessages: []
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/eb65bbf21dd114e788d1b53d4bce730ba581b0d6%3A6795fb8cfa442579b1550a1db0876b308886962adc142d0f57e246d177d1b8c1/metadata
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/545aa21d3930b03790aaf9628537aa1722c246d5%3A1d6bbb5c0b434552f8401f81bae07f5f73514a97ec627b0c67f9879462c27569/metadata
       body: null
       headers:
         Accept:
@@ -1678,7 +1677,7 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: eb65bbf21dd114e788d1b53d4bce730ba581b0d6:6795fb8cfa442579b1550a1db0876b308886962adc142d0f57e246d177d1b8c1
+              executionResult: 545aa21d3930b03790aaf9628537aa1722c246d5:1d6bbb5c0b434552f8401f81bae07f5f73514a97ec627b0c67f9879462c27569
           resultSpec:
             dimensions:
               - localIdentifier: dim_0
@@ -1695,7 +1694,7 @@ interactions:
           resultSize: 3152
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/eb65bbf21dd114e788d1b53d4bce730ba581b0d6%3A6795fb8cfa442579b1550a1db0876b308886962adc142d0f57e246d177d1b8c1?offset=0%2C0&limit=100%2C100
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/545aa21d3930b03790aaf9628537aa1722c246d5%3A1d6bbb5c0b434552f8401f81bae07f5f73514a97ec627b0c67f9879462c27569?offset=0%2C0&limit=100%2C100
       body: null
       headers:
         Accept:

@@ -1,4 +1,3 @@
-# (C) 2026 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -481,7 +480,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-Gdc-Cancel-Token:
-          - 94bb23eb-88aa-485e-b56b-e80f1b8af24d
+          - 5b0f114d-ec85-437d-942b-503184638aca
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - '0'
@@ -496,7 +495,7 @@ interactions:
                         name: '# of Active Customers'
                 localIdentifier: dim_0
             links:
-              executionResult: 954bf7977fb94369f50dcbbd66baa37987275995:10ff571c38da7a9146fdf99afe08fef01e39d9d6da1a7639a74b4ab179e6cb3b
+              executionResult: cdf9c710ce60eaba0bc9741e4109c023ae7dc1e5:0c0a9d0a48311125df88313174c6014901cc187750553b057db68ab1e25c06bd
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/dataSources/demo-test-ds/uploadNotification
@@ -593,7 +592,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-Gdc-Cancel-Token:
-          - 0b0515ce-17ff-45c6-98a0-abcaeac0702f
+          - 93d2f597-988b-4c77-b6a1-e7210092518f
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - '0'
@@ -608,4 +607,4 @@ interactions:
                         name: '# of Active Customers'
                 localIdentifier: dim_0
             links:
-              executionResult: d53959cc4b7b3c7e0af466fa2c3c4fcd83a04e99:e2567b44a756fe36cf1e0eea07d581213fd67d0a308e3f1f773b98e1ff6e903f
+              executionResult: 9bfc2243429cb92f416131b2c52bc420db952715:957bc62790a6155c313a83dea6fd48bdeb0c697922cb250f859cca83424e92a4

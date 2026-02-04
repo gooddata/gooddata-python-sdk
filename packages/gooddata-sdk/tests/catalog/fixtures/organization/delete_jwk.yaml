@@ -1,4 +1,3 @@
-# (C) 2026 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -48,7 +47,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: ce835716aa8281d15b6711de7861ed7e
+          traceId: b48e6ca96d041d9f0b5575a24e430285
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/jwks
@@ -207,7 +206,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 38581cf4c95a1aa14f15321a41d8b15a
+          traceId: 55d940db10412191cbe1e08306c2b863
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/entities/jwks?page=0&size=500

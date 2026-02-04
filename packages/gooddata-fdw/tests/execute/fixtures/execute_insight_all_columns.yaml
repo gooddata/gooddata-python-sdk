@@ -1,4 +1,3 @@
-# (C) 2026 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -141,7 +140,7 @@ interactions:
                       direction: asc
                 version: '2'
                 visualizationUrl: local:table
-              createdAt: 2026-02-03 13:15
+              createdAt: 2025-08-07 11:45
             id: revenue_and_quantity_by_product_and_category
             meta:
               origin:
@@ -192,7 +191,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
-                createdAt: 2026-02-03 13:15
+                createdAt: 2025-08-07 11:45
               id: revenue
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue
@@ -245,7 +244,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
                     ALL OTHER)
-                createdAt: 2026-02-03 13:15
+                createdAt: 2025-08-07 11:45
               id: percent_revenue_in_category
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_in_category
@@ -370,7 +369,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-Gdc-Cancel-Token:
-          - f579680c-9686-47a2-8e27-c9648172070f
+          - 03445ee5-644b-48d0-a76b-09811ec05683
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - '0'
@@ -422,10 +421,10 @@ interactions:
                         name: Revenue
                 localIdentifier: dim_1
             links:
-              executionResult: f6ca7eab333460cb2590f3f5e55c47646e141e04:021965d4a9a0b12b74d781ddca1d58908af28f84f12cc6243a26e8201f359302
+              executionResult: e6c5bf0a99c49ac05d090c9fb04fb66009a5bd83:43149b1578aab25668c16258063788f171220dd76396949a584fa58ef38ff7a7
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/f6ca7eab333460cb2590f3f5e55c47646e141e04%3A021965d4a9a0b12b74d781ddca1d58908af28f84f12cc6243a26e8201f359302?offset=0%2C0&limit=512%2C256
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/e6c5bf0a99c49ac05d090c9fb04fb66009a5bd83%3A43149b1578aab25668c16258063788f171220dd76396949a584fa58ef38ff7a7?offset=0%2C0&limit=512%2C256
       body: null
       headers:
         Accept:

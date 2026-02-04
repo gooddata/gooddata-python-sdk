@@ -1,4 +1,3 @@
-# (C) 2026 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -46,7 +45,7 @@ interactions:
         string:
           data:
             attributes:
-              authenticationId: CiQxZDYzMzNmNC1lNDdhLTRiNTctOGEzYy1hNjFjMjM3MDI0OTISBWxvY2Fs
+              authenticationId: CiQ0ZGY4NTEyNi01MDY4LTRlOWItODkxMS0yMWViYzFhNmU4YjMSBWxvY2Fs
             id: demo2
             relationships:
               userGroups:
