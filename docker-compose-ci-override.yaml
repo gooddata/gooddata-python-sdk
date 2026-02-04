@@ -1,0 +1,21 @@
+services:
+  pulsar-create-namespace:
+    dns_search:
+      - .
+  metadata-organization-bootstrap:
+    dns_search:
+      - .
+  create-ds:
+    dns_search:
+      - .
+  layout-uploader:
+    dns_search:
+      - .
+  # Enable DATA_SOURCE_ROUTING feature flag required for SDK tests
+  # Tests use alternative_data_source_id which requires this feature
+  metadata-api:
+    environment:
+      GDC_FEATURES_VALUES_ENABLE_DATA_SOURCE_ROUTING: "true"
+  api-gw:
+    environment:
+      GDC_FEATURES_VALUES_ENABLE_DATA_SOURCE_ROUTING: "true"

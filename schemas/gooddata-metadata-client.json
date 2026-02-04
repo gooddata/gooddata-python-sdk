@@ -18871,7 +18871,7 @@
               },
               "analyzedValue": {
                 "description": "Metric value in the analyzed period (the observed value that triggered the anomaly)",
-                "example": 2.6E+9
+                "example": 2600000000
               },
               "areRelationsValid": {
                 "type": "boolean"
@@ -18923,7 +18923,7 @@
               },
               "referenceValue": {
                 "description": "Metric value in the reference period",
-                "example": 2.4E+9
+                "example": 2400000000
               },
               "sourceCount": {
                 "description": "Number of source documents used for generation",
@@ -19045,7 +19045,7 @@
               },
               "analyzedValue": {
                 "description": "Metric value in the analyzed period (the observed value that triggered the anomaly)",
-                "example": 2.6E+9
+                "example": 2600000000
               },
               "areRelationsValid": {
                 "type": "boolean"
@@ -19101,7 +19101,7 @@
               },
               "referenceValue": {
                 "description": "Metric value in the reference period",
-                "example": 2.4E+9
+                "example": 2400000000
               },
               "sourceCount": {
                 "description": "Number of source documents used for generation",
@@ -19311,7 +19311,7 @@
               },
               "analyzedValue": {
                 "description": "Metric value in the analyzed period (the observed value that triggered the anomaly)",
-                "example": 2.6E+9
+                "example": 2600000000
               },
               "areRelationsValid": {
                 "type": "boolean"
@@ -19363,7 +19363,7 @@
               },
               "referenceValue": {
                 "description": "Metric value in the reference period",
-                "example": 2.4E+9
+                "example": 2400000000
               },
               "sourceCount": {
                 "description": "Number of source documents used for generation",
@@ -19477,7 +19477,7 @@
               },
               "analyzedValue": {
                 "description": "Metric value in the analyzed period (the observed value that triggered the anomaly)",
-                "example": 2.6E+9
+                "example": 2600000000
               },
               "areRelationsValid": {
                 "type": "boolean"
@@ -19529,7 +19529,7 @@
               },
               "referenceValue": {
                 "description": "Metric value in the reference period",
-                "example": 2.4E+9
+                "example": 2400000000
               },
               "sourceCount": {
                 "description": "Number of source documents used for generation",
@@ -21983,6 +21983,11 @@
                 },
                 "type": "object"
               },
+              "dataCenter": {
+                "description": "Current deployment region. Should be used for issue investigation only.",
+                "nullable": true,
+                "type": "string"
+              },
               "earlyAccess": {
                 "deprecated": true,
                 "description": "The early access feature identifier. It is used to enable experimental features. Deprecated in favor of earlyAccessValues.",
@@ -22005,6 +22010,11 @@
               },
               "name": {
                 "maxLength": 255,
+                "nullable": true,
+                "type": "string"
+              },
+              "region": {
+                "description": "Current deployment cluster name. Should be used for issue investigation only.",
                 "nullable": true,
                 "type": "string"
               }

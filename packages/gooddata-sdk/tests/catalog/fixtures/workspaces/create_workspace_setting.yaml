@@ -1,4 +1,3 @@
-# (C) 2026 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -48,7 +47,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 47a19c703869fb620badeb3f74748420
+          traceId: 318b01ec02f2f6c85ddeed26b6557d7e
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings

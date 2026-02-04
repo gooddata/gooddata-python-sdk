@@ -1,4 +1,3 @@
-# (C) 2026 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -145,7 +144,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: a2916ba16f8ef6ed0b8cdafbe848fda8
+          traceId: 9168104afeaf1c2d15e21d09f78227ca
   - request:
       method: DELETE
       uri: http://localhost:3000/api/v1/entities/llmEndpoints/endpoint1

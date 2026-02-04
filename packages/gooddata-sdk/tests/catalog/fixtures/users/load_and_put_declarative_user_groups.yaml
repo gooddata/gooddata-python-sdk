@@ -1,4 +1,3 @@
-# (C) 2026 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -51,7 +50,7 @@ interactions:
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiRmMWY0ZWM0YS0zOThjLTRmMDctYTBiZC0wYzgzMTAyYTUxZDkSBWxvY2Fs
+            - authId: CiQ2M2IwMGY2Mi1lZWU1LTRlZWEtYjQwYi1iNTg5YTliNjNiNGESBWxvY2Fs
               email: demo@example.com
               firstname: Demo
               id: demo
@@ -61,7 +60,7 @@ interactions:
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiQxZDYzMzNmNC1lNDdhLTRiNTctOGEzYy1hNjFjMjM3MDI0OTISBWxvY2Fs
+            - authId: CiRjZDViNTgzZC0yMmEyLTRiMDItOWY3OS01YTlkZjQwZDcyYTQSBWxvY2Fs
               id: demo2
               permissions: []
               settings: []
@@ -181,7 +180,7 @@ interactions:
                       type: userGroup
               type: user
             - attributes:
-                authenticationId: CiRmMWY0ZWM0YS0zOThjLTRmMDctYTBiZC0wYzgzMTAyYTUxZDkSBWxvY2Fs
+                authenticationId: CiQ2M2IwMGY2Mi1lZWU1LTRlZWEtYjQwYi1iNTg5YTliNjNiNGESBWxvY2Fs
                 firstname: Demo
                 lastname: User
                 email: demo@example.com
@@ -195,7 +194,7 @@ interactions:
                       type: userGroup
               type: user
             - attributes:
-                authenticationId: CiQxZDYzMzNmNC1lNDdhLTRiNTctOGEzYy1hNjFjMjM3MDI0OTISBWxvY2Fs
+                authenticationId: CiRjZDViNTgzZC0yMmEyLTRiMDItOWY3OS01YTlkZjQwZDcyYTQSBWxvY2Fs
               id: demo2
               links:
                 self: http://localhost:3000/api/v1/entities/users/demo2
@@ -324,7 +323,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '430'
+          - '450'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -349,6 +348,7 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
+              allowedOrigins: []
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -547,14 +547,14 @@ interactions:
             email: demo@example.com
             firstname: Demo
             lastname: User
-            authId: CiRmMWY0ZWM0YS0zOThjLTRmMDctYTBiZC0wYzgzMTAyYTUxZDkSBWxvY2Fs
+            authId: CiQ2M2IwMGY2Mi1lZWU1LTRlZWEtYjQwYi1iNTg5YTliNjNiNGESBWxvY2Fs
             userGroups:
               - id: adminGroup
                 type: userGroup
             settings: []
             permissions: []
           - id: demo2
-            authId: CiQxZDYzMzNmNC1lNDdhLTRiNTctOGEzYy1hNjFjMjM3MDI0OTISBWxvY2Fs
+            authId: CiRjZDViNTgzZC0yMmEyLTRiMDItOWY3OS01YTlkZjQwZDcyYTQSBWxvY2Fs
             userGroups:
               - id: demoGroup
                 type: userGroup

@@ -1,4 +1,3 @@
-# (C) 2026 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -75,7 +74,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-Gdc-Cancel-Token:
-          - c7c6f053-654e-4f20-a6d7-8c6c5ad8e1d5
+          - 08ef9fa3-6c38-4592-a320-a8276ae44cb0
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - '0'
@@ -120,7 +119,7 @@ interactions:
                       valueType: TEXT
                 localIdentifier: dim_1
             links:
-              executionResult: 07da243c250ab56835c6c9440eafdea0fc77dc56:841445d6b157c7fb80d1c18f7b4a8b5d811b701039f4c94e9d45e40b5e22670a
+              executionResult: f67daccd91a0f1f6d6b437b430e50e8d97b11982:d17c8e6ead862aa7d8d13a5725f578a452ad5a56037337d037a3da00b2fcbd75
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3Din%3D%28region%2Cproducts.category%29&page=0&size=500
@@ -280,7 +279,7 @@ interactions:
             next: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3Din%3D%28%27region%27%2C%27products.category%27%29&page=1&size=500
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/07da243c250ab56835c6c9440eafdea0fc77dc56%3A841445d6b157c7fb80d1c18f7b4a8b5d811b701039f4c94e9d45e40b5e22670a?offset=0%2C0&limit=1%2C1000
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/f67daccd91a0f1f6d6b437b430e50e8d97b11982%3Ad17c8e6ead862aa7d8d13a5725f578a452ad5a56037337d037a3da00b2fcbd75?offset=0%2C0&limit=1%2C1000
       body: null
       headers:
         Accept:

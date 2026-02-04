@@ -1,4 +1,3 @@
-# (C) 2026 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -94,7 +93,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 30a8c2619d0cd69b8f639919aac90598
+          traceId: bd3ec116cce3dfa1a6f90d356811ab20
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces/demo/userDataFilters
@@ -241,7 +240,7 @@ interactions:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_status
               type: label
             - attributes:
-                authenticationId: CiRmMWY0ZWM0YS0zOThjLTRmMDctYTBiZC0wYzgzMTAyYTUxZDkSBWxvY2Fs
+                authenticationId: CiQ2M2IwMGY2Mi1lZWU1LTRlZWEtYjQwYi1iNTg5YTliNjNiNGESBWxvY2Fs
                 firstname: Demo
                 lastname: User
                 email: demo@example.com
@@ -316,7 +315,7 @@ interactions:
             type: userDataFilter
           included:
             - attributes:
-                authenticationId: CiRmMWY0ZWM0YS0zOThjLTRmMDctYTBiZC0wYzgzMTAyYTUxZDkSBWxvY2Fs
+                authenticationId: CiQ2M2IwMGY2Mi1lZWU1LTRlZWEtYjQwYi1iNTg5YTliNjNiNGESBWxvY2Fs
                 firstname: Demo
                 lastname: User
                 email: demo@example.com

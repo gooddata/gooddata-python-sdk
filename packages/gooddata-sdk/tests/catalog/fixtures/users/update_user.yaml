@@ -1,4 +1,3 @@
-# (C) 2026 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -56,7 +55,7 @@ interactions:
                       type: userGroup
               type: user
             - attributes:
-                authenticationId: CiRmMWY0ZWM0YS0zOThjLTRmMDctYTBiZC0wYzgzMTAyYTUxZDkSBWxvY2Fs
+                authenticationId: CiQ2M2IwMGY2Mi1lZWU1LTRlZWEtYjQwYi1iNTg5YTliNjNiNGESBWxvY2Fs
                 firstname: Demo
                 lastname: User
                 email: demo@example.com
@@ -70,7 +69,7 @@ interactions:
                       type: userGroup
               type: user
             - attributes:
-                authenticationId: CiQxZDYzMzNmNC1lNDdhLTRiNTctOGEzYy1hNjFjMjM3MDI0OTISBWxvY2Fs
+                authenticationId: CiRjZDViNTgzZC0yMmEyLTRiMDItOWY3OS01YTlkZjQwZDcyYTQSBWxvY2Fs
               id: demo2
               links:
                 self: http://localhost:3000/api/v1/entities/users/demo2
@@ -141,7 +140,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 2053a3df6e90210ae3f2a157bff4c620
+          traceId: a5ef7876b5b9e1eb3b7f2dbf1f735576
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/users
@@ -263,7 +262,7 @@ interactions:
                       type: userGroup
               type: user
             - attributes:
-                authenticationId: CiRmMWY0ZWM0YS0zOThjLTRmMDctYTBiZC0wYzgzMTAyYTUxZDkSBWxvY2Fs
+                authenticationId: CiQ2M2IwMGY2Mi1lZWU1LTRlZWEtYjQwYi1iNTg5YTliNjNiNGESBWxvY2Fs
                 firstname: Demo
                 lastname: User
                 email: demo@example.com
@@ -277,7 +276,7 @@ interactions:
                       type: userGroup
               type: user
             - attributes:
-                authenticationId: CiQxZDYzMzNmNC1lNDdhLTRiNTctOGEzYy1hNjFjMjM3MDI0OTISBWxvY2Fs
+                authenticationId: CiRjZDViNTgzZC0yMmEyLTRiMDItOWY3OS01YTlkZjQwZDcyYTQSBWxvY2Fs
               id: demo2
               links:
                 self: http://localhost:3000/api/v1/entities/users/demo2
@@ -613,7 +612,7 @@ interactions:
                       type: userGroup
               type: user
             - attributes:
-                authenticationId: CiRmMWY0ZWM0YS0zOThjLTRmMDctYTBiZC0wYzgzMTAyYTUxZDkSBWxvY2Fs
+                authenticationId: CiQ2M2IwMGY2Mi1lZWU1LTRlZWEtYjQwYi1iNTg5YTliNjNiNGESBWxvY2Fs
                 firstname: Demo
                 lastname: User
                 email: demo@example.com
@@ -627,7 +626,7 @@ interactions:
                       type: userGroup
               type: user
             - attributes:
-                authenticationId: CiQxZDYzMzNmNC1lNDdhLTRiNTctOGEzYy1hNjFjMjM3MDI0OTISBWxvY2Fs
+                authenticationId: CiRjZDViNTgzZC0yMmEyLTRiMDItOWY3OS01YTlkZjQwZDcyYTQSBWxvY2Fs
               id: demo2
               links:
                 self: http://localhost:3000/api/v1/entities/users/demo2
