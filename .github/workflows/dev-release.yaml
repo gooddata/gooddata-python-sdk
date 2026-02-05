@@ -48,5 +48,5 @@ jobs:
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN }}
-          packages_dir: ${{ matrix.component == 'gooddata-api-client' && format('{0}/dist', matrix.component) || format('packages/{0}/dist', matrix.component) }}
+          packages-dir: ${{ matrix.component == 'gooddata-api-client' && format('{0}/dist', matrix.component) || format('packages/{0}/dist', matrix.component) }}
           verbose: true

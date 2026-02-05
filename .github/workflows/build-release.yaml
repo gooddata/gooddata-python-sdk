@@ -106,7 +106,7 @@ jobs:
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN }}
-          packages_dir: dist/${{ matrix.component }}
+          packages-dir: dist/${{ matrix.component }}
           verbose: true
   slack-notification:
     runs-on: ubuntu-latest
