@@ -1,7 +1,7 @@
 # (C) 2025 GoodData Corporation
 [project]
 name = "gooddata-fdw"
-version = "1.58.0"
+version = "1.59.0"
 description = "GoodData Cloud Foreign Data Wrapper For PostgreSQL"
 readme = "README.md"
 license = "MIT"
@@ -26,7 +26,7 @@ keywords = [
 ]
 requires-python = ">=3.10"
 dependencies = [
-    "gooddata-sdk~=1.58.0",
+    "gooddata-sdk~=1.59.0",
     # "multicorn>=1.4.0",  # Uncommented as it was in original setup.py
 ]
 classifiers = [
@@ -44,7 +44,7 @@ classifiers = [
 ]
 
 [project.urls]
-Documentation = "https://gooddata-fdw.readthedocs.io/en/v1.58.0"
+Documentation = "https://gooddata-fdw.readthedocs.io/en/v1.59.0"
 Source = "https://github.com/gooddata/gooddata-python-sdk"
 
 [dependency-groups]
