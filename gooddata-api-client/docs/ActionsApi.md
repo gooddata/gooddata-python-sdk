@@ -141,6 +141,13 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = actions_api.ActionsApi(api_client)
     workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
     chat_request = ChatRequest(
+        allowed_relationship_types=[
+            AllowedRelationshipType(
+                allow_orphans=True,
+                source_type="attribute",
+                target_type="attribute",
+            ),
+        ],
         include_hidden=False,
         limit_create=3,
         limit_create_context=10,
@@ -311,6 +318,13 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = actions_api.ActionsApi(api_client)
     workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
     chat_request = ChatRequest(
+        allowed_relationship_types=[
+            AllowedRelationshipType(
+                allow_orphans=True,
+                source_type="attribute",
+                target_type="attribute",
+            ),
+        ],
         include_hidden=False,
         limit_create=3,
         limit_create_context=10,
@@ -1512,7 +1526,7 @@ with gooddata_api_client.ApiClient() as api_client:
     elements_request = ElementsRequest(
         cache_id="cache_id_example",
         complement_filter=False,
-        data_sampling_percentage=100.0,
+        data_sampling_percentage=100,
         depends_on=[
             ElementsRequestDependsOnInner(None),
         ],
