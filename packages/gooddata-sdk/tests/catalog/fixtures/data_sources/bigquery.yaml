@@ -48,7 +48,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 5c70b9ea523ec59e9c38741b35d44862
+          traceId: 4298cd4888286f711a9ba2731f0e40a4
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources
@@ -117,8 +117,8 @@ interactions:
                 - name: projectId
                   value: PROJECT_ID
               authenticationType: TOKEN
-              name: Test
               type: BIGQUERY
+              name: Test
               schema: demo
             id: test
             type: dataSource
@@ -179,8 +179,8 @@ interactions:
                 - name: projectId
                   value: PROJECT_ID
               authenticationType: TOKEN
-              name: Test
               type: BIGQUERY
+              name: Test
               schema: demo
             id: test
             type: dataSource

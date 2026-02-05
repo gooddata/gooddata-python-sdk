@@ -22,7 +22,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '3321'
+          - '3322'
         Content-Type:
           - application/json
         DATE: &id001
@@ -90,9 +90,9 @@ interactions:
                         identifier:
                           id: date
                           type: dataset
-                      from: -11
+                      from: -12
                       granularity: GDC.time.month
-                      to: 0
+                      to: -1
                 properties:
                   controls:
                     colorMapping:
@@ -118,7 +118,7 @@ interactions:
                       rotation: auto
                 version: '2'
                 visualizationUrl: local:combo2
-              createdAt: 2026-02-03 13:15
+              createdAt: 2025-08-07 11:45
             id: customers_trend
             meta:
               origin:
@@ -165,7 +165,7 @@ interactions:
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
-                createdAt: 2026-02-03 13:15
+                createdAt: 2025-08-07 11:45
               id: amount_of_active_customers
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/amount_of_active_customers
@@ -175,7 +175,7 @@ interactions:
                 content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
-                createdAt: 2026-02-03 13:15
+                createdAt: 2025-08-07 11:45
               id: revenue_per_customer
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue_per_customer
@@ -210,9 +210,9 @@ interactions:
                   identifier:
                     id: date
                     type: dataset
-                from: -11
+                from: -12
                 granularity: MONTH
-                to: 0
+                to: -1
           measures:
             - definition:
                 measure:
@@ -276,7 +276,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-Gdc-Cancel-Token:
-          - e8bbba13-24ae-4bf5-b8f1-2f631ff01e21
+          - 447b1e13-05fc-4fe0-ad8f-e5f553b5dbcc
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - '0'
@@ -315,7 +315,7 @@ interactions:
                       valueType: TEXT
                 localIdentifier: dim_1
             links:
-              executionResult: fef7915bf404b7b8145fdfe6c2127346663a4187:2cb4bf6e8755de8381059fcc30e57fc648b7267be107a40fd93f6fe5084adc26
+              executionResult: 92d0c1593d5f443c07e38345fa8704bf06b34d59:26f1932036f6c84ec85ff36bdfdb606f503a7bdcb01906e80aadc224ea69cfbe
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3Din%3D%28date.month%29&page=0&size=500
@@ -410,7 +410,7 @@ interactions:
             next: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3D%3D%27date.month%27&page=1&size=500
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/fef7915bf404b7b8145fdfe6c2127346663a4187%3A2cb4bf6e8755de8381059fcc30e57fc648b7267be107a40fd93f6fe5084adc26?offset=0%2C0&limit=2%2C1000
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/92d0c1593d5f443c07e38345fa8704bf06b34d59%3A26f1932036f6c84ec85ff36bdfdb606f503a7bdcb01906e80aadc224ea69cfbe?offset=0%2C0&limit=2%2C1000
       body: null
       headers:
         Accept:
@@ -429,7 +429,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '1403'
+          - '1413'
         Content-Type:
           - application/json
         DATE: *id001
@@ -451,7 +451,8 @@ interactions:
       body:
         string:
           data:
-            - - 62
+            - - 57
+              - 62
               - 60
               - 51
               - 60
@@ -462,8 +463,8 @@ interactions:
               - 56
               - 90
               - 60
-              - 64
-            - - 93.78964285714285
+            - - 197.37653846153847
+              - 93.78964285714285
               - 115.96454545454546
               - 241.92872340425532
               - 270.91346938775513
@@ -474,7 +475,6 @@ interactions:
               - 160.19469387755103
               - 178.3658536585366
               - 185.4194
-              - 146.6475
           dimensionHeaders:
             - headerGroups:
                 - headers:
@@ -484,6 +484,9 @@ interactions:
                         measureIndex: 1
             - headerGroups:
                 - headers:
+                    - attributeHeader:
+                        labelValue: 2025-02
+                        primaryLabelValue: 2025-02
                     - attributeHeader:
                         labelValue: 2025-03
                         primaryLabelValue: 2025-03
@@ -517,9 +520,6 @@ interactions:
                     - attributeHeader:
                         labelValue: 2026-01
                         primaryLabelValue: 2026-01
-                    - attributeHeader:
-                        labelValue: 2026-02
-                        primaryLabelValue: 2026-02
           grandTotals: []
           paging:
             count:

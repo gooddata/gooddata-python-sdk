@@ -6330,6 +6330,13 @@
       },
       "ChatRequest": {
         "properties": {
+          "allowedRelationshipTypes": {
+            "description": "Filter relationships and search results based on allowed relationship type combinations. When specified, only relationships matching the allowed types are returned (e.g. for view-only users).",
+            "items": {
+              "$ref": "#/components/schemas/AllowedRelationshipType"
+            },
+            "type": "array"
+          },
           "includeHidden": {
             "default": false,
             "description": "If true, includes hidden objects in search and visualization building. If false (default), excludes objects where isHidden=true.",
@@ -11680,7 +11687,7 @@
             "type": "boolean"
           },
           "dataSamplingPercentage": {
-            "default": 100.0,
+            "default": 100,
             "deprecated": true,
             "description": "Specifies percentage of source table data scanned during the computation. This field is deprecated and is no longer used during the elements computation.",
             "format": "float",
@@ -12007,7 +12014,7 @@
             "description": "A multi-dimensional array of computed results. The most common one being a 2-dimensional array. The arrays can be composed of Double or null values.",
             "example": [
               [
-                1.0,
+                1,
                 2.5
               ],
               [
@@ -12083,7 +12090,7 @@
             "description": "A multi-dimensional array of computed results. The most common one being a 2-dimensional array. The arrays can be composed of Double or null values.",
             "example": [
               [
-                1.0,
+                1,
                 2.5
               ],
               [
@@ -12475,8 +12482,8 @@
             "exclusiveMaximum": true,
             "exclusiveMinimum": true,
             "format": "float",
-            "maximum": 1.0,
-            "minimum": 0.0,
+            "maximum": 1,
+            "minimum": 0,
             "type": "number"
           },
           "forecastPeriod": {
@@ -21473,7 +21480,7 @@
               },
               "analyzedValue": {
                 "description": "Metric value in the analyzed period (the observed value that triggered the anomaly)",
-                "example": 2.6E+9
+                "example": 2600000000
               },
               "areRelationsValid": {
                 "type": "boolean"
@@ -21525,7 +21532,7 @@
               },
               "referenceValue": {
                 "description": "Metric value in the reference period",
-                "example": 2.4E+9
+                "example": 2400000000
               },
               "sourceCount": {
                 "description": "Number of source documents used for generation",
@@ -21647,7 +21654,7 @@
               },
               "analyzedValue": {
                 "description": "Metric value in the analyzed period (the observed value that triggered the anomaly)",
-                "example": 2.6E+9
+                "example": 2600000000
               },
               "areRelationsValid": {
                 "type": "boolean"
@@ -21703,7 +21710,7 @@
               },
               "referenceValue": {
                 "description": "Metric value in the reference period",
-                "example": 2.4E+9
+                "example": 2400000000
               },
               "sourceCount": {
                 "description": "Number of source documents used for generation",
@@ -21913,7 +21920,7 @@
               },
               "analyzedValue": {
                 "description": "Metric value in the analyzed period (the observed value that triggered the anomaly)",
-                "example": 2.6E+9
+                "example": 2600000000
               },
               "areRelationsValid": {
                 "type": "boolean"
@@ -21965,7 +21972,7 @@
               },
               "referenceValue": {
                 "description": "Metric value in the reference period",
-                "example": 2.4E+9
+                "example": 2400000000
               },
               "sourceCount": {
                 "description": "Number of source documents used for generation",
@@ -22079,7 +22086,7 @@
               },
               "analyzedValue": {
                 "description": "Metric value in the analyzed period (the observed value that triggered the anomaly)",
-                "example": 2.6E+9
+                "example": 2600000000
               },
               "areRelationsValid": {
                 "type": "boolean"
@@ -22131,7 +22138,7 @@
               },
               "referenceValue": {
                 "description": "Metric value in the reference period",
-                "example": 2.4E+9
+                "example": 2400000000
               },
               "sourceCount": {
                 "description": "Number of source documents used for generation",
@@ -24585,6 +24592,11 @@
                 },
                 "type": "object"
               },
+              "dataCenter": {
+                "description": "Current deployment region. Should be used for issue investigation only.",
+                "nullable": true,
+                "type": "string"
+              },
               "earlyAccess": {
                 "deprecated": true,
                 "description": "The early access feature identifier. It is used to enable experimental features. Deprecated in favor of earlyAccessValues.",
@@ -24607,6 +24619,11 @@
               },
               "name": {
                 "maxLength": 255,
+                "nullable": true,
+                "type": "string"
+              },
+              "region": {
+                "description": "Current deployment cluster name. Should be used for issue investigation only.",
                 "nullable": true,
                 "type": "string"
               }

@@ -99,10 +99,12 @@ class JsonApiOrganizationOutAttributes(ModelNormal):
         return {
             'allowed_origins': ([str],),  # noqa: E501
             'cache_settings': (JsonApiOrganizationOutAttributesCacheSettings,),  # noqa: E501
+            'data_center': (str, none_type,),  # noqa: E501
             'early_access': (str, none_type,),  # noqa: E501
             'early_access_values': ([str], none_type,),  # noqa: E501
             'hostname': (str,),  # noqa: E501
             'name': (str, none_type,),  # noqa: E501
+            'region': (str, none_type,),  # noqa: E501
         }
 
     @cached_property
@@ -113,10 +115,12 @@ class JsonApiOrganizationOutAttributes(ModelNormal):
     attribute_map = {
         'allowed_origins': 'allowedOrigins',  # noqa: E501
         'cache_settings': 'cacheSettings',  # noqa: E501
+        'data_center': 'dataCenter',  # noqa: E501
         'early_access': 'earlyAccess',  # noqa: E501
         'early_access_values': 'earlyAccessValues',  # noqa: E501
         'hostname': 'hostname',  # noqa: E501
         'name': 'name',  # noqa: E501
+        'region': 'region',  # noqa: E501
     }
 
     read_only_vars = {
@@ -162,10 +166,12 @@ class JsonApiOrganizationOutAttributes(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             allowed_origins ([str]): [optional]  # noqa: E501
             cache_settings (JsonApiOrganizationOutAttributesCacheSettings): [optional]  # noqa: E501
+            data_center (str, none_type): Current deployment region. Should be used for issue investigation only.. [optional]  # noqa: E501
             early_access (str, none_type): The early access feature identifier. It is used to enable experimental features. Deprecated in favor of earlyAccessValues.. [optional]  # noqa: E501
             early_access_values ([str], none_type): The early access feature identifiers. They are used to enable experimental features.. [optional]  # noqa: E501
             hostname (str): [optional]  # noqa: E501
             name (str, none_type): [optional]  # noqa: E501
+            region (str, none_type): Current deployment cluster name. Should be used for issue investigation only.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -253,10 +259,12 @@ class JsonApiOrganizationOutAttributes(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             allowed_origins ([str]): [optional]  # noqa: E501
             cache_settings (JsonApiOrganizationOutAttributesCacheSettings): [optional]  # noqa: E501
+            data_center (str, none_type): Current deployment region. Should be used for issue investigation only.. [optional]  # noqa: E501
             early_access (str, none_type): The early access feature identifier. It is used to enable experimental features. Deprecated in favor of earlyAccessValues.. [optional]  # noqa: E501
             early_access_values ([str], none_type): The early access feature identifiers. They are used to enable experimental features.. [optional]  # noqa: E501
             hostname (str): [optional]  # noqa: E501
             name (str, none_type): [optional]  # noqa: E501
+            region (str, none_type): Current deployment cluster name. Should be used for issue investigation only.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
