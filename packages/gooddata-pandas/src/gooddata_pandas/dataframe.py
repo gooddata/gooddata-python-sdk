@@ -1,7 +1,7 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
 
-from typing import Callable, Optional, Union
+from typing import Callable, Literal, Optional, Union
 
 import pandas
 from gooddata_api_client import models
@@ -259,6 +259,7 @@ class DataFrameFactory:
         on_execution_submitted: Optional[Callable[[Execution], None]] = None,
         is_cancellable: bool = False,
         optimized: bool = False,
+        grand_totals_position: Optional[Literal["pinnedBottom", "pinnedTop", "bottom", "top"]] = "bottom",
     ) -> tuple[pandas.DataFrame, DataFrameMetadata]:
         """
         Creates a data frame using a created visualization.
@@ -272,6 +273,9 @@ class DataFrameFactory:
                 headers in memory as lists of dicts, which can consume a lot of memory for large results.
                 Optimized accumulator stores only unique values and story only reference to them in the list,
                 which can significantly reduce memory usage.
+            grand_totals_position (Literal["pinnedBottom", "pinnedTop", "bottom", "top"], optional):
+                Position where grand totals should be placed. "pinnedBottom" and "bottom" append totals,
+                "pinnedTop" and "top" prepend totals. Defaults to "bottom".
 
         Returns:
             pandas.DataFrame: A DataFrame instance.
@@ -283,6 +287,7 @@ class DataFrameFactory:
             exec_def=execution_definition,
             on_execution_submitted=on_execution_submitted,
             optimized=optimized,
+            grand_totals_position=grand_totals_position,
         )
 
     def result_cache_metadata_for_exec_result_id(self, result_id: str) -> ResultCacheMetadata:
@@ -306,6 +311,7 @@ class DataFrameFactory:
         page_size: int = _DEFAULT_PAGE_SIZE,
         on_execution_submitted: Optional[Callable[[Execution], None]] = None,
         optimized: bool = False,
+        grand_totals_position: Optional[Literal["pinnedBottom", "pinnedTop", "bottom", "top"]] = "bottom",
     ) -> tuple[pandas.DataFrame, DataFrameMetadata]:
         """
         Creates a data frame using an execution definition.
@@ -342,6 +348,9 @@ class DataFrameFactory:
                 headers in memory as lists of dicts, which can consume a lot of memory for large results.
                 Optimized accumulator stores only unique values and story only reference to them in the list,
                 which can significantly reduce memory usage.
+            grand_totals_position (Literal["pinnedBottom", "pinnedTop", "bottom", "top"], optional):
+                Position where grand totals should be placed. "pinnedBottom" and "bottom" append totals,
+                "pinnedTop" and "top" prepend totals. Defaults to "bottom".
 
         Returns:
             Tuple[pandas.DataFrame, DataFrameMetadata]: Tuple holding DataFrame and DataFrame metadata.
@@ -363,6 +372,7 @@ class DataFrameFactory:
             result_size_bytes_limit=result_size_bytes_limit,
             page_size=page_size,
             optimized=optimized,
+            grand_totals_position=grand_totals_position,
         )
 
     def for_exec_result_id(
@@ -376,6 +386,7 @@ class DataFrameFactory:
         use_primary_labels_in_attributes: bool = False,
         page_size: int = _DEFAULT_PAGE_SIZE,
         optimized: bool = False,
+        grand_totals_position: Optional[Literal["pinnedBottom", "pinnedTop", "bottom", "top"]] = "bottom",
     ) -> tuple[pandas.DataFrame, DataFrameMetadata]:
         """
             Retrieves a DataFrame and DataFrame metadata for a given execution result identifier.
@@ -410,6 +421,9 @@ class DataFrameFactory:
                 headers in memory as lists of dicts, which can consume a lot of memory for large results.
                 Optimized accumulator stores only unique values and story only reference to them in the list,
                 which can significantly reduce memory usage.
+            grand_totals_position (Literal["pinnedBottom", "pinnedTop", "bottom", "top"], optional):
+                Position where grand totals should be placed. "pinnedBottom" and "bottom" append totals,
+                "pinnedTop" and "top" prepend totals. Defaults to "bottom".
 
         Returns:
             Tuple[pandas.DataFrame, DataFrameMetadata]: Tuple holding DataFrame and DataFrame metadata.
@@ -436,4 +450,5 @@ class DataFrameFactory:
             use_primary_labels_in_attributes=use_primary_labels_in_attributes,
             page_size=page_size,
             optimized=optimized,
+            grand_totals_position=grand_totals_position,
         )

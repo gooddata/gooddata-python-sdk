@@ -2,7 +2,7 @@
 from abc import ABC, abstractmethod
 from collections.abc import Iterator
 from functools import cached_property
-from typing import Any, Callable, Optional, Union, cast
+from typing import Any, Callable, Literal, Optional, Union, cast
 
 import pandas
 from attrs import define, field, frozen
@@ -698,30 +698,45 @@ def _headers_to_index(
     ), primary_attribute_labels_mapping
 
 
-def _merge_grand_totals_into_data(extract: _DataWithHeaders) -> Union[_DataArray, list[_DataArray]]:
+def _merge_grand_totals_into_data(
+    extract: _DataWithHeaders,
+    grand_totals_position: Optional[Literal["pinnedBottom", "pinnedTop", "bottom", "top"]] = "bottom",
+) -> Union[_DataArray, list[_DataArray]]:
     """
     Merges grand totals into the extracted data. This function will mutate the extracted data,
     extending the rows and columns with grand totals. Going with mutation here so as not to copy arrays around.
 
     Args:
         extract (_DataWithHeaders): Extracted data with headers and grand totals.
+        grand_totals_position (Literal["pinnedBottom", "pinnedTop", "bottom", "top"], optional):
+            Position where grand totals should be placed. "pinnedBottom" and "bottom" append totals,
+            "pinnedTop" and "top" prepend totals. Defaults to "bottom".
 
     Returns:
         Union[_DataArray, List[_DataArray]]: Mutated data with rows and columns extended with grand totals.
     """
     data: list[_DataArray] = extract.data
+    # Treat None as "bottom" as a fallback
+    if grand_totals_position is None:
+        grand_totals_position = "bottom"
+    # Determine if grand totals should be prepended or appended
+    should_prepend = grand_totals_position in ("pinnedTop", "top")
 
     if extract.grand_totals[0] is not None:
         # column totals are computed into extra rows, one row per column total
-        # add those rows at the end of the data rows
-        data.extend(extract.grand_totals[0])
+        # add those rows at the beginning or end of the data rows based on position
+        if should_prepend:
+            data[:0] = extract.grand_totals[0]
+        else:
+            data.extend(extract.grand_totals[0])
 
     if extract.grand_totals[1] is not None:
         # row totals are computed into extra columns that should be appended to
-        # existing data rows
+        # existing data rows (column position doesn't change for row totals)
         for row_idx, cols_to_append in enumerate(extract.grand_totals[1]):
             data[row_idx].extend(cols_to_append)
 
+    return data
     return data
 
 
@@ -757,6 +772,7 @@ def convert_execution_response_to_dataframe(
     use_primary_labels_in_attributes: bool = False,
     page_size: int = _DEFAULT_PAGE_SIZE,
     optimized: bool = False,
+    grand_totals_position: Optional[Literal["pinnedBottom", "pinnedTop", "bottom", "top"]] = "bottom",
 ) -> tuple[pandas.DataFrame, DataFrameMetadata]:
     """
     Converts execution result to a pandas dataframe, maintaining the dimensionality of the result.
@@ -776,6 +792,9 @@ def convert_execution_response_to_dataframe(
             headers in memory as lists of dicts, which can consume a lot of memory for large results.
             Optimized accumulator stores only unique values and story only reference to them in the list,
             which can significantly reduce memory usage.
+        grand_totals_position (Literal["pinnedBottom", "pinnedTop", "bottom", "top"], optional):
+            Position where grand totals should be placed. "pinnedBottom" and "bottom" append totals,
+            "pinnedTop" and "top" prepend totals. Defaults to "bottom".
 
     Returns:
         Tuple[pandas.DataFrame, DataFrameMetadata]: A tuple containing the created dataframe and its metadata.
@@ -789,7 +808,7 @@ def convert_execution_response_to_dataframe(
         optimized=optimized,
     )
 
-    full_data = _merge_grand_totals_into_data(extract)
+    full_data = _merge_grand_totals_into_data(extract=extract, grand_totals_position=grand_totals_position)
     full_headers = _merge_grand_total_headers_into_headers(extract)
 
     index, primary_labels_from_index = _headers_to_index(
