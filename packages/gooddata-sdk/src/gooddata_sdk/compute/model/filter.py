@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from datetime import datetime
 from importlib.util import find_spec
-from typing import Any, Optional, Union, cast
+from typing import Any, Literal, Optional, TypeAlias, Union, cast
 
 import attrs
 from gooddata_api_client.model.inline_filter_definition_inline import InlineFilterDefinitionInline
@@ -63,6 +63,17 @@ _METRIC_VALUE_FILTER_OPERATOR_LABEL = {
     "LESS_THAN_OR_EQUAL_TO": "<=",
     "NOT_EQUAL_TO": "!=",
 }
+
+ComparisonOperator: TypeAlias = Literal[
+    "GREATER_THAN",
+    "GREATER_THAN_OR_EQUAL_TO",
+    "LESS_THAN",
+    "LESS_THAN_OR_EQUAL_TO",
+    "EQUAL_TO",
+    "NOT_EQUAL_TO",
+]
+
+RangeOperator: TypeAlias = Literal["BETWEEN", "NOT_BETWEEN"]
 
 
 def _extract_id_or_local_id(val: Union[ObjId, Attribute, Metric, str]) -> Union[ObjId, str]:
@@ -488,7 +499,7 @@ class MetricValueFilter(Filter):
 
 @attrs.define(frozen=True, slots=True)
 class MetricValueComparisonCondition:
-    operator: str
+    operator: ComparisonOperator
     value: Union[int, float]
 
     def as_api_model(self) -> afm_models.MeasureValueCondition:
@@ -505,7 +516,7 @@ class MetricValueComparisonCondition:
 
 @attrs.define(frozen=True, slots=True)
 class MetricValueRangeCondition:
-    operator: str
+    operator: RangeOperator
     from_value: Union[int, float]
     to_value: Union[int, float]
 
@@ -519,7 +530,7 @@ class MetricValueRangeCondition:
         return afm_models.MeasureValueCondition(range=range_body, _check_type=False)
 
     def description(self) -> str:
-        not_between = "not" if self.operator == "NOT_BETWEEN" else ""
+        not_between = "not " if self.operator == "NOT_BETWEEN" else ""
         return f"{not_between}between {float(self.from_value)} - {float(self.to_value)}"
 
 
