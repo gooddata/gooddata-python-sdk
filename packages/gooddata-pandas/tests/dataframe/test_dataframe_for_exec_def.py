@@ -1,6 +1,6 @@
 # (C) 2022 GoodData Corporation
 from pathlib import Path
-from typing import Optional
+from typing import Literal, Optional
 
 import pytest
 from gooddata_pandas import DataFrameFactory
@@ -31,9 +31,12 @@ def _run_and_validate_results(
     expected_column_totals: Optional[list[list[int]]] = None,
     page_size: int = 100,
     optimized: bool = False,
+    grand_totals_position: Optional[Literal["pinnedBottom", "pinnedTop", "bottom", "top"]] = "bottom",
 ) -> str:
     # generate dataframe from exec_def
-    result, result_metadata = gdf.for_exec_def(exec_def=exec_def, page_size=page_size)
+    result, result_metadata = gdf.for_exec_def(
+        exec_def=exec_def, page_size=page_size, grand_totals_position=grand_totals_position
+    )
     assert result.values.shape == expected
 
     # use result ID from computation above and generate dataframe just from it
