@@ -1,0 +1,15 @@
+# (C) 2022 GoodData Corporation
+columnName: wdf__state
+id: wdf__state
+title: Customer state
+workspace:
+  id: demo_west
+  type: workspace
+workspaceDataFilterSettings:
+  - filterValues:
+      - California
+    id: region_west_california
+    title: Region West California
+    workspace:
+      id: demo_west_california
+      type: workspace

@@ -1,0 +1,27 @@
+# (C) 2022 GoodData Corporation
+columns:
+- dataType: NUMERIC
+  isPrimaryKey: false
+  name: budget
+- dataType: STRING
+  isPrimaryKey: true
+  name: campaign_channel_id
+- dataType: INT
+  isPrimaryKey: false
+  name: campaign_id
+  referencedTableColumn: campaign_id
+  referencedTableId: campaigns
+- dataType: STRING
+  isPrimaryKey: false
+  name: category
+- dataType: NUMERIC
+  isPrimaryKey: false
+  name: spend
+- dataType: STRING
+  isPrimaryKey: false
+  name: type
+id: campaign_channels
+path:
+- demo
+- campaign_channels
+type: TABLE

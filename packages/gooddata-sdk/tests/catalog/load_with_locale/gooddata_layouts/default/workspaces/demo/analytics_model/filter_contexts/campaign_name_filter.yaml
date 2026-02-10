@@ -1,0 +1,22 @@
+# (C) 2022 GoodData Corporation
+content:
+  filters:
+    - dateFilter:
+        from: '0'
+        granularity: GDC.time.month
+        to: '0'
+        type: relative
+    - attributeFilter:
+        attributeElements:
+          uris: []
+        displayForm:
+          identifier:
+            id: campaign_name
+            type: label
+        filterElementsBy: []
+        localIdentifier: 14b0807447ef4bc28f43e4fc5c337d1d
+        negativeSelection: true
+  version: '2'
+description: ''
+id: campaign_name_filter
+title: filterContext

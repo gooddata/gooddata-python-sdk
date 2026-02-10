@@ -1,0 +1,16 @@
+# (C) 2022 GoodData Corporation
+columns:
+  - dataType: STRING
+    isPrimaryKey: false
+    name: category
+  - dataType: INT
+    isPrimaryKey: true
+    name: product_id
+  - dataType: STRING
+    isPrimaryKey: false
+    name: product_name
+id: products
+path:
+  - demo
+  - products
+type: TABLE

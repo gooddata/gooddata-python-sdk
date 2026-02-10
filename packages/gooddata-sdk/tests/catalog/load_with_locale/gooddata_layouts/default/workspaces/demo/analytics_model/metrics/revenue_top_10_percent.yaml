@@ -1,0 +1,6 @@
+# (C) 2022 GoodData Corporation
+content:
+  format: $#,##0
+  maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
+id: revenue_top_10_percent
+title: Revenue / Top 10%

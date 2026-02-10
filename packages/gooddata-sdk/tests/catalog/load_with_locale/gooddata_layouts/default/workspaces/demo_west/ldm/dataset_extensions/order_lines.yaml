@@ -1,0 +1,8 @@
+# (C) 2023 GoodData Corporation
+id: order_lines
+workspaceDataFilterReferences:
+  - filterColumn: wdf__state
+    filterColumnDataType: STRING
+    filterId:
+      id: wdf__state
+      type: workspaceDataFilter
