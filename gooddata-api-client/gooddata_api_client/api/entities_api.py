@@ -2501,8 +2501,8 @@ class EntitiesApi(object):
                     },
                     ('meta_include',): {
 
-                        "CONFIG": "config",
                         "PERMISSIONS": "permissions",
+                        "CONFIG": "config",
                         "HIERARCHY": "hierarchy",
                         "DATAMODELDATASETS": "dataModelDatasets",
                         "ALL": "all",
@@ -8691,8 +8691,8 @@ class EntitiesApi(object):
                     },
                     ('meta_include',): {
 
-                        "CONFIG": "config",
                         "PERMISSIONS": "permissions",
+                        "CONFIG": "config",
                         "HIERARCHY": "hierarchy",
                         "DATAMODELDATASETS": "dataModelDatasets",
                         "PAGE": "page",
@@ -12323,8 +12323,8 @@ class EntitiesApi(object):
                     },
                     ('meta_include',): {
 
-                        "CONFIG": "config",
                         "PERMISSIONS": "permissions",
+                        "CONFIG": "config",
                         "HIERARCHY": "hierarchy",
                         "DATAMODELDATASETS": "dataModelDatasets",
                         "ALL": "all",

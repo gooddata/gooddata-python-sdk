@@ -398,6 +398,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             ),
                         ],
                     ),
+                    interval="DAY",
                     trigger="ALWAYS",
                 ),
                 are_relations_valid=True,
@@ -448,7 +449,16 @@ with gooddata_api_client.ApiClient() as api_client:
                         ),
                     ),
                 ],
-                metadata=JsonApiAutomationInAttributesMetadata(),
+                metadata=JsonApiAutomationInAttributesMetadata(
+                    visible_filters=[
+                        VisibleFilter(
+                            is_all_time_date_filter=False,
+                            local_identifier="local_identifier_example",
+                            title="title_example",
+                        ),
+                    ],
+                    widget="widget_example",
+                ),
                 raw_exports=[
                     JsonApiAutomationInAttributesRawExportsInner(
                         request_payload=RawExportAutomationRequest(
@@ -7394,6 +7404,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             ),
                         ],
                     ),
+                    interval="DAY",
                     trigger="ALWAYS",
                 ),
                 are_relations_valid=True,
@@ -7444,7 +7455,16 @@ with gooddata_api_client.ApiClient() as api_client:
                         ),
                     ),
                 ],
-                metadata=JsonApiAutomationInAttributesMetadata(),
+                metadata=JsonApiAutomationInAttributesMetadata(
+                    visible_filters=[
+                        VisibleFilter(
+                            is_all_time_date_filter=False,
+                            local_identifier="local_identifier_example",
+                            title="title_example",
+                        ),
+                    ],
+                    widget="widget_example",
+                ),
                 raw_exports=[
                     JsonApiAutomationInAttributesRawExportsInner(
                         request_payload=RawExportAutomationRequest(
@@ -11728,6 +11748,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             ),
                         ],
                     ),
+                    interval="DAY",
                     trigger="ALWAYS",
                 ),
                 are_relations_valid=True,
@@ -11778,7 +11799,16 @@ with gooddata_api_client.ApiClient() as api_client:
                         ),
                     ),
                 ],
-                metadata=JsonApiAutomationInAttributesMetadata(),
+                metadata=JsonApiAutomationInAttributesMetadata(
+                    visible_filters=[
+                        VisibleFilter(
+                            is_all_time_date_filter=False,
+                            local_identifier="local_identifier_example",
+                            title="title_example",
+                        ),
+                    ],
+                    widget="widget_example",
+                ),
                 raw_exports=[
                     JsonApiAutomationInAttributesRawExportsInner(
                         request_payload=RawExportAutomationRequest(

@@ -7473,6 +7473,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         ),
                     ],
                 ),
+                interval="DAY",
                 trigger="ALWAYS",
             ),
             analytical_dashboard=DeclarativeAnalyticalDashboardIdentifier(

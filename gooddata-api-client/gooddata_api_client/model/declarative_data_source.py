@@ -90,6 +90,7 @@ class DeclarativeDataSource(ModelNormal):
             'ATHENA': "ATHENA",
             'MONGODB': "MONGODB",
             'CRATEDB': "CRATEDB",
+            'AILAKEHOUSE': "AILAKEHOUSE",
         },
         ('authentication_type',): {
             'None': None,
