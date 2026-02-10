@@ -17,6 +17,9 @@ from gooddata_api_client.models import AbsoluteDateFilterAbsoluteDateFilter as A
 from gooddata_api_client.models import (
     ComparisonMeasureValueFilterComparisonMeasureValueFilter as ComparisonMeasureValueFilterBody,
 )
+from gooddata_api_client.models import (
+    CompoundMeasureValueFilterCompoundMeasureValueFilter as CompoundMeasureValueFilterBody,
+)
 from gooddata_api_client.models import NegativeAttributeFilterNegativeAttributeFilter as NegativeAttributeFilterBody
 from gooddata_api_client.models import PositiveAttributeFilterPositiveAttributeFilter as PositiveAttributeFilterBody
 from gooddata_api_client.models import RangeMeasureValueFilterRangeMeasureValueFilter as RangeMeasureValueFilterBody
@@ -481,6 +484,105 @@ class MetricValueFilter(Filter):
                 f"{labels.get(metric_id, metric_id)}: "
                 f"{_METRIC_VALUE_FILTER_OPERATOR_LABEL.get(self.operator, self.operator)} {self.values[0]}"
             )
+
+
+@attrs.define(frozen=True, slots=True)
+class MetricValueComparisonCondition:
+    operator: str
+    value: Union[int, float]
+
+    def as_api_model(self) -> afm_models.MeasureValueCondition:
+        comparison = afm_models.ComparisonConditionComparison(
+            operator=self.operator,
+            value=float(self.value),
+            _check_type=False,
+        )
+        return afm_models.MeasureValueCondition(comparison=comparison, _check_type=False)
+
+    def description(self) -> str:
+        return f"{_METRIC_VALUE_FILTER_OPERATOR_LABEL.get(self.operator, self.operator)} {float(self.value)}"
+
+
+@attrs.define(frozen=True, slots=True)
+class MetricValueRangeCondition:
+    operator: str
+    from_value: Union[int, float]
+    to_value: Union[int, float]
+
+    def as_api_model(self) -> afm_models.MeasureValueCondition:
+        range_body = afm_models.RangeConditionRange(
+            _from=float(self.from_value),
+            operator=self.operator,
+            to=float(self.to_value),
+            _check_type=False,
+        )
+        return afm_models.MeasureValueCondition(range=range_body, _check_type=False)
+
+    def description(self) -> str:
+        not_between = "not" if self.operator == "NOT_BETWEEN" else ""
+        return f"{not_between}between {float(self.from_value)} - {float(self.to_value)}"
+
+
+MetricValueCondition = Union[MetricValueComparisonCondition, MetricValueRangeCondition]
+
+
+class CompoundMetricValueFilter(Filter):
+    """
+    Compound measure value filter.
+
+    Semantics match backend `CompoundMeasureValueFilter`: multiple conditions combined with OR logic.
+
+    Note:
+    - If `conditions` is empty, the filter is a noop (all rows are returned).
+    - `treat_nulls_as` is applied at the filter level (same for all conditions).
+    """
+
+    def __init__(
+        self,
+        metric: Union[ObjId, str, Metric],
+        conditions: list[MetricValueCondition],
+        treat_nulls_as: Union[float, None] = None,
+    ) -> None:
+        super().__init__()
+        self._metric = _extract_id_or_local_id(metric)
+        self._conditions = conditions
+        self._treat_nulls_as = treat_nulls_as
+
+    @property
+    def metric(self) -> Union[ObjId, str]:
+        return self._metric
+
+    @property
+    def conditions(self) -> list[MetricValueCondition]:
+        return self._conditions
+
+    @property
+    def treat_nulls_as(self) -> Union[float, None]:
+        return self._treat_nulls_as
+
+    def is_noop(self) -> bool:
+        return len(self.conditions) == 0
+
+    def as_api_model(self) -> afm_models.CompoundMeasureValueFilter:
+        measure = _to_identifier(self._metric)
+
+        kwargs: dict[str, Any] = dict(
+            measure=measure,
+            conditions=[c.as_api_model() for c in self.conditions],
+            _check_type=False,
+        )
+        if self.treat_nulls_as is not None:
+            kwargs["treat_null_values_as"] = self.treat_nulls_as
+
+        body = CompoundMeasureValueFilterBody(**kwargs)
+        return afm_models.CompoundMeasureValueFilter(body, _check_type=False)
+
+    def description(self, labels: dict[str, str], format_locale: Optional[str] = None) -> str:
+        metric_id = self.metric.id if isinstance(self.metric, ObjId) else self.metric
+        if not self.conditions:
+            return f"{labels.get(metric_id, metric_id)}: All"
+        conditions_str = " OR ".join([c.description() for c in self.conditions])
+        return f"{labels.get(metric_id, metric_id)}: {conditions_str}"
 
 
 _RANKING_OPERATORS = {"TOP", "BOTTOM"}

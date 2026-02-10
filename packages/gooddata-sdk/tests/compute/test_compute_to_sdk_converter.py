@@ -5,9 +5,12 @@ from gooddata_sdk import (
     AbsoluteDateFilter,
     ArithmeticMetric,
     Attribute,
+    CompoundMetricValueFilter,
     ComputeToSdkConverter,
     InlineFilter,
+    MetricValueComparisonCondition,
     MetricValueFilter,
+    MetricValueRangeCondition,
     NegativeAttributeFilter,
     PopDateMetric,
     PopDatesetMetric,
@@ -178,6 +181,38 @@ def test_range_measure_value_filter_conversion():
     assert result.operator == "BETWEEN"
     assert result.values == (100, 200)
     assert result.treat_nulls_as == 42
+
+
+def test_compound_measure_value_filter_conversion():
+    filter_dict = json.loads(
+        """
+        {
+          "compoundMeasureValueFilter": {
+            "measure": { "localIdentifier": "measureLocalId" },
+            "conditions": [
+              { "comparison": { "operator": "GREATER_THAN", "value": 100 } },
+              { "range": { "operator": "BETWEEN", "from": 10, "to": 20 } }
+            ],
+            "treatNullValuesAs": 0,
+            "applyOnResult": true
+          }
+        }
+        """
+    )
+
+    result = ComputeToSdkConverter.convert_filter(filter_dict)
+
+    assert isinstance(result, CompoundMetricValueFilter)
+    assert result.metric == "measureLocalId"
+    assert result.treat_nulls_as == 0
+    assert len(result.conditions) == 2
+    assert isinstance(result.conditions[0], MetricValueComparisonCondition)
+    assert result.conditions[0].operator == "GREATER_THAN"
+    assert result.conditions[0].value == 100
+    assert isinstance(result.conditions[1], MetricValueRangeCondition)
+    assert result.conditions[1].operator == "BETWEEN"
+    assert result.conditions[1].from_value == 10
+    assert result.conditions[1].to_value == 20
 
 
 def test_ranking_filter_conversion():

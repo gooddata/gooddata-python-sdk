@@ -7,9 +7,12 @@ from gooddata_sdk.compute.model.filter import (
     AbsoluteDateFilter,
     AllTimeFilter,
     BoundedFilter,
+    CompoundMetricValueFilter,
     Filter,
     InlineFilter,
+    MetricValueComparisonCondition,
     MetricValueFilter,
+    MetricValueRangeCondition,
     NegativeAttributeFilter,
     PositiveAttributeFilter,
     RankingFilter,
@@ -113,6 +116,28 @@ class ComputeToSdkConverter:
                 metric=ref_extract(f["measure"]),
                 operator=f["operator"],
                 values=(f["from"], f["to"]),
+                treat_nulls_as=f.get("treatNullValuesAs"),
+            )
+
+        if "compoundMeasureValueFilter" in filter_dict:
+            f = filter_dict["compoundMeasureValueFilter"]
+
+            conditions: list[Union[MetricValueComparisonCondition, MetricValueRangeCondition]] = []
+            for condition in f.get("conditions", []):
+                if "comparison" in condition:
+                    c = condition["comparison"]
+                    conditions.append(MetricValueComparisonCondition(operator=c["operator"], value=c["value"]))
+                elif "range" in condition:
+                    c = condition["range"]
+                    conditions.append(
+                        MetricValueRangeCondition(operator=c["operator"], from_value=c["from"], to_value=c["to"])
+                    )
+                else:
+                    raise ValueError(f"Unsupported measure value condition type: {condition}")
+
+            return CompoundMetricValueFilter(
+                metric=ref_extract(f["measure"]),
+                conditions=conditions,
                 treat_nulls_as=f.get("treatNullValuesAs"),
             )
 
