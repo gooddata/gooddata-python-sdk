@@ -40,7 +40,8 @@
             "description": "Campaign channel id",
             "tags": [
               "Campaign channels"
-            ]
+            ],
+            "isNullable": false
           },
           {
             "id": "campaign_channels.category",

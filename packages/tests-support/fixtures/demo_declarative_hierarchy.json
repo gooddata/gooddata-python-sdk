@@ -2519,6 +2519,7 @@
                   "labels": [],
                   "sourceColumn": "campaign_channel_id",
                   "sourceColumnDataType": "STRING",
+                  "isNullable": false,
                   "tags": [
                     "Campaign channels"
                   ],

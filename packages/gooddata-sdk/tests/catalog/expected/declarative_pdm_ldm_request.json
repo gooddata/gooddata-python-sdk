@@ -10,7 +10,8 @@
         {
           "data_type": "STRING",
           "isPrimaryKey": true,
-          "name": "campaign_channel_id"
+          "name": "campaign_channel_id",
+          "isNullable": false
         },
         {
           "data_type": "INT",
