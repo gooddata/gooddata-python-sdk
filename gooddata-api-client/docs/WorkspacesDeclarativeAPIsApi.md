@@ -656,6 +656,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                     ),
                                 ],
                             ),
+                            interval="DAY",
                             trigger="ALWAYS",
                         ),
                         analytical_dashboard=DeclarativeAnalyticalDashboardIdentifier(
@@ -886,7 +887,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 custom_application_settings=[
                     DeclarativeCustomApplicationSetting(
                         application_name="Modeler",
-                        content=JsonNode(),
+                        content={},
                         id="modeler.demo",
                     ),
                 ],

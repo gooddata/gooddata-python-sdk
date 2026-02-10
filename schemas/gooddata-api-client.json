@@ -5410,12 +5410,6 @@
         ],
         "type": "object"
       },
-      "Array": {
-        "items": {
-          "type": "string"
-        },
-        "type": "array"
-      },
       "AssigneeIdentifier": {
         "description": "Identifier of a user or user-group.",
         "properties": {
@@ -5794,12 +5788,24 @@
           "execution": {
             "$ref": "#/components/schemas/AlertAfm"
           },
+          "interval": {
+            "description": "Date granularity for the interval of ONCE_PER_INTERVAL trigger. Supported granularities: DAY, WEEK, MONTH, QUARTER, YEAR.",
+            "enum": [
+              "DAY",
+              "WEEK",
+              "MONTH",
+              "QUARTER",
+              "YEAR"
+            ],
+            "type": "string"
+          },
           "trigger": {
             "default": "ALWAYS",
-            "description": "Trigger behavior for the alert.\nALWAYS - alert is triggered every time the condition is met.\nONCE - alert is triggered only once when the condition is met.\n",
+            "description": "Trigger behavior for the alert.\nALWAYS - alert is triggered every time the condition is met.\nONCE - alert is triggered only once when the condition is met.\nONCE_PER_INTERVAL - alert is triggered when the condition is met, then suppressed for the interval. If no interval is specified, it behaves as ALWAYS.\n",
             "enum": [
               "ALWAYS",
-              "ONCE"
+              "ONCE",
+              "ONCE_PER_INTERVAL"
             ],
             "type": "string"
           }
@@ -8581,6 +8587,7 @@
             "description": "Column name",
             "example": "customer_id",
             "maxLength": 255,
+            "pattern": "^[^\u0000]*$",
             "type": "string"
           },
           "referencedTableColumn": {
@@ -8631,7 +8638,11 @@
             "type": "string"
           },
           "content": {
-            "$ref": "#/components/schemas/JsonNode"
+            "description": "Free-form JSON content. Maximum supported length is 250000 characters.",
+            "example": {},
+            "maxLength": 250000,
+            "nullable": true,
+            "type": "object"
           },
           "id": {
             "description": "Custom Application Setting ID.",
@@ -8650,10 +8661,21 @@
       "DeclarativeCustomGeoCollection": {
         "description": "A declarative form of custom geo collection.",
         "properties": {
+          "description": {
+            "description": "Description of the custom geo collection.",
+            "maxLength": 10000,
+            "type": "string"
+          },
           "id": {
             "description": "Custom geo collection ID.",
             "example": "my-geo-collection",
             "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of the custom geo collection.",
+            "example": "My Geo Collection",
+            "maxLength": 255,
             "type": "string"
           }
         },
@@ -8871,7 +8893,8 @@
               "STARROCKS",
               "ATHENA",
               "MONGODB",
-              "CRATEDB"
+              "CRATEDB",
+              "AILAKEHOUSE"
             ],
             "example": "POSTGRESQL",
             "type": "string"
@@ -9478,6 +9501,8 @@
         "properties": {
           "customClaimMapping": {
             "additionalProperties": {
+              "description": "Map of custom claim overrides. To be used when your Idp does not provide default claims (sub, email, name, given_name, family_name, urn.gooddata.user_groups [optional]). Define the key pair for the claim you wish to override, where the key is the default name of the attribute and the value is your custom name for the given attribute.",
+              "maxLength": 10000,
               "type": "string"
             },
             "description": "Map of custom claim overrides. To be used when your Idp does not provide default claims (sub, email, name, given_name, family_name, urn.gooddata.user_groups [optional]). Define the key pair for the claim you wish to override, where the key is the default name of the attribute and the value is your custom name for the given attribute.",
@@ -12355,16 +12380,25 @@
               "YES",
               "NO"
             ],
-            "type": "string"
+            "type": "string",
+            "xml": {
+              "attribute": true
+            }
           },
           "id": {
-            "type": "string"
+            "type": "string",
+            "xml": {
+              "attribute": true
+            }
           },
           "notes": {
             "$ref": "#/components/schemas/Notes"
           },
           "original": {
-            "type": "string"
+            "type": "string",
+            "xml": {
+              "attribute": true
+            }
           },
           "otherAttributes": {
             "additionalProperties": {
@@ -12376,7 +12410,11 @@
             "$ref": "#/components/schemas/Skeleton"
           },
           "space": {
-            "type": "string"
+            "type": "string",
+            "xml": {
+              "attribute": true,
+              "namespace": "http://www.w3.org/XML/1998/namespace"
+            }
           },
           "srcDir": {
             "enum": [
@@ -12384,14 +12422,20 @@
               "RTL",
               "AUTO"
             ],
-            "type": "string"
+            "type": "string",
+            "xml": {
+              "attribute": true
+            }
           },
           "translate": {
             "enum": [
               "YES",
               "NO"
             ],
-            "type": "string"
+            "type": "string",
+            "xml": {
+              "attribute": true
+            }
           },
           "trgDir": {
             "enum": [
@@ -12399,7 +12443,10 @@
               "RTL",
               "AUTO"
             ],
-            "type": "string"
+            "type": "string",
+            "xml": {
+              "attribute": true
+            }
           },
           "unitOrGroup": {
             "items": {
@@ -12408,7 +12455,11 @@
             "type": "array"
           }
         },
-        "type": "object"
+        "type": "object",
+        "xml": {
+          "name": "file",
+          "namespace": "urn:oasis:names:tc:xliff:document:2.0"
+        }
       },
       "Filter": {
         "description": "List of filters to be applied to the new visualization",
@@ -13528,7 +13579,10 @@
                 "type": "object"
               },
               "createdAt": {
+                "description": "Time of the entity creation.",
                 "format": "date-time",
+                "nullable": true,
+                "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
                 "type": "string"
               },
               "description": {
@@ -13536,7 +13590,10 @@
                 "type": "string"
               },
               "modifiedAt": {
+                "description": "Time of the last entity modification.",
                 "format": "date-time",
+                "nullable": true,
+                "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
                 "type": "string"
               },
               "summary": {
@@ -14241,7 +14298,10 @@
                 "type": "object"
               },
               "createdAt": {
+                "description": "Time of the entity creation.",
                 "format": "date-time",
+                "nullable": true,
+                "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
                 "type": "string"
               },
               "description": {
@@ -14249,7 +14309,10 @@
                 "type": "string"
               },
               "modifiedAt": {
+                "description": "Time of the last entity modification.",
                 "format": "date-time",
+                "nullable": true,
+                "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
                 "type": "string"
               },
               "tags": {
@@ -14893,12 +14956,24 @@
                   "execution": {
                     "$ref": "#/components/schemas/AlertAfm"
                   },
+                  "interval": {
+                    "description": "Date granularity for the interval of ONCE_PER_INTERVAL trigger. Supported granularities: DAY, WEEK, MONTH, QUARTER, YEAR.",
+                    "enum": [
+                      "DAY",
+                      "WEEK",
+                      "MONTH",
+                      "QUARTER",
+                      "YEAR"
+                    ],
+                    "type": "string"
+                  },
                   "trigger": {
                     "default": "ALWAYS",
-                    "description": "Trigger behavior for the alert.\nALWAYS - alert is triggered every time the condition is met.\nONCE - alert is triggered only once when the condition is met.\n",
+                    "description": "Trigger behavior for the alert.\nALWAYS - alert is triggered every time the condition is met.\nONCE - alert is triggered only once when the condition is met.\nONCE_PER_INTERVAL - alert is triggered when the condition is met, then suppressed for the interval. If no interval is specified, it behaves as ALWAYS.\n",
                     "enum": [
                       "ALWAYS",
-                      "ONCE"
+                      "ONCE",
+                      "ONCE_PER_INTERVAL"
                     ],
                     "type": "string"
                   }
@@ -14975,7 +15050,6 @@
                 "type": "array"
               },
               "metadata": {
-                "additionalProperties": true,
                 "description": "Additional information for the automation.",
                 "maxLength": 250000,
                 "nullable": true,
@@ -15214,12 +15288,24 @@
                   "execution": {
                     "$ref": "#/components/schemas/AlertAfm"
                   },
+                  "interval": {
+                    "description": "Date granularity for the interval of ONCE_PER_INTERVAL trigger. Supported granularities: DAY, WEEK, MONTH, QUARTER, YEAR.",
+                    "enum": [
+                      "DAY",
+                      "WEEK",
+                      "MONTH",
+                      "QUARTER",
+                      "YEAR"
+                    ],
+                    "type": "string"
+                  },
                   "trigger": {
                     "default": "ALWAYS",
-                    "description": "Trigger behavior for the alert.\nALWAYS - alert is triggered every time the condition is met.\nONCE - alert is triggered only once when the condition is met.\n",
+                    "description": "Trigger behavior for the alert.\nALWAYS - alert is triggered every time the condition is met.\nONCE - alert is triggered only once when the condition is met.\nONCE_PER_INTERVAL - alert is triggered when the condition is met, then suppressed for the interval. If no interval is specified, it behaves as ALWAYS.\n",
                     "enum": [
                       "ALWAYS",
-                      "ONCE"
+                      "ONCE",
+                      "ONCE_PER_INTERVAL"
                     ],
                     "type": "string"
                   }
@@ -15234,7 +15320,10 @@
                 "type": "boolean"
               },
               "createdAt": {
+                "description": "Time of the entity creation.",
                 "format": "date-time",
+                "nullable": true,
+                "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
                 "type": "string"
               },
               "dashboardTabularExports": {
@@ -15300,7 +15389,6 @@
                 "type": "array"
               },
               "metadata": {
-                "additionalProperties": true,
                 "description": "Additional information for the automation.",
                 "maxLength": 250000,
                 "nullable": true,
@@ -15318,7 +15406,10 @@
                 "type": "object"
               },
               "modifiedAt": {
+                "description": "Time of the last entity modification.",
                 "format": "date-time",
+                "nullable": true,
+                "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
                 "type": "string"
               },
               "rawExports": {
@@ -15661,12 +15752,24 @@
                   "execution": {
                     "$ref": "#/components/schemas/AlertAfm"
                   },
+                  "interval": {
+                    "description": "Date granularity for the interval of ONCE_PER_INTERVAL trigger. Supported granularities: DAY, WEEK, MONTH, QUARTER, YEAR.",
+                    "enum": [
+                      "DAY",
+                      "WEEK",
+                      "MONTH",
+                      "QUARTER",
+                      "YEAR"
+                    ],
+                    "type": "string"
+                  },
                   "trigger": {
                     "default": "ALWAYS",
-                    "description": "Trigger behavior for the alert.\nALWAYS - alert is triggered every time the condition is met.\nONCE - alert is triggered only once when the condition is met.\n",
+                    "description": "Trigger behavior for the alert.\nALWAYS - alert is triggered every time the condition is met.\nONCE - alert is triggered only once when the condition is met.\nONCE_PER_INTERVAL - alert is triggered when the condition is met, then suppressed for the interval. If no interval is specified, it behaves as ALWAYS.\n",
                     "enum": [
                       "ALWAYS",
-                      "ONCE"
+                      "ONCE",
+                      "ONCE_PER_INTERVAL"
                     ],
                     "type": "string"
                   }
@@ -15743,7 +15846,6 @@
                 "type": "array"
               },
               "metadata": {
-                "additionalProperties": true,
                 "description": "Additional information for the automation.",
                 "maxLength": 250000,
                 "nullable": true,
@@ -16646,7 +16748,7 @@
                 "type": "string"
               },
               "content": {
-                "description": "Free-form JSON content. Maximum supported length is 15000 characters.",
+                "description": "Free-form JSON content. Maximum supported length is 250000 characters.",
                 "example": {},
                 "type": "object"
               }
@@ -16700,7 +16802,7 @@
                 "type": "string"
               },
               "content": {
-                "description": "Free-form JSON content. Maximum supported length is 15000 characters.",
+                "description": "Free-form JSON content. Maximum supported length is 250000 characters.",
                 "example": {},
                 "type": "object"
               }
@@ -16820,7 +16922,7 @@
                 "type": "string"
               },
               "content": {
-                "description": "Free-form JSON content. Maximum supported length is 15000 characters.",
+                "description": "Free-form JSON content. Maximum supported length is 250000 characters.",
                 "example": {},
                 "type": "object"
               }
@@ -16870,7 +16972,7 @@
                 "type": "string"
               },
               "content": {
-                "description": "Free-form JSON content. Maximum supported length is 15000 characters.",
+                "description": "Free-form JSON content. Maximum supported length is 250000 characters.",
                 "example": {},
                 "type": "object"
               }
@@ -16916,6 +17018,21 @@
       "JsonApiCustomGeoCollectionIn": {
         "description": "JSON:API representation of customGeoCollection entity.",
         "properties": {
+          "attributes": {
+            "properties": {
+              "description": {
+                "maxLength": 10000,
+                "nullable": true,
+                "type": "string"
+              },
+              "name": {
+                "maxLength": 255,
+                "nullable": true,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
           "id": {
             "description": "API identifier of an object",
             "example": "id1",
@@ -16951,6 +17068,21 @@
       "JsonApiCustomGeoCollectionOut": {
         "description": "JSON:API representation of customGeoCollection entity.",
         "properties": {
+          "attributes": {
+            "properties": {
+              "description": {
+                "maxLength": 10000,
+                "nullable": true,
+                "type": "string"
+              },
+              "name": {
+                "maxLength": 255,
+                "nullable": true,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
           "id": {
             "description": "API identifier of an object",
             "example": "id1",
@@ -17026,6 +17158,21 @@
       "JsonApiCustomGeoCollectionPatch": {
         "description": "JSON:API representation of patching customGeoCollection entity.",
         "properties": {
+          "attributes": {
+            "properties": {
+              "description": {
+                "maxLength": 10000,
+                "nullable": true,
+                "type": "string"
+              },
+              "name": {
+                "maxLength": 255,
+                "nullable": true,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
           "id": {
             "description": "API identifier of an object",
             "example": "id1",
@@ -17157,7 +17304,10 @@
                 "type": "object"
               },
               "createdAt": {
+                "description": "Time of the entity creation.",
                 "format": "date-time",
+                "nullable": true,
+                "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
                 "type": "string"
               },
               "description": {
@@ -17165,7 +17315,10 @@
                 "type": "string"
               },
               "modifiedAt": {
+                "description": "Time of the last entity modification.",
                 "format": "date-time",
+                "nullable": true,
+                "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
                 "type": "string"
               },
               "tags": {
@@ -17497,7 +17650,8 @@
                   "STARROCKS",
                   "ATHENA",
                   "MONGODB",
-                  "CRATEDB"
+                  "CRATEDB",
+                  "AILAKEHOUSE"
                 ],
                 "type": "string"
               }
@@ -17714,7 +17868,8 @@
                   "STARROCKS",
                   "ATHENA",
                   "MONGODB",
-                  "CRATEDB"
+                  "CRATEDB",
+                  "AILAKEHOUSE"
                 ],
                 "type": "string"
               },
@@ -17889,7 +18044,8 @@
                   "STARROCKS",
                   "ATHENA",
                   "MONGODB",
-                  "CRATEDB"
+                  "CRATEDB",
+                  "AILAKEHOUSE"
                 ],
                 "type": "string"
               },
@@ -18118,7 +18274,8 @@
                   "STARROCKS",
                   "ATHENA",
                   "MONGODB",
-                  "CRATEDB"
+                  "CRATEDB",
+                  "AILAKEHOUSE"
                 ],
                 "type": "string"
               },
@@ -18861,7 +19018,10 @@
                 "type": "boolean"
               },
               "createdAt": {
+                "description": "Time of the entity creation.",
                 "format": "date-time",
+                "nullable": true,
+                "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
                 "type": "string"
               },
               "description": {
@@ -18869,7 +19029,10 @@
                 "type": "string"
               },
               "modifiedAt": {
+                "description": "Time of the last entity modification.",
                 "format": "date-time",
+                "nullable": true,
+                "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
                 "type": "string"
               },
               "requestPayload": {
@@ -22922,7 +23085,10 @@
                 "type": "boolean"
               },
               "createdAt": {
+                "description": "Time of the entity creation.",
                 "format": "date-time",
+                "nullable": true,
+                "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
                 "type": "string"
               },
               "description": {
@@ -22946,7 +23112,10 @@
                 "type": "array"
               },
               "modifiedAt": {
+                "description": "Time of the last entity modification.",
                 "format": "date-time",
+                "nullable": true,
+                "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
                 "type": "string"
               },
               "strategy": {
@@ -23430,7 +23599,10 @@
                 "type": "object"
               },
               "createdAt": {
+                "description": "Time of the entity creation.",
                 "format": "date-time",
+                "nullable": true,
+                "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
                 "type": "string"
               },
               "description": {
@@ -23444,7 +23616,10 @@
                 "type": "boolean"
               },
               "modifiedAt": {
+                "description": "Time of the last entity modification.",
                 "format": "date-time",
+                "nullable": true,
+                "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
                 "type": "string"
               },
               "tags": {
@@ -26923,7 +27098,10 @@
                 "type": "object"
               },
               "createdAt": {
+                "description": "Time of the entity creation.",
                 "format": "date-time",
+                "nullable": true,
+                "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
                 "type": "string"
               },
               "description": {
@@ -26934,7 +27112,10 @@
                 "type": "boolean"
               },
               "modifiedAt": {
+                "description": "Time of the last entity modification.",
                 "format": "date-time",
+                "nullable": true,
+                "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
                 "type": "string"
               },
               "tags": {
@@ -27325,12 +27506,24 @@
                   "execution": {
                     "$ref": "#/components/schemas/AlertAfm"
                   },
+                  "interval": {
+                    "description": "Date granularity for the interval of ONCE_PER_INTERVAL trigger. Supported granularities: DAY, WEEK, MONTH, QUARTER, YEAR.",
+                    "enum": [
+                      "DAY",
+                      "WEEK",
+                      "MONTH",
+                      "QUARTER",
+                      "YEAR"
+                    ],
+                    "type": "string"
+                  },
                   "trigger": {
                     "default": "ALWAYS",
-                    "description": "Trigger behavior for the alert.\nALWAYS - alert is triggered every time the condition is met.\nONCE - alert is triggered only once when the condition is met.\n",
+                    "description": "Trigger behavior for the alert.\nALWAYS - alert is triggered every time the condition is met.\nONCE - alert is triggered only once when the condition is met.\nONCE_PER_INTERVAL - alert is triggered when the condition is met, then suppressed for the interval. If no interval is specified, it behaves as ALWAYS.\n",
                     "enum": [
                       "ALWAYS",
-                      "ONCE"
+                      "ONCE",
+                      "ONCE_PER_INTERVAL"
                     ],
                     "type": "string"
                   }
@@ -27411,7 +27604,6 @@
                 "type": "array"
               },
               "metadata": {
-                "additionalProperties": true,
                 "description": "Additional information for the automation.",
                 "maxLength": 250000,
                 "nullable": true,
@@ -29871,16 +30063,25 @@
               "SOURCE",
               "TARGET"
             ],
-            "type": "string"
+            "type": "string",
+            "xml": {
+              "attribute": true
+            }
           },
           "category": {
-            "type": "string"
+            "type": "string",
+            "xml": {
+              "attribute": true
+            }
           },
           "content": {
             "type": "string"
           },
           "id": {
-            "type": "string"
+            "type": "string",
+            "xml": {
+              "attribute": true
+            }
           },
           "otherAttributes": {
             "additionalProperties": {
@@ -29890,10 +30091,17 @@
           },
           "priority": {
             "format": "int32",
-            "type": "integer"
+            "type": "integer",
+            "xml": {
+              "attribute": true
+            }
           }
         },
-        "type": "object"
+        "type": "object",
+        "xml": {
+          "name": "note",
+          "namespace": "urn:oasis:names:tc:xliff:document:2.0"
+        }
       },
       "Notes": {
         "properties": {
@@ -29904,7 +30112,14 @@
             "type": "array"
           }
         },
-        "type": "object"
+        "required": [
+          "note"
+        ],
+        "type": "object",
+        "xml": {
+          "name": "notes",
+          "namespace": "urn:oasis:names:tc:xliff:document:2.0"
+        }
       },
       "Notification": {
         "properties": {
@@ -31696,6 +31911,9 @@
             "type": "string"
           },
           "kid": {
+            "maxLength": 255,
+            "minLength": 0,
+            "pattern": "^[^.]",
             "type": "string"
           },
           "kty": {
@@ -32292,10 +32510,17 @@
             "type": "array"
           },
           "href": {
-            "type": "string"
+            "type": "string",
+            "xml": {
+              "attribute": true
+            }
           }
         },
-        "type": "object"
+        "type": "object",
+        "xml": {
+          "name": "skeleton",
+          "namespace": "urn:oasis:names:tc:xliff:document:2.0"
+        }
       },
       "SlidesExportRequest": {
         "description": "Export request object describing the export properties and metadata for slides exports.",
@@ -34207,19 +34432,39 @@
             "type": "object"
           },
           "space": {
-            "type": "string"
+            "type": "string",
+            "xml": {
+              "attribute": true,
+              "namespace": "http://www.w3.org/XML/1998/namespace"
+            }
           },
           "srcLang": {
-            "type": "string"
+            "type": "string",
+            "xml": {
+              "attribute": true
+            }
           },
           "trgLang": {
-            "type": "string"
+            "type": "string",
+            "xml": {
+              "attribute": true
+            }
           },
           "version": {
-            "type": "string"
+            "type": "string",
+            "xml": {
+              "attribute": true
+            }
           }
         },
-        "type": "object"
+        "required": [
+          "file"
+        ],
+        "type": "object",
+        "xml": {
+          "name": "xliff",
+          "namespace": "urn:oasis:names:tc:xliff:document:2.0"
+        }
       }
     }
   },
@@ -41345,7 +41590,7 @@
         "parameters": [
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "",
+            "example": "name==someString;description==someString",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -41457,7 +41702,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "",
+            "example": "name==someString;description==someString",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -41484,7 +41729,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "",
+            "example": "name==someString;description==someString",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -41523,7 +41768,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "",
+            "example": "name==someString;description==someString",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -41577,7 +41822,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "",
+            "example": "name==someString;description==someString",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -46198,7 +46443,7 @@
           },
           {
             "description": "Include Meta objects.",
-            "example": "metaInclude=config,permissions,hierarchy,dataModelDatasets,page,all",
+            "example": "metaInclude=permissions,config,hierarchy,dataModelDatasets,page,all",
             "explode": false,
             "in": "query",
             "name": "metaInclude",
@@ -46207,8 +46452,8 @@
               "description": "Included meta objects",
               "items": {
                 "enum": [
-                  "config",
                   "permissions",
+                  "config",
                   "hierarchy",
                   "dataModelDatasets",
                   "page",
@@ -46279,7 +46524,7 @@
           },
           {
             "description": "Include Meta objects.",
-            "example": "metaInclude=config,permissions,hierarchy,dataModelDatasets,all",
+            "example": "metaInclude=permissions,config,hierarchy,dataModelDatasets,all",
             "explode": false,
             "in": "query",
             "name": "metaInclude",
@@ -46288,8 +46533,8 @@
               "description": "Included meta objects",
               "items": {
                 "enum": [
-                  "config",
                   "permissions",
+                  "config",
                   "hierarchy",
                   "dataModelDatasets",
                   "all",
@@ -46423,7 +46668,7 @@
           },
           {
             "description": "Include Meta objects.",
-            "example": "metaInclude=config,permissions,hierarchy,dataModelDatasets,all",
+            "example": "metaInclude=permissions,config,hierarchy,dataModelDatasets,all",
             "explode": false,
             "in": "query",
             "name": "metaInclude",
@@ -46432,8 +46677,8 @@
               "description": "Included meta objects",
               "items": {
                 "enum": [
-                  "config",
                   "permissions",
+                  "config",
                   "hierarchy",
                   "dataModelDatasets",
                   "all",
