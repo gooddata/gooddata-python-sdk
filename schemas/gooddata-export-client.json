@@ -1,3122 +1,2519 @@
 {
-  "components": {
-    "schemas": {
-      "AFM": {
-        "description": "Top level executable entity. Combination of [A]ttributes, [F]ilters & [M]etrics.",
-        "properties": {
-          "attributes": {
-            "description": "Attributes to be used in the computation.",
-            "items": {
-              "$ref": "#/components/schemas/AttributeItem"
+  "components" : {
+    "schemas" : {
+      "AFM" : {
+        "description" : "Top level executable entity. Combination of [A]ttributes, [F]ilters & [M]etrics.",
+        "properties" : {
+          "attributes" : {
+            "description" : "Attributes to be used in the computation.",
+            "items" : {
+              "$ref" : "#/components/schemas/AttributeItem"
             },
-            "type": "array"
+            "type" : "array"
           },
-          "auxMeasures": {
-            "description": "Metrics to be referenced from other AFM objects (e.g. filters) but not included in the result.",
-            "items": {
-              "$ref": "#/components/schemas/MeasureItem"
+          "auxMeasures" : {
+            "description" : "Metrics to be referenced from other AFM objects (e.g. filters) but not included in the result.",
+            "items" : {
+              "$ref" : "#/components/schemas/MeasureItem"
             },
-            "type": "array"
+            "type" : "array"
           },
-          "filters": {
-            "description": "Various filter types to filter the execution result.",
-            "items": {
-              "$ref": "#/components/schemas/FilterDefinition"
+          "filters" : {
+            "description" : "Various filter types to filter the execution result.",
+            "items" : {
+              "$ref" : "#/components/schemas/FilterDefinition"
             },
-            "type": "array"
+            "type" : "array"
           },
-          "measures": {
-            "description": "Metrics to be computed.",
-            "items": {
-              "$ref": "#/components/schemas/MeasureItem"
+          "measures" : {
+            "description" : "Metrics to be computed.",
+            "items" : {
+              "$ref" : "#/components/schemas/MeasureItem"
             },
-            "type": "array"
+            "type" : "array"
           }
         },
-        "required": [
-          "attributes",
-          "filters",
-          "measures"
-        ],
-        "type": "object"
+        "required" : [ "attributes", "filters", "measures" ],
+        "type" : "object"
       },
-      "AbsoluteDateFilter": {
-        "description": "A datetime filter specifying exact from and to values.",
-        "properties": {
-          "absoluteDateFilter": {
-            "properties": {
-              "applyOnResult": {
-                "type": "boolean"
+      "AbsoluteDateFilter" : {
+        "description" : "A datetime filter specifying exact from and to values.",
+        "properties" : {
+          "absoluteDateFilter" : {
+            "properties" : {
+              "applyOnResult" : {
+                "type" : "boolean"
               },
-              "dataset": {
-                "$ref": "#/components/schemas/AfmObjectIdentifierDataset"
+              "dataset" : {
+                "$ref" : "#/components/schemas/AfmObjectIdentifierDataset"
               },
-              "from": {
-                "example": "2020-07-01 18:23",
-                "pattern": "^\\d{4}-\\d{1,2}-\\d{1,2}( \\d{1,2}:\\d{1,2})?$",
-                "type": "string"
+              "from" : {
+                "example" : "2020-07-01 18:23",
+                "pattern" : "^\\d{4}-\\d{1,2}-\\d{1,2}( \\d{1,2}:\\d{1,2})?$",
+                "type" : "string"
               },
-              "includeEmptyValues": {
-                "description": "If true, rows with undefined (NULL) date values will be included in the result. The filter becomes: (date_condition) OR (date IS NULL). If false or not set, standard behavior applies (NULLs excluded by the date condition).",
-                "type": "boolean"
+              "localIdentifier" : {
+                "type" : "string"
               },
-              "localIdentifier": {
-                "type": "string"
-              },
-              "to": {
-                "example": "2020-07-16 23:59",
-                "pattern": "^\\d{4}-\\d{1,2}-\\d{1,2}( \\d{1,2}:\\d{1,2})?$",
-                "type": "string"
+              "to" : {
+                "example" : "2020-07-16 23:59",
+                "pattern" : "^\\d{4}-\\d{1,2}-\\d{1,2}( \\d{1,2}:\\d{1,2})?$",
+                "type" : "string"
               }
             },
-            "required": [
-              "from",
-              "to",
-              "dataset"
-            ],
-            "type": "object"
+            "required" : [ "from", "to", "dataset" ],
+            "type" : "object"
           }
         },
-        "required": [
-          "absoluteDateFilter"
-        ],
-        "type": "object"
+        "required" : [ "absoluteDateFilter" ],
+        "type" : "object"
       },
-      "AbstractMeasureValueFilter": {
-        "oneOf": [
-          {
-            "$ref": "#/components/schemas/ComparisonMeasureValueFilter"
-          },
-          {
-            "$ref": "#/components/schemas/RangeMeasureValueFilter"
-          },
-          {
-            "$ref": "#/components/schemas/CompoundMeasureValueFilter"
-          },
-          {
-            "$ref": "#/components/schemas/RankingFilter"
-          }
-        ],
-        "type": "object"
+      "AbstractMeasureValueFilter" : {
+        "oneOf" : [ {
+          "$ref" : "#/components/schemas/ComparisonMeasureValueFilter"
+        }, {
+          "$ref" : "#/components/schemas/RangeMeasureValueFilter"
+        }, {
+          "$ref" : "#/components/schemas/CompoundMeasureValueFilter"
+        }, {
+          "$ref" : "#/components/schemas/RankingFilter"
+        } ],
+        "type" : "object"
       },
-      "AfmIdentifier": {
-        "description": "Reference to the attribute label to which the filter should be applied.",
-        "oneOf": [
-          {
-            "$ref": "#/components/schemas/AfmObjectIdentifier"
-          },
-          {
-            "$ref": "#/components/schemas/AfmLocalIdentifier"
-          }
-        ],
-        "type": "object"
+      "AfmIdentifier" : {
+        "description" : "Reference to the attribute label to which the filter should be applied.",
+        "oneOf" : [ {
+          "$ref" : "#/components/schemas/AfmObjectIdentifier"
+        }, {
+          "$ref" : "#/components/schemas/AfmLocalIdentifier"
+        } ],
+        "type" : "object"
       },
-      "AfmLocalIdentifier": {
-        "properties": {
-          "localIdentifier": {
-            "example": "sampleAutoGenerated0123_ID",
-            "pattern": "^[.a-zA-Z0-9_-]+$",
-            "type": "string"
+      "AfmLocalIdentifier" : {
+        "properties" : {
+          "localIdentifier" : {
+            "example" : "sampleAutoGenerated0123_ID",
+            "pattern" : "^[.a-zA-Z0-9_-]+$",
+            "type" : "string"
           }
         },
-        "required": [
-          "localIdentifier"
-        ],
-        "type": "object"
+        "required" : [ "localIdentifier" ],
+        "type" : "object"
       },
-      "AfmObjectIdentifier": {
-        "description": "ObjectIdentifier with `identifier` wrapper. This serves to distinguish MD object identifiers in AFM request from local identifiers.",
-        "properties": {
-          "identifier": {
-            "properties": {
-              "id": {
-                "example": "sample_item.price",
-                "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-                "type": "string"
+      "AfmObjectIdentifier" : {
+        "description" : "ObjectIdentifier with `identifier` wrapper. This serves to distinguish MD object identifiers in AFM request from local identifiers.",
+        "properties" : {
+          "identifier" : {
+            "properties" : {
+              "id" : {
+                "example" : "sample_item.price",
+                "pattern" : "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+                "type" : "string"
               },
-              "type": {
-                "enum": [
-                  "analyticalDashboard",
-                  "attribute",
-                  "dashboardPlugin",
-                  "dataset",
-                  "fact",
-                  "label",
-                  "metric",
-                  "prompt",
-                  "visualizationObject",
-                  "filterContext"
-                ],
-                "example": "fact",
-                "type": "string"
+              "type" : {
+                "enum" : [ "analyticalDashboard", "attribute", "dashboardPlugin", "dataset", "fact", "label", "metric", "prompt", "visualizationObject", "filterContext" ],
+                "example" : "fact",
+                "type" : "string"
               }
             },
-            "required": [
-              "type",
-              "id"
-            ],
-            "type": "object"
+            "required" : [ "type", "id" ],
+            "type" : "object"
           }
         },
-        "required": [
-          "identifier"
-        ],
-        "type": "object"
+        "required" : [ "identifier" ],
+        "type" : "object"
       },
-      "AfmObjectIdentifierAttribute": {
-        "description": "Reference to the date attribute to use.",
-        "properties": {
-          "identifier": {
-            "properties": {
-              "id": {
-                "example": "sample_item.price",
-                "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-                "type": "string"
+      "AfmObjectIdentifierAttribute" : {
+        "description" : "Reference to the date attribute to use.",
+        "properties" : {
+          "identifier" : {
+            "properties" : {
+              "id" : {
+                "example" : "sample_item.price",
+                "pattern" : "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+                "type" : "string"
               },
-              "type": {
-                "enum": [
-                  "attribute"
-                ],
-                "type": "string"
+              "type" : {
+                "enum" : [ "attribute" ],
+                "type" : "string"
               }
             },
-            "required": [
-              "id",
-              "type"
-            ],
-            "type": "object"
+            "required" : [ "id", "type" ],
+            "type" : "object"
           }
         },
-        "required": [
-          "identifier"
-        ],
-        "type": "object"
+        "required" : [ "identifier" ],
+        "type" : "object"
       },
-      "AfmObjectIdentifierCore": {
-        "description": "Reference to the metric, fact or attribute object to use for the metric.",
-        "properties": {
-          "identifier": {
-            "properties": {
-              "id": {
-                "example": "sample_item.price",
-                "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-                "type": "string"
+      "AfmObjectIdentifierCore" : {
+        "description" : "Reference to the metric, fact or attribute object to use for the metric.",
+        "properties" : {
+          "identifier" : {
+            "properties" : {
+              "id" : {
+                "example" : "sample_item.price",
+                "pattern" : "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+                "type" : "string"
               },
-              "type": {
-                "enum": [
-                  "attribute",
-                  "label",
-                  "fact",
-                  "metric"
-                ],
-                "type": "string"
+              "type" : {
+                "enum" : [ "attribute", "label", "fact", "metric" ],
+                "type" : "string"
               }
             },
-            "required": [
-              "id",
-              "type"
-            ],
-            "type": "object"
+            "required" : [ "id", "type" ],
+            "type" : "object"
           }
         },
-        "required": [
-          "identifier"
-        ],
-        "type": "object"
+        "required" : [ "identifier" ],
+        "type" : "object"
       },
-      "AfmObjectIdentifierDataset": {
-        "description": "Reference to the date dataset to which the filter should be applied.",
-        "properties": {
-          "identifier": {
-            "properties": {
-              "id": {
-                "example": "sample_item.price",
-                "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-                "type": "string"
+      "AfmObjectIdentifierDataset" : {
+        "description" : "Reference to the date dataset to which the filter should be applied.",
+        "properties" : {
+          "identifier" : {
+            "properties" : {
+              "id" : {
+                "example" : "sample_item.price",
+                "pattern" : "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+                "type" : "string"
               },
-              "type": {
-                "enum": [
-                  "dataset"
-                ],
-                "type": "string"
+              "type" : {
+                "enum" : [ "dataset" ],
+                "type" : "string"
               }
             },
-            "required": [
-              "id",
-              "type"
-            ],
-            "type": "object"
+            "required" : [ "id", "type" ],
+            "type" : "object"
           }
         },
-        "required": [
-          "identifier"
-        ],
-        "type": "object"
+        "required" : [ "identifier" ],
+        "type" : "object"
       },
-      "AfmObjectIdentifierLabel": {
-        "properties": {
-          "identifier": {
-            "properties": {
-              "id": {
-                "example": "sample_item.price",
-                "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-                "type": "string"
+      "AfmObjectIdentifierLabel" : {
+        "properties" : {
+          "identifier" : {
+            "properties" : {
+              "id" : {
+                "example" : "sample_item.price",
+                "pattern" : "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+                "type" : "string"
               },
-              "type": {
-                "enum": [
-                  "label"
-                ],
-                "type": "string"
+              "type" : {
+                "enum" : [ "label" ],
+                "type" : "string"
               }
             },
-            "required": [
-              "type",
-              "id"
-            ],
-            "type": "object"
+            "required" : [ "type", "id" ],
+            "type" : "object"
           }
         },
-        "required": [
-          "identifier"
-        ],
-        "type": "object"
+        "required" : [ "identifier" ],
+        "type" : "object"
       },
-      "ArithmeticMeasureDefinition": {
-        "description": "Metric representing arithmetics between other metrics.",
-        "properties": {
-          "arithmeticMeasure": {
-            "properties": {
-              "measureIdentifiers": {
-                "description": "List of metrics to apply arithmetic operation by chosen operator.",
-                "items": {
-                  "$ref": "#/components/schemas/AfmLocalIdentifier"
+      "ArithmeticMeasureDefinition" : {
+        "description" : "Metric representing arithmetics between other metrics.",
+        "properties" : {
+          "arithmeticMeasure" : {
+            "properties" : {
+              "measureIdentifiers" : {
+                "description" : "List of metrics to apply arithmetic operation by chosen operator.",
+                "items" : {
+                  "$ref" : "#/components/schemas/AfmLocalIdentifier"
                 },
-                "type": "array"
+                "type" : "array"
               },
-              "operator": {
-                "description": "Arithmetic operator describing operation between metrics.",
-                "enum": [
-                  "SUM",
-                  "DIFFERENCE",
-                  "MULTIPLICATION",
-                  "RATIO",
-                  "CHANGE"
-                ],
-                "example": "SUM",
-                "type": "string"
+              "operator" : {
+                "description" : "Arithmetic operator describing operation between metrics.",
+                "enum" : [ "SUM", "DIFFERENCE", "MULTIPLICATION", "RATIO", "CHANGE" ],
+                "example" : "SUM",
+                "type" : "string"
               }
             },
-            "required": [
-              "measureIdentifiers",
-              "operator"
-            ],
-            "type": "object"
+            "required" : [ "measureIdentifiers", "operator" ],
+            "type" : "object"
           }
         },
-        "required": [
-          "arithmeticMeasure"
-        ],
-        "type": "object"
+        "required" : [ "arithmeticMeasure" ],
+        "type" : "object"
       },
-      "AttributeElements": {
-        "oneOf": [
-          {
-            "$ref": "#/components/schemas/AttributeElementsByRef"
-          },
-          {
-            "$ref": "#/components/schemas/AttributeElementsByValue"
-          }
-        ],
-        "type": "object"
+      "AttributeElements" : {
+        "oneOf" : [ {
+          "$ref" : "#/components/schemas/AttributeElementsByRef"
+        }, {
+          "$ref" : "#/components/schemas/AttributeElementsByValue"
+        } ],
+        "type" : "object"
       },
-      "AttributeElementsByRef": {
-        "properties": {
-          "uris": {
-            "description": "List of attribute elements by reference",
-            "items": {
-              "nullable": true,
-              "type": "string"
+      "AttributeElementsByRef" : {
+        "properties" : {
+          "uris" : {
+            "description" : "List of attribute elements by reference",
+            "items" : {
+              "nullable" : true,
+              "type" : "string"
             },
-            "type": "array"
+            "type" : "array"
           }
         },
-        "required": [
-          "uris"
-        ],
-        "type": "object"
+        "required" : [ "uris" ],
+        "type" : "object"
       },
-      "AttributeElementsByValue": {
-        "properties": {
-          "values": {
-            "description": "List of attribute elements by value",
-            "items": {
-              "nullable": true,
-              "type": "string"
+      "AttributeElementsByValue" : {
+        "properties" : {
+          "values" : {
+            "description" : "List of attribute elements by value",
+            "items" : {
+              "nullable" : true,
+              "type" : "string"
             },
-            "type": "array"
+            "type" : "array"
           }
         },
-        "required": [
-          "values"
-        ],
-        "type": "object"
+        "required" : [ "values" ],
+        "type" : "object"
       },
-      "AttributeFilter": {
-        "description": "Abstract filter definition type attributes",
-        "oneOf": [
-          {
-            "$ref": "#/components/schemas/NegativeAttributeFilter"
-          },
-          {
-            "$ref": "#/components/schemas/PositiveAttributeFilter"
-          }
-        ],
-        "type": "object"
+      "AttributeFilter" : {
+        "description" : "Abstract filter definition type attributes",
+        "oneOf" : [ {
+          "$ref" : "#/components/schemas/NegativeAttributeFilter"
+        }, {
+          "$ref" : "#/components/schemas/PositiveAttributeFilter"
+        } ],
+        "type" : "object"
       },
-      "AttributeFilterByDate": {
-        "properties": {
-          "filterLocalIdentifier": {
-            "type": "string"
+      "AttributeFilterByDate" : {
+        "properties" : {
+          "filterLocalIdentifier" : {
+            "type" : "string"
           },
-          "isCommonDate": {
-            "type": "boolean"
+          "isCommonDate" : {
+            "type" : "boolean"
           }
         },
-        "required": [
-          "filterLocalIdentifier",
-          "isCommonDate"
-        ],
-        "type": "object"
+        "required" : [ "filterLocalIdentifier", "isCommonDate" ],
+        "type" : "object"
       },
-      "AttributeFilterElements": {
-        "description": "Filter on specific set of label values.",
-        "properties": {
-          "values": {
-            "description": "Set of label values.",
-            "example": [
-              "value1",
-              "value2"
-            ],
-            "items": {
-              "nullable": true,
-              "type": "string"
+      "AttributeFilterElements" : {
+        "description" : "Filter on specific set of label values.",
+        "properties" : {
+          "values" : {
+            "description" : "Set of label values.",
+            "example" : [ "value1", "value2" ],
+            "items" : {
+              "nullable" : true,
+              "type" : "string"
             },
-            "type": "array",
-            "uniqueItems": true
+            "type" : "array",
+            "uniqueItems" : true
           }
         },
-        "required": [
-          "values"
-        ],
-        "type": "object"
+        "required" : [ "values" ],
+        "type" : "object"
       },
-      "AttributeFilterParent": {
-        "properties": {
-          "filterLocalIdentifier": {
-            "type": "string"
+      "AttributeFilterParent" : {
+        "properties" : {
+          "filterLocalIdentifier" : {
+            "type" : "string"
           },
-          "over": {
-            "$ref": "#/components/schemas/Over"
+          "over" : {
+            "$ref" : "#/components/schemas/Over"
           }
         },
-        "required": [
-          "filterLocalIdentifier",
-          "over"
-        ],
-        "type": "object"
+        "required" : [ "filterLocalIdentifier", "over" ],
+        "type" : "object"
       },
-      "AttributeItem": {
-        "properties": {
-          "label": {
-            "$ref": "#/components/schemas/AfmObjectIdentifierLabel"
+      "AttributeItem" : {
+        "properties" : {
+          "label" : {
+            "$ref" : "#/components/schemas/AfmObjectIdentifierLabel"
           },
-          "localIdentifier": {
-            "description": "Local identifier of the attribute. This can be used to reference the attribute in other parts of the execution definition.",
-            "example": "attribute_1",
-            "pattern": "^[.a-zA-Z0-9_-]+$",
-            "type": "string"
+          "localIdentifier" : {
+            "description" : "Local identifier of the attribute. This can be used to reference the attribute in other parts of the execution definition.",
+            "example" : "attribute_1",
+            "pattern" : "^[.a-zA-Z0-9_-]+$",
+            "type" : "string"
           },
-          "showAllValues": {
-            "default": false,
-            "description": "Indicates whether to show all values of given attribute even if the data bound to those values is not available.",
-            "type": "boolean"
+          "showAllValues" : {
+            "default" : false,
+            "description" : "Indicates whether to show all values of given attribute even if the data bound to those values is not available.",
+            "type" : "boolean"
           }
         },
-        "required": [
-          "label",
-          "localIdentifier"
-        ],
-        "type": "object"
+        "required" : [ "label", "localIdentifier" ],
+        "type" : "object"
       },
-      "BoundedFilter": {
-        "description": "Bounding filter for this relative date filter. This can be used to limit the range of the relative date filter to a specific date range.",
-        "properties": {
-          "from": {
-            "description": "Start of the filtering interval. Specified by number of periods (with respect to given granularity). Typically negative (historical time interval like -2 for '2 days/weeks, ... ago'). If null, then start of the range is unbounded.",
-            "example": -6,
-            "format": "int32",
-            "nullable": true,
-            "type": "integer"
+      "BoundedFilter" : {
+        "description" : "Bounding filter for this relative date filter. This can be used to limit the range of the relative date filter to a specific date range.",
+        "properties" : {
+          "from" : {
+            "description" : "Start of the filtering interval. Specified by number of periods (with respect to given granularity). Typically negative (historical time interval like -2 for '2 days/weeks, ... ago'). If null, then start of the range is unbounded.",
+            "example" : -6,
+            "format" : "int32",
+            "nullable" : true,
+            "type" : "integer"
           },
-          "granularity": {
-            "description": "Date granularity specifying particular date attribute in given dimension.",
-            "enum": [
-              "MINUTE",
-              "HOUR",
-              "DAY",
-              "WEEK",
-              "MONTH",
-              "QUARTER",
-              "YEAR",
-              "MINUTE_OF_HOUR",
-              "HOUR_OF_DAY",
-              "DAY_OF_WEEK",
-              "DAY_OF_MONTH",
-              "DAY_OF_QUARTER",
-              "DAY_OF_YEAR",
-              "WEEK_OF_YEAR",
-              "MONTH_OF_YEAR",
-              "QUARTER_OF_YEAR",
-              "FISCAL_MONTH",
-              "FISCAL_QUARTER",
-              "FISCAL_YEAR"
-            ],
-            "example": "DAY",
-            "type": "string"
+          "granularity" : {
+            "description" : "Date granularity specifying particular date attribute in given dimension.",
+            "enum" : [ "MINUTE", "HOUR", "DAY", "WEEK", "MONTH", "QUARTER", "YEAR", "MINUTE_OF_HOUR", "HOUR_OF_DAY", "DAY_OF_WEEK", "DAY_OF_MONTH", "DAY_OF_QUARTER", "DAY_OF_YEAR", "WEEK_OF_YEAR", "MONTH_OF_YEAR", "QUARTER_OF_YEAR", "FISCAL_MONTH", "FISCAL_QUARTER", "FISCAL_YEAR" ],
+            "example" : "DAY",
+            "type" : "string"
           },
-          "to": {
-            "description": "End of the filtering interval. Specified by number of periods (with respect to given granularity). Value 'O' is representing current time-interval (current day, week, ...). If null, then end of the range is unbounded.",
-            "example": 0,
-            "format": "int32",
-            "nullable": true,
-            "type": "integer"
+          "to" : {
+            "description" : "End of the filtering interval. Specified by number of periods (with respect to given granularity). Value 'O' is representing current time-interval (current day, week, ...). If null, then end of the range is unbounded.",
+            "example" : 0,
+            "format" : "int32",
+            "nullable" : true,
+            "type" : "integer"
           }
         },
-        "required": [
-          "granularity"
-        ],
-        "type": "object"
+        "required" : [ "granularity" ],
+        "type" : "object"
       },
-      "ComparisonCondition": {
-        "description": "Condition that compares the metric value to a given constant value using a comparison operator.",
-        "properties": {
-          "comparison": {
-            "properties": {
-              "operator": {
-                "enum": [
-                  "GREATER_THAN",
-                  "GREATER_THAN_OR_EQUAL_TO",
-                  "LESS_THAN",
-                  "LESS_THAN_OR_EQUAL_TO",
-                  "EQUAL_TO",
-                  "NOT_EQUAL_TO"
-                ],
-                "example": "GREATER_THAN",
-                "type": "string"
+      "ComparisonCondition" : {
+        "description" : "Condition that compares the metric value to a given constant value using a comparison operator.",
+        "properties" : {
+          "comparison" : {
+            "properties" : {
+              "operator" : {
+                "enum" : [ "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "EQUAL_TO", "NOT_EQUAL_TO" ],
+                "example" : "GREATER_THAN",
+                "type" : "string"
               },
-              "value": {
-                "example": 100,
-                "type": "number"
+              "value" : {
+                "example" : 100,
+                "type" : "number"
               }
             },
-            "required": [
-              "operator",
-              "value"
-            ],
-            "type": "object"
+            "required" : [ "operator", "value" ],
+            "type" : "object"
           }
         },
-        "required": [
-          "comparison"
-        ],
-        "type": "object"
+        "required" : [ "comparison" ],
+        "type" : "object"
       },
-      "ComparisonMeasureValueFilter": {
-        "description": "Filter the result by comparing specified metric to given constant value, using given comparison operator.",
-        "properties": {
-          "comparisonMeasureValueFilter": {
-            "properties": {
-              "applyOnResult": {
-                "type": "boolean"
+      "ComparisonMeasureValueFilter" : {
+        "description" : "Filter the result by comparing specified metric to given constant value, using given comparison operator.",
+        "properties" : {
+          "comparisonMeasureValueFilter" : {
+            "properties" : {
+              "applyOnResult" : {
+                "type" : "boolean"
               },
-              "dimensionality": {
-                "description": "References to the attributes to be used when filtering.",
-                "items": {
-                  "$ref": "#/components/schemas/AfmIdentifier"
+              "dimensionality" : {
+                "description" : "References to the attributes to be used when filtering.",
+                "items" : {
+                  "$ref" : "#/components/schemas/AfmIdentifier"
                 },
-                "type": "array"
+                "type" : "array"
               },
-              "localIdentifier": {
-                "type": "string"
+              "localIdentifier" : {
+                "type" : "string"
               },
-              "measure": {
-                "$ref": "#/components/schemas/AfmIdentifier"
+              "measure" : {
+                "$ref" : "#/components/schemas/AfmIdentifier"
               },
-              "operator": {
-                "enum": [
-                  "GREATER_THAN",
-                  "GREATER_THAN_OR_EQUAL_TO",
-                  "LESS_THAN",
-                  "LESS_THAN_OR_EQUAL_TO",
-                  "EQUAL_TO",
-                  "NOT_EQUAL_TO"
-                ],
-                "example": "GREATER_THAN",
-                "type": "string"
+              "operator" : {
+                "enum" : [ "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "EQUAL_TO", "NOT_EQUAL_TO" ],
+                "example" : "GREATER_THAN",
+                "type" : "string"
               },
-              "treatNullValuesAs": {
-                "description": "A value that will be substituted for null values in the metric for the comparisons.",
-                "example": 0,
-                "type": "number"
+              "treatNullValuesAs" : {
+                "description" : "A value that will be substituted for null values in the metric for the comparisons.",
+                "example" : 0,
+                "type" : "number"
               },
-              "value": {
-                "example": 1327,
-                "type": "number"
+              "value" : {
+                "example" : 1327,
+                "type" : "number"
               }
             },
-            "required": [
-              "operator",
-              "value",
-              "measure"
-            ],
-            "type": "object"
+            "required" : [ "operator", "value", "measure" ],
+            "type" : "object"
           }
         },
-        "required": [
-          "comparisonMeasureValueFilter"
-        ],
-        "type": "object"
+        "required" : [ "comparisonMeasureValueFilter" ],
+        "type" : "object"
       },
-      "CompoundMeasureValueFilter": {
-        "description": "Filter the result by applying multiple comparison and/or range conditions combined with OR logic. If conditions list is empty, no filtering is applied (all rows are returned).",
-        "properties": {
-          "compoundMeasureValueFilter": {
-            "properties": {
-              "applyOnResult": {
-                "type": "boolean"
+      "CompoundMeasureValueFilter" : {
+        "description" : "Filter the result by applying multiple comparison and/or range conditions combined with OR logic. If conditions list is empty, no filtering is applied (all rows are returned).",
+        "properties" : {
+          "compoundMeasureValueFilter" : {
+            "properties" : {
+              "applyOnResult" : {
+                "type" : "boolean"
               },
-              "conditions": {
-                "description": "List of conditions to apply. Conditions are combined with OR logic. Each condition can be either a comparison (e.g., > 100) or a range (e.g., BETWEEN 10 AND 50). If empty, no filtering is applied and all rows are returned.",
-                "items": {
-                  "$ref": "#/components/schemas/MeasureValueCondition"
+              "conditions" : {
+                "description" : "List of conditions to apply. Conditions are combined with OR logic. Each condition can be either a comparison (e.g., > 100) or a range (e.g., BETWEEN 10 AND 50). If empty, no filtering is applied and all rows are returned.",
+                "items" : {
+                  "$ref" : "#/components/schemas/MeasureValueCondition"
                 },
-                "type": "array"
+                "type" : "array"
               },
-              "dimensionality": {
-                "description": "References to the attributes to be used when filtering.",
-                "items": {
-                  "$ref": "#/components/schemas/AfmIdentifier"
+              "dimensionality" : {
+                "description" : "References to the attributes to be used when filtering.",
+                "items" : {
+                  "$ref" : "#/components/schemas/AfmIdentifier"
                 },
-                "type": "array"
+                "type" : "array"
               },
-              "localIdentifier": {
-                "type": "string"
+              "localIdentifier" : {
+                "type" : "string"
               },
-              "measure": {
-                "$ref": "#/components/schemas/AfmIdentifier"
+              "measure" : {
+                "$ref" : "#/components/schemas/AfmIdentifier"
               },
-              "treatNullValuesAs": {
-                "description": "A value that will be substituted for null values in the metric for the comparisons.",
-                "example": 0,
-                "type": "number"
+              "treatNullValuesAs" : {
+                "description" : "A value that will be substituted for null values in the metric for the comparisons.",
+                "example" : 0,
+                "type" : "number"
               }
             },
-            "required": [
-              "conditions",
-              "measure"
-            ],
-            "type": "object"
+            "required" : [ "conditions", "measure" ],
+            "type" : "object"
           }
         },
-        "required": [
-          "compoundMeasureValueFilter"
-        ],
-        "type": "object"
+        "required" : [ "compoundMeasureValueFilter" ],
+        "type" : "object"
       },
-      "CustomLabel": {
-        "description": "Custom label object override.",
-        "properties": {
-          "title": {
-            "description": "Override value.",
-            "type": "string"
+      "CustomLabel" : {
+        "description" : "Custom label object override.",
+        "properties" : {
+          "title" : {
+            "description" : "Override value.",
+            "type" : "string"
           }
         },
-        "required": [
-          "title"
-        ],
-        "type": "object"
+        "required" : [ "title" ],
+        "type" : "object"
       },
-      "CustomMetric": {
-        "description": "Custom metric object override.",
-        "properties": {
-          "format": {
-            "description": "Format override.",
-            "type": "string"
+      "CustomMetric" : {
+        "description" : "Custom metric object override.",
+        "properties" : {
+          "format" : {
+            "description" : "Format override.",
+            "type" : "string"
           },
-          "title": {
-            "description": "Metric title override.",
-            "type": "string"
+          "title" : {
+            "description" : "Metric title override.",
+            "type" : "string"
           }
         },
-        "required": [
-          "format",
-          "title"
-        ],
-        "type": "object"
+        "required" : [ "format", "title" ],
+        "type" : "object"
       },
-      "CustomOverride": {
-        "description": "Custom cell value overrides (IDs will be replaced with specified values).",
-        "properties": {
-          "labels": {
-            "additionalProperties": {
-              "$ref": "#/components/schemas/CustomLabel"
+      "CustomOverride" : {
+        "description" : "Custom cell value overrides (IDs will be replaced with specified values).",
+        "properties" : {
+          "labels" : {
+            "additionalProperties" : {
+              "$ref" : "#/components/schemas/CustomLabel"
             },
-            "description": "Map of CustomLabels with keys used as placeholders in document.",
-            "type": "object"
+            "description" : "Map of CustomLabels with keys used as placeholders in document.",
+            "type" : "object"
           },
-          "metrics": {
-            "additionalProperties": {
-              "$ref": "#/components/schemas/CustomMetric"
+          "metrics" : {
+            "additionalProperties" : {
+              "$ref" : "#/components/schemas/CustomMetric"
             },
-            "description": "Map of CustomMetrics with keys used as placeholders in document.",
-            "type": "object"
+            "description" : "Map of CustomMetrics with keys used as placeholders in document.",
+            "type" : "object"
           }
         },
-        "type": "object"
+        "type" : "object"
       },
-      "DashboardAttributeFilter": {
-        "properties": {
-          "attributeFilter": {
-            "properties": {
-              "attributeElements": {
-                "$ref": "#/components/schemas/AttributeElements"
+      "DashboardAttributeFilter" : {
+        "properties" : {
+          "attributeFilter" : {
+            "properties" : {
+              "attributeElements" : {
+                "$ref" : "#/components/schemas/AttributeElements"
               },
-              "displayForm": {
-                "$ref": "#/components/schemas/IdentifierRef"
+              "displayForm" : {
+                "$ref" : "#/components/schemas/IdentifierRef"
               },
-              "filterElementsBy": {
-                "items": {
-                  "$ref": "#/components/schemas/AttributeFilterParent"
+              "filterElementsBy" : {
+                "items" : {
+                  "$ref" : "#/components/schemas/AttributeFilterParent"
                 },
-                "type": "array"
+                "type" : "array"
               },
-              "filterElementsByDate": {
-                "items": {
-                  "$ref": "#/components/schemas/AttributeFilterByDate"
+              "filterElementsByDate" : {
+                "items" : {
+                  "$ref" : "#/components/schemas/AttributeFilterByDate"
                 },
-                "type": "array"
+                "type" : "array"
               },
-              "localIdentifier": {
-                "type": "string"
+              "localIdentifier" : {
+                "type" : "string"
               },
-              "negativeSelection": {
-                "type": "boolean"
+              "negativeSelection" : {
+                "type" : "boolean"
               },
-              "selectionMode": {
-                "enum": [
-                  "single",
-                  "multi"
-                ],
-                "type": "string"
+              "selectionMode" : {
+                "enum" : [ "single", "multi" ],
+                "type" : "string"
               },
-              "title": {
-                "type": "string"
+              "title" : {
+                "type" : "string"
               },
-              "validateElementsBy": {
-                "items": {
-                  "$ref": "#/components/schemas/IdentifierRef"
+              "validateElementsBy" : {
+                "items" : {
+                  "$ref" : "#/components/schemas/IdentifierRef"
                 },
-                "type": "array"
+                "type" : "array"
               }
             },
-            "required": [
-              "attributeElements",
-              "displayForm",
-              "negativeSelection"
-            ],
-            "type": "object"
+            "required" : [ "attributeElements", "displayForm", "negativeSelection" ],
+            "type" : "object"
           }
         },
-        "required": [
-          "attributeFilter"
-        ],
-        "type": "object"
+        "required" : [ "attributeFilter" ],
+        "type" : "object"
       },
-      "DashboardDateFilter": {
-        "properties": {
-          "dateFilter": {
-            "properties": {
-              "attribute": {
-                "$ref": "#/components/schemas/IdentifierRef"
+      "DashboardDateFilter" : {
+        "properties" : {
+          "dateFilter" : {
+            "properties" : {
+              "attribute" : {
+                "$ref" : "#/components/schemas/IdentifierRef"
               },
-              "boundedFilter": {
-                "$ref": "#/components/schemas/RelativeBoundedDateFilter"
+              "boundedFilter" : {
+                "$ref" : "#/components/schemas/RelativeBoundedDateFilter"
               },
-              "dataSet": {
-                "$ref": "#/components/schemas/IdentifierRef"
+              "dataSet" : {
+                "$ref" : "#/components/schemas/IdentifierRef"
               },
-              "from": {
-                "oneOf": [
-                  {
-                    "type": "string"
-                  },
-                  {
-                    "format": "int32",
-                    "type": "integer"
-                  }
-                ]
+              "from" : {
+                "oneOf" : [ {
+                  "type" : "string"
+                }, {
+                  "format" : "int32",
+                  "type" : "integer"
+                } ]
               },
-              "granularity": {
-                "enum": [
-                  "ALL_TIME_GRANULARITY",
-                  "GDC.time.year",
-                  "GDC.time.week_us",
-                  "GDC.time.week_in_year",
-                  "GDC.time.week_in_quarter",
-                  "GDC.time.week",
-                  "GDC.time.euweek_in_year",
-                  "GDC.time.euweek_in_quarter",
-                  "GDC.time.quarter",
-                  "GDC.time.quarter_in_year",
-                  "GDC.time.month",
-                  "GDC.time.month_in_quarter",
-                  "GDC.time.month_in_year",
-                  "GDC.time.day_in_year",
-                  "GDC.time.day_in_quarter",
-                  "GDC.time.day_in_month",
-                  "GDC.time.day_in_week",
-                  "GDC.time.day_in_euweek",
-                  "GDC.time.date",
-                  "GDC.time.hour",
-                  "GDC.time.hour_in_day",
-                  "GDC.time.minute",
-                  "GDC.time.minute_in_hour",
-                  "GDC.time.fiscal_month",
-                  "GDC.time.fiscal_quarter",
-                  "GDC.time.fiscal_year"
-                ],
-                "type": "string"
+              "granularity" : {
+                "enum" : [ "ALL_TIME_GRANULARITY", "GDC.time.year", "GDC.time.week_us", "GDC.time.week_in_year", "GDC.time.week_in_quarter", "GDC.time.week", "GDC.time.euweek_in_year", "GDC.time.euweek_in_quarter", "GDC.time.quarter", "GDC.time.quarter_in_year", "GDC.time.month", "GDC.time.month_in_quarter", "GDC.time.month_in_year", "GDC.time.day_in_year", "GDC.time.day_in_quarter", "GDC.time.day_in_month", "GDC.time.day_in_week", "GDC.time.day_in_euweek", "GDC.time.date", "GDC.time.hour", "GDC.time.hour_in_day", "GDC.time.minute", "GDC.time.minute_in_hour", "GDC.time.fiscal_month", "GDC.time.fiscal_quarter", "GDC.time.fiscal_year" ],
+                "type" : "string"
               },
-              "includeEmptyValues": {
-                "type": "boolean"
+              "localIdentifier" : {
+                "type" : "string"
               },
-              "localIdentifier": {
-                "type": "string"
+              "to" : {
+                "oneOf" : [ {
+                  "type" : "string"
+                }, {
+                  "format" : "int32",
+                  "type" : "integer"
+                } ]
               },
-              "to": {
-                "oneOf": [
-                  {
-                    "type": "string"
-                  },
-                  {
-                    "format": "int32",
-                    "type": "integer"
-                  }
-                ]
-              },
-              "type": {
-                "enum": [
-                  "relative",
-                  "absolute"
-                ],
-                "type": "string"
+              "type" : {
+                "enum" : [ "relative", "absolute" ],
+                "type" : "string"
               }
             },
-            "required": [
-              "granularity",
-              "type"
-            ],
-            "type": "object"
+            "required" : [ "granularity", "type" ],
+            "type" : "object"
           }
         },
-        "required": [
-          "dateFilter"
-        ],
-        "type": "object"
+        "required" : [ "dateFilter" ],
+        "type" : "object"
       },
-      "DashboardExportSettings": {
-        "description": "Additional settings.",
-        "properties": {
-          "exportInfo": {
-            "default": false,
-            "description": "If true, the export will contain the information about the export – exported date, dashboard filters, etc.",
-            "example": true,
-            "type": "boolean"
+      "DashboardExportSettings" : {
+        "description" : "Additional settings.",
+        "properties" : {
+          "exportInfo" : {
+            "default" : false,
+            "description" : "If true, the export will contain the information about the export – exported date, dashboard filters, etc.",
+            "example" : true,
+            "type" : "boolean"
           },
-          "mergeHeaders": {
-            "default": false,
-            "description": "Merge equal headers in neighbouring cells. Used for [XLSX] format only.",
-            "example": true,
-            "type": "boolean"
+          "mergeHeaders" : {
+            "default" : false,
+            "description" : "Merge equal headers in neighbouring cells. Used for [XLSX] format only.",
+            "example" : true,
+            "type" : "boolean"
           },
-          "pageOrientation": {
-            "default": "PORTRAIT",
-            "description": "Set page orientation. (PDF)",
-            "enum": [
-              "PORTRAIT",
-              "LANDSCAPE"
-            ],
-            "type": "string"
+          "pageOrientation" : {
+            "default" : "PORTRAIT",
+            "description" : "Set page orientation. (PDF)",
+            "enum" : [ "PORTRAIT", "LANDSCAPE" ],
+            "type" : "string"
           },
-          "pageSize": {
-            "default": "A4",
-            "description": "Set page size. (PDF)",
-            "enum": [
-              "A3",
-              "A4",
-              "LETTER"
-            ],
-            "type": "string"
+          "pageSize" : {
+            "default" : "A4",
+            "description" : "Set page size. (PDF)",
+            "enum" : [ "A3", "A4", "LETTER" ],
+            "type" : "string"
           }
         },
-        "type": "object"
+        "type" : "object"
       },
-      "DashboardFilter": {
-        "oneOf": [
-          {
-            "$ref": "#/components/schemas/DashboardAttributeFilter"
-          },
-          {
-            "$ref": "#/components/schemas/DashboardDateFilter"
-          }
-        ],
-        "type": "object"
+      "DashboardFilter" : {
+        "oneOf" : [ {
+          "$ref" : "#/components/schemas/DashboardAttributeFilter"
+        }, {
+          "$ref" : "#/components/schemas/DashboardDateFilter"
+        } ],
+        "type" : "object"
       },
-      "DashboardTabularExportRequest": {
-        "description": "Export request object describing the export properties for dashboard tabular exports.",
-        "properties": {
-          "dashboardFiltersOverride": {
-            "description": "List of filters that will be used instead of the default dashboard filters.",
-            "items": {
-              "$ref": "#/components/schemas/DashboardFilter"
+      "DashboardTabularExportRequest" : {
+        "description" : "Export request object describing the export properties for dashboard tabular exports.",
+        "properties" : {
+          "dashboardFiltersOverride" : {
+            "description" : "List of filters that will be used instead of the default dashboard filters.",
+            "items" : {
+              "$ref" : "#/components/schemas/DashboardFilter"
             },
-            "type": "array"
+            "type" : "array"
           },
-          "dashboardTabsFiltersOverrides": {
-            "additionalProperties": {
-              "items": {
-                "$ref": "#/components/schemas/DashboardFilter"
+          "dashboardTabsFiltersOverrides" : {
+            "additionalProperties" : {
+              "items" : {
+                "$ref" : "#/components/schemas/DashboardFilter"
               },
-              "type": "array"
+              "type" : "array"
             },
-            "description": "Map of tab-specific filter overrides. Key is tabId, value is list of filters for that tab.",
-            "type": "object"
+            "description" : "Map of tab-specific filter overrides. Key is tabId, value is list of filters for that tab.",
+            "type" : "object"
           },
-          "fileName": {
-            "description": "Filename of downloaded file without extension.",
-            "example": "result",
-            "type": "string"
+          "fileName" : {
+            "description" : "Filename of downloaded file without extension.",
+            "example" : "result",
+            "type" : "string"
           },
-          "format": {
-            "description": "Requested tabular export type.",
-            "enum": [
-              "XLSX",
-              "PDF"
-            ],
-            "example": "XLSX",
-            "type": "string"
+          "format" : {
+            "description" : "Requested tabular export type.",
+            "enum" : [ "XLSX", "PDF" ],
+            "example" : "XLSX",
+            "type" : "string"
           },
-          "settings": {
-            "$ref": "#/components/schemas/DashboardExportSettings"
+          "settings" : {
+            "$ref" : "#/components/schemas/DashboardExportSettings"
           },
-          "widgetIds": {
-            "description": "List of widget identifiers to be exported. Note that only one widget is currently supported.",
-            "items": {
-              "type": "string"
+          "widgetIds" : {
+            "description" : "List of widget identifiers to be exported. Note that only one widget is currently supported.",
+            "items" : {
+              "type" : "string"
             },
-            "maxItems": 1,
-            "type": "array",
-            "uniqueItems": true
+            "maxItems" : 1,
+            "type" : "array",
+            "uniqueItems" : true
           }
         },
-        "required": [
-          "fileName",
-          "format"
-        ],
-        "type": "object"
+        "required" : [ "fileName", "format" ],
+        "type" : "object"
       },
-      "DateFilter": {
-        "description": "Abstract filter definition type for dates.",
-        "oneOf": [
-          {
-            "$ref": "#/components/schemas/AbsoluteDateFilter"
-          },
-          {
-            "$ref": "#/components/schemas/RelativeDateFilter"
-          }
-        ],
-        "type": "object"
+      "DateFilter" : {
+        "description" : "Abstract filter definition type for dates.",
+        "oneOf" : [ {
+          "$ref" : "#/components/schemas/AbsoluteDateFilter"
+        }, {
+          "$ref" : "#/components/schemas/RelativeDateFilter"
+        } ],
+        "type" : "object"
       },
-      "DateValue": {
-        "properties": {
-          "value": {
-            "type": "string"
+      "DateValue" : {
+        "properties" : {
+          "value" : {
+            "type" : "string"
           }
         },
-        "required": [
-          "value"
-        ],
-        "type": "object"
+        "required" : [ "value" ],
+        "type" : "object"
       },
-      "ExecutionSettings": {
-        "description": "Various settings affecting the process of AFM execution or its result",
-        "properties": {
-          "dataSamplingPercentage": {
-            "description": "Specifies the percentage of rows from fact datasets to use during computation. This feature is available only for workspaces that use a Vertica Data Source without table views.",
-            "exclusiveMaximum": true,
-            "exclusiveMinimum": true,
-            "format": "float",
-            "maximum": 100,
-            "minimum": 0,
-            "type": "number"
+      "ExecutionSettings" : {
+        "description" : "Various settings affecting the process of AFM execution or its result",
+        "properties" : {
+          "dataSamplingPercentage" : {
+            "description" : "Specifies the percentage of rows from fact datasets to use during computation. This feature is available only for workspaces that use a Vertica Data Source without table views.",
+            "exclusiveMaximum" : true,
+            "exclusiveMinimum" : true,
+            "format" : "float",
+            "maximum" : 100,
+            "minimum" : 0,
+            "type" : "number"
           },
-          "timestamp": {
-            "description": "Specifies the timestamp of the execution from which relative filters are resolved. If not set, the current time is used.",
-            "format": "date-time",
-            "type": "string"
+          "timestamp" : {
+            "description" : "Specifies the timestamp of the execution from which relative filters are resolved. If not set, the current time is used.",
+            "format" : "date-time",
+            "type" : "string"
           }
         },
-        "type": "object"
+        "type" : "object"
       },
-      "ExportResponse": {
-        "properties": {
-          "exportResult": {
-            "type": "string"
+      "ExportResponse" : {
+        "properties" : {
+          "exportResult" : {
+            "type" : "string"
           }
         },
-        "required": [
-          "exportResult"
-        ],
-        "type": "object"
+        "required" : [ "exportResult" ],
+        "type" : "object"
       },
-      "FilterDefinition": {
-        "description": "Abstract filter definition type",
-        "oneOf": [
-          {
-            "$ref": "#/components/schemas/InlineFilterDefinition"
-          },
-          {
-            "$ref": "#/components/schemas/RankingFilter"
-          },
-          {
-            "$ref": "#/components/schemas/ComparisonMeasureValueFilter"
-          },
-          {
-            "$ref": "#/components/schemas/RangeMeasureValueFilter"
-          },
-          {
-            "$ref": "#/components/schemas/CompoundMeasureValueFilter"
-          },
-          {
-            "$ref": "#/components/schemas/AbsoluteDateFilter"
-          },
-          {
-            "$ref": "#/components/schemas/RelativeDateFilter"
-          },
-          {
-            "$ref": "#/components/schemas/NegativeAttributeFilter"
-          },
-          {
-            "$ref": "#/components/schemas/PositiveAttributeFilter"
-          }
-        ],
-        "type": "object"
+      "FilterDefinition" : {
+        "description" : "Abstract filter definition type",
+        "oneOf" : [ {
+          "$ref" : "#/components/schemas/InlineFilterDefinition"
+        }, {
+          "$ref" : "#/components/schemas/RankingFilter"
+        }, {
+          "$ref" : "#/components/schemas/ComparisonMeasureValueFilter"
+        }, {
+          "$ref" : "#/components/schemas/RangeMeasureValueFilter"
+        }, {
+          "$ref" : "#/components/schemas/CompoundMeasureValueFilter"
+        }, {
+          "$ref" : "#/components/schemas/AbsoluteDateFilter"
+        }, {
+          "$ref" : "#/components/schemas/RelativeDateFilter"
+        }, {
+          "$ref" : "#/components/schemas/NegativeAttributeFilter"
+        }, {
+          "$ref" : "#/components/schemas/PositiveAttributeFilter"
+        } ],
+        "type" : "object"
       },
-      "FilterDefinitionForSimpleMeasure": {
-        "description": "Abstract filter definition type for simple metric.",
-        "oneOf": [
-          {
-            "$ref": "#/components/schemas/DateFilter"
-          },
-          {
-            "$ref": "#/components/schemas/AttributeFilter"
-          }
-        ],
-        "type": "object"
+      "FilterDefinitionForSimpleMeasure" : {
+        "description" : "Abstract filter definition type for simple metric.",
+        "oneOf" : [ {
+          "$ref" : "#/components/schemas/DateFilter"
+        }, {
+          "$ref" : "#/components/schemas/AttributeFilter"
+        } ],
+        "type" : "object"
       },
-      "IdentifierRef": {
-        "properties": {
-          "identifier": {
-            "properties": {
-              "id": {
-                "type": "string"
+      "IdentifierRef" : {
+        "properties" : {
+          "identifier" : {
+            "properties" : {
+              "id" : {
+                "type" : "string"
               },
-              "type": {
-                "enum": [
-                  "analyticalDashboard",
-                  "attribute",
-                  "attributeHierarchy",
-                  "dashboardPlugin",
-                  "dataset",
-                  "fact",
-                  "aggregatedFact",
-                  "label",
-                  "metric",
-                  "userDataFilter",
-                  "exportDefinition",
-                  "automation",
-                  "automationResult",
-                  "memoryItem",
-                  "knowledgeRecommendation",
-                  "prompt",
-                  "visualizationObject",
-                  "filterContext",
-                  "workspaceSettings",
-                  "customApplicationSetting",
-                  "workspaceDataFilter",
-                  "workspaceDataFilterSetting",
-                  "filterView"
-                ],
-                "type": "string"
+              "type" : {
+                "enum" : [ "analyticalDashboard", "attribute", "attributeHierarchy", "dashboardPlugin", "dataset", "fact", "aggregatedFact", "label", "metric", "userDataFilter", "exportDefinition", "automation", "automationResult", "memoryItem", "knowledgeRecommendation", "prompt", "visualizationObject", "filterContext", "workspaceSettings", "customApplicationSetting", "workspaceDataFilter", "workspaceDataFilterSetting", "filterView" ],
+                "type" : "string"
               }
             },
-            "required": [
-              "id",
-              "type"
-            ],
-            "type": "object"
+            "required" : [ "id", "type" ],
+            "type" : "object"
           }
         },
-        "type": "object"
+        "type" : "object"
       },
-      "ImageExportRequest": {
-        "description": "Export request object describing the export properties and metadata for image exports.",
-        "properties": {
-          "dashboardId": {
-            "description": "Dashboard identifier",
-            "example": "761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
-            "type": "string"
+      "ImageExportRequest" : {
+        "description" : "Export request object describing the export properties and metadata for image exports.",
+        "properties" : {
+          "dashboardId" : {
+            "description" : "Dashboard identifier",
+            "example" : "761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+            "type" : "string"
           },
-          "fileName": {
-            "description": "File name to be used for retrieving the image document.",
-            "example": "filename",
-            "type": "string"
+          "fileName" : {
+            "description" : "File name to be used for retrieving the image document.",
+            "example" : "filename",
+            "type" : "string"
           },
-          "format": {
-            "description": "Requested resulting file type.",
-            "enum": [
-              "PNG"
-            ],
-            "example": "PNG",
-            "type": "string"
+          "format" : {
+            "description" : "Requested resulting file type.",
+            "enum" : [ "PNG" ],
+            "example" : "PNG",
+            "type" : "string"
           },
-          "metadata": {
-            "$ref": "#/components/schemas/JsonNode"
+          "metadata" : {
+            "$ref" : "#/components/schemas/JsonNode"
           },
-          "widgetIds": {
-            "description": "List of widget identifiers to be exported. Note that only one widget is currently supported.",
-            "items": {
-              "maxLength": 255,
-              "minLength": 1,
-              "type": "string"
+          "widgetIds" : {
+            "description" : "List of widget identifiers to be exported. Note that only one widget is currently supported.",
+            "items" : {
+              "maxLength" : 255,
+              "minLength" : 1,
+              "type" : "string"
             },
-            "maxItems": 1,
-            "minItems": 1,
-            "type": "array",
-            "uniqueItems": true
+            "maxItems" : 1,
+            "minItems" : 1,
+            "type" : "array",
+            "uniqueItems" : true
           }
         },
-        "required": [
-          "dashboardId",
-          "fileName",
-          "format",
-          "widgetIds"
-        ],
-        "type": "object"
+        "required" : [ "dashboardId", "fileName", "format", "widgetIds" ],
+        "type" : "object"
       },
-      "InlineFilterDefinition": {
-        "description": "Filter in form of direct MAQL query.",
-        "properties": {
-          "inline": {
-            "properties": {
-              "applyOnResult": {
-                "type": "boolean"
+      "InlineFilterDefinition" : {
+        "description" : "Filter in form of direct MAQL query.",
+        "properties" : {
+          "inline" : {
+            "properties" : {
+              "applyOnResult" : {
+                "type" : "boolean"
               },
-              "filter": {
-                "description": "MAQL query representing the filter.",
-                "type": "string"
+              "filter" : {
+                "description" : "MAQL query representing the filter.",
+                "type" : "string"
               },
-              "localIdentifier": {
-                "type": "string"
+              "localIdentifier" : {
+                "type" : "string"
               }
             },
-            "required": [
-              "filter"
-            ],
-            "type": "object"
+            "required" : [ "filter" ],
+            "type" : "object"
           }
         },
-        "required": [
-          "inline"
-        ],
-        "type": "object"
+        "required" : [ "inline" ],
+        "type" : "object"
       },
-      "InlineMeasureDefinition": {
-        "description": "Metric defined by the raw MAQL query.",
-        "properties": {
-          "inline": {
-            "properties": {
-              "maql": {
-                "description": "MAQL query defining the metric.",
-                "type": "string"
+      "InlineMeasureDefinition" : {
+        "description" : "Metric defined by the raw MAQL query.",
+        "properties" : {
+          "inline" : {
+            "properties" : {
+              "maql" : {
+                "description" : "MAQL query defining the metric.",
+                "type" : "string"
               }
             },
-            "required": [
-              "maql"
-            ],
-            "type": "object"
+            "required" : [ "maql" ],
+            "type" : "object"
           }
         },
-        "required": [
-          "inline"
-        ],
-        "type": "object"
+        "required" : [ "inline" ],
+        "type" : "object"
       },
-      "JsonNode": {
-        "description": "Metadata definition in free-form JSON format.",
-        "example": {},
-        "maxLength": 15000,
-        "nullable": true,
-        "type": "object"
+      "JsonNode" : {
+        "description" : "Metadata definition in free-form JSON format.",
+        "example" : { },
+        "maxLength" : 15000,
+        "nullable" : true,
+        "type" : "object"
       },
-      "MeasureDefinition": {
-        "description": "Abstract metric definition type",
-        "oneOf": [
-          {
-            "$ref": "#/components/schemas/InlineMeasureDefinition"
-          },
-          {
-            "$ref": "#/components/schemas/ArithmeticMeasureDefinition"
-          },
-          {
-            "$ref": "#/components/schemas/SimpleMeasureDefinition"
-          },
-          {
-            "$ref": "#/components/schemas/PopMeasureDefinition"
-          }
-        ],
-        "type": "object"
+      "MeasureDefinition" : {
+        "description" : "Abstract metric definition type",
+        "oneOf" : [ {
+          "$ref" : "#/components/schemas/InlineMeasureDefinition"
+        }, {
+          "$ref" : "#/components/schemas/ArithmeticMeasureDefinition"
+        }, {
+          "$ref" : "#/components/schemas/SimpleMeasureDefinition"
+        }, {
+          "$ref" : "#/components/schemas/PopMeasureDefinition"
+        } ],
+        "type" : "object"
       },
-      "MeasureItem": {
-        "description": "Metric is a quantity that is calculated from the data.",
-        "properties": {
-          "definition": {
-            "$ref": "#/components/schemas/MeasureDefinition"
+      "MeasureItem" : {
+        "description" : "Metric is a quantity that is calculated from the data.",
+        "properties" : {
+          "definition" : {
+            "$ref" : "#/components/schemas/MeasureDefinition"
           },
-          "localIdentifier": {
-            "description": "Local identifier of the metric. This can be used to reference the metric in other parts of the execution definition.",
-            "example": "metric_1",
-            "pattern": "^[.a-zA-Z0-9_-]+$",
-            "type": "string"
+          "localIdentifier" : {
+            "description" : "Local identifier of the metric. This can be used to reference the metric in other parts of the execution definition.",
+            "example" : "metric_1",
+            "pattern" : "^[.a-zA-Z0-9_-]+$",
+            "type" : "string"
           }
         },
-        "required": [
-          "definition",
-          "localIdentifier"
-        ],
-        "type": "object"
+        "required" : [ "definition", "localIdentifier" ],
+        "type" : "object"
       },
-      "MeasureValueCondition": {
-        "description": "A condition for filtering by measure value. Can be either a comparison or a range condition.",
-        "oneOf": [
-          {
-            "$ref": "#/components/schemas/ComparisonCondition"
-          },
-          {
-            "$ref": "#/components/schemas/RangeCondition"
-          }
-        ],
-        "type": "object"
+      "MeasureValueCondition" : {
+        "description" : "A condition for filtering by measure value. Can be either a comparison or a range condition.",
+        "oneOf" : [ {
+          "$ref" : "#/components/schemas/ComparisonCondition"
+        }, {
+          "$ref" : "#/components/schemas/RangeCondition"
+        } ],
+        "type" : "object"
       },
-      "MeasureValueFilter": {
-        "description": "Abstract filter definition type filtering by the value of the metric.",
-        "oneOf": [
-          {
-            "$ref": "#/components/schemas/ComparisonMeasureValueFilter"
-          },
-          {
-            "$ref": "#/components/schemas/RangeMeasureValueFilter"
-          },
-          {
-            "$ref": "#/components/schemas/CompoundMeasureValueFilter"
-          }
-        ],
-        "type": "object"
+      "MeasureValueFilter" : {
+        "description" : "Abstract filter definition type filtering by the value of the metric.",
+        "oneOf" : [ {
+          "$ref" : "#/components/schemas/ComparisonMeasureValueFilter"
+        }, {
+          "$ref" : "#/components/schemas/RangeMeasureValueFilter"
+        }, {
+          "$ref" : "#/components/schemas/CompoundMeasureValueFilter"
+        } ],
+        "type" : "object"
       },
-      "NegativeAttributeFilter": {
-        "description": "Filter able to limit element values by label and related selected negated elements.",
-        "properties": {
-          "negativeAttributeFilter": {
-            "properties": {
-              "applyOnResult": {
-                "type": "boolean"
+      "NegativeAttributeFilter" : {
+        "description" : "Filter able to limit element values by label and related selected negated elements.",
+        "properties" : {
+          "negativeAttributeFilter" : {
+            "properties" : {
+              "applyOnResult" : {
+                "type" : "boolean"
               },
-              "label": {
-                "$ref": "#/components/schemas/AfmIdentifier"
+              "label" : {
+                "$ref" : "#/components/schemas/AfmIdentifier"
               },
-              "localIdentifier": {
-                "type": "string"
+              "localIdentifier" : {
+                "type" : "string"
               },
-              "notIn": {
-                "$ref": "#/components/schemas/AttributeFilterElements"
+              "notIn" : {
+                "$ref" : "#/components/schemas/AttributeFilterElements"
               }
             },
-            "required": [
-              "notIn",
-              "label"
-            ],
-            "type": "object"
+            "required" : [ "notIn", "label" ],
+            "type" : "object"
           }
         },
-        "required": [
-          "negativeAttributeFilter"
-        ],
-        "type": "object"
+        "required" : [ "negativeAttributeFilter" ],
+        "type" : "object"
       },
-      "Over": {
-        "properties": {
-          "attributes": {
-            "items": {
-              "$ref": "#/components/schemas/IdentifierRef"
+      "Over" : {
+        "properties" : {
+          "attributes" : {
+            "items" : {
+              "$ref" : "#/components/schemas/IdentifierRef"
             },
-            "type": "array"
+            "type" : "array"
           }
         },
-        "required": [
-          "attributes"
-        ],
-        "type": "object"
+        "required" : [ "attributes" ],
+        "type" : "object"
       },
-      "PdfTableStyle": {
-        "deprecated": true,
-        "description": "Custom CSS styles for the table. (PDF, HTML)",
-        "example": [
-          {
-            "properties": [
-              {
-                "key": "font-size",
-                "value": "30px"
-              }
-            ],
-            "selector": "th"
-          }
-        ],
-        "properties": {
-          "properties": {
-            "description": "List of CSS properties.",
-            "items": {
-              "$ref": "#/components/schemas/PdfTableStyleProperty"
+      "PdfTableStyle" : {
+        "deprecated" : true,
+        "description" : "Custom CSS styles for the table. (PDF, HTML)",
+        "example" : [ {
+          "properties" : [ {
+            "key" : "font-size",
+            "value" : "30px"
+          } ],
+          "selector" : "th"
+        } ],
+        "properties" : {
+          "properties" : {
+            "description" : "List of CSS properties.",
+            "items" : {
+              "$ref" : "#/components/schemas/PdfTableStyleProperty"
             },
-            "type": "array"
+            "type" : "array"
           },
-          "selector": {
-            "description": "CSS selector where to apply given properties.",
-            "type": "string"
+          "selector" : {
+            "description" : "CSS selector where to apply given properties.",
+            "type" : "string"
           }
         },
-        "required": [
-          "selector"
-        ],
-        "type": "object"
+        "required" : [ "selector" ],
+        "type" : "object"
       },
-      "PdfTableStyleProperty": {
-        "description": "CSS property.",
-        "properties": {
-          "key": {
-            "description": "CSS property key.",
-            "type": "string"
+      "PdfTableStyleProperty" : {
+        "description" : "CSS property.",
+        "properties" : {
+          "key" : {
+            "description" : "CSS property key.",
+            "type" : "string"
           },
-          "value": {
-            "description": "CSS property value.",
-            "type": "string"
+          "value" : {
+            "description" : "CSS property value.",
+            "type" : "string"
           }
         },
-        "required": [
-          "key",
-          "value"
-        ],
-        "type": "object"
+        "required" : [ "key", "value" ],
+        "type" : "object"
       },
-      "PopDataset": {
-        "description": "Combination of the date data set to use and how many periods ago to calculate the previous period for.",
-        "properties": {
-          "dataset": {
-            "$ref": "#/components/schemas/AfmObjectIdentifierDataset"
+      "PopDataset" : {
+        "description" : "Combination of the date data set to use and how many periods ago to calculate the previous period for.",
+        "properties" : {
+          "dataset" : {
+            "$ref" : "#/components/schemas/AfmObjectIdentifierDataset"
           },
-          "periodsAgo": {
-            "description": "Number of periods ago to calculate the previous period for.",
-            "example": 1,
-            "format": "int32",
-            "type": "integer"
+          "periodsAgo" : {
+            "description" : "Number of periods ago to calculate the previous period for.",
+            "example" : 1,
+            "format" : "int32",
+            "type" : "integer"
           }
         },
-        "required": [
-          "dataset",
-          "periodsAgo"
-        ],
-        "type": "object"
+        "required" : [ "dataset", "periodsAgo" ],
+        "type" : "object"
       },
-      "PopDatasetMeasureDefinition": {
-        "description": "Previous period type of metric.",
-        "properties": {
-          "previousPeriodMeasure": {
-            "properties": {
-              "dateDatasets": {
-                "description": "Specification of which date data sets to use for determining the period to calculate the previous period for.",
-                "items": {
-                  "$ref": "#/components/schemas/PopDataset"
+      "PopDatasetMeasureDefinition" : {
+        "description" : "Previous period type of metric.",
+        "properties" : {
+          "previousPeriodMeasure" : {
+            "properties" : {
+              "dateDatasets" : {
+                "description" : "Specification of which date data sets to use for determining the period to calculate the previous period for.",
+                "items" : {
+                  "$ref" : "#/components/schemas/PopDataset"
                 },
-                "type": "array"
+                "type" : "array"
               },
-              "measureIdentifier": {
-                "$ref": "#/components/schemas/AfmLocalIdentifier"
+              "measureIdentifier" : {
+                "$ref" : "#/components/schemas/AfmLocalIdentifier"
               }
             },
-            "required": [
-              "dateDatasets",
-              "measureIdentifier"
-            ],
-            "type": "object"
+            "required" : [ "dateDatasets", "measureIdentifier" ],
+            "type" : "object"
           }
         },
-        "required": [
-          "previousPeriodMeasure"
-        ],
-        "type": "object"
+        "required" : [ "previousPeriodMeasure" ],
+        "type" : "object"
       },
-      "PopDate": {
-        "description": "Combination of the date attribute to use and how many periods ago to calculate the PoP for.",
-        "properties": {
-          "attribute": {
-            "$ref": "#/components/schemas/AfmObjectIdentifierAttribute"
+      "PopDate" : {
+        "description" : "Combination of the date attribute to use and how many periods ago to calculate the PoP for.",
+        "properties" : {
+          "attribute" : {
+            "$ref" : "#/components/schemas/AfmObjectIdentifierAttribute"
           },
-          "periodsAgo": {
-            "description": "Number of periods ago to calculate the previous period for.",
-            "example": 1,
-            "format": "int32",
-            "type": "integer"
+          "periodsAgo" : {
+            "description" : "Number of periods ago to calculate the previous period for.",
+            "example" : 1,
+            "format" : "int32",
+            "type" : "integer"
           }
         },
-        "required": [
-          "attribute",
-          "periodsAgo"
-        ],
-        "type": "object"
+        "required" : [ "attribute", "periodsAgo" ],
+        "type" : "object"
       },
-      "PopDateMeasureDefinition": {
-        "description": "Period over period type of metric.",
-        "properties": {
-          "overPeriodMeasure": {
-            "properties": {
-              "dateAttributes": {
-                "description": "Attributes to use for determining the period to calculate the PoP for.",
-                "items": {
-                  "$ref": "#/components/schemas/PopDate"
+      "PopDateMeasureDefinition" : {
+        "description" : "Period over period type of metric.",
+        "properties" : {
+          "overPeriodMeasure" : {
+            "properties" : {
+              "dateAttributes" : {
+                "description" : "Attributes to use for determining the period to calculate the PoP for.",
+                "items" : {
+                  "$ref" : "#/components/schemas/PopDate"
                 },
-                "type": "array"
+                "type" : "array"
               },
-              "measureIdentifier": {
-                "$ref": "#/components/schemas/AfmLocalIdentifier"
+              "measureIdentifier" : {
+                "$ref" : "#/components/schemas/AfmLocalIdentifier"
               }
             },
-            "required": [
-              "dateAttributes",
-              "measureIdentifier"
-            ],
-            "type": "object"
+            "required" : [ "dateAttributes", "measureIdentifier" ],
+            "type" : "object"
           }
         },
-        "required": [
-          "overPeriodMeasure"
-        ],
-        "type": "object"
+        "required" : [ "overPeriodMeasure" ],
+        "type" : "object"
       },
-      "PopMeasureDefinition": {
-        "oneOf": [
-          {
-            "$ref": "#/components/schemas/PopDatasetMeasureDefinition"
-          },
-          {
-            "$ref": "#/components/schemas/PopDateMeasureDefinition"
-          }
-        ],
-        "type": "object"
+      "PopMeasureDefinition" : {
+        "oneOf" : [ {
+          "$ref" : "#/components/schemas/PopDatasetMeasureDefinition"
+        }, {
+          "$ref" : "#/components/schemas/PopDateMeasureDefinition"
+        } ],
+        "type" : "object"
       },
-      "PositiveAttributeFilter": {
-        "description": "Filter able to limit element values by label and related selected elements.",
-        "properties": {
-          "positiveAttributeFilter": {
-            "properties": {
-              "applyOnResult": {
-                "type": "boolean"
+      "PositiveAttributeFilter" : {
+        "description" : "Filter able to limit element values by label and related selected elements.",
+        "properties" : {
+          "positiveAttributeFilter" : {
+            "properties" : {
+              "applyOnResult" : {
+                "type" : "boolean"
               },
-              "in": {
-                "$ref": "#/components/schemas/AttributeFilterElements"
+              "in" : {
+                "$ref" : "#/components/schemas/AttributeFilterElements"
               },
-              "label": {
-                "$ref": "#/components/schemas/AfmIdentifier"
+              "label" : {
+                "$ref" : "#/components/schemas/AfmIdentifier"
               },
-              "localIdentifier": {
-                "type": "string"
+              "localIdentifier" : {
+                "type" : "string"
               }
             },
-            "required": [
-              "in",
-              "label"
-            ],
-            "type": "object"
+            "required" : [ "in", "label" ],
+            "type" : "object"
           }
         },
-        "required": [
-          "positiveAttributeFilter"
-        ],
-        "type": "object"
+        "required" : [ "positiveAttributeFilter" ],
+        "type" : "object"
       },
-      "RangeCondition": {
-        "description": "Condition that checks if the metric value is within a given range.",
-        "properties": {
-          "range": {
-            "properties": {
-              "from": {
-                "example": 100,
-                "type": "number"
+      "RangeCondition" : {
+        "description" : "Condition that checks if the metric value is within a given range.",
+        "properties" : {
+          "range" : {
+            "properties" : {
+              "from" : {
+                "example" : 100,
+                "type" : "number"
               },
-              "operator": {
-                "enum": [
-                  "BETWEEN",
-                  "NOT_BETWEEN"
-                ],
-                "example": "BETWEEN",
-                "type": "string"
+              "operator" : {
+                "enum" : [ "BETWEEN", "NOT_BETWEEN" ],
+                "example" : "BETWEEN",
+                "type" : "string"
               },
-              "to": {
-                "example": 999,
-                "type": "number"
+              "to" : {
+                "example" : 999,
+                "type" : "number"
               }
             },
-            "required": [
-              "from",
-              "operator",
-              "to"
-            ],
-            "type": "object"
+            "required" : [ "from", "operator", "to" ],
+            "type" : "object"
           }
         },
-        "required": [
-          "range"
-        ],
-        "type": "object"
+        "required" : [ "range" ],
+        "type" : "object"
       },
-      "RangeMeasureValueFilter": {
-        "description": "Filter the result by comparing specified metric to given range of values.",
-        "properties": {
-          "rangeMeasureValueFilter": {
-            "properties": {
-              "applyOnResult": {
-                "type": "boolean"
+      "RangeMeasureValueFilter" : {
+        "description" : "Filter the result by comparing specified metric to given range of values.",
+        "properties" : {
+          "rangeMeasureValueFilter" : {
+            "properties" : {
+              "applyOnResult" : {
+                "type" : "boolean"
               },
-              "dimensionality": {
-                "description": "References to the attributes to be used when filtering.",
-                "items": {
-                  "$ref": "#/components/schemas/AfmIdentifier"
+              "dimensionality" : {
+                "description" : "References to the attributes to be used when filtering.",
+                "items" : {
+                  "$ref" : "#/components/schemas/AfmIdentifier"
                 },
-                "type": "array"
+                "type" : "array"
               },
-              "from": {
-                "example": 100,
-                "type": "number"
+              "from" : {
+                "example" : 100,
+                "type" : "number"
               },
-              "localIdentifier": {
-                "type": "string"
+              "localIdentifier" : {
+                "type" : "string"
               },
-              "measure": {
-                "$ref": "#/components/schemas/AfmIdentifier"
+              "measure" : {
+                "$ref" : "#/components/schemas/AfmIdentifier"
               },
-              "operator": {
-                "enum": [
-                  "BETWEEN",
-                  "NOT_BETWEEN"
-                ],
-                "example": "BETWEEN",
-                "type": "string"
+              "operator" : {
+                "enum" : [ "BETWEEN", "NOT_BETWEEN" ],
+                "example" : "BETWEEN",
+                "type" : "string"
               },
-              "to": {
-                "example": 999,
-                "type": "number"
+              "to" : {
+                "example" : 999,
+                "type" : "number"
               },
-              "treatNullValuesAs": {
-                "description": "A value that will be substituted for null values in the metric for the comparisons.",
-                "example": 0,
-                "type": "number"
+              "treatNullValuesAs" : {
+                "description" : "A value that will be substituted for null values in the metric for the comparisons.",
+                "example" : 0,
+                "type" : "number"
               }
             },
-            "required": [
-              "from",
-              "operator",
-              "to",
-              "measure"
-            ],
-            "type": "object"
+            "required" : [ "from", "operator", "to", "measure" ],
+            "type" : "object"
           }
         },
-        "required": [
-          "rangeMeasureValueFilter"
-        ],
-        "type": "object"
+        "required" : [ "rangeMeasureValueFilter" ],
+        "type" : "object"
       },
-      "RankingFilter": {
-        "description": "Filter the result on top/bottom N values according to given metric(s).",
-        "properties": {
-          "rankingFilter": {
-            "properties": {
-              "applyOnResult": {
-                "type": "boolean"
+      "RankingFilter" : {
+        "description" : "Filter the result on top/bottom N values according to given metric(s).",
+        "properties" : {
+          "rankingFilter" : {
+            "properties" : {
+              "applyOnResult" : {
+                "type" : "boolean"
               },
-              "dimensionality": {
-                "description": "References to the attributes to be used when filtering.",
-                "items": {
-                  "$ref": "#/components/schemas/AfmIdentifier"
+              "dimensionality" : {
+                "description" : "References to the attributes to be used when filtering.",
+                "items" : {
+                  "$ref" : "#/components/schemas/AfmIdentifier"
                 },
-                "type": "array"
+                "type" : "array"
               },
-              "localIdentifier": {
-                "type": "string"
+              "localIdentifier" : {
+                "type" : "string"
               },
-              "measures": {
-                "description": "References to the metrics to be used when filtering.",
-                "items": {
-                  "$ref": "#/components/schemas/AfmIdentifier"
+              "measures" : {
+                "description" : "References to the metrics to be used when filtering.",
+                "items" : {
+                  "$ref" : "#/components/schemas/AfmIdentifier"
                 },
-                "type": "array"
+                "type" : "array"
               },
-              "operator": {
-                "description": "The type of ranking to use, TOP or BOTTOM.",
-                "enum": [
-                  "TOP",
-                  "BOTTOM"
-                ],
-                "type": "string"
+              "operator" : {
+                "description" : "The type of ranking to use, TOP or BOTTOM.",
+                "enum" : [ "TOP", "BOTTOM" ],
+                "type" : "string"
               },
-              "value": {
-                "description": "Number of top/bottom values to filter.",
-                "example": 5,
-                "format": "int32",
-                "type": "integer"
+              "value" : {
+                "description" : "Number of top/bottom values to filter.",
+                "example" : 5,
+                "format" : "int32",
+                "type" : "integer"
               }
             },
-            "required": [
-              "measures",
-              "operator",
-              "value"
-            ],
-            "type": "object"
+            "required" : [ "measures", "operator", "value" ],
+            "type" : "object"
           }
         },
-        "required": [
-          "rankingFilter"
-        ],
-        "type": "object"
+        "required" : [ "rankingFilter" ],
+        "type" : "object"
       },
-      "RawCustomLabel": {
-        "description": "Custom label object override.",
-        "properties": {
-          "title": {
-            "description": "Override value.",
-            "type": "string"
+      "RawCustomLabel" : {
+        "description" : "Custom label object override.",
+        "properties" : {
+          "title" : {
+            "description" : "Override value.",
+            "type" : "string"
           }
         },
-        "required": [
-          "title"
-        ],
-        "type": "object"
+        "required" : [ "title" ],
+        "type" : "object"
       },
-      "RawCustomMetric": {
-        "description": "Custom metric object override.",
-        "properties": {
-          "title": {
-            "description": "Metric title override.",
-            "type": "string"
+      "RawCustomMetric" : {
+        "description" : "Custom metric object override.",
+        "properties" : {
+          "title" : {
+            "description" : "Metric title override.",
+            "type" : "string"
           }
         },
-        "required": [
-          "title"
-        ],
-        "type": "object"
+        "required" : [ "title" ],
+        "type" : "object"
       },
-      "RawCustomOverride": {
-        "description": "Custom cell value overrides (IDs will be replaced with specified values).",
-        "properties": {
-          "labels": {
-            "additionalProperties": {
-              "$ref": "#/components/schemas/RawCustomLabel"
+      "RawCustomOverride" : {
+        "description" : "Custom cell value overrides (IDs will be replaced with specified values).",
+        "properties" : {
+          "labels" : {
+            "additionalProperties" : {
+              "$ref" : "#/components/schemas/RawCustomLabel"
             },
-            "description": "Map of CustomLabels with keys used as placeholders in export result.",
-            "type": "object"
+            "description" : "Map of CustomLabels with keys used as placeholders in export result.",
+            "type" : "object"
           },
-          "metrics": {
-            "additionalProperties": {
-              "$ref": "#/components/schemas/RawCustomMetric"
+          "metrics" : {
+            "additionalProperties" : {
+              "$ref" : "#/components/schemas/RawCustomMetric"
             },
-            "description": "Map of CustomMetrics with keys used as placeholders in export result.",
-            "type": "object"
+            "description" : "Map of CustomMetrics with keys used as placeholders in export result.",
+            "type" : "object"
           }
         },
-        "type": "object"
+        "type" : "object"
       },
-      "RawExportRequest": {
-        "description": "Export request object describing the export properties and overrides for raw exports.",
-        "properties": {
-          "customOverride": {
-            "$ref": "#/components/schemas/RawCustomOverride"
+      "RawExportRequest" : {
+        "description" : "Export request object describing the export properties and overrides for raw exports.",
+        "properties" : {
+          "customOverride" : {
+            "$ref" : "#/components/schemas/RawCustomOverride"
           },
-          "delimiter": {
-            "description": "Set column delimiter. (CSV)",
-            "maxLength": 1,
-            "minLength": 1,
-            "pattern": "^[^\\r\\n\"]$",
-            "type": "string"
+          "delimiter" : {
+            "description" : "Set column delimiter. (CSV)",
+            "maxLength" : 1,
+            "minLength" : 1,
+            "pattern" : "^[^\\r\\n\"]$",
+            "type" : "string"
           },
-          "execution": {
-            "$ref": "#/components/schemas/AFM"
+          "execution" : {
+            "$ref" : "#/components/schemas/AFM"
           },
-          "executionSettings": {
-            "$ref": "#/components/schemas/ExecutionSettings"
+          "executionSettings" : {
+            "$ref" : "#/components/schemas/ExecutionSettings"
           },
-          "fileName": {
-            "description": "Filename of downloaded file without extension.",
-            "example": "result",
-            "type": "string"
+          "fileName" : {
+            "description" : "Filename of downloaded file without extension.",
+            "example" : "result",
+            "type" : "string"
           },
-          "format": {
-            "description": "Requested resulting file type.",
-            "enum": [
-              "ARROW_FILE",
-              "ARROW_STREAM",
-              "CSV"
-            ],
-            "example": "CSV",
-            "type": "string"
+          "format" : {
+            "description" : "Requested resulting file type.",
+            "enum" : [ "ARROW_FILE", "ARROW_STREAM", "CSV" ],
+            "example" : "CSV",
+            "type" : "string"
           }
         },
-        "required": [
-          "execution",
-          "fileName",
-          "format"
-        ],
-        "type": "object"
+        "required" : [ "execution", "fileName", "format" ],
+        "type" : "object"
       },
-      "RelativeBoundedDateFilter": {
-        "properties": {
-          "from": {
-            "format": "int32",
-            "type": "integer"
+      "RelativeBoundedDateFilter" : {
+        "properties" : {
+          "from" : {
+            "format" : "int32",
+            "type" : "integer"
           },
-          "granularity": {
-            "enum": [
-              "ALL_TIME_GRANULARITY",
-              "GDC.time.year",
-              "GDC.time.week_us",
-              "GDC.time.week_in_year",
-              "GDC.time.week_in_quarter",
-              "GDC.time.week",
-              "GDC.time.euweek_in_year",
-              "GDC.time.euweek_in_quarter",
-              "GDC.time.quarter",
-              "GDC.time.quarter_in_year",
-              "GDC.time.month",
-              "GDC.time.month_in_quarter",
-              "GDC.time.month_in_year",
-              "GDC.time.day_in_year",
-              "GDC.time.day_in_quarter",
-              "GDC.time.day_in_month",
-              "GDC.time.day_in_week",
-              "GDC.time.day_in_euweek",
-              "GDC.time.date",
-              "GDC.time.hour",
-              "GDC.time.hour_in_day",
-              "GDC.time.minute",
-              "GDC.time.minute_in_hour",
-              "GDC.time.fiscal_month",
-              "GDC.time.fiscal_quarter",
-              "GDC.time.fiscal_year"
-            ],
-            "type": "string"
+          "granularity" : {
+            "enum" : [ "ALL_TIME_GRANULARITY", "GDC.time.year", "GDC.time.week_us", "GDC.time.week_in_year", "GDC.time.week_in_quarter", "GDC.time.week", "GDC.time.euweek_in_year", "GDC.time.euweek_in_quarter", "GDC.time.quarter", "GDC.time.quarter_in_year", "GDC.time.month", "GDC.time.month_in_quarter", "GDC.time.month_in_year", "GDC.time.day_in_year", "GDC.time.day_in_quarter", "GDC.time.day_in_month", "GDC.time.day_in_week", "GDC.time.day_in_euweek", "GDC.time.date", "GDC.time.hour", "GDC.time.hour_in_day", "GDC.time.minute", "GDC.time.minute_in_hour", "GDC.time.fiscal_month", "GDC.time.fiscal_quarter", "GDC.time.fiscal_year" ],
+            "type" : "string"
           },
-          "to": {
-            "format": "int32",
-            "type": "integer"
+          "to" : {
+            "format" : "int32",
+            "type" : "integer"
           }
         },
-        "required": [
-          "granularity"
-        ],
-        "type": "object"
+        "required" : [ "granularity" ],
+        "type" : "object"
       },
-      "RelativeDateFilter": {
-        "description": "A date filter specifying a time interval that is relative to the current date. For example, last week, next month, and so on. Field dataset is representing qualifier of date dimension. The 'from' and 'to' properties mark the boundaries of the interval. If 'from' is omitted, all values earlier than 'to' are included. If 'to' is omitted, all values later than 'from' are included. It is not allowed to omit both.",
-        "properties": {
-          "relativeDateFilter": {
-            "properties": {
-              "applyOnResult": {
-                "type": "boolean"
+      "RelativeDateFilter" : {
+        "description" : "A date filter specifying a time interval that is relative to the current date. For example, last week, next month, and so on. Field dataset is representing qualifier of date dimension. The 'from' and 'to' properties mark the boundaries of the interval. If 'from' is omitted, all values earlier than 'to' are included. If 'to' is omitted, all values later than 'from' are included. It is not allowed to omit both.",
+        "properties" : {
+          "relativeDateFilter" : {
+            "properties" : {
+              "applyOnResult" : {
+                "type" : "boolean"
               },
-              "boundedFilter": {
-                "$ref": "#/components/schemas/BoundedFilter"
+              "boundedFilter" : {
+                "$ref" : "#/components/schemas/BoundedFilter"
               },
-              "dataset": {
-                "$ref": "#/components/schemas/AfmObjectIdentifierDataset"
+              "dataset" : {
+                "$ref" : "#/components/schemas/AfmObjectIdentifierDataset"
               },
-              "from": {
-                "description": "Start of the filtering interval. Specified by number of periods (with respect to given granularity). Typically negative (historical time interval like -2 for '2 days/weeks, ... ago').",
-                "example": -6,
-                "format": "int32",
-                "type": "integer"
+              "from" : {
+                "description" : "Start of the filtering interval. Specified by number of periods (with respect to given granularity). Typically negative (historical time interval like -2 for '2 days/weeks, ... ago').",
+                "example" : -6,
+                "format" : "int32",
+                "type" : "integer"
               },
-              "granularity": {
-                "description": "Date granularity specifying particular date attribute in given dimension.",
-                "enum": [
-                  "MINUTE",
-                  "HOUR",
-                  "DAY",
-                  "WEEK",
-                  "MONTH",
-                  "QUARTER",
-                  "YEAR",
-                  "MINUTE_OF_HOUR",
-                  "HOUR_OF_DAY",
-                  "DAY_OF_WEEK",
-                  "DAY_OF_MONTH",
-                  "DAY_OF_QUARTER",
-                  "DAY_OF_YEAR",
-                  "WEEK_OF_YEAR",
-                  "MONTH_OF_YEAR",
-                  "QUARTER_OF_YEAR",
-                  "FISCAL_MONTH",
-                  "FISCAL_QUARTER",
-                  "FISCAL_YEAR"
-                ],
-                "example": "DAY",
-                "type": "string"
+              "granularity" : {
+                "description" : "Date granularity specifying particular date attribute in given dimension.",
+                "enum" : [ "MINUTE", "HOUR", "DAY", "WEEK", "MONTH", "QUARTER", "YEAR", "MINUTE_OF_HOUR", "HOUR_OF_DAY", "DAY_OF_WEEK", "DAY_OF_MONTH", "DAY_OF_QUARTER", "DAY_OF_YEAR", "WEEK_OF_YEAR", "MONTH_OF_YEAR", "QUARTER_OF_YEAR", "FISCAL_MONTH", "FISCAL_QUARTER", "FISCAL_YEAR" ],
+                "example" : "DAY",
+                "type" : "string"
               },
-              "includeEmptyValues": {
-                "description": "If true, rows with undefined (NULL) date values will be included in the result. The filter becomes: (date_condition) OR (date IS NULL). If false or not set, standard behavior applies (NULLs excluded by the date condition).",
-                "type": "boolean"
+              "localIdentifier" : {
+                "type" : "string"
               },
-              "localIdentifier": {
-                "type": "string"
-              },
-              "to": {
-                "description": "End of the filtering interval. Specified by number of periods (with respect to given granularity). Value 'O' is representing current time-interval (current day, week, ...).",
-                "example": 0,
-                "format": "int32",
-                "type": "integer"
+              "to" : {
+                "description" : "End of the filtering interval. Specified by number of periods (with respect to given granularity). Value 'O' is representing current time-interval (current day, week, ...).",
+                "example" : 0,
+                "format" : "int32",
+                "type" : "integer"
               }
             },
-            "required": [
-              "from",
-              "granularity",
-              "to",
-              "dataset"
-            ],
-            "type": "object"
+            "required" : [ "from", "granularity", "to", "dataset" ],
+            "type" : "object"
           }
         },
-        "required": [
-          "relativeDateFilter"
-        ],
-        "type": "object"
+        "required" : [ "relativeDateFilter" ],
+        "type" : "object"
       },
-      "Settings": {
-        "description": "Additional settings.",
-        "properties": {
-          "delimiter": {
-            "description": "Set column delimiter. (CSV)",
-            "maxLength": 1,
-            "minLength": 1,
-            "pattern": "^[^\\r\\n\"]$",
-            "type": "string"
+      "Settings" : {
+        "description" : "Additional settings.",
+        "properties" : {
+          "delimiter" : {
+            "description" : "Set column delimiter. (CSV)",
+            "maxLength" : 1,
+            "minLength" : 1,
+            "pattern" : "^[^\\r\\n\"]$",
+            "type" : "string"
           },
-          "exportInfo": {
-            "default": false,
-            "description": "If true, the export will contain the information about the export – exported date, filters, etc. Works only with `visualizationObject`. (XLSX, PDF)",
-            "example": true,
-            "type": "boolean"
+          "exportInfo" : {
+            "default" : false,
+            "description" : "If true, the export will contain the information about the export – exported date, filters, etc. Works only with `visualizationObject`. (XLSX, PDF)",
+            "example" : true,
+            "type" : "boolean"
           },
-          "mergeHeaders": {
-            "description": "Merge equal headers in neighbouring cells. (XLSX)",
-            "example": true,
-            "type": "boolean"
+          "mergeHeaders" : {
+            "description" : "Merge equal headers in neighbouring cells. (XLSX)",
+            "example" : true,
+            "type" : "boolean"
           },
-          "pageOrientation": {
-            "default": "PORTRAIT",
-            "description": "Set page orientation. (PDF)",
-            "enum": [
-              "PORTRAIT",
-              "LANDSCAPE"
-            ],
-            "type": "string"
+          "pageOrientation" : {
+            "default" : "PORTRAIT",
+            "description" : "Set page orientation. (PDF)",
+            "enum" : [ "PORTRAIT", "LANDSCAPE" ],
+            "type" : "string"
           },
-          "pageSize": {
-            "default": "A4",
-            "description": "Set page size. (PDF)",
-            "enum": [
-              "A3",
-              "A4",
-              "LETTER"
-            ],
-            "type": "string"
+          "pageSize" : {
+            "default" : "A4",
+            "description" : "Set page size. (PDF)",
+            "enum" : [ "A3", "A4", "LETTER" ],
+            "type" : "string"
           },
-          "pdfPageSize": {
-            "deprecated": true,
-            "description": "Page size and orientation. (PDF)",
-            "example": "a4 landscape",
-            "type": "string"
+          "pdfPageSize" : {
+            "deprecated" : true,
+            "description" : "Page size and orientation. (PDF)",
+            "example" : "a4 landscape",
+            "type" : "string"
           },
-          "pdfTableStyle": {
-            "deprecated": true,
-            "description": "Custom CSS styles for the table. (PDF, HTML)",
-            "example": [
-              {
-                "properties": [
-                  {
-                    "key": "font-size",
-                    "value": "30px"
-                  }
-                ],
-                "selector": "th"
-              }
-            ],
-            "items": {
-              "$ref": "#/components/schemas/PdfTableStyle"
+          "pdfTableStyle" : {
+            "deprecated" : true,
+            "description" : "Custom CSS styles for the table. (PDF, HTML)",
+            "example" : [ {
+              "properties" : [ {
+                "key" : "font-size",
+                "value" : "30px"
+              } ],
+              "selector" : "th"
+            } ],
+            "items" : {
+              "$ref" : "#/components/schemas/PdfTableStyle"
             },
-            "type": "array"
+            "type" : "array"
           },
-          "pdfTopLeftContent": {
-            "deprecated": true,
-            "description": "Top left header content. (PDF)",
-            "example": "Good",
-            "type": "string"
+          "pdfTopLeftContent" : {
+            "deprecated" : true,
+            "description" : "Top left header content. (PDF)",
+            "example" : "Good",
+            "type" : "string"
           },
-          "pdfTopRightContent": {
-            "deprecated": true,
-            "description": "Top right header content. (PDF)",
-            "example": "Morning",
-            "type": "string"
+          "pdfTopRightContent" : {
+            "deprecated" : true,
+            "description" : "Top right header content. (PDF)",
+            "example" : "Morning",
+            "type" : "string"
           },
-          "showFilters": {
-            "deprecated": true,
-            "description": "Print applied filters on top of the document. (PDF/HTML when visualizationObject is given)",
-            "example": false,
-            "type": "boolean"
+          "showFilters" : {
+            "deprecated" : true,
+            "description" : "Print applied filters on top of the document. (PDF/HTML when visualizationObject is given)",
+            "example" : false,
+            "type" : "boolean"
           }
         },
-        "type": "object"
+        "type" : "object"
       },
-      "SimpleMeasureDefinition": {
-        "description": "Metric defined by referencing a MAQL metric or an LDM fact object with aggregation.",
-        "properties": {
-          "measure": {
-            "properties": {
-              "aggregation": {
-                "description": "Definition of aggregation type of the metric.",
-                "enum": [
-                  "SUM",
-                  "COUNT",
-                  "AVG",
-                  "MIN",
-                  "MAX",
-                  "MEDIAN",
-                  "RUNSUM",
-                  "APPROXIMATE_COUNT"
-                ],
-                "example": "SUM",
-                "type": "string"
+      "SimpleMeasureDefinition" : {
+        "description" : "Metric defined by referencing a MAQL metric or an LDM fact object with aggregation.",
+        "properties" : {
+          "measure" : {
+            "properties" : {
+              "aggregation" : {
+                "description" : "Definition of aggregation type of the metric.",
+                "enum" : [ "SUM", "COUNT", "AVG", "MIN", "MAX", "MEDIAN", "RUNSUM", "APPROXIMATE_COUNT" ],
+                "example" : "SUM",
+                "type" : "string"
               },
-              "computeRatio": {
-                "default": false,
-                "description": "If true, compute the percentage of given metric values (broken down by AFM attributes) to the total (not broken down).",
-                "example": true,
-                "type": "boolean"
+              "computeRatio" : {
+                "default" : false,
+                "description" : "If true, compute the percentage of given metric values (broken down by AFM attributes) to the total (not broken down).",
+                "example" : true,
+                "type" : "boolean"
               },
-              "filters": {
-                "description": "Metrics can be filtered by attribute filters with the same interface as ones for global AFM. Note that only one DateFilter is allowed.",
-                "items": {
-                  "$ref": "#/components/schemas/FilterDefinitionForSimpleMeasure"
+              "filters" : {
+                "description" : "Metrics can be filtered by attribute filters with the same interface as ones for global AFM. Note that only one DateFilter is allowed.",
+                "items" : {
+                  "$ref" : "#/components/schemas/FilterDefinitionForSimpleMeasure"
                 },
-                "type": "array"
+                "type" : "array"
               },
-              "item": {
-                "$ref": "#/components/schemas/AfmObjectIdentifierCore"
+              "item" : {
+                "$ref" : "#/components/schemas/AfmObjectIdentifierCore"
               }
             },
-            "required": [
-              "item"
-            ],
-            "type": "object"
+            "required" : [ "item" ],
+            "type" : "object"
           }
         },
-        "required": [
-          "measure"
-        ],
-        "type": "object"
+        "required" : [ "measure" ],
+        "type" : "object"
       },
-      "SlidesExportRequest": {
-        "description": "Export request object describing the export properties and metadata for slides exports.",
-        "properties": {
-          "dashboardId": {
-            "description": "Dashboard identifier",
-            "example": "761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
-            "type": "string"
+      "SlidesExportRequest" : {
+        "description" : "Export request object describing the export properties and metadata for slides exports.",
+        "properties" : {
+          "dashboardId" : {
+            "description" : "Dashboard identifier",
+            "example" : "761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+            "type" : "string"
           },
-          "fileName": {
-            "description": "File name to be used for retrieving the pdf document.",
-            "example": "filename",
-            "type": "string"
+          "fileName" : {
+            "description" : "File name to be used for retrieving the pdf document.",
+            "example" : "filename",
+            "type" : "string"
           },
-          "format": {
-            "description": "Requested resulting file type.",
-            "enum": [
-              "PDF",
-              "PPTX"
-            ],
-            "example": "PDF",
-            "type": "string"
+          "format" : {
+            "description" : "Requested resulting file type.",
+            "enum" : [ "PDF", "PPTX" ],
+            "example" : "PDF",
+            "type" : "string"
           },
-          "metadata": {
-            "$ref": "#/components/schemas/JsonNode"
+          "metadata" : {
+            "$ref" : "#/components/schemas/JsonNode"
           },
-          "templateId": {
-            "description": "Export template identifier.",
-            "maxLength": 255,
-            "nullable": true,
-            "type": "string"
+          "templateId" : {
+            "description" : "Export template identifier.",
+            "maxLength" : 255,
+            "nullable" : true,
+            "type" : "string"
           },
-          "visualizationIds": {
-            "description": "List of visualization ids to be exported. Note that only one visualization is currently supported.",
-            "items": {
-              "maxLength": 255,
-              "minLength": 1,
-              "type": "string"
+          "visualizationIds" : {
+            "description" : "List of visualization ids to be exported. Note that only one visualization is currently supported.",
+            "items" : {
+              "maxLength" : 255,
+              "minLength" : 1,
+              "type" : "string"
             },
-            "maxItems": 1,
-            "type": "array",
-            "uniqueItems": true
+            "maxItems" : 1,
+            "type" : "array",
+            "uniqueItems" : true
           },
-          "widgetIds": {
-            "description": "List of widget identifiers to be exported. Note that only one widget is currently supported.",
-            "items": {
-              "maxLength": 255,
-              "minLength": 1,
-              "type": "string"
+          "widgetIds" : {
+            "description" : "List of widget identifiers to be exported. Note that only one widget is currently supported.",
+            "items" : {
+              "maxLength" : 255,
+              "minLength" : 1,
+              "type" : "string"
             },
-            "maxItems": 1,
-            "type": "array",
-            "uniqueItems": true
+            "maxItems" : 1,
+            "type" : "array",
+            "uniqueItems" : true
           }
         },
-        "required": [
-          "fileName",
-          "format"
-        ],
-        "type": "object"
+        "required" : [ "fileName", "format" ],
+        "type" : "object"
       },
-      "TabularExportRequest": {
-        "description": "Export request object describing the export properties and overrides for tabular exports.",
-        "properties": {
-          "customOverride": {
-            "$ref": "#/components/schemas/CustomOverride"
+      "TabularExportRequest" : {
+        "description" : "Export request object describing the export properties and overrides for tabular exports.",
+        "properties" : {
+          "customOverride" : {
+            "$ref" : "#/components/schemas/CustomOverride"
           },
-          "executionResult": {
-            "description": "Execution result identifier.",
-            "example": "ff483727196c9dc862c7fd3a5a84df55c96d61a4",
-            "type": "string"
+          "executionResult" : {
+            "description" : "Execution result identifier.",
+            "example" : "ff483727196c9dc862c7fd3a5a84df55c96d61a4",
+            "type" : "string"
           },
-          "fileName": {
-            "description": "Filename of downloaded file without extension.",
-            "example": "result",
-            "type": "string"
+          "fileName" : {
+            "description" : "Filename of downloaded file without extension.",
+            "example" : "result",
+            "type" : "string"
           },
-          "format": {
-            "description": "Expected file format.",
-            "enum": [
-              "CSV",
-              "XLSX",
-              "HTML",
-              "PDF"
-            ],
-            "example": "CSV",
-            "type": "string"
+          "format" : {
+            "description" : "Expected file format.",
+            "enum" : [ "CSV", "XLSX", "HTML", "PDF" ],
+            "example" : "CSV",
+            "type" : "string"
           },
-          "metadata": {
-            "$ref": "#/components/schemas/JsonNode"
+          "metadata" : {
+            "$ref" : "#/components/schemas/JsonNode"
           },
-          "relatedDashboardId": {
-            "description": "Analytical dashboard identifier. Optional identifier, which informs the system that the export is related to a specific dashboard.",
-            "example": "761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
-            "type": "string"
+          "relatedDashboardId" : {
+            "description" : "Analytical dashboard identifier. Optional identifier, which informs the system that the export is related to a specific dashboard.",
+            "example" : "761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+            "type" : "string"
           },
-          "settings": {
-            "$ref": "#/components/schemas/Settings"
+          "settings" : {
+            "$ref" : "#/components/schemas/Settings"
           },
-          "visualizationObject": {
-            "description": "Visualization object identifier. Alternative to executionResult property.",
-            "example": "f7c359bc-c230-4487-b15b-ad9685bcb537",
-            "type": "string"
+          "visualizationObject" : {
+            "description" : "Visualization object identifier. Alternative to executionResult property.",
+            "example" : "f7c359bc-c230-4487-b15b-ad9685bcb537",
+            "type" : "string"
           },
-          "visualizationObjectCustomFilters": {
-            "description": "Optional custom filters (as array of IFilter objects defined in UI SDK) to be applied when visualizationObject is given. Those filters override the original filters defined in the visualization.",
-            "example": "[{\"negativeAttributeFilter\":{\"displayForm\":{\"identifier\":{\"id\":\"products.category\",\"type\":\"label\"}},\"notIn\":{\"values\":[\"Books\"]}}}]",
-            "items": {
-              "type": "object"
+          "visualizationObjectCustomFilters" : {
+            "description" : "Optional custom filters (as array of IFilter objects defined in UI SDK) to be applied when visualizationObject is given. Those filters override the original filters defined in the visualization.",
+            "example" : "[{\"negativeAttributeFilter\":{\"displayForm\":{\"identifier\":{\"id\":\"products.category\",\"type\":\"label\"}},\"notIn\":{\"values\":[\"Books\"]}}}]",
+            "items" : {
+              "type" : "object"
             },
-            "type": "array"
+            "type" : "array"
           }
         },
-        "required": [
-          "fileName",
-          "format"
-        ],
-        "type": "object"
+        "required" : [ "fileName", "format" ],
+        "type" : "object"
       },
-      "VisualExportRequest": {
-        "description": "Export request object describing the export properties and metadata for dashboard PDF exports.",
-        "properties": {
-          "dashboardId": {
-            "description": "Dashboard identifier",
-            "example": "761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
-            "type": "string"
+      "VisualExportRequest" : {
+        "description" : "Export request object describing the export properties and metadata for dashboard PDF exports.",
+        "properties" : {
+          "dashboardId" : {
+            "description" : "Dashboard identifier",
+            "example" : "761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+            "type" : "string"
           },
-          "fileName": {
-            "description": "File name to be used for retrieving the pdf document.",
-            "example": "filename",
-            "type": "string"
+          "fileName" : {
+            "description" : "File name to be used for retrieving the pdf document.",
+            "example" : "filename",
+            "type" : "string"
           },
-          "metadata": {
-            "description": "Metadata definition in free-form JSON format.",
-            "example": "{}",
-            "type": "object"
+          "metadata" : {
+            "description" : "Metadata definition in free-form JSON format.",
+            "example" : "{}",
+            "type" : "object"
           }
         },
-        "required": [
-          "dashboardId",
-          "fileName"
-        ],
-        "type": "object"
+        "required" : [ "dashboardId", "fileName" ],
+        "type" : "object"
       }
     }
   },
-  "info": {
-    "title": "OpenAPI definition",
-    "version": "v0"
+  "info" : {
+    "title" : "OpenAPI definition",
+    "version" : "v0"
   },
-  "openapi": "3.0.1",
-  "paths": {
-    "/api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/export/tabular": {
-      "post": {
-        "description": "Note: This API is an experimental and is going to change. Please, use it accordingly.An tabular export job will be created based on the export request and put to queue to be executed. The result of the operation will be an exportResult identifier that will be assembled by the client into a url that can be polled.",
-        "operationId": "createDashboardExportRequest",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "path",
-            "name": "dashboardId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
+  "openapi" : "3.0.1",
+  "paths" : {
+    "/api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/export/tabular" : {
+      "post" : {
+        "description" : "Note: This API is an experimental and is going to change. Please, use it accordingly.An tabular export job will be created based on the export request and put to queue to be executed. The result of the operation will be an exportResult identifier that will be assembled by the client into a url that can be polled.",
+        "operationId" : "createDashboardExportRequest",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "workspaceId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
           }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/DashboardTabularExportRequest"
+        }, {
+          "in" : "path",
+          "name" : "dashboardId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DashboardTabularExportRequest"
               }
             }
           },
-          "required": true
+          "required" : true
         },
-        "responses": {
-          "201": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ExportResponse"
+        "responses" : {
+          "201" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ExportResponse"
                 }
               }
             },
-            "description": "Tabular export request created successfully."
+            "description" : "Tabular export request created successfully."
           }
         },
-        "summary": "(EXPERIMENTAL) Create dashboard tabular export request",
-        "tags": [
-          "Tabular export",
-          "actions"
-        ],
-        "x-gdc-security-info": {
-          "description": "Permissions required to execute tabular export.",
-          "permissions": [
-            "EXPORT_TABULAR"
-          ]
+        "summary" : "(EXPERIMENTAL) Create dashboard tabular export request",
+        "tags" : [ "Tabular export", "actions" ],
+        "x-gdc-security-info" : {
+          "description" : "Permissions required to execute tabular export.",
+          "permissions" : [ "EXPORT_TABULAR" ]
         }
       }
     },
-    "/api/v1/actions/workspaces/{workspaceId}/export/image": {
-      "post": {
-        "description": "Note: This API is an experimental and is going to change. Please, use it accordingly. An image export job will be created based on the export request and put to queue to be executed. The result of the operation will be an exportResult identifier that will be assembled by the client into a url that can be polled.",
-        "operationId": "createImageExport",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
+    "/api/v1/actions/workspaces/{workspaceId}/export/image" : {
+      "post" : {
+        "description" : "Note: This API is an experimental and is going to change. Please, use it accordingly. An image export job will be created based on the export request and put to queue to be executed. The result of the operation will be an exportResult identifier that will be assembled by the client into a url that can be polled.",
+        "operationId" : "createImageExport",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "workspaceId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
           }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ImageExportRequest"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ImageExportRequest"
               }
             }
           },
-          "required": true
+          "required" : true
         },
-        "responses": {
-          "201": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ExportResponse"
+        "responses" : {
+          "201" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ExportResponse"
                 }
               }
             },
-            "description": "Image export request created successfully."
+            "description" : "Image export request created successfully."
           }
         },
-        "summary": "(EXPERIMENTAL) Create image export request",
-        "tags": [
-          "Image export",
-          "actions"
-        ],
-        "x-gdc-security-info": {
-          "description": "Permissions required to execute image export.",
-          "permissions": [
-            "EXPORT_PDF"
-          ]
+        "summary" : "(EXPERIMENTAL) Create image export request",
+        "tags" : [ "Image export", "actions" ],
+        "x-gdc-security-info" : {
+          "description" : "Permissions required to execute image export.",
+          "permissions" : [ "EXPORT_PDF" ]
         }
       }
     },
-    "/api/v1/actions/workspaces/{workspaceId}/export/image/{exportId}": {
-      "get": {
-        "description": "Note: This API is an experimental and is going to change. Please, use it accordingly. After clients creates a POST export request, the processing of it will start shortly asynchronously. To retrieve the result, client has to check periodically for the result on this endpoint. In case the result isn't ready yet, the service returns 202. If the result is ready, it returns 200 and octet stream of the result file with provided filename.",
-        "operationId": "getImageExport",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "path",
-            "name": "exportId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
+    "/api/v1/actions/workspaces/{workspaceId}/export/image/{exportId}" : {
+      "get" : {
+        "description" : "Note: This API is an experimental and is going to change. Please, use it accordingly. After clients creates a POST export request, the processing of it will start shortly asynchronously. To retrieve the result, client has to check periodically for the result on this endpoint. In case the result isn't ready yet, the service returns 202. If the result is ready, it returns 200 and octet stream of the result file with provided filename.",
+        "operationId" : "getImageExport",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "workspaceId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
           }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "image/png": {
-                "schema": {
-                  "format": "binary",
-                  "type": "string"
+        }, {
+          "in" : "path",
+          "name" : "exportId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "image/png" : {
+                "schema" : {
+                  "format" : "binary",
+                  "type" : "string"
                 }
               }
             },
-            "description": "Binary export result.",
-            "headers": {
-              "Content-Disposition": {
-                "schema": {
-                  "example": "attachment; filename='result.png'",
-                  "pattern": "attachment; filename='[^']+'",
-                  "type": "string"
+            "description" : "Binary export result.",
+            "headers" : {
+              "Content-Disposition" : {
+                "schema" : {
+                  "example" : "attachment; filename='result.png'",
+                  "pattern" : "attachment; filename='[^']+'",
+                  "type" : "string"
                 },
-                "style": "simple"
+                "style" : "simple"
               }
             }
           },
-          "202": {
-            "content": {
-              "image/png": {
-                "schema": {
-                  "items": {
-                    "properties": {
-                      "char": {
-                        "type": "string"
+          "202" : {
+            "content" : {
+              "image/png" : {
+                "schema" : {
+                  "items" : {
+                    "properties" : {
+                      "char" : {
+                        "type" : "string"
                       },
-                      "direct": {
-                        "type": "boolean"
+                      "direct" : {
+                        "type" : "boolean"
                       },
-                      "double": {
-                        "format": "double",
-                        "type": "number"
+                      "double" : {
+                        "format" : "double",
+                        "type" : "number"
                       },
-                      "float": {
-                        "format": "float",
-                        "type": "number"
+                      "float" : {
+                        "format" : "float",
+                        "type" : "number"
                       },
-                      "int": {
-                        "format": "int32",
-                        "type": "integer"
+                      "int" : {
+                        "format" : "int32",
+                        "type" : "integer"
                       },
-                      "long": {
-                        "format": "int64",
-                        "type": "integer"
+                      "long" : {
+                        "format" : "int64",
+                        "type" : "integer"
                       },
-                      "readOnly": {
-                        "type": "boolean"
+                      "readOnly" : {
+                        "type" : "boolean"
                       },
-                      "short": {
-                        "format": "int32",
-                        "type": "integer"
+                      "short" : {
+                        "format" : "int32",
+                        "type" : "integer"
                       }
                     },
-                    "type": "object"
+                    "type" : "object"
                   },
-                  "type": "array"
+                  "type" : "array"
                 }
               }
             },
-            "description": "Request is accepted, provided exportId exists, but export is not yet ready."
+            "description" : "Request is accepted, provided exportId exists, but export is not yet ready."
           }
         },
-        "summary": "(EXPERIMENTAL) Retrieve exported files",
-        "tags": [
-          "Image export",
-          "actions"
-        ],
-        "x-gdc-security-info": {
-          "description": "Minimal permission required to use this endpoint.",
-          "permissions": [
-            "EXPORT_PDF"
-          ]
+        "summary" : "(EXPERIMENTAL) Retrieve exported files",
+        "tags" : [ "Image export", "actions" ],
+        "x-gdc-security-info" : {
+          "description" : "Minimal permission required to use this endpoint.",
+          "permissions" : [ "EXPORT_PDF" ]
         }
       }
     },
-    "/api/v1/actions/workspaces/{workspaceId}/export/image/{exportId}/metadata": {
-      "get": {
-        "description": "Note: This API is an experimental and is going to change. Please, use it accordingly. This endpoint serves as a cache for user-defined metadata of the export for the front end UI to retrieve it, if one was created using the POST ../export/image endpoint. The metadata structure is not verified.",
-        "operationId": "getImageExportMetadata",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "path",
-            "name": "exportId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
+    "/api/v1/actions/workspaces/{workspaceId}/export/image/{exportId}/metadata" : {
+      "get" : {
+        "description" : "Note: This API is an experimental and is going to change. Please, use it accordingly. This endpoint serves as a cache for user-defined metadata of the export for the front end UI to retrieve it, if one was created using the POST ../export/image endpoint. The metadata structure is not verified.",
+        "operationId" : "getImageExportMetadata",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "workspaceId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
           }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {}
+        }, {
+          "in" : "path",
+          "name" : "exportId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : { }
             },
-            "description": "Json metadata representation"
+            "description" : "Json metadata representation"
           }
         },
-        "summary": "(EXPERIMENTAL) Retrieve metadata context",
-        "tags": [
-          "Image export",
-          "actions"
-        ],
-        "x-gdc-security-info": {
-          "description": "Minimal permission required to use this endpoint.",
-          "permissions": [
-            "EXPORT_PDF"
-          ]
+        "summary" : "(EXPERIMENTAL) Retrieve metadata context",
+        "tags" : [ "Image export", "actions" ],
+        "x-gdc-security-info" : {
+          "description" : "Minimal permission required to use this endpoint.",
+          "permissions" : [ "EXPORT_PDF" ]
         }
       }
     },
-    "/api/v1/actions/workspaces/{workspaceId}/export/raw": {
-      "post": {
-        "description": "Note: This API is an experimental and is going to change. Please, use it accordingly.An raw export job will be created based on the export request and put to queue to be executed. The result of the operation will be an exportResult identifier that will be assembled by the client into a url that can be polled.",
-        "operationId": "createRawExport",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
+    "/api/v1/actions/workspaces/{workspaceId}/export/raw" : {
+      "post" : {
+        "description" : "Note: This API is an experimental and is going to change. Please, use it accordingly.An raw export job will be created based on the export request and put to queue to be executed. The result of the operation will be an exportResult identifier that will be assembled by the client into a url that can be polled.",
+        "operationId" : "createRawExport",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "workspaceId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
           }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RawExportRequest"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RawExportRequest"
               }
             }
           },
-          "required": true
+          "required" : true
         },
-        "responses": {
-          "201": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ExportResponse"
+        "responses" : {
+          "201" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ExportResponse"
                 }
               }
             },
-            "description": "Raw export request created successfully."
+            "description" : "Raw export request created successfully."
           }
         },
-        "summary": "(EXPERIMENTAL) Create raw export request",
-        "tags": [
-          "Raw export",
-          "actions"
-        ],
-        "x-gdc-security-info": {
-          "description": "Permissions required to execute raw export.",
-          "permissions": [
-            "EXPORT_TABULAR"
-          ]
+        "summary" : "(EXPERIMENTAL) Create raw export request",
+        "tags" : [ "Raw export", "actions" ],
+        "x-gdc-security-info" : {
+          "description" : "Permissions required to execute raw export.",
+          "permissions" : [ "EXPORT_TABULAR" ]
         }
       }
     },
-    "/api/v1/actions/workspaces/{workspaceId}/export/raw/{exportId}": {
-      "get": {
-        "description": "Note: This API is an experimental and is going to change. Please, use it accordingly.After clients creates a POST export request, the processing of it will start shortly asynchronously. To retrieve the result, client has to check periodically for the result on this endpoint. In case the result isn't ready yet, the service returns 202. If the result is ready, it returns 200 and octet stream of the result file with provided filename.",
-        "operationId": "getRawExport",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "path",
-            "name": "exportId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
+    "/api/v1/actions/workspaces/{workspaceId}/export/raw/{exportId}" : {
+      "get" : {
+        "description" : "Note: This API is an experimental and is going to change. Please, use it accordingly.After clients creates a POST export request, the processing of it will start shortly asynchronously. To retrieve the result, client has to check periodically for the result on this endpoint. In case the result isn't ready yet, the service returns 202. If the result is ready, it returns 200 and octet stream of the result file with provided filename.",
+        "operationId" : "getRawExport",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "workspaceId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
           }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/vnd.apache.arrow.file": {
-                "schema": {
-                  "format": "binary",
-                  "type": "string"
+        }, {
+          "in" : "path",
+          "name" : "exportId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/vnd.apache.arrow.file" : {
+                "schema" : {
+                  "format" : "binary",
+                  "type" : "string"
                 }
               },
-              "application/vnd.apache.arrow.stream": {
-                "schema": {
-                  "format": "binary",
-                  "type": "string"
+              "application/vnd.apache.arrow.stream" : {
+                "schema" : {
+                  "format" : "binary",
+                  "type" : "string"
                 }
               },
-              "text/csv": {
-                "schema": {
-                  "format": "binary",
-                  "type": "string"
+              "text/csv" : {
+                "schema" : {
+                  "format" : "binary",
+                  "type" : "string"
                 }
               }
             },
-            "description": "Binary export result.",
-            "headers": {
-              "Content-Disposition": {
-                "schema": {
-                  "example": "attachment; filename='result.csv'",
-                  "pattern": "attachment; filename='[^']+'",
-                  "type": "string"
+            "description" : "Binary export result.",
+            "headers" : {
+              "Content-Disposition" : {
+                "schema" : {
+                  "example" : "attachment; filename='result.csv'",
+                  "pattern" : "attachment; filename='[^']+'",
+                  "type" : "string"
                 },
-                "style": "simple"
+                "style" : "simple"
               }
             }
           },
-          "202": {
-            "content": {
-              "application/vnd.apache.arrow.file": {
-                "schema": {
-                  "format": "binary",
-                  "type": "string"
+          "202" : {
+            "content" : {
+              "application/vnd.apache.arrow.file" : {
+                "schema" : {
+                  "format" : "binary",
+                  "type" : "string"
                 }
               },
-              "application/vnd.apache.arrow.stream": {
-                "schema": {
-                  "format": "binary",
-                  "type": "string"
+              "application/vnd.apache.arrow.stream" : {
+                "schema" : {
+                  "format" : "binary",
+                  "type" : "string"
                 }
               },
-              "text/csv": {
-                "schema": {
-                  "format": "binary",
-                  "type": "string"
+              "text/csv" : {
+                "schema" : {
+                  "format" : "binary",
+                  "type" : "string"
                 }
               }
             },
-            "description": "Request is accepted, provided exportId exists, but export is not yet ready."
+            "description" : "Request is accepted, provided exportId exists, but export is not yet ready."
           }
         },
-        "summary": "(EXPERIMENTAL) Retrieve exported files",
-        "tags": [
-          "Raw export",
-          "actions"
-        ],
-        "x-gdc-security-info": {
-          "description": "Minimal permission required to use this endpoint.",
-          "permissions": [
-            "EXPORT_TABULAR"
-          ]
+        "summary" : "(EXPERIMENTAL) Retrieve exported files",
+        "tags" : [ "Raw export", "actions" ],
+        "x-gdc-security-info" : {
+          "description" : "Minimal permission required to use this endpoint.",
+          "permissions" : [ "EXPORT_TABULAR" ]
         }
       }
     },
-    "/api/v1/actions/workspaces/{workspaceId}/export/slides": {
-      "post": {
-        "description": "Note: This API is an experimental and is going to change. Please, use it accordingly. A slides export job will be created based on the export request and put to queue to be executed. The result of the operation will be an exportResult identifier that will be assembled by the client into a url that can be polled.",
-        "operationId": "createSlidesExport",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "header",
-            "name": "X-Gdc-Debug",
-            "required": false,
-            "schema": {
-              "default": false,
-              "type": "boolean"
-            }
+    "/api/v1/actions/workspaces/{workspaceId}/export/slides" : {
+      "post" : {
+        "description" : "Note: This API is an experimental and is going to change. Please, use it accordingly. A slides export job will be created based on the export request and put to queue to be executed. The result of the operation will be an exportResult identifier that will be assembled by the client into a url that can be polled.",
+        "operationId" : "createSlidesExport",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "workspaceId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
           }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SlidesExportRequest"
+        }, {
+          "in" : "header",
+          "name" : "X-Gdc-Debug",
+          "required" : false,
+          "schema" : {
+            "default" : false,
+            "type" : "boolean"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/SlidesExportRequest"
               }
             }
           },
-          "required": true
+          "required" : true
         },
-        "responses": {
-          "201": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ExportResponse"
+        "responses" : {
+          "201" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ExportResponse"
                 }
               }
             },
-            "description": "Slides export request created successfully."
+            "description" : "Slides export request created successfully."
           }
         },
-        "summary": "(EXPERIMENTAL) Create slides export request",
-        "tags": [
-          "Slides export",
-          "actions"
-        ],
-        "x-gdc-security-info": {
-          "description": "Permissions required to execute slides export.",
-          "permissions": [
-            "EXPORT_PDF"
-          ]
+        "summary" : "(EXPERIMENTAL) Create slides export request",
+        "tags" : [ "Slides export", "actions" ],
+        "x-gdc-security-info" : {
+          "description" : "Permissions required to execute slides export.",
+          "permissions" : [ "EXPORT_PDF" ]
         }
       }
     },
-    "/api/v1/actions/workspaces/{workspaceId}/export/slides/{exportId}": {
-      "get": {
-        "description": "Note: This API is an experimental and is going to change. Please, use it accordingly. After clients creates a POST export request, the processing of it will start shortly asynchronously. To retrieve the result, client has to check periodically for the result on this endpoint. In case the result isn't ready yet, the service returns 202. If the result is ready, it returns 200 and octet stream of the result file with provided filename.",
-        "operationId": "getSlidesExport",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "path",
-            "name": "exportId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
+    "/api/v1/actions/workspaces/{workspaceId}/export/slides/{exportId}" : {
+      "get" : {
+        "description" : "Note: This API is an experimental and is going to change. Please, use it accordingly. After clients creates a POST export request, the processing of it will start shortly asynchronously. To retrieve the result, client has to check periodically for the result on this endpoint. In case the result isn't ready yet, the service returns 202. If the result is ready, it returns 200 and octet stream of the result file with provided filename.",
+        "operationId" : "getSlidesExport",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "workspaceId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
           }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/pdf": {
-                "schema": {
-                  "format": "binary",
-                  "type": "string"
+        }, {
+          "in" : "path",
+          "name" : "exportId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/pdf" : {
+                "schema" : {
+                  "format" : "binary",
+                  "type" : "string"
                 }
               },
-              "application/vnd.openxmlformats-officedocument.presentationml.presentation": {
-                "schema": {
-                  "format": "binary",
-                  "type": "string"
+              "application/vnd.openxmlformats-officedocument.presentationml.presentation" : {
+                "schema" : {
+                  "format" : "binary",
+                  "type" : "string"
                 }
               },
-              "application/zip": {
-                "schema": {
-                  "format": "binary",
-                  "type": "string"
+              "application/zip" : {
+                "schema" : {
+                  "format" : "binary",
+                  "type" : "string"
                 }
               }
             },
-            "description": "Binary export result.",
-            "headers": {
-              "Content-Disposition": {
-                "schema": {
-                  "example": "attachment; filename='result.pdf'",
-                  "pattern": "attachment; filename='[^']+'",
-                  "type": "string"
+            "description" : "Binary export result.",
+            "headers" : {
+              "Content-Disposition" : {
+                "schema" : {
+                  "example" : "attachment; filename='result.pdf'",
+                  "pattern" : "attachment; filename='[^']+'",
+                  "type" : "string"
                 },
-                "style": "simple"
+                "style" : "simple"
               }
             }
           },
-          "202": {
-            "content": {
-              "application/pdf": {
-                "schema": {
-                  "items": {
-                    "properties": {
-                      "char": {
-                        "type": "string"
+          "202" : {
+            "content" : {
+              "application/pdf" : {
+                "schema" : {
+                  "items" : {
+                    "properties" : {
+                      "char" : {
+                        "type" : "string"
                       },
-                      "direct": {
-                        "type": "boolean"
+                      "direct" : {
+                        "type" : "boolean"
                       },
-                      "double": {
-                        "format": "double",
-                        "type": "number"
+                      "double" : {
+                        "format" : "double",
+                        "type" : "number"
                       },
-                      "float": {
-                        "format": "float",
-                        "type": "number"
+                      "float" : {
+                        "format" : "float",
+                        "type" : "number"
                       },
-                      "int": {
-                        "format": "int32",
-                        "type": "integer"
+                      "int" : {
+                        "format" : "int32",
+                        "type" : "integer"
                       },
-                      "long": {
-                        "format": "int64",
-                        "type": "integer"
+                      "long" : {
+                        "format" : "int64",
+                        "type" : "integer"
                       },
-                      "readOnly": {
-                        "type": "boolean"
+                      "readOnly" : {
+                        "type" : "boolean"
                       },
-                      "short": {
-                        "format": "int32",
-                        "type": "integer"
+                      "short" : {
+                        "format" : "int32",
+                        "type" : "integer"
                       }
                     },
-                    "type": "object"
+                    "type" : "object"
                   },
-                  "type": "array"
+                  "type" : "array"
                 }
               },
-              "application/vnd.openxmlformats-officedocument.presentationml.presentation": {
-                "schema": {
-                  "items": {
-                    "properties": {
-                      "char": {
-                        "type": "string"
+              "application/vnd.openxmlformats-officedocument.presentationml.presentation" : {
+                "schema" : {
+                  "items" : {
+                    "properties" : {
+                      "char" : {
+                        "type" : "string"
                       },
-                      "direct": {
-                        "type": "boolean"
+                      "direct" : {
+                        "type" : "boolean"
                       },
-                      "double": {
-                        "format": "double",
-                        "type": "number"
+                      "double" : {
+                        "format" : "double",
+                        "type" : "number"
                       },
-                      "float": {
-                        "format": "float",
-                        "type": "number"
+                      "float" : {
+                        "format" : "float",
+                        "type" : "number"
                       },
-                      "int": {
-                        "format": "int32",
-                        "type": "integer"
+                      "int" : {
+                        "format" : "int32",
+                        "type" : "integer"
                       },
-                      "long": {
-                        "format": "int64",
-                        "type": "integer"
+                      "long" : {
+                        "format" : "int64",
+                        "type" : "integer"
                       },
-                      "readOnly": {
-                        "type": "boolean"
+                      "readOnly" : {
+                        "type" : "boolean"
                       },
-                      "short": {
-                        "format": "int32",
-                        "type": "integer"
+                      "short" : {
+                        "format" : "int32",
+                        "type" : "integer"
                       }
                     },
-                    "type": "object"
+                    "type" : "object"
                   },
-                  "type": "array"
+                  "type" : "array"
                 }
               }
             },
-            "description": "Request is accepted, provided exportId exists, but export is not yet ready."
+            "description" : "Request is accepted, provided exportId exists, but export is not yet ready."
           }
         },
-        "summary": "(EXPERIMENTAL) Retrieve exported files",
-        "tags": [
-          "Slides export",
-          "actions"
-        ],
-        "x-gdc-security-info": {
-          "description": "Minimal permission required to use this endpoint.",
-          "permissions": [
-            "EXPORT_PDF"
-          ]
+        "summary" : "(EXPERIMENTAL) Retrieve exported files",
+        "tags" : [ "Slides export", "actions" ],
+        "x-gdc-security-info" : {
+          "description" : "Minimal permission required to use this endpoint.",
+          "permissions" : [ "EXPORT_PDF" ]
         }
       }
     },
-    "/api/v1/actions/workspaces/{workspaceId}/export/slides/{exportId}/metadata": {
-      "get": {
-        "description": "Note: This API is an experimental and is going to change. Please, use it accordingly. This endpoint serves as a cache for user-defined metadata of the export for the front end UI to retrieve it, if one was created using the POST ../export/slides endpoint. The metadata structure is not verified.",
-        "operationId": "getSlidesExportMetadata",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "path",
-            "name": "exportId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
+    "/api/v1/actions/workspaces/{workspaceId}/export/slides/{exportId}/metadata" : {
+      "get" : {
+        "description" : "Note: This API is an experimental and is going to change. Please, use it accordingly. This endpoint serves as a cache for user-defined metadata of the export for the front end UI to retrieve it, if one was created using the POST ../export/slides endpoint. The metadata structure is not verified.",
+        "operationId" : "getSlidesExportMetadata",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "workspaceId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
           }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {}
+        }, {
+          "in" : "path",
+          "name" : "exportId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : { }
             },
-            "description": "Json metadata representation"
+            "description" : "Json metadata representation"
           }
         },
-        "summary": "(EXPERIMENTAL) Retrieve metadata context",
-        "tags": [
-          "Slides export",
-          "actions"
-        ],
-        "x-gdc-security-info": {
-          "description": "Minimal permission required to use this endpoint.",
-          "permissions": [
-            "EXPORT_PDF"
-          ]
+        "summary" : "(EXPERIMENTAL) Retrieve metadata context",
+        "tags" : [ "Slides export", "actions" ],
+        "x-gdc-security-info" : {
+          "description" : "Minimal permission required to use this endpoint.",
+          "permissions" : [ "EXPORT_PDF" ]
         }
       }
     },
-    "/api/v1/actions/workspaces/{workspaceId}/export/tabular": {
-      "post": {
-        "description": "An tabular export job will be created based on the export request and put to queue to be executed. The result of the operation will be an exportResult identifier that will be assembled by the client into a url that can be polled.",
-        "operationId": "createTabularExport",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
+    "/api/v1/actions/workspaces/{workspaceId}/export/tabular" : {
+      "post" : {
+        "description" : "An tabular export job will be created based on the export request and put to queue to be executed. The result of the operation will be an exportResult identifier that will be assembled by the client into a url that can be polled.",
+        "operationId" : "createTabularExport",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "workspaceId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
           }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TabularExportRequest"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/TabularExportRequest"
               }
             }
           },
-          "required": true
+          "required" : true
         },
-        "responses": {
-          "201": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ExportResponse"
+        "responses" : {
+          "201" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ExportResponse"
                 }
               }
             },
-            "description": "Tabular export request created successfully."
+            "description" : "Tabular export request created successfully."
           }
         },
-        "summary": "Create tabular export request",
-        "tags": [
-          "Tabular export",
-          "actions"
-        ],
-        "x-gdc-security-info": {
-          "description": "Permissions required to execute tabular export.",
-          "permissions": [
-            "EXPORT_TABULAR"
-          ]
+        "summary" : "Create tabular export request",
+        "tags" : [ "Tabular export", "actions" ],
+        "x-gdc-security-info" : {
+          "description" : "Permissions required to execute tabular export.",
+          "permissions" : [ "EXPORT_TABULAR" ]
         }
       }
     },
-    "/api/v1/actions/workspaces/{workspaceId}/export/tabular/{exportId}": {
-      "get": {
-        "description": "After clients creates a POST export request, the processing of it will start shortly asynchronously. To retrieve the result, client has to check periodically for the result on this endpoint. In case the result isn't ready yet, the service returns 202. If the result is ready, it returns 200 and octet stream of the result file with provided filename.",
-        "operationId": "getTabularExport",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "path",
-            "name": "exportId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
+    "/api/v1/actions/workspaces/{workspaceId}/export/tabular/{exportId}" : {
+      "get" : {
+        "description" : "After clients creates a POST export request, the processing of it will start shortly asynchronously. To retrieve the result, client has to check periodically for the result on this endpoint. In case the result isn't ready yet, the service returns 202. If the result is ready, it returns 200 and octet stream of the result file with provided filename.",
+        "operationId" : "getTabularExport",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "workspaceId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
           }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/pdf": {
-                "schema": {
-                  "format": "binary",
-                  "type": "string"
+        }, {
+          "in" : "path",
+          "name" : "exportId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/pdf" : {
+                "schema" : {
+                  "format" : "binary",
+                  "type" : "string"
                 }
               },
-              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
-                "schema": {
-                  "format": "binary",
-                  "type": "string"
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" : {
+                "schema" : {
+                  "format" : "binary",
+                  "type" : "string"
                 }
               },
-              "application/zip": {
-                "schema": {
-                  "format": "binary",
-                  "type": "string"
+              "application/zip" : {
+                "schema" : {
+                  "format" : "binary",
+                  "type" : "string"
                 }
               },
-              "text/csv": {
-                "schema": {
-                  "format": "binary",
-                  "type": "string"
+              "text/csv" : {
+                "schema" : {
+                  "format" : "binary",
+                  "type" : "string"
                 }
               },
-              "text/html": {
-                "schema": {
-                  "format": "binary",
-                  "type": "string"
+              "text/html" : {
+                "schema" : {
+                  "format" : "binary",
+                  "type" : "string"
                 }
               }
             },
-            "description": "Binary export result.",
-            "headers": {
-              "Content-Disposition": {
-                "schema": {
-                  "example": "attachment; filename='result.csv'",
-                  "pattern": "attachment; filename='[^']+'",
-                  "type": "string"
+            "description" : "Binary export result.",
+            "headers" : {
+              "Content-Disposition" : {
+                "schema" : {
+                  "example" : "attachment; filename='result.csv'",
+                  "pattern" : "attachment; filename='[^']+'",
+                  "type" : "string"
                 },
-                "style": "simple"
+                "style" : "simple"
               }
             }
           },
-          "202": {
-            "content": {
-              "application/pdf": {
-                "schema": {
-                  "format": "binary",
-                  "type": "string"
+          "202" : {
+            "content" : {
+              "application/pdf" : {
+                "schema" : {
+                  "format" : "binary",
+                  "type" : "string"
                 }
               },
-              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
-                "schema": {
-                  "format": "binary",
-                  "type": "string"
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" : {
+                "schema" : {
+                  "format" : "binary",
+                  "type" : "string"
                 }
               },
-              "application/zip": {
-                "schema": {
-                  "format": "binary",
-                  "type": "string"
+              "application/zip" : {
+                "schema" : {
+                  "format" : "binary",
+                  "type" : "string"
                 }
               },
-              "text/csv": {
-                "schema": {
-                  "format": "binary",
-                  "type": "string"
+              "text/csv" : {
+                "schema" : {
+                  "format" : "binary",
+                  "type" : "string"
                 }
               },
-              "text/html": {
-                "schema": {
-                  "format": "binary",
-                  "type": "string"
+              "text/html" : {
+                "schema" : {
+                  "format" : "binary",
+                  "type" : "string"
                 }
               }
             },
-            "description": "Request is accepted, provided exportId exists, but export is not yet ready."
+            "description" : "Request is accepted, provided exportId exists, but export is not yet ready."
           }
         },
-        "summary": "Retrieve exported files",
-        "tags": [
-          "Tabular export",
-          "actions"
-        ],
-        "x-gdc-security-info": {
-          "description": "Minimal permission required to use this endpoint.",
-          "permissions": [
-            "EXPORT_TABULAR"
-          ]
+        "summary" : "Retrieve exported files",
+        "tags" : [ "Tabular export", "actions" ],
+        "x-gdc-security-info" : {
+          "description" : "Minimal permission required to use this endpoint.",
+          "permissions" : [ "EXPORT_TABULAR" ]
         }
       }
     },
-    "/api/v1/actions/workspaces/{workspaceId}/export/visual": {
-      "post": {
-        "description": "An visual export job will be created based on the export request and put to queue to be executed. The result of the operation will be an exportResult identifier that will be assembled by the client into a url that can be polled.",
-        "operationId": "createPdfExport",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "header",
-            "name": "X-Gdc-Debug",
-            "required": false,
-            "schema": {
-              "default": false,
-              "type": "boolean"
-            }
+    "/api/v1/actions/workspaces/{workspaceId}/export/visual" : {
+      "post" : {
+        "description" : "An visual export job will be created based on the export request and put to queue to be executed. The result of the operation will be an exportResult identifier that will be assembled by the client into a url that can be polled.",
+        "operationId" : "createPdfExport",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "workspaceId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
           }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/VisualExportRequest"
+        }, {
+          "in" : "header",
+          "name" : "X-Gdc-Debug",
+          "required" : false,
+          "schema" : {
+            "default" : false,
+            "type" : "boolean"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/VisualExportRequest"
               }
             }
           },
-          "required": true
+          "required" : true
         },
-        "responses": {
-          "201": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ExportResponse"
+        "responses" : {
+          "201" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ExportResponse"
                 }
               }
             },
-            "description": "Visual export request created successfully."
+            "description" : "Visual export request created successfully."
           }
         },
-        "summary": "Create visual - pdf export request",
-        "tags": [
-          "actions",
-          "Visual export"
-        ],
-        "x-gdc-security-info": {
-          "description": "Permissions required to execute pdf export.",
-          "permissions": [
-            "EXPORT_PDF"
-          ]
+        "summary" : "Create visual - pdf export request",
+        "tags" : [ "actions", "Visual export" ],
+        "x-gdc-security-info" : {
+          "description" : "Permissions required to execute pdf export.",
+          "permissions" : [ "EXPORT_PDF" ]
         }
       }
     },
-    "/api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId}": {
-      "get": {
-        "description": "Returns 202 until original POST export request is not processed.Returns 200 with exported data once the export is done.",
-        "operationId": "getExportedFile",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "path",
-            "name": "exportId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
+    "/api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId}" : {
+      "get" : {
+        "description" : "Returns 202 until original POST export request is not processed.Returns 200 with exported data once the export is done.",
+        "operationId" : "getExportedFile",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "workspaceId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
           }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/pdf": {
-                "schema": {
-                  "format": "binary",
-                  "type": "string"
+        }, {
+          "in" : "path",
+          "name" : "exportId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/pdf" : {
+                "schema" : {
+                  "format" : "binary",
+                  "type" : "string"
                 }
               },
-              "application/zip": {
-                "schema": {
-                  "format": "binary",
-                  "type": "string"
+              "application/zip" : {
+                "schema" : {
+                  "format" : "binary",
+                  "type" : "string"
                 }
               }
             },
-            "description": "Binary export result.",
-            "headers": {
-              "Content-Disposition": {
-                "schema": {
-                  "example": "attachment; filename='result.pdf'",
-                  "pattern": "attachment; filename='[^']+'",
-                  "type": "string"
+            "description" : "Binary export result.",
+            "headers" : {
+              "Content-Disposition" : {
+                "schema" : {
+                  "example" : "attachment; filename='result.pdf'",
+                  "pattern" : "attachment; filename='[^']+'",
+                  "type" : "string"
                 },
-                "style": "simple"
+                "style" : "simple"
               }
             }
           },
-          "202": {
-            "content": {
-              "application/pdf": {
-                "schema": {
-                  "format": "binary",
-                  "type": "string"
+          "202" : {
+            "content" : {
+              "application/pdf" : {
+                "schema" : {
+                  "format" : "binary",
+                  "type" : "string"
                 }
               },
-              "application/zip": {
-                "schema": {
-                  "format": "binary",
-                  "type": "string"
+              "application/zip" : {
+                "schema" : {
+                  "format" : "binary",
+                  "type" : "string"
                 }
               }
             },
-            "description": "Request is accepted, provided exportId exists, but export is not yet ready."
+            "description" : "Request is accepted, provided exportId exists, but export is not yet ready."
           }
         },
-        "summary": "Retrieve exported files",
-        "tags": [
-          "actions",
-          "Visual export"
-        ],
-        "x-gdc-security-info": {
-          "description": "Minimal permission required to use this endpoint.",
-          "permissions": [
-            "EXPORT_PDF"
-          ]
+        "summary" : "Retrieve exported files",
+        "tags" : [ "actions", "Visual export" ],
+        "x-gdc-security-info" : {
+          "description" : "Minimal permission required to use this endpoint.",
+          "permissions" : [ "EXPORT_PDF" ]
         }
       }
     },
-    "/api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId}/metadata": {
-      "get": {
-        "description": "This endpoint serves as a cache for user-defined metadata of the export for the front end UI to retrieve it, if one was created using the POST ../export/visual endpoint. The metadata structure is not verified.",
-        "operationId": "getMetadata",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "path",
-            "name": "exportId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
+    "/api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId}/metadata" : {
+      "get" : {
+        "description" : "This endpoint serves as a cache for user-defined metadata of the export for the front end UI to retrieve it, if one was created using the POST ../export/visual endpoint. The metadata structure is not verified.",
+        "operationId" : "getMetadata",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "workspaceId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
           }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {}
+        }, {
+          "in" : "path",
+          "name" : "exportId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : { }
             },
-            "description": "Json metadata representation"
+            "description" : "Json metadata representation"
           }
         },
-        "summary": "Retrieve metadata context",
-        "tags": [
-          "actions",
-          "Visual export"
-        ],
-        "x-gdc-security-info": {
-          "description": "Minimal permission required to use this endpoint.",
-          "permissions": [
-            "EXPORT_PDF"
-          ]
+        "summary" : "Retrieve metadata context",
+        "tags" : [ "actions", "Visual export" ],
+        "x-gdc-security-info" : {
+          "description" : "Minimal permission required to use this endpoint.",
+          "permissions" : [ "EXPORT_PDF" ]
         }
       }
     }
   },
-  "servers": [
-    {
-      "description": "GoodData.CN endpoint",
-      "url": "/"
-    }
-  ],
-  "tags": [
-    {
-      "description": "| execution of some form of computation (RPC over JSON)",
-      "name": "actions"
-    }
-  ]
+  "servers" : [ {
+    "description" : "GoodData.CN endpoint",
+    "url" : "/"
+  } ],
+  "tags" : [ {
+    "description" : "| execution of some form of computation (RPC over JSON)",
+    "name" : "actions"
+  } ]
 }

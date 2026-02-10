@@ -31,9 +31,11 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.json_api_custom_geo_collection_in_attributes import JsonApiCustomGeoCollectionInAttributes
     from gooddata_api_client.model.json_api_custom_geo_collection_out import JsonApiCustomGeoCollectionOut
     from gooddata_api_client.model.object_links import ObjectLinks
     from gooddata_api_client.model.object_links_container import ObjectLinksContainer
+    globals()['JsonApiCustomGeoCollectionInAttributes'] = JsonApiCustomGeoCollectionInAttributes
     globals()['JsonApiCustomGeoCollectionOut'] = JsonApiCustomGeoCollectionOut
     globals()['ObjectLinks'] = ObjectLinks
     globals()['ObjectLinksContainer'] = ObjectLinksContainer
@@ -102,6 +104,7 @@ class JsonApiCustomGeoCollectionOutWithLinks(ModelComposed):
         return {
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
+            'attributes': (JsonApiCustomGeoCollectionInAttributes,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
         }
 
@@ -113,6 +116,7 @@ class JsonApiCustomGeoCollectionOutWithLinks(ModelComposed):
     attribute_map = {
         'id': 'id',  # noqa: E501
         'type': 'type',  # noqa: E501
+        'attributes': 'attributes',  # noqa: E501
         'links': 'links',  # noqa: E501
     }
 
@@ -157,6 +161,7 @@ class JsonApiCustomGeoCollectionOutWithLinks(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            attributes (JsonApiCustomGeoCollectionInAttributes): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """
 
@@ -264,6 +269,7 @@ class JsonApiCustomGeoCollectionOutWithLinks(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            attributes (JsonApiCustomGeoCollectionInAttributes): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """
 

@@ -582,6 +582,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             ),
                         ],
                     ),
+                    interval="DAY",
                     trigger="ALWAYS",
                 ),
                 are_relations_valid=True,
@@ -632,7 +633,16 @@ with gooddata_api_client.ApiClient() as api_client:
                         ),
                     ),
                 ],
-                metadata=JsonApiAutomationInAttributesMetadata(),
+                metadata=JsonApiAutomationInAttributesMetadata(
+                    visible_filters=[
+                        VisibleFilter(
+                            is_all_time_date_filter=False,
+                            local_identifier="local_identifier_example",
+                            title="title_example",
+                        ),
+                    ],
+                    widget="widget_example",
+                ),
                 raw_exports=[
                     JsonApiAutomationInAttributesRawExportsInner(
                         request_payload=RawExportAutomationRequest(
@@ -1131,6 +1141,10 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = entities_api.EntitiesApi(api_client)
     json_api_custom_geo_collection_in_document = JsonApiCustomGeoCollectionInDocument(
         data=JsonApiCustomGeoCollectionIn(
+            attributes=JsonApiCustomGeoCollectionInAttributes(
+                description="description_example",
+                name="name_example",
+            ),
             id="id1",
             type="customGeoCollection",
         ),
@@ -3471,7 +3485,7 @@ with gooddata_api_client.ApiClient() as api_client:
         "parent",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
     meta_include = [
-        "metaInclude=config,permissions,hierarchy,dataModelDatasets,all",
+        "metaInclude=permissions,config,hierarchy,dataModelDatasets,all",
     ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
@@ -4071,7 +4085,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = entities_api.EntitiesApi(api_client)
     id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "name==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -6822,7 +6836,7 @@ configuration = gooddata_api_client.Configuration(
 with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = entities_api.EntitiesApi(api_client)
-    filter = "" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "name==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
     size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
     sort = [
@@ -9542,7 +9556,7 @@ with gooddata_api_client.ApiClient() as api_client:
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
     meta_include = [
-        "metaInclude=config,permissions,hierarchy,dataModelDatasets,page,all",
+        "metaInclude=permissions,config,hierarchy,dataModelDatasets,page,all",
     ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
@@ -10569,7 +10583,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = entities_api.EntitiesApi(api_client)
     id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "name==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -13210,7 +13224,7 @@ with gooddata_api_client.ApiClient() as api_client:
         "parent",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
     meta_include = [
-        "metaInclude=config,permissions,hierarchy,dataModelDatasets,all",
+        "metaInclude=permissions,config,hierarchy,dataModelDatasets,all",
     ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
@@ -13694,6 +13708,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             ),
                         ],
                     ),
+                    interval="DAY",
                     trigger="ALWAYS",
                 ),
                 are_relations_valid=True,
@@ -13744,7 +13759,16 @@ with gooddata_api_client.ApiClient() as api_client:
                         ),
                     ),
                 ],
-                metadata=JsonApiAutomationInAttributesMetadata(),
+                metadata=JsonApiAutomationInAttributesMetadata(
+                    visible_filters=[
+                        VisibleFilter(
+                            is_all_time_date_filter=False,
+                            local_identifier="local_identifier_example",
+                            title="title_example",
+                        ),
+                    ],
+                    widget="widget_example",
+                ),
                 raw_exports=[
                     JsonApiAutomationInAttributesRawExportsInner(
                         request_payload=RawExportAutomationRequest(
@@ -14357,11 +14381,15 @@ with gooddata_api_client.ApiClient() as api_client:
     id = "/6bUUGjjNSwg0_bs" # str | 
     json_api_custom_geo_collection_patch_document = JsonApiCustomGeoCollectionPatchDocument(
         data=JsonApiCustomGeoCollectionPatch(
+            attributes=JsonApiCustomGeoCollectionInAttributes(
+                description="description_example",
+                name="name_example",
+            ),
             id="id1",
             type="customGeoCollection",
         ),
     ) # JsonApiCustomGeoCollectionPatchDocument | 
-    filter = "" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "name==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -19616,6 +19644,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             ),
                         ],
                     ),
+                    interval="DAY",
                     trigger="ALWAYS",
                 ),
                 are_relations_valid=True,
@@ -19666,7 +19695,16 @@ with gooddata_api_client.ApiClient() as api_client:
                         ),
                     ),
                 ],
-                metadata=JsonApiAutomationInAttributesMetadata(),
+                metadata=JsonApiAutomationInAttributesMetadata(
+                    visible_filters=[
+                        VisibleFilter(
+                            is_all_time_date_filter=False,
+                            local_identifier="local_identifier_example",
+                            title="title_example",
+                        ),
+                    ],
+                    widget="widget_example",
+                ),
                 raw_exports=[
                     JsonApiAutomationInAttributesRawExportsInner(
                         request_payload=RawExportAutomationRequest(
@@ -20279,11 +20317,15 @@ with gooddata_api_client.ApiClient() as api_client:
     id = "/6bUUGjjNSwg0_bs" # str | 
     json_api_custom_geo_collection_in_document = JsonApiCustomGeoCollectionInDocument(
         data=JsonApiCustomGeoCollectionIn(
+            attributes=JsonApiCustomGeoCollectionInAttributes(
+                description="description_example",
+                name="name_example",
+            ),
             id="id1",
             type="customGeoCollection",
         ),
     ) # JsonApiCustomGeoCollectionInDocument | 
-    filter = "" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "name==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:

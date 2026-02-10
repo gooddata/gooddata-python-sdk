@@ -2668,6 +2668,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         ),
                     ],
                 ),
+                interval="DAY",
                 trigger="ALWAYS",
             ),
             analytical_dashboard=DeclarativeAnalyticalDashboardIdentifier(
@@ -2735,7 +2736,16 @@ with gooddata_api_client.ApiClient() as api_client:
                     ),
                 ),
             ],
-            metadata=AutomationMetadata(),
+            metadata=AutomationMetadata(
+                visible_filters=[
+                    VisibleFilter(
+                        is_all_time_date_filter=False,
+                        local_identifier="local_identifier_example",
+                        title="title_example",
+                    ),
+                ],
+                widget="widget_example",
+            ),
             modified_at="2023-07-20 12:30",
             modified_by=DeclarativeUserIdentifier(
                 id="employee123",
@@ -2963,7 +2973,9 @@ with gooddata_api_client.ApiClient() as api_client:
     declarative_custom_geo_collections = DeclarativeCustomGeoCollections(
         custom_geo_collections=[
             DeclarativeCustomGeoCollection(
+                description="description_example",
                 id="my-geo-collection",
+                name="My Geo Collection",
             ),
         ],
     ) # DeclarativeCustomGeoCollections | 
@@ -3752,7 +3764,9 @@ with gooddata_api_client.ApiClient() as api_client:
     declarative_organization = DeclarativeOrganization(
         custom_geo_collections=[
             DeclarativeCustomGeoCollection(
+                description="description_example",
                 id="my-geo-collection",
+                name="My Geo Collection",
             ),
         ],
         data_sources=[
@@ -4074,6 +4088,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                     ),
                                 ],
                             ),
+                            interval="DAY",
                             trigger="ALWAYS",
                         ),
                         analytical_dashboard=DeclarativeAnalyticalDashboardIdentifier(
@@ -4141,7 +4156,16 @@ with gooddata_api_client.ApiClient() as api_client:
                                 ),
                             ),
                         ],
-                        metadata=AutomationMetadata(),
+                        metadata=AutomationMetadata(
+                            visible_filters=[
+                                VisibleFilter(
+                                    is_all_time_date_filter=False,
+                                    local_identifier="local_identifier_example",
+                                    title="title_example",
+                                ),
+                            ],
+                            widget="widget_example",
+                        ),
                         modified_at="2023-07-20 12:30",
                         modified_by=DeclarativeUserIdentifier(
                             id="employee123",
@@ -4304,7 +4328,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 custom_application_settings=[
                     DeclarativeCustomApplicationSetting(
                         application_name="Modeler",
-                        content=JsonNode(),
+                        content={},
                         id="modeler.demo",
                     ),
                 ],
@@ -5352,6 +5376,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                     ),
                                 ],
                             ),
+                            interval="DAY",
                             trigger="ALWAYS",
                         ),
                         analytical_dashboard=DeclarativeAnalyticalDashboardIdentifier(
@@ -5419,7 +5444,16 @@ with gooddata_api_client.ApiClient() as api_client:
                                 ),
                             ),
                         ],
-                        metadata=AutomationMetadata(),
+                        metadata=AutomationMetadata(
+                            visible_filters=[
+                                VisibleFilter(
+                                    is_all_time_date_filter=False,
+                                    local_identifier="local_identifier_example",
+                                    title="title_example",
+                                ),
+                            ],
+                            widget="widget_example",
+                        ),
                         modified_at="2023-07-20 12:30",
                         modified_by=DeclarativeUserIdentifier(
                             id="employee123",
@@ -5582,7 +5616,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 custom_application_settings=[
                     DeclarativeCustomApplicationSetting(
                         application_name="Modeler",
-                        content=JsonNode(),
+                        content={},
                         id="modeler.demo",
                     ),
                 ],

@@ -1,6 +1,6 @@
 # JsonNode
 
-Free-form JSON object
+Metadata definition in free-form JSON format.
 
 ## Properties
 Name | Type | Description | Notes

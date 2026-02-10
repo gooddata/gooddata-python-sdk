@@ -1,6 +1,6 @@
 # TestResponse
 
-Response from data source testing.
+Response from notification channel testing.
 
 ## Properties
 Name | Type | Description | Notes

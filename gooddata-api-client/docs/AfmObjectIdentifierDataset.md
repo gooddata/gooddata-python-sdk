@@ -1,6 +1,6 @@
 # AfmObjectIdentifierDataset
 
-Reference to the date dataset to which the filter should be applied.
+Date dataset used for anomaly detection.
 
 ## Properties
 Name | Type | Description | Notes

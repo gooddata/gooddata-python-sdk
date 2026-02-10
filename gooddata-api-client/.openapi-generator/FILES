@@ -98,7 +98,6 @@ docs/AppearanceApi.md
 docs/ArithmeticMeasure.md
 docs/ArithmeticMeasureDefinition.md
 docs/ArithmeticMeasureDefinitionArithmeticMeasure.md
-docs/Array.md
 docs/AssigneeIdentifier.md
 docs/AssigneeRule.md
 docs/AttributeElements.md
@@ -545,6 +544,7 @@ docs/JsonApiCustomApplicationSettingPatchDocument.md
 docs/JsonApiCustomApplicationSettingPostOptionalId.md
 docs/JsonApiCustomApplicationSettingPostOptionalIdDocument.md
 docs/JsonApiCustomGeoCollectionIn.md
+docs/JsonApiCustomGeoCollectionInAttributes.md
 docs/JsonApiCustomGeoCollectionInDocument.md
 docs/JsonApiCustomGeoCollectionOut.md
 docs/JsonApiCustomGeoCollectionOutDocument.md
@@ -903,6 +903,7 @@ docs/JsonApiVisualizationObjectPostOptionalIdDocument.md
 docs/JsonApiVisualizationObjectToManyLinkage.md
 docs/JsonApiVisualizationObjectToOneLinkage.md
 docs/JsonApiWorkspaceAutomationOut.md
+docs/JsonApiWorkspaceAutomationOutAttributes.md
 docs/JsonApiWorkspaceAutomationOutIncludes.md
 docs/JsonApiWorkspaceAutomationOutList.md
 docs/JsonApiWorkspaceAutomationOutRelationships.md
@@ -1377,7 +1378,6 @@ gooddata_api_client/model/api_entitlement.py
 gooddata_api_client/model/arithmetic_measure.py
 gooddata_api_client/model/arithmetic_measure_definition.py
 gooddata_api_client/model/arithmetic_measure_definition_arithmetic_measure.py
-gooddata_api_client/model/array.py
 gooddata_api_client/model/assignee_identifier.py
 gooddata_api_client/model/assignee_rule.py
 gooddata_api_client/model/attribute_elements.py
@@ -1796,6 +1796,7 @@ gooddata_api_client/model/json_api_custom_application_setting_patch_document.py
 gooddata_api_client/model/json_api_custom_application_setting_post_optional_id.py
 gooddata_api_client/model/json_api_custom_application_setting_post_optional_id_document.py
 gooddata_api_client/model/json_api_custom_geo_collection_in.py
+gooddata_api_client/model/json_api_custom_geo_collection_in_attributes.py
 gooddata_api_client/model/json_api_custom_geo_collection_in_document.py
 gooddata_api_client/model/json_api_custom_geo_collection_out.py
 gooddata_api_client/model/json_api_custom_geo_collection_out_document.py
@@ -2154,6 +2155,7 @@ gooddata_api_client/model/json_api_visualization_object_post_optional_id_documen
 gooddata_api_client/model/json_api_visualization_object_to_many_linkage.py
 gooddata_api_client/model/json_api_visualization_object_to_one_linkage.py
 gooddata_api_client/model/json_api_workspace_automation_out.py
+gooddata_api_client/model/json_api_workspace_automation_out_attributes.py
 gooddata_api_client/model/json_api_workspace_automation_out_includes.py
 gooddata_api_client/model/json_api_workspace_automation_out_list.py
 gooddata_api_client/model/json_api_workspace_automation_out_relationships.py

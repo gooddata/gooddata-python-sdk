@@ -7473,6 +7473,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         ),
                     ],
                 ),
+                interval="DAY",
                 trigger="ALWAYS",
             ),
             analytical_dashboard=DeclarativeAnalyticalDashboardIdentifier(
@@ -7527,7 +7528,16 @@ with gooddata_api_client.ApiClient() as api_client:
                     ),
                 ),
             ],
-            metadata=AutomationMetadata(),
+            metadata=AutomationMetadata(
+                visible_filters=[
+                    VisibleFilter(
+                        is_all_time_date_filter=False,
+                        local_identifier="local_identifier_example",
+                        title="title_example",
+                    ),
+                ],
+                widget="widget_example",
+            ),
             notification_channel=DeclarativeNotificationChannelIdentifier(
                 id="webhook123",
                 type="notificationChannel",
