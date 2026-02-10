@@ -1,0 +1,6 @@
+# (C) 2023 GoodData Corporation
+permissions:
+  - assigneeRule:
+      type: allWorkspaceUsers
+    name: VIEW
+id: campaign

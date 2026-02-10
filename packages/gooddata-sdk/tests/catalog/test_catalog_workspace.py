@@ -93,8 +93,9 @@ def _are_user_data_filters_empty(sdk: GoodDataSdk, workspace_id: str) -> None:
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_load_and_put_declarative_workspaces.yaml"))
 def test_load_and_put_declarative_workspaces(test_config):
+    # This test includes testing locales!
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-    path = _current_dir / "load"
+    path = _current_dir / "load_with_locale"
     with open(_current_dir / "expected" / "declarative_workspaces.json") as f:
         data = json.load(f)
         workspaces_e = CatalogDeclarativeWorkspaces.from_dict(data)

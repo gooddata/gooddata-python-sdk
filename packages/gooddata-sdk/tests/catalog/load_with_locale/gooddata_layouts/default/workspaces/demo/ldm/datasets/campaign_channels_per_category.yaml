@@ -1,0 +1,36 @@
+# (C) 2025 GoodData Corporation
+aggregatedFacts:
+  - description: Budget Agg
+    id: budget_agg
+    sourceColumn: budget
+    sourceColumnDataType: INT
+    sourceFactReference:
+      operation: SUM
+      reference:
+        id: budget
+        type: fact
+    tags:
+      - Campaign channels per category
+attributes: []
+description: Campaign channels per categories
+facts: []
+grain: []
+id: campaign_channels_per_category
+precedence: 1
+references:
+  - identifier:
+      id: campaign_channels
+      type: dataset
+    multivalue: false
+    sources:
+      - column: campaign_channel_id
+        dataType: STRING
+        target:
+          id: campaign_channel_id
+          type: attribute
+sql:
+  dataSourceId: demo-test-ds
+  statement: SELECT category, SUM(budget) FROM campaign_channels GROUP BY category
+tags:
+  - Campaign channels per category
+title: Campaign channels per category

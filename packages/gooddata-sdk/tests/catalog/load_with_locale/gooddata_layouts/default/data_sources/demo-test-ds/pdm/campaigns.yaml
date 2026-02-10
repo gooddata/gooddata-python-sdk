@@ -1,0 +1,13 @@
+# (C) 2022 GoodData Corporation
+columns:
+  - dataType: INT
+    isPrimaryKey: true
+    name: campaign_id
+  - dataType: STRING
+    isPrimaryKey: false
+    name: campaign_name
+id: campaigns
+path:
+  - demo
+  - campaigns
+type: TABLE

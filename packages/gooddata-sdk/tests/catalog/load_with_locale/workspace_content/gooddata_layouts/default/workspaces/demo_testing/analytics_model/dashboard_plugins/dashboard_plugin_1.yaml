@@ -1,0 +1,7 @@
+# (C) 2022 GoodData Corporation
+content:
+  url: https://www.example.com
+  version: '2'
+description: Testing record dashboard_plugin_1
+id: dashboard_plugin_1
+title: dashboard_plugin_1

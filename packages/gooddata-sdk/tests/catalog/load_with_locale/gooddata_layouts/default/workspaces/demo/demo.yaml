@@ -1,0 +1,22 @@
+# (C) 2022 GoodData Corporation
+hierarchyPermissions:
+  - assignee:
+      id: demo2
+      type: user
+    name: MANAGE
+  - assignee:
+      id: demoGroup
+      type: userGroup
+    name: ANALYZE
+id: demo
+name: Demo
+permissions:
+  - assignee:
+      id: demo2
+      type: user
+    name: ANALYZE
+  - assignee:
+      id: demoGroup
+      type: userGroup
+    name: VIEW
+settings: []
