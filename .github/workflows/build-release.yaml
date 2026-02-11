@@ -14,23 +14,28 @@ on:
     tags:
       - v*.*.*
 
-permissions:
-  contents: write
+env:
+  COMPONENTS: '["gooddata-api-client","gooddata-pandas","gooddata-fdw","gooddata-sdk","gooddata-dbt","gooddata-flight-server","gooddata-flexconnect","gooddata-pipelines"]'
 
 jobs:
+  matrix-components:
+    name: Prepare matrix components
+    runs-on: ubuntu-latest
+    outputs:
+      components: ${{ steps.export.outputs.components }}
+    steps:
+      - name: Export components JSON
+        id: export
+        run: echo "components=${COMPONENTS}" >> "$GITHUB_OUTPUT"
+
   build:
     name: Build all components
+    needs: matrix-components
+    permissions:
+      contents: read
     strategy:
       matrix:
-        component:
-          - gooddata-api-client
-          - gooddata-pandas
-          - gooddata-fdw
-          - gooddata-sdk
-          - gooddata-dbt
-          - gooddata-flight-server
-          - gooddata-flexconnect
-          - gooddata-pipelines
+        component: ${{ fromJSON(needs.matrix-components.outputs.components) }}
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -55,6 +60,8 @@ jobs:
     name: Create GitHub release
     runs-on: ubuntu-latest
     needs: build
+    permissions:
+      contents: write
     steps:
       - name: Obtain artifacts
         uses: actions/download-artifact@v4
@@ -83,18 +90,14 @@ jobs:
   publish:
     name: Publish components
     runs-on: ubuntu-latest
-    needs: build
+    needs:
+      - matrix-components
+      - build
+    permissions:
+      id-token: write
     strategy:
       matrix:
-        component:
-          - gooddata-api-client
-          - gooddata-pandas
-          - gooddata-fdw
-          - gooddata-sdk
-          - gooddata-dbt
-          - gooddata-flight-server
-          - gooddata-flexconnect
-          - gooddata-pipelines
+        component: ${{ fromJSON(needs.matrix-components.outputs.components) }}
     steps:
       - name: Obtain ${{ matrix.component }} artifacts
         uses: actions/download-artifact@v4
@@ -104,8 +107,6 @@ jobs:
       - name: Push ${{ matrix.component}} to pypi
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          user: __token__
-          password: ${{ secrets.PYPI_API_TOKEN }}
           packages-dir: dist/${{ matrix.component }}
           verbose: true
   slack-notification:
