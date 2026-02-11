@@ -40,6 +40,17 @@
 
 ## Maintenance Tasks
 
+### Adding a New Package
+
+When adding a new distributable package to this monorepo, update release automation and PyPI configuration together:
+
+1. Add the package name to `COMPONENTS` in:
+   - `.github/workflows/dev-release.yaml`
+   - `.github/workflows/build-release.yaml`
+2. Verify the package is built by release workflows and artifacts are uploaded from its `dist/` directory.
+3. Configure the package on PyPI to use Trusted Publisher for this repository/workflow combination.
+4. Run/observe a release workflow and confirm publishing succeeds via OIDC (no `PYPI_API_TOKEN` required).
+
 ### Adding Support for a New Python Version
 
 When adding support for a new Python version:
