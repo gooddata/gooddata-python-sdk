@@ -8,21 +8,29 @@ on:
         description: 'Branch name to release from'
         default: "master"
 
+env:
+  COMPONENTS: '["gooddata-api-client","gooddata-pandas","gooddata-fdw","gooddata-sdk","gooddata-dbt","gooddata-flight-server","gooddata-flexconnect","gooddata-pipelines"]'
+
 jobs:
-  dev-release:
-    name: Releasing master as dev
+  matrix-components:
+    name: Prepare matrix components
     runs-on: ubuntu-latest
+    outputs:
+      components: ${{ steps.export.outputs.components }}
+    steps:
+      - name: Export components JSON
+        id: export
+        run: echo "components=${COMPONENTS}" >> "$GITHUB_OUTPUT"
+
+  build:
+    name: Build ${{ matrix.component }}
+    runs-on: ubuntu-latest
+    needs: matrix-components
+    permissions:
+      contents: read
     strategy:
       matrix:
-        component:
-          - gooddata-api-client
-          - gooddata-pandas
-          - gooddata-fdw
-          - gooddata-sdk
-          - gooddata-dbt
-          - gooddata-flight-server
-          - gooddata-flexconnect
-          - gooddata-pipelines
+        component: ${{ fromJSON(needs.matrix-components.outputs.components) }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -43,10 +51,32 @@ jobs:
             cd packages/${{ matrix.component }}
           fi
           uv build --out-dir dist
+      - name: Upload ${{ matrix.component }} artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-${{ matrix.component }}
+          path: ${{ matrix.component == 'gooddata-api-client' && format('{0}/dist', matrix.component) || format('packages/{0}/dist', matrix.component) }}
+          if-no-files-found: error
+
+  publish:
+    name: Publish ${{ matrix.component }}
+    runs-on: ubuntu-latest
+    needs:
+      - matrix-components
+      - build
+    permissions:
+      id-token: write
+    strategy:
+      matrix:
+        component: ${{ fromJSON(needs.matrix-components.outputs.components) }}
+    steps:
+      - name: Download ${{ matrix.component }} artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-${{ matrix.component }}
+          path: dist
       - name: Push ${{ matrix.component}} to pypi
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          user: __token__
-          password: ${{ secrets.PYPI_API_TOKEN }}
-          packages-dir: ${{ matrix.component == 'gooddata-api-client' && format('{0}/dist', matrix.component) || format('packages/{0}/dist', matrix.component) }}
+          packages-dir: dist
           verbose: true
