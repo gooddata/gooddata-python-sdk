@@ -14,6 +14,7 @@ from gooddata_api_client.model.declarative_analytics_layer import DeclarativeAna
 from gooddata_api_client.model.declarative_attribute_hierarchy import DeclarativeAttributeHierarchy
 from gooddata_api_client.model.declarative_dashboard_plugin import DeclarativeDashboardPlugin
 from gooddata_api_client.model.declarative_filter_context import DeclarativeFilterContext
+from gooddata_api_client.model.declarative_memory_item import DeclarativeMemoryItem
 from gooddata_api_client.model.declarative_metric import DeclarativeMetric
 from gooddata_api_client.model.declarative_visualization_object import DeclarativeVisualizationObject
 
@@ -24,6 +25,7 @@ from gooddata_sdk.catalog.permission.declarative_model.permission import (
 )
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.base import (
     CatalogAnalyticsBase,
+    CatalogAnalyticsBaseMeta,
     CatalogAnalyticsObjectBase,
 )
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.export_definition import (
@@ -78,6 +80,7 @@ class CatalogDeclarativeAnalyticsLayer(Base):
     metrics: list[CatalogDeclarativeMetric] = attr.field(factory=list)
     visualization_objects: list[CatalogDeclarativeVisualizationObject] = attr.field(factory=list)
     export_definitions: list[CatalogDeclarativeExportDefinition] = attr.field(factory=list)
+    memory_items: list[CatalogMemoryItems] = attr.field(factory=list)
 
     @staticmethod
     def client_class() -> type[DeclarativeAnalyticsLayer]:
@@ -311,3 +314,18 @@ class CatalogDeclarativeAttributeHierarchy(CatalogAnalyticsBase):
     @staticmethod
     def client_class() -> type[DeclarativeAttributeHierarchy]:
         return DeclarativeAttributeHierarchy
+
+
+@define(auto_attribs=True, kw_only=True)
+class CatalogMemoryItems(CatalogAnalyticsBaseMeta):
+    instruction: str
+    strategy: str
+    title: str
+    tags: list[str]
+    description: str
+    is_disabled: bool
+    keywords: list[str]
+
+    @staticmethod
+    def client_class() -> type[DeclarativeMemoryItem]:
+        return DeclarativeMemoryItem
