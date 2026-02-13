@@ -22,7 +22,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '37189'
+          - '37240'
         Content-Type:
           - application/json
         DATE: &id001
@@ -380,6 +380,7 @@ interactions:
                       description: ''
                       id: region_filter
                       title: filterContext
+                  memoryItems: []
                   metrics:
                     - content:
                         format: '#,##0'
@@ -1808,6 +1809,7 @@ interactions:
                   dashboardPlugins: []
                   exportDefinitions: []
                   filterContexts: []
+                  memoryItems: []
                   metrics: []
                   visualizationObjects: []
                 ldm:
@@ -1841,6 +1843,7 @@ interactions:
                   dashboardPlugins: []
                   exportDefinitions: []
                   filterContexts: []
+                  memoryItems: []
                   metrics: []
                   visualizationObjects: []
                 ldm:
@@ -3663,6 +3666,7 @@ interactions:
                     id: top_10_products
                     title: Top 10 Products
                 exportDefinitions: []
+                memoryItems: []
             permissions:
               - assignee:
                   id: demo2
@@ -3714,6 +3718,7 @@ interactions:
                 metrics: []
                 visualizationObjects: []
                 exportDefinitions: []
+                memoryItems: []
             parent:
               id: demo
               type: workspace
@@ -3739,6 +3744,7 @@ interactions:
                 metrics: []
                 visualizationObjects: []
                 exportDefinitions: []
+                memoryItems: []
             parent:
               id: demo_west
               type: workspace
@@ -3804,7 +3810,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '37189'
+          - '37240'
         Content-Type:
           - application/json
         DATE: *id001
@@ -4161,6 +4167,7 @@ interactions:
                       description: ''
                       id: region_filter
                       title: filterContext
+                  memoryItems: []
                   metrics:
                     - content:
                         format: '#,##0'
@@ -5589,6 +5596,7 @@ interactions:
                   dashboardPlugins: []
                   exportDefinitions: []
                   filterContexts: []
+                  memoryItems: []
                   metrics: []
                   visualizationObjects: []
                 ldm:
@@ -5622,6 +5630,7 @@ interactions:
                   dashboardPlugins: []
                   exportDefinitions: []
                   filterContexts: []
+                  memoryItems: []
                   metrics: []
                   visualizationObjects: []
                 ldm:
@@ -7003,6 +7012,7 @@ interactions:
                       visualizationUrl: local:bar
                     id: top_10_products
                     title: Top 10 Products
+                memoryItems: []
               ldm:
                 datasets:
                   - grain:
@@ -7404,6 +7414,7 @@ interactions:
                 filterContexts: []
                 metrics: []
                 visualizationObjects: []
+                memoryItems: []
               ldm:
                 datasetExtensions:
                   - id: order_lines
@@ -7437,6 +7448,7 @@ interactions:
                 filterContexts: []
                 metrics: []
                 visualizationObjects: []
+                memoryItems: []
               ldm:
                 datasets: []
                 dateInstances: []

@@ -392,7 +392,7 @@ with gooddata_api_client.ApiClient() as api_client:
     elements_request = ElementsRequest(
         cache_id="cache_id_example",
         complement_filter=False,
-        data_sampling_percentage=100,
+        data_sampling_percentage=100.0,
         depends_on=[
             ElementsRequestDependsOnInner(None),
         ],

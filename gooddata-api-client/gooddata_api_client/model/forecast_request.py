@@ -60,8 +60,8 @@ class ForecastRequest(ModelNormal):
 
     validations = {
         ('confidence_level',): {
-            'exclusive_maximum''inclusive_maximum': 1,
-            'exclusive_minimum''inclusive_minimum': 0,
+            'exclusive_maximum''inclusive_maximum': 1.0,
+            'exclusive_minimum''inclusive_minimum': 0.0,
         },
     }
 

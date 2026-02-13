@@ -39,6 +39,8 @@ def lazy_import():
     from gooddata_api_client.model.compound_measure_value_filter_compound_measure_value_filter import CompoundMeasureValueFilterCompoundMeasureValueFilter
     from gooddata_api_client.model.inline_filter_definition import InlineFilterDefinition
     from gooddata_api_client.model.inline_filter_definition_inline import InlineFilterDefinitionInline
+    from gooddata_api_client.model.match_attribute_filter import MatchAttributeFilter
+    from gooddata_api_client.model.match_attribute_filter_match_attribute_filter import MatchAttributeFilterMatchAttributeFilter
     from gooddata_api_client.model.negative_attribute_filter import NegativeAttributeFilter
     from gooddata_api_client.model.negative_attribute_filter_negative_attribute_filter import NegativeAttributeFilterNegativeAttributeFilter
     from gooddata_api_client.model.positive_attribute_filter import PositiveAttributeFilter
@@ -57,6 +59,8 @@ def lazy_import():
     globals()['CompoundMeasureValueFilterCompoundMeasureValueFilter'] = CompoundMeasureValueFilterCompoundMeasureValueFilter
     globals()['InlineFilterDefinition'] = InlineFilterDefinition
     globals()['InlineFilterDefinitionInline'] = InlineFilterDefinitionInline
+    globals()['MatchAttributeFilter'] = MatchAttributeFilter
+    globals()['MatchAttributeFilterMatchAttributeFilter'] = MatchAttributeFilterMatchAttributeFilter
     globals()['NegativeAttributeFilter'] = NegativeAttributeFilter
     globals()['NegativeAttributeFilterNegativeAttributeFilter'] = NegativeAttributeFilterNegativeAttributeFilter
     globals()['PositiveAttributeFilter'] = PositiveAttributeFilter
@@ -131,6 +135,7 @@ class FilterDefinition(ModelComposed):
             'relative_date_filter': (RelativeDateFilterRelativeDateFilter,),  # noqa: E501
             'negative_attribute_filter': (NegativeAttributeFilterNegativeAttributeFilter,),  # noqa: E501
             'positive_attribute_filter': (PositiveAttributeFilterPositiveAttributeFilter,),  # noqa: E501
+            'match_attribute_filter': (MatchAttributeFilterMatchAttributeFilter,),  # noqa: E501
         }
 
     @cached_property
@@ -148,6 +153,7 @@ class FilterDefinition(ModelComposed):
         'relative_date_filter': 'relativeDateFilter',  # noqa: E501
         'negative_attribute_filter': 'negativeAttributeFilter',  # noqa: E501
         'positive_attribute_filter': 'positiveAttributeFilter',  # noqa: E501
+        'match_attribute_filter': 'matchAttributeFilter',  # noqa: E501
     }
 
     read_only_vars = {
@@ -198,6 +204,7 @@ class FilterDefinition(ModelComposed):
             relative_date_filter (RelativeDateFilterRelativeDateFilter): [optional]  # noqa: E501
             negative_attribute_filter (NegativeAttributeFilterNegativeAttributeFilter): [optional]  # noqa: E501
             positive_attribute_filter (PositiveAttributeFilterPositiveAttributeFilter): [optional]  # noqa: E501
+            match_attribute_filter (MatchAttributeFilterMatchAttributeFilter): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -310,6 +317,7 @@ class FilterDefinition(ModelComposed):
             relative_date_filter (RelativeDateFilterRelativeDateFilter): [optional]  # noqa: E501
             negative_attribute_filter (NegativeAttributeFilterNegativeAttributeFilter): [optional]  # noqa: E501
             positive_attribute_filter (PositiveAttributeFilterPositiveAttributeFilter): [optional]  # noqa: E501
+            match_attribute_filter (MatchAttributeFilterMatchAttributeFilter): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -385,6 +393,7 @@ class FilterDefinition(ModelComposed):
               ComparisonMeasureValueFilter,
               CompoundMeasureValueFilter,
               InlineFilterDefinition,
+              MatchAttributeFilter,
               NegativeAttributeFilter,
               PositiveAttributeFilter,
               RangeMeasureValueFilter,

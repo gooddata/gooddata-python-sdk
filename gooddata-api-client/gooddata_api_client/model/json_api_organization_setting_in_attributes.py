@@ -103,6 +103,7 @@ class JsonApiOrganizationSettingInAttributes(ModelNormal):
             'ENABLE_NULL_JOINS': "ENABLE_NULL_JOINS",
             'EXPORT_CSV_CUSTOM_DELIMITER': "EXPORT_CSV_CUSTOM_DELIMITER",
             'ENABLE_QUERY_TAGS': "ENABLE_QUERY_TAGS",
+            'RESTRICT_BASE_UI': "RESTRICT_BASE_UI",
         },
     }
 

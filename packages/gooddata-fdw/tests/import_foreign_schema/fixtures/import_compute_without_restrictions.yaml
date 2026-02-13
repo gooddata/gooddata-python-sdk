@@ -597,20 +597,6 @@ interactions:
                     sourceColumns: null
                     sourceColumnDataTypes: null
                   - identifier:
-                      id: date
-                      type: dataset
-                    multivalue: false
-                    sources:
-                      - column: date
-                        dataType: DATE
-                        target:
-                          id: date
-                          type: date
-                        isNullable: null
-                        nullValue: null
-                    sourceColumns: null
-                    sourceColumnDataTypes: null
-                  - identifier:
                       id: campaigns
                       type: dataset
                     multivalue: false
@@ -620,6 +606,20 @@ interactions:
                         target:
                           id: campaign_id
                           type: attribute
+                        isNullable: null
+                        nullValue: null
+                    sourceColumns: null
+                    sourceColumnDataTypes: null
+                  - identifier:
+                      id: date
+                      type: dataset
+                    multivalue: false
+                    sources:
+                      - column: date
+                        dataType: DATE
+                        target:
+                          id: date
+                          type: date
                         isNullable: null
                         nullValue: null
                     sourceColumns: null
@@ -1245,20 +1245,6 @@ interactions:
                     sourceColumns: null
                     sourceColumnDataTypes: null
                   - identifier:
-                      id: date
-                      type: dataset
-                    multivalue: false
-                    sources:
-                      - column: date
-                        dataType: DATE
-                        target:
-                          id: date
-                          type: date
-                        isNullable: null
-                        nullValue: null
-                    sourceColumns: null
-                    sourceColumnDataTypes: null
-                  - identifier:
                       id: campaigns
                       type: dataset
                     multivalue: false
@@ -1268,6 +1254,20 @@ interactions:
                         target:
                           id: campaign_id
                           type: attribute
+                        isNullable: null
+                        nullValue: null
+                    sourceColumns: null
+                    sourceColumnDataTypes: null
+                  - identifier:
+                      id: date
+                      type: dataset
+                    multivalue: false
+                    sources:
+                      - column: date
+                        dataType: DATE
+                        target:
+                          id: date
+                          type: date
                         isNullable: null
                         nullValue: null
                     sourceColumns: null
