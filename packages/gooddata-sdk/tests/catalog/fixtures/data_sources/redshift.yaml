@@ -48,7 +48,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: aae5de8e5d88c9ca7ba548d1689b769c
+          traceId: edb1ed4761e34ae181f370a46fb19604
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources
@@ -110,8 +110,8 @@ interactions:
               username: demouser
               authenticationType: USERNAME_PASSWORD
               alternativeDataSourceId: ds-abc-id
-              type: REDSHIFT
               name: Test2
+              type: REDSHIFT
               schema: demo
             id: test
             type: dataSource
@@ -165,8 +165,8 @@ interactions:
               username: demouser
               authenticationType: USERNAME_PASSWORD
               alternativeDataSourceId: ds-abc-id
-              type: REDSHIFT
               name: Test2
+              type: REDSHIFT
               schema: demo
             id: test
             type: dataSource

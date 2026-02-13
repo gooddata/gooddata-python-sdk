@@ -84,6 +84,7 @@ class JsonApiDataSourceIdentifierOutAttributes(ModelNormal):
             'ATHENA': "ATHENA",
             'MONGODB': "MONGODB",
             'CRATEDB': "CRATEDB",
+            'AILAKEHOUSE': "AILAKEHOUSE",
         },
     }
 

@@ -66,10 +66,6 @@
                 "pattern": "^\\d{4}-\\d{1,2}-\\d{1,2}( \\d{1,2}:\\d{1,2})?$",
                 "type": "string"
               },
-              "includeEmptyValues": {
-                "description": "If true, rows with undefined (NULL) date values will be included in the result. The filter becomes: (date_condition) OR (date IS NULL). If false or not set, standard behavior applies (NULLs excluded by the date condition).",
-                "type": "boolean"
-              },
               "localIdentifier": {
                 "type": "string"
               },
@@ -713,6 +709,9 @@
           },
           {
             "$ref": "#/components/schemas/PositiveAttributeFilter"
+          },
+          {
+            "$ref": "#/components/schemas/MatchAttributeFilter"
           }
         ],
         "type": "object"
@@ -813,12 +812,24 @@
           "execution": {
             "$ref": "#/components/schemas/AlertAfm"
           },
+          "interval": {
+            "description": "Date granularity for the interval of ONCE_PER_INTERVAL trigger. Supported granularities: DAY, WEEK, MONTH, QUARTER, YEAR.",
+            "enum": [
+              "DAY",
+              "WEEK",
+              "MONTH",
+              "QUARTER",
+              "YEAR"
+            ],
+            "type": "string"
+          },
           "trigger": {
             "default": "ALWAYS",
-            "description": "Trigger behavior for the alert.\nALWAYS - alert is triggered every time the condition is met.\nONCE - alert is triggered only once when the condition is met.\n",
+            "description": "Trigger behavior for the alert.\nALWAYS - alert is triggered every time the condition is met.\nONCE - alert is triggered only once when the condition is met.\nONCE_PER_INTERVAL - alert is triggered when the condition is met, then suppressed for the interval. If no interval is specified, it behaves as ALWAYS.\n",
             "enum": [
               "ALWAYS",
-              "ONCE"
+              "ONCE",
+              "ONCE_PER_INTERVAL"
             ],
             "type": "string"
           }
@@ -1332,9 +1343,6 @@
                 ],
                 "type": "string"
               },
-              "includeEmptyValues": {
-                "type": "boolean"
-              },
               "localIdentifier": {
                 "type": "string"
               },
@@ -1693,6 +1701,9 @@
           },
           {
             "$ref": "#/components/schemas/PositiveAttributeFilter"
+          },
+          {
+            "$ref": "#/components/schemas/MatchAttributeFilter"
           }
         ],
         "type": "object"
@@ -1895,6 +1906,58 @@
         },
         "required": [
           "localIdentifier"
+        ],
+        "type": "object"
+      },
+      "MatchAttributeFilter": {
+        "description": "Filter via label with given match type and literal value.",
+        "properties": {
+          "matchAttributeFilter": {
+            "properties": {
+              "applyOnResult": {
+                "type": "boolean"
+              },
+              "caseSensitive": {
+                "default": false,
+                "description": "Indicates whether the filter match is evaluated in case-sensitive mode or not.",
+                "type": "boolean"
+              },
+              "label": {
+                "$ref": "#/components/schemas/AfmIdentifier"
+              },
+              "literal": {
+                "description": "Literal used to limit label values.",
+                "example": "value",
+                "type": "string"
+              },
+              "localIdentifier": {
+                "type": "string"
+              },
+              "matchType": {
+                "description": "Requested match type.",
+                "enum": [
+                  "STARTS_WITH",
+                  "ENDS_WITH",
+                  "CONTAINS"
+                ],
+                "type": "string"
+              },
+              "negate": {
+                "default": false,
+                "description": "Indicates whether the filter should negate the match.",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "literal",
+              "matchType",
+              "label"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "matchAttributeFilter"
         ],
         "type": "object"
       },
@@ -2754,10 +2817,6 @@
                 ],
                 "example": "DAY",
                 "type": "string"
-              },
-              "includeEmptyValues": {
-                "description": "If true, rows with undefined (NULL) date values will be included in the result. The filter becomes: (date_condition) OR (date IS NULL). If false or not set, standard behavior applies (NULLs excluded by the date condition).",
-                "type": "boolean"
               },
               "localIdentifier": {
                 "type": "string"

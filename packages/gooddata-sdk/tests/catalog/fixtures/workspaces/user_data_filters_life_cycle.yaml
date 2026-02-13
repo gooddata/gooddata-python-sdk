@@ -94,7 +94,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: ef93345cfdae57d39543485c38454771
+          traceId: f0ac023ee70d58b07a29cf07ff1d663f
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces/demo/userDataFilters
@@ -241,7 +241,7 @@ interactions:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_status
               type: label
             - attributes:
-                authenticationId: CiQwODQwMjI5Ni0zNjZiLTQyNzctODM0Mi0zZmE2YzY0MWQwYzMSBWxvY2Fs
+                authenticationId: CiRjN2JlZTQzYS0zNjM4LTQ4NTctYjRmYy0xN2E5OTNmYTQ4NTQSBWxvY2Fs
                 firstname: Demo
                 lastname: User
                 email: demo@example.com
@@ -316,7 +316,7 @@ interactions:
             type: userDataFilter
           included:
             - attributes:
-                authenticationId: CiQwODQwMjI5Ni0zNjZiLTQyNzctODM0Mi0zZmE2YzY0MWQwYzMSBWxvY2Fs
+                authenticationId: CiRjN2JlZTQzYS0zNjM4LTQ4NTctYjRmYy0xN2E5OTNmYTQ4NTQSBWxvY2Fs
                 firstname: Demo
                 lastname: User
                 email: demo@example.com
@@ -1792,6 +1792,7 @@ interactions:
                       visualizationUrl: local:bar
                     id: top_10_products
                     title: Top 10 Products
+                memoryItems: []
               ldm:
                 datasets:
                   - grain:
@@ -2193,6 +2194,7 @@ interactions:
                 filterContexts: []
                 metrics: []
                 visualizationObjects: []
+                memoryItems: []
               ldm:
                 datasetExtensions:
                   - id: order_lines
@@ -2226,6 +2228,7 @@ interactions:
                 filterContexts: []
                 metrics: []
                 visualizationObjects: []
+                memoryItems: []
               ldm:
                 datasets: []
                 dateInstances: []

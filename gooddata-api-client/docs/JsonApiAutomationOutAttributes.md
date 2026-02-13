@@ -6,7 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **alert** | [**JsonApiAutomationInAttributesAlert**](JsonApiAutomationInAttributesAlert.md) |  | [optional] 
 **are_relations_valid** | **bool** |  | [optional] 
-**created_at** | **datetime** |  | [optional] 
+**created_at** | **datetime, none_type** | Time of the entity creation. | [optional] 
 **dashboard_tabular_exports** | [**[JsonApiAutomationInAttributesDashboardTabularExportsInner]**](JsonApiAutomationInAttributesDashboardTabularExportsInner.md) |  | [optional] 
 **description** | **str** |  | [optional] 
 **details** | **{str: (bool, date, datetime, dict, float, int, list, str, none_type)}** | Additional details to be included in the automated message. | [optional] 
@@ -14,7 +14,7 @@ Name | Type | Description | Notes
 **external_recipients** | [**[JsonApiAutomationInAttributesExternalRecipientsInner]**](JsonApiAutomationInAttributesExternalRecipientsInner.md) | External recipients of the automation action results. | [optional] 
 **image_exports** | [**[JsonApiAutomationInAttributesImageExportsInner]**](JsonApiAutomationInAttributesImageExportsInner.md) |  | [optional] 
 **metadata** | [**JsonApiAutomationInAttributesMetadata**](JsonApiAutomationInAttributesMetadata.md) |  | [optional] 
-**modified_at** | **datetime** |  | [optional] 
+**modified_at** | **datetime, none_type** | Time of the last entity modification. | [optional] 
 **raw_exports** | [**[JsonApiAutomationInAttributesRawExportsInner]**](JsonApiAutomationInAttributesRawExportsInner.md) |  | [optional] 
 **schedule** | [**JsonApiAutomationInAttributesSchedule**](JsonApiAutomationInAttributesSchedule.md) |  | [optional] 
 **slides_exports** | [**[JsonApiAutomationInAttributesSlidesExportsInner]**](JsonApiAutomationInAttributesSlidesExportsInner.md) |  | [optional] 
