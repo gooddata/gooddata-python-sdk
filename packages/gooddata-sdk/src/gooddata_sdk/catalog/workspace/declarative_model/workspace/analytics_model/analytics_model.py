@@ -50,6 +50,7 @@ LAYOUT_METRICS_DIR = "metrics"
 LAYOUT_VISUALIZATION_OBJECTS_DIR = "visualization_objects"
 ATTRIBUTE_HIERARCHY_OBJECTS_DIR = "attribute_hierarchy_objects"
 EXPORT_DEFINITION_DIR = "export_definitions"
+MEMORY_ITEMS_DIR = "memory_items"
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -135,8 +136,14 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         return folder
 
     @staticmethod
-    def get_export_definition_dif(analytics_model_folder: Path) -> Path:
+    def get_export_definition_folder(analytics_model_folder: Path) -> Path:
         folder = analytics_model_folder / EXPORT_DEFINITION_DIR
+        create_directory(folder)
+        return folder
+
+    @staticmethod
+    def get_memory_item_folder(analytics_model_folder: Path) -> Path:
+        folder = analytics_model_folder / MEMORY_ITEMS_DIR
         create_directory(folder)
         return folder
 
@@ -150,7 +157,8 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         metrics_folder = self.get_metrics_folder(analytics_model_folder)
         visualization_objects_folder = self.get_visualization_objects_folder(analytics_model_folder)
         attribute_hierarchy_folder = self.get_attribute_hierarchy_folder(analytics_model_folder)
-        export_definition_folder = self.get_export_definition_dif(analytical_dashboards_folder)
+        export_definition_folder = self.get_export_definition_folder(analytical_dashboards_folder)
+        memory_item_folder = self.get_memory_item_folder(analytical_dashboards_folder)
 
         for analytical_dashboard in self.analytical_dashboards:
             analytical_dashboard.store_to_disk(analytical_dashboards_folder, sort=sort)
@@ -176,6 +184,9 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         for export_definition in self.export_definitions:
             export_definition.store_to_disk(export_definition_folder, sort=sort)
 
+        for memory_item in self.memory_items:
+            memory_item.store_to_disk(memory_item_folder, sort=sort)
+
     @classmethod
     def load_from_disk(cls, workspace_folder: Path) -> CatalogDeclarativeAnalyticsLayer:
         analytics_model_folder = cls.get_analytics_model_folder(workspace_folder)
@@ -186,7 +197,8 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         metrics_folder = cls.get_metrics_folder(analytics_model_folder)
         visualization_objects_folder = cls.get_visualization_objects_folder(analytics_model_folder)
         attribute_hierarchy_folder = cls.get_attribute_hierarchy_folder(analytics_model_folder)
-        export_definition_folder = cls.get_export_definition_dif(analytical_dashboards_folder)
+        export_definition_folder = cls.get_export_definition_folder(analytical_dashboards_folder)
+        memory_item_folder = cls.get_memory_item_folder(analytical_dashboards_folder)
 
         analytical_dashboard_files = get_sorted_yaml_files(analytical_dashboards_folder)
         analytical_dashboard_extension_files = get_sorted_yaml_files(analytical_dashboard_extensions_folder)
@@ -196,6 +208,7 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         visualization_object_files = get_sorted_yaml_files(visualization_objects_folder)
         attribute_hierarchy_files = get_sorted_yaml_files(attribute_hierarchy_folder)
         export_definition_files = get_sorted_yaml_files(export_definition_folder)
+        memory_item_files = get_sorted_yaml_files(memory_item_folder)
 
         analytical_dashboards = [
             CatalogDeclarativeAnalyticalDashboard.load_from_disk(analytical_dashboard_file)
@@ -226,6 +239,9 @@ class CatalogDeclarativeAnalyticsLayer(Base):
             CatalogDeclarativeExportDefinition.load_from_disk(export_definition_file)
             for export_definition_file in export_definition_files
         ]
+        memory_items = [
+            CatalogDeclarativeMemoryItem.load_from_disk(memory_item_file) for memory_item_file in memory_item_files
+        ]
         return cls(
             analytical_dashboards=analytical_dashboards,
             analytical_dashboard_extensions=analytical_dashboard_extensions,
@@ -235,6 +251,7 @@ class CatalogDeclarativeAnalyticsLayer(Base):
             metrics=metrics,
             visualization_objects=visualization_objects,
             export_definitions=export_definitions,
+            memory_items=memory_items,
         )
 
 
