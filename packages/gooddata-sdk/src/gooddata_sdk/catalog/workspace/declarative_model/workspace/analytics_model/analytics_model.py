@@ -136,7 +136,7 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         return folder
 
     @staticmethod
-    def get_export_definition_dif(analytics_model_folder: Path) -> Path:
+    def get_export_definition_folder(analytics_model_folder: Path) -> Path:
         folder = analytics_model_folder / EXPORT_DEFINITION_DIR
         create_directory(folder)
         return folder
@@ -157,7 +157,7 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         metrics_folder = self.get_metrics_folder(analytics_model_folder)
         visualization_objects_folder = self.get_visualization_objects_folder(analytics_model_folder)
         attribute_hierarchy_folder = self.get_attribute_hierarchy_folder(analytics_model_folder)
-        export_definition_folder = self.get_export_definition_dif(analytical_dashboards_folder)
+        export_definition_folder = self.get_export_definition_folder(analytical_dashboards_folder)
         memory_item_folder = self.get_memory_item_folder(analytical_dashboards_folder)
 
         for analytical_dashboard in self.analytical_dashboards:
@@ -197,7 +197,7 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         metrics_folder = cls.get_metrics_folder(analytics_model_folder)
         visualization_objects_folder = cls.get_visualization_objects_folder(analytics_model_folder)
         attribute_hierarchy_folder = cls.get_attribute_hierarchy_folder(analytics_model_folder)
-        export_definition_folder = cls.get_export_definition_dif(analytical_dashboards_folder)
+        export_definition_folder = cls.get_export_definition_folder(analytical_dashboards_folder)
         memory_item_folder = cls.get_memory_item_folder(analytical_dashboards_folder)
 
         analytical_dashboard_files = get_sorted_yaml_files(analytical_dashboards_folder)
