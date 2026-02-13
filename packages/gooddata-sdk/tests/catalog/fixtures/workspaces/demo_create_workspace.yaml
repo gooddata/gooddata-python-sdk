@@ -131,7 +131,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: bc9dcbabbae207a9e810b1edfc7bb3b5
+          traceId: ed2e8f5434720de497f11072bcf40e0e
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces
@@ -1717,6 +1717,7 @@ interactions:
                       visualizationUrl: local:bar
                     id: top_10_products
                     title: Top 10 Products
+                memoryItems: []
               ldm:
                 datasets:
                   - grain:
@@ -2118,6 +2119,7 @@ interactions:
                 filterContexts: []
                 metrics: []
                 visualizationObjects: []
+                memoryItems: []
               ldm:
                 datasetExtensions:
                   - id: order_lines
@@ -2151,6 +2153,7 @@ interactions:
                 filterContexts: []
                 metrics: []
                 visualizationObjects: []
+                memoryItems: []
               ldm:
                 datasets: []
                 dateInstances: []

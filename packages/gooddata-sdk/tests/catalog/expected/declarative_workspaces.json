@@ -2345,7 +2345,8 @@
               "id": "top_10_products",
               "title": "Top 10 Products"
             }
-          ]
+          ],
+          "memoryItems": []
         },
         "ldm": {
           "datasets": [
@@ -2946,7 +2947,8 @@
           "exportDefinitions": [],
           "filterContexts": [],
           "metrics": [],
-          "visualizationObjects": []
+          "visualizationObjects": [],
+          "memoryItems": []
         },
         "ldm": {
           "datasetExtensions": [
@@ -2992,7 +2994,8 @@
           "exportDefinitions": [],
           "filterContexts": [],
           "metrics": [],
-          "visualizationObjects": []
+          "visualizationObjects": [],
+          "memoryItems": []
         },
         "ldm": {
           "datasets": [],

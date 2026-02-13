@@ -118,7 +118,7 @@ interactions:
                       rotation: auto
                 version: '2'
                 visualizationUrl: local:combo2
-              createdAt: 2026-02-04 09:01
+              createdAt: 2026-02-13 10:46
             id: customers_trend
             meta:
               origin:
@@ -165,7 +165,7 @@ interactions:
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
-                createdAt: 2026-02-04 09:01
+                createdAt: 2026-02-13 10:46
               id: amount_of_active_customers
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/amount_of_active_customers
@@ -175,7 +175,7 @@ interactions:
                 content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
-                createdAt: 2026-02-04 09:01
+                createdAt: 2026-02-13 10:46
               id: revenue_per_customer
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue_per_customer
@@ -240,10 +240,10 @@ interactions:
           - '0'
       body:
         string:
-          exportResult: 791a4a6ea6570d241cb73e36f6d669fad0fea6cb
+          exportResult: e21601cd38e9e313feb569440af57423b41370ca
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/791a4a6ea6570d241cb73e36f6d669fad0fea6cb
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/e21601cd38e9e313feb569440af57423b41370ca
       body: null
       headers:
         Accept:
@@ -284,7 +284,7 @@ interactions:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/791a4a6ea6570d241cb73e36f6d669fad0fea6cb
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/e21601cd38e9e313feb569440af57423b41370ca
       body: null
       headers:
         Accept:
@@ -325,7 +325,7 @@ interactions:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/791a4a6ea6570d241cb73e36f6d669fad0fea6cb
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/e21601cd38e9e313feb569440af57423b41370ca
       body: null
       headers:
         Accept:
@@ -366,7 +366,7 @@ interactions:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/791a4a6ea6570d241cb73e36f6d669fad0fea6cb
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/e21601cd38e9e313feb569440af57423b41370ca
       body: null
       headers:
         Accept:
@@ -407,7 +407,7 @@ interactions:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/791a4a6ea6570d241cb73e36f6d669fad0fea6cb
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/e21601cd38e9e313feb569440af57423b41370ca
       body: null
       headers:
         Accept:
@@ -448,7 +448,48 @@ interactions:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/791a4a6ea6570d241cb73e36f6d669fad0fea6cb
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/e21601cd38e9e313feb569440af57423b41370ca
+      body: null
+      headers:
+        Accept:
+          - application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/zip, text/csv, text/html
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+    response:
+      status:
+        code: 202
+        message: Accepted
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Length:
+          - '0'
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Vary:
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - '0'
+      body:
+        string: ''
+  - request:
+      method: GET
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/e21601cd38e9e313feb569440af57423b41370ca
       body: null
       headers:
         Accept:
