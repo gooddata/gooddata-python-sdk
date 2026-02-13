@@ -80,7 +80,7 @@ class CatalogDeclarativeAnalyticsLayer(Base):
     metrics: list[CatalogDeclarativeMetric] = attr.field(factory=list)
     visualization_objects: list[CatalogDeclarativeVisualizationObject] = attr.field(factory=list)
     export_definitions: list[CatalogDeclarativeExportDefinition] = attr.field(factory=list)
-    memory_items: list[CatalogMemoryItems] = attr.field(factory=list)
+    memory_items: list[CatalogDeclarativeMemoryItem] = attr.field(factory=list)
 
     @staticmethod
     def client_class() -> type[DeclarativeAnalyticsLayer]:
@@ -317,14 +317,14 @@ class CatalogDeclarativeAttributeHierarchy(CatalogAnalyticsBase):
 
 
 @define(auto_attribs=True, kw_only=True)
-class CatalogMemoryItems(CatalogAnalyticsBaseMeta):
+class CatalogDeclarativeMemoryItem(CatalogAnalyticsBaseMeta):
     instruction: str
     strategy: str
     title: str
-    tags: list[str]
-    description: str
-    is_disabled: bool
-    keywords: list[str]
+    tags: list[str] | None = None
+    description: str | None = None
+    is_disabled: bool | None = None
+    keywords: list[str] | None = None
 
     @staticmethod
     def client_class() -> type[DeclarativeMemoryItem]:
