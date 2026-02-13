@@ -104,6 +104,7 @@ class SearchRequest(ModelNormal):
             'question': (str,),  # noqa: E501
             'allowed_relationship_types': ([AllowedRelationshipType],),  # noqa: E501
             'deep_search': (bool,),  # noqa: E501
+            'enable_hybrid_search': (bool,),  # noqa: E501
             'exclude_tags': ([str],),  # noqa: E501
             'include_hidden': (bool,),  # noqa: E501
             'include_tags': ([str],),  # noqa: E501
@@ -122,6 +123,7 @@ class SearchRequest(ModelNormal):
         'question': 'question',  # noqa: E501
         'allowed_relationship_types': 'allowedRelationshipTypes',  # noqa: E501
         'deep_search': 'deepSearch',  # noqa: E501
+        'enable_hybrid_search': 'enableHybridSearch',  # noqa: E501
         'exclude_tags': 'excludeTags',  # noqa: E501
         'include_hidden': 'includeHidden',  # noqa: E501
         'include_tags': 'includeTags',  # noqa: E501
@@ -177,6 +179,7 @@ class SearchRequest(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             allowed_relationship_types ([AllowedRelationshipType]): Filter relationships and results based on allowed relationship type combinations. When specified, only relationships matching the allowed types are returned, and results are filtered to include only direct matches or objects reachable via allowed relationships. When null or omitted, all relationships and results are returned (default behavior). Note: This filtering happens after the initial search, so the number of returned results may be lower than the requested limit if some results are filtered out.. [optional]  # noqa: E501
             deep_search (bool): Turn on deep search. If true, content of complex objects will be searched as well, e.g. metrics in visualizations.. [optional] if omitted the server will use the default value of False  # noqa: E501
+            enable_hybrid_search (bool): If true, enables hybrid search combining vector similarity and keyword matching. This can improve search results by considering both semantic similarity and exact keyword matches.. [optional] if omitted the server will use the default value of False  # noqa: E501
             exclude_tags ([str]): Exclude objects that contain any of the specified tags. This parameter only affects the search results. Objects with excluded tags are completely hidden from the results.. [optional]  # noqa: E501
             include_hidden (bool): If true, includes hidden objects in search results. If false (default), excludes objects where isHidden=true.. [optional] if omitted the server will use the default value of False  # noqa: E501
             include_tags ([str]): Include only objects that contain at least one of the specified tags (OR logic). This parameter only affects the search results. If an object has multiple tags, it will be included as long as it matches at least one tag from this parameter.. [optional]  # noqa: E501
@@ -275,6 +278,7 @@ class SearchRequest(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             allowed_relationship_types ([AllowedRelationshipType]): Filter relationships and results based on allowed relationship type combinations. When specified, only relationships matching the allowed types are returned, and results are filtered to include only direct matches or objects reachable via allowed relationships. When null or omitted, all relationships and results are returned (default behavior). Note: This filtering happens after the initial search, so the number of returned results may be lower than the requested limit if some results are filtered out.. [optional]  # noqa: E501
             deep_search (bool): Turn on deep search. If true, content of complex objects will be searched as well, e.g. metrics in visualizations.. [optional] if omitted the server will use the default value of False  # noqa: E501
+            enable_hybrid_search (bool): If true, enables hybrid search combining vector similarity and keyword matching. This can improve search results by considering both semantic similarity and exact keyword matches.. [optional] if omitted the server will use the default value of False  # noqa: E501
             exclude_tags ([str]): Exclude objects that contain any of the specified tags. This parameter only affects the search results. Objects with excluded tags are completely hidden from the results.. [optional]  # noqa: E501
             include_hidden (bool): If true, includes hidden objects in search results. If false (default), excludes objects where isHidden=true.. [optional] if omitted the server will use the default value of False  # noqa: E501
             include_tags ([str]): Include only objects that contain at least one of the specified tags (OR logic). This parameter only affects the search results. If an object has multiple tags, it will be included as long as it matches at least one tag from this parameter.. [optional]  # noqa: E501

@@ -31,10 +31,14 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.match_attribute_filter import MatchAttributeFilter
+    from gooddata_api_client.model.match_attribute_filter_match_attribute_filter import MatchAttributeFilterMatchAttributeFilter
     from gooddata_api_client.model.negative_attribute_filter import NegativeAttributeFilter
     from gooddata_api_client.model.negative_attribute_filter_negative_attribute_filter import NegativeAttributeFilterNegativeAttributeFilter
     from gooddata_api_client.model.positive_attribute_filter import PositiveAttributeFilter
     from gooddata_api_client.model.positive_attribute_filter_positive_attribute_filter import PositiveAttributeFilterPositiveAttributeFilter
+    globals()['MatchAttributeFilter'] = MatchAttributeFilter
+    globals()['MatchAttributeFilterMatchAttributeFilter'] = MatchAttributeFilterMatchAttributeFilter
     globals()['NegativeAttributeFilter'] = NegativeAttributeFilter
     globals()['NegativeAttributeFilterNegativeAttributeFilter'] = NegativeAttributeFilterNegativeAttributeFilter
     globals()['PositiveAttributeFilter'] = PositiveAttributeFilter
@@ -96,6 +100,7 @@ class AttributeFilter(ModelComposed):
         return {
             'negative_attribute_filter': (NegativeAttributeFilterNegativeAttributeFilter,),  # noqa: E501
             'positive_attribute_filter': (PositiveAttributeFilterPositiveAttributeFilter,),  # noqa: E501
+            'match_attribute_filter': (MatchAttributeFilterMatchAttributeFilter,),  # noqa: E501
         }
 
     @cached_property
@@ -106,6 +111,7 @@ class AttributeFilter(ModelComposed):
     attribute_map = {
         'negative_attribute_filter': 'negativeAttributeFilter',  # noqa: E501
         'positive_attribute_filter': 'positiveAttributeFilter',  # noqa: E501
+        'match_attribute_filter': 'matchAttributeFilter',  # noqa: E501
     }
 
     read_only_vars = {
@@ -149,6 +155,7 @@ class AttributeFilter(ModelComposed):
                                 _visited_composed_classes = (Animal,)
             negative_attribute_filter (NegativeAttributeFilterNegativeAttributeFilter): [optional]  # noqa: E501
             positive_attribute_filter (PositiveAttributeFilterPositiveAttributeFilter): [optional]  # noqa: E501
+            match_attribute_filter (MatchAttributeFilterMatchAttributeFilter): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -254,6 +261,7 @@ class AttributeFilter(ModelComposed):
                                 _visited_composed_classes = (Animal,)
             negative_attribute_filter (NegativeAttributeFilterNegativeAttributeFilter): [optional]  # noqa: E501
             positive_attribute_filter (PositiveAttributeFilterPositiveAttributeFilter): [optional]  # noqa: E501
+            match_attribute_filter (MatchAttributeFilterMatchAttributeFilter): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -325,6 +333,7 @@ class AttributeFilter(ModelComposed):
           'allOf': [
           ],
           'oneOf': [
+              MatchAttributeFilter,
               NegativeAttributeFilter,
               PositiveAttributeFilter,
           ],
