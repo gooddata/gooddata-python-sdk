@@ -62,9 +62,17 @@ class AutomationAlert(ModelNormal):
     """
 
     allowed_values = {
+        ('interval',): {
+            'DAY': "DAY",
+            'WEEK': "WEEK",
+            'MONTH': "MONTH",
+            'QUARTER': "QUARTER",
+            'YEAR': "YEAR",
+        },
         ('trigger',): {
             'ALWAYS': "ALWAYS",
             'ONCE': "ONCE",
+            'ONCE_PER_INTERVAL': "ONCE_PER_INTERVAL",
         },
     }
 
@@ -96,6 +104,7 @@ class AutomationAlert(ModelNormal):
         return {
             'condition': (AutomationAlertCondition,),  # noqa: E501
             'execution': (AlertAfm,),  # noqa: E501
+            'interval': (str,),  # noqa: E501
             'trigger': (str,),  # noqa: E501
         }
 
@@ -107,6 +116,7 @@ class AutomationAlert(ModelNormal):
     attribute_map = {
         'condition': 'condition',  # noqa: E501
         'execution': 'execution',  # noqa: E501
+        'interval': 'interval',  # noqa: E501
         'trigger': 'trigger',  # noqa: E501
     }
 
@@ -155,7 +165,8 @@ class AutomationAlert(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            trigger (str): Trigger behavior for the alert. ALWAYS - alert is triggered every time the condition is met. ONCE - alert is triggered only once when the condition is met. . [optional] if omitted the server will use the default value of "ALWAYS"  # noqa: E501
+            interval (str): Date granularity for the interval of ONCE_PER_INTERVAL trigger. Supported granularities: DAY, WEEK, MONTH, QUARTER, YEAR.. [optional]  # noqa: E501
+            trigger (str): Trigger behavior for the alert. ALWAYS - alert is triggered every time the condition is met. ONCE - alert is triggered only once when the condition is met. ONCE_PER_INTERVAL - alert is triggered when the condition is met, then suppressed for the interval. If no interval is specified, it behaves as ALWAYS. . [optional] if omitted the server will use the default value of "ALWAYS"  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -247,7 +258,8 @@ class AutomationAlert(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            trigger (str): Trigger behavior for the alert. ALWAYS - alert is triggered every time the condition is met. ONCE - alert is triggered only once when the condition is met. . [optional] if omitted the server will use the default value of "ALWAYS"  # noqa: E501
+            interval (str): Date granularity for the interval of ONCE_PER_INTERVAL trigger. Supported granularities: DAY, WEEK, MONTH, QUARTER, YEAR.. [optional]  # noqa: E501
+            trigger (str): Trigger behavior for the alert. ALWAYS - alert is triggered every time the condition is met. ONCE - alert is triggered only once when the condition is met. ONCE_PER_INTERVAL - alert is triggered when the condition is met, then suppressed for the interval. If no interval is specified, it behaves as ALWAYS. . [optional] if omitted the server will use the default value of "ALWAYS"  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

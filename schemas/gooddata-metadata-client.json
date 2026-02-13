@@ -4464,10 +4464,6 @@
                 "pattern": "^\\d{4}-\\d{1,2}-\\d{1,2}( \\d{1,2}:\\d{1,2})?$",
                 "type": "string"
               },
-              "includeEmptyValues": {
-                "description": "If true, rows with undefined (NULL) date values will be included in the result. The filter becomes: (date_condition) OR (date IS NULL). If false or not set, standard behavior applies (NULLs excluded by the date condition).",
-                "type": "boolean"
-              },
               "localIdentifier": {
                 "type": "string"
               },
@@ -5009,6 +5005,9 @@
           },
           {
             "$ref": "#/components/schemas/PositiveAttributeFilter"
+          },
+          {
+            "$ref": "#/components/schemas/MatchAttributeFilter"
           }
         ],
         "type": "object"
@@ -5109,12 +5108,24 @@
           "execution": {
             "$ref": "#/components/schemas/AlertAfm"
           },
+          "interval": {
+            "description": "Date granularity for the interval of ONCE_PER_INTERVAL trigger. Supported granularities: DAY, WEEK, MONTH, QUARTER, YEAR.",
+            "enum": [
+              "DAY",
+              "WEEK",
+              "MONTH",
+              "QUARTER",
+              "YEAR"
+            ],
+            "type": "string"
+          },
           "trigger": {
             "default": "ALWAYS",
-            "description": "Trigger behavior for the alert.\nALWAYS - alert is triggered every time the condition is met.\nONCE - alert is triggered only once when the condition is met.\n",
+            "description": "Trigger behavior for the alert.\nALWAYS - alert is triggered every time the condition is met.\nONCE - alert is triggered only once when the condition is met.\nONCE_PER_INTERVAL - alert is triggered when the condition is met, then suppressed for the interval. If no interval is specified, it behaves as ALWAYS.\n",
             "enum": [
               "ALWAYS",
-              "ONCE"
+              "ONCE",
+              "ONCE_PER_INTERVAL"
             ],
             "type": "string"
           }
@@ -5746,9 +5757,6 @@
                   "GDC.time.fiscal_year"
                 ],
                 "type": "string"
-              },
-              "includeEmptyValues": {
-                "type": "boolean"
               },
               "localIdentifier": {
                 "type": "string"
@@ -6915,7 +6923,11 @@
             "type": "string"
           },
           "content": {
-            "$ref": "#/components/schemas/JsonNode"
+            "description": "Free-form JSON content. Maximum supported length is 250000 characters.",
+            "example": {},
+            "maxLength": 250000,
+            "nullable": true,
+            "type": "object"
           },
           "id": {
             "description": "Custom Application Setting ID.",
@@ -6934,10 +6946,21 @@
       "DeclarativeCustomGeoCollection": {
         "description": "A declarative form of custom geo collection.",
         "properties": {
+          "description": {
+            "description": "Description of the custom geo collection.",
+            "maxLength": 10000,
+            "type": "string"
+          },
           "id": {
             "description": "Custom geo collection ID.",
             "example": "my-geo-collection",
             "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of the custom geo collection.",
+            "example": "My Geo Collection",
+            "maxLength": 255,
             "type": "string"
           }
         },
@@ -7155,7 +7178,8 @@
               "STARROCKS",
               "ATHENA",
               "MONGODB",
-              "CRATEDB"
+              "CRATEDB",
+              "AILAKEHOUSE"
             ],
             "example": "POSTGRESQL",
             "type": "string"
@@ -8534,7 +8558,8 @@
             "description": "Permission name.",
             "enum": [
               "MANAGE",
-              "SELF_CREATE_TOKEN"
+              "SELF_CREATE_TOKEN",
+              "BASE_UI_ACCESS"
             ],
             "type": "string"
           }
@@ -8767,7 +8792,8 @@
               "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
               "ENABLE_NULL_JOINS",
               "EXPORT_CSV_CUSTOM_DELIMITER",
-              "ENABLE_QUERY_TAGS"
+              "ENABLE_QUERY_TAGS",
+              "RESTRICT_BASE_UI"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -10089,6 +10115,9 @@
           },
           {
             "$ref": "#/components/schemas/PositiveAttributeFilter"
+          },
+          {
+            "$ref": "#/components/schemas/MatchAttributeFilter"
           }
         ],
         "type": "object"
@@ -10919,7 +10948,10 @@
                 "type": "object"
               },
               "createdAt": {
+                "description": "Time of the entity creation.",
                 "format": "date-time",
+                "nullable": true,
+                "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
                 "type": "string"
               },
               "description": {
@@ -10927,7 +10959,10 @@
                 "type": "string"
               },
               "modifiedAt": {
+                "description": "Time of the last entity modification.",
                 "format": "date-time",
+                "nullable": true,
+                "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
                 "type": "string"
               },
               "summary": {
@@ -11632,7 +11667,10 @@
                 "type": "object"
               },
               "createdAt": {
+                "description": "Time of the entity creation.",
                 "format": "date-time",
+                "nullable": true,
+                "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
                 "type": "string"
               },
               "description": {
@@ -11640,7 +11678,10 @@
                 "type": "string"
               },
               "modifiedAt": {
+                "description": "Time of the last entity modification.",
                 "format": "date-time",
+                "nullable": true,
+                "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
                 "type": "string"
               },
               "tags": {
@@ -12284,12 +12325,24 @@
                   "execution": {
                     "$ref": "#/components/schemas/AlertAfm"
                   },
+                  "interval": {
+                    "description": "Date granularity for the interval of ONCE_PER_INTERVAL trigger. Supported granularities: DAY, WEEK, MONTH, QUARTER, YEAR.",
+                    "enum": [
+                      "DAY",
+                      "WEEK",
+                      "MONTH",
+                      "QUARTER",
+                      "YEAR"
+                    ],
+                    "type": "string"
+                  },
                   "trigger": {
                     "default": "ALWAYS",
-                    "description": "Trigger behavior for the alert.\nALWAYS - alert is triggered every time the condition is met.\nONCE - alert is triggered only once when the condition is met.\n",
+                    "description": "Trigger behavior for the alert.\nALWAYS - alert is triggered every time the condition is met.\nONCE - alert is triggered only once when the condition is met.\nONCE_PER_INTERVAL - alert is triggered when the condition is met, then suppressed for the interval. If no interval is specified, it behaves as ALWAYS.\n",
                     "enum": [
                       "ALWAYS",
-                      "ONCE"
+                      "ONCE",
+                      "ONCE_PER_INTERVAL"
                     ],
                     "type": "string"
                   }
@@ -12605,12 +12658,24 @@
                   "execution": {
                     "$ref": "#/components/schemas/AlertAfm"
                   },
+                  "interval": {
+                    "description": "Date granularity for the interval of ONCE_PER_INTERVAL trigger. Supported granularities: DAY, WEEK, MONTH, QUARTER, YEAR.",
+                    "enum": [
+                      "DAY",
+                      "WEEK",
+                      "MONTH",
+                      "QUARTER",
+                      "YEAR"
+                    ],
+                    "type": "string"
+                  },
                   "trigger": {
                     "default": "ALWAYS",
-                    "description": "Trigger behavior for the alert.\nALWAYS - alert is triggered every time the condition is met.\nONCE - alert is triggered only once when the condition is met.\n",
+                    "description": "Trigger behavior for the alert.\nALWAYS - alert is triggered every time the condition is met.\nONCE - alert is triggered only once when the condition is met.\nONCE_PER_INTERVAL - alert is triggered when the condition is met, then suppressed for the interval. If no interval is specified, it behaves as ALWAYS.\n",
                     "enum": [
                       "ALWAYS",
-                      "ONCE"
+                      "ONCE",
+                      "ONCE_PER_INTERVAL"
                     ],
                     "type": "string"
                   }
@@ -12625,7 +12690,10 @@
                 "type": "boolean"
               },
               "createdAt": {
+                "description": "Time of the entity creation.",
                 "format": "date-time",
+                "nullable": true,
+                "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
                 "type": "string"
               },
               "dashboardTabularExports": {
@@ -12709,7 +12777,10 @@
                 "type": "object"
               },
               "modifiedAt": {
+                "description": "Time of the last entity modification.",
                 "format": "date-time",
+                "nullable": true,
+                "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
                 "type": "string"
               },
               "rawExports": {
@@ -13052,12 +13123,24 @@
                   "execution": {
                     "$ref": "#/components/schemas/AlertAfm"
                   },
+                  "interval": {
+                    "description": "Date granularity for the interval of ONCE_PER_INTERVAL trigger. Supported granularities: DAY, WEEK, MONTH, QUARTER, YEAR.",
+                    "enum": [
+                      "DAY",
+                      "WEEK",
+                      "MONTH",
+                      "QUARTER",
+                      "YEAR"
+                    ],
+                    "type": "string"
+                  },
                   "trigger": {
                     "default": "ALWAYS",
-                    "description": "Trigger behavior for the alert.\nALWAYS - alert is triggered every time the condition is met.\nONCE - alert is triggered only once when the condition is met.\n",
+                    "description": "Trigger behavior for the alert.\nALWAYS - alert is triggered every time the condition is met.\nONCE - alert is triggered only once when the condition is met.\nONCE_PER_INTERVAL - alert is triggered when the condition is met, then suppressed for the interval. If no interval is specified, it behaves as ALWAYS.\n",
                     "enum": [
                       "ALWAYS",
-                      "ONCE"
+                      "ONCE",
+                      "ONCE_PER_INTERVAL"
                     ],
                     "type": "string"
                   }
@@ -14037,7 +14120,7 @@
                 "type": "string"
               },
               "content": {
-                "description": "Free-form JSON content. Maximum supported length is 15000 characters.",
+                "description": "Free-form JSON content. Maximum supported length is 250000 characters.",
                 "example": {},
                 "type": "object"
               }
@@ -14091,7 +14174,7 @@
                 "type": "string"
               },
               "content": {
-                "description": "Free-form JSON content. Maximum supported length is 15000 characters.",
+                "description": "Free-form JSON content. Maximum supported length is 250000 characters.",
                 "example": {},
                 "type": "object"
               }
@@ -14211,7 +14294,7 @@
                 "type": "string"
               },
               "content": {
-                "description": "Free-form JSON content. Maximum supported length is 15000 characters.",
+                "description": "Free-form JSON content. Maximum supported length is 250000 characters.",
                 "example": {},
                 "type": "object"
               }
@@ -14261,7 +14344,7 @@
                 "type": "string"
               },
               "content": {
-                "description": "Free-form JSON content. Maximum supported length is 15000 characters.",
+                "description": "Free-form JSON content. Maximum supported length is 250000 characters.",
                 "example": {},
                 "type": "object"
               }
@@ -14307,6 +14390,21 @@
       "JsonApiCustomGeoCollectionIn": {
         "description": "JSON:API representation of customGeoCollection entity.",
         "properties": {
+          "attributes": {
+            "properties": {
+              "description": {
+                "maxLength": 10000,
+                "nullable": true,
+                "type": "string"
+              },
+              "name": {
+                "maxLength": 255,
+                "nullable": true,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
           "id": {
             "description": "API identifier of an object",
             "example": "id1",
@@ -14342,6 +14440,21 @@
       "JsonApiCustomGeoCollectionOut": {
         "description": "JSON:API representation of customGeoCollection entity.",
         "properties": {
+          "attributes": {
+            "properties": {
+              "description": {
+                "maxLength": 10000,
+                "nullable": true,
+                "type": "string"
+              },
+              "name": {
+                "maxLength": 255,
+                "nullable": true,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
           "id": {
             "description": "API identifier of an object",
             "example": "id1",
@@ -14417,6 +14530,21 @@
       "JsonApiCustomGeoCollectionPatch": {
         "description": "JSON:API representation of patching customGeoCollection entity.",
         "properties": {
+          "attributes": {
+            "properties": {
+              "description": {
+                "maxLength": 10000,
+                "nullable": true,
+                "type": "string"
+              },
+              "name": {
+                "maxLength": 255,
+                "nullable": true,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
           "id": {
             "description": "API identifier of an object",
             "example": "id1",
@@ -14548,7 +14676,10 @@
                 "type": "object"
               },
               "createdAt": {
+                "description": "Time of the entity creation.",
                 "format": "date-time",
+                "nullable": true,
+                "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
                 "type": "string"
               },
               "description": {
@@ -14556,7 +14687,10 @@
                 "type": "string"
               },
               "modifiedAt": {
+                "description": "Time of the last entity modification.",
                 "format": "date-time",
+                "nullable": true,
+                "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
                 "type": "string"
               },
               "tags": {
@@ -14888,7 +15022,8 @@
                   "STARROCKS",
                   "ATHENA",
                   "MONGODB",
-                  "CRATEDB"
+                  "CRATEDB",
+                  "AILAKEHOUSE"
                 ],
                 "type": "string"
               }
@@ -15105,7 +15240,8 @@
                   "STARROCKS",
                   "ATHENA",
                   "MONGODB",
-                  "CRATEDB"
+                  "CRATEDB",
+                  "AILAKEHOUSE"
                 ],
                 "type": "string"
               },
@@ -15280,7 +15416,8 @@
                   "STARROCKS",
                   "ATHENA",
                   "MONGODB",
-                  "CRATEDB"
+                  "CRATEDB",
+                  "AILAKEHOUSE"
                 ],
                 "type": "string"
               },
@@ -15509,7 +15646,8 @@
                   "STARROCKS",
                   "ATHENA",
                   "MONGODB",
-                  "CRATEDB"
+                  "CRATEDB",
+                  "AILAKEHOUSE"
                 ],
                 "type": "string"
               },
@@ -16252,7 +16390,10 @@
                 "type": "boolean"
               },
               "createdAt": {
+                "description": "Time of the entity creation.",
                 "format": "date-time",
+                "nullable": true,
+                "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
                 "type": "string"
               },
               "description": {
@@ -16260,7 +16401,10 @@
                 "type": "string"
               },
               "modifiedAt": {
+                "description": "Time of the last entity modification.",
                 "format": "date-time",
+                "nullable": true,
+                "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
                 "type": "string"
               },
               "requestPayload": {
@@ -18871,7 +19015,7 @@
               },
               "analyzedValue": {
                 "description": "Metric value in the analyzed period (the observed value that triggered the anomaly)",
-                "example": 2600000000
+                "example": 2.6E+9
               },
               "areRelationsValid": {
                 "type": "boolean"
@@ -18923,7 +19067,7 @@
               },
               "referenceValue": {
                 "description": "Metric value in the reference period",
-                "example": 2400000000
+                "example": 2.4E+9
               },
               "sourceCount": {
                 "description": "Number of source documents used for generation",
@@ -19045,7 +19189,7 @@
               },
               "analyzedValue": {
                 "description": "Metric value in the analyzed period (the observed value that triggered the anomaly)",
-                "example": 2600000000
+                "example": 2.6E+9
               },
               "areRelationsValid": {
                 "type": "boolean"
@@ -19101,7 +19245,7 @@
               },
               "referenceValue": {
                 "description": "Metric value in the reference period",
-                "example": 2400000000
+                "example": 2.4E+9
               },
               "sourceCount": {
                 "description": "Number of source documents used for generation",
@@ -19311,7 +19455,7 @@
               },
               "analyzedValue": {
                 "description": "Metric value in the analyzed period (the observed value that triggered the anomaly)",
-                "example": 2600000000
+                "example": 2.6E+9
               },
               "areRelationsValid": {
                 "type": "boolean"
@@ -19363,7 +19507,7 @@
               },
               "referenceValue": {
                 "description": "Metric value in the reference period",
-                "example": 2400000000
+                "example": 2.4E+9
               },
               "sourceCount": {
                 "description": "Number of source documents used for generation",
@@ -19477,7 +19621,7 @@
               },
               "analyzedValue": {
                 "description": "Metric value in the analyzed period (the observed value that triggered the anomaly)",
-                "example": 2600000000
+                "example": 2.6E+9
               },
               "areRelationsValid": {
                 "type": "boolean"
@@ -19529,7 +19673,7 @@
               },
               "referenceValue": {
                 "description": "Metric value in the reference period",
-                "example": 2400000000
+                "example": 2.4E+9
               },
               "sourceCount": {
                 "description": "Number of source documents used for generation",
@@ -20313,7 +20457,10 @@
                 "type": "boolean"
               },
               "createdAt": {
+                "description": "Time of the entity creation.",
                 "format": "date-time",
+                "nullable": true,
+                "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
                 "type": "string"
               },
               "description": {
@@ -20337,7 +20484,10 @@
                 "type": "array"
               },
               "modifiedAt": {
+                "description": "Time of the last entity modification.",
                 "format": "date-time",
+                "nullable": true,
+                "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
                 "type": "string"
               },
               "strategy": {
@@ -20821,7 +20971,10 @@
                 "type": "object"
               },
               "createdAt": {
+                "description": "Time of the entity creation.",
                 "format": "date-time",
+                "nullable": true,
+                "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
                 "type": "string"
               },
               "description": {
@@ -20835,7 +20988,10 @@
                 "type": "boolean"
               },
               "modifiedAt": {
+                "description": "Time of the last entity modification.",
                 "format": "date-time",
+                "nullable": true,
+                "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
                 "type": "string"
               },
               "tags": {
@@ -22034,7 +22190,8 @@
                 "items": {
                   "enum": [
                     "MANAGE",
-                    "SELF_CREATE_TOKEN"
+                    "SELF_CREATE_TOKEN",
+                    "BASE_UI_ACCESS"
                   ],
                   "type": "string"
                 },
@@ -22275,7 +22432,8 @@
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
                   "ENABLE_NULL_JOINS",
                   "EXPORT_CSV_CUSTOM_DELIMITER",
-                  "ENABLE_QUERY_TAGS"
+                  "ENABLE_QUERY_TAGS",
+                  "RESTRICT_BASE_UI"
                 ],
                 "type": "string"
               }
@@ -22371,7 +22529,8 @@
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
                   "ENABLE_NULL_JOINS",
                   "EXPORT_CSV_CUSTOM_DELIMITER",
-                  "ENABLE_QUERY_TAGS"
+                  "ENABLE_QUERY_TAGS",
+                  "RESTRICT_BASE_UI"
                 ],
                 "type": "string"
               }
@@ -22507,7 +22666,8 @@
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
                   "ENABLE_NULL_JOINS",
                   "EXPORT_CSV_CUSTOM_DELIMITER",
-                  "ENABLE_QUERY_TAGS"
+                  "ENABLE_QUERY_TAGS",
+                  "RESTRICT_BASE_UI"
                 ],
                 "type": "string"
               }
@@ -24009,7 +24169,8 @@
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
                   "ENABLE_NULL_JOINS",
                   "EXPORT_CSV_CUSTOM_DELIMITER",
-                  "ENABLE_QUERY_TAGS"
+                  "ENABLE_QUERY_TAGS",
+                  "RESTRICT_BASE_UI"
                 ],
                 "type": "string"
               }
@@ -24105,7 +24266,8 @@
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
                   "ENABLE_NULL_JOINS",
                   "EXPORT_CSV_CUSTOM_DELIMITER",
-                  "ENABLE_QUERY_TAGS"
+                  "ENABLE_QUERY_TAGS",
+                  "RESTRICT_BASE_UI"
                 ],
                 "type": "string"
               }
@@ -24314,7 +24476,10 @@
                 "type": "object"
               },
               "createdAt": {
+                "description": "Time of the entity creation.",
                 "format": "date-time",
+                "nullable": true,
+                "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
                 "type": "string"
               },
               "description": {
@@ -24325,7 +24490,10 @@
                 "type": "boolean"
               },
               "modifiedAt": {
+                "description": "Time of the last entity modification.",
                 "format": "date-time",
+                "nullable": true,
+                "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
                 "type": "string"
               },
               "tags": {
@@ -24716,12 +24884,24 @@
                   "execution": {
                     "$ref": "#/components/schemas/AlertAfm"
                   },
+                  "interval": {
+                    "description": "Date granularity for the interval of ONCE_PER_INTERVAL trigger. Supported granularities: DAY, WEEK, MONTH, QUARTER, YEAR.",
+                    "enum": [
+                      "DAY",
+                      "WEEK",
+                      "MONTH",
+                      "QUARTER",
+                      "YEAR"
+                    ],
+                    "type": "string"
+                  },
                   "trigger": {
                     "default": "ALWAYS",
-                    "description": "Trigger behavior for the alert.\nALWAYS - alert is triggered every time the condition is met.\nONCE - alert is triggered only once when the condition is met.\n",
+                    "description": "Trigger behavior for the alert.\nALWAYS - alert is triggered every time the condition is met.\nONCE - alert is triggered only once when the condition is met.\nONCE_PER_INTERVAL - alert is triggered when the condition is met, then suppressed for the interval. If no interval is specified, it behaves as ALWAYS.\n",
                     "enum": [
                       "ALWAYS",
-                      "ONCE"
+                      "ONCE",
+                      "ONCE_PER_INTERVAL"
                     ],
                     "type": "string"
                   }
@@ -26304,7 +26484,8 @@
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
                   "ENABLE_NULL_JOINS",
                   "EXPORT_CSV_CUSTOM_DELIMITER",
-                  "ENABLE_QUERY_TAGS"
+                  "ENABLE_QUERY_TAGS",
+                  "RESTRICT_BASE_UI"
                 ],
                 "type": "string"
               }
@@ -26400,7 +26581,8 @@
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
                   "ENABLE_NULL_JOINS",
                   "EXPORT_CSV_CUSTOM_DELIMITER",
-                  "ENABLE_QUERY_TAGS"
+                  "ENABLE_QUERY_TAGS",
+                  "RESTRICT_BASE_UI"
                 ],
                 "type": "string"
               }
@@ -26562,7 +26744,8 @@
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
                   "ENABLE_NULL_JOINS",
                   "EXPORT_CSV_CUSTOM_DELIMITER",
-                  "ENABLE_QUERY_TAGS"
+                  "ENABLE_QUERY_TAGS",
+                  "RESTRICT_BASE_UI"
                 ],
                 "type": "string"
               }
@@ -26658,7 +26841,8 @@
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
                   "ENABLE_NULL_JOINS",
                   "EXPORT_CSV_CUSTOM_DELIMITER",
-                  "ENABLE_QUERY_TAGS"
+                  "ENABLE_QUERY_TAGS",
+                  "RESTRICT_BASE_UI"
                 ],
                 "type": "string"
               }
@@ -26791,6 +26975,58 @@
         },
         "required": [
           "locale"
+        ],
+        "type": "object"
+      },
+      "MatchAttributeFilter": {
+        "description": "Filter via label with given match type and literal value.",
+        "properties": {
+          "matchAttributeFilter": {
+            "properties": {
+              "applyOnResult": {
+                "type": "boolean"
+              },
+              "caseSensitive": {
+                "default": false,
+                "description": "Indicates whether the filter match is evaluated in case-sensitive mode or not.",
+                "type": "boolean"
+              },
+              "label": {
+                "$ref": "#/components/schemas/AfmIdentifier"
+              },
+              "literal": {
+                "description": "Literal used to limit label values.",
+                "example": "value",
+                "type": "string"
+              },
+              "localIdentifier": {
+                "type": "string"
+              },
+              "matchType": {
+                "description": "Requested match type.",
+                "enum": [
+                  "STARTS_WITH",
+                  "ENDS_WITH",
+                  "CONTAINS"
+                ],
+                "type": "string"
+              },
+              "negate": {
+                "default": false,
+                "description": "Indicates whether the filter should negate the match.",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "literal",
+              "matchType",
+              "label"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "matchAttributeFilter"
         ],
         "type": "object"
       },
@@ -27015,7 +27251,8 @@
             "items": {
               "enum": [
                 "MANAGE",
-                "SELF_CREATE_TOKEN"
+                "SELF_CREATE_TOKEN",
+                "BASE_UI_ACCESS"
               ],
               "type": "string"
             },
@@ -27876,10 +28113,6 @@
                 "example": "DAY",
                 "type": "string"
               },
-              "includeEmptyValues": {
-                "description": "If true, rows with undefined (NULL) date values will be included in the result. The filter becomes: (date_condition) OR (date IS NULL). If false or not set, standard behavior applies (NULLs excluded by the date condition).",
-                "type": "boolean"
-              },
               "localIdentifier": {
                 "type": "string"
               },
@@ -27993,7 +28226,8 @@
               "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
               "ENABLE_NULL_JOINS",
               "EXPORT_CSV_CUSTOM_DELIMITER",
-              "ENABLE_QUERY_TAGS"
+              "ENABLE_QUERY_TAGS",
+              "RESTRICT_BASE_UI"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -32617,7 +32851,7 @@
         "parameters": [
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "",
+            "example": "name==someString;description==someString",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -32729,7 +32963,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "",
+            "example": "name==someString;description==someString",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -32756,7 +32990,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "",
+            "example": "name==someString;description==someString",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -32795,7 +33029,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "",
+            "example": "name==someString;description==someString",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -32849,7 +33083,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "",
+            "example": "name==someString;description==someString",
             "in": "query",
             "name": "filter",
             "schema": {

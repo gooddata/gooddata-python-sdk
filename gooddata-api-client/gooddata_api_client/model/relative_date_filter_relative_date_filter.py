@@ -117,7 +117,6 @@ class RelativeDateFilterRelativeDateFilter(ModelNormal):
             'to': (int,),  # noqa: E501
             'apply_on_result': (bool,),  # noqa: E501
             'bounded_filter': (BoundedFilter,),  # noqa: E501
-            'include_empty_values': (bool,),  # noqa: E501
             'local_identifier': (str,),  # noqa: E501
         }
 
@@ -133,7 +132,6 @@ class RelativeDateFilterRelativeDateFilter(ModelNormal):
         'to': 'to',  # noqa: E501
         'apply_on_result': 'applyOnResult',  # noqa: E501
         'bounded_filter': 'boundedFilter',  # noqa: E501
-        'include_empty_values': 'includeEmptyValues',  # noqa: E501
         'local_identifier': 'localIdentifier',  # noqa: E501
     }
 
@@ -186,7 +184,6 @@ class RelativeDateFilterRelativeDateFilter(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             apply_on_result (bool): [optional]  # noqa: E501
             bounded_filter (BoundedFilter): [optional]  # noqa: E501
-            include_empty_values (bool): If true, rows with undefined (NULL) date values will be included in the result. The filter becomes: (date_condition) OR (date IS NULL). If false or not set, standard behavior applies (NULLs excluded by the date condition).. [optional]  # noqa: E501
             local_identifier (str): [optional]  # noqa: E501
         """
 
@@ -285,7 +282,6 @@ class RelativeDateFilterRelativeDateFilter(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             apply_on_result (bool): [optional]  # noqa: E501
             bounded_filter (BoundedFilter): [optional]  # noqa: E501
-            include_empty_values (bool): If true, rows with undefined (NULL) date values will be included in the result. The filter becomes: (date_condition) OR (date IS NULL). If false or not set, standard behavior applies (NULLs excluded by the date condition).. [optional]  # noqa: E501
             local_identifier (str): [optional]  # noqa: E501
         """
 

@@ -63,6 +63,7 @@ class OrganizationPermissionAssignment(ModelNormal):
         ('permissions',): {
             'MANAGE': "MANAGE",
             'SELF_CREATE_TOKEN': "SELF_CREATE_TOKEN",
+            'BASE_UI_ACCESS': "BASE_UI_ACCESS",
         },
     }
 

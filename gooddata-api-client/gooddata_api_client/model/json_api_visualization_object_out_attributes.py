@@ -59,8 +59,18 @@ class JsonApiVisualizationObjectOutAttributes(ModelNormal):
     }
 
     validations = {
+        ('created_at',): {
+            'regex': {
+                'pattern': r'[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}',  # noqa: E501
+            },
+        },
         ('description',): {
             'max_length': 10000,
+        },
+        ('modified_at',): {
+            'regex': {
+                'pattern': r'[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}',  # noqa: E501
+            },
         },
         ('title',): {
             'max_length': 255,
@@ -90,10 +100,10 @@ class JsonApiVisualizationObjectOutAttributes(ModelNormal):
         return {
             'content': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),  # noqa: E501
             'are_relations_valid': (bool,),  # noqa: E501
-            'created_at': (datetime,),  # noqa: E501
+            'created_at': (datetime, none_type,),  # noqa: E501
             'description': (str,),  # noqa: E501
             'is_hidden': (bool,),  # noqa: E501
-            'modified_at': (datetime,),  # noqa: E501
+            'modified_at': (datetime, none_type,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
             'title': (str,),  # noqa: E501
         }
@@ -159,10 +169,10 @@ class JsonApiVisualizationObjectOutAttributes(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             are_relations_valid (bool): [optional]  # noqa: E501
-            created_at (datetime): [optional]  # noqa: E501
+            created_at (datetime, none_type): Time of the entity creation.. [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             is_hidden (bool): [optional]  # noqa: E501
-            modified_at (datetime): [optional]  # noqa: E501
+            modified_at (datetime, none_type): Time of the last entity modification.. [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
         """
@@ -255,10 +265,10 @@ class JsonApiVisualizationObjectOutAttributes(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             are_relations_valid (bool): [optional]  # noqa: E501
-            created_at (datetime): [optional]  # noqa: E501
+            created_at (datetime, none_type): Time of the entity creation.. [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             is_hidden (bool): [optional]  # noqa: E501
-            modified_at (datetime): [optional]  # noqa: E501
+            modified_at (datetime, none_type): Time of the last entity modification.. [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
         """

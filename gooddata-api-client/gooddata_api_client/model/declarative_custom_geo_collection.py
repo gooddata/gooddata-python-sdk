@@ -64,6 +64,12 @@ class DeclarativeCustomGeoCollection(ModelNormal):
                 'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
             },
         },
+        ('description',): {
+            'max_length': 10000,
+        },
+        ('name',): {
+            'max_length': 255,
+        },
     }
 
     @cached_property
@@ -88,6 +94,8 @@ class DeclarativeCustomGeoCollection(ModelNormal):
         """
         return {
             'id': (str,),  # noqa: E501
+            'description': (str,),  # noqa: E501
+            'name': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -97,6 +105,8 @@ class DeclarativeCustomGeoCollection(ModelNormal):
 
     attribute_map = {
         'id': 'id',  # noqa: E501
+        'description': 'description',  # noqa: E501
+        'name': 'name',  # noqa: E501
     }
 
     read_only_vars = {
@@ -143,6 +153,8 @@ class DeclarativeCustomGeoCollection(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            description (str): Description of the custom geo collection.. [optional]  # noqa: E501
+            name (str): Name of the custom geo collection.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -232,6 +244,8 @@ class DeclarativeCustomGeoCollection(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            description (str): Description of the custom geo collection.. [optional]  # noqa: E501
+            name (str): Name of the custom geo collection.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

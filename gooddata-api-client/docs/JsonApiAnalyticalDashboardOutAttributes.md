@@ -6,9 +6,9 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **content** | **{str: (bool, date, datetime, dict, float, int, list, str, none_type)}** | Free-form JSON content. Maximum supported length is 250000 characters. | 
 **are_relations_valid** | **bool** |  | [optional] 
-**created_at** | **datetime** |  | [optional] 
+**created_at** | **datetime, none_type** | Time of the entity creation. | [optional] 
 **description** | **str** |  | [optional] 
-**modified_at** | **datetime** |  | [optional] 
+**modified_at** | **datetime, none_type** | Time of the last entity modification. | [optional] 
 **summary** | **str** | AI-generated summary of the dashboard content | [optional] 
 **tags** | **[str]** |  | [optional] 
 **title** | **str** |  | [optional] 

@@ -31,9 +31,9 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_automation_out_attributes import JsonApiAutomationOutAttributes
+    from gooddata_api_client.model.json_api_workspace_automation_out_attributes import JsonApiWorkspaceAutomationOutAttributes
     from gooddata_api_client.model.json_api_workspace_automation_out_relationships import JsonApiWorkspaceAutomationOutRelationships
-    globals()['JsonApiAutomationOutAttributes'] = JsonApiAutomationOutAttributes
+    globals()['JsonApiWorkspaceAutomationOutAttributes'] = JsonApiWorkspaceAutomationOutAttributes
     globals()['JsonApiWorkspaceAutomationOutRelationships'] = JsonApiWorkspaceAutomationOutRelationships
 
 
@@ -100,7 +100,7 @@ class JsonApiWorkspaceAutomationOut(ModelNormal):
         return {
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
-            'attributes': (JsonApiAutomationOutAttributes,),  # noqa: E501
+            'attributes': (JsonApiWorkspaceAutomationOutAttributes,),  # noqa: E501
             'relationships': (JsonApiWorkspaceAutomationOutRelationships,),  # noqa: E501
         }
 
@@ -161,7 +161,7 @@ class JsonApiWorkspaceAutomationOut(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiAutomationOutAttributes): [optional]  # noqa: E501
+            attributes (JsonApiWorkspaceAutomationOutAttributes): [optional]  # noqa: E501
             relationships (JsonApiWorkspaceAutomationOutRelationships): [optional]  # noqa: E501
         """
 
@@ -255,7 +255,7 @@ class JsonApiWorkspaceAutomationOut(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiAutomationOutAttributes): [optional]  # noqa: E501
+            attributes (JsonApiWorkspaceAutomationOutAttributes): [optional]  # noqa: E501
             relationships (JsonApiWorkspaceAutomationOutRelationships): [optional]  # noqa: E501
         """
 

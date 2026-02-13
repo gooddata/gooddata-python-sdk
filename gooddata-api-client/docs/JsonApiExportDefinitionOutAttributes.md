@@ -5,9 +5,9 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **are_relations_valid** | **bool** |  | [optional] 
-**created_at** | **datetime** |  | [optional] 
+**created_at** | **datetime, none_type** | Time of the entity creation. | [optional] 
 **description** | **str** |  | [optional] 
-**modified_at** | **datetime** |  | [optional] 
+**modified_at** | **datetime, none_type** | Time of the last entity modification. | [optional] 
 **request_payload** | [**JsonApiExportDefinitionInAttributesRequestPayload**](JsonApiExportDefinitionInAttributesRequestPayload.md) |  | [optional] 
 **tags** | **[str]** |  | [optional] 
 **title** | **str** |  | [optional] 

@@ -93,6 +93,7 @@ class JsonApiDataSourcePatchAttributes(ModelNormal):
             'ATHENA': "ATHENA",
             'MONGODB': "MONGODB",
             'CRATEDB': "CRATEDB",
+            'AILAKEHOUSE': "AILAKEHOUSE",
         },
     }
 

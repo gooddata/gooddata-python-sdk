@@ -6,7 +6,7 @@ Custom application setting and its value.
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **application_name** | **str** | The application id | 
-**content** | [**JsonNode**](JsonNode.md) |  | 
+**content** | **{str: (bool, date, datetime, dict, float, int, list, str, none_type)}, none_type** | Free-form JSON content. Maximum supported length is 250000 characters. | 
 **id** | **str** | Custom Application Setting ID. | 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 

@@ -405,6 +405,7 @@ with gooddata_api_client.ApiClient() as api_client:
             ),
         ],
         deep_search=False,
+        enable_hybrid_search=False,
         exclude_tags=[
             "exclude_tags_example",
         ],

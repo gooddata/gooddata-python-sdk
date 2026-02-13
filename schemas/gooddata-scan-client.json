@@ -647,7 +647,8 @@
               "STARROCKS",
               "ATHENA",
               "MONGODB",
-              "CRATEDB"
+              "CRATEDB",
+              "AILAKEHOUSE"
             ],
             "example": "POSTGRESQL",
             "type": "string"

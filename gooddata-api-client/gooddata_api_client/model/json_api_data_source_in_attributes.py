@@ -88,6 +88,7 @@ class JsonApiDataSourceInAttributes(ModelNormal):
             'ATHENA': "ATHENA",
             'MONGODB': "MONGODB",
             'CRATEDB': "CRATEDB",
+            'AILAKEHOUSE': "AILAKEHOUSE",
         },
         ('cache_strategy',): {
             'None': None,

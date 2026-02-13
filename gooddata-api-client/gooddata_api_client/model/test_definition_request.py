@@ -88,6 +88,7 @@ class TestDefinitionRequest(ModelNormal):
             'ATHENA': "ATHENA",
             'MONGODB': "MONGODB",
             'CRATEDB': "CRATEDB",
+            'AILAKEHOUSE': "AILAKEHOUSE",
         },
     }
 
