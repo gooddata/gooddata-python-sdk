@@ -22,7 +22,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '37189'
+          - '37240'
         Content-Type:
           - application/json
         DATE: &id001
@@ -380,6 +380,7 @@ interactions:
                       description: ''
                       id: region_filter
                       title: filterContext
+                  memoryItems: []
                   metrics:
                     - content:
                         format: '#,##0'
@@ -1808,6 +1809,7 @@ interactions:
                   dashboardPlugins: []
                   exportDefinitions: []
                   filterContexts: []
+                  memoryItems: []
                   metrics: []
                   visualizationObjects: []
                 ldm:
@@ -1841,6 +1843,7 @@ interactions:
                   dashboardPlugins: []
                   exportDefinitions: []
                   filterContexts: []
+                  memoryItems: []
                   metrics: []
                   visualizationObjects: []
                 ldm:
@@ -1874,7 +1877,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '37189'
+          - '37240'
         Content-Type:
           - application/json
         DATE: *id001
@@ -2231,6 +2234,7 @@ interactions:
                       description: ''
                       id: region_filter
                       title: filterContext
+                  memoryItems: []
                   metrics:
                     - content:
                         format: '#,##0'
@@ -3659,6 +3663,7 @@ interactions:
                   dashboardPlugins: []
                   exportDefinitions: []
                   filterContexts: []
+                  memoryItems: []
                   metrics: []
                   visualizationObjects: []
                 ldm:
@@ -3692,6 +3697,7 @@ interactions:
                   dashboardPlugins: []
                   exportDefinitions: []
                   filterContexts: []
+                  memoryItems: []
                   metrics: []
                   visualizationObjects: []
                 ldm:

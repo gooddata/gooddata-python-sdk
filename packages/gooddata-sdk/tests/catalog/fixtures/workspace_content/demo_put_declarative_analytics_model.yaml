@@ -44,7 +44,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 7ff91ca006fda8dc11336a90cc8c5f84
+          traceId: cb686008af96957908eca40ae56e1771
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces
@@ -934,7 +934,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '206'
+          - '223'
         Content-Type:
           - application/json
         DATE: *id001
@@ -962,6 +962,7 @@ interactions:
             dashboardPlugins: []
             exportDefinitions: []
             filterContexts: []
+            memoryItems: []
             metrics: []
             visualizationObjects: []
   - request:
@@ -977,6 +978,7 @@ interactions:
           metrics: []
           visualizationObjects: []
           exportDefinitions: []
+          memoryItems: []
       headers:
         Accept-Encoding:
           - br, gzip, deflate
@@ -1032,7 +1034,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '206'
+          - '223'
         Content-Type:
           - application/json
         DATE: *id001
@@ -1060,6 +1062,7 @@ interactions:
             dashboardPlugins: []
             exportDefinitions: []
             filterContexts: []
+            memoryItems: []
             metrics: []
             visualizationObjects: []
   - request:
@@ -2431,6 +2434,7 @@ interactions:
                       visualizationUrl: local:bar
                     id: top_10_products
                     title: Top 10 Products
+                memoryItems: []
               ldm:
                 datasets:
                   - grain:
@@ -2832,6 +2836,7 @@ interactions:
                 filterContexts: []
                 metrics: []
                 visualizationObjects: []
+                memoryItems: []
               ldm:
                 datasetExtensions:
                   - id: order_lines
@@ -2865,6 +2870,7 @@ interactions:
                 filterContexts: []
                 metrics: []
                 visualizationObjects: []
+                memoryItems: []
               ldm:
                 datasets: []
                 dateInstances: []

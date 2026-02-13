@@ -22,7 +22,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '34866'
+          - '34883'
         Content-Type:
           - application/json
         DATE: &id001
@@ -335,6 +335,7 @@ interactions:
                 description: ''
                 id: region_filter
                 title: filterContext
+            memoryItems: []
             metrics:
               - content:
                   format: '#,##0'
@@ -1754,7 +1755,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '34866'
+          - '34883'
         Content-Type:
           - application/json
         DATE: *id001
@@ -2066,6 +2067,7 @@ interactions:
                 description: ''
                 id: region_filter
                 title: filterContext
+            memoryItems: []
             metrics:
               - content:
                   format: '#,##0'

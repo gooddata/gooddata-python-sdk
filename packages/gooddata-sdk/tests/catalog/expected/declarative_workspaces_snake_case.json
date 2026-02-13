@@ -2794,7 +2794,8 @@
               }
             }
           ],
-          "export_definitions": []
+          "export_definitions": [],
+          "memory_items": []
         }
       },
       "permissions": [
@@ -2877,7 +2878,8 @@
           "filter_contexts": [],
           "metrics": [],
           "visualization_objects": [],
-          "export_definitions": []
+          "export_definitions": [],
+          "memory_items": []
         }
       },
       "parent": {
@@ -2907,7 +2909,8 @@
           "filter_contexts": [],
           "metrics": [],
           "visualization_objects": [],
-          "export_definitions": []
+          "export_definitions": [],
+          "memory_items": []
         }
       },
       "parent": {
