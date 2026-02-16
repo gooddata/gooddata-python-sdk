@@ -63,6 +63,7 @@ class DeclarativeCustomApplicationSetting(ModelNormal):
             'max_length': 255,
         },
         ('content',): {
+            'max_length': 250000,
         },
         ('id',): {
             'regex': {
