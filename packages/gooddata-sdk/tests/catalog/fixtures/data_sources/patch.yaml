@@ -49,8 +49,8 @@ interactions:
                 url: jdbc:postgresql://postgres:5432/tiger?sslmode=prefer
                 username: postgres
                 authenticationType: USERNAME_PASSWORD
-                name: demo-test-ds
                 type: POSTGRESQL
+                name: demo-test-ds
                 schema: demo
               id: demo-test-ds
               links:
@@ -105,7 +105,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: f02a0ce7ceb08628bb0af45db99e6702
+          traceId: e7fb0705103107245fb50f761d1b5ace
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources
@@ -165,8 +165,8 @@ interactions:
               url: jdbc:postgresql://localhost:5432/demo?autosave=true&sslmode=prefer
               username: demouser
               authenticationType: USERNAME_PASSWORD
-              name: Test
               type: POSTGRESQL
+              name: Test
               schema: demo
             id: test
             type: dataSource
@@ -219,8 +219,8 @@ interactions:
               url: jdbc:postgresql://localhost:5432/demo?autosave=true&sslmode=prefer
               username: demouser
               authenticationType: USERNAME_PASSWORD
-              name: Test
               type: POSTGRESQL
+              name: Test
               schema: demo
             id: test
             type: dataSource
@@ -273,8 +273,8 @@ interactions:
               url: jdbc:postgresql://localhost:5432/demo?autosave=true&sslmode=prefer
               username: demouser
               authenticationType: USERNAME_PASSWORD
-              name: Test
               type: POSTGRESQL
+              name: Test
               schema: demo
             id: test
             type: dataSource
@@ -338,8 +338,8 @@ interactions:
               username: demouser
               authenticationType: USERNAME_PASSWORD
               alternativeDataSourceId: ds-patch-abc-id
-              name: Test2
               type: POSTGRESQL
+              name: Test2
               schema: demo
             id: test
             type: dataSource
@@ -393,8 +393,8 @@ interactions:
               username: demouser
               authenticationType: USERNAME_PASSWORD
               alternativeDataSourceId: ds-patch-abc-id
-              name: Test2
               type: POSTGRESQL
+              name: Test2
               schema: demo
             id: test
             type: dataSource

@@ -143,7 +143,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '83'
+          - '81'
         Content-Type:
           - application/json
         DATE: *id001
@@ -166,5 +166,5 @@ interactions:
         string:
           queryDurationMillis:
             createCacheTable: 0
-            simpleSelect: 133
+            simpleSelect: 2
           successful: true

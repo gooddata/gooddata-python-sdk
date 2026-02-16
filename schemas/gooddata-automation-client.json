@@ -61,6 +61,16 @@
               "dataset": {
                 "$ref": "#/components/schemas/AfmObjectIdentifierDataset"
               },
+              "emptyValueHandling": {
+                "default": "EXCLUDE",
+                "description": "Specifies how rows with empty (null/missing) date values should be handled. INCLUDE includes empty dates in addition to the date range restriction, EXCLUDE removes rows with empty dates (default), ONLY keeps only rows with empty dates.",
+                "enum": [
+                  "INCLUDE",
+                  "EXCLUDE",
+                  "ONLY"
+                ],
+                "type": "string"
+              },
               "from": {
                 "example": "2020-07-01 18:23",
                 "pattern": "^\\d{4}-\\d{1,2}-\\d{1,2}( \\d{1,2}:\\d{1,2})?$",
@@ -76,9 +86,9 @@
               }
             },
             "required": [
+              "dataset",
               "from",
-              "to",
-              "dataset"
+              "to"
             ],
             "type": "object"
           }
@@ -546,6 +556,69 @@
             "$ref": "#/components/schemas/MetricRecord"
           }
         },
+        "type": "object"
+      },
+      "AllTimeDateFilter": {
+        "description": "An all-time date filter that does not restrict by date range. Controls how rows with empty (null/missing) date values are handled.",
+        "properties": {
+          "allTimeDateFilter": {
+            "properties": {
+              "applyOnResult": {
+                "type": "boolean"
+              },
+              "dataset": {
+                "$ref": "#/components/schemas/AfmObjectIdentifierDataset"
+              },
+              "emptyValueHandling": {
+                "default": "INCLUDE",
+                "description": "Specifies how rows with empty (null/missing) date values should be handled. INCLUDE means no filtering effect (default), EXCLUDE removes rows with null dates, ONLY keeps only rows with null dates.",
+                "enum": [
+                  "INCLUDE",
+                  "EXCLUDE",
+                  "ONLY"
+                ],
+                "type": "string"
+              },
+              "granularity": {
+                "default": "DAY",
+                "description": "Date granularity used to resolve the date attribute label for null value checks. Defaults to DAY if not specified.",
+                "enum": [
+                  "MINUTE",
+                  "HOUR",
+                  "DAY",
+                  "WEEK",
+                  "MONTH",
+                  "QUARTER",
+                  "YEAR",
+                  "MINUTE_OF_HOUR",
+                  "HOUR_OF_DAY",
+                  "DAY_OF_WEEK",
+                  "DAY_OF_MONTH",
+                  "DAY_OF_QUARTER",
+                  "DAY_OF_YEAR",
+                  "WEEK_OF_YEAR",
+                  "MONTH_OF_YEAR",
+                  "QUARTER_OF_YEAR",
+                  "FISCAL_MONTH",
+                  "FISCAL_QUARTER",
+                  "FISCAL_YEAR"
+                ],
+                "example": "DAY",
+                "type": "string"
+              },
+              "localIdentifier": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "dataset"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "allTimeDateFilter"
+        ],
         "type": "object"
       },
       "AnomalyDetection": {
@@ -1110,9 +1183,9 @@
               }
             },
             "required": [
+              "measure",
               "operator",
-              "value",
-              "measure"
+              "value"
             ],
             "type": "object"
           }
@@ -1492,6 +1565,9 @@
           },
           {
             "$ref": "#/components/schemas/RelativeDateFilter"
+          },
+          {
+            "$ref": "#/components/schemas/AllTimeDateFilter"
           }
         ],
         "type": "object"
@@ -1695,6 +1771,9 @@
           },
           {
             "$ref": "#/components/schemas/RelativeDateFilter"
+          },
+          {
+            "$ref": "#/components/schemas/AllTimeDateFilter"
           },
           {
             "$ref": "#/components/schemas/NegativeAttributeFilter"
@@ -1949,9 +2028,9 @@
               }
             },
             "required": [
+              "label",
               "literal",
-              "matchType",
-              "label"
+              "matchType"
             ],
             "type": "object"
           }
@@ -2078,8 +2157,8 @@
               }
             },
             "required": [
-              "notIn",
-              "label"
+              "label",
+              "notIn"
             ],
             "type": "object"
           }
@@ -2533,9 +2612,9 @@
             },
             "required": [
               "from",
+              "measure",
               "operator",
-              "to",
-              "measure"
+              "to"
             ],
             "type": "object"
           }
@@ -2786,6 +2865,16 @@
               "dataset": {
                 "$ref": "#/components/schemas/AfmObjectIdentifierDataset"
               },
+              "emptyValueHandling": {
+                "default": "EXCLUDE",
+                "description": "Specifies how rows with empty (null/missing) date values should be handled. INCLUDE includes empty dates in addition to the date range restriction, EXCLUDE removes rows with empty dates (default), ONLY keeps only rows with empty dates.",
+                "enum": [
+                  "INCLUDE",
+                  "EXCLUDE",
+                  "ONLY"
+                ],
+                "type": "string"
+              },
               "from": {
                 "description": "Start of the filtering interval. Specified by number of periods (with respect to given granularity). Typically negative (historical time interval like -2 for '2 days/weeks, ... ago').",
                 "example": -6,
@@ -2829,10 +2918,10 @@
               }
             },
             "required": [
+              "dataset",
               "from",
               "granularity",
-              "to",
-              "dataset"
+              "to"
             ],
             "type": "object"
           }

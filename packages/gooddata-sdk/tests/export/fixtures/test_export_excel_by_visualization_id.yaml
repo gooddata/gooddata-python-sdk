@@ -118,7 +118,7 @@ interactions:
                       rotation: auto
                 version: '2'
                 visualizationUrl: local:combo2
-              createdAt: 2026-02-13 10:46
+              createdAt: 2026-02-16 12:45
             id: customers_trend
             meta:
               origin:
@@ -165,7 +165,7 @@ interactions:
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
-                createdAt: 2026-02-13 10:46
+                createdAt: 2026-02-16 12:45
               id: amount_of_active_customers
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/amount_of_active_customers
@@ -175,7 +175,7 @@ interactions:
                 content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
-                createdAt: 2026-02-13 10:46
+                createdAt: 2026-02-16 12:45
               id: revenue_per_customer
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue_per_customer
@@ -240,10 +240,10 @@ interactions:
           - '0'
       body:
         string:
-          exportResult: 7cad09362d0ac3c20fe6349703eec0c7835b4233
+          exportResult: 9ebcc587c9f85096e7f774c7141bff633384b758
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/7cad09362d0ac3c20fe6349703eec0c7835b4233
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/9ebcc587c9f85096e7f774c7141bff633384b758
       body: null
       headers:
         Accept:
@@ -284,7 +284,7 @@ interactions:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/7cad09362d0ac3c20fe6349703eec0c7835b4233
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/9ebcc587c9f85096e7f774c7141bff633384b758
       body: null
       headers:
         Accept:
@@ -325,7 +325,7 @@ interactions:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/7cad09362d0ac3c20fe6349703eec0c7835b4233
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/9ebcc587c9f85096e7f774c7141bff633384b758
       body: null
       headers:
         Accept:
@@ -366,7 +366,7 @@ interactions:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/7cad09362d0ac3c20fe6349703eec0c7835b4233
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/9ebcc587c9f85096e7f774c7141bff633384b758
       body: null
       headers:
         Accept:
@@ -407,7 +407,7 @@ interactions:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/7cad09362d0ac3c20fe6349703eec0c7835b4233
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/9ebcc587c9f85096e7f774c7141bff633384b758
       body: null
       headers:
         Accept:
@@ -448,7 +448,7 @@ interactions:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/7cad09362d0ac3c20fe6349703eec0c7835b4233
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/9ebcc587c9f85096e7f774c7141bff633384b758
       body: null
       headers:
         Accept:
@@ -572,12 +572,12 @@ interactions:
           7LdQNOsmpSNy3Omg2abqGob9//Dk466YfM4eDxaC3PPMIq7W9LVHwcbbqXDOR23dbHHdW/tRm8Lh
           A2Vf0Lip8Nlivh3wA4g+mk+UCBLxUqssv/nmEHRuacZlrP7ZMWoRgtaKeF/k8Kk5u7HC2WeLe3Nn
           ewZfe2e72l4uUVs7yOSrpT+e+PA+yN6Bg9KEKVm8TXoAR83u7C8D4GMvSLf+BlBLAwQUAAAACAAA
-          AD8At/8m3CUBAABQAgAAEQAAAGRvY1Byb3BzL2NvcmUueG1snZLNasMwEITvfQqjuy3bCWkRtgNt
-          yamBQl1aehPSJhG1fpDUOn77KrbjJOBTj6uZ/XZ2UbE+yib6BeuEViXKkhRFoJjmQu1L9F5v4gcU
-          OU8Vp41WUKIOHFpXdwUzhGkLr1YbsF6AiwJIOcJMiQ7eG4KxYweQ1CXBoYK401ZSH0q7x4ayb7oH
-          nKfpCkvwlFNP8QkYm4mIRiRnE9L82KYHcIahAQnKO5wlGb54PVjpZht65cophe8MzFrP4uQ+OjEZ
-          27ZN2kVvDfkz/Ll9eetXjYU6nYoBqgrOCLNAvbZVga+LcLiGOr8NJ94J4I9d0GfexkWGPuBRCECG
-          uGflY/H0XG9Qlaf5Kk7zOFvUWUqW92S5+jqNvOm/AOU45N/EM2DIffsJqj9QSwMEFAAAAAgAAAA/
+          AD8A74557yUBAABQAgAAEQAAAGRvY1Byb3BzL2NvcmUueG1snZLLTsMwEEX3fEXkfeIkhYKsJJUA
+          dUUlJIJA7Cx72lrED9mGtH+Pm1dbKSuW43vnzJ2Ri9VBNtEvWCe0KlGWpCgCxTQXalei93odP6DI
+          eao4bbSCEh3BoVV1UzBDmLbwarUB6wW4KICUI8yUaO+9IRg7tgdJXRIcKohbbSX1obQ7bCj7pjvA
+          eZousQRPOfUUn4CxmYhoQHI2Ic2PbToAZxgakKC8w1mS4bPXg5VutqFTLpxS+KOBWesoTu6DE5Ox
+          bdukXXTWkD/Dn5uXt27VWKjTqRigquCMMAvUa1sV+LIIh2uo85tw4q0A/ngM+szbsEjfBzwKAUgf
+          d1Q+Fk/P9RpVeZov4zSPs2Wd5eT2jizuv04jr/rPQDkM+TdxBPS5rz9B9QdQSwMEFAAAAAgAAAA/
           ALLAMkd+AQAAGQMAABAAAABkb2NQcm9wcy9hcHAueG1snVLBTuswELzzFZHv1GmF0FPlGKEC4sDT
           q9QAZ+NsGgvHtrzbqH1fj5OqIQVO5DQ7OxpPdlfc7FubdRDReFew+SxnGTjtK+O2BXsuHy7/sAxJ
           uUpZ76BgB0B2Iy/EOvoAkQxglhwcFqwhCkvOUTfQKpyltkud2sdWUSrjlvu6NhruvN614Igv8vya
@@ -594,6 +594,6 @@ interactions:
           SwECFAMUAAAACAAAAD8A7cSCI7oAAAAEAQAAFAAAAAAAAAAAAAAAgIEVCAAAeGwvc2hhcmVkU3Ry
           aW5ncy54bWxQSwECFAMUAAAACAAAAD8AJckRufECAACwDQAADQAAAAAAAAAAAAAAgIEBCQAAeGwv
           c3R5bGVzLnhtbFBLAQIUAxQAAAAIAAAAPwAY+kZUsAUAAFIbAAATAAAAAAAAAAAAAACAgR0MAAB4
-          bC90aGVtZS90aGVtZTEueG1sUEsBAhQDFAAAAAgAAAA/ALf/JtwlAQAAUAIAABEAAAAAAAAAAAAA
+          bC90aGVtZS90aGVtZTEueG1sUEsBAhQDFAAAAAgAAAA/AO+Oee8lAQAAUAIAABEAAAAAAAAAAAAA
           AICB/hEAAGRvY1Byb3BzL2NvcmUueG1sUEsBAhQDFAAAAAgAAAA/ALLAMkd+AQAAGQMAABAAAAAA
           AAAAAAAAAICBUhMAAGRvY1Byb3BzL2FwcC54bWxQSwUGAAAAAAoACgCAAgAA/hQAAAAA

@@ -48,7 +48,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: cea12df9ee418ac6c77c387061fd047c
+          traceId: 57c6d4096ece4c8ce7ba3e4ee9fd8d54
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources
@@ -108,8 +108,8 @@ interactions:
               url: jdbc:vertica://localhost:5433/demo?TLSmode=false
               username: demouser
               authenticationType: USERNAME_PASSWORD
-              name: Test2
               type: VERTICA
+              name: Test2
               schema: demo
             id: test
             type: dataSource
@@ -162,8 +162,8 @@ interactions:
               url: jdbc:vertica://localhost:5433/demo?TLSmode=false
               username: demouser
               authenticationType: USERNAME_PASSWORD
-              name: Test2
               type: VERTICA
+              name: Test2
               schema: demo
             id: test
             type: dataSource

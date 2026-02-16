@@ -84,6 +84,8 @@ docs/AlertCondition.md
 docs/AlertConditionOperand.md
 docs/AlertDescription.md
 docs/AlertEvaluationRow.md
+docs/AllTimeDateFilter.md
+docs/AllTimeDateFilterAllTimeDateFilter.md
 docs/AllowedRelationshipType.md
 docs/AnalyticsCatalogCreatedBy.md
 docs/AnalyticsCatalogTags.md
@@ -1369,6 +1371,8 @@ gooddata_api_client/model/alert_condition.py
 gooddata_api_client/model/alert_condition_operand.py
 gooddata_api_client/model/alert_description.py
 gooddata_api_client/model/alert_evaluation_row.py
+gooddata_api_client/model/all_time_date_filter.py
+gooddata_api_client/model/all_time_date_filter_all_time_date_filter.py
 gooddata_api_client/model/allowed_relationship_type.py
 gooddata_api_client/model/analytics_catalog_created_by.py
 gooddata_api_client/model/analytics_catalog_tags.py

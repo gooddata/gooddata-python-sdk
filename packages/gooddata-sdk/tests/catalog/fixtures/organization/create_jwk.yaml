@@ -48,7 +48,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 8f35d76abc08a3005683091e9307b43e
+          traceId: 469d7e348b290441364b8dfa52dd60ec
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/jwks

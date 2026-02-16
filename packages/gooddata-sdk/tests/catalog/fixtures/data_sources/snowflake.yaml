@@ -48,7 +48,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: d038f237d2ff13ee5a55086ba2954a5f
+          traceId: a835027adf17eecdddea195246c926a8
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources
@@ -108,8 +108,8 @@ interactions:
               url: jdbc:snowflake://gooddata.snowflakecomputing.com:443/?application=GoodData_GoodDataCN&db=TIGER&useProxy=true&warehouse=TIGER
               username: demouser
               authenticationType: USERNAME_PASSWORD
-              name: Test
               type: SNOWFLAKE
+              name: Test
               schema: demo
             id: test
             type: dataSource
@@ -162,8 +162,8 @@ interactions:
               url: jdbc:snowflake://gooddata.snowflakecomputing.com:443/?application=GoodData_GoodDataCN&db=TIGER&useProxy=true&warehouse=TIGER
               username: demouser
               authenticationType: USERNAME_PASSWORD
-              name: Test
               type: SNOWFLAKE
+              name: Test
               schema: demo
             id: test
             type: dataSource
@@ -253,7 +253,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: fc8a066f8196902ff1d1656852b9403c
+          traceId: cda1300db37ea34c9ea9378aba015905
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources
@@ -314,8 +314,8 @@ interactions:
               url: jdbc:snowflake://gooddata.snowflakecomputing.com:443/?application=GoodData_GoodDataCN&db=TIGER&useProxy=true&warehouse=TIGER
               username: demouser
               authenticationType: KEY_PAIR
-              name: Test
               type: SNOWFLAKE
+              name: Test
               schema: demo
             id: test
             type: dataSource
@@ -368,8 +368,8 @@ interactions:
               url: jdbc:snowflake://gooddata.snowflakecomputing.com:443/?application=GoodData_GoodDataCN&db=TIGER&useProxy=true&warehouse=TIGER
               username: demouser
               authenticationType: KEY_PAIR
-              name: Test
               type: SNOWFLAKE
+              name: Test
               schema: demo
             id: test
             type: dataSource
