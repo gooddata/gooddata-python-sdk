@@ -158,7 +158,7 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         visualization_objects_folder = self.get_visualization_objects_folder(analytics_model_folder)
         attribute_hierarchy_folder = self.get_attribute_hierarchy_folder(analytics_model_folder)
         export_definition_folder = self.get_export_definition_folder(analytical_dashboards_folder)
-        memory_item_folder = self.get_memory_item_folder(analytical_dashboards_folder)
+        memory_item_folder = self.get_memory_item_folder(analytics_model_folder)
 
         for analytical_dashboard in self.analytical_dashboards:
             analytical_dashboard.store_to_disk(analytical_dashboards_folder, sort=sort)
@@ -198,7 +198,7 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         visualization_objects_folder = cls.get_visualization_objects_folder(analytics_model_folder)
         attribute_hierarchy_folder = cls.get_attribute_hierarchy_folder(analytics_model_folder)
         export_definition_folder = cls.get_export_definition_folder(analytical_dashboards_folder)
-        memory_item_folder = cls.get_memory_item_folder(analytical_dashboards_folder)
+        memory_item_folder = cls.get_memory_item_folder(analytics_model_folder)
 
         analytical_dashboard_files = get_sorted_yaml_files(analytical_dashboards_folder)
         analytical_dashboard_extension_files = get_sorted_yaml_files(analytical_dashboard_extensions_folder)
