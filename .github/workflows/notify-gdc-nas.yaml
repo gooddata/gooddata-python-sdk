@@ -1,0 +1,38 @@
+# Notify gdc-nas when a cassette-update PR is merged, triggering commit analysis
+name: Notify gdc-nas on cassette merge
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - master
+  workflow_dispatch:
+    inputs:
+      target_repo:
+        description: 'gdc-nas repo to notify (owner/repo)'
+        required: false
+        default: 'gooddata/gdc-nas'
+
+jobs:
+  notify:
+    name: Trigger gdc-nas commit analysis
+    if: >-
+      github.event_name == 'workflow_dispatch'
+      || (github.event.pull_request.merged == true
+          && startsWith(github.event.pull_request.head.ref, 'auto/cassette-update-'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - name: Send repository_dispatch to gdc-nas
+        env:
+          GH_TOKEN: ${{ secrets.TOKEN_GITHUB_YENKINS_ADMIN }}
+          TARGET_REPO: ${{ inputs.target_repo || 'gooddata/gdc-nas' }}
+        run: |
+          gh api "repos/$TARGET_REPO/dispatches" \
+            -f event_type=cassette-regeneration-merged \
+            -f "client_payload[trigger]=cassette-pr-merged" \
+            -f "client_payload[sha]=${{ github.sha }}" \
+            -f "client_payload[pr_number]=${{ github.event.pull_request.number || '' }}"
+          echo "Dispatch sent to $TARGET_REPO"
