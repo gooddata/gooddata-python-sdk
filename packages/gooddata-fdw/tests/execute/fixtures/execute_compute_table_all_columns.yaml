@@ -103,7 +103,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-Gdc-Cancel-Token:
-          - 46c69d89-460b-49cc-b48b-fe183a2cebc1
+          - 20b1932f-2a7e-46a3-a9da-e6bbffdd6b98
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - '0'
@@ -155,10 +155,10 @@ interactions:
                         name: Revenue
                 localIdentifier: dim_1
             links:
-              executionResult: 777c7a762a410324eadf1dd3e3ca36f9b29fd229:abbd64389afc398e6c0f855e8828db3ac94e8cc1890494e8d941c023117aada3
+              executionResult: db269641d9293f813ad550b22a07a85cd943193c:5ead2724f975878de998669b4d1e6f97cbafdc7c5b03e2bd837f623ea0858b9c
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/777c7a762a410324eadf1dd3e3ca36f9b29fd229%3Aabbd64389afc398e6c0f855e8828db3ac94e8cc1890494e8d941c023117aada3?offset=0%2C0&limit=512%2C256
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/db269641d9293f813ad550b22a07a85cd943193c%3A5ead2724f975878de998669b4d1e6f97cbafdc7c5b03e2bd837f623ea0858b9c?offset=0%2C0&limit=512%2C256
       body: null
       headers:
         Accept:

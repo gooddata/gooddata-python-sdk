@@ -516,9 +516,9 @@ interactions:
                     type: dataset
                 labels:
                   data:
-                    - id: geo__state__location
-                      type: label
                     - id: state
+                      type: label
+                    - id: geo__state__location
                       type: label
               type: attribute
             - attributes:
@@ -611,20 +611,6 @@ interactions:
                     sourceColumns: null
                     sourceColumnDataTypes: null
                   - identifier:
-                      id: date
-                      type: dataset
-                    multivalue: false
-                    sources:
-                      - column: date
-                        dataType: DATE
-                        target:
-                          id: date
-                          type: date
-                        isNullable: null
-                        nullValue: null
-                    sourceColumns: null
-                    sourceColumnDataTypes: null
-                  - identifier:
                       id: products
                       type: dataset
                     multivalue: false
@@ -634,6 +620,20 @@ interactions:
                         target:
                           id: product_id
                           type: attribute
+                        isNullable: null
+                        nullValue: null
+                    sourceColumns: null
+                    sourceColumnDataTypes: null
+                  - identifier:
+                      id: date
+                      type: dataset
+                    multivalue: false
+                    sources:
+                      - column: date
+                        dataType: DATE
+                        target:
+                          id: date
+                          type: date
                         isNullable: null
                         nullValue: null
                     sourceColumns: null
@@ -1259,20 +1259,6 @@ interactions:
                     sourceColumns: null
                     sourceColumnDataTypes: null
                   - identifier:
-                      id: date
-                      type: dataset
-                    multivalue: false
-                    sources:
-                      - column: date
-                        dataType: DATE
-                        target:
-                          id: date
-                          type: date
-                        isNullable: null
-                        nullValue: null
-                    sourceColumns: null
-                    sourceColumnDataTypes: null
-                  - identifier:
                       id: products
                       type: dataset
                     multivalue: false
@@ -1282,6 +1268,20 @@ interactions:
                         target:
                           id: product_id
                           type: attribute
+                        isNullable: null
+                        nullValue: null
+                    sourceColumns: null
+                    sourceColumnDataTypes: null
+                  - identifier:
+                      id: date
+                      type: dataset
+                    multivalue: false
+                    sources:
+                      - column: date
+                        dataType: DATE
+                        target:
+                          id: date
+                          type: date
                         isNullable: null
                         nullValue: null
                     sourceColumns: null
