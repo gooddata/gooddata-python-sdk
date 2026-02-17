@@ -252,7 +252,7 @@ from gooddata_sdk.compute.model.execution import (
 from gooddata_sdk.compute.model.filter import (
     AbsoluteDateFilter,
     AllMetricValueFilter,
-    AllTimeFilter,
+    AllTimeDateFilter,
     AttributeFilter,
     BoundedFilter,
     CompoundMetricValueFilter,

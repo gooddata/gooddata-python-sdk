@@ -1,0 +1,13 @@
+{
+    "absolute_date_filter": {
+        "_from": "2021-07-01 18:23",
+        "dataset": {
+            "identifier": {
+                "id": "dataset.id",
+                "type": "dataset"
+            }
+        },
+        "empty_value_handling": "ONLY",
+        "to": "2021-07-16 18:23"
+    }
+}

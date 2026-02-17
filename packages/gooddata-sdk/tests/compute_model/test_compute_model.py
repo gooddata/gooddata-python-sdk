@@ -9,7 +9,7 @@ import pytest
 from gooddata_sdk.compute.model.attribute import Attribute
 from gooddata_sdk.compute.model.base import Filter, ObjId
 from gooddata_sdk.compute.model.execution import compute_model_to_api_model
-from gooddata_sdk.compute.model.filter import AbsoluteDateFilter, PositiveAttributeFilter
+from gooddata_sdk.compute.model.filter import AbsoluteDateFilter, AllTimeDateFilter, PositiveAttributeFilter
 from gooddata_sdk.compute.model.metric import (
     Metric,
     PopDate,
@@ -49,6 +49,11 @@ _absolute_date_filter = AbsoluteDateFilter(
     to_date="2021-07-16 18:23",
 )
 
+_all_time_date_filter = AllTimeDateFilter(
+    dataset=ObjId(type="dataset", id="dataset.id"),
+    empty_value_handling="EXCLUDE",
+)
+
 test_inputs = [
     [
         "multiple attributes and metrics and filters",
@@ -60,6 +65,7 @@ test_inputs = [
     ["attribute and filter ", [_attribute], None, [_positive_filter]],
     ["metric only ", None, [_simple_metric], None],
     ["metric and filter ", None, [_simple_metric], [_positive_filter]],
+    ["metric and all time date filter", None, [_simple_metric], [_all_time_date_filter]],
     [
         "attribute and metric and filter ",
         [_attribute],
