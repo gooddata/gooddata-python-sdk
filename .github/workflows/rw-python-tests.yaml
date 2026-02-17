@@ -37,7 +37,7 @@ jobs:
           python-version: 3.14
       - name: Install dependencies
         run: |
-          uv sync --only-group lint
+          uv sync --only-group lint --locked
       - name: pep8 and formatting check
         run: |
           make format
@@ -51,7 +51,7 @@ jobs:
         uses: astral-sh/setup-uv@v6
       - name: Install dependencies
         run: |
-          uv sync --only-group tox --only-group type
+          uv sync --group type --locked
       - name: type check
         run: |
           make type-check
