@@ -2,6 +2,7 @@
 from pathlib import Path
 
 import pytest
+from gooddata_api_client.model.allowed_relationship_type import AllowedRelationshipType
 from gooddata_sdk import CatalogWorkspace
 from gooddata_sdk.sdk import GoodDataSdk
 from tests_support.vcrpy_utils import get_vcr
@@ -235,6 +236,61 @@ def test_build_exec_def_from_chat_result(test_config):
         execution = sdk.compute.for_exec_def(test_workspace_id, execution_definition)
         assert execution.result_id is not None
 
+    finally:
+        sdk.catalog_workspace.delete_workspace(test_workspace_id)
+        sdk.compute.reset_ai_chat_history(test_workspace_id)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "ai_chat_with_allowed_relationship_types.yaml"))
+def test_ai_chat_with_allowed_relationship_types(test_config):
+    """Test AI chat with allowed_relationship_types parameter."""
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    path = _current_dir / "load" / "ai"
+    test_workspace_id = test_config["workspace_test"]
+
+    try:
+        _setup_test_workspace(sdk, test_workspace_id, path)
+
+        # Define allowed relationship types for filtering
+        allowed_types = [
+            AllowedRelationshipType(source_type="dashboard", target_type="visualization", allow_orphans=True),
+            AllowedRelationshipType(source_type="visualization", target_type="metric", allow_orphans=False),
+        ]
+
+        response = sdk.compute.ai_chat(
+            test_workspace_id, "Create a visualization for total revenue", allowed_relationship_types=allowed_types
+        )
+        assert hasattr(response, "routing")
+        assert hasattr(response, "created_visualizations")
+        assert hasattr(response, "chat_history_interaction_id")
+        assert response.chat_history_interaction_id is not None
+    finally:
+        sdk.catalog_workspace.delete_workspace(test_workspace_id)
+        sdk.compute.reset_ai_chat_history(test_workspace_id)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "ai_chat_stream_with_allowed_relationship_types.yaml"))
+def test_ai_chat_stream_with_allowed_relationship_types(test_config):
+    """Test AI chat stream with allowed_relationship_types parameter."""
+    path = _current_dir / "load" / "ai"
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    test_workspace_id = test_config["workspace_test"]
+
+    question = "What is the total revenue for the year 2024?"
+    try:
+        _setup_test_workspace(sdk, test_workspace_id, path)
+
+        # Define allowed relationship types for filtering
+        allowed_types = [
+            AllowedRelationshipType(source_type="metric", target_type="attribute", allow_orphans=True),
+        ]
+
+        buffer = {}
+        for chunk in sdk.compute.ai_chat_stream(
+            test_workspace_id, question, allowed_relationship_types=allowed_types
+        ):
+            buffer = {**buffer, **chunk}
+        assert buffer is not None
     finally:
         sdk.catalog_workspace.delete_workspace(test_workspace_id)
         sdk.compute.reset_ai_chat_history(test_workspace_id)
