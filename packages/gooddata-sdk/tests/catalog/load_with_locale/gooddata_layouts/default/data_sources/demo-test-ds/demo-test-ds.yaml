@@ -1,0 +1,16 @@
+# (C) 2022 GoodData Corporation
+id: demo-test-ds
+name: demo-test-ds
+permissions:
+  - assignee:
+      id: demo2
+      type: user
+    name: MANAGE
+  - assignee:
+      id: demoGroup
+      type: userGroup
+    name: USE
+schema: demo
+type: POSTGRESQL
+url: jdbc:postgresql://postgres:5432/tiger?sslmode=prefer
+username: postgres

@@ -1,0 +1,17 @@
+# (C) 2022 GoodData Corporation
+content:
+  filters:
+    - attributeFilter:
+        attributeElements:
+          uris: []
+        displayForm:
+          identifier:
+            id: region
+            type: label
+        filterElementsBy: []
+        localIdentifier: 2d5ef8df82444f6ba27b45f0990ee6af
+        negativeSelection: true
+  version: '2'
+description: ''
+id: region_filter
+title: filterContext

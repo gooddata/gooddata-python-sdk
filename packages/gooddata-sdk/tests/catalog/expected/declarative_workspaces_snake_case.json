@@ -261,13 +261,6 @@
                       "source_column": "geo__state__location",
                       "source_column_data_type": "STRING",
                       "description": "Location",
-                      "locale": "en-US",
-                      "translations": [
-                        {
-                          "locale": "cs-CZ",
-                          "source_column": "geo__state__location_cz"
-                        }
-                      ],
                       "tags": [
                         "Customers"
                       ],

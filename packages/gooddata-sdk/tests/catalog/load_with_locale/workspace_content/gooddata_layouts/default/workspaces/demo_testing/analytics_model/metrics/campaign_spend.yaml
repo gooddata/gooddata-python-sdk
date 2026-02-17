@@ -1,0 +1,6 @@
+# (C) 2022 GoodData Corporation
+content:
+  format: $#,##0
+  maql: SELECT SUM({fact/spend})
+id: campaign_spend
+title: Campaign Spend

@@ -1,0 +1,54 @@
+# (C) 2025 GoodData Corporation
+content:
+  filterContextRef:
+    identifier:
+      id: campaign_name_filter
+      type: filterContext
+  layout:
+    sections:
+      - header:
+          description: The first insight shows a breakdown of spend by category and
+            campaign. The second shows revenue per $ spend, for each campaign, to
+            demonstrate, how campaigns are successful.
+          title: Spend breakdown and Revenue
+        items:
+          - size:
+              xl:
+                gridWidth: 6
+            type: IDashboardLayoutItem
+            widget:
+              description: ''
+              drills: []
+              ignoreDashboardFilters: []
+              insight:
+                identifier:
+                  id: campaign_spend
+                  type: visualizationObject
+              properties: {}
+              title: Campaign Spend
+              type: insight
+          - size:
+              xl:
+                gridWidth: 6
+            type: IDashboardLayoutItem
+            widget:
+              description: ''
+              drills: []
+              ignoreDashboardFilters: []
+              insight:
+                identifier:
+                  id: revenue_per_usd_vs_spend_by_campaign
+                  type: visualizationObject
+              properties: {}
+              title: Revenue per $ vs Spend by Campaign
+              type: insight
+        type: IDashboardLayoutSection
+    type: IDashboardLayout
+  version: '2'
+description: ''
+id: campaign
+permissions:
+  - assigneeRule:
+      type: allWorkspaceUsers
+    name: VIEW
+title: Campaign
