@@ -64,10 +64,6 @@ test = [
     "pyyaml",
     "tests_support",
 ]
-type = [
-    "mypy~=1.11.2",
-    "pydantic~=2.12.0",
-]
 
 [tool.ty.analysis]
 allowed-unresolved-imports = ["gooddata_api_client"]
