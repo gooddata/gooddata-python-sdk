@@ -30,6 +30,48 @@ def _default_organization_check(organization: CatalogOrganization):
     assert organization.attributes.hostname == "localhost"
 
 
+def test_organization_from_api_with_deployment_info():
+    # Test that deployment info fields are correctly extracted from API response
+    api_response = {
+        "id": "test_org",
+        "attributes": {
+            "name": "Test Organization",
+            "hostname": "test.example.com",
+            "allowed_origins": ["https://example.com"],
+            "region": "us-east-1",
+            "data_center": "aws-us",
+        },
+    }
+
+    organization = CatalogOrganization.from_api(api_response)
+
+    assert organization.id == "test_org"
+    assert organization.attributes.name == "Test Organization"
+    assert organization.attributes.hostname == "test.example.com"
+    assert organization.attributes.allowed_origins == ["https://example.com"]
+    assert organization.attributes.region == "us-east-1"
+    assert organization.attributes.data_center == "aws-us"
+
+
+def test_organization_from_api_without_deployment_info():
+    # Test that organization can be created without deployment info fields
+    api_response = {
+        "id": "test_org",
+        "attributes": {
+            "name": "Test Organization",
+            "hostname": "test.example.com",
+        },
+    }
+
+    organization = CatalogOrganization.from_api(api_response)
+
+    assert organization.id == "test_org"
+    assert organization.attributes.name == "Test Organization"
+    assert organization.attributes.hostname == "test.example.com"
+    assert organization.attributes.region is None
+    assert organization.attributes.data_center is None
+
+
 def _default_jwk(jwk_id=_default_jwk_id, alg=None, kid=None):
     rsa_specification = CatalogRsaSpecification(
         alg=alg if alg else "RS256",
