@@ -63,7 +63,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '430'
+          - '450'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -88,6 +88,7 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
+              allowedOrigins: []
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -163,7 +164,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '430'
+          - '450'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -188,6 +189,7 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
+              allowedOrigins: []
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -230,7 +232,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '427'
+          - '447'
         Content-Type:
           - application/json
         DATE: *id001
@@ -255,6 +257,7 @@ interactions:
             attributes:
               name: test_organization
               hostname: localhost
+              allowedOrigins: []
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -330,7 +333,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '427'
+          - '447'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -355,6 +358,7 @@ interactions:
             attributes:
               name: test_organization
               hostname: localhost
+              allowedOrigins: []
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -430,7 +434,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '427'
+          - '447'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -455,6 +459,7 @@ interactions:
             attributes:
               name: test_organization
               hostname: localhost
+              allowedOrigins: []
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -497,7 +502,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '430'
+          - '450'
         Content-Type:
           - application/json
         DATE: *id001
@@ -522,6 +527,7 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
+              allowedOrigins: []
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -597,7 +603,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '430'
+          - '450'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -622,6 +628,7 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
+              allowedOrigins: []
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting

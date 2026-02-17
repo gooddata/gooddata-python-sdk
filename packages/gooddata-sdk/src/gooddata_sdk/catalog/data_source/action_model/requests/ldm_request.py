@@ -51,6 +51,7 @@ class CatalogGenerateLdmRequest(Base):
     wdf_prefix: Optional[str] = None
     pdm: Optional[CatalogPdmLdmRequest] = None
     workspace_id: Optional[str] = None
+    translation_prefix: Optional[str] = None
 
     @staticmethod
     def client_class() -> type[GenerateLdmRequest]:

@@ -1,0 +1,6 @@
+# (C) 2022 GoodData Corporation
+content:
+  format: $#,##0
+  maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
+id: total_revenue-no_filters
+title: Total Revenue (No Filters)

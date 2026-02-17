@@ -10,5 +10,5 @@ _current_dir = Path(__file__).parent.absolute()
 
 def _refresh_workspaces(sdk: GoodDataSdk) -> None:
     layout_api = sdk.client.layout_api
-    with open(_current_dir / "expected" / "declarative_workspaces.json") as f:
+    with open(_current_dir / "refresh" / "declarative_workspaces.json") as f:
         layout_api.set_workspaces_layout(DeclarativeWorkspaces.from_dict(json.load(f)))

@@ -131,7 +131,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: ed2e8f5434720de497f11072bcf40e0e
+          traceId: 004a46aa7a196c26bbe8f35d524dc304
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces
@@ -1897,10 +1897,6 @@ interactions:
                             title: Location
                             description: Location
                             sourceColumnDataType: STRING
-                            locale: en-US
-                            translations:
-                              - locale: cs-CZ
-                                sourceColumn: geo__state__location_cz
                             tags:
                               - Customers
                             valueType: GEO

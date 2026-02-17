@@ -22,7 +22,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '8290'
+          - '8196'
         Content-Type:
           - application/json
         DATE: &id001
@@ -243,10 +243,6 @@ interactions:
                 sourceColumnDataType: STRING
                 valueType: GEO
                 areRelationsValid: true
-                locale: en-US
-                translations:
-                  - sourceColumn: geo__state__location_cz
-                    locale: cs-CZ
               id: geo__state__location
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/geo__state__location

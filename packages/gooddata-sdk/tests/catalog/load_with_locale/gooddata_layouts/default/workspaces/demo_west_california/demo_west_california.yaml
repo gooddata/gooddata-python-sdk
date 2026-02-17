@@ -1,0 +1,9 @@
+# (C) 2022 GoodData Corporation
+hierarchyPermissions: []
+id: demo_west_california
+name: Demo West California
+parent:
+  id: demo_west
+  type: workspace
+permissions: []
+settings: []

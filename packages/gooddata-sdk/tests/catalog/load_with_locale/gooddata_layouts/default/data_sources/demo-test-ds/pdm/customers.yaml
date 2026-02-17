@@ -1,0 +1,22 @@
+# (C) 2022 GoodData Corporation
+columns:
+  - dataType: INT
+    isPrimaryKey: true
+    name: customer_id
+  - dataType: STRING
+    isPrimaryKey: false
+    name: customer_name
+  - dataType: STRING
+    isPrimaryKey: false
+    name: geo__state__location
+  - dataType: STRING
+    isPrimaryKey: false
+    name: region
+  - dataType: STRING
+    isPrimaryKey: false
+    name: state
+id: customers
+path:
+  - demo
+  - customers
+type: TABLE

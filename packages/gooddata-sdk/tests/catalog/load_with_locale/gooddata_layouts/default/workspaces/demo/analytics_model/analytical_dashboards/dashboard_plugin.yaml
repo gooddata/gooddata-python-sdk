@@ -1,0 +1,35 @@
+# (C) 2025 GoodData Corporation
+content:
+  filterContextRef:
+    identifier:
+      id: campaign_name_filter
+      type: filterContext
+  layout:
+    sections:
+      - items:
+          - size:
+              xl:
+                gridWidth: 12
+            type: IDashboardLayoutItem
+            widget:
+              description: ''
+              drills: []
+              ignoreDashboardFilters: []
+              insight:
+                identifier:
+                  id: top_10_products
+                  type: visualizationObject
+              properties: {}
+              title: DHO simple
+              type: insight
+        type: IDashboardLayoutSection
+    type: IDashboardLayout
+  plugins:
+    - plugin:
+        identifier:
+          id: dashboard_plugin_1
+          type: dashboardPlugin
+      version: '2'
+  version: '2'
+id: dashboard_plugin
+title: Dashboard plugin

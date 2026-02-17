@@ -307,12 +307,8 @@ interactions:
           id="label.date.year"><unit id="label.date.year.title"><segment><source>Date
           - Year</source></segment></unit><unit id="label.date.year.description"><segment><source>Year</source></segment></unit><unit
           id="label.date.year.tags"><segment><source>Date</source></segment></unit></group></group><group
-          id="metric"><group id="metric.total_revenue"><unit id="metric.total_revenue.title"><segment><source>Total
-          Revenue</source></segment></unit></group><group id="metric.total_revenue-no_filters"><unit
-          id="metric.total_revenue-no_filters.title"><segment><source>Total Revenue
-          (No Filters)</source></segment></unit></group><group id="metric.amount_of_active_customers"><unit
-          id="metric.amount_of_active_customers.title"><segment><source># of Active
-          Customers</source></segment></unit></group><group id="metric.amount_of_orders"><unit
+          id="metric"><group id="metric.amount_of_active_customers"><unit id="metric.amount_of_active_customers.title"><segment><source>#
+          of Active Customers</source></segment></unit></group><group id="metric.amount_of_orders"><unit
           id="metric.amount_of_orders.title"><segment><source># of Orders</source></segment></unit></group><group
           id="metric.amount_of_top_customers"><unit id="metric.amount_of_top_customers.title"><segment><source>#
           of Top Customers</source></segment></unit></group><group id="metric.amount_of_valid_orders"><unit
@@ -349,7 +345,10 @@ interactions:
           Dollar Spent</source></segment></unit></group><group id="metric.revenue_top_10"><unit
           id="metric.revenue_top_10.title"><segment><source>Revenue / Top 10</source></segment></unit></group><group
           id="metric.revenue_top_10_percent"><unit id="metric.revenue_top_10_percent.title"><segment><source>Revenue
-          / Top 10%</source></segment></unit></group></group><group id="visualizationObject"><group
+          / Top 10%</source></segment></unit></group><group id="metric.total_revenue"><unit
+          id="metric.total_revenue.title"><segment><source>Total Revenue</source></segment></unit></group><group
+          id="metric.total_revenue-no_filters"><unit id="metric.total_revenue-no_filters.title"><segment><source>Total
+          Revenue (No Filters)</source></segment></unit></group></group><group id="visualizationObject"><group
           id="visualizationObject.campaign_spend"><unit id="visualizationObject.campaign_spend.title"><segment><source>Campaign
           Spend</source></segment></unit><unit id="visualizationObject.campaign_spend.free-form"><notes><note
           appliesTo="source">Free-form translations are marked by the 'id' attribute,
@@ -768,12 +767,8 @@ interactions:
           id="label.date.year"><unit id="label.date.year.title"><segment><source>Date
           - Year</source></segment></unit><unit id="label.date.year.description"><segment><source>Year</source></segment></unit><unit
           id="label.date.year.tags"><segment><source>Date</source></segment></unit></group></group><group
-          id="metric"><group id="metric.total_revenue"><unit id="metric.total_revenue.title"><segment><source>Total
-          Revenue</source></segment></unit></group><group id="metric.total_revenue-no_filters"><unit
-          id="metric.total_revenue-no_filters.title"><segment><source>Total Revenue
-          (No Filters)</source></segment></unit></group><group id="metric.amount_of_active_customers"><unit
-          id="metric.amount_of_active_customers.title"><segment><source># of Active
-          Customers</source></segment></unit></group><group id="metric.amount_of_orders"><unit
+          id="metric"><group id="metric.amount_of_active_customers"><unit id="metric.amount_of_active_customers.title"><segment><source>#
+          of Active Customers</source></segment></unit></group><group id="metric.amount_of_orders"><unit
           id="metric.amount_of_orders.title"><segment><source># of Orders</source></segment></unit></group><group
           id="metric.amount_of_top_customers"><unit id="metric.amount_of_top_customers.title"><segment><source>#
           of Top Customers</source></segment></unit></group><group id="metric.amount_of_valid_orders"><unit
@@ -810,7 +805,10 @@ interactions:
           Dollar Spent</source></segment></unit></group><group id="metric.revenue_top_10"><unit
           id="metric.revenue_top_10.title"><segment><source>Revenue / Top 10</source></segment></unit></group><group
           id="metric.revenue_top_10_percent"><unit id="metric.revenue_top_10_percent.title"><segment><source>Revenue
-          / Top 10%</source></segment></unit></group></group><group id="visualizationObject"><group
+          / Top 10%</source></segment></unit></group><group id="metric.total_revenue"><unit
+          id="metric.total_revenue.title"><segment><source>Total Revenue</source></segment></unit></group><group
+          id="metric.total_revenue-no_filters"><unit id="metric.total_revenue-no_filters.title"><segment><source>Total
+          Revenue (No Filters)</source></segment></unit></group></group><group id="visualizationObject"><group
           id="visualizationObject.campaign_spend"><unit id="visualizationObject.campaign_spend.title"><segment><source>Campaign
           Spend</source></segment></unit><unit id="visualizationObject.campaign_spend.free-form"><notes><note
           appliesTo="source">Free-form translations are marked by the 'id' attribute,
@@ -1222,11 +1220,7 @@ interactions:
         id="label.date.year"><unit id="label.date.year.title"><segment><source>Date
         - Year</source><target>Date - Year.</target></segment></unit><unit id="label.date.year.description"><segment><source>Year</source><target>Year.</target></segment></unit><unit
         id="label.date.year.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group></group><group
-        id="metric"><group id="metric.total_revenue"><unit id="metric.total_revenue.title"><segment><source>Total
-        Revenue</source><target>Total Revenue.</target></segment></unit></group><group
-        id="metric.total_revenue-no_filters"><unit id="metric.total_revenue-no_filters.title"><segment><source>Total
-        Revenue (No Filters)</source><target>Total Revenue (No Filters).</target></segment></unit></group><group
-        id="metric.amount_of_active_customers"><unit id="metric.amount_of_active_customers.title"><segment><source>#
+        id="metric"><group id="metric.amount_of_active_customers"><unit id="metric.amount_of_active_customers.title"><segment><source>#
         of Active Customers</source><target># of Active Customers.</target></segment></unit></group><group
         id="metric.amount_of_orders"><unit id="metric.amount_of_orders.title"><segment><source>#
         of Orders</source><target># of Orders.</target></segment></unit></group><group
@@ -1270,7 +1264,11 @@ interactions:
         id="metric.revenue_top_10"><unit id="metric.revenue_top_10.title"><segment><source>Revenue
         / Top 10</source><target>Revenue / Top 10.</target></segment></unit></group><group
         id="metric.revenue_top_10_percent"><unit id="metric.revenue_top_10_percent.title"><segment><source>Revenue
-        / Top 10%</source><target>Revenue / Top 10%.</target></segment></unit></group></group><group
+        / Top 10%</source><target>Revenue / Top 10%.</target></segment></unit></group><group
+        id="metric.total_revenue"><unit id="metric.total_revenue.title"><segment><source>Total
+        Revenue</source><target>Total Revenue.</target></segment></unit></group><group
+        id="metric.total_revenue-no_filters"><unit id="metric.total_revenue-no_filters.title"><segment><source>Total
+        Revenue (No Filters)</source><target>Total Revenue (No Filters).</target></segment></unit></group></group><group
         id="visualizationObject"><group id="visualizationObject.campaign_spend"><unit
         id="visualizationObject.campaign_spend.title"><segment><source>Campaign Spend</source><target>Campaign
         Spend.</target></segment></unit><unit id="visualizationObject.campaign_spend.free-form"><notes><note
@@ -1445,7 +1443,7 @@ interactions:
         Accept:
           - '*/*'
         Accept-Encoding:
-          - gzip, deflate, br, zstd
+          - gzip, deflate, br
         Connection:
           - keep-alive
         Content-Length:
@@ -1776,11 +1774,7 @@ interactions:
           id="label.date.year"><unit id="label.date.year.title"><segment><source>Date
           - Year</source><target>Date - Year.</target></segment></unit><unit id="label.date.year.description"><segment><source>Year</source><target>Year.</target></segment></unit><unit
           id="label.date.year.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group></group><group
-          id="metric"><group id="metric.total_revenue"><unit id="metric.total_revenue.title"><segment><source>Total
-          Revenue</source><target>Total Revenue.</target></segment></unit></group><group
-          id="metric.total_revenue-no_filters"><unit id="metric.total_revenue-no_filters.title"><segment><source>Total
-          Revenue (No Filters)</source><target>Total Revenue (No Filters).</target></segment></unit></group><group
-          id="metric.amount_of_active_customers"><unit id="metric.amount_of_active_customers.title"><segment><source>#
+          id="metric"><group id="metric.amount_of_active_customers"><unit id="metric.amount_of_active_customers.title"><segment><source>#
           of Active Customers</source><target># of Active Customers.</target></segment></unit></group><group
           id="metric.amount_of_orders"><unit id="metric.amount_of_orders.title"><segment><source>#
           of Orders</source><target># of Orders.</target></segment></unit></group><group
@@ -1824,7 +1818,11 @@ interactions:
           id="metric.revenue_top_10"><unit id="metric.revenue_top_10.title"><segment><source>Revenue
           / Top 10</source><target>Revenue / Top 10.</target></segment></unit></group><group
           id="metric.revenue_top_10_percent"><unit id="metric.revenue_top_10_percent.title"><segment><source>Revenue
-          / Top 10%</source><target>Revenue / Top 10%.</target></segment></unit></group></group><group
+          / Top 10%</source><target>Revenue / Top 10%.</target></segment></unit></group><group
+          id="metric.total_revenue"><unit id="metric.total_revenue.title"><segment><source>Total
+          Revenue</source><target>Total Revenue.</target></segment></unit></group><group
+          id="metric.total_revenue-no_filters"><unit id="metric.total_revenue-no_filters.title"><segment><source>Total
+          Revenue (No Filters)</source><target>Total Revenue (No Filters).</target></segment></unit></group></group><group
           id="visualizationObject"><group id="visualizationObject.campaign_spend"><unit
           id="visualizationObject.campaign_spend.title"><segment><source>Campaign
           Spend</source><target>Campaign Spend.</target></segment></unit><unit id="visualizationObject.campaign_spend.free-form"><notes><note
@@ -2302,12 +2300,8 @@ interactions:
           id="label.date.year"><unit id="label.date.year.title"><segment><source>Date
           - Year</source></segment></unit><unit id="label.date.year.description"><segment><source>Year</source></segment></unit><unit
           id="label.date.year.tags"><segment><source>Date</source></segment></unit></group></group><group
-          id="metric"><group id="metric.total_revenue"><unit id="metric.total_revenue.title"><segment><source>Total
-          Revenue</source></segment></unit></group><group id="metric.total_revenue-no_filters"><unit
-          id="metric.total_revenue-no_filters.title"><segment><source>Total Revenue
-          (No Filters)</source></segment></unit></group><group id="metric.amount_of_active_customers"><unit
-          id="metric.amount_of_active_customers.title"><segment><source># of Active
-          Customers</source></segment></unit></group><group id="metric.amount_of_orders"><unit
+          id="metric"><group id="metric.amount_of_active_customers"><unit id="metric.amount_of_active_customers.title"><segment><source>#
+          of Active Customers</source></segment></unit></group><group id="metric.amount_of_orders"><unit
           id="metric.amount_of_orders.title"><segment><source># of Orders</source></segment></unit></group><group
           id="metric.amount_of_top_customers"><unit id="metric.amount_of_top_customers.title"><segment><source>#
           of Top Customers</source></segment></unit></group><group id="metric.amount_of_valid_orders"><unit
@@ -2344,7 +2338,10 @@ interactions:
           Dollar Spent</source></segment></unit></group><group id="metric.revenue_top_10"><unit
           id="metric.revenue_top_10.title"><segment><source>Revenue / Top 10</source></segment></unit></group><group
           id="metric.revenue_top_10_percent"><unit id="metric.revenue_top_10_percent.title"><segment><source>Revenue
-          / Top 10%</source></segment></unit></group></group><group id="visualizationObject"><group
+          / Top 10%</source></segment></unit></group><group id="metric.total_revenue"><unit
+          id="metric.total_revenue.title"><segment><source>Total Revenue</source></segment></unit></group><group
+          id="metric.total_revenue-no_filters"><unit id="metric.total_revenue-no_filters.title"><segment><source>Total
+          Revenue (No Filters)</source></segment></unit></group></group><group id="visualizationObject"><group
           id="visualizationObject.campaign_spend"><unit id="visualizationObject.campaign_spend.title"><segment><source>Campaign
           Spend</source></segment></unit><unit id="visualizationObject.campaign_spend.free-form"><notes><note
           appliesTo="source">Free-form translations are marked by the 'id' attribute,

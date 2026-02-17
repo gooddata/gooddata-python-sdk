@@ -1,0 +1,6 @@
+# (C) 2022 GoodData Corporation
+content:
+  format: $#,##0.0
+  maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
+id: revenue_per_customer
+title: Revenue per Customer
