@@ -4,7 +4,7 @@ FROM python:${PY_TAG}
 
 ARG PY_TAG
 ARG ENV_TAG
-ARG UV_VERSION=0.9.5
+ARG UV_VERSION=0.10.0
 
 # tox defines all python targets, makefile recognizes TEST_ENVS and forces
 # tox to execute only tests for installed python
@@ -12,7 +12,7 @@ ENV TEST_ENVS=${ENV_TAG}
 
 # install make and gosu
 # install uv using pip
-# UV_VERSION should match pyproject.toml [tool.uv] required-version (currently 0.9.5)
+# UV_VERSION should match pyproject.toml [tool.uv] required-version (currently ~=0.10.0)
 ENV GOSU_VERSION=1.14
 RUN set -x \
   && apt-get update \
