@@ -3,6 +3,8 @@
 # Common command components (run from workspace root, scoped to this package)
 ROOT_DIR = ../..
 RUFF = ./.venv/bin/ruff
+# ty needs uv run (unlike ruff) because it resolves imports from installed packages
+TY = uv run ty
 PKG_PATH = packages/$(CURR_DIR_BASE_NAME)
 
 TOX_FLAGS =
@@ -50,7 +52,7 @@ format-diff:
 
 .PHONY: type-check
 type-check:
-	uv run tox $(TOX_FLAGS) -e type-check
+	(cd $(ROOT_DIR); $(TY) check --project $(PKG_PATH) $(PKG_PATH)/src)
 
 .PHONY: types
 types: type-check
