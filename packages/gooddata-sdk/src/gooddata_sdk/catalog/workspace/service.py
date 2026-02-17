@@ -9,7 +9,7 @@ from copy import deepcopy
 from math import ceil
 from pathlib import Path
 from time import time
-from typing import Any, Callable, Optional
+from typing import Any, Callable
 from xml.etree import ElementTree as ET
 
 import attrs
@@ -190,13 +190,14 @@ class CatalogWorkspaceService(CatalogServiceBase):
         workspace_settings = load_all_entities(get_workspace_settings).data
         return [CatalogWorkspaceSetting.from_api(ws) for ws in workspace_settings]
 
-    def resolve_all_workspace_settings(self, workspace_id: str) -> dict:
+    def resolve_all_workspace_settings(self, workspace_id: str, exclude_user_settings: bool = False) -> dict:
         """
         Resolves values for all settings in a workspace by current user, workspace, organization, or default settings
         and return them as a dictionary. Proper parsing is up to the caller.
         TODO: long-term we should return a proper entity object.
 
         :param workspace_id: Workspace ID
+        :param exclude_user_settings: If True, user-level settings are excluded from resolution
         :return: Dict of settings
         """
         # note: in case some settings were recently added and the API client was not regenerated it can fail on
@@ -205,12 +206,15 @@ class CatalogWorkspaceService(CatalogServiceBase):
             setting.to_dict()
             for setting in self._client.actions_api.workspace_resolve_all_settings(
                 workspace_id,
+                exclude_user_settings=exclude_user_settings,
                 _check_return_type=False,
             )
         ]
         return {setting["type"]: setting for setting in resolved_workspace_settings}
 
-    def resolve_workspace_settings(self, workspace_id: str, settings: list) -> dict:
+    def resolve_workspace_settings(
+        self, workspace_id: str, settings: list, exclude_user_settings: bool = False
+    ) -> dict:
         """
         Resolves values for given settings in a workspace by current user, workspace, organization, or default settings
         and return them as a dictionary. Proper parsing is up to the caller.
@@ -218,6 +222,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
 
         :param workspace_id: Workspace ID
         :param settings: List of settings to resolve
+        :param exclude_user_settings: If True, user-level settings are excluded from resolution
         :return: Dict of settings
         """
         resolved_workspace_settings = [
@@ -225,6 +230,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
             for setting in self._client.actions_api.workspace_resolve_settings(
                 workspace_id,
                 ResolveSettingsRequest(settings=settings),
+                exclude_user_settings=exclude_user_settings,
                 _check_return_type=False,
             )
         ]
@@ -232,7 +238,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
 
     # Declarative methods - workspaces
 
-    def get_declarative_workspaces(self, exclude: Optional[list[str]] = None) -> CatalogDeclarativeWorkspaces:
+    def get_declarative_workspaces(self, exclude: list[str] | None = None) -> CatalogDeclarativeWorkspaces:
         """Get all workspaces in the current organization in a declarative form.
 
         Args:
@@ -305,7 +311,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
     # Declarative methods - workspace
 
     def get_declarative_workspace(
-        self, workspace_id: str, exclude: Optional[list[str]] = None
+        self, workspace_id: str, exclude: list[str] | None = None
     ) -> CatalogDeclarativeWorkspaceModel:
         """Retrieve a workspace layout.
 
@@ -348,7 +354,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
         self._layout_api.put_workspace_layout(workspace_id, workspace.to_api())
 
     def store_declarative_workspace(
-        self, workspace_id: str, layout_root_path: Path = Path.cwd(), exclude: Optional[list[str]] = None
+        self, workspace_id: str, layout_root_path: Path = Path.cwd(), exclude: list[str] | None = None
     ) -> None:
         """Store workspace layout in a directory hierarchy.
 
@@ -410,11 +416,11 @@ class CatalogWorkspaceService(CatalogServiceBase):
     def clone_workspace(
         self,
         source_workspace_id: str,
-        target_workspace_id: Optional[str] = None,
-        target_workspace_name: Optional[str] = None,
-        overwrite_existing: Optional[bool] = None,
-        data_source_mapping: Optional[dict] = None,
-        upper_case: Optional[bool] = True,
+        target_workspace_id: str | None = None,
+        target_workspace_name: str | None = None,
+        overwrite_existing: bool | None = None,
+        data_source_mapping: dict | None = None,
+        upper_case: bool | None = True,
         place_in_hierarchy: bool = True,
     ) -> None:
         """Clone workspace from existing workspace.
@@ -513,10 +519,10 @@ class CatalogWorkspaceService(CatalogServiceBase):
         to_lang: str,
         to_locale: str,
         from_lang: str = "en",
-        translator_func: Optional[Callable] = None,
-        layout_root_path: Optional[Path] = None,
-        provision_workspace: Optional[bool] = False,
-        store_layouts: Optional[bool] = False,
+        translator_func: Callable | None = None,
+        layout_root_path: Path | None = None,
+        provision_workspace: bool | None = False,
+        store_layouts: bool | None = False,
         place_in_hierarchy: bool = True,
     ) -> None:
         """
@@ -577,7 +583,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
         if provision_workspace:
             self.provision_workspace_with_locales(workspace_id, new_workspace, new_workspace_content, to_locale)
 
-    def create_custom_workspace_folder(self, workspace_id: str, layout_root_path: Optional[Path]) -> Path:
+    def create_custom_workspace_folder(self, workspace_id: str, layout_root_path: Path | None) -> Path:
         if layout_root_path:
             workspace_folder = layout_root_path
         else:
@@ -661,7 +667,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
     def translate_if_requested(
         self,
         to_translate: set[str],
-        translator_func: Optional[Callable],
+        translator_func: Callable | None,
         to_lang: str,
         from_lang: str,
         already_translated: dict[str, str],
@@ -691,14 +697,14 @@ class CatalogWorkspaceService(CatalogServiceBase):
         return translated
 
     @staticmethod
-    def add_title_description(to_translate: set[str], title: Optional[str], description: Optional[str]) -> None:
+    def add_title_description(to_translate: set[str], title: str | None, description: str | None) -> None:
         if title:
             to_translate.add(title)
         if description:
             to_translate.add(description)
 
     def add_title_description_tags(
-        self, to_translate: set[str], title: Optional[str], description: Optional[str], tags: Optional[list[str]]
+        self, to_translate: set[str], title: str | None, description: str | None, tags: list[str] | None
     ) -> None:
         self.add_title_description(to_translate, title, description)
         if tags:
