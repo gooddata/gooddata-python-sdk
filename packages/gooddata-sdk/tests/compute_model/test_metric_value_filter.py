@@ -86,7 +86,7 @@ def test_all_metric_value_filter_description():
 
 def test_cannot_create_api_model_from_all_metric_value_filter():
     """
-    Analogy to AllTimeFilter test_cannot_create_api_model_from_all_time_filter() in test_date_filters.py
+    Analogy to AllTimeDateFilter noop behavior test in test_date_filters.py
     """
     with pytest.raises(NotImplementedError):
         f = AllMetricValueFilter(metric="local_id1")

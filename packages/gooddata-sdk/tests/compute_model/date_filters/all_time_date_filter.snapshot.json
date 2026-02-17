@@ -1,0 +1,11 @@
+{
+    "all_time_date_filter": {
+        "dataset": {
+            "identifier": {
+                "id": "dataset.id",
+                "type": "dataset"
+            }
+        },
+        "empty_value_handling": "EXCLUDE"
+    }
+}
