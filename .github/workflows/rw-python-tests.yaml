@@ -22,9 +22,9 @@ jobs:
           TEST_ENVS: ${{ matrix.python_version }}
       - name: Upload coverage to Codecov
         if: ${{ matrix.python_version == 'py314' }}
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v5
         with:
-          files: ./packages/gooddata-sdk/coverage.xml,./packages/gooddata-pandas/coverage.xml,./packages/gooddata-fdw/coverage.xml,./packages/gooddata-flight-server/coverage.xml,./packages/gooddata-flexconnect/coverage.xml
+          files: ./packages/gooddata-sdk/coverage.xml,./packages/gooddata-pandas/coverage.xml,./packages/gooddata-fdw/coverage.xml,./packages/gooddata-flight-server/coverage.xml,./packages/gooddata-flexconnect/coverage.xml,./packages/gooddata-dbt/coverage.xml,./packages/gooddata-pipelines/coverage.xml
   lint-and-format-check:
     runs-on: ubuntu-latest
     if: ${{inputs.changed-python-modules == 'true'}}
