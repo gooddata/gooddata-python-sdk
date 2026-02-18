@@ -17,7 +17,7 @@ dependencies = [
 ]
 
 [tool.uv]
-required-version = ">=0.9.5,<0.10.0"
+required-version = "~=0.10.0"
 
 [tool.uv.sources]
 gooddata-sdk = { workspace = true }
@@ -40,10 +40,10 @@ dev = [
     "gitlint~=0.19.1",
 ]
 lint = [
-    "ruff==0.9.5",
+    "ruff~=0.15.1",
 ]
 type = [
-    "ty>=0.0.14",
+    "ty~=0.0.14",
 ]
 test = [
     # Common test dependencies used across all workspace packages
