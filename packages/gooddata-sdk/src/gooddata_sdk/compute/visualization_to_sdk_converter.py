@@ -5,7 +5,7 @@ from gooddata_sdk.compute.model.attribute import Attribute
 from gooddata_sdk.compute.model.base import ObjId
 from gooddata_sdk.compute.model.filter import (
     AbsoluteDateFilter,
-    AllTimeFilter,
+    AllTimeDateFilter,
     BoundedFilter,
     Filter,
     NegativeAttributeFilter,
@@ -52,7 +52,7 @@ class VisualizationToSdkConverter:
                 - NegativeAttributeFilter: When exclude values specified
                 - RelativeDateFilter: When granularity and from/to shifts specified
                 - AbsoluteDateFilter: When from/to dates specified
-                - AllTimeFilter: When no date range specified
+                - AllTimeDateFilter: When no date range specified
         """
         using = filter_dict["using"]
         include = filter_dict.get("include")
@@ -84,7 +84,7 @@ class VisualizationToSdkConverter:
         elif _from is not None and _to is not None:
             return AbsoluteDateFilter(dataset=ObjId(using, "dataset"), from_date=_from, to_date=_to)
         else:
-            return AllTimeFilter(dataset=ObjId(using, "dataset"))
+            return AllTimeDateFilter(dataset=ObjId(using, "dataset"))
 
     @staticmethod
     def convert_metric(metric_dict: dict[str, Any]) -> Metric:
