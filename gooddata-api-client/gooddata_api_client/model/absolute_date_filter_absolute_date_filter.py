@@ -60,6 +60,11 @@ class AbsoluteDateFilterAbsoluteDateFilter(ModelNormal):
     """
 
     allowed_values = {
+        ('empty_value_handling',): {
+            'INCLUDE': "INCLUDE",
+            'EXCLUDE': "EXCLUDE",
+            'ONLY': "ONLY",
+        },
     }
 
     validations = {
@@ -99,6 +104,7 @@ class AbsoluteDateFilterAbsoluteDateFilter(ModelNormal):
         lazy_import()
         return {
             'dataset': (AfmObjectIdentifierDataset,),  # noqa: E501
+            'empty_value_handling': (str,),  # noqa: E501
             '_from': (str,),  # noqa: E501
             'to': (str,),  # noqa: E501
             'apply_on_result': (bool,),  # noqa: E501
@@ -112,6 +118,7 @@ class AbsoluteDateFilterAbsoluteDateFilter(ModelNormal):
 
     attribute_map = {
         'dataset': 'dataset',  # noqa: E501
+        'empty_value_handling': 'emptyValueHandling',  # noqa: E501
         '_from': 'from',  # noqa: E501
         'to': 'to',  # noqa: E501
         'apply_on_result': 'applyOnResult',  # noqa: E501

@@ -1,0 +1,33 @@
+{
+    "attributes": [],
+    "filters": [
+        {
+            "all_time_date_filter": {
+                "dataset": {
+                    "identifier": {
+                        "id": "dataset.id",
+                        "type": "dataset"
+                    }
+                },
+                "empty_value_handling": "EXCLUDE"
+            }
+        }
+    ],
+    "measures": [
+        {
+            "definition": {
+                "measure": {
+                    "compute_ratio": false,
+                    "filters": [],
+                    "item": {
+                        "identifier": {
+                            "id": "metric_id",
+                            "type": "metric"
+                        }
+                    }
+                }
+            },
+            "local_identifier": "simple_metric_local_id"
+        }
+    ]
+}

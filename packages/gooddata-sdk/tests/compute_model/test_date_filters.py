@@ -6,7 +6,7 @@ import os
 from importlib.util import find_spec
 
 import pytest
-from gooddata_sdk import AbsoluteDateFilter, AllTimeFilter, ObjId, RelativeDateFilter
+from gooddata_sdk import AbsoluteDateFilter, AllTimeDateFilter, ObjId, RelativeDateFilter
 
 _current_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -33,6 +33,18 @@ test_filters = [
         },
     ],
     [
+        "absolute date filter with empty value handling",
+        AbsoluteDateFilter(
+            dataset=ObjId(type="dataset", id="dataset.id"),
+            from_date="2021-07-01 18:23",
+            to_date="2021-07-16 18:23",
+            empty_value_handling="ONLY",
+        ),
+        {
+            "default": "DataSet ID: 7/1/2021 - 7/16/2021",
+        },
+    ],
+    [
         "relative date filter",
         RelativeDateFilter(
             dataset=ObjId(type="dataset", id="dataset.id"),
@@ -42,6 +54,29 @@ test_filters = [
         ),
         {
             "default": "DataSet ID: From 10 days to 1 day ago",
+        },
+    ],
+    [
+        "relative date filter with empty value handling",
+        RelativeDateFilter(
+            dataset=ObjId(type="dataset", id="dataset.id"),
+            granularity="DAY",
+            from_shift=-10,
+            to_shift=-1,
+            empty_value_handling="ONLY",
+        ),
+        {
+            "default": "DataSet ID: From 10 days to 1 day ago",
+        },
+    ],
+    [
+        "all time date filter",
+        AllTimeDateFilter(
+            dataset=ObjId(type="dataset", id="dataset.id"),
+            empty_value_handling="EXCLUDE",
+        ),
+        {
+            "default": "DataSet ID: All time",
         },
     ],
 ]
@@ -71,11 +106,6 @@ def test_date_filters_description(scenario, filter, descriptions):
                 pytest.skip("ICU library not found")
 
 
-def test_cannot_create_api_model_from_all_time_filter():
-    """As All time filter from GoodData.CN does not contain from and to fields,
-    we are not sure how to make valid model from it. We prefer to fail, until
-    we decide what to do with this situation.
-    """
-    with pytest.raises(NotImplementedError):
-        f = AllTimeFilter(dataset=ObjId(type="dataset", id="dataset.id"))
-        f.as_api_model()
+def test_all_time_date_filter_is_noop_by_default():
+    f = AllTimeDateFilter(dataset=ObjId(type="dataset", id="dataset.id"))
+    assert f.is_noop()

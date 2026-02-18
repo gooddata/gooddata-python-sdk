@@ -12,7 +12,7 @@ from gooddata_sdk.compute.model.base import ObjId
 from gooddata_sdk.compute.model.filter import (
     AbsoluteDateFilter,
     AllMetricValueFilter,
-    AllTimeFilter,
+    AllTimeDateFilter,
     BoundedFilter,
     Filter,
     MetricValueFilter,
@@ -183,7 +183,12 @@ def _convert_filter_to_computable(filter_obj: dict[str, Any]) -> Filter:
 
         # there is filter present, but uses all time
         if ("from" not in f) or ("to" not in f):
-            return AllTimeFilter(ref_extract_obj_id(f["dataSet"]))
+            granularity = _GRANULARITY_CONVERSION.get(f.get("granularity")) if "granularity" in f else None
+            return AllTimeDateFilter(
+                dataset=ref_extract_obj_id(f.get("dataSet") or f.get("dataset")),
+                granularity=granularity,
+                empty_value_handling=f.get("emptyValueHandling"),
+            )
 
         # Extract bounded filter if present
         bounded_filter = None
@@ -201,12 +206,27 @@ def _convert_filter_to_computable(filter_obj: dict[str, Any]) -> Filter:
             from_shift=f["from"],
             to_shift=f["to"],
             bounded_filter=bounded_filter,
+            empty_value_handling=f.get("emptyValueHandling"),
+        )
+
+    elif "allTimeDateFilter" in filter_obj:
+        f = filter_obj["allTimeDateFilter"]
+        granularity = _GRANULARITY_CONVERSION.get(f.get("granularity")) if "granularity" in f else None
+        return AllTimeDateFilter(
+            dataset=ref_extract_obj_id(f.get("dataSet") or f.get("dataset")),
+            granularity=granularity,
+            empty_value_handling=f.get("emptyValueHandling"),
         )
 
     elif "absoluteDateFilter" in filter_obj:
         f = filter_obj["absoluteDateFilter"]
 
-        return AbsoluteDateFilter(dataset=ref_extract_obj_id(f["dataSet"]), from_date=f["from"], to_date=f["to"])
+        return AbsoluteDateFilter(
+            dataset=ref_extract_obj_id(f["dataSet"]),
+            from_date=f["from"],
+            to_date=f["to"],
+            empty_value_handling=f.get("emptyValueHandling"),
+        )
     elif "measureValueFilter" in filter_obj:
         f = filter_obj["measureValueFilter"]
 

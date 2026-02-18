@@ -14,6 +14,7 @@ if find_spec("icu") is not None:
 import gooddata_api_client.models as afm_models
 from gooddata_api_client.model_utils import OpenApiModel
 from gooddata_api_client.models import AbsoluteDateFilterAbsoluteDateFilter as AbsoluteDateFilterBody
+from gooddata_api_client.models import AllTimeDateFilterAllTimeDateFilter as AllTimeDateFilterBody
 from gooddata_api_client.models import (
     ComparisonMeasureValueFilterComparisonMeasureValueFilter as ComparisonMeasureValueFilterBody,
 )
@@ -74,6 +75,8 @@ ComparisonOperator: TypeAlias = Literal[
 ]
 
 RangeOperator: TypeAlias = Literal["BETWEEN", "NOT_BETWEEN"]
+
+EmptyValueHandling: TypeAlias = Literal["INCLUDE", "EXCLUDE", "ONLY"]
 
 
 def _extract_id_or_local_id(val: Union[ObjId, Attribute, Metric, str]) -> Union[ObjId, str]:
@@ -199,8 +202,15 @@ class RelativeDateFilter(Filter):
         from_shift: int,
         to_shift: int,
         bounded_filter: Optional[BoundedFilter] = None,
+        empty_value_handling: Optional[EmptyValueHandling] = None,
     ) -> None:
         super().__init__()
+
+        if empty_value_handling is not None and empty_value_handling not in ("INCLUDE", "EXCLUDE", "ONLY"):
+            raise ValueError(
+                f"Invalid relative date filter empty value handling '{empty_value_handling}'. "
+                "It is expected to be one of: INCLUDE, EXCLUDE, ONLY"
+            )
 
         if granularity not in _GRANULARITY:
             raise ValueError(
@@ -212,6 +222,7 @@ class RelativeDateFilter(Filter):
         self._from_shift = from_shift
         self._to_shift = to_shift
         self._bounded_filter = bounded_filter
+        self._empty_value_handling = empty_value_handling
 
     @property
     def dataset(self) -> ObjId:
@@ -233,6 +244,10 @@ class RelativeDateFilter(Filter):
     def bounded_filter(self) -> Optional[BoundedFilter]:
         return self._bounded_filter
 
+    @property
+    def empty_value_handling(self) -> Optional[EmptyValueHandling]:
+        return self._empty_value_handling
+
     def is_noop(self) -> bool:
         return False
 
@@ -247,6 +262,9 @@ class RelativeDateFilter(Filter):
 
         if self.bounded_filter is not None:
             body_params["bounded_filter"] = self.bounded_filter.as_api_model()
+
+        if self.empty_value_handling is not None:
+            body_params["empty_value_handling"] = self.empty_value_handling
 
         body = RelativeDateFilterBody(**body_params)
         return afm_models.RelativeDateFilter(body)
@@ -291,40 +309,84 @@ class RelativeDateFilter(Filter):
         return f"{labels.get(self.dataset.id, self.dataset.id)}: {range_str}"
 
 
-# noinspection PyAbstractClass
-class AllTimeFilter(Filter):
-    """Filter that is semantically equivalent to absent filter.
-
-    This filter exists because 'All time filter' retrieved from GoodData.CN
-    is non-standard as it does not have `from` and `to` fields;
-    this is also the reason why as_api_model method is not implemented - it
-    would lead to invalid object.
-
-    The main feature of this filter is noop.
-    """
-
-    def __init__(self, dataset: ObjId) -> None:
+class AllTimeDateFilter(Filter):
+    def __init__(
+        self,
+        dataset: ObjId,
+        granularity: Optional[str] = None,
+        empty_value_handling: Optional[EmptyValueHandling] = None,
+    ) -> None:
         super().__init__()
+
+        if empty_value_handling is not None and empty_value_handling not in ("INCLUDE", "EXCLUDE", "ONLY"):
+            raise ValueError(
+                f"Invalid all time date filter empty value handling '{empty_value_handling}'. "
+                "It is expected to be one of: INCLUDE, EXCLUDE, ONLY"
+            )
+
+        if granularity is not None and granularity not in _GRANULARITY:
+            raise ValueError(
+                f"Invalid all time date filter granularity '{granularity}'. It is expected to be one of: {_GRANULARITY}"
+            )
+
         self._dataset = dataset
+        self._granularity = granularity
+        self._empty_value_handling = empty_value_handling
 
     @property
     def dataset(self) -> ObjId:
         return self._dataset
 
+    @property
+    def granularity(self) -> Optional[str]:
+        return self._granularity
+
+    @property
+    def empty_value_handling(self) -> Optional[EmptyValueHandling]:
+        return self._empty_value_handling
+
     def is_noop(self) -> bool:
-        return True
+        return self.empty_value_handling is None or self.empty_value_handling == "INCLUDE"
+
+    def as_api_model(self) -> afm_models.AllTimeDateFilter:
+        body_params: dict[str, Any] = {
+            "dataset": self.dataset.as_afm_id(),
+            "_check_type": False,
+        }
+
+        if self.granularity is not None:
+            body_params["granularity"] = self.granularity
+
+        if self.empty_value_handling is not None:
+            body_params["empty_value_handling"] = self.empty_value_handling
+
+        body = AllTimeDateFilterBody(**body_params)
+        return afm_models.AllTimeDateFilter(body, _check_type=False)
 
     def description(self, labels: dict[str, str], format_locale: Optional[str] = None) -> str:
         return f"{labels.get(self.dataset.id, self.dataset.id)}: All time"
 
 
 class AbsoluteDateFilter(Filter):
-    def __init__(self, dataset: ObjId, from_date: str, to_date: str) -> None:
+    def __init__(
+        self,
+        dataset: ObjId,
+        from_date: str,
+        to_date: str,
+        empty_value_handling: Optional[EmptyValueHandling] = None,
+    ) -> None:
         super().__init__()
+
+        if empty_value_handling is not None and empty_value_handling not in ("INCLUDE", "EXCLUDE", "ONLY"):
+            raise ValueError(
+                f"Invalid absolute date filter empty value handling '{empty_value_handling}'. "
+                "It is expected to be one of: INCLUDE, EXCLUDE, ONLY"
+            )
 
         self._dataset = dataset
         self._from_date = from_date
         self._to_date = to_date
+        self._empty_value_handling = empty_value_handling
 
     @property
     def dataset(self) -> ObjId:
@@ -338,16 +400,24 @@ class AbsoluteDateFilter(Filter):
     def to_date(self) -> str:
         return self._to_date
 
+    @property
+    def empty_value_handling(self) -> Optional[EmptyValueHandling]:
+        return self._empty_value_handling
+
     def is_noop(self) -> bool:
         return False
 
     def as_api_model(self) -> afm_models.AbsoluteDateFilter:
-        body = AbsoluteDateFilterBody(
+        body_params: dict[str, Any] = dict(
             dataset=self.dataset.as_afm_id(),
             _from=self._from_date,
             to=self._to_date,
             _check_type=False,
         )
+        if self.empty_value_handling is not None:
+            body_params["empty_value_handling"] = self.empty_value_handling
+
+        body = AbsoluteDateFilterBody(**body_params)
         return afm_models.AbsoluteDateFilter(body)
 
     def __eq__(self, other: object) -> bool:
