@@ -8,6 +8,7 @@ from typing import Any, Optional, Union
 
 from gooddata_api_client import ApiException
 from gooddata_api_client.model.afm_cancel_tokens import AfmCancelTokens
+from gooddata_api_client.model.allowed_relationship_type import AllowedRelationshipType
 from gooddata_api_client.model.chat_history_request import ChatHistoryRequest
 from gooddata_api_client.model.chat_history_result import ChatHistoryResult
 from gooddata_api_client.model.chat_request import ChatRequest
@@ -135,17 +136,27 @@ class ComputeService:
             is_cancellable=is_cancellable,
         )
 
-    def ai_chat(self, workspace_id: str, question: str) -> ChatResult:
+    def ai_chat(
+        self,
+        workspace_id: str,
+        question: str,
+        allowed_relationship_types: Optional[list[AllowedRelationshipType]] = None,
+    ) -> ChatResult:
         """
         Chat with AI in GoodData workspace.
 
         Args:
             workspace_id (str): workspace identifier
             question (str): question for the AI
+            allowed_relationship_types (Optional[list[AllowedRelationshipType]]): list of allowed relationship types
+                to filter which object-type combinations the AI may reference. Defaults to None (no filtering).
         Returns:
             ChatResult: Chat response
         """
-        chat_request = ChatRequest(question=question)
+        chat_params: dict[str, Any] = {}
+        if allowed_relationship_types is not None:
+            chat_params["allowed_relationship_types"] = allowed_relationship_types
+        chat_request = ChatRequest(question=question, **chat_params)
         response = self._actions_api.ai_chat(workspace_id, chat_request, _check_return_type=False)
         return response
 
@@ -160,17 +171,27 @@ class ComputeService:
                     except json.JSONDecodeError:
                         continue
 
-    def ai_chat_stream(self, workspace_id: str, question: str) -> Iterator[Any]:
+    def ai_chat_stream(
+        self,
+        workspace_id: str,
+        question: str,
+        allowed_relationship_types: Optional[list[AllowedRelationshipType]] = None,
+    ) -> Iterator[Any]:
         """
         Chat Stream with AI in GoodData workspace.
 
         Args:
             workspace_id (str): workspace identifier
             question (str): question for the AI
+            allowed_relationship_types (Optional[list[AllowedRelationshipType]]): list of allowed relationship types
+                to filter which object-type combinations the AI may reference. Defaults to None (no filtering).
         Returns:
             Iterator[Any]: Yields parsed JSON objects from each SSE event's data field
         """
-        chat_request = ChatRequest(question=question)
+        chat_params: dict[str, Any] = {}
+        if allowed_relationship_types is not None:
+            chat_params["allowed_relationship_types"] = allowed_relationship_types
+        chat_request = ChatRequest(question=question, **chat_params)
         response = self._actions_api.ai_chat_stream(
             workspace_id, chat_request, _check_return_type=False, _preload_content=False
         )
