@@ -1,7 +1,6 @@
 # (C) 2023 GoodData Corporation
 import argparse
 from logging import Logger
-from typing import Optional
 
 from gooddata_sdk import GoodDataSdk
 
@@ -11,7 +10,7 @@ from gooddata_dbt.gooddata.api_wrapper import GoodDataApiWrapper
 class GoodDataSdkWrapper:
     # Timeout=600 because supporting waiting for GoodData services to start
     def __init__(
-        self, args: argparse.Namespace, logger: Logger, profile: Optional[str] = None, timeout: int = 600
+        self, args: argparse.Namespace, logger: Logger, profile: str | None = None, timeout: int = 600
     ) -> None:
         self.args = args
         self.logger = logger
@@ -22,7 +21,7 @@ class GoodDataSdkWrapper:
         if not self.args.dry_run:
             self.wait_for_gooddata_is_up(self.timeout)
 
-    def get_host_from_sdk(self) -> Optional[str]:
+    def get_host_from_sdk(self) -> str | None:
         # TODO - make _hostname public in gooddata_sdk
         return self.sdk.client._hostname
 
@@ -54,7 +53,7 @@ class GoodDataSdkWrapper:
         self.sdk.support.wait_till_available(timeout=timeout)
         self.logger.info(f"Host {host} is up")
 
-    def pre_cache_visualizations(self, workspaces: Optional[list] = None) -> None:
+    def pre_cache_visualizations(self, workspaces: list | None = None) -> None:
         if not workspaces:
             workspaces = [w.id for w in self.sdk.catalog_workspace.list_workspaces()]
         for workspace_id in workspaces:

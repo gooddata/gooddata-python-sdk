@@ -4,7 +4,7 @@ from __future__ import annotations
 import functools
 from collections import defaultdict
 from enum import Enum
-from typing import Any, Optional, Union, cast
+from typing import Any, Union, cast
 
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.model.attribute import Attribute
@@ -350,31 +350,31 @@ class VisualizationMetric:
         return self._m["localIdentifier"]
 
     @property
-    def alias(self) -> Optional[str]:
+    def alias(self) -> str | None:
         return self._m.get("alias")
 
     @property
-    def title(self) -> Optional[str]:
+    def title(self) -> str | None:
         return self._m.get("title")
 
     @property
-    def format(self) -> Optional[str]:
+    def format(self) -> str | None:
         return self._m.get("format")
 
     @property
-    def item(self) -> Optional[dict[str, Any]]:
+    def item(self) -> dict[str, Any] | None:
         return safeget(self._d, ["measureDefinition", "item"])
 
     @property
-    def aggregation(self) -> Optional[str]:
+    def aggregation(self) -> str | None:
         return safeget(self._d, ["measureDefinition", "aggregation"])
 
     @property
-    def item_id(self) -> Optional[str]:
+    def item_id(self) -> str | None:
         return safeget(self.item, ["identifier", "id"])
 
     @property
-    def item_type(self) -> Optional[str]:
+    def item_type(self) -> str | None:
         return safeget(self.item, ["identifier", "type"])
 
     @property
@@ -382,7 +382,7 @@ class VisualizationMetric:
         return "popMeasureDefinition" in self._d or "previousPeriodMeasure" in self._d
 
     @property
-    def time_comparison_master(self) -> Optional[str]:
+    def time_comparison_master(self) -> str | None:
         """
         If this is a time comparison metric, return local_id of the master metric from which it is
         derived.
@@ -417,7 +417,7 @@ class VisualizationAttribute:
         return self._a["displayForm"]["identifier"]["id"]
 
     @property
-    def alias(self) -> Optional[str]:
+    def alias(self) -> str | None:
         return self._a.get("alias")
 
     @property
@@ -425,7 +425,7 @@ class VisualizationAttribute:
         return self._a["displayForm"]
 
     @property
-    def show_all_values(self) -> Optional[bool]:
+    def show_all_values(self) -> bool | None:
         return self._a.get("showAllValues")
 
     def as_computable(self) -> Attribute:
@@ -522,7 +522,7 @@ class VisualizationSort:
         sort_keys = list(sort.keys())
         sort_key = sort_keys[0] if sort_keys else ""
         self._sort = sort[sort_key] if sort_key else {}
-        self._locators: Optional[list[VisualizationSortLocator]] = None
+        self._locators: list[VisualizationSortLocator] | None = None
         self.type = _SORT_KEY_TO_SORT_TYPE[sort_key]
 
     @property
@@ -534,7 +534,7 @@ class VisualizationSort:
         return self._sort["attributeIdentifier"] if self.type == SortType.ATTRIBUTE else ""
 
     @property
-    def aggregation(self) -> Optional[str]:
+    def aggregation(self) -> str | None:
         return self._sort.get("aggregation")
 
     @property
@@ -565,9 +565,9 @@ class VisualizationSort:
 class VisualizationBucket:
     def __init__(self, bucket: dict[str, Any]) -> None:
         self._b = bucket
-        self._metrics: Optional[list[VisualizationMetric]] = None
-        self._attributes: Optional[list[VisualizationAttribute]] = None
-        self._totals: Optional[list[VisualizationTotal]] = None
+        self._metrics: list[VisualizationMetric] | None = None
+        self._attributes: list[VisualizationAttribute] | None = None
+        self._totals: list[VisualizationTotal] | None = None
         self.type = _LOCAL_ID_TO_BUCKET_TYPE[self.local_id]
 
     @property
@@ -610,13 +610,13 @@ class Visualization:
     def __init__(
         self,
         from_vis_obj: dict[str, Any],
-        side_loads: Optional[SideLoads] = None,
+        side_loads: SideLoads | None = None,
     ) -> None:
         self._vo = from_vis_obj
-        self._attribute_filter_configs: Optional[list[VisualizationAttributeFilterConfig]] = None
-        self._buckets: Optional[list[VisualizationBucket]] = None
-        self._filters: Optional[list[VisualizationFilter]] = None
-        self._sorts: Optional[list[VisualizationSort]] = None
+        self._attribute_filter_configs: list[VisualizationAttributeFilterConfig] | None = None
+        self._buckets: list[VisualizationBucket] | None = None
+        self._filters: list[VisualizationFilter] | None = None
+        self._sorts: list[VisualizationSort] | None = None
         self._side_loads = SideLoads([]) if side_loads is None else side_loads
 
     @property
@@ -637,7 +637,7 @@ class Visualization:
         return self._vo["attributes"].get("areRelationsValid", "true")
 
     @property
-    def attribute_filter_configs(self) -> Optional[list[VisualizationAttributeFilterConfig]]:
+    def attribute_filter_configs(self) -> list[VisualizationAttributeFilterConfig] | None:
         visualization_attribute_filter_configs = safeget(self._vo, ["attributes", "content", "attributeFilterConfigs"])
         if self._attribute_filter_configs is None and visualization_attribute_filter_configs is not None:
             self._attribute_filter_configs = [
@@ -706,7 +706,7 @@ class Visualization:
     def side_loads(self) -> SideLoads:
         return self._side_loads
 
-    def get_metadata(self, id_obj: IdObjType) -> Optional[Any]:
+    def get_metadata(self, id_obj: IdObjType) -> Any | None:
         if not self._side_loads:
             return None
 
@@ -731,7 +731,7 @@ class Visualization:
                         formats[item_values["localIdentifier"]] = item_values["format"]
         return labels, formats
 
-    def get_filters_description(self, labels: dict[str, str], format_locale: Optional[str] = None) -> list[str]:
+    def get_filters_description(self, labels: dict[str, str], format_locale: str | None = None) -> list[str]:
         return [f.as_computable().description(labels, format_locale) for f in self.filters]
 
     def __str__(self) -> str:
@@ -792,7 +792,7 @@ class VisualizationService:
         return [Visualization(vis_obj, side_loads) for vis_obj in vis_objects.data]
 
     def get_visualization(
-        self, workspace_id: str, visualization_id: str, timeout: Optional[Union[int, float, tuple]] = None
+        self, workspace_id: str, visualization_id: str, timeout: Union[int, float, tuple] | None = None
     ) -> Visualization:
         """Gets a single visualization from a workspace.
 

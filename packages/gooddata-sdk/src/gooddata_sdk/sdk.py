@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Optional
 
 from gooddata_sdk.catalog.data_source.service import CatalogDataSourceService
 from gooddata_sdk.catalog.export.service import ExportService
@@ -45,11 +44,11 @@ class GoodDataSdk:
         cls,
         host_: str,
         token_: str,
-        extra_user_agent_: Optional[str] = None,
+        extra_user_agent_: str | None = None,
         *,
-        ssl_ca_cert: Optional[str] = None,
+        ssl_ca_cert: str | None = None,
         executions_cancellable: bool = False,
-        **custom_headers_: Optional[str],
+        **custom_headers_: str | None,
     ) -> GoodDataSdk:
         """
         Create common GoodDataApiClient and return new GoodDataSdk instance.

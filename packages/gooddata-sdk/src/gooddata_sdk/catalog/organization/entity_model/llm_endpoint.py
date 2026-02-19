@@ -1,7 +1,7 @@
 # (C) 2024 GoodData Corporation
 from __future__ import annotations
 
-from typing import Any, Optional
+from typing import Any
 
 from attr import define
 from gooddata_api_client.model.json_api_llm_endpoint_in import JsonApiLlmEndpointIn
@@ -36,7 +36,7 @@ class CatalogLlmEndpointPatchDocument(Base):
 @define(kw_only=True)
 class CatalogLlmEndpoint(Base):
     id: str
-    attributes: Optional[CatalogLlmEndpointAttributes] = None
+    attributes: CatalogLlmEndpointAttributes | None = None
 
     @staticmethod
     def client_class() -> type[JsonApiLlmEndpointIn]:
@@ -48,10 +48,10 @@ class CatalogLlmEndpoint(Base):
         id: str,
         title: str,
         token: str,
-        provider: Optional[str] = None,
-        base_url: Optional[str] = None,
-        llm_organization: Optional[str] = None,
-        llm_model: Optional[str] = None,
+        provider: str | None = None,
+        base_url: str | None = None,
+        llm_organization: str | None = None,
+        llm_model: str | None = None,
     ) -> CatalogLlmEndpoint:
         return cls(
             id=id,
@@ -85,7 +85,7 @@ class CatalogLlmEndpoint(Base):
 @define(kw_only=True)
 class CatalogLlmEndpointPatch(Base):
     id: str
-    attributes: Optional[CatalogLlmEndpointPatchAttributes] = None
+    attributes: CatalogLlmEndpointPatchAttributes | None = None
 
     @staticmethod
     def client_class() -> type[JsonApiLlmEndpointPatch]:
@@ -95,12 +95,12 @@ class CatalogLlmEndpointPatch(Base):
     def init(
         cls,
         id: str,
-        title: Optional[str] = None,
-        token: Optional[str] = None,
-        provider: Optional[str] = None,
-        base_url: Optional[str] = None,
-        llm_organization: Optional[str] = None,
-        llm_model: Optional[str] = None,
+        title: str | None = None,
+        token: str | None = None,
+        provider: str | None = None,
+        base_url: str | None = None,
+        llm_organization: str | None = None,
+        llm_model: str | None = None,
     ) -> CatalogLlmEndpointPatch:
         return cls(
             id=id,
@@ -119,10 +119,10 @@ class CatalogLlmEndpointPatch(Base):
 class CatalogLlmEndpointAttributes(Base):
     title: str
     token: str
-    provider: Optional[str] = None
-    base_url: Optional[str] = None
-    llm_organization: Optional[str] = None
-    llm_model: Optional[str] = None
+    provider: str | None = None
+    base_url: str | None = None
+    llm_organization: str | None = None
+    llm_model: str | None = None
 
     @staticmethod
     def client_class() -> type[JsonApiLlmEndpointInAttributes]:
@@ -131,12 +131,12 @@ class CatalogLlmEndpointAttributes(Base):
 
 @define(kw_only=True)
 class CatalogLlmEndpointPatchAttributes(Base):
-    title: Optional[str] = None
-    token: Optional[str] = None
-    provider: Optional[str] = None
-    base_url: Optional[str] = None
-    llm_organization: Optional[str] = None
-    llm_model: Optional[str] = None
+    title: str | None = None
+    token: str | None = None
+    provider: str | None = None
+    base_url: str | None = None
+    llm_organization: str | None = None
+    llm_model: str | None = None
 
     @staticmethod
     def client_class() -> type[JsonApiLlmEndpointPatchAttributes]:

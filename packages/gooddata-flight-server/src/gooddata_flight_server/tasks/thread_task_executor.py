@@ -6,7 +6,7 @@ from collections.abc import Generator
 from concurrent.futures import CancelledError, Future, ThreadPoolExecutor
 from contextlib import contextmanager
 from dataclasses import dataclass
-from typing import Any, Optional, Union
+from typing import Any, Union
 
 import opentelemetry.context as otelctx
 import pyarrow.flight
@@ -47,22 +47,22 @@ class _TaskExecutionStats:
     time when the task was created
     """
 
-    run_submitted: Optional[float] = None
+    run_submitted: float | None = None
     """
     time when task was submitted to thread pool to invoke the run()
     """
 
-    run_started: Optional[float] = None
+    run_started: float | None = None
     """
     time when some thread actually started the run()
     """
 
-    run_completed: Optional[float] = None
+    run_completed: float | None = None
     """
     time when the run() completed (regardless of the result)
     """
 
-    completed: Optional[float] = None
+    completed: float | None = None
     """
     time when all work for task execution completed. if the task was actually run,
     then this value is same as `run_completed`. if the task failed/was cancelled
@@ -187,7 +187,7 @@ class _TaskExecution:
         self._lock = threading.RLock()
 
         # all these are protected using the lock
-        self._result_future: Optional[Future[Union[TaskResult, TaskError]]] = None
+        self._result_future: Future[Union[TaskResult, TaskError]] | None = None
         self._completed: threading.Condition = threading.Condition(self._lock)
 
     @property
@@ -289,7 +289,7 @@ class _TaskExecution:
             # may not be possible
             return self._task.cancel()
 
-    def wait_for_completion(self, timeout: Optional[float] = None) -> None:
+    def wait_for_completion(self, timeout: float | None = None) -> None:
         with self._lock:
             completed = self._completed.wait(timeout=timeout)
 
@@ -566,7 +566,7 @@ class ThreadTaskExecutor(TaskExecutor, _TaskExecutionCallbacks):
         execution.start()
         self._metrics.queue_size.set(self._queue_size)
 
-    def get_task_submitted_timestamp(self, task_id: str) -> Optional[float]:
+    def get_task_submitted_timestamp(self, task_id: str) -> float | None:
         with self._task_lock:
             execution = self._executions.get(task_id)
 
@@ -574,7 +574,7 @@ class ThreadTaskExecutor(TaskExecutor, _TaskExecutionCallbacks):
             return execution.stats.created
         return None
 
-    def wait_for_result(self, task_id: str, timeout: Optional[float] = None) -> Optional[TaskExecutionResult]:
+    def wait_for_result(self, task_id: str, timeout: float | None = None) -> TaskExecutionResult | None:
         with self._task_lock:
             execution = self._executions.get(task_id)
             result = self._results.get_entry(task_id)
@@ -621,7 +621,7 @@ class ThreadTaskExecutor(TaskExecutor, _TaskExecutionCallbacks):
         self._on_finished_task_evicted(result)
         return True
 
-    def stop(self, cancel_running: bool = True, timeout: Optional[float] = None) -> None:
+    def stop(self, cancel_running: bool = True, timeout: float | None = None) -> None:
         """
         Stops the service. Any pending tasks will be immediately cancelled. Tasks that are already executing
         are allowed to complete.

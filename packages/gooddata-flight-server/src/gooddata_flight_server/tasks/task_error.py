@@ -1,7 +1,7 @@
 #  (C) 2024 GoodData Corporation
 import dataclasses
 from dataclasses import dataclass
-from typing import Callable, Optional
+from typing import Callable
 
 import pyarrow.flight
 
@@ -36,7 +36,7 @@ class TaskError:
     """
 
     error_info: ErrorInfo
-    error_factory: Callable[[str, Optional[bytes]], pyarrow.flight.FlightError]
+    error_factory: Callable[[str, bytes | None], pyarrow.flight.FlightError]
 
     client_error: bool = False
     """

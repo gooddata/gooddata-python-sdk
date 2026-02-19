@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import builtins
 from pathlib import Path
-from typing import Any, Optional, Union
+from typing import Any, Union
 from warnings import warn
 
 import attr
@@ -90,7 +90,7 @@ class CatalogDeclarativeDataSources(Base):
         return self._inject_base(credentials)
 
     def to_api(
-        self, credentials: Optional[dict[str, Any]] = None, config_file: Optional[Union[str, Path]] = None
+        self, credentials: dict[str, Any] | None = None, config_file: Union[str, Path] | None = None
     ) -> DeclarativeDataSources:
         client_class = self.client_class()
         if credentials is not None and config_file is not None:
@@ -132,24 +132,24 @@ class CatalogDeclarativeDataSource(Base):
     id: str
     name: str
     type: str = attr.field(validator=value_in_allowed)
-    url: Optional[str] = None
+    url: str | None = None
     schema: str
-    cache_strategy: Optional[str] = None
-    username: Optional[str] = None
-    parameters: Optional[list[CatalogParameter]] = None
-    decoded_parameters: Optional[list[CatalogParameter]] = None
+    cache_strategy: str | None = None
+    username: str | None = None
+    parameters: list[CatalogParameter] | None = None
+    decoded_parameters: list[CatalogParameter] | None = None
     permissions: list[CatalogDeclarativeDataSourcePermission] = attr.field(factory=list)
-    client_id: Optional[str] = None
-    authentication_type: Optional[str] = None
-    alternative_data_source_id: Optional[str] = None
+    client_id: str | None = None
+    authentication_type: str | None = None
+    alternative_data_source_id: str | None = None
 
     def to_test_request(
         self,
-        password: Optional[str] = None,
-        token: Optional[str] = None,
-        private_key: Optional[str] = None,
-        private_key_passphrase: Optional[str] = None,
-        client_secret: Optional[str] = None,
+        password: str | None = None,
+        token: str | None = None,
+        private_key: str | None = None,
+        private_key_passphrase: str | None = None,
+        client_secret: str | None = None,
     ) -> TestDefinitionRequest:
         kwargs: dict[str, Any] = {"schema": self.schema}
         if password is not None:
@@ -183,11 +183,11 @@ class CatalogDeclarativeDataSource(Base):
 
     def to_api(
         self,
-        password: Optional[str] = None,
-        token: Optional[str] = None,
-        private_key: Optional[str] = None,
-        private_key_passphrase: Optional[str] = None,
-        client_secret: Optional[str] = None,
+        password: str | None = None,
+        token: str | None = None,
+        private_key: str | None = None,
+        private_key_passphrase: str | None = None,
+        client_secret: str | None = None,
     ) -> DeclarativeDataSource:
         dictionary = self._get_snake_dict()
         if password is not None:

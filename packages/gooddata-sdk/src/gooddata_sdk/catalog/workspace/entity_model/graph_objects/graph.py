@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import builtins
-from typing import Optional
 
 import attr
 from gooddata_api_client.model.dependent_entities_graph import DependentEntitiesGraph
@@ -46,7 +45,7 @@ class CatalogDependentEntitiesGraph(Base):
 class CatalogDependentEntitiesNode(Base):
     id: str
     type: str
-    title: Optional[str] = None
+    title: str | None = None
 
     @staticmethod
     def client_class() -> builtins.type[DependentEntitiesNode]:

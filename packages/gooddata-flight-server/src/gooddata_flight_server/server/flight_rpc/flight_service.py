@@ -3,7 +3,6 @@
 # mypy: no-strict-optional
 
 from threading import Thread
-from typing import Optional
 
 import pyarrow.flight
 import structlog
@@ -41,14 +40,14 @@ class _AvailabilityMiddlewareFactory(pyarrow.flight.ServerMiddlewareFactory):
     If unavailable_reason is set -> reject. Otherwise, let the request through.
     """
 
-    def __init__(self, unavailable_reason: Optional[ErrorInfo] = None):
+    def __init__(self, unavailable_reason: ErrorInfo | None = None):
         super().__init__()
 
-        self.unavailable_reason: Optional[ErrorInfo] = unavailable_reason
+        self.unavailable_reason: ErrorInfo | None = unavailable_reason
 
     def start_call(
         self, info: pyarrow.flight.CallInfo, headers: dict[str, list[str]]
-    ) -> Optional[pyarrow.flight.ServerMiddleware]:
+    ) -> pyarrow.flight.ServerMiddleware | None:
         if self.unavailable_reason is None:
             return None
 
@@ -58,14 +57,14 @@ class _AvailabilityMiddlewareFactory(pyarrow.flight.ServerMiddlewareFactory):
 class _CallInfoMiddlewareFactory(pyarrow.flight.ServerMiddlewareFactory):
     def start_call(
         self, info: pyarrow.flight.CallInfo, headers: dict[str, list[str]]
-    ) -> Optional[pyarrow.flight.ServerMiddleware]:
+    ) -> pyarrow.flight.ServerMiddleware | None:
         return CallInfo(info, headers)
 
 
 class _CallFinalizerMiddlewareFactory(pyarrow.flight.ServerMiddlewareFactory):
     def start_call(
         self, info: pyarrow.flight.CallInfo, headers: dict[str, list[str]]
-    ) -> Optional[pyarrow.flight.ServerMiddleware]:
+    ) -> pyarrow.flight.ServerMiddleware | None:
         return CallFinalizer()
 
 
@@ -76,7 +75,7 @@ class _OtelMiddlewareFactory(pyarrow.flight.ServerMiddlewareFactory):
 
     def start_call(
         self, info: pyarrow.flight.CallInfo, headers: dict[str, list[str]]
-    ) -> Optional[pyarrow.flight.ServerMiddleware]:
+    ) -> pyarrow.flight.ServerMiddleware | None:
         return OtelMiddleware(info, headers, self._extract_context)
 
 
@@ -110,13 +109,13 @@ class FlightRpcService:
         # internal mutable state
         # server starts immediately when constructed (PyArrow stuff); thus defer
         # construction until start() is called
-        self._server: Optional[FlightServer] = None
-        self._flight_shutdown_thread: Optional[Thread] = None
+        self._server: FlightServer | None = None
+        self._flight_shutdown_thread: Thread | None = None
         self._stopped = False
 
     def _initialize_authentication(
         self, ctx: ServerContext
-    ) -> Optional[tuple[str, pyarrow.flight.ServerMiddlewareFactory]]:
+    ) -> tuple[str, pyarrow.flight.ServerMiddlewareFactory] | None:
         if self._config.authentication_method == AuthenticationMethod.NoAuth:
             if self._config.use_mutual_tls:
                 return None
@@ -141,7 +140,7 @@ class FlightRpcService:
 
     def _initialize_otel_tracing(
         self, ctx: ServerContext
-    ) -> Optional[tuple[str, pyarrow.flight.ServerMiddlewareFactory]]:
+    ) -> tuple[str, pyarrow.flight.ServerMiddlewareFactory] | None:
         if self._config.otel_config.exporter_type is None:
             return None
 
@@ -262,7 +261,7 @@ class FlightRpcService:
         self._server.shutdown()
         self._logger.info("flight_service_finished")
 
-    def wait_for_stop(self, timeout: Optional[float] = None) -> bool:
+    def wait_for_stop(self, timeout: float | None = None) -> bool:
         if self._flight_shutdown_thread is None:
             # this is really some mess in the caller code.. did not call stop() but tries to wait for it..
             raise AssertionError("Flight server stop() was not issued yet attempting to wait for the server to stop.")

@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import builtins
-from typing import Optional
 
 from attrs import define
 from gooddata_api_client.model.json_api_export_template_in_attributes import JsonApiExportTemplateInAttributes
@@ -16,7 +15,7 @@ from gooddata_sdk.catalog.organization.common.widget_slides_template import Cata
 @define(auto_attribs=True, kw_only=True)
 class CatalogExportTemplate(Base):
     id: str
-    attributes: Optional[CatalogExportTemplateAttributes] = None
+    attributes: CatalogExportTemplateAttributes | None = None
 
     @staticmethod
     def client_class() -> builtins.type[JsonApiExportTemplatePostOptionalId]:
@@ -26,8 +25,8 @@ class CatalogExportTemplate(Base):
 @define(auto_attribs=True, kw_only=True)
 class CatalogExportTemplateAttributes(Base):
     name: str
-    dashboard_slides_template: Optional[CatalogDashboardSlidesTemplate] = None
-    widget_slides_template: Optional[CatalogWidgetSlidesTemplate] = None
+    dashboard_slides_template: CatalogDashboardSlidesTemplate | None = None
+    widget_slides_template: CatalogWidgetSlidesTemplate | None = None
 
     @staticmethod
     def client_class() -> builtins.type[JsonApiExportTemplateInAttributes]:

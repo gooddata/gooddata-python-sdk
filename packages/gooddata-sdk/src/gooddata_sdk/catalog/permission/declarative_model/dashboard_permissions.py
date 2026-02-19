@@ -1,6 +1,5 @@
 # (C) 2023 GoodData Corporation
 import builtins
-from typing import Optional
 
 import attr
 from gooddata_api_client.model.dashboard_permissions import DashboardPermissions
@@ -25,9 +24,9 @@ class CatalogGrantedPermission(Base):
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogUserPermission(Base):
     id: str
-    name: Optional[str] = None
-    email: Optional[str] = None
-    permissions: Optional[list[CatalogGrantedPermission]] = None
+    name: str | None = None
+    email: str | None = None
+    permissions: list[CatalogGrantedPermission] | None = None
 
     @staticmethod
     def client_class() -> type[UserPermission]:
@@ -37,8 +36,8 @@ class CatalogUserPermission(Base):
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogUserGroupPermission(Base):
     id: str
-    name: Optional[str] = None
-    permissions: Optional[list[CatalogGrantedPermission]] = None
+    name: str | None = None
+    permissions: list[CatalogGrantedPermission] | None = None
 
     @staticmethod
     def client_class() -> type[UserGroupPermission]:
@@ -48,7 +47,7 @@ class CatalogUserGroupPermission(Base):
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogRulePermission(Base):
     type: str
-    permissions: Optional[list[str]] = None
+    permissions: list[str] | None = None
 
     @staticmethod
     def client_class() -> builtins.type[RulePermission]:  # noqa: UP006

@@ -1,7 +1,7 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
 
-from typing import Callable, Literal, Optional, Union
+from typing import Callable, Literal, Union
 
 import pandas
 from gooddata_api_client import models
@@ -72,10 +72,10 @@ class DataFrameFactory:
         self,
         index_by: IndexDef,
         columns: ColumnsDef,
-        filter_by: Optional[Union[Filter, list[Filter]]] = None,
-        on_execution_submitted: Optional[Callable[[Execution], None]] = None,
+        filter_by: Union[Filter, list[Filter]] | None = None,
+        on_execution_submitted: Callable[[Execution], None] | None = None,
         is_cancellable: bool = False,
-        result_page_len: Optional[int] = None,
+        result_page_len: int | None = None,
     ) -> pandas.DataFrame:
         """
         Creates a data frame indexed by values of the label. The data frame columns will be created from either
@@ -115,10 +115,10 @@ class DataFrameFactory:
     def not_indexed(
         self,
         columns: ColumnsDef,
-        filter_by: Optional[Union[Filter, list[Filter]]] = None,
-        on_execution_submitted: Optional[Callable[[Execution], None]] = None,
+        filter_by: Union[Filter, list[Filter]] | None = None,
+        on_execution_submitted: Callable[[Execution], None] | None = None,
         is_cancellable: bool = False,
-        result_page_len: Optional[int] = None,
+        result_page_len: int | None = None,
     ) -> pandas.DataFrame:
         """
         Creates a data frame with columns created from metrics and or labels.
@@ -152,11 +152,11 @@ class DataFrameFactory:
     def for_items(
         self,
         items: ColumnsDef,
-        filter_by: Optional[Union[Filter, list[Filter]]] = None,
+        filter_by: Union[Filter, list[Filter]] | None = None,
         auto_index: bool = True,
-        on_execution_submitted: Optional[Callable[[Execution], None]] = None,
+        on_execution_submitted: Callable[[Execution], None] | None = None,
         is_cancellable: bool = False,
-        result_page_len: Optional[int] = None,
+        result_page_len: int | None = None,
     ) -> pandas.DataFrame:
         """
         Creates a data frame for named items. This is a convenience method that will create DataFrame with or
@@ -214,9 +214,9 @@ class DataFrameFactory:
         self,
         visualization_id: str,
         auto_index: bool = True,
-        on_execution_submitted: Optional[Callable[[Execution], None]] = None,
+        on_execution_submitted: Callable[[Execution], None] | None = None,
         is_cancellable: bool = False,
-        result_page_len: Optional[int] = None,
+        result_page_len: int | None = None,
     ) -> pandas.DataFrame:
         """
         Creates a data frame with columns based on the content of the visualization with the provided identifier.
@@ -256,10 +256,10 @@ class DataFrameFactory:
     def for_created_visualization(
         self,
         created_visualizations_response: dict,
-        on_execution_submitted: Optional[Callable[[Execution], None]] = None,
+        on_execution_submitted: Callable[[Execution], None] | None = None,
         is_cancellable: bool = False,
         optimized: bool = False,
-        grand_totals_position: Optional[Literal["pinnedBottom", "pinnedTop", "bottom", "top"]] = "bottom",
+        grand_totals_position: Literal["pinnedBottom", "pinnedTop", "bottom", "top"] | None = "bottom",
     ) -> tuple[pandas.DataFrame, DataFrameMetadata]:
         """
         Creates a data frame using a created visualization.
@@ -305,13 +305,13 @@ class DataFrameFactory:
     def for_exec_def(
         self,
         exec_def: ExecutionDefinition,
-        label_overrides: Optional[LabelOverrides] = None,
+        label_overrides: LabelOverrides | None = None,
         result_size_dimensions_limits: ResultSizeDimensions = (),
-        result_size_bytes_limit: Optional[int] = None,
+        result_size_bytes_limit: int | None = None,
         page_size: int = _DEFAULT_PAGE_SIZE,
-        on_execution_submitted: Optional[Callable[[Execution], None]] = None,
+        on_execution_submitted: Callable[[Execution], None] | None = None,
         optimized: bool = False,
-        grand_totals_position: Optional[Literal["pinnedBottom", "pinnedTop", "bottom", "top"]] = "bottom",
+        grand_totals_position: Literal["pinnedBottom", "pinnedTop", "bottom", "top"] | None = "bottom",
     ) -> tuple[pandas.DataFrame, DataFrameMetadata]:
         """
         Creates a data frame using an execution definition.
@@ -378,15 +378,15 @@ class DataFrameFactory:
     def for_exec_result_id(
         self,
         result_id: str,
-        label_overrides: Optional[LabelOverrides] = None,
-        result_cache_metadata: Optional[ResultCacheMetadata] = None,
+        label_overrides: LabelOverrides | None = None,
+        result_cache_metadata: ResultCacheMetadata | None = None,
         result_size_dimensions_limits: ResultSizeDimensions = (),
-        result_size_bytes_limit: Optional[int] = None,
+        result_size_bytes_limit: int | None = None,
         use_local_ids_in_headers: bool = False,
         use_primary_labels_in_attributes: bool = False,
         page_size: int = _DEFAULT_PAGE_SIZE,
         optimized: bool = False,
-        grand_totals_position: Optional[Literal["pinnedBottom", "pinnedTop", "bottom", "top"]] = "bottom",
+        grand_totals_position: Literal["pinnedBottom", "pinnedTop", "bottom", "top"] | None = "bottom",
     ) -> tuple[pandas.DataFrame, DataFrameMetadata]:
         """
             Retrieves a DataFrame and DataFrame metadata for a given execution result identifier.

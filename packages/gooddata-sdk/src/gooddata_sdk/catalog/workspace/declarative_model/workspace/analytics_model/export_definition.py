@@ -1,5 +1,4 @@
 # (C) 2024 GoodData Corporation
-from typing import Optional
 
 from attrs import define
 from gooddata_api_client.model.declarative_export_definition import DeclarativeExportDefinition
@@ -14,16 +13,16 @@ from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.
 
 @define(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeExportDefinitionRequestPayload(Base):
-    custom_override: Optional[ExportCustomOverride] = None
-    execution_result: Optional[str] = None
-    metadata: Optional[dict] = None
-    related_dashboard_id: Optional[str] = None
-    settings: Optional[ExportSettings] = None
-    visualization_object: Optional[str] = None
-    visualization_object_custom_filters: Optional[list[dict]] = None
-    file_name: Optional[str] = None
-    format: Optional[str] = None
-    dashboard_id: Optional[str] = None
+    custom_override: ExportCustomOverride | None = None
+    execution_result: str | None = None
+    metadata: dict | None = None
+    related_dashboard_id: str | None = None
+    settings: ExportSettings | None = None
+    visualization_object: str | None = None
+    visualization_object_custom_filters: list[dict] | None = None
+    file_name: str | None = None
+    format: str | None = None
+    dashboard_id: str | None = None
 
     @staticmethod
     def client_class() -> type[DeclarativeExportDefinitionRequestPayload]:
@@ -35,8 +34,8 @@ class CatalogDeclarativeExportDefinition(CatalogAnalyticsBaseMeta):
     id: str
     title: str
     request_payload: CatalogDeclarativeExportDefinitionRequestPayload
-    description: Optional[str] = None
-    tags: Optional[list[str]] = None
+    description: str | None = None
+    tags: list[str] | None = None
 
     @staticmethod
     def client_class() -> type[DeclarativeExportDefinition]:

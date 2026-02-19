@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import functools
-from typing import Any, Optional
+from typing import Any
 
 from gooddata_api_client.exceptions import NotFoundException
 from gooddata_api_client.model.declarative_export_templates import DeclarativeExportTemplates
@@ -513,11 +513,11 @@ class CatalogOrganizationService(CatalogServiceBase):
 
     def list_llm_endpoints(
         self,
-        filter: Optional[str] = None,
-        page: Optional[int] = None,
-        size: Optional[int] = None,
-        sort: Optional[list[str]] = None,
-        meta_include: Optional[list[str]] = None,
+        filter: str | None = None,
+        page: int | None = None,
+        size: int | None = None,
+        sort: list[str] | None = None,
+        meta_include: list[str] | None = None,
     ) -> list[CatalogLlmEndpoint]:
         """
         List all LLM endpoints.
@@ -556,10 +556,10 @@ class CatalogOrganizationService(CatalogServiceBase):
         id: str,
         title: str,
         token: str,
-        provider: Optional[str] = None,
-        base_url: Optional[str] = None,
-        llm_organization: Optional[str] = None,
-        llm_model: Optional[str] = None,
+        provider: str | None = None,
+        base_url: str | None = None,
+        llm_organization: str | None = None,
+        llm_model: str | None = None,
     ) -> CatalogLlmEndpoint:
         """
         Create a new LLM endpoint.
@@ -594,12 +594,12 @@ class CatalogOrganizationService(CatalogServiceBase):
     def update_llm_endpoint(
         self,
         id: str,
-        title: Optional[str] = None,
-        token: Optional[str] = None,
-        provider: Optional[str] = None,
-        base_url: Optional[str] = None,
-        llm_organization: Optional[str] = None,
-        llm_model: Optional[str] = None,
+        title: str | None = None,
+        token: str | None = None,
+        provider: str | None = None,
+        base_url: str | None = None,
+        llm_organization: str | None = None,
+        llm_model: str | None = None,
     ) -> CatalogLlmEndpoint:
         """
         Update an existing LLM endpoint.

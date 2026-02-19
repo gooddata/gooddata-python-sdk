@@ -1,11 +1,10 @@
 #  (C) 2024 GoodData Corporation
-from typing import Optional
 
 import pyarrow
 from gooddata_flexconnect.function.function import FlexConnectFunction
 from gooddata_flight_server import ArrowData, ServerContext
 
-_DATA: Optional[pyarrow.Table] = None
+_DATA: pyarrow.Table | None = None
 
 
 class _SimpleFun2(FlexConnectFunction):
@@ -21,7 +20,7 @@ class _SimpleFun2(FlexConnectFunction):
     def call(
         self,
         parameters: dict,
-        columns: Optional[tuple[str, ...]],
+        columns: tuple[str, ...] | None,
         headers: dict[str, list[str]],
     ) -> ArrowData:
         assert _DATA is not None

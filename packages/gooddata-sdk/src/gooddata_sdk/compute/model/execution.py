@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, Optional, Union
+from typing import Any, Union
 
 from attr.setters import frozen as frozen_attr
 from attrs import define, field
@@ -46,7 +46,7 @@ class TotalDefinition:
 class TableDimension:
     """Dataclass used during total and dimension computation."""
 
-    item_ids: Optional[list[str]] = field(on_setattr=frozen_attr)
+    item_ids: list[str] | None = field(on_setattr=frozen_attr)
     """table dimension item local identifiers"""
 
     sorting: list[dict] = field(default=[])
@@ -56,11 +56,11 @@ class TableDimension:
 class ExecutionDefinition:
     def __init__(
         self,
-        attributes: Optional[list[Attribute]],
-        metrics: Optional[list[Metric]],
-        filters: Optional[list[Filter]],
+        attributes: list[Attribute] | None,
+        metrics: list[Metric] | None,
+        filters: list[Filter] | None,
         dimensions: list[TableDimension],
-        totals: Optional[list[TotalDefinition]] = None,
+        totals: list[TotalDefinition] | None = None,
         is_cancellable: bool = False,
     ) -> None:
         self._attributes = attributes or []
@@ -165,7 +165,7 @@ class ExecutionDefinition:
 
         return dimensions
 
-    def _create_totals(self) -> Optional[list[models.Total]]:
+    def _create_totals(self) -> list[models.Total] | None:
         if not self._totals:
             return None
 
@@ -205,7 +205,7 @@ class ExecutionDefinition:
         return models.AfmExecution(execution=execution, result_spec=result_spec)
 
 
-ResultSizeDimensions = tuple[Optional[int], ...]
+ResultSizeDimensions = tuple[int | None, ...]
 
 
 class ResultSizeDimensionsLimitsExceeded(Exception):
@@ -308,7 +308,7 @@ class BareExecutionResponse:
         api_client: GoodDataApiClient,
         workspace_id: str,
         execution_response: models.AfmExecutionResponse,
-        cancel_token: Optional[str] = None,
+        cancel_token: str | None = None,
     ):
         self._api_client = api_client
         self._actions_api = self._api_client.actions_api
@@ -331,14 +331,14 @@ class BareExecutionResponse:
         return self._exec_response["dimensions"]
 
     @property
-    def cancel_token(self) -> Optional[str]:
+    def cancel_token(self) -> str | None:
         return self._cancel_token
 
     def read_result(
         self,
         limit: Union[int, list[int]],
         offset: Union[None, int, list[int]] = None,
-        timeout: Optional[Union[int, float, tuple]] = None,
+        timeout: Union[int, float, tuple] | None = None,
     ) -> ExecutionResult:
         """
         Reads from the execution result.
@@ -402,7 +402,7 @@ class Execution:
         workspace_id: str,
         exec_def: ExecutionDefinition,
         response: models.AfmExecutionResponse,
-        cancel_token: Optional[str] = None,
+        cancel_token: str | None = None,
     ):
         self._exec_def = exec_def
         self._bare_exec_response = BareExecutionResponse(
@@ -430,7 +430,7 @@ class Execution:
         return self.bare_exec_response._exec_response["dimensions"]
 
     @property
-    def cancel_token(self) -> Optional[str]:
+    def cancel_token(self) -> str | None:
         return self.bare_exec_response.cancel_token
 
     def get_labels_and_formats(self) -> tuple[dict[str, str], dict[str, str]]:
@@ -460,7 +460,7 @@ class Execution:
         self,
         limit: Union[int, list[int]],
         offset: Union[None, int, list[int]] = None,
-        timeout: Optional[Union[int, float, tuple]] = None,
+        timeout: Union[int, float, tuple] | None = None,
     ) -> ExecutionResult:
         return self.bare_exec_response.read_result(limit, offset, timeout)
 
@@ -516,7 +516,7 @@ class ResultCacheMetadata:
     def result_spec(self) -> ResultSpec:
         return self._result_cache_metadata.result_spec
 
-    def check_bytes_size_limit(self, result_size_bytes_limit: Optional[int] = None) -> None:
+    def check_bytes_size_limit(self, result_size_bytes_limit: int | None = None) -> None:
         if result_size_bytes_limit is not None and self.result_size > result_size_bytes_limit:
             raise ResultSizeBytesLimitExceeded(
                 result_size_bytes_limit=result_size_bytes_limit,
@@ -525,9 +525,9 @@ class ResultCacheMetadata:
 
 
 def compute_model_to_api_model(
-    attributes: Optional[list[Attribute]] = None,
-    metrics: Optional[list[Metric]] = None,
-    filters: Optional[list[Filter]] = None,
+    attributes: list[Attribute] | None = None,
+    metrics: list[Metric] | None = None,
+    filters: list[Filter] | None = None,
 ) -> models.AFM:
     """
     Transforms categorized execution model entities (attributes, metrics, facts) into an API model

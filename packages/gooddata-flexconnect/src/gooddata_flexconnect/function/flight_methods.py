@@ -1,7 +1,6 @@
 #  (C) 2024 GoodData Corporation
 import time
 from collections.abc import Generator
-from typing import Optional
 
 import orjson
 import pyarrow.flight
@@ -59,7 +58,7 @@ class _FlexConnectServerMethods(FlightServerMethods):
         self._poll_interval = poll_interval_ms / 1000
 
     @staticmethod
-    def _create_descriptor(fun_name: str, metadata: Optional[dict]) -> pyarrow.flight.FlightDescriptor:
+    def _create_descriptor(fun_name: str, metadata: dict | None) -> pyarrow.flight.FlightDescriptor:
         cmd = {
             "functionName": fun_name,
             "metadata": metadata,
@@ -98,7 +97,7 @@ class _FlexConnectServerMethods(FlightServerMethods):
         )
 
     def _prepare_flight_info(
-        self, task_id: str, task_result: Optional[TaskExecutionResult]
+        self, task_id: str, task_result: TaskExecutionResult | None
     ) -> pyarrow.flight.FlightInfo:
         if task_result is None:
             raise ErrorInfo.for_reason(
@@ -142,7 +141,7 @@ class _FlexConnectServerMethods(FlightServerMethods):
         structlog.contextvars.bind_contextvars(peer=context.peer())
         invocation = extract_submit_invocation_from_descriptor(descriptor)
 
-        task: Optional[FlexConnectFunctionTask] = None
+        task: FlexConnectFunctionTask | None = None
 
         try:
             task = self._prepare_task(context, invocation)
@@ -192,7 +191,7 @@ class _FlexConnectServerMethods(FlightServerMethods):
         invocation = extract_pollable_invocation_from_descriptor(descriptor)
 
         task_id: str
-        fun_name: Optional[str] = None
+        fun_name: str | None = None
 
         if isinstance(invocation, CancelInvocation):
             # cancel the given task and raise cancellation exception

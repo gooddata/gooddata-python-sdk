@@ -1,5 +1,5 @@
 # (C) 2023 GoodData Corporation
-from typing import Literal, Optional
+from typing import Literal
 
 from attrs import define
 from gooddata_api_client.model.custom_label import CustomLabel as ApiCustomLabel
@@ -34,8 +34,8 @@ class ExportCustomMetric(Base):
 
 @define(auto_attribs=True, kw_only=True)
 class ExportCustomOverride(Base):
-    labels: Optional[dict[str, ExportCustomLabel]] = None
-    metrics: Optional[dict[str, ExportCustomMetric]] = None
+    labels: dict[str, ExportCustomLabel] | None = None
+    metrics: dict[str, ExportCustomMetric] | None = None
 
     @staticmethod
     def client_class() -> type[ApiCustomOverride]:
@@ -66,10 +66,10 @@ class ExportRequest(Base):
 
     format: str
     file_name: str
-    execution_result: Optional[str] = None
-    visualization_object: Optional[str] = None
-    settings: Optional[ExportSettings] = None
-    custom_override: Optional[ExportCustomOverride] = None
+    execution_result: str | None = None
+    visualization_object: str | None = None
+    settings: ExportSettings | None = None
+    custom_override: ExportCustomOverride | None = None
 
     def __attrs_post_init__(self) -> None:
         """
@@ -112,7 +112,7 @@ class VisualExportRequest(Base):
 
     dashboard_id: str
     file_name: str
-    metadata: Optional[dict] = None
+    metadata: dict | None = None
 
     @staticmethod
     def client_class() -> type[VisualExportRequestApi]:
@@ -136,11 +136,11 @@ class SlidesExportRequest(Base):
 
     file_name: str
     format: Literal["PDF", "PPTX"]
-    dashboard_id: Optional[str] = None
-    widget_ids: Optional[list[str]] = None
-    visualization_ids: Optional[list[str]] = None
-    metadata: Optional[dict] = None
-    templateId: Optional[str] = None
+    dashboard_id: str | None = None
+    widget_ids: list[str] | None = None
+    visualization_ids: list[str] | None = None
+    metadata: dict | None = None
+    templateId: str | None = None
 
     @staticmethod
     def client_class() -> type[SlidesExportRequestApi]:
