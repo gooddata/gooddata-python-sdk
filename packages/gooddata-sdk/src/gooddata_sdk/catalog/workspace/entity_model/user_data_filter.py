@@ -1,7 +1,7 @@
 # (C) 2023 GoodData Corporation
 from __future__ import annotations
 
-from typing import Any, Optional, Union
+from typing import Any, Union
 
 import attr
 from gooddata_api_client.model.json_api_user_data_filter_in import JsonApiUserDataFilterIn
@@ -38,7 +38,7 @@ class CatalogUserDataFilterDocument(Base):
         return JsonApiUserDataFilterPostOptionalIdDocument.from_dict(dictionary, camel_case=False)
 
 
-def _proces_entity_list_output(list_entity_data: Optional[dict[str, list[CatalogEntityIdentifier]]]) -> list[str]:
+def _proces_entity_list_output(list_entity_data: dict[str, list[CatalogEntityIdentifier]] | None) -> list[str]:
     if list_entity_data:
         return list(map(lambda x: x.id, list_entity_data["data"]))
     return []
@@ -50,9 +50,9 @@ def _data_entity(value: Any) -> dict[str, Any]:
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogUserDataFilter(Base):
-    id: Optional[str] = None
+    id: str | None = None
     attributes: CatalogUserDataFilterAttributes
-    relationships: Optional[CatalogUserDataFilterRelationships] = None
+    relationships: CatalogUserDataFilterRelationships | None = None
 
     @staticmethod
     def client_class() -> type[JsonApiUserDataFilterIn]:
@@ -63,12 +63,12 @@ class CatalogUserDataFilter(Base):
         cls,
         user_data_filter_id: str,
         maql: str,
-        are_relations_valid: Optional[bool] = None,
-        title: Optional[str] = None,
-        description: Optional[str] = None,
-        tags: Optional[list[str]] = None,
-        user_id: Optional[str] = None,
-        user_group_id: Optional[str] = None,
+        are_relations_valid: bool | None = None,
+        title: str | None = None,
+        description: str | None = None,
+        tags: list[str] | None = None,
+        user_id: str | None = None,
+        user_group_id: str | None = None,
     ) -> CatalogUserDataFilter:
         attributes = CatalogUserDataFilterAttributes(
             maql=maql, title=title, are_relations_valid=are_relations_valid, tags=tags, description=description
@@ -155,10 +155,10 @@ class CatalogUserDataFilter(Base):
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogUserDataFilterAttributes(Base):
     maql: str
-    are_relations_valid: Optional[bool] = None
-    title: Optional[str] = None
-    description: Optional[str] = None
-    tags: Optional[list[str]] = None
+    are_relations_valid: bool | None = None
+    title: str | None = None
+    description: str | None = None
+    tags: list[str] | None = None
 
     @staticmethod
     def client_class() -> type[JsonApiUserDataFilterInAttributes]:
@@ -167,13 +167,13 @@ class CatalogUserDataFilterAttributes(Base):
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogUserDataFilterRelationships(Base):
-    user: Optional[dict[str, CatalogEntityIdentifier]] = None
-    user_group: Optional[dict[str, CatalogEntityIdentifier]] = None
-    attributes: Optional[dict[str, list[CatalogEntityIdentifier]]] = None
-    labels: Optional[dict[str, list[CatalogEntityIdentifier]]] = None
-    datasets: Optional[dict[str, list[CatalogEntityIdentifier]]] = None
-    facts: Optional[dict[str, list[CatalogEntityIdentifier]]] = None
-    metrics: Optional[dict[str, list[CatalogEntityIdentifier]]] = None
+    user: dict[str, CatalogEntityIdentifier] | None = None
+    user_group: dict[str, CatalogEntityIdentifier] | None = None
+    attributes: dict[str, list[CatalogEntityIdentifier]] | None = None
+    labels: dict[str, list[CatalogEntityIdentifier]] | None = None
+    datasets: dict[str, list[CatalogEntityIdentifier]] | None = None
+    facts: dict[str, list[CatalogEntityIdentifier]] | None = None
+    metrics: dict[str, list[CatalogEntityIdentifier]] | None = None
 
     @staticmethod
     def client_class() -> type[JsonApiUserDataFilterInRelationships]:
@@ -181,7 +181,7 @@ class CatalogUserDataFilterRelationships(Base):
 
     @classmethod
     def create_user_user_group_relationship(
-        cls, user_id: Optional[str] = None, user_group_id: Optional[str] = None
+        cls, user_id: str | None = None, user_group_id: str | None = None
     ) -> CatalogUserDataFilterRelationships | None:
         if user_id is None and user_group_id is None:
             return None
@@ -195,4 +195,4 @@ class CatalogUserDataFilterRelationships(Base):
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogEntityIdentifier(Base):
     id: str
-    type: Optional[str] = None
+    type: str | None = None

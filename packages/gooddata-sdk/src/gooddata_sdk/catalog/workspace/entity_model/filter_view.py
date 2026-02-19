@@ -1,7 +1,7 @@
 # (C) 2024 GoodData Corporation
 from __future__ import annotations
 
-from typing import Any, Optional, Union
+from typing import Any, Union
 
 import attr
 from gooddata_api_client.model.json_api_filter_view_in import JsonApiFilterViewIn
@@ -31,9 +31,9 @@ def _data_entity(value: Any) -> dict[str, Any]:
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogFilterView(Base):
-    id: Optional[str] = None
+    id: str | None = None
     attributes: CatalogFilterViewAttributes
-    relationships: Optional[CatalogFilterViewRelationships] = None
+    relationships: CatalogFilterViewRelationships | None = None
 
     @staticmethod
     def client_class() -> type[JsonApiFilterViewIn]:
@@ -45,12 +45,12 @@ class CatalogFilterView(Base):
         filter_view_id: str,
         content: dict[str, Any],
         title: str,
-        are_relations_valid: Optional[bool] = None,
-        description: Optional[str] = None,
-        is_default: Optional[bool] = None,
-        tags: Optional[list[str]] = None,
-        user_id: Optional[str] = None,
-        analytical_dashboard_id: Optional[str] = None,
+        are_relations_valid: bool | None = None,
+        description: str | None = None,
+        is_default: bool | None = None,
+        tags: list[str] | None = None,
+        user_id: str | None = None,
+        analytical_dashboard_id: str | None = None,
     ) -> CatalogFilterView:
         attributes = CatalogFilterViewAttributes(
             content=content,
@@ -110,10 +110,10 @@ class CatalogFilterView(Base):
 class CatalogFilterViewAttributes(Base):
     content: dict[str, Any]
     title: str
-    are_relations_valid: Optional[bool] = None
-    description: Optional[str] = None
-    is_default: Optional[bool] = None
-    tags: Optional[list[str]] = None
+    are_relations_valid: bool | None = None
+    description: str | None = None
+    is_default: bool | None = None
+    tags: list[str] | None = None
 
     @staticmethod
     def client_class() -> type[JsonApiFilterViewInAttributes]:
@@ -122,8 +122,8 @@ class CatalogFilterViewAttributes(Base):
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogFilterViewRelationships(Base):
-    user: Optional[dict[str, CatalogUserIdentifier]] = None
-    analytical_dashboard: Optional[dict[str, CatalogDeclarativeAnalyticalDashboardIdentifier]] = None
+    user: dict[str, CatalogUserIdentifier] | None = None
+    analytical_dashboard: dict[str, CatalogDeclarativeAnalyticalDashboardIdentifier] | None = None
 
     @staticmethod
     def client_class() -> type[JsonApiFilterViewInRelationships]:
@@ -131,7 +131,7 @@ class CatalogFilterViewRelationships(Base):
 
     @classmethod
     def create_user_analytical_dashboard_relationship(
-        cls, user_id: Optional[str] = None, analytical_dashboard_id: Optional[str] = None
+        cls, user_id: str | None = None, analytical_dashboard_id: str | None = None
     ) -> CatalogFilterViewRelationships | None:
         if user_id is None and analytical_dashboard_id is None:
             return None

@@ -1,7 +1,7 @@
 # (C) 2023 GoodData Corporation
 import time
 from pathlib import Path
-from typing import Any, Callable, Optional, Union
+from typing import Any, Callable, Union
 
 from gooddata_api_client.exceptions import NotFoundException
 from gooddata_api_client.model.slides_export_request import SlidesExportRequest as SlidesExportRequestApi
@@ -186,7 +186,7 @@ class ExportService(CatalogServiceBase):
         timeout: float = 60.0,
         retry: float = 0.2,
         max_retry: float = 5.0,
-        metadata: Optional[dict[str, Any]] = None,
+        metadata: dict[str, Any] | None = None,
     ) -> None:
         """
         Export a PDF of the specified GoodData Dashboard and save it to the specified file path.
@@ -275,8 +275,8 @@ class ExportService(CatalogServiceBase):
         workspace_id: str,
         visualization_id: str,
         file_format: str,
-        file_name: Optional[str] = None,
-        settings: Optional[ExportSettings] = None,
+        file_name: str | None = None,
+        settings: ExportSettings | None = None,
         store_path: Union[str, Path] = Path.cwd(),
         timeout: float = 60.0,
         retry: float = 0.2,

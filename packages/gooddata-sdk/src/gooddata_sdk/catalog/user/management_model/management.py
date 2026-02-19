@@ -1,6 +1,5 @@
 # (C) 2024 GoodData Corporation
 
-from typing import Optional
 
 import attrs
 from gooddata_api_client.model.permissions_assignment import PermissionsAssignment
@@ -20,7 +19,7 @@ from gooddata_sdk.catalog.identifier import CatalogAssigneeIdentifier
 class CatalogDataSourcePermissionAssignment(Base):
     id: str
     permissions: list[str] = attrs.field(factory=list)
-    name: Optional[str] = None
+    name: str | None = None
 
     @staticmethod
     def client_class() -> type[UserManagementDataSourcePermissionAssignment]:
@@ -32,7 +31,7 @@ class CatalogWorkspacePermissionAssignment(Base):
     id: str
     permissions: list[str] = attrs.field(factory=list)
     hierarchy_permissions: list[str] = attrs.field(factory=list)
-    name: Optional[str] = None
+    name: str | None = None
 
     @staticmethod
     def client_class() -> type[UserManagementWorkspacePermissionAssignment]:

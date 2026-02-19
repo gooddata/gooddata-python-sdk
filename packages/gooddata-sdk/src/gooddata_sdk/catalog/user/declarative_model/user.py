@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Optional
 
 import attr
 from gooddata_api_client.model.declarative_user import DeclarativeUser
@@ -45,10 +44,10 @@ class CatalogDeclarativeUsers(Base):
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeUser(Base):
     id: str
-    email: Optional[str] = None
-    firstname: Optional[str] = None
-    lastname: Optional[str] = None
-    auth_id: Optional[str] = None
+    email: str | None = None
+    firstname: str | None = None
+    lastname: str | None = None
+    auth_id: str | None = None
     user_groups: list[CatalogDeclarativeUserGroupIdentifier] = attr.field(factory=list)
     settings: list[CatalogDeclarativeSetting] = attr.field(factory=list)
     permissions: list[CatalogDeclarativeUserPermission] = attr.field(factory=list)

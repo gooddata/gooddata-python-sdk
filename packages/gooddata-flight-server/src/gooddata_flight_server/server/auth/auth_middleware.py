@@ -1,5 +1,5 @@
 #  (C) 2024 GoodData Corporation
-from typing import Any, Optional
+from typing import Any
 
 import pyarrow.flight
 import structlog
@@ -31,7 +31,7 @@ _BEARER_END_IDX = 7
 class TokenAuthMiddlewareFactory(pyarrow.flight.ServerMiddlewareFactory):
     def __init__(
         self,
-        token_header_name: Optional[str],
+        token_header_name: str | None,
         strategy: TokenVerificationStrategy,
     ):
         super().__init__()
@@ -69,7 +69,7 @@ class TokenAuthMiddlewareFactory(pyarrow.flight.ServerMiddlewareFactory):
         token = _auth_header_value(self._token_header_name)
         return token.strip()
 
-    def start_call(self, info: pyarrow.flight.CallInfo, headers: dict[str, list[str]]) -> Optional[TokenAuthMiddleware]:
+    def start_call(self, info: pyarrow.flight.CallInfo, headers: dict[str, list[str]]) -> TokenAuthMiddleware | None:
         try:
             token = self._extract_token(headers)
             result = self._strategy.verify(call_info=info, token=token)

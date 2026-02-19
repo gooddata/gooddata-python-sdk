@@ -1,6 +1,6 @@
 # (C) 2024 GoodData Corporation
 from pathlib import Path
-from typing import Any, Optional, TypeVar
+from typing import Any, TypeVar
 
 from attrs import define
 
@@ -27,16 +27,16 @@ class CatalogAnalyticsObjectBase(Base):
 
 @define(auto_attribs=True, kw_only=True)
 class CatalogAnalyticsBaseMeta(CatalogAnalyticsObjectBase):
-    created_at: Optional[str] = None
-    created_by: Optional[CatalogUserIdentifier] = None
-    modified_at: Optional[str] = None
-    modified_by: Optional[CatalogUserIdentifier] = None
+    created_at: str | None = None
+    created_by: CatalogUserIdentifier | None = None
+    modified_at: str | None = None
+    modified_by: CatalogUserIdentifier | None = None
 
 
 @define(auto_attribs=True, kw_only=True)
 class CatalogAnalyticsBase(CatalogAnalyticsBaseMeta):
     title: str
     content: dict[str, Any]
-    description: Optional[str] = None
-    tags: Optional[list[str]] = None
-    is_hidden: Optional[bool] = None
+    description: str | None = None
+    tags: list[str] | None = None
+    is_hidden: bool | None = None

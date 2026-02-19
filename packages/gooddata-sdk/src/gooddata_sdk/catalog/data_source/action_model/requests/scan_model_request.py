@@ -1,7 +1,7 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import Any, Optional
+from typing import Any
 
 import attr
 from attr import field
@@ -20,9 +20,9 @@ class CatalogScanModelRequest(Base):
     separator: str = "__"
     scan_tables: bool = field(default=True, validator=one_scan_true)
     scan_views: bool = field(default=False, validator=one_scan_true)
-    table_prefix: Optional[str] = None
-    view_prefix: Optional[str] = None
-    schemata: Optional[list[str]] = None
+    table_prefix: str | None = None
+    view_prefix: str | None = None
+    schemata: list[str] | None = None
 
     @staticmethod
     def client_class() -> type[ScanRequest]:

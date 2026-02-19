@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Optional, Union
+from typing import Union
 from unittest import mock
 from unittest.mock import MagicMock
 
@@ -252,7 +252,7 @@ def _create_default_data_source(sdk: GoodDataSdk, data_source_id: str = "test"):
     assert expected_data_source == data_source
 
 
-def _get_data_source(data_sources: list[CatalogDataSource], data_source_id: str) -> Optional[CatalogDataSource]:
+def _get_data_source(data_sources: list[CatalogDataSource], data_source_id: str) -> CatalogDataSource | None:
     for data_source in data_sources:
         if data_source.id == data_source_id:
             return data_source
@@ -869,8 +869,8 @@ def test_jdbc_urls_creation(
     db_class: type[CatalogDataSource],
     attributes: type[DatabaseAttributes],
     url: str,
-    parameters: Optional[list],
-    url_params: Optional[list],
+    parameters: list | None,
+    url_params: list | None,
 ):
     data_source = db_class(
         id="test",

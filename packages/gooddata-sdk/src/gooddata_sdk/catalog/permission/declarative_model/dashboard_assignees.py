@@ -1,5 +1,4 @@
 # (C) 2023 GoodData Corporation
-from typing import Optional
 
 import attr
 from gooddata_api_client.model.available_assignees import AvailableAssignees
@@ -12,8 +11,8 @@ from gooddata_sdk.catalog.base import Base
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogUserAssignee(Base):
     id: str
-    name: Optional[str] = None
-    email: Optional[str] = None
+    name: str | None = None
+    email: str | None = None
 
     @staticmethod
     def client_class() -> type[UserAssignee]:
@@ -23,7 +22,7 @@ class CatalogUserAssignee(Base):
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogUserGroupAssignee(Base):
     id: str
-    name: Optional[str] = None
+    name: str | None = None
 
     @staticmethod
     def client_class() -> type[UserGroupAssignee]:

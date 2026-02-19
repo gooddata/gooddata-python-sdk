@@ -1,8 +1,6 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import Optional
-
 import attr
 from gooddata_api_client.model.json_api_user_in import JsonApiUserIn
 from gooddata_api_client.model.json_api_user_in_document import JsonApiUserInDocument
@@ -23,11 +21,11 @@ class CatalogUserDocument(Base):
     def init(
         cls,
         user_id: str,
-        firstname: Optional[str] = None,
-        lastname: Optional[str] = None,
-        email: Optional[str] = None,
-        authentication_id: Optional[str] = None,
-        user_group_ids: Optional[list[str]] = None,
+        firstname: str | None = None,
+        lastname: str | None = None,
+        email: str | None = None,
+        authentication_id: str | None = None,
+        user_group_ids: list[str] | None = None,
     ) -> CatalogUserDocument:
         user = CatalogUser.init(
             user_id=user_id,
@@ -42,11 +40,11 @@ class CatalogUserDocument(Base):
 
     def update_user(
         self,
-        firstname: Optional[str] = None,
-        lastname: Optional[str] = None,
-        email: Optional[str] = None,
-        authentication_id: Optional[str] = None,
-        user_group_ids: Optional[list[str]] = None,
+        firstname: str | None = None,
+        lastname: str | None = None,
+        email: str | None = None,
+        authentication_id: str | None = None,
+        user_group_ids: list[str] | None = None,
     ) -> None:
         attributes = CatalogUserAttributes(
             firstname=firstname, lastname=lastname, email=email, authentication_id=authentication_id
@@ -59,8 +57,8 @@ class CatalogUserDocument(Base):
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogUser(Base):
     id: str
-    attributes: Optional[CatalogUserAttributes] = None
-    relationships: Optional[CatalogUserRelationships] = None
+    attributes: CatalogUserAttributes | None = None
+    relationships: CatalogUserRelationships | None = None
 
     @staticmethod
     def client_class() -> type[JsonApiUserIn]:
@@ -70,11 +68,11 @@ class CatalogUser(Base):
     def init(
         cls,
         user_id: str,
-        firstname: Optional[str] = None,
-        lastname: Optional[str] = None,
-        email: Optional[str] = None,
-        authentication_id: Optional[str] = None,
-        user_group_ids: Optional[list[str]] = None,
+        firstname: str | None = None,
+        lastname: str | None = None,
+        email: str | None = None,
+        authentication_id: str | None = None,
+        user_group_ids: list[str] | None = None,
     ) -> CatalogUser:
         attributes = CatalogUserAttributes(
             firstname=firstname, lastname=lastname, email=email, authentication_id=authentication_id
@@ -148,15 +146,15 @@ class CatalogUser(Base):
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogUserAttributes(Base):
-    firstname: Optional[str] = None
-    lastname: Optional[str] = None
-    email: Optional[str] = None
-    authentication_id: Optional[str] = None
+    firstname: str | None = None
+    lastname: str | None = None
+    email: str | None = None
+    authentication_id: str | None = None
 
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogUserRelationships(Base):
-    user_groups: Optional[CatalogUserGroupsData] = None
+    user_groups: CatalogUserGroupsData | None = None
 
     def add_user_groups(self, user_groups: list[CatalogUserGroup]) -> None:
         """Appends the User Groups to the existing list.
@@ -187,7 +185,7 @@ class CatalogUserRelationships(Base):
             self.user_groups.data = user_groups
 
     @classmethod
-    def create_user_relationships(cls, user_group_ids: Optional[list[str]]) -> CatalogUserRelationships:
+    def create_user_relationships(cls, user_group_ids: list[str] | None) -> CatalogUserRelationships:
         user_groups = None
         if user_group_ids is not None:
             user_groups = CatalogUserGroupsData(

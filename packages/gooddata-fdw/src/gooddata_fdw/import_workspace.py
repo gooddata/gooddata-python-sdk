@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import re
-from typing import NamedTuple, Optional
+from typing import NamedTuple
 
 from gooddata_sdk import (
     CatalogWorkspaceContent,
@@ -24,7 +24,7 @@ from gooddata_fdw.naming import (
 from gooddata_fdw.pg_logging import _log_debug, _log_info, _log_warn
 
 
-def _metric_format_to_precision(metric_format: Optional[str]) -> Optional[str]:
+def _metric_format_to_precision(metric_format: str | None) -> str | None:
     if metric_format:
         re_decimal_places = re.compile(r"^[^.]+\.([#0]+)")
         match = re_decimal_places.search(metric_format)
@@ -39,7 +39,7 @@ class ImporterInitData(NamedTuple):
     workspace: str
     server_options: options.ServerOptions
     import_options: options.ImportSchemaOptions
-    restriction_type: Optional[str]
+    restriction_type: str | None
     restricts: list[str]
 
 
@@ -165,7 +165,7 @@ class InsightsWorkspaceImporter(WorkspaceImporter):
 
     # InsightMetric do not contain format in case of stored metrics
     @staticmethod
-    def _get_insight_metric_format(metric: VisualizationMetric, catalog: CatalogWorkspaceContent) -> Optional[str]:
+    def _get_insight_metric_format(metric: VisualizationMetric, catalog: CatalogWorkspaceContent) -> str | None:
         if metric.format:
             return metric.format
         elif metric.item_id:

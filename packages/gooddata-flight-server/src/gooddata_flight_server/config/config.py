@@ -5,7 +5,7 @@ import os
 import platform
 import socket
 from dataclasses import dataclass
-from typing import Any, Optional
+from typing import Any
 
 from dynaconf import Dynaconf, ValidationError, Validator
 
@@ -34,10 +34,10 @@ class AuthenticationMethod(enum.Enum):
 
 @dataclass(frozen=True)
 class OtelConfig:
-    exporter_type: Optional[OtelExporterType]
+    exporter_type: OtelExporterType | None
     service_name: str
-    service_namespace: Optional[str]
-    service_instance_id: Optional[str]
+    service_namespace: str | None
+    service_instance_id: str | None
     extract_context_from_headers: bool
 
 
@@ -50,21 +50,21 @@ class ServerConfig:
 
     use_tls: bool
     use_mutual_tls: bool
-    tls_cert_and_key: Optional[tuple[bytes, bytes]]
-    tls_root_cert: Optional[bytes]
+    tls_cert_and_key: tuple[bytes, bytes] | None
+    tls_root_cert: bytes | None
 
     authentication_method: AuthenticationMethod
-    token_header_name: Optional[str]
-    token_verification: Optional[str]
+    token_header_name: str | None
+    token_verification: str | None
 
     task_threads: int
     task_close_threads: int
     task_result_ttl_sec: int
 
-    metrics_host: Optional[str]
+    metrics_host: str | None
     metrics_port: int
 
-    health_check_host: Optional[str]
+    health_check_host: str | None
     health_check_port: int
 
     malloc_trim_interval_sec: int
@@ -77,8 +77,8 @@ class ServerConfig:
         def _basic_sanity(val: bytes) -> bytes:
             return val[0:38] + b"..." + val[-38:]
 
-        sanitized_root_cert: Optional[bytes] = None
-        sanitized_cert_and_key: Optional[tuple[bytes, bytes]] = None
+        sanitized_root_cert: bytes | None = None
+        sanitized_cert_and_key: tuple[bytes, bytes] | None = None
 
         if self.tls_root_cert is not None:
             sanitized_root_cert = _basic_sanity(self.tls_root_cert)
@@ -422,7 +422,7 @@ _VALIDATORS = [
 ]
 
 
-def _read_tls_setting(settings: Dynaconf, setting: str) -> Optional[bytes]:
+def _read_tls_setting(settings: Dynaconf, setting: str) -> bytes | None:
     value: str = settings.get(setting)
     if value is None:
         return None
@@ -448,8 +448,8 @@ def _create_server_config(settings: Dynaconf) -> ServerConfig:
     advertise_port = server_settings.get(_Settings.AdvertisePort) or server_settings.get(_Settings.ListenPort)
 
     use_tls = server_settings.get(_Settings.UseTls)
-    tls_cert_and_key: Optional[tuple[bytes, bytes]] = None
-    tls_root_cert: Optional[bytes] = None
+    tls_cert_and_key: tuple[bytes, bytes] | None = None
+    tls_root_cert: bytes | None = None
 
     if use_tls:
         cert = _read_tls_setting(server_settings, _Settings.TlsCertificate)
@@ -471,7 +471,7 @@ def _create_server_config(settings: Dynaconf) -> ServerConfig:
         tls_root_cert = _read_tls_setting(server_settings, _Settings.TlsRoot)
 
     _auth_method = AuthenticationMethod(server_settings.get(_Settings.AuthenticationMethod))
-    _token_verification: Optional[str] = None
+    _token_verification: str | None = None
     if _auth_method == AuthenticationMethod.Token:
         _token_verification = server_settings.get(_Settings.TokenVerification) or _DEFAULT_TOKEN_VERIFICATION
 

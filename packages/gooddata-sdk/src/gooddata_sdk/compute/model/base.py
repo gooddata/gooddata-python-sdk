@@ -1,7 +1,7 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import Optional, Union
+from typing import Union
 
 import gooddata_api_client.models as afm_models
 from gooddata_api_client.model_utils import OpenApiModel
@@ -71,7 +71,7 @@ class ExecModelEntity:
 
 
 class Filter(ExecModelEntity):
-    def __init__(self, _apply_on_result: Optional[bool] = None) -> None:
+    def __init__(self, _apply_on_result: bool | None = None) -> None:
         super().__init__()
 
         self._apply_on_result = _apply_on_result
@@ -86,7 +86,7 @@ class Filter(ExecModelEntity):
     def as_api_model(self) -> OpenApiModel:
         raise NotImplementedError()
 
-    def description(self, labels: dict[str, str], format_locale: Optional[str] = None) -> str:
+    def description(self, labels: dict[str, str], format_locale: str | None = None) -> str:
         """
         Description of the filter as it's visible for customer in UI.
 
