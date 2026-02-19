@@ -8,6 +8,7 @@ from typing import Any, Optional, Union
 
 from gooddata_api_client import ApiException
 from gooddata_api_client.model.afm_cancel_tokens import AfmCancelTokens
+from gooddata_api_client.model.allowed_relationship_type import AllowedRelationshipType
 from gooddata_api_client.model.chat_history_request import ChatHistoryRequest
 from gooddata_api_client.model.chat_history_result import ChatHistoryResult
 from gooddata_api_client.model.chat_request import ChatRequest
@@ -135,17 +136,27 @@ class ComputeService:
             is_cancellable=is_cancellable,
         )
 
-    def ai_chat(self, workspace_id: str, question: str) -> ChatResult:
+    def ai_chat(
+        self,
+        workspace_id: str,
+        question: str,
+        allowed_relationship_types: Optional[list[AllowedRelationshipType]] = None,
+    ) -> ChatResult:
         """
         Chat with AI in GoodData workspace.
 
         Args:
             workspace_id (str): workspace identifier
             question (str): question for the AI
+            allowed_relationship_types (Optional[list[AllowedRelationshipType]]): list of allowed relationship types
+                to filter search results. If provided, only relationships of the specified types will be considered.
         Returns:
             ChatResult: Chat response
         """
-        chat_request = ChatRequest(question=question)
+        chat_request_params: dict[str, Any] = {"question": question}
+        if allowed_relationship_types is not None:
+            chat_request_params["allowed_relationship_types"] = allowed_relationship_types
+        chat_request = ChatRequest(**chat_request_params)
         response = self._actions_api.ai_chat(workspace_id, chat_request, _check_return_type=False)
         return response
 
@@ -160,17 +171,27 @@ class ComputeService:
                     except json.JSONDecodeError:
                         continue
 
-    def ai_chat_stream(self, workspace_id: str, question: str) -> Iterator[Any]:
+    def ai_chat_stream(
+        self,
+        workspace_id: str,
+        question: str,
+        allowed_relationship_types: Optional[list[AllowedRelationshipType]] = None,
+    ) -> Iterator[Any]:
         """
         Chat Stream with AI in GoodData workspace.
 
         Args:
             workspace_id (str): workspace identifier
             question (str): question for the AI
+            allowed_relationship_types (Optional[list[AllowedRelationshipType]]): list of allowed relationship types
+                to filter search results. If provided, only relationships of the specified types will be considered.
         Returns:
             Iterator[Any]: Yields parsed JSON objects from each SSE event's data field
         """
-        chat_request = ChatRequest(question=question)
+        chat_request_params: dict[str, Any] = {"question": question}
+        if allowed_relationship_types is not None:
+            chat_request_params["allowed_relationship_types"] = allowed_relationship_types
+        chat_request = ChatRequest(**chat_request_params)
         response = self._actions_api.ai_chat_stream(
             workspace_id, chat_request, _check_return_type=False, _preload_content=False
         )
@@ -280,6 +301,7 @@ class ComputeService:
         object_types: Optional[list[str]] = None,
         relevant_score_threshold: Optional[float] = None,
         title_to_descriptor_ratio: Optional[float] = None,
+        allowed_relationship_types: Optional[list[AllowedRelationshipType]] = None,
     ) -> SearchResult:
         """
         Search for metadata objects using similarity search.
@@ -293,6 +315,8 @@ class ComputeService:
                 "label", "date", "dataset", "visualization" and "dashboard". Defaults to None.
             relevant_score_threshold (Optional[float]): minimum relevance score threshold for results. Defaults to None.
             title_to_descriptor_ratio (Optional[float]): ratio of title score to descriptor score. Defaults to None.
+            allowed_relationship_types (Optional[list[AllowedRelationshipType]]): list of allowed relationship types
+                to filter search results. If provided, only relationships of the specified types will be considered.
 
         Returns:
             SearchResult: Search results
@@ -311,6 +335,8 @@ class ComputeService:
             search_params["relevant_score_threshold"] = relevant_score_threshold
         if title_to_descriptor_ratio is not None:
             search_params["title_to_descriptor_ratio"] = title_to_descriptor_ratio
+        if allowed_relationship_types is not None:
+            search_params["allowed_relationship_types"] = allowed_relationship_types
         search_request = SearchRequest(question=question, **search_params)
         response = self._actions_api.ai_search(workspace_id, search_request, _check_return_type=False)
         return response
