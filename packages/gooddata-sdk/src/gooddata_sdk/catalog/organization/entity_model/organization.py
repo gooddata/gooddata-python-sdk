@@ -53,6 +53,8 @@ class CatalogOrganization(Base):
             allowed_origins=safeget(ea, ["allowed_origins"]),
             oauth_issuer_location=safeget(ea, ["oauth_issuer_location"]),
             oauth_client_id=safeget(ea, ["oauth_client_id"]),
+            data_center=safeget(ea, ["data_center"]),
+            region=safeget(ea, ["region"]),
         )
 
         identity_provider_id = safeget(er, ["identityProvider", "data", "id"])
@@ -87,6 +89,8 @@ class CatalogOrganizationAttributes(Base):
     allowed_origins: Optional[list[str]] = None
     oauth_issuer_location: Optional[str] = None
     oauth_client_id: Optional[str] = None
+    data_center: Optional[str] = None
+    region: Optional[str] = None
 
     @staticmethod
     def client_class() -> type[JsonApiOrganizationInAttributes]:

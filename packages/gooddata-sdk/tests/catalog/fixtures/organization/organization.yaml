@@ -99,6 +99,8 @@ interactions:
                 - enableUserManagement
                 - enableRawExports
                 - enableFlexibleDashboardLayout
+              dataCenter: null
+              region: null
             id: default
             type: organization
           links:
