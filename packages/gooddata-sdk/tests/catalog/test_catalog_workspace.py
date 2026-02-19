@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from unittest.mock import MagicMock, patch
 from xml.etree import ElementTree as ET
 
 import yaml
@@ -1039,3 +1040,99 @@ def test_layout_filter_views(test_config):
         sdk.catalog_workspace.put_declarative_filter_views(workspace_id, [])
         filter_views = sdk.catalog_workspace.get_declarative_filter_views(workspace_id)
         assert len(filter_views) == 0
+
+
+def test_resolve_all_workspace_settings_forwards_exclude_user_settings():
+    mock_setting = MagicMock()
+    mock_setting.to_dict.return_value = {"type": "LOCALE", "value": "en-US"}
+
+    mock_actions_api = MagicMock()
+    mock_actions_api.workspace_resolve_all_settings.return_value = [mock_setting]
+
+    mock_client = MagicMock()
+    mock_client.actions_api = mock_actions_api
+
+    sdk = GoodDataSdk.__new__(GoodDataSdk)
+    sdk._client = mock_client
+    from gooddata_sdk.catalog.workspace.service import CatalogWorkspaceService
+
+    service = CatalogWorkspaceService.__new__(CatalogWorkspaceService)
+    service._client = mock_client
+
+    result = service.resolve_all_workspace_settings("demo", exclude_user_settings=True)
+
+    mock_actions_api.workspace_resolve_all_settings.assert_called_once_with(
+        "demo", _check_return_type=False, exclude_user_settings=True
+    )
+    assert result == {"LOCALE": {"type": "LOCALE", "value": "en-US"}}
+
+
+def test_resolve_all_workspace_settings_omits_exclude_user_settings_by_default():
+    mock_setting = MagicMock()
+    mock_setting.to_dict.return_value = {"type": "LOCALE", "value": "en-US"}
+
+    mock_actions_api = MagicMock()
+    mock_actions_api.workspace_resolve_all_settings.return_value = [mock_setting]
+
+    mock_client = MagicMock()
+    mock_client.actions_api = mock_actions_api
+
+    from gooddata_sdk.catalog.workspace.service import CatalogWorkspaceService
+
+    service = CatalogWorkspaceService.__new__(CatalogWorkspaceService)
+    service._client = mock_client
+
+    service.resolve_all_workspace_settings("demo")
+
+    mock_actions_api.workspace_resolve_all_settings.assert_called_once_with(
+        "demo", _check_return_type=False
+    )
+
+
+def test_resolve_workspace_settings_forwards_exclude_user_settings():
+    mock_setting = MagicMock()
+    mock_setting.to_dict.return_value = {"type": "LOCALE", "value": "en-US"}
+
+    mock_actions_api = MagicMock()
+    mock_actions_api.workspace_resolve_settings.return_value = [mock_setting]
+
+    mock_client = MagicMock()
+    mock_client.actions_api = mock_actions_api
+
+    from gooddata_sdk.catalog.workspace.service import CatalogWorkspaceService
+
+    service = CatalogWorkspaceService.__new__(CatalogWorkspaceService)
+    service._client = mock_client
+
+    settings_input = ["LOCALE"]
+    result = service.resolve_workspace_settings("demo", settings_input, exclude_user_settings=True)
+
+    call_args = mock_actions_api.workspace_resolve_settings.call_args
+    assert call_args[0][0] == "demo"
+    assert call_args[1]["_check_return_type"] is False
+    assert call_args[1]["exclude_user_settings"] is True
+    assert result == {"LOCALE": {"type": "LOCALE", "value": "en-US"}}
+
+
+def test_resolve_workspace_settings_omits_exclude_user_settings_by_default():
+    mock_setting = MagicMock()
+    mock_setting.to_dict.return_value = {"type": "LOCALE", "value": "en-US"}
+
+    mock_actions_api = MagicMock()
+    mock_actions_api.workspace_resolve_settings.return_value = [mock_setting]
+
+    mock_client = MagicMock()
+    mock_client.actions_api = mock_actions_api
+
+    from gooddata_sdk.catalog.workspace.service import CatalogWorkspaceService
+
+    service = CatalogWorkspaceService.__new__(CatalogWorkspaceService)
+    service._client = mock_client
+
+    settings_input = ["LOCALE"]
+    service.resolve_workspace_settings("demo", settings_input)
+
+    call_args = mock_actions_api.workspace_resolve_settings.call_args
+    assert call_args[0][0] == "demo"
+    assert call_args[1]["_check_return_type"] is False
+    assert "exclude_user_settings" not in call_args[1]

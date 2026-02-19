@@ -190,27 +190,35 @@ class CatalogWorkspaceService(CatalogServiceBase):
         workspace_settings = load_all_entities(get_workspace_settings).data
         return [CatalogWorkspaceSetting.from_api(ws) for ws in workspace_settings]
 
-    def resolve_all_workspace_settings(self, workspace_id: str) -> dict:
+    def resolve_all_workspace_settings(
+        self, workspace_id: str, exclude_user_settings: Optional[bool] = None
+    ) -> dict:
         """
         Resolves values for all settings in a workspace by current user, workspace, organization, or default settings
         and return them as a dictionary. Proper parsing is up to the caller.
         TODO: long-term we should return a proper entity object.
 
         :param workspace_id: Workspace ID
+        :param exclude_user_settings: When True, user-level settings are excluded from resolution
         :return: Dict of settings
         """
         # note: in case some settings were recently added and the API client was not regenerated it can fail on
         #       invalid value when validating allowed types on the client side before request is sent to the server
+        kwargs: dict = {"_check_return_type": False}
+        if exclude_user_settings is not None:
+            kwargs["exclude_user_settings"] = exclude_user_settings
         resolved_workspace_settings = [
             setting.to_dict()
             for setting in self._client.actions_api.workspace_resolve_all_settings(
                 workspace_id,
-                _check_return_type=False,
+                **kwargs,
             )
         ]
         return {setting["type"]: setting for setting in resolved_workspace_settings}
 
-    def resolve_workspace_settings(self, workspace_id: str, settings: list) -> dict:
+    def resolve_workspace_settings(
+        self, workspace_id: str, settings: list, exclude_user_settings: Optional[bool] = None
+    ) -> dict:
         """
         Resolves values for given settings in a workspace by current user, workspace, organization, or default settings
         and return them as a dictionary. Proper parsing is up to the caller.
@@ -218,14 +226,18 @@ class CatalogWorkspaceService(CatalogServiceBase):
 
         :param workspace_id: Workspace ID
         :param settings: List of settings to resolve
+        :param exclude_user_settings: When True, user-level settings are excluded from resolution
         :return: Dict of settings
         """
+        kwargs: dict = {"_check_return_type": False}
+        if exclude_user_settings is not None:
+            kwargs["exclude_user_settings"] = exclude_user_settings
         resolved_workspace_settings = [
             setting.to_dict()
             for setting in self._client.actions_api.workspace_resolve_settings(
                 workspace_id,
                 ResolveSettingsRequest(settings=settings),
-                _check_return_type=False,
+                **kwargs,
             )
         ]
         return {setting["type"]: setting for setting in resolved_workspace_settings}
