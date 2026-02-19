@@ -1,7 +1,7 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
 
-from typing import Any, Callable, Optional, Union, cast
+from typing import Any, Callable, Union, cast
 
 from gooddata_sdk import (
     Attribute,
@@ -33,7 +33,7 @@ from gooddata_pandas.utils import (
 class ExecutionDefinitionBuilder:
     _DEFAULT_INDEX_NAME: str = "0"
 
-    def __init__(self, columns: ColumnsDef, index_by: Optional[IndexDef] = None, is_cancellable: bool = False) -> None:
+    def __init__(self, columns: ColumnsDef, index_by: IndexDef | None = None, is_cancellable: bool = False) -> None:
         """
         Initializes the ExecutionDefinitionBuilder instance with columns and an
         optional index_by definition. Processes the given columns and index_by
@@ -105,7 +105,7 @@ class ExecutionDefinitionBuilder:
             self._col_to_metric_idx[column_name] = len(self._metrics)
             self._metrics.append(item)
 
-    def _process_index(self, index_by: Optional[IndexDef] = None) -> None:
+    def _process_index(self, index_by: IndexDef | None = None) -> None:
         """
         Processes the given index definition (index_by) to determine whether to reference attributes or
         raise an error when attempting to reference metrics. Updates the internal index-to-attribute mapping
@@ -186,7 +186,7 @@ class ExecutionDefinitionBuilder:
             self._index_to_attr_idx[index_name] = len(self._attributes)
             self._attributes.append(attr_item)
 
-    def _update_filter_ids(self, filter_by: Optional[Union[Filter, list[Filter]]] = None) -> Optional[list[Filter]]:
+    def _update_filter_ids(self, filter_by: Union[Filter, list[Filter]] | None = None) -> list[Filter] | None:
         """
         Updates the filter IDs for the given filters. If a filter references a metric/attribute by a string,
         it is converted to the corresponding internal ID.
@@ -225,7 +225,7 @@ class ExecutionDefinitionBuilder:
         return filters
 
     def build_execution_definition(
-        self, filter_by: Optional[Union[Filter, list[Filter]]] = None
+        self, filter_by: Union[Filter, list[Filter]] | None = None
     ) -> ExecutionDefinition:
         """
         Builds an ExecutionDefinition instance with the current configuration of metrics, attributes, and filters.
@@ -262,8 +262,8 @@ def _compute(
     sdk: GoodDataSdk,
     workspace_id: str,
     columns: ColumnsDef,
-    index_by: Optional[IndexDef] = None,
-    filter_by: Optional[Union[Filter, list[Filter]]] = None,
+    index_by: IndexDef | None = None,
+    filter_by: Union[Filter, list[Filter]] | None = None,
     is_cancellable: bool = False,
 ) -> tuple[Execution, dict[str, int], dict[str, int], dict[str, int]]:
     """
@@ -360,8 +360,8 @@ def _extract_from_attributes_and_maybe_metrics(
     cols: list[str],
     col_to_attr_idx: dict[str, int],
     col_to_metric_idx: dict[str, int],
-    index_to_attr_idx: Optional[dict[str, int]] = None,
-    result_page_len: Optional[int] = None,
+    index_to_attr_idx: dict[str, int] | None = None,
+    result_page_len: int | None = None,
 ) -> tuple[dict, dict]:
     """
     Internal function that extracts data from execution response with attributes columns and
@@ -424,11 +424,11 @@ def compute_and_extract(
     sdk: GoodDataSdk,
     workspace_id: str,
     columns: ColumnsDef,
-    index_by: Optional[IndexDef] = None,
-    filter_by: Optional[Union[Filter, list[Filter]]] = None,
-    on_execution_submitted: Optional[Callable[[Execution], None]] = None,
+    index_by: IndexDef | None = None,
+    filter_by: Union[Filter, list[Filter]] | None = None,
+    on_execution_submitted: Callable[[Execution], None] | None = None,
     is_cancellable: bool = False,
-    result_page_len: Optional[int] = None,
+    result_page_len: int | None = None,
 ) -> tuple[dict, dict]:
     """
     Convenience function that computes and extracts data from the execution response.

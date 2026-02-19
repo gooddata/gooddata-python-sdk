@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import builtins
-from typing import Any, Optional, TypeVar
+from typing import Any, TypeVar
 
 import attr
 from cattrs import structure
@@ -14,7 +14,7 @@ U = TypeVar("U", bound="JsonApiEntityBase")
 
 
 def value_in_allowed(
-    instance: type[Base], attribute: attr.Attribute, value: str, client_class: Optional[Any] = None
+    instance: type[Base], attribute: attr.Attribute, value: str, client_class: Any | None = None
 ) -> None:
     if client_class is None:
         client_class = instance.client_class()
@@ -77,9 +77,9 @@ class JsonApiEntityBase:
     id: str
     type: str
     attributes: dict[str, Any] = attr.field(repr=False)
-    relationships: Optional[dict[str, Any]] = attr.field(repr=False, default=None)
-    meta: Optional[dict[str, Any]] = attr.field(repr=False, default=None)
-    links: Optional[dict[str, Any]] = attr.field(repr=False, default=None)
+    relationships: dict[str, Any] | None = attr.field(repr=False, default=None)
+    meta: dict[str, Any] | None = attr.field(repr=False, default=None)
+    links: dict[str, Any] | None = attr.field(repr=False, default=None)
     related_entities_data: list[dict[str, Any]] = attr.field(repr=False, factory=list)
     related_entities_side_loads: list[dict[str, Any]] = attr.field(repr=False, factory=list)
     side_loads: list[dict[str, Any]] = attr.field(repr=False, factory=list)
@@ -88,8 +88,8 @@ class JsonApiEntityBase:
     def from_api(
         cls,
         entity: dict[str, Any],
-        side_loads: Optional[list[Any]] = None,
-        related_entities: Optional[AllPagedEntities] = None,
+        side_loads: list[Any] | None = None,
+        related_entities: AllPagedEntities | None = None,
     ) -> JsonApiEntityBase:
         """
         Creates object from entity passed by client class, which represents it as dictionary.

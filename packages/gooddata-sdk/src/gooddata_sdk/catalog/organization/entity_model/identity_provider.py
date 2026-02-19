@@ -1,7 +1,7 @@
 # (C) 2024 GoodData Corporation
 from __future__ import annotations
 
-from typing import Any, Optional
+from typing import Any
 
 import attr
 from gooddata_api_client.model.json_api_identity_provider_in import JsonApiIdentityProviderIn
@@ -26,7 +26,7 @@ class CatalogIdentityProviderDocument(Base):
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogIdentityProvider(Base):
     id: str
-    attributes: Optional[CatalogIdentityProviderAttributes] = None
+    attributes: CatalogIdentityProviderAttributes | None = None
 
     @staticmethod
     def client_class() -> type[JsonApiIdentityProviderIn]:
@@ -36,17 +36,17 @@ class CatalogIdentityProvider(Base):
     def init(
         cls,
         identity_provider_id: str,
-        custom_claim_mapping: Optional[dict[str, str]] = None,
-        identifiers: Optional[list[str]] = None,
-        oauth_client_id: Optional[str] = None,
-        oauth_client_secret: Optional[str] = None,
-        oauth_issuer_location: Optional[str] = None,
-        saml_metadata: Optional[str] = None,
-        idp_type: Optional[str] = None,
-        oauth_issuer_id: Optional[str] = None,
-        oauth_subject_id_claim: Optional[str] = None,
-        oauth_custom_auth_attributes: Optional[dict[str, str]] = None,
-        oauth_custom_scopes: Optional[list[str]] = None,
+        custom_claim_mapping: dict[str, str] | None = None,
+        identifiers: list[str] | None = None,
+        oauth_client_id: str | None = None,
+        oauth_client_secret: str | None = None,
+        oauth_issuer_location: str | None = None,
+        saml_metadata: str | None = None,
+        idp_type: str | None = None,
+        oauth_issuer_id: str | None = None,
+        oauth_subject_id_claim: str | None = None,
+        oauth_custom_auth_attributes: dict[str, str] | None = None,
+        oauth_custom_scopes: list[str] | None = None,
     ) -> CatalogIdentityProvider:
         return cls(
             id=identity_provider_id,
@@ -97,17 +97,17 @@ class CatalogIdentityProvider(Base):
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogIdentityProviderAttributes(Base):
-    custom_claim_mapping: Optional[dict[str, str]] = None
-    identifiers: Optional[list[str]] = None
-    oauth_client_id: Optional[str] = None
-    oauth_client_secret: Optional[str] = None
-    oauth_issuer_location: Optional[str] = None
-    saml_metadata: Optional[str] = None
-    idp_type: Optional[str] = None
-    oauth_issuer_id: Optional[str] = None
-    oauth_subject_id_claim: Optional[str] = None
-    oauth_custom_auth_attributes: Optional[dict[str, str]] = None
-    oauth_custom_scopes: Optional[list[str]] = None
+    custom_claim_mapping: dict[str, str] | None = None
+    identifiers: list[str] | None = None
+    oauth_client_id: str | None = None
+    oauth_client_secret: str | None = None
+    oauth_issuer_location: str | None = None
+    saml_metadata: str | None = None
+    idp_type: str | None = None
+    oauth_issuer_id: str | None = None
+    oauth_subject_id_claim: str | None = None
+    oauth_custom_auth_attributes: dict[str, str] | None = None
+    oauth_custom_scopes: list[str] | None = None
 
     @staticmethod
     def client_class() -> type[JsonApiIdentityProviderInAttributes]:

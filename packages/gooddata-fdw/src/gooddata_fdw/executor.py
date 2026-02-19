@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from collections.abc import Generator
-from typing import Any, NamedTuple, Optional
+from typing import Any, NamedTuple
 
 from gooddata_sdk import GoodDataSdk
 
@@ -37,7 +37,7 @@ class Executor:
                 validator.validate(column_name, column_def)
 
     def execute(
-        self, quals: list[Qual], columns: list[str], sort_keys: Optional[list[Any]] = None
+        self, quals: list[Qual], columns: list[str], sort_keys: list[Any] | None = None
     ) -> Generator[dict[str, Any], None, None]:
         raise NotImplementedError()
 
@@ -59,7 +59,7 @@ class InsightExecutor(Executor):
         return inputs.table_options.insight is not None
 
     def execute(
-        self, quals: list[Qual], columns: list[str], sort_keys: Optional[list[Any]] = None
+        self, quals: list[Qual], columns: list[str], sort_keys: list[Any] | None = None
     ) -> Generator[dict[str, Any], None, None]:
         results_reader = InsightTableResultReader(self._table_columns, columns)
         insight = self._sdk.visualizations.get_visualization(self._workspace, self._insight)
@@ -81,7 +81,7 @@ class ComputeExecutor(Executor):
         return inputs.table_options.compute is not None
 
     def execute(
-        self, quals: list[Qual], columns: list[str], sort_keys: Optional[list[Any]] = None
+        self, quals: list[Qual], columns: list[str], sort_keys: list[Any] | None = None
     ) -> Generator[dict[str, Any], None, None]:
         col_val.validate_columns_in_table_def(self._table_columns, columns)
         items = [column_utils.table_col_as_computable(self._table_columns[col_name]) for col_name in columns]
@@ -105,7 +105,7 @@ class CustomExecutor(Executor):
         return True
 
     def execute(
-        self, quals: list[Qual], columns: list[str], sort_keys: Optional[list[Any]] = None
+        self, quals: list[Qual], columns: list[str], sort_keys: list[Any] | None = None
     ) -> Generator[dict[str, Any], None, None]:
         items = [column_utils.table_col_as_computable(col) for col in self._table_columns.values()]
         # TODO: pushdown more filters that are included in quals

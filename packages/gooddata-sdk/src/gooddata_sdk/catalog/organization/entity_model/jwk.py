@@ -1,8 +1,6 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import Optional
-
 import attr
 from gooddata_api_client.model.json_api_jwk_in import JsonApiJwkIn
 from gooddata_api_client.model.json_api_jwk_in_attributes import JsonApiJwkInAttributes
@@ -24,7 +22,7 @@ class CatalogJwkDocument(Base):
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogJwk(Base):
     id: str
-    attributes: Optional[CatalogJwkAttributes] = None
+    attributes: CatalogJwkAttributes | None = None
 
     @staticmethod
     def client_class() -> type[JsonApiJwkIn]:
@@ -34,14 +32,14 @@ class CatalogJwk(Base):
     def init(
         cls,
         jwk_id: str,
-        rsa_spec: Optional[CatalogRsaSpecification] = None,
+        rsa_spec: CatalogRsaSpecification | None = None,
     ) -> CatalogJwk:
         return cls(id=jwk_id, attributes=CatalogJwkAttributes(content=rsa_spec))
 
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogJwkAttributes(Base):
-    content: Optional[CatalogRsaSpecification] = None
+    content: CatalogRsaSpecification | None = None
 
     @staticmethod
     def client_class() -> type[JsonApiJwkInAttributes]:

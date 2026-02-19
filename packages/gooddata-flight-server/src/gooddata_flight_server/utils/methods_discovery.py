@@ -2,7 +2,6 @@
 import importlib
 from functools import wraps
 from inspect import signature
-from typing import Optional
 
 from gooddata_flight_server.exceptions import FlightMethodsModuleError
 from gooddata_flight_server.server.base import (
@@ -74,7 +73,7 @@ def _only_valid_flight_methods_factory(
     return factory
 
 
-def get_methods_factory(module_name: str, root: Optional[str] = None) -> FlightServerMethodsFactory:
+def get_methods_factory(module_name: str, root: str | None = None) -> FlightServerMethodsFactory:
     """
     Get the method factory from the given module.
     The module should contain exactly one method decorated with @flight_server_methods.

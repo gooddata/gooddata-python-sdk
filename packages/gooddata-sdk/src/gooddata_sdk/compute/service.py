@@ -4,7 +4,7 @@ from __future__ import annotations
 import json
 import logging
 from collections.abc import Iterator
-from typing import Any, Optional, Union
+from typing import Any, Union
 
 from gooddata_api_client import ApiException
 from gooddata_api_client.model.afm_cancel_tokens import AfmCancelTokens
@@ -45,7 +45,7 @@ class ComputeService:
         self,
         workspace_id: str,
         exec_def: ExecutionDefinition,
-        timeout: Optional[Union[int, float, tuple]] = None,
+        timeout: Union[int, float, tuple] | None = None,
     ) -> Execution:
         """
         Starts computation in GoodData.CN workspace, using the provided execution definition.
@@ -140,7 +140,7 @@ class ComputeService:
         self,
         workspace_id: str,
         question: str,
-        allowed_relationship_types: Optional[list[AllowedRelationshipType]] = None,
+        allowed_relationship_types: list[AllowedRelationshipType] | None = None,
     ) -> ChatResult:
         """
         Chat with AI in GoodData workspace.
@@ -175,7 +175,7 @@ class ComputeService:
         self,
         workspace_id: str,
         question: str,
-        allowed_relationship_types: Optional[list[AllowedRelationshipType]] = None,
+        allowed_relationship_types: list[AllowedRelationshipType] | None = None,
     ) -> Iterator[Any]:
         """
         Chat Stream with AI in GoodData workspace.
@@ -296,11 +296,11 @@ class ComputeService:
         self,
         workspace_id: str,
         question: str,
-        deep_search: Optional[bool] = None,
-        limit: Optional[int] = None,
-        object_types: Optional[list[str]] = None,
-        relevant_score_threshold: Optional[float] = None,
-        title_to_descriptor_ratio: Optional[float] = None,
+        deep_search: bool | None = None,
+        limit: int | None = None,
+        object_types: list[str] | None = None,
+        relevant_score_threshold: float | None = None,
+        title_to_descriptor_ratio: float | None = None,
     ) -> SearchResult:
         """
         Search for metadata objects using similarity search.

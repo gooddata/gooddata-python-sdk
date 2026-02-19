@@ -1,5 +1,5 @@
 #  (C) 2024 GoodData Corporation
-from typing import Optional, Union
+from typing import Union
 
 import structlog
 from gooddata_flight_server import FlightDataTaskResult, Task, TaskError, TaskResult
@@ -16,11 +16,11 @@ class FlexConnectFunctionTask(Task):
         self,
         fun: FlexConnectFunction,
         parameters: dict,
-        columns: Optional[tuple[str, ...]],
+        columns: tuple[str, ...] | None,
         headers: dict[str, list[str]],
         cmd: bytes,
         cancellable: bool = True,
-        task_id: Optional[str] = None,
+        task_id: str | None = None,
     ):
         super().__init__(cmd, cancellable, task_id)
 
@@ -32,7 +32,7 @@ class FlexConnectFunctionTask(Task):
         _LOGGER.info("flexconnect_task_created", fun=fun.Name, task_id=self._task_id)
 
     @property
-    def fun_name(self) -> Optional[str]:
+    def fun_name(self) -> str | None:
         return self._fun.Name
 
     def run(self) -> Union[TaskResult, TaskError]:

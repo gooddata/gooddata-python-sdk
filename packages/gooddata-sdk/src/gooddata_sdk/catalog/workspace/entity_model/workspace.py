@@ -1,7 +1,7 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import Any, Optional
+from typing import Any
 
 import attr
 from gooddata_api_client.model.json_api_workspace_automation_out_relationships_workspace import (
@@ -22,8 +22,8 @@ class CatalogWorkspace(Base):
     workspace_id: str
     id: str = attr.field(init=False, default=attr.Factory(lambda self: self.workspace_id, takes_self=True))
     name: str
-    parent_id: Optional[str] = attr.field(default=None)
-    description: Optional[str] = attr.field(default=None)
+    parent_id: str | None = attr.field(default=None)
+    description: str | None = attr.field(default=None)
 
     @classmethod
     def from_api(cls, entity: dict[str, Any]) -> CatalogWorkspace:

@@ -1,6 +1,5 @@
 #  (C) 2024 GoodData Corporation
 import abc
-from typing import Optional
 
 from gooddata_flight_server.tasks.task import Task
 from gooddata_flight_server.tasks.task_result import TaskExecutionResult
@@ -55,7 +54,7 @@ class TaskExecutor(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def get_task_submitted_timestamp(self, task_id: str) -> Optional[float]:
+    def get_task_submitted_timestamp(self, task_id: str) -> float | None:
         """
         Returns the timestamp of when the task with the given id was submitted.
         :param task_id: task id to get the timestamp for
@@ -64,7 +63,7 @@ class TaskExecutor(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def wait_for_result(self, task_id: str, timeout: Optional[float] = None) -> Optional[TaskExecutionResult]:
+    def wait_for_result(self, task_id: str, timeout: float | None = None) -> TaskExecutionResult | None:
         """
         Wait for the task with the provided task id to finish.
 

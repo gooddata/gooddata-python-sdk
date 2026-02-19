@@ -6,6 +6,8 @@ At the moment the SDK provides services to inspect and interact with the Semanti
 
 import logging
 
+from gooddata_api_client.model.allowed_relationship_type import AllowedRelationshipType
+
 from gooddata_sdk._version import __version__
 from gooddata_sdk.catalog.data_source.action_model.requests.ldm_request import (
     CatalogGenerateLdmRequest,
@@ -276,7 +278,6 @@ from gooddata_sdk.compute.model.metric import (
     PopDatesetMetric,
     SimpleMetric,
 )
-from gooddata_api_client.model.allowed_relationship_type import AllowedRelationshipType
 from gooddata_sdk.compute.service import ComputeService
 from gooddata_sdk.sdk import GoodDataSdk
 from gooddata_sdk.table import ExecutionTable, TableService

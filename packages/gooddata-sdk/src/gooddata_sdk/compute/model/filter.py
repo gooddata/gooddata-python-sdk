@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from datetime import datetime
 from importlib.util import find_spec
-from typing import Any, Literal, Optional, TypeAlias, Union, cast
+from typing import Any, Literal, TypeAlias, Union, cast
 
 import attrs
 from gooddata_api_client.model.inline_filter_definition_inline import InlineFilterDefinitionInline
@@ -95,7 +95,7 @@ def _to_identifier(val: Union[ObjId, str]) -> Union[afm_models.AfmLocalIdentifie
 
 
 class AttributeFilter(Filter):
-    def __init__(self, label: Union[ObjId, str, Attribute], values: Optional[list[str]] = None) -> None:
+    def __init__(self, label: Union[ObjId, str, Attribute], values: list[str] | None = None) -> None:
         super().__init__()
 
         self._label = _extract_id_or_local_id(label)
@@ -130,7 +130,7 @@ class PositiveAttributeFilter(AttributeFilter):
         body = PositiveAttributeFilterBody(label=label_id, _in=elements, _check_type=False)
         return afm_models.PositiveAttributeFilter(body, _check_type=False)
 
-    def description(self, labels: dict[str, str], format_locale: Optional[str] = None) -> str:
+    def description(self, labels: dict[str, str], format_locale: str | None = None) -> str:
         label_id = self.label.id if isinstance(self.label, ObjId) else self.label
         values = ", ".join(self.values) if len(self.values) else "All"
         return f"{labels.get(label_id, label_id)}: {values}"
@@ -146,7 +146,7 @@ class NegativeAttributeFilter(AttributeFilter):
         body = NegativeAttributeFilterBody(label=label_id, not_in=elements, _check_type=False)
         return afm_models.NegativeAttributeFilter(body)
 
-    def description(self, labels: dict[str, str], format_locale: Optional[str] = None) -> str:
+    def description(self, labels: dict[str, str], format_locale: str | None = None) -> str:
         label_id = self.label.id if isinstance(self.label, ObjId) else self.label
         values = "All except " + ", ".join(self.values) if len(self.values) else "All"
         return f"{labels.get(label_id, label_id)}: {values}"
@@ -177,8 +177,8 @@ _GRANULARITY: set[str] = {
 @attrs.define
 class BoundedFilter:
     granularity: str
-    from_shift: Optional[int] = None
-    to_shift: Optional[int] = None
+    from_shift: int | None = None
+    to_shift: int | None = None
 
     def __attrs_post_init__(self) -> None:
         # Validate that exactly one of from_shift or to_shift is set
@@ -201,8 +201,8 @@ class RelativeDateFilter(Filter):
         granularity: str,
         from_shift: int,
         to_shift: int,
-        bounded_filter: Optional[BoundedFilter] = None,
-        empty_value_handling: Optional[EmptyValueHandling] = None,
+        bounded_filter: BoundedFilter | None = None,
+        empty_value_handling: EmptyValueHandling | None = None,
     ) -> None:
         super().__init__()
 
@@ -241,11 +241,11 @@ class RelativeDateFilter(Filter):
         return self._to_shift
 
     @property
-    def bounded_filter(self) -> Optional[BoundedFilter]:
+    def bounded_filter(self) -> BoundedFilter | None:
         return self._bounded_filter
 
     @property
-    def empty_value_handling(self) -> Optional[EmptyValueHandling]:
+    def empty_value_handling(self) -> EmptyValueHandling | None:
         return self._empty_value_handling
 
     def is_noop(self) -> bool:
@@ -269,7 +269,7 @@ class RelativeDateFilter(Filter):
         body = RelativeDateFilterBody(**body_params)
         return afm_models.RelativeDateFilter(body)
 
-    def description(self, labels: dict[str, str], format_locale: Optional[str] = None) -> str:
+    def description(self, labels: dict[str, str], format_locale: str | None = None) -> str:
         # TODO compare with other period is not implemented as it's not defined in the filter but in measures
         from_shift = self.from_shift
         to_shift = self.to_shift
@@ -313,8 +313,8 @@ class AllTimeDateFilter(Filter):
     def __init__(
         self,
         dataset: ObjId,
-        granularity: Optional[str] = None,
-        empty_value_handling: Optional[EmptyValueHandling] = None,
+        granularity: str | None = None,
+        empty_value_handling: EmptyValueHandling | None = None,
     ) -> None:
         super().__init__()
 
@@ -338,11 +338,11 @@ class AllTimeDateFilter(Filter):
         return self._dataset
 
     @property
-    def granularity(self) -> Optional[str]:
+    def granularity(self) -> str | None:
         return self._granularity
 
     @property
-    def empty_value_handling(self) -> Optional[EmptyValueHandling]:
+    def empty_value_handling(self) -> EmptyValueHandling | None:
         return self._empty_value_handling
 
     def is_noop(self) -> bool:
@@ -363,7 +363,7 @@ class AllTimeDateFilter(Filter):
         body = AllTimeDateFilterBody(**body_params)
         return afm_models.AllTimeDateFilter(body, _check_type=False)
 
-    def description(self, labels: dict[str, str], format_locale: Optional[str] = None) -> str:
+    def description(self, labels: dict[str, str], format_locale: str | None = None) -> str:
         return f"{labels.get(self.dataset.id, self.dataset.id)}: All time"
 
 
@@ -373,7 +373,7 @@ class AbsoluteDateFilter(Filter):
         dataset: ObjId,
         from_date: str,
         to_date: str,
-        empty_value_handling: Optional[EmptyValueHandling] = None,
+        empty_value_handling: EmptyValueHandling | None = None,
     ) -> None:
         super().__init__()
 
@@ -401,7 +401,7 @@ class AbsoluteDateFilter(Filter):
         return self._to_date
 
     @property
-    def empty_value_handling(self) -> Optional[EmptyValueHandling]:
+    def empty_value_handling(self) -> EmptyValueHandling | None:
         return self._empty_value_handling
 
     def is_noop(self) -> bool:
@@ -428,7 +428,7 @@ class AbsoluteDateFilter(Filter):
             and self._to_date == other._to_date
         )
 
-    def description(self, labels: dict[str, str], format_locale: Optional[str] = None) -> str:
+    def description(self, labels: dict[str, str], format_locale: str | None = None) -> str:
         if format_locale is not None and find_spec("icu") is not None:
             src_parser = SimpleDateFormat(_ICU_DATE_FORMAT_INPUT)
             dest_formatter = SimpleDateFormat(
@@ -470,7 +470,7 @@ class AllMetricValueFilter(Filter):
     def is_noop(self) -> bool:
         return True
 
-    def description(self, labels: dict[str, str], format_locale: Optional[str] = None) -> str:
+    def description(self, labels: dict[str, str], format_locale: str | None = None) -> str:
         metric_id = self.metric.id if isinstance(self.metric, ObjId) else self.metric
         return f"{labels.get(metric_id, metric_id)}: All"
 
@@ -554,7 +554,7 @@ class MetricValueFilter(Filter):
             body = RangeMeasureValueFilterBody(**kwargs)
             return afm_models.RangeMeasureValueFilter(body)
 
-    def description(self, labels: dict[str, str], format_locale: Optional[str] = None) -> str:
+    def description(self, labels: dict[str, str], format_locale: str | None = None) -> str:
         metric_id = self.metric.id if isinstance(self.metric, ObjId) else self.metric
         if self.operator in ["BETWEEN", "NOT_BETWEEN"] and len(self.values) == 2:
             not_between = "not" if self.operator == "NOT_BETWEEN" else ""
@@ -658,7 +658,7 @@ class CompoundMetricValueFilter(Filter):
         body = CompoundMeasureValueFilterBody(**kwargs)
         return afm_models.CompoundMeasureValueFilter(body, _check_type=False)
 
-    def description(self, labels: dict[str, str], format_locale: Optional[str] = None) -> str:
+    def description(self, labels: dict[str, str], format_locale: str | None = None) -> str:
         metric_id = self.metric.id if isinstance(self.metric, ObjId) else self.metric
         if not self.conditions:
             return f"{labels.get(metric_id, metric_id)}: All"
@@ -675,7 +675,7 @@ class RankingFilter(Filter):
         metrics: list[Union[ObjId, Metric, str]],
         operator: str,
         value: int,
-        dimensionality: Optional[list[Union[str, ObjId, Attribute, Metric]]],
+        dimensionality: list[Union[str, ObjId, Attribute, Metric]] | None,
     ) -> None:
         super().__init__()
 
@@ -702,7 +702,7 @@ class RankingFilter(Filter):
         return self._value
 
     @property
-    def dimensionality(self) -> Optional[list[Union[ObjId, str]]]:
+    def dimensionality(self) -> list[Union[ObjId, str]] | None:
         return self._dimensionality
 
     def is_noop(self) -> bool:
@@ -718,7 +718,7 @@ class RankingFilter(Filter):
         )
         return afm_models.RankingFilter(body)
 
-    def description(self, labels: dict[str, str], format_locale: Optional[str] = None) -> str:
+    def description(self, labels: dict[str, str], format_locale: str | None = None) -> str:
         # TODO more metrics and dimensions not supported now as it's not supported on FE as well
         dimensionality_ids = (
             [d.id if isinstance(d, ObjId) else d for d in self.dimensionality] if self.dimensionality else []
@@ -755,7 +755,7 @@ class InlineFilter(Filter):
     """
 
     def __init__(
-        self, maql: str, apply_on_result: Optional[bool] = None, local_identifier: Optional[Union[ObjId, str]] = None
+        self, maql: str, apply_on_result: bool | None = None, local_identifier: Union[ObjId, str] | None = None
     ) -> None:
         super().__init__(apply_on_result)
 

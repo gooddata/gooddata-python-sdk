@@ -2,7 +2,7 @@
 from abc import ABC, abstractmethod
 from collections.abc import Iterator
 from functools import cached_property
-from typing import Any, Callable, Literal, Optional, Union, cast
+from typing import Any, Callable, Literal, Union, cast
 
 import pandas
 from attrs import define, field, frozen
@@ -31,7 +31,7 @@ class _Header(ABC):
     def _dict(self) -> dict[str, Any]:
         pass
 
-    def get(self, key: str, default: Optional[Any] = None) -> Optional[Any]:
+    def get(self, key: str, default: Any | None = None) -> Any | None:
         return self._dict.get(key, default)
 
 
@@ -89,7 +89,7 @@ class _TotalHeader(_Header):
         return {"totalHeader": {"function": self.function}}
 
 
-def _header_from_dict(d: dict[str, Any]) -> Optional[_Header]:
+def _header_from_dict(d: dict[str, Any]) -> _Header | None:
     """
     Convert dict representation to _Header object.
     :param d: dictionary representation of a header
@@ -167,7 +167,7 @@ _DataHeaderContainers = list[_HeaderContainer]
 
 # Optimized version of _DataWithHeaders uses _HeaderContainer instead of list of headers
 _HeadersByAxis = tuple[
-    Union[_DataHeaders, _DataHeaderContainers], Union[Optional[_DataHeaders], Optional[_DataHeaderContainers]]
+    Union[_DataHeaders, _DataHeaderContainers], Union[_DataHeaders | None, _DataHeaderContainers | None]
 ]
 
 
@@ -188,8 +188,8 @@ class _DataWithHeaders:
 
     data: list[_DataArray]
     data_headers: _HeadersByAxis
-    grand_totals: tuple[Optional[list[_DataArray]], Optional[list[_DataArray]]]
-    grand_total_headers: tuple[Optional[list[dict[str, _DataHeaders]]], Optional[list[dict[str, _DataHeaders]]]]
+    grand_totals: tuple[list[_DataArray] | None, list[_DataArray] | None]
+    grand_total_headers: tuple[list[dict[str, _DataHeaders]] | None, list[dict[str, _DataHeaders]] | None]
 
 
 @define
@@ -209,10 +209,10 @@ class _AbstractAccumulatedData(ABC):
     """
 
     data: list[_DataArray] = field(init=False, factory=list)
-    data_headers: list[Optional[Any]] = field(init=False, factory=lambda: [None, None])
-    grand_totals: list[Optional[list[_DataArray]]] = field(init=False, factory=lambda: [None, None])
+    data_headers: list[Any | None] = field(init=False, factory=lambda: [None, None])
+    grand_totals: list[list[_DataArray] | None] = field(init=False, factory=lambda: [None, None])
     total_of_grant_totals_processed: bool = field(init=False, default=False)
-    grand_totals_headers: list[Optional[list[dict[str, _DataHeaders]]]] = field(
+    grand_totals_headers: list[list[dict[str, _DataHeaders]] | None] = field(
         init=False, factory=lambda: [None, None]
     )
 
@@ -473,7 +473,7 @@ class DataFrameMetadata:
         )
 
     @staticmethod
-    def _get_totals_indexes(headers: Optional[Any]) -> list[list[int]]:
+    def _get_totals_indexes(headers: Any | None) -> list[list[int]]:
         if headers is None:
             return []
         return [
@@ -486,7 +486,7 @@ def _read_complete_execution_result(
     execution_response: BareExecutionResponse,
     result_cache_metadata: ResultCacheMetadata,
     result_size_dimensions_limits: ResultSizeDimensions,
-    result_size_bytes_limit: Optional[int] = None,
+    result_size_bytes_limit: int | None = None,
     page_size: int = _DEFAULT_PAGE_SIZE,
     optimized: bool = False,
 ) -> _DataWithHeaders:
@@ -569,10 +569,10 @@ def _create_header_mapper(
     response: BareExecutionResponse,
     dim: int,
     primary_attribute_labels_mapping: dict[int, dict[str, str]],
-    label_overrides: Optional[LabelOverrides] = None,
+    label_overrides: LabelOverrides | None = None,
     use_local_ids_in_headers: bool = False,
     use_primary_labels_in_attributes: bool = False,
-) -> Callable[[Any, Optional[int]], Optional[str]]:
+) -> Callable[[Any, int | None], str | None]:
     """
     Prepares a header mapper function which translates header structures into appropriate labels used
     in a dataframe.
@@ -597,7 +597,7 @@ def _create_header_mapper(
     attribute_labels = label_overrides.get("labels", {})
     measure_labels = label_overrides.get("metrics", {})
 
-    def _mapper(header: Union[dict, _Header, None], header_idx: Optional[int]) -> Optional[str]:
+    def _mapper(header: Union[dict, _Header, None], header_idx: int | None) -> str | None:
         label = None
         if header is None:
             pass
@@ -655,7 +655,7 @@ def _headers_to_index(
     label_overrides: LabelOverrides,
     use_local_ids_in_headers: bool = False,
     use_primary_labels_in_attributes: bool = False,
-) -> tuple[Optional[pandas.Index], dict[int, dict[str, str]]]:
+) -> tuple[pandas.Index | None, dict[int, dict[str, str]]]:
     """Converts headers to a pandas MultiIndex.
 
     This function converts the headers present in the response to a pandas MultiIndex (can be used in pandas dataframes)
@@ -700,7 +700,7 @@ def _headers_to_index(
 
 def _merge_grand_totals_into_data(
     extract: _DataWithHeaders,
-    grand_totals_position: Optional[Literal["pinnedBottom", "pinnedTop", "bottom", "top"]] = "bottom",
+    grand_totals_position: Literal["pinnedBottom", "pinnedTop", "bottom", "top"] | None = "bottom",
 ) -> Union[_DataArray, list[_DataArray]]:
     """
     Merges grand totals into the extracted data. This function will mutate the extracted data,
@@ -767,12 +767,12 @@ def convert_execution_response_to_dataframe(
     result_cache_metadata: ResultCacheMetadata,
     label_overrides: LabelOverrides,
     result_size_dimensions_limits: ResultSizeDimensions,
-    result_size_bytes_limit: Optional[int] = None,
+    result_size_bytes_limit: int | None = None,
     use_local_ids_in_headers: bool = False,
     use_primary_labels_in_attributes: bool = False,
     page_size: int = _DEFAULT_PAGE_SIZE,
     optimized: bool = False,
-    grand_totals_position: Optional[Literal["pinnedBottom", "pinnedTop", "bottom", "top"]] = "bottom",
+    grand_totals_position: Literal["pinnedBottom", "pinnedTop", "bottom", "top"] | None = "bottom",
 ) -> tuple[pandas.DataFrame, DataFrameMetadata]:
     """
     Converts execution result to a pandas dataframe, maintaining the dimensionality of the result.

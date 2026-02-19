@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import builtins
-from typing import Any, ClassVar, Optional, TypeVar
+from typing import Any, ClassVar, TypeVar
 
 import attr
 from cattrs import structure
@@ -55,12 +55,12 @@ class CatalogDataSourceBase(Base):
     name: str
     type: str = attr.field()
     schema: str
-    url: Optional[str] = None
-    cache_strategy: Optional[str] = None
-    parameters: Optional[list[dict[str, str]]] = None
-    decoded_parameters: Optional[list[dict[str, str]]] = None
+    url: str | None = None
+    cache_strategy: str | None = None
+    parameters: list[dict[str, str]] | None = None
+    decoded_parameters: list[dict[str, str]] | None = None
     credentials: Credentials = attr.field(repr=False)
-    alternative_data_source_id: Optional[str] = None
+    alternative_data_source_id: str | None = None
 
     @type.validator  # type: ignore[attr-defined]
     def _check_allowed_values(self, attribute: attr.Attribute, value: str) -> None:
@@ -105,18 +105,18 @@ class CatalogDataSourceBase(Base):
 
 @attr.s(auto_attribs=True, kw_only=True, eq=False)
 class CatalogDataSource(CatalogDataSourceBase):
-    _URL_TMPL: ClassVar[Optional[str]] = None
-    _DATA_SOURCE_TYPE: ClassVar[Optional[str]] = None
+    _URL_TMPL: ClassVar[str | None] = None
+    _DATA_SOURCE_TYPE: ClassVar[str | None] = None
 
-    db_vendor: Optional[str] = attr.field(default=None, init=False)
-    db_specific_attributes: Optional[DatabaseAttributes] = attr.field(default=None, validator=db_attrs_with_template)
-    url_params: Optional[list[tuple[str, str]]] = None
+    db_vendor: str | None = attr.field(default=None, init=False)
+    db_specific_attributes: DatabaseAttributes | None = attr.field(default=None, validator=db_attrs_with_template)
+    url_params: list[tuple[str, str]] | None = None
 
     def __attrs_post_init__(self) -> None:
         self.db_vendor = self.db_vendor or self.type.lower()
         self.url = self._make_url()
 
-    def _make_url(self) -> Optional[str]:
+    def _make_url(self) -> str | None:
         parameters = self._join_params()
         if self.url:
             return f"{self.url}?{parameters}" if parameters else self.url
@@ -132,13 +132,13 @@ class CatalogDataSource(CatalogDataSourceBase):
         else:
             return None
 
-    def _join_params(self) -> Optional[str]:
+    def _join_params(self) -> str | None:
         if self.url_params:
             return self._DELIMITER.join([f"{p[0]}={p[1]}" for p in self.url_params])
         return None
 
     @property
-    def url_template(self) -> Optional[str]:
+    def url_template(self) -> str | None:
         return self._URL_TMPL
 
 

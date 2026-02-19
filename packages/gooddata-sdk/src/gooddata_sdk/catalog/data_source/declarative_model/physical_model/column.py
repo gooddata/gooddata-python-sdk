@@ -1,8 +1,6 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import Optional
-
 import attr
 from gooddata_api_client.model.declarative_column import DeclarativeColumn
 
@@ -13,11 +11,11 @@ from gooddata_sdk.catalog.base import Base
 class CatalogDeclarativeColumn(Base):
     name: str
     data_type: str
-    is_primary_key: Optional[bool] = None
-    referenced_table_id: Optional[str] = None
-    referenced_table_column: Optional[str] = None
-    is_nullable: Optional[bool] = None
-    null_value: Optional[str] = None
+    is_primary_key: bool | None = None
+    referenced_table_id: str | None = None
+    referenced_table_column: str | None = None
+    is_nullable: bool | None = None
+    null_value: str | None = None
 
     @staticmethod
     def client_class() -> type[DeclarativeColumn]:

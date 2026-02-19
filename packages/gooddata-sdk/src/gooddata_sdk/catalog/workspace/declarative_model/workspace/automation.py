@@ -1,6 +1,6 @@
 # (C) 2024 GoodData Corporation
 import builtins
-from typing import Any, Optional
+from typing import Any
 
 from attrs import define, field
 from gooddata_api_client.model.automation_schedule import AutomationSchedule
@@ -24,9 +24,9 @@ from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.
 @define(auto_attribs=True, kw_only=True)
 class CatalogAutomationSchedule(Base):
     cron: str
-    cron_description: Optional[str] = field(default=None, eq=False)
-    first_run: Optional[str] = None
-    timezone: Optional[str] = "UTC"
+    cron_description: str | None = field(default=None, eq=False)
+    first_run: str | None = None
+    timezone: str | None = "UTC"
 
     @staticmethod
     def client_class() -> builtins.type[AutomationSchedule]:
@@ -53,18 +53,18 @@ class CatalogAutomationVisualExport(Base):
 
 @define(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeAutomation(CatalogAnalyticsBaseMeta):
-    description: Optional[str] = None
-    details: Optional[dict[str, Any]] = None
-    state: Optional[str] = None
-    tags: Optional[list[str]] = None
-    title: Optional[str] = None
-    recipients: Optional[list[CatalogUserIdentifier]] = None
-    metadata: Optional[dict] = None
-    export_definitions: Optional[list[CatalogExportDefinitionIdentifier]] = None
-    notification_channel: Optional[CatalogNotificationChannelIdentifier] = None
-    schedule: Optional[CatalogAutomationSchedule] = None
-    tabular_exports: Optional[list[CatalogAutomationTabularExport]] = None
-    visual_exports: Optional[list[CatalogAutomationVisualExport]] = None
+    description: str | None = None
+    details: dict[str, Any] | None = None
+    state: str | None = None
+    tags: list[str] | None = None
+    title: str | None = None
+    recipients: list[CatalogUserIdentifier] | None = None
+    metadata: dict | None = None
+    export_definitions: list[CatalogExportDefinitionIdentifier] | None = None
+    notification_channel: CatalogNotificationChannelIdentifier | None = None
+    schedule: CatalogAutomationSchedule | None = None
+    tabular_exports: list[CatalogAutomationTabularExport] | None = None
+    visual_exports: list[CatalogAutomationVisualExport] | None = None
 
     @staticmethod
     def client_class() -> builtins.type[DeclarativeAutomation]:

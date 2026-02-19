@@ -1,7 +1,7 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import Any, Optional
+from typing import Any
 
 import attr
 from gooddata_api_client.model.json_api_metric_out import JsonApiMetricOut
@@ -18,11 +18,11 @@ class CatalogMetric(AttrCatalogEntity):
         return JsonApiMetricOut
 
     @property
-    def format(self) -> Optional[str]:
+    def format(self) -> str | None:
         return safeget(self.json_api_attributes, ["content", "format"])
 
     @property
-    def is_hidden(self) -> Optional[bool]:
+    def is_hidden(self) -> bool | None:
         return safeget(self.json_api_attributes, ["isHidden"])
 
     def as_computable(self) -> Metric:

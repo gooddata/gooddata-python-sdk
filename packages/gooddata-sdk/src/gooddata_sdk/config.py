@@ -1,6 +1,6 @@
 # (C) 2024 GoodData Corporation
 import os
-from typing import Any, Optional, TypeVar
+from typing import Any, TypeVar
 
 import attrs
 from attrs import define
@@ -33,9 +33,9 @@ class ConfigBase:
 class Profile(ConfigBase):
     host: str
     token: str
-    custom_headers: Optional[dict[str, str]] = None
-    extra_user_agent: Optional[str] = None
-    ssl_ca_cert: Optional[str] = None
+    custom_headers: dict[str, str] | None = None
+    extra_user_agent: str | None = None
+    ssl_ca_cert: str | None = None
 
     def to_dict(self, use_env: bool = False) -> dict[str, str]:
         load_dotenv()

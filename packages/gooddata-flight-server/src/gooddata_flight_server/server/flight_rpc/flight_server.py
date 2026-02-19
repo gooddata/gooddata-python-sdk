@@ -10,7 +10,7 @@ There are two main pieces:
 """
 
 from collections.abc import Generator
-from typing import Any, Callable, Optional, TypeVar, Union
+from typing import Any, Callable, TypeVar, Union
 
 import opentelemetry.context as otelctx
 import opentelemetry.trace as oteltrace
@@ -22,7 +22,7 @@ from gooddata_flight_server.server.flight_rpc.server_methods import (
     FlightServerMethods,
 )
 
-FlightServerLocation: TypeAlias = Union[str, bytes, Optional[tuple[str, int]], pyarrow.flight.Location]
+FlightServerLocation: TypeAlias = Union[str, bytes, tuple[str, int] | None, pyarrow.flight.Location]
 FlightTlsCertificates: TypeAlias = list[tuple[bytes, bytes]]
 FlightMiddlewares: TypeAlias = dict[str, pyarrow.flight.ServerMiddlewareFactory]
 
@@ -82,13 +82,13 @@ class FlightServer(pyarrow.flight.FlightServerBase):
 
     def __init__(
         self,
-        methods: Optional[FlightServerMethods] = None,
-        location: Optional[FlightServerLocation] = None,
-        auth_handler: Optional[pyarrow.flight.ServerAuthHandler] = None,
-        tls_certificates: Optional[FlightTlsCertificates] = None,
-        verify_client: Optional[bool] = None,
-        root_certificates: Optional[bytes] = None,
-        middleware: Optional[FlightMiddlewares] = None,
+        methods: FlightServerMethods | None = None,
+        location: FlightServerLocation | None = None,
+        auth_handler: pyarrow.flight.ServerAuthHandler | None = None,
+        tls_certificates: FlightTlsCertificates | None = None,
+        verify_client: bool | None = None,
+        root_certificates: bytes | None = None,
+        middleware: FlightMiddlewares | None = None,
     ):
         """
         Create Flight server

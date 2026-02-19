@@ -1,6 +1,5 @@
 # (C) 2024 GoodData Corporation
 import builtins
-from typing import Optional
 
 from attrs import define, field
 from gooddata_api_client.model.declarative_notification_channel import DeclarativeNotificationChannel
@@ -38,8 +37,8 @@ from gooddata_sdk.catalog.base import Base
 class CatalogWebhook(Base):
     type: str = field(default="WEBHOOK", init=False)
     url: str
-    token: Optional[str] = field(default=None, eq=False)
-    has_token: Optional[bool] = field(default=None, eq=False)
+    token: str | None = field(default=None, eq=False)
+    has_token: bool | None = field(default=None, eq=False)
 
     @staticmethod
     def client_class() -> builtins.type[Webhook]:
@@ -49,13 +48,13 @@ class CatalogWebhook(Base):
 @define(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeNotificationChannel(Base):
     id: str
-    name: Optional[str] = None
-    description: Optional[str] = None
-    destination_type: Optional[str] = None
-    custom_dashboard_url: Optional[str] = None
-    allowed_recipients: Optional[str] = None
+    name: str | None = None
+    description: str | None = None
+    destination_type: str | None = None
+    custom_dashboard_url: str | None = None
+    allowed_recipients: str | None = None
     # destination: Optional[Union[CatalogDefaultSmtp, CatalogSmtp, CatalogWebhook]] = None
-    destination: Optional[CatalogWebhook] = None
+    destination: CatalogWebhook | None = None
 
     @staticmethod
     def client_class() -> builtins.type[DeclarativeNotificationChannel]:
