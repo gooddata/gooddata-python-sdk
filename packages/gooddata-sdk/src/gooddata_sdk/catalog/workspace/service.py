@@ -33,6 +33,12 @@ from gooddata_sdk.catalog.workspace.entity_model.filter_view import (
     CatalogFilterView,
     CatalogFilterViewDocument,
 )
+from gooddata_sdk.catalog.workspace.entity_model.memory_item import (
+    CatalogMemoryItem,
+    CatalogMemoryItemDocument,
+    CatalogMemoryItemPatch,
+    CatalogMemoryItemPatchDocument,
+)
 from gooddata_sdk.catalog.workspace.entity_model.user_data_filter import (
     CatalogUserDataFilter,
     CatalogUserDataFilterDocument,
@@ -1476,3 +1482,103 @@ class CatalogWorkspaceService(CatalogServiceBase):
             self.layout_organization_folder(layout_root_path)
         )
         self.put_declarative_filter_views(workspace_id, declarative_filter_views)
+
+    def list_memory_items(self, workspace_id: str) -> list[CatalogMemoryItem]:
+        """List all memory items for a workspace.
+
+        Args:
+            workspace_id (str):
+                String containing id of the workspace.
+
+        Returns:
+            list[CatalogMemoryItem]:
+                List of memory item entities.
+        """
+        get_memory_items = functools.partial(
+            self._entities_api.get_all_entities_memory_items,
+            workspace_id,
+            _check_return_type=False,
+        )
+        memory_items = load_all_entities_dict(get_memory_items, camel_case=False)
+        return [CatalogMemoryItem.from_dict(v, camel_case=False) for v in memory_items["data"]]
+
+    def get_memory_item(self, workspace_id: str, memory_item_id: str) -> CatalogMemoryItem:
+        """Get memory item by its id.
+
+        Args:
+            workspace_id (str):
+                String containing id of the workspace.
+            memory_item_id (str):
+                String containing id of the memory item.
+
+        Returns:
+            CatalogMemoryItem:
+                Memory item entity object.
+        """
+        memory_item_dict = self._entities_api.get_entity_memory_items(
+            workspace_id=workspace_id,
+            object_id=memory_item_id,
+            _check_return_type=False,
+        ).data
+        return CatalogMemoryItem.from_dict(memory_item_dict, camel_case=True)
+
+    def create_memory_item(self, workspace_id: str, memory_item: CatalogMemoryItem) -> CatalogMemoryItem:
+        """Create a new memory item.
+
+        Args:
+            workspace_id (str):
+                String containing id of the workspace.
+            memory_item (CatalogMemoryItem):
+                Memory item entity object to create.
+
+        Returns:
+            CatalogMemoryItem:
+                Created memory item entity object.
+        """
+        memory_item_document = CatalogMemoryItemDocument(data=memory_item)
+        result = self._entities_api.create_entity_memory_items(
+            workspace_id=workspace_id,
+            json_api_memory_item_in_document=memory_item_document.to_api(),
+            _check_return_type=False,
+        )
+        return CatalogMemoryItem.from_dict(result.data, camel_case=True)
+
+    def patch_memory_item(
+        self, workspace_id: str, memory_item_id: str, memory_item_patch: CatalogMemoryItemPatch
+    ) -> CatalogMemoryItem:
+        """Patch an existing memory item.
+
+        Args:
+            workspace_id (str):
+                String containing id of the workspace.
+            memory_item_id (str):
+                String containing id of the memory item.
+            memory_item_patch (CatalogMemoryItemPatch):
+                Memory item patch object with fields to update.
+
+        Returns:
+            CatalogMemoryItem:
+                Updated memory item entity object.
+        """
+        memory_item_patch_document = CatalogMemoryItemPatchDocument(data=memory_item_patch)
+        result = self._entities_api.patch_entity_memory_items(
+            workspace_id=workspace_id,
+            object_id=memory_item_id,
+            json_api_memory_item_patch_document=memory_item_patch_document.to_api(),
+            _check_return_type=False,
+        )
+        return CatalogMemoryItem.from_dict(result.data, camel_case=True)
+
+    def delete_memory_item(self, workspace_id: str, memory_item_id: str) -> None:
+        """Delete a memory item.
+
+        Args:
+            workspace_id (str):
+                String containing id of the workspace.
+            memory_item_id (str):
+                String containing id of the memory item to delete.
+
+        Returns:
+            None
+        """
+        self._entities_api.delete_entity_memory_items(workspace_id=workspace_id, object_id=memory_item_id)

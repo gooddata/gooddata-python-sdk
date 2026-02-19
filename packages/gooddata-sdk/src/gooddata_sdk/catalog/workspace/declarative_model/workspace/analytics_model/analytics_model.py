@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any, Optional, Union
+from typing import Any, Literal, Optional, Union
 
 import attr
 from attrs import define
@@ -40,6 +40,8 @@ AnalyticsObjects = Union[
     DeclarativeMetric,
     DeclarativeVisualizationObject,
 ]
+
+MemoryItemStrategy = Literal["AUTO", "ALWAYS"]
 
 LAYOUT_ANALYTICS_MODEL_DIR = "analytics_model"
 LAYOUT_ANALYTICAL_DASHBOARDS_DIR = "analytical_dashboards"
@@ -336,7 +338,7 @@ class CatalogDeclarativeAttributeHierarchy(CatalogAnalyticsBase):
 @define(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeMemoryItem(CatalogAnalyticsBaseMeta):
     instruction: str
-    strategy: str
+    strategy: MemoryItemStrategy
     title: str
     tags: list[str] | None = None
     description: str | None = None
