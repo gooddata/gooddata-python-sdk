@@ -5,7 +5,7 @@ import base64
 import builtins
 import os
 from pathlib import Path
-from typing import Any, ClassVar, Optional, TypeVar, Union
+from typing import Any, ClassVar, TypeVar, Union
 
 import attr
 
@@ -32,10 +32,10 @@ class AttrCatalogEntity:
 
     # Optional, because write use case -
     # we need to pass only ID and some properties in attributes when creating an instance of this class
-    json_api_entity: Optional[JsonApiEntityBase] = None
-    title: Optional[str] = None
-    description: Optional[str] = None
-    tags: Optional[list[str]] = None
+    json_api_entity: JsonApiEntityBase | None = None
+    title: str | None = None
+    description: str | None = None
+    tags: list[str] | None = None
 
     @property
     def json_api_attributes(self) -> dict[str, Any]:
@@ -65,8 +65,8 @@ class AttrCatalogEntity:
     def from_api(
         cls: builtins.type[T],
         entity: dict[str, Any],
-        side_loads: Optional[list[Any]] = None,
-        related_entities: Optional[AllPagedEntities] = None,
+        side_loads: list[Any] | None = None,
+        related_entities: AllPagedEntities | None = None,
     ) -> T:
         """
         Creates GoodData object from AttrCatalogEntityJsonApi.
@@ -104,12 +104,12 @@ class CatalogEntity:
         return self._entity["type"]
 
     @property
-    def title(self) -> Optional[str]:
+    def title(self) -> str | None:
         # Optional, not all metadata objects contain title
         return self._e.get("title")
 
     @property
-    def description(self) -> Optional[str]:
+    def description(self) -> str | None:
         # Optional, not all metadata objects contain description
         return self._e.get("description")
 
@@ -270,7 +270,7 @@ class BasicCredentials(Credentials):
 class KeyPairCredentials(Credentials):
     username: str
     private_key: str = attr.field(repr=lambda value: "***")
-    private_key_passphrase: Optional[str] = attr.field(repr=lambda value: "***", default=None)
+    private_key_passphrase: str | None = attr.field(repr=lambda value: "***", default=None)
 
     @classmethod
     def is_part_of_api(cls, entity: dict[str, Any]) -> bool:

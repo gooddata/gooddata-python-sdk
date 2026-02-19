@@ -1,7 +1,7 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import Any, Optional, Union, cast
+from typing import Any, Union, cast
 
 import attr
 import attrs
@@ -33,15 +33,15 @@ class CatalogLabel(AttrCatalogEntity):
         return safeget(self.json_api_attributes, ["valueType"])
 
     @property
-    def is_hidden(self) -> Optional[bool]:
+    def is_hidden(self) -> bool | None:
         return safeget(self.json_api_attributes, ["isHidden"])
 
     @property
-    def locale(self) -> Optional[str]:
+    def locale(self) -> str | None:
         return safeget(self.json_api_attributes, ["locale"])
 
     @property
-    def translations(self) -> Optional[list[dict[str, str]]]:
+    def translations(self) -> list[dict[str, str]] | None:
         return safeget(self.json_api_attributes, ["translations"])
 
     def as_computable(self) -> Attribute:
@@ -78,11 +78,11 @@ class CatalogAttribute(AttrCatalogEntity):
         return self.json_api_attributes.get("granularity")
 
     @property
-    def is_hidden(self) -> Optional[bool]:
+    def is_hidden(self) -> bool | None:
         return safeget(self.json_api_attributes, ["isHidden"])
 
     @property
-    def locale(self) -> Optional[bool]:
+    def locale(self) -> bool | None:
         return safeget(self.json_api_attributes, ["locale"])
 
     def primary_label(self) -> Union[CatalogLabel, None]:
@@ -115,7 +115,7 @@ class CatalogFact(AttrCatalogEntity):
         return JsonApiFactOut
 
     @property
-    def is_hidden(self) -> Optional[bool]:
+    def is_hidden(self) -> bool | None:
         return safeget(self.json_api_attributes, ["isHidden"])
 
     def as_computable(self) -> Metric:
@@ -159,38 +159,38 @@ class CatalogDataset(AttrCatalogEntity):
             lambda self: self._relation_entity_from_side_loads(CatalogFact, ["facts", "data"]), takes_self=True
         ),
     )
-    aggregated_facts: Optional[list[CatalogAggregatedFact]] = attr.field(
+    aggregated_facts: list[CatalogAggregatedFact] | None = attr.field(
         repr=False,
         default=attr.Factory(
             lambda self: self._relation_entity_from_side_loads(CatalogAggregatedFact, ["aggregatedFacts", "data"]),
             takes_self=True,
         ),
     )
-    precedence: Optional[int] = attr.field(
+    precedence: int | None = attr.field(
         default=attr.Factory(lambda self: self.json_api_attributes.get("precedence"), takes_self=True)
     )
-    grain: Optional[list] = attr.field(
+    grain: list | None = attr.field(
         default=attr.Factory(lambda self: self.json_api_attributes.get("grain"), takes_self=True)
     )
-    reference_properties: Optional[list] = attr.field(
+    reference_properties: list | None = attr.field(
         default=attr.Factory(lambda self: self.json_api_attributes.get("referenceProperties"), takes_self=True)
     )
-    data_source_table_id: Optional[str] = attr.field(
+    data_source_table_id: str | None = attr.field(
         default=attr.Factory(lambda self: self.json_api_attributes.get("dataSourceTableId"), takes_self=True)
     )
-    data_source_table_path: Optional[list] = attr.field(
+    data_source_table_path: list | None = attr.field(
         default=attr.Factory(lambda self: self.json_api_attributes.get("dataSourceTablePath"), takes_self=True)
     )
-    sql: Optional[dict] = attr.field(
+    sql: dict | None = attr.field(
         default=attr.Factory(lambda self: self.json_api_attributes.get("sql"), takes_self=True)
     )
-    are_relations_valid: Optional[bool] = attr.field(
+    are_relations_valid: bool | None = attr.field(
         default=attr.Factory(lambda self: self.json_api_attributes.get("areRelationsValid"), takes_self=True)
     )
-    workspace_data_filter_columns: Optional[list] = attr.field(
+    workspace_data_filter_columns: list | None = attr.field(
         default=attr.Factory(lambda self: self.json_api_attributes.get("workspaceDataFilterColumns"), takes_self=True)
     )
-    workspace_data_filter_references: Optional[list] = attr.field(
+    workspace_data_filter_references: list | None = attr.field(
         default=attr.Factory(
             lambda self: self.json_api_attributes.get("workspaceDataFilterReferences"), takes_self=True
         )
@@ -207,7 +207,7 @@ class CatalogDataset(AttrCatalogEntity):
 
         return None
 
-    def filter_dataset(self, valid_objects: ValidObjects) -> Optional[CatalogDataset]:
+    def filter_dataset(self, valid_objects: ValidObjects) -> CatalogDataset | None:
         """
         Filters dataset so that it contains only attributes and facts that are part of the provided valid objects
         structure.

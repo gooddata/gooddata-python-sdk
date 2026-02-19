@@ -21,13 +21,13 @@ TInput = TypeVar("TInput")
 TResult = TypeVar("TResult")
 
 
-def none_safe(func: Callable[[TInput], TResult]) -> Callable[[Optional[TInput]], Optional[TResult]]:
+def none_safe(func: Callable[[TInput], TResult]) -> Callable[[TInput | None], TResult | None]:
     """
     Decorator that makes the unary function safe for None input.
     If the only argument is None, the function returns None.
     """
 
-    def wrapper(arg: Optional[TInput]) -> Optional[TResult]:
+    def wrapper(arg: TInput | None) -> TResult | None:
         if arg is None:
             return None
         return func(arg)
@@ -114,18 +114,18 @@ class ExecutionContextAttribute:
     Title of the particular label used.
     """
 
-    date_granularity: Optional[str]
+    date_granularity: str | None
     """
     Date granularity of the attribute if it is a date attribute.
     """
 
-    sorting: Optional[ExecutionContextAttributeSorting]
+    sorting: ExecutionContextAttributeSorting | None
     """
     Sorting of the attribute. If not present, the attribute is not sorted.
     """
 
     @staticmethod
-    def from_dict(d: Optional[dict]) -> Optional["ExecutionContextAttribute"]:
+    def from_dict(d: dict | None) -> Optional["ExecutionContextAttribute"]:
         """
         Create ExecutionContextAttribute from a dictionary.
         :param d: the dictionary to parse
@@ -153,7 +153,7 @@ class ExecutionContextPositiveAttributeFilter:
     Identifier of the label used.
     """
 
-    values: list[Optional[str]]
+    values: list[str | None]
     """
     Values of the filter.
     """
@@ -170,7 +170,7 @@ class ExecutionContextNegativeAttributeFilter:
     Identifier of the label used.
     """
 
-    values: list[Optional[str]]
+    values: list[str | None]
     """
     Values of the filter.
     """
@@ -366,17 +366,17 @@ class LabelElementsExecutionRequest:
     The label to get the elements for.
     """
 
-    offset: Optional[int]
+    offset: int | None
     """
     The number of elements to skip before returning.
     """
 
-    limit: Optional[int]
+    limit: int | None
     """
     The maximum number of elements to return.
     """
 
-    exclude_primary_label: Optional[bool]
+    exclude_primary_label: bool | None
     """
     Excludes items from the result that differ only by primary label
 
@@ -384,33 +384,33 @@ class LabelElementsExecutionRequest:
     * true - return items with distinct requested label
     """
 
-    exact_filter: Optional[list[str]]
+    exact_filter: list[str] | None
     """
     Exact values to filter the elements by.
     """
 
-    pattern_filter: Optional[str]
+    pattern_filter: str | None
     """
     Filter the elements by a pattern. The pattern is matched against the element values in a case-insensitive way.
     """
 
-    complement_filter: Optional[bool]
+    complement_filter: bool | None
     """
     Whether to invert the effects of exact_filter amd pattern_filter.
     """
 
-    depends_on: Optional[list[DependsOn]]
+    depends_on: list[DependsOn] | None
     """
     Other labels or date filters that should be used to limit the elements.
     """
 
-    filter_by: Optional[CatalogFilterBy]
+    filter_by: CatalogFilterBy | None
     """
     Which label is used for filtering - primary or requested.
     If omitted the server will use the default value of "REQUESTED".
     """
 
-    validate_by: Optional[list[CatalogValidateByItem]]
+    validate_by: list[CatalogValidateByItem] | None
     """
     Other metrics, attributes, labels or facts used to validate the elements.
     """
@@ -504,18 +504,18 @@ class ExecutionContext:
     The ID of the user that invoked the FlexConnect function.
     """
 
-    timestamp: Optional[str]
+    timestamp: str | None
     """
     The timestamp of the execution used as "now" in date filters.
     For example 2020-06-03T10:15:30+01:00.
     """
 
-    timezone: Optional[str]
+    timezone: str | None
     """
     The timezone of the execution.
     """
 
-    week_start: Optional[str]
+    week_start: str | None
     """
     The start of the week. Either "monday" or "sunday".
     """
@@ -530,13 +530,13 @@ class ExecutionContext:
     All the attribute and date filters that are part of the execution request.
     """
 
-    report_execution_request: Optional[ReportExecutionRequest]
+    report_execution_request: ReportExecutionRequest | None
     """
     The report execution request that the FlexConnect function should process.
     Only present if the execution type is "REPORT".
     """
 
-    label_elements_execution_request: Optional[LabelElementsExecutionRequest]
+    label_elements_execution_request: LabelElementsExecutionRequest | None
     """
     The label elements execution request that the FlexConnect function should process.
     Only present if the execution type is "LABEL_ELEMENTS".

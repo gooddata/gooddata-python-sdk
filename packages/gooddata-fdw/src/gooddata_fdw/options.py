@@ -1,11 +1,11 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import Any, Optional, Union
+from typing import Any, Union
 
 
 class BaseOptions:
-    def __init__(self, validate: bool = True, skip_attributes: Optional[list[str]] = None) -> None:
+    def __init__(self, validate: bool = True, skip_attributes: list[str] | None = None) -> None:
         if skip_attributes is None:
             self._skip_attributes = []
         else:
@@ -124,6 +124,6 @@ class ImportSchemaOptions(BaseOptions):
     def numeric_max_size(self) -> str:
         return self._options.get("numeric_max_size", self.METRIC_DIGITS_BEFORE_DEC_POINT_DEFAULT)
 
-    def metric_data_type(self, precision: Optional[str] = None) -> str:
+    def metric_data_type(self, precision: str | None = None) -> str:
         digits_after = precision if precision else self.METRIC_DIGITS_AFTER_DEC_POINT_DEFAULT
         return f"DECIMAL({self.numeric_max_size}, {digits_after})"

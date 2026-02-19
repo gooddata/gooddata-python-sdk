@@ -3,7 +3,7 @@ import abc
 import threading
 from collections.abc import Generator, Iterable
 from dataclasses import dataclass
-from typing import Callable, Optional, Union, final
+from typing import Callable, Union, final
 
 import pyarrow.flight
 import structlog
@@ -49,7 +49,7 @@ class FlightDataTaskResult(abc.ABC):
         self._claimed = False
         self._closed = False
 
-    def _acquire_reader(self) -> Optional[rwlock.Lockable]:
+    def _acquire_reader(self) -> rwlock.Lockable | None:
         rlock = self._data_lock.gen_rlock()
         if not rlock.acquire(blocking=False):
             # lock cannot be acquired -> means write lock is taken -> means data is being closed
@@ -181,7 +181,7 @@ class FlightDataTaskResult(abc.ABC):
         self._close()
 
     @staticmethod
-    def for_table(table: pyarrow.Table, on_close: Optional[OnCloseCallback] = None) -> "FlightDataTaskResult":
+    def for_table(table: pyarrow.Table, on_close: OnCloseCallback | None = None) -> "FlightDataTaskResult":
         """
         Factory to create result for an Arrow table. This result allows for repeated
         reads.
@@ -196,7 +196,7 @@ class FlightDataTaskResult(abc.ABC):
 
     @staticmethod
     def for_reader(
-        reader: pyarrow.RecordBatchReader, on_close: Optional[OnCloseCallback] = None
+        reader: pyarrow.RecordBatchReader, on_close: OnCloseCallback | None = None
     ) -> "FlightDataTaskResult":
         """
         Factory to create result for an RecordBatchReader. The created result will
@@ -212,7 +212,7 @@ class FlightDataTaskResult(abc.ABC):
         return _ReaderTaskResult(reader, on_close=on_close)
 
     @staticmethod
-    def for_data(data: ArrowData, on_close: Optional[OnCloseCallback] = None) -> "FlightDataTaskResult":
+    def for_data(data: ArrowData, on_close: OnCloseCallback | None = None) -> "FlightDataTaskResult":
         """
         Convenience factory function to create result from either Arrow Table or RecordBatchReader.
 
@@ -262,9 +262,9 @@ class TaskExecutionResult:
         self,
         task_id: str,
         cmd: bytes,
-        result: Optional[TaskResult],
+        result: TaskResult | None,
         cancelled: bool,
-        error: Optional[TaskError],
+        error: TaskError | None,
     ):
         self._task_id = task_id
         self._cmd = cmd
@@ -288,7 +288,7 @@ class TaskExecutionResult:
         return self._cmd
 
     @property
-    def result(self) -> Optional[TaskResult]:
+    def result(self) -> TaskResult | None:
         """
         :return: result of task's successful execution; None if the task failed or was cancelled
         """
@@ -302,7 +302,7 @@ class TaskExecutionResult:
         return self._cancelled
 
     @property
-    def error(self) -> Optional[TaskError]:
+    def error(self) -> TaskError | None:
         """
         :return: error that caused the task to fail; None if the task has not failed
         """
@@ -313,7 +313,7 @@ _LOGGER = structlog.get_logger("gooddata_flight_server.task_executor")
 
 
 class _TableTaskResult(FlightDataTaskResult):
-    def __init__(self, table: pyarrow.Table, on_close: Optional[OnCloseCallback] = None) -> None:
+    def __init__(self, table: pyarrow.Table, on_close: OnCloseCallback | None = None) -> None:
         super().__init__(single_use_data=False)
 
         self._table: pyarrow.Table = table
@@ -336,7 +336,7 @@ class _TableTaskResult(FlightDataTaskResult):
 
 
 class _ReaderTaskResult(FlightDataTaskResult):
-    def __init__(self, reader: pyarrow.RecordBatchReader, on_close: Optional[OnCloseCallback] = None) -> None:
+    def __init__(self, reader: pyarrow.RecordBatchReader, on_close: OnCloseCallback | None = None) -> None:
         super().__init__(single_use_data=True)
 
         self._reader = reader

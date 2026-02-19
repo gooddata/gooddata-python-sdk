@@ -4,7 +4,7 @@ from __future__ import annotations
 import logging
 from collections.abc import Generator
 from operator import attrgetter
-from typing import Any, Callable, Optional, Union
+from typing import Any, Callable, Union
 
 from attrs import define, field, frozen
 from attrs.setters import frozen as frozen_attr
@@ -243,7 +243,7 @@ def _prepare_tabular_definition(
 def _as_table(
     response: ExecutionResponse,
     always_two_dimensional: bool = False,
-    timeout: Optional[Union[int, float, tuple]] = None,
+    timeout: Union[int, float, tuple] | None = None,
 ) -> ExecutionTable:
     first_page_offset = [0, 0]
     first_page_limit = [_TABLE_ROW_BATCH_SIZE, _MAX_METRICS]
@@ -361,7 +361,7 @@ def _create_data_col_locators(locators: list[VisualizationSortLocator]) -> list[
 
 def _get_dim_idx_for_predicate(
     dims: list[TableDimension], predicate: Callable[[TableDimension], bool]
-) -> Optional[int]:
+) -> int | None:
     for dim_idx, dim in enumerate(dims):
         if predicate(dim):
             return dim_idx
@@ -391,8 +391,8 @@ def _append_attribute_sort_key(
 
 
 def _append_measure_sort_key(
-    measure_dim: Optional[TableDimension],
-    non_measure_dim_idx: Optional[int],
+    measure_dim: TableDimension | None,
+    non_measure_dim_idx: int | None,
     sort_item: VisualizationSort,
     sorting: list[list[SortKey]],
 ) -> None:
@@ -472,7 +472,7 @@ def _vis_is_transposed(visualization: Visualization) -> bool:
     return controls.get("measureGroupDimension") == "rows"
 
 
-def _create_dimension(bucket: VisualizationBucket, measures_item_identifier: Optional[str] = None) -> TableDimension:
+def _create_dimension(bucket: VisualizationBucket, measures_item_identifier: str | None = None) -> TableDimension:
     item_ids = [a.local_id for a in bucket.attributes]
     if measures_item_identifier is not None:
         item_ids.append(measures_item_identifier)
@@ -800,8 +800,8 @@ class TableService:
         self,
         workspace_id: str,
         items: list[Union[Attribute, Metric]],
-        filters: Optional[list[Filter]] = None,
-        timeout: Optional[Union[int, float, tuple]] = None,
+        filters: list[Filter] | None = None,
+        timeout: Union[int, float, tuple] | None = None,
     ) -> ExecutionTable:
         if filters is None:
             filters = []

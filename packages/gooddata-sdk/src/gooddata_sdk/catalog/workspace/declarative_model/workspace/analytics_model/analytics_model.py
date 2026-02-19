@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any, Optional, Union
+from typing import Any, Union
 
 import attr
 from attrs import define
@@ -55,7 +55,7 @@ MEMORY_ITEMS_DIR = "memory_items"
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeAnalytics(Base):
-    analytics: Optional[CatalogDeclarativeAnalyticsLayer] = None
+    analytics: CatalogDeclarativeAnalyticsLayer | None = None
 
     @staticmethod
     def client_class() -> type[DeclarativeAnalytics]:
@@ -257,13 +257,7 @@ class CatalogDeclarativeAnalyticsLayer(Base):
 
 @define(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeAnalyticalDashboard(CatalogAnalyticsBase):
-    permissions: Optional[
-        list[
-            Union[
-                CatalogDeclarativeDashboardPermissionsForAssignee, CatalogDeclarativeDashboardPermissionsForAssigneeRule
-            ]
-        ]
-    ] = None
+    permissions: list[Union[CatalogDeclarativeDashboardPermissionsForAssignee, CatalogDeclarativeDashboardPermissionsForAssigneeRule]] | None = None
 
     @staticmethod
     def client_class() -> type[DeclarativeAnalyticalDashboard]:

@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Optional
 
 from gooddata_sdk import GoodDataSdk
 from gooddata_sdk.utils import PROFILES_FILE_PATH, good_pandas_profile_content
@@ -24,8 +23,8 @@ class GoodPandas:
         self,
         host: str,
         token: str,
-        headers_host: Optional[str] = None,
-        **custom_headers_: Optional[str],
+        headers_host: str | None = None,
+        **custom_headers_: str | None,
     ) -> None:
         """
         Initializes GoodPandas instance.

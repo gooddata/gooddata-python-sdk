@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import builtins
 from pathlib import Path
-from typing import Optional
 
 import attr
 from gooddata_api_client.model.declarative_table import DeclarativeTable
@@ -19,7 +18,7 @@ class CatalogDeclarativeTable(Base):
     type: str
     path: list[str]
     columns: list[CatalogDeclarativeColumn]
-    name_prefix: Optional[str] = None
+    name_prefix: str | None = None
 
     @staticmethod
     def client_class() -> builtins.type[DeclarativeTable]:

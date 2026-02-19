@@ -1,12 +1,10 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
 
-from typing import Optional
-
 import gooddata_sdk as sdk
 
 
-def _sanitize_str_for_postgres(string: str, used_names: Optional[dict[str, bool]] = None) -> str:
+def _sanitize_str_for_postgres(string: str, used_names: dict[str, bool] | None = None) -> str:
     # replace non-alpha-num stuff with underscores
     with_underscores = "".join(char if char.isalnum() else "_" for char in string.lower())
 

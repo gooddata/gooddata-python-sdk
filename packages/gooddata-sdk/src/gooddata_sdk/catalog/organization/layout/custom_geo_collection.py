@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import builtins
-from typing import Any, Optional
+from typing import Any
 
 import attr
 from gooddata_api_client.model.declarative_custom_geo_collection import DeclarativeCustomGeoCollection
@@ -14,8 +14,8 @@ from gooddata_sdk.utils import safeget
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeCustomGeoCollection(Base):
     id: str
-    name: Optional[str] = None
-    description: Optional[str] = None
+    name: str | None = None
+    description: str | None = None
 
     @staticmethod
     def client_class() -> builtins.type[DeclarativeCustomGeoCollection]:

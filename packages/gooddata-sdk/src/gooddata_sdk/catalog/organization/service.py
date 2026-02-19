@@ -2,14 +2,14 @@
 from __future__ import annotations
 
 import functools
-from typing import Any, Optional
+from typing import Any
 
 from gooddata_api_client.exceptions import NotFoundException
 from gooddata_api_client.model.declarative_custom_geo_collections import DeclarativeCustomGeoCollections
 from gooddata_api_client.model.declarative_export_templates import DeclarativeExportTemplates
 from gooddata_api_client.model.declarative_notification_channels import DeclarativeNotificationChannels
-from gooddata_api_client.model.json_api_custom_geo_collection_in_document import JsonApiCustomGeoCollectionInDocument
 from gooddata_api_client.model.json_api_csp_directive_in_document import JsonApiCspDirectiveInDocument
+from gooddata_api_client.model.json_api_custom_geo_collection_in_document import JsonApiCustomGeoCollectionInDocument
 from gooddata_api_client.model.json_api_export_template_in_document import JsonApiExportTemplateInDocument
 from gooddata_api_client.model.json_api_export_template_post_optional_id_document import (
     JsonApiExportTemplatePostOptionalIdDocument,
@@ -22,6 +22,7 @@ from gooddata_api_client.model.switch_identity_provider_request import SwitchIde
 
 from gooddata_sdk import CatalogDeclarativeExportTemplate, CatalogExportTemplate
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
+from gooddata_sdk.catalog.organization.entity_model.custom_geo_collection import CatalogCustomGeoCollection
 from gooddata_sdk.catalog.organization.entity_model.directive import CatalogCspDirective
 from gooddata_sdk.catalog.organization.entity_model.identity_provider import CatalogIdentityProvider
 from gooddata_sdk.catalog.organization.entity_model.jwk import CatalogJwk, CatalogJwkDocument
@@ -31,7 +32,6 @@ from gooddata_sdk.catalog.organization.entity_model.llm_endpoint import (
     CatalogLlmEndpointPatch,
     CatalogLlmEndpointPatchDocument,
 )
-from gooddata_sdk.catalog.organization.entity_model.custom_geo_collection import CatalogCustomGeoCollection
 from gooddata_sdk.catalog.organization.entity_model.setting import CatalogOrganizationSetting
 from gooddata_sdk.catalog.organization.layout.custom_geo_collection import CatalogDeclarativeCustomGeoCollection
 from gooddata_sdk.catalog.organization.layout.identity_provider import CatalogDeclarativeIdentityProvider
@@ -517,11 +517,11 @@ class CatalogOrganizationService(CatalogServiceBase):
 
     def list_llm_endpoints(
         self,
-        filter: Optional[str] = None,
-        page: Optional[int] = None,
-        size: Optional[int] = None,
-        sort: Optional[list[str]] = None,
-        meta_include: Optional[list[str]] = None,
+        filter: str | None = None,
+        page: int | None = None,
+        size: int | None = None,
+        sort: list[str] | None = None,
+        meta_include: list[str] | None = None,
     ) -> list[CatalogLlmEndpoint]:
         """
         List all LLM endpoints.
@@ -560,10 +560,10 @@ class CatalogOrganizationService(CatalogServiceBase):
         id: str,
         title: str,
         token: str,
-        provider: Optional[str] = None,
-        base_url: Optional[str] = None,
-        llm_organization: Optional[str] = None,
-        llm_model: Optional[str] = None,
+        provider: str | None = None,
+        base_url: str | None = None,
+        llm_organization: str | None = None,
+        llm_model: str | None = None,
     ) -> CatalogLlmEndpoint:
         """
         Create a new LLM endpoint.
@@ -598,12 +598,12 @@ class CatalogOrganizationService(CatalogServiceBase):
     def update_llm_endpoint(
         self,
         id: str,
-        title: Optional[str] = None,
-        token: Optional[str] = None,
-        provider: Optional[str] = None,
-        base_url: Optional[str] = None,
-        llm_organization: Optional[str] = None,
-        llm_model: Optional[str] = None,
+        title: str | None = None,
+        token: str | None = None,
+        provider: str | None = None,
+        base_url: str | None = None,
+        llm_organization: str | None = None,
+        llm_model: str | None = None,
     ) -> CatalogLlmEndpoint:
         """
         Update an existing LLM endpoint.
@@ -830,9 +830,7 @@ class CatalogOrganizationService(CatalogServiceBase):
             None
         """
         cgc_document = JsonApiCustomGeoCollectionInDocument(data=custom_geo_collection.to_api())
-        self._entities_api.create_entity_custom_geo_collections(
-            json_api_custom_geo_collection_in_document=cgc_document
-        )
+        self._entities_api.create_entity_custom_geo_collections(json_api_custom_geo_collection_in_document=cgc_document)
 
     def delete_custom_geo_collection(self, custom_geo_collection_id: str) -> None:
         """Delete a custom geo collection.

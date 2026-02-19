@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import builtins
-from typing import Any, Optional
+from typing import Any
 
 import attr
 from gooddata_api_client.model.json_api_organization_setting_in import JsonApiOrganizationSettingIn
@@ -27,7 +27,7 @@ class CatalogOrganizationSetting(Base):
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogOrganizationSettingAttributes(Base):
-    type: Optional[str]
+    type: str | None
     content: dict[str, Any]
 
     @staticmethod

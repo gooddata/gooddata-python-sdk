@@ -5,7 +5,6 @@ from argparse import Namespace
 from asyncio import Semaphore
 from pathlib import Path
 from time import time
-from typing import Optional
 
 import tabulate
 import yaml
@@ -36,7 +35,7 @@ def generate_and_put_ldm(
     data_source_id: str,
     workspace_id: str,
     dbt_tables: DbtModelTables,
-    model_ids: Optional[list[str]],
+    model_ids: list[str] | None,
 ) -> None:
     scan_request = CatalogScanModelRequest(scan_tables=True, scan_views=True)
     logger.info(f"Scan data source {data_source_id=}")
@@ -68,7 +67,7 @@ def deploy_ldm(
     args: Namespace,
     all_model_ids: list[str],
     sdk_wrapper: GoodDataSdkWrapper,
-    model_ids: Optional[list[str]],
+    model_ids: list[str] | None,
     workspace_id: str,
 ) -> None:
     logger.info("Generate and put LDM")
@@ -186,7 +185,7 @@ async def test_visualizations(
     logger: logging.Logger,
     sdk_wrapper: GoodDataSdkWrapper,
     workspace_id: str,
-    skip_tests: Optional[list[str]],
+    skip_tests: list[str] | None,
     test_visualizations_parallelism: int = 1,
 ) -> None:
     start = time()
@@ -334,7 +333,7 @@ def process_organization(
     logger: logging.Logger,
     sdk_wrapper: GoodDataSdkWrapper,
     gd_config: GoodDataConfig,
-    organization: Optional[GoodDataConfigOrganization] = None,
+    organization: GoodDataConfigOrganization | None = None,
 ) -> None:
     if args.method == "upload_notification":
         dbt_profiles = DbtProfiles(args)

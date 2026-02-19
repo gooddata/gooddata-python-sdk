@@ -1,8 +1,6 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import Optional
-
 import attr
 from gooddata_api_client.model.generate_ldm_request import GenerateLdmRequest
 from gooddata_api_client.model.pdm_ldm_request import PdmLdmRequest
@@ -26,8 +24,8 @@ class CatalogPdmSql(Base):
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogPdmLdmRequest(Base):
-    sqls: Optional[list[CatalogPdmSql]] = None
-    tables: Optional[list[CatalogDeclarativeTable]] = None
+    sqls: list[CatalogPdmSql] | None = None
+    tables: list[CatalogDeclarativeTable] | None = None
 
     @staticmethod
     def client_class() -> type[PdmLdmRequest]:
@@ -37,21 +35,21 @@ class CatalogPdmLdmRequest(Base):
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogGenerateLdmRequest(Base):
     separator: str = "__"
-    generate_long_ids: Optional[bool] = None
-    table_prefix: Optional[str] = None
-    view_prefix: Optional[str] = None
-    primary_label_prefix: Optional[str] = None
-    secondary_label_prefix: Optional[str] = None
-    fact_prefix: Optional[str] = None
-    date_granularities: Optional[str] = None
-    grain_prefix: Optional[str] = None
-    reference_prefix: Optional[str] = None
-    grain_reference_prefix: Optional[str] = None
-    denorm_prefix: Optional[str] = None
-    wdf_prefix: Optional[str] = None
-    pdm: Optional[CatalogPdmLdmRequest] = None
-    workspace_id: Optional[str] = None
-    translation_prefix: Optional[str] = None
+    generate_long_ids: bool | None = None
+    table_prefix: str | None = None
+    view_prefix: str | None = None
+    primary_label_prefix: str | None = None
+    secondary_label_prefix: str | None = None
+    fact_prefix: str | None = None
+    date_granularities: str | None = None
+    grain_prefix: str | None = None
+    reference_prefix: str | None = None
+    grain_reference_prefix: str | None = None
+    denorm_prefix: str | None = None
+    wdf_prefix: str | None = None
+    pdm: CatalogPdmLdmRequest | None = None
+    workspace_id: str | None = None
+    translation_prefix: str | None = None
 
     @staticmethod
     def client_class() -> type[GenerateLdmRequest]:

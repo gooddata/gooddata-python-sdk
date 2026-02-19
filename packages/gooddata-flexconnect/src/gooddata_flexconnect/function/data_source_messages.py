@@ -1,7 +1,7 @@
 # (C) 2025 GoodData Corporation
 from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import Any, Optional
+from typing import Any
 
 import orjson
 import pyarrow
@@ -33,7 +33,7 @@ class DataSourceMessage:
     Type of the message, currently free-form, we might define some enum for these in the future.
     """
 
-    data: Optional[Any] = None
+    data: Any | None = None
     """
     Optional message-specific data. This can be anything that can be JSON-serialized.
     Try to keep this as small as possible: the backend has a quite strict size limit on the messages.
@@ -47,7 +47,7 @@ class DataSourceMessage:
 
 
 def add_data_source_messages_metadata(
-    data_source_messages: Iterable[DataSourceMessage], original_metadata: Optional[dict] = None
+    data_source_messages: Iterable[DataSourceMessage], original_metadata: dict | None = None
 ) -> dict[bytes, bytes]:
     """
     Given a list of DataSourceMessages, creates a PyArrow-compatible metadata dictionary.

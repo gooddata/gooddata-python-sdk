@@ -3,7 +3,7 @@ import copy
 import json
 import re
 from pathlib import Path
-from typing import Optional, Union
+from typing import Union
 
 import attrs
 from gooddata_sdk import CatalogDeclarativeColumn, CatalogDeclarativeTable, CatalogDeclarativeTables
@@ -27,22 +27,22 @@ from gooddata_dbt.dbt.cloud import DbtConnection
 
 @attrs.define(auto_attribs=True, kw_only=True)
 class DbtModelMetaGoodDataTableProps(Base):
-    model_id: Optional[str] = None
+    model_id: str | None = None
 
 
 @attrs.define(auto_attribs=True, kw_only=True)
 class DbtModelMetaGoodDataColumnProps(Base):
-    id: Optional[str] = None
-    ldm_type: Optional[GoodDataLdmType] = None
-    referenced_table: Optional[str] = None
-    label_type: Optional[GoodDataLabelType] = None
-    attribute_column: Optional[str] = None
-    sort_column: Optional[str] = None
-    sort_direction: Optional[GoodDataSortDirection] = None
-    default_view: Optional[bool] = None
+    id: str | None = None
+    ldm_type: GoodDataLdmType | None = None
+    referenced_table: str | None = None
+    label_type: GoodDataLabelType | None = None
+    attribute_column: str | None = None
+    sort_column: str | None = None
+    sort_direction: GoodDataSortDirection | None = None
+    default_view: bool | None = None
 
     @property
-    def gooddata_ref_table_ldm_id(self) -> Optional[str]:
+    def gooddata_ref_table_ldm_id(self) -> str | None:
         if self.referenced_table:
             return self.referenced_table.lower()
         return None
@@ -73,7 +73,7 @@ class DbtModelBase(Base):
     tags: list[str]
     # If 2+ references point to the same table, the table plays multiple roles,
     # it must be generated as multiple datasets
-    role_name: Optional[str] = None
+    role_name: str | None = None
 
     # TODO - duplicate of backend logic.
     # Solution: use result of generateLdm as a master template, and override based on dbt metadata only if necessary
@@ -120,7 +120,7 @@ class DbtModelBase(Base):
 
 @attrs.define(auto_attribs=True, kw_only=True)
 class DbtModelColumn(DbtModelBase):
-    data_type: Optional[str]
+    data_type: str | None
     meta: DbtModelMetaGoodDataColumn = attrs.field(factory=DbtModelMetaGoodDataColumn)
 
     # Enable to override LDM ID for LDM entities derived from columns (attributes, ...)
@@ -130,21 +130,21 @@ class DbtModelColumn(DbtModelBase):
         return self.meta.gooddata.id or self.gooddata_ldm_id
 
     @property
-    def ldm_type(self) -> Optional[str]:
+    def ldm_type(self) -> str | None:
         if self.meta.gooddata.ldm_type is None:
             return None
         else:
             return self.meta.gooddata.ldm_type.value
 
     @property
-    def label_type(self) -> Optional[str]:
+    def label_type(self) -> str | None:
         if self.meta.gooddata.label_type is None:
             return None
         else:
             return self.meta.gooddata.label_type.value
 
     @property
-    def sort_direction(self) -> Optional[str]:
+    def sort_direction(self) -> str | None:
         if self.meta.gooddata.sort_direction is None:
             return None
         else:
@@ -387,7 +387,7 @@ class DbtModelTables:
         return facts
 
     @staticmethod
-    def make_labels(table: DbtModelTable, attribute_column: DbtModelColumn) -> tuple[list[dict], Optional[dict]]:
+    def make_labels(table: DbtModelTable, attribute_column: DbtModelColumn) -> tuple[list[dict], dict | None]:
         labels = []
         default_view = None
         for column in table.columns.values():
@@ -507,7 +507,7 @@ class DbtModelTables:
                 result.append(table)
         return result
 
-    def make_declarative_datasets(self, data_source_id: str, model_ids: Optional[list[str]]) -> dict:
+    def make_declarative_datasets(self, data_source_id: str, model_ids: list[str] | None) -> dict:
         result: dict[str, list] = {"datasets": [], "date_instances": []}
         model_tables = [t for t in self.tables if not model_ids or t.meta.gooddata.model_id in model_ids]
         role_playing_tables = self.find_role_playing_tables(model_tables)
@@ -517,7 +517,7 @@ class DbtModelTables:
             result = self.make_dataset(data_source_id, table, role_playing_tables, result)
         return result
 
-    def get_entity_type(self, table_name: str, column_name: str) -> Optional[str]:
+    def get_entity_type(self, table_name: str, column_name: str) -> str | None:
         comp_table_name = table_name
         if self.upper_case:
             comp_table_name = table_name.upper()

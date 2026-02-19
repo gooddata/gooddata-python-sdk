@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import traceback
-from typing import Any, Optional
+from typing import Any
 
 from gooddata_sdk import GoodDataSdk
 
@@ -34,7 +34,7 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
         self._executor = ExecutorFactory.create(InitData(gd_sdk, self._server_options, self._table_options, columns))
         self._executor.validate_columns_def()
 
-    def execute(self, quals: list[Qual], columns: list[str], sortkeys: Optional[list[Any]] = None):
+    def execute(self, quals: list[Qual], columns: list[str], sortkeys: list[Any] | None = None):
         _log_debug(f"query in fdw with {self._server_options}; {self._table_options}; columns {columns}; quals={quals}")
         try:
             return self._executor.execute(quals, columns, sortkeys)
@@ -48,7 +48,7 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
         schema: str,
         srv_options: dict[str, str],
         options: dict[str, str],
-        restriction_type: Optional[str],
+        restriction_type: str | None,
         restricts: list[str],
     ) -> list[TableDefinition]:
         _log_info(
