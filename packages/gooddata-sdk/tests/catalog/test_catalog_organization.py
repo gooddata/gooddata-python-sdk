@@ -6,6 +6,8 @@ from pathlib import Path
 from gooddata_api_client.exceptions import NotFoundException
 from gooddata_sdk import (
     CatalogCspDirective,
+    CatalogCustomGeoCollection,
+    CatalogDeclarativeCustomGeoCollection,
     CatalogDeclarativeNotificationChannel,
     CatalogJwk,
     CatalogLlmEndpoint,
@@ -785,3 +787,50 @@ def test_delete_llm_endpoint(test_config):
 #         sdk.catalog_organization.put_declarative_identity_providers([])
 #         idps = sdk.catalog_organization.get_declarative_identity_providers()
 #         assert len(idps) == 0
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "layout_custom_geo_collections.yaml"))
+def test_layout_custom_geo_collections(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+
+    cgcs = sdk.catalog_organization.get_declarative_custom_geo_collections()
+    assert len(cgcs) == 0
+
+    try:
+        custom_geo_collections_e = [
+            CatalogDeclarativeCustomGeoCollection(
+                id="myGeoCollection",
+                name="My Geo Collection",
+                description="A test geo collection",
+            ),
+        ]
+        sdk.catalog_organization.put_declarative_custom_geo_collections(custom_geo_collections_e)
+        custom_geo_collections_o = sdk.catalog_organization.get_declarative_custom_geo_collections()
+        assert custom_geo_collections_e[0].id == custom_geo_collections_o[0].id
+        assert custom_geo_collections_e[0].name == custom_geo_collections_o[0].name
+        assert custom_geo_collections_e[0].description == custom_geo_collections_o[0].description
+    finally:
+        sdk.catalog_organization.put_declarative_custom_geo_collections([])
+        cgcs = sdk.catalog_organization.get_declarative_custom_geo_collections()
+        assert len(cgcs) == 0
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "create_custom_geo_collection.yaml"))
+def test_create_custom_geo_collection(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+
+    cgc_id = "testGeoCollection"
+    new_cgc = CatalogCustomGeoCollection(
+        id=cgc_id,
+        name="Test Geo Collection",
+        description="A test geo collection entity",
+    )
+    try:
+        sdk.catalog_organization.create_custom_geo_collection(new_cgc)
+        created_cgc = sdk.catalog_organization.get_custom_geo_collection(cgc_id)
+        assert created_cgc.id == cgc_id
+        assert created_cgc.name == new_cgc.name
+        assert created_cgc.description == new_cgc.description
+    finally:
+        sdk.catalog_organization.delete_custom_geo_collection(cgc_id)
+        assert len(sdk.catalog_organization.list_custom_geo_collections()) == 0
