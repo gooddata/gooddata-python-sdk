@@ -28,6 +28,8 @@ def _default_organization_check(organization: CatalogOrganization):
     assert organization.id == "default"
     assert organization.attributes.name == "Default Organization"
     assert organization.attributes.hostname == "localhost"
+    assert organization.attributes.data_center is None
+    assert organization.attributes.region is None
 
 
 def _default_jwk(jwk_id=_default_jwk_id, alg=None, kid=None):
