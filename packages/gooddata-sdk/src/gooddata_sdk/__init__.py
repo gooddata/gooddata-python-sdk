@@ -165,6 +165,7 @@ from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.
     CatalogDeclarativeAnalytics,
     CatalogDeclarativeMemoryItem,
     CatalogDeclarativeMetric,
+    MemoryItemStrategy,
 )
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.export_definition import (
     CatalogDeclarativeExportDefinition,
@@ -224,6 +225,12 @@ from gooddata_sdk.catalog.workspace.entity_model.graph_objects.graph import (
     CatalogDependentEntitiesRequest,
     CatalogDependentEntitiesResponse,
     CatalogEntityIdentifier,
+)
+from gooddata_sdk.catalog.workspace.entity_model.memory_item import (
+    CatalogMemoryItem,
+    CatalogMemoryItemAttributes,
+    CatalogMemoryItemPatch,
+    CatalogMemoryItemPatchAttributes,
 )
 from gooddata_sdk.catalog.workspace.entity_model.user_data_filter import (
     CatalogUserDataFilter,
