@@ -1,7 +1,7 @@
 # (C) 2025 GoodData Corporation
 [project]
 name = "gooddata-dbt"
-version = "1.59.0"
+version = "1.60.0"
 description = "dbt plugin for GoodData"
 readme = "README.md"
 license = "MIT"
@@ -10,7 +10,7 @@ authors = [
 ]
 requires-python = ">=3.10"
 dependencies = [
-    "gooddata-sdk~=1.59.0",
+    "gooddata-sdk~=1.60.0",
     "pyyaml>=6.0",
     "attrs>=21.4.0,<=24.2.0",
     "cattrs>=22.1.0,<=24.1.1",
