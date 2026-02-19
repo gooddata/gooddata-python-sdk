@@ -190,9 +190,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
         workspace_settings = load_all_entities(get_workspace_settings).data
         return [CatalogWorkspaceSetting.from_api(ws) for ws in workspace_settings]
 
-    def resolve_all_workspace_settings(
-        self, workspace_id: str, exclude_user_settings: Optional[bool] = None
-    ) -> dict:
+    def resolve_all_workspace_settings(self, workspace_id: str, exclude_user_settings: Optional[bool] = None) -> dict:
         """
         Resolves values for all settings in a workspace by current user, workspace, organization, or default settings
         and return them as a dictionary. Proper parsing is up to the caller.

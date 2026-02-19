@@ -1084,9 +1084,7 @@ def test_resolve_all_workspace_settings_omits_exclude_user_settings_by_default()
 
     service.resolve_all_workspace_settings("demo")
 
-    mock_actions_api.workspace_resolve_all_settings.assert_called_once_with(
-        "demo", _check_return_type=False
-    )
+    mock_actions_api.workspace_resolve_all_settings.assert_called_once_with("demo", _check_return_type=False)
 
 
 def test_resolve_workspace_settings_forwards_exclude_user_settings():
