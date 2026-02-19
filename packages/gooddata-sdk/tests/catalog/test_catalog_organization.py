@@ -65,6 +65,8 @@ def test_get_organization(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     organization = sdk.catalog_organization.get_organization()
     _default_organization_check(organization)
+    assert organization.attributes.region == "us-east-1"
+    assert organization.attributes.data_center == "us-cluster-1"
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "update_name.yaml"))

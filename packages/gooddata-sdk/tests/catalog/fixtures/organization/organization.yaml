@@ -99,6 +99,8 @@ interactions:
                 - enableUserManagement
                 - enableRawExports
                 - enableFlexibleDashboardLayout
+              region: us-east-1
+              dataCenter: us-cluster-1
             id: default
             type: organization
           links:
