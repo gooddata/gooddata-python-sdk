@@ -88,6 +88,12 @@ def sample_report_execution_context_dict():
             }
         ],
         "filters": [{"filterType": "negativeAttributeFilter", "labelIdentifier": "attribute1", "values": ["id1"]}],
+        "executionInitiator": {
+            "type": "display",
+            "dashboardId": "b2f2d436-9831-4fe0-81df-8c59fd33242b",
+            "visualizationId": "bf21d8ec-742c-48d7-8100-80663b43622b",
+            "widgetId": "453844a7-4aa8-4456-be23-ac62b9b3b98a",
+        },
     }
 
 
