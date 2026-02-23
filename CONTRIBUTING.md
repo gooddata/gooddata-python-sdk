@@ -328,3 +328,24 @@ venv automatically. So when docker tox tests are executed after localhost tests 
 
 # How to generate and maintain OpenAPI clients
 Refer to our [OpenAPI client README](./.openapi-generator/README.md)
+
+# Kinds of fixtures and layouts
+
+There are several kinds of fixtures used for the tests.
+This is important to know about when you're making changes or updating cassettes as it can surprise you.
+You have to keep in mind especially if you want to add new attributes to be used across several tests.
+
+- `packages/tests-support/fixtures` are used as the default layout for tests that are uploaded by docker compose. They
+  are also uploaded by the `upload_demo_layout.py` script.
+
+## Gooddata SDK
+
+These are common places for fixtures used in Gooddata SDK:
+
+- `packages/gooddata-sdk/tests/catalog/refresh`: this is the layout that actually *replaces* the layout after some kinds of catalog tests, and hence overrides the layout from docker compose.
+You have to make changes also here if you want to make changes to the default layout.
+It's a current TODO to merge this and `packages/tests-support/fixtures` into one layout.
+- `packages/gooddata-sdk/tests/catalog/expected`: these are fixtures that are used to compare against in various catalog tests.
+- `packages/gooddata-sdk/tests/catalog/store`, `packages/gooddata-sdk/tests/catalog/load`, `packages/gooddata-sdk/tests/catalog/load_with_locale`, `packages/gooddata-sdk/tests/catalog/load_with_locale`, ...
+    - These are numerous fixtures that are used for load and put tests. You often need to change more of them.
+    - Note that some of these contain `workspace` and `workspace_content` subfolders, depending on where the fixtures are used to load
