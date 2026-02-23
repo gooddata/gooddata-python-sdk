@@ -16,6 +16,69 @@ from jsonschema.exceptions import ValidationError
             "filters": [],
             "reportExecutionRequest": {},
         },
+        # REPORT with executionInitiator display
+        {
+            "executionType": "REPORT",
+            "organizationId": "org1",
+            "workspaceId": "ws1",
+            "userId": "user1",
+            "attributes": [],
+            "filters": [],
+            "reportExecutionRequest": {},
+            "executionInitiator": {
+                "type": "display",
+                "dashboardId": "d1",
+                "visualizationId": "v1",
+                "widgetId": "w1",
+            },
+        },
+        # REPORT with executionInitiator adhocExport
+        {
+            "executionType": "REPORT",
+            "organizationId": "org1",
+            "workspaceId": "ws1",
+            "userId": "user1",
+            "attributes": [],
+            "filters": [],
+            "reportExecutionRequest": {},
+            "executionInitiator": {
+                "type": "adhocExport",
+                "dashboardId": "d1",
+                "visualizationId": "v1",
+                "widgetId": "w1",
+                "exportType": "CSV",
+            },
+        },
+        # REPORT with executionInitiator automation
+        {
+            "executionType": "REPORT",
+            "organizationId": "org1",
+            "workspaceId": "ws1",
+            "userId": "user1",
+            "attributes": [],
+            "filters": [],
+            "reportExecutionRequest": {},
+            "executionInitiator": {
+                "type": "automation",
+                "automationId": "a1",
+            },
+        },
+        # REPORT with executionInitiator alert
+        {
+            "executionType": "REPORT",
+            "organizationId": "org1",
+            "workspaceId": "ws1",
+            "userId": "user1",
+            "attributes": [],
+            "filters": [],
+            "reportExecutionRequest": {},
+            "executionInitiator": {
+                "type": "alert",
+                "dashboardId": "d1",
+                "visualizationId": "v1",
+                "widgetId": "w1",
+            },
+        },
         # minimal valid schema for LABEL_ELEMENTS execution type
         {
             "executionType": "LABEL_ELEMENTS",
@@ -109,6 +172,49 @@ def test_valid_execution_context_schema(value, get_validator):
             "attributes": [{"attributeIdentifier": "attr1"}],  # missing required properties
             "filters": [],
             "labelElementsExecutionRequest": {"label": "label2"},
+        },
+        # invalid executionInitiator type
+        {
+            "executionType": "REPORT",
+            "organizationId": "org1",
+            "workspaceId": "ws1",
+            "userId": "user1",
+            "attributes": [],
+            "filters": [],
+            "reportExecutionRequest": {},
+            "executionInitiator": {
+                "type": "INVALID",
+            },
+        },
+        # automation initiator must not contain dashboardId
+        {
+            "executionType": "REPORT",
+            "organizationId": "org1",
+            "workspaceId": "ws1",
+            "userId": "user1",
+            "attributes": [],
+            "filters": [],
+            "reportExecutionRequest": {},
+            "executionInitiator": {
+                "type": "automation",
+                "automationId": "a1",
+                "dashboardId": "d1",
+            },
+        },
+        # display initiator must not contain exportType
+        {
+            "executionType": "REPORT",
+            "organizationId": "org1",
+            "workspaceId": "ws1",
+            "userId": "user1",
+            "attributes": [],
+            "filters": [],
+            "reportExecutionRequest": {},
+            "executionInitiator": {
+                "type": "display",
+                "dashboardId": "d1",
+                "exportType": "CSV",
+            },
         },
     ],
 )

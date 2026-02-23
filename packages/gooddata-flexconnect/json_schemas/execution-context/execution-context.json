@@ -52,6 +52,61 @@
             "items": {
                 "$ref": "filter.json"
             }
+        },
+        "executionInitiator": {
+            "type": "object",
+            "description": "Information about what triggered this execution.",
+            "required": ["type"],
+            "discriminator": {
+                "propertyName": "type",
+                "mapping": {
+                    "display": "#/properties/executionInitiator/oneOf/0",
+                    "adhocExport": "#/properties/executionInitiator/oneOf/1",
+                    "automation": "#/properties/executionInitiator/oneOf/2",
+                    "alert": "#/properties/executionInitiator/oneOf/3"
+                }
+            },
+            "oneOf": [
+                {
+                    "description": "Execution triggered by displaying data in the UI.",
+                    "properties": {
+                        "type": { "const": "display" },
+                        "dashboardId": { "type": "string" },
+                        "visualizationId": { "type": "string" },
+                        "widgetId": { "type": "string" }
+                    },
+                    "additionalProperties": false
+                },
+                {
+                    "description": "Execution triggered by an ad-hoc export from the UI.",
+                    "properties": {
+                        "type": { "const": "adhocExport" },
+                        "dashboardId": { "type": "string" },
+                        "visualizationId": { "type": "string" },
+                        "widgetId": { "type": "string" },
+                        "exportType": { "type": "string" }
+                    },
+                    "additionalProperties": false
+                },
+                {
+                    "description": "Execution triggered by an automation.",
+                    "properties": {
+                        "type": { "const": "automation" },
+                        "automationId": { "type": "string" }
+                    },
+                    "additionalProperties": false
+                },
+                {
+                    "description": "Execution triggered by an alert evaluation.",
+                    "properties": {
+                        "type": { "const": "alert" },
+                        "dashboardId": { "type": "string" },
+                        "visualizationId": { "type": "string" },
+                        "widgetId": { "type": "string" }
+                    },
+                    "additionalProperties": false
+                }
+            ]
         }
     },
     "allOf": [
