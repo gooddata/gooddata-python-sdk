@@ -436,6 +436,126 @@ class LabelElementsExecutionRequest:
         )
 
 
+@dataclass
+class ExecutionInitiatorDisplay:
+    """
+    Information about an execution being run in order to display the data in the UI.
+    """
+
+    dashboard_id: Optional[str]
+    """
+    The id of the dashboard the execution was run as a part of.
+    """
+
+    visualization_id: Optional[str]
+    """
+    The id of the visualization the execution was run as a part of.
+    """
+
+    widget_id: Optional[str]
+    """
+    The id of the widget the execution was run as a part of.
+    """
+
+
+@dataclass
+class ExecutionInitiatorAdHocExport:
+    """
+    Information about an execution being run in order to export the data by a user in the UI.
+    """
+
+    dashboard_id: Optional[str]
+    """
+    The id of the dashboard the execution was run as a part of.
+    """
+
+    visualization_id: Optional[str]
+    """
+    The id of the visualization the execution was run as a part of.
+    """
+
+    widget_id: Optional[str]
+    """
+    The id of the widget the execution was run as a part of.
+    """
+
+    export_type: Optional[str]
+    """
+    The type of the exported file (CSV, RAW_CSV, etc.).
+    """
+
+
+@dataclass
+class ExecutionInitiatorAutomation:
+    """
+    Information about an execution being run because of an automation.
+    """
+
+    automation_id: Optional[str]
+    """
+    The id of the automation initiating this execution.
+    """
+
+
+@dataclass
+class ExecutionInitiatorAlert:
+    """
+    Information about an execution being run in order to evaluate an alert.
+    """
+
+    dashboard_id: Optional[str]
+    """
+    The id of the dashboard the execution was run as a part of.
+    """
+
+    visualization_id: Optional[str]
+    """
+    The id of the visualization the execution was run as a part of.
+    """
+
+    widget_id: Optional[str]
+    """
+    The id of the widget the execution was run as a part of.
+    """
+
+
+ExecutionInitiator: TypeAlias = Union[
+    ExecutionInitiatorDisplay,
+    ExecutionInitiatorAdHocExport,
+    ExecutionInitiatorAutomation,
+    ExecutionInitiatorAlert,
+]
+
+
+@none_safe
+def _dict_to_execution_initiator(d: dict) -> ExecutionInitiator:
+    initiator_type = d.get("type")
+    if initiator_type == "display":
+        return ExecutionInitiatorDisplay(
+            dashboard_id=d.get("dashboardId"),
+            visualization_id=d.get("visualizationId"),
+            widget_id=d.get("widgetId"),
+        )
+    if initiator_type == "adhocExport":
+        return ExecutionInitiatorAdHocExport(
+            export_type=d.get("exportType"),
+            dashboard_id=d.get("dashboardId"),
+            visualization_id=d.get("visualizationId"),
+            widget_id=d.get("widgetId"),
+        )
+    if initiator_type == "automation":
+        return ExecutionInitiatorAutomation(
+            automation_id=d.get("automationId"),
+        )
+    if initiator_type == "alert":
+        return ExecutionInitiatorAlert(
+            dashboard_id=d.get("dashboardId"),
+            visualization_id=d.get("visualizationId"),
+            widget_id=d.get("widgetId"),
+        )
+    raise ValueError(f"Unsupported execution initiator type: {initiator_type}")
+
+
 def _dict_to_filter(d: dict) -> ExecutionContextFilter:
     filter_type = d.get("filterType")
     if filter_type == "positiveAttributeFilter":
@@ -542,6 +662,11 @@ class ExecutionContext:
     Only present if the execution type is "LABEL_ELEMENTS".
     """
 
+    execution_initiator: Optional[ExecutionInitiator]
+    """
+    Information about what triggered this execution (e.g. display, export, automation, alert).
+    """
+
     @staticmethod
     @none_safe
     def from_dict(d: dict) -> "ExecutionContext":
@@ -563,6 +688,7 @@ class ExecutionContext:
             ),
             attributes=_dict_to_attributes(d.get("attributes", [])),
             filters=_dict_to_filters(d.get("filters", [])),
+            execution_initiator=_dict_to_execution_initiator(d.get("executionInitiator")),
         )
 
     @staticmethod
