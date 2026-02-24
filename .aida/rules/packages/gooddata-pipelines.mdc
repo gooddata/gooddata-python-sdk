@@ -1,0 +1,38 @@
+# (C) 2026 GoodData Corporation
+---
+description: GoodData Pipelines package - lifecycle automation for GoodData Cloud
+alwaysApply: false
+---
+
+# GoodData Pipelines Package
+
+**Location**: `packages/gooddata-pipelines/`
+
+## Owns
+
+- High-level automation flows for provisioning users, groups, permissions, and workspace hierarchies
+- Backup and restore workflows for workspace metadata (local, S3, Azure Blob targets)
+- LDM extension workflows for child workspaces
+
+## Does NOT Own
+
+- Core platform API/service abstractions and low-level client behavior → `gooddata-sdk`
+- dbt metadata conversion and deployment CLI → `gooddata-dbt`
+- Flight RPC runtime infrastructure → `gooddata-flight-server`
+
+## Architecture
+
+**Primary package**: `src/gooddata_pipelines`
+
+**Depends on**: `gooddata-sdk` plus cloud storage SDK integrations
+
+**Primary modules**: `provisioning`, `backup_and_restore`, `ldm_extension`
+
+## Testing
+
+Use package-local pytest suites under `packages/gooddata-pipelines/tests`.
+
+## Dependencies
+
+Required: technologies/python, packages/gooddata-sdk
+Related: technologies/testing
