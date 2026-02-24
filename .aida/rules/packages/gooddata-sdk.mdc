@@ -1,4 +1,4 @@
-# (C) 2025 GoodData Corporation
+# (C) 2026 GoodData Corporation
 ---
 description: GoodData SDK core package - primary interface for GoodData Cloud
 alwaysApply: false
@@ -22,6 +22,9 @@ alwaysApply: false
 - Pandas integration → gooddata-pandas package
 - dbt integration → gooddata-dbt package
 - Flight server → gooddata-flight-server package
+- FlexConnect data source framework → gooddata-flexconnect package
+- Lifecycle automation workflows → gooddata-pipelines package
+- PostgreSQL FDW integration → gooddata-fdw package
 - API client generation → gooddata-api-client (generated)
 
 ## Architecture
@@ -48,4 +51,4 @@ Uses vcrpy cassettes. See `technologies/testing` rule for workflow.
 ## Dependencies
 
 Required: technologies/python, technologies/testing
-Related: packages/gooddata-pandas
+Related: packages/gooddata-pandas, packages/gooddata-dbt, packages/gooddata-pipelines

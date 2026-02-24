@@ -1,0 +1,38 @@
+# (C) 2026 GoodData Corporation
+---
+description: GoodData FlexConnect package - custom data source framework for GoodData
+alwaysApply: false
+---
+
+# GoodData FlexConnect Package
+
+**Location**: `packages/gooddata-flexconnect/`
+
+## Owns
+
+- FlexConnect framework for authoring custom table-function style data sources
+- Runtime contract for mapping custom function outputs into GoodData datasets
+- Integration layer combining GoodData SDK interactions with Flight server hosting
+
+## Does NOT Own
+
+- Generic Flight server infrastructure and CLI → `gooddata-flight-server`
+- Core GoodData Cloud domain/catalog/compute APIs → `gooddata-sdk`
+- PostgreSQL FDW integration → `gooddata-fdw`
+
+## Architecture
+
+**Primary package**: `src/gooddata_flexconnect`
+
+**Depends on**: `gooddata-flight-server`, `gooddata-sdk`
+
+**Typical usage**: external FlexConnect projects consume this package as a framework dependency
+
+## Testing
+
+Use package-local pytest suites under `packages/gooddata-flexconnect/tests`.
+
+## Dependencies
+
+Required: technologies/python, packages/gooddata-flight-server, packages/gooddata-sdk
+Related: technologies/testing

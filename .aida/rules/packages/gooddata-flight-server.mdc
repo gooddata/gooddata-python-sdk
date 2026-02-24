@@ -1,0 +1,38 @@
+# (C) 2026 GoodData Corporation
+---
+description: GoodData Flight Server package - pluggable Flight RPC server foundation
+alwaysApply: false
+---
+
+# GoodData Flight Server Package
+
+**Location**: `packages/gooddata-flight-server/`
+
+## Owns
+
+- Reusable Flight RPC server runtime and CLI (`gooddata-flight-server`)
+- Server bootstrap, lifecycle handling, observability, and auth/token integration
+- Configuration patterns for running custom Flight method providers
+
+## Does NOT Own
+
+- Core GoodData Cloud domain/catalog/compute SDK APIs → `gooddata-sdk`
+- Product-specific data source functions and semantic model mapping → `gooddata-flexconnect`
+- Lifecycle provisioning and backup workflows → `gooddata-pipelines`
+
+## Architecture
+
+**Entry point**: `gooddata_flight_server.cli:server_cli`
+
+**Primary package**: `src/gooddata_flight_server`
+
+**Key stack**: `pyarrow.flight`, `dynaconf`, telemetry/metrics integrations
+
+## Testing
+
+Use package-local pytest suites under `packages/gooddata-flight-server/tests`.
+
+## Dependencies
+
+Required: technologies/python
+Related: technologies/testing, packages/gooddata-flexconnect
