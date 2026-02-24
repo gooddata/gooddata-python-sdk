@@ -1,0 +1,38 @@
+# (C) 2025 GoodData Corporation
+---
+description: Tests support package - shared test helpers for SDK repository packages
+alwaysApply: false
+---
+
+# Tests Support Package
+
+**Location**: `packages/tests-support/`
+
+## Owns
+
+- Shared test utilities reused across multiple repository packages
+- VCR helpers for cassette normalization and deterministic request/response handling
+- File and deep-comparison helper functions used by package test suites
+
+## Does NOT Own
+
+- Product/runtime code for any customer-facing package
+- Package-specific test scenarios (those remain with each package under `packages/*/tests`)
+- Core SDK API behavior and domain services → `gooddata-sdk`
+
+## Architecture
+
+**Primary package**: `src/tests_support`
+
+**Main modules**: `vcrpy_utils.py`, `compare_utils.py`, `file_utils.py`
+
+**Role**: test-only utility package consumed from dependency groups in other packages
+
+## Testing
+
+Prefer adding shared test helpers here only when at least two packages need the behavior.
+
+## Dependencies
+
+Required: technologies/python
+Related: technologies/testing, packages/gooddata-sdk, packages/gooddata-pandas

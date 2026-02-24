@@ -1,0 +1,38 @@
+# (C) 2025 GoodData Corporation
+---
+description: GoodData FDW package - PostgreSQL foreign data wrapper integration
+alwaysApply: false
+---
+
+# GoodData FDW Package
+
+**Location**: `packages/gooddata-fdw/`
+
+## Owns
+
+- PostgreSQL FDW integration for exposing GoodData data as SQL-accessible foreign tables
+- Translation layer between FDW execution flow and GoodData SDK calls
+- Import/execute FDW command behavior used by package tests and docs
+
+## Does NOT Own
+
+- Core API/service client behavior → `gooddata-sdk`
+- Flight RPC server infrastructure → `gooddata-flight-server`
+- FlexConnect function runtime → `gooddata-flexconnect`
+
+## Architecture
+
+**Primary package**: `src/gooddata_fdw`
+
+**Runtime dependency**: multicorn/PostgreSQL FDW environment
+
+**Depends on**: `gooddata-sdk`
+
+## Testing
+
+Use package-local pytest suites under `packages/gooddata-fdw/tests`.
+
+## Dependencies
+
+Required: technologies/python, packages/gooddata-sdk
+Related: technologies/testing
