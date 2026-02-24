@@ -14,6 +14,21 @@ registry:
     package-test:
       argv: ["make", "-C", "{root}", "test"]
       cwd: "{workspace_root}"
+    package-test-py314:
+      argv: ["make", "-C", "{root}", "test"]
+      cwd: "{workspace_root}"
+      env:
+        TEST_ENVS: py314
+    package-test-py310:
+      argv: ["make", "-C", "{root}", "test"]
+      cwd: "{workspace_root}"
+      env:
+        TEST_ENVS: py310
+    package-test-matrix:
+      argv: ["make", "-C", "{root}", "test"]
+      cwd: "{workspace_root}"
+      env:
+        TEST_ENVS: py314,py313,py312,py311,py310
     workspace-lint:
       argv: ["make", "lint"]
       cwd: "{workspace_root}"

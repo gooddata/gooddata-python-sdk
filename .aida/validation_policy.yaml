@@ -30,6 +30,19 @@ validation_policy:
           processor_id: passthrough
         - command_id: package-type-check
           processor_id: passthrough
+        - command_id: package-test-py314
+          processor_id: pytest
+
+    package-compat:
+      steps:
+        - command_id: package-lint
+          processor_id: passthrough
+        - command_id: package-type-check
+          processor_id: passthrough
+        - command_id: package-test-py314
+          processor_id: pytest
+        - command_id: package-test-py310
+          processor_id: pytest
 
     package-full:
       steps:
@@ -37,7 +50,7 @@ validation_policy:
           processor_id: passthrough
         - command_id: package-type-check
           processor_id: passthrough
-        - command_id: package-test
+        - command_id: package-test-matrix
           processor_id: pytest
 
     api-client-fast:
