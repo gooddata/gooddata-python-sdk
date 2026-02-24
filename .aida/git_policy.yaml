@@ -1,0 +1,21 @@
+# (C) 2026 GoodData Corporation
+# AIDA git policy
+#
+# Configure commit and git workflow policy used by AIDA tools.
+git_policy:
+  commit:
+    # Max allowed characters for the full commit subject line.
+    subject_max_chars: 70
+    # Allowed values for required `risk:` footer.
+    risk_values: [nonprod, low, high]
+    # Require AI contribution metadata (`AI-Code-Share`) in each commit.
+    require_ai_share: false
+    # Require `Co-authored-by:` footer in each commit.
+    require_co_authored_by: false
+    # Allow `--ai-share-auto <actor>` (deterministic actor=100).
+    enable_ai_share_auto: true
+  workflow:
+    # Prefer `git push --force-with-lease` over `--force` for unpublished branches.
+    prefer_force_with_lease: true
+    # Allow autosquash/rebase only for unpublished (not yet shared) commits.
+    autosquash_unpublished_only: true

@@ -1,0 +1,43 @@
+# (C) 2026 GoodData Corporation
+# AIDA change domain classification
+#
+# Define how changed paths map to validation domains.
+# See `.aida/validation_policy.yaml` for mapping domains to pipelines.
+domains:
+  - id: python-package
+    description: Any workspace Python package under packages/*
+    match_globs:
+      - "packages/*/src/**/*.py"
+      - "packages/*/tests/**/*.py"
+      - "packages/*/pyproject.toml"
+      - "packages/*/tox.ini"
+      - "packages/*/Makefile"
+    root_depth: 2
+
+  - id: api-client
+    description: Generated API client package and its local config
+    match_globs:
+      - "gooddata-api-client/**/*.py"
+      - "gooddata-api-client/requirements.txt"
+      - "gooddata-api-client/test-requirements.txt"
+      - "gooddata-api-client/setup.py"
+      - "gooddata-api-client/tox.ini"
+    root_depth: 1
+
+  - id: repo-tooling
+    description: Root-level shared tooling and workspace configuration
+    match_globs:
+      - "pyproject.toml"
+      - "Makefile"
+      - "project_common.mk"
+      - "ci_tests.mk"
+    root_depth: 0
+
+  - id: aida-config
+    description: AIDA workflow configuration and local MCP wiring
+    match_globs:
+      - ".aida/**/*.yaml"
+      - ".aida/**/*.mdc"
+      - ".mcp.json"
+      - ".claude/CLAUDE.md"
+    root_depth: 0

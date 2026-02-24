@@ -1,0 +1,35 @@
+# (C) 2026 GoodData Corporation
+# AIDA validation registry
+#
+# Define command_id and processor_id specifications referenced by validation_policy.yaml.
+registry:
+  includes: []
+  commands:
+    package-lint:
+      argv: ["make", "-C", "{root}", "lint"]
+      cwd: "{workspace_root}"
+    package-type-check:
+      argv: ["make", "-C", "{root}", "type-check"]
+      cwd: "{workspace_root}"
+    package-test:
+      argv: ["make", "-C", "{root}", "test"]
+      cwd: "{workspace_root}"
+    workspace-lint:
+      argv: ["make", "lint"]
+      cwd: "{workspace_root}"
+    workspace-type-check:
+      argv: ["make", "type-check"]
+      cwd: "{workspace_root}"
+    api-client-tests:
+      argv: ["uv", "run", "tox", "-c", "{workspace_root}/gooddata-api-client/tox.ini"]
+      cwd: "{workspace_root}/gooddata-api-client"
+    aida-doctor:
+      argv: ["aida-mcp", "doctor"]
+      cwd: "{workspace_root}"
+  processors:
+    passthrough:
+      kind: builtin
+      builtin_id: passthrough
+    pytest:
+      kind: builtin
+      builtin_id: pytest

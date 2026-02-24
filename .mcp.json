@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "aida": {
+      "command": "aida-mcp",
+      "args": [],
+      "env": {
+        "AIDA_ENABLE_EMBEDDED_VENDOR_RULES": "true"
+      }
+    }
+  }
+}

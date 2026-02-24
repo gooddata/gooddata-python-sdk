@@ -1,0 +1,58 @@
+# (C) 2026 GoodData Corporation
+# AIDA validation policy
+#
+# This file wires domains -> pipelines -> steps (command_id + processor_id).
+# Initially empty (validate may no-op until you configure routes).
+validation_policy:
+  codegen:
+    - id: api-client-regeneration-check
+      match_globs:
+        - "schemas/**/*.json"
+        - ".openapi-generator/**/*.yaml"
+        - "scripts/generate_client.sh"
+      pipeline: api-client-fast
+      scopes: ["pre_push"]
+
+  routes:
+    - domain: python-package
+      pipeline: package-fast
+    - domain: api-client
+      pipeline: api-client-fast
+    - domain: repo-tooling
+      pipeline: repo-fast
+    - domain: aida-config
+      pipeline: aida-config
+
+  pipelines:
+    package-fast:
+      steps:
+        - command_id: package-lint
+          processor_id: passthrough
+        - command_id: package-type-check
+          processor_id: passthrough
+
+    package-full:
+      steps:
+        - command_id: package-lint
+          processor_id: passthrough
+        - command_id: package-type-check
+          processor_id: passthrough
+        - command_id: package-test
+          processor_id: pytest
+
+    api-client-fast:
+      steps:
+        - command_id: api-client-tests
+          processor_id: pytest
+
+    repo-fast:
+      steps:
+        - command_id: workspace-lint
+          processor_id: passthrough
+        - command_id: workspace-type-check
+          processor_id: passthrough
+
+    aida-config:
+      steps:
+        - command_id: aida-doctor
+          processor_id: passthrough

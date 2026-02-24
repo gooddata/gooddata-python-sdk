@@ -1,0 +1,38 @@
+# (C) 2025 GoodData Corporation
+---
+description: GoodData dbt package - bridge from dbt metadata to GoodData semantic model
+alwaysApply: false
+---
+
+# GoodData dbt Package
+
+**Location**: `packages/gooddata-dbt/`
+
+## Owns
+
+- CLI workflow for dbt-oriented GoodData operations (`gooddata-dbt`)
+- Conversion of dbt models/profiles into GoodData LDM and analytics deployment inputs
+- Workspace and data source provisioning helpers driven by `gooddata.yaml`
+
+## Does NOT Own
+
+- Core GoodData SDK domain/client services → `gooddata-sdk`
+- Generic orchestration or storage automation → `gooddata-pipelines`
+- dbt runtime implementation itself (provided by dbt tooling)
+
+## Architecture
+
+**Entry point**: `gooddata_dbt.main:main`
+
+**Primary package**: `src/gooddata_dbt`
+
+**Depends on**: `gooddata-sdk`
+
+## Testing
+
+Use package-local pytest suites under `packages/gooddata-dbt/tests`.
+
+## Dependencies
+
+Required: technologies/python, packages/gooddata-sdk
+Related: technologies/testing, packages/gooddata-pipelines
