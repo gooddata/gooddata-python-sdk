@@ -19,7 +19,7 @@
                 <div class="homepage-card__icon">
                     {{ readFile (printf "%s%s" .RelPermalink .Params.icon) | safeHTML }}
                 </div>
-                <h4 class="homepage-card__title">{{ .Title }}</h4>
+                <p class="homepage-card__title">{{ .Title }}</p>
                 <p class="homepage-card__text">{{ .Description }}</p>
             </a>
         {{ end }}
@@ -30,7 +30,7 @@
                     {{ readFile $icon | safeHTML }}
                 </div>
             {{ end }}
-            <h4 class="homepage-card__title">{{ $title }}</h4>
+            <p class="homepage-card__title">{{ $title }}</p>
 
             {{ if eq .Page.File.Ext "md" }}
                 {{ .Inner | .Page.RenderString }}
