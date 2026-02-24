@@ -1,4 +1,4 @@
-# (C) 2025 GoodData Corporation
+# (C) 2026 GoodData Corporation
 ---
 description: GoodData dbt package - bridge from dbt metadata to GoodData semantic model
 alwaysApply: false
