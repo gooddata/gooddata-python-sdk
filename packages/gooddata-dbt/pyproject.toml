@@ -32,7 +32,7 @@ classifiers = [
 ]
 
 [project.scripts]
-gooddata-dbt = "gooddata_dbt.main:main"
+gooddata-dbt = "gooddata_dbt.dbt_plugin:main"
 
 [dependency-groups]
 test = [
