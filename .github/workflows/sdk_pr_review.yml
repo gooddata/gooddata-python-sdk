@@ -15,11 +15,14 @@
 # Gates (automatic trigger — all must pass or job never starts):
 #   1. Review state == changes_requested, or commented with body
 #   2. PR author == yenkins-admin or tychtjan
-#   3. Same repo (no forks)
+#   3. Reviewer is a gooddata org member (checked at runtime)
+#   4. Same repo (no forks)
 #
 # Additional protections:
 #   - Claude output is never exposed in PR comments (stays in workflow artifacts)
 #   - Claude prompt includes strict security guardrails
+#   - --dangerously-skip-permissions is required for headless CI; real protection
+#     comes from ephemeral runner + limited PAT scope + prompt guardrails
 #
 # SECRETS (gooddata-python-sdk repo settings)
 # -------------------------------------------
@@ -69,19 +72,24 @@ jobs:
       pull-requests: write
 
     steps:
-      # ── Org membership check (manual trigger only) ────────────
+      # ── Org membership check ──────────────────────────────────
       - name: Verify org membership
-        if: github.event_name == 'workflow_dispatch'
         env:
           GH_TOKEN: ${{ secrets.TOKEN_GITHUB_YENKINS_ADMIN }}
-          ACTOR: ${{ github.actor }}
         run: |
-          HTTP_STATUS=$(gh api "orgs/gooddata/members/${ACTOR}" --silent -i 2>/dev/null | head -1 | awk '{print $2}')
+          # For manual trigger, check the actor; for review trigger, check the reviewer
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            CHECK_USER="${{ github.actor }}"
+          else
+            CHECK_USER="${{ github.event.review.user.login }}"
+          fi
+
+          HTTP_STATUS=$(gh api "orgs/gooddata/members/${CHECK_USER}" --silent -i 2>/dev/null | head -1 | awk '{print $2}')
           if [ "$HTTP_STATUS" != "204" ]; then
-            echo "ERROR: ${ACTOR} is not a member of the gooddata organization"
+            echo "ERROR: ${CHECK_USER} is not a member of the gooddata organization"
             exit 1
           fi
-          echo "${ACTOR} is a gooddata org member — proceeding"
+          echo "${CHECK_USER} is a gooddata org member — proceeding"
 
       # ── Resolve PR metadata ────────────────────────────────────
       - name: Resolve PR details
@@ -131,6 +139,7 @@ jobs:
           REPO: ${{ github.repository }}
           REVIEW_ID: ${{ github.event.review.id }}
           EVENT_NAME: ${{ github.event_name }}
+          REVIEW_BODY: ${{ github.event.review.body }}
         run: |
           mkdir -p review-context
 
@@ -138,9 +147,7 @@ jobs:
           if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
             echo "(manual trigger — no review body)" > review-context/review-body.txt
           else
-            cat > review-context/review-body.txt << 'EOF'
-          ${{ github.event.review.body }}
-          EOF
+            printenv REVIEW_BODY > review-context/review-body.txt
           fi
 
           # Inline comments for specific review (only for event trigger)
@@ -338,41 +345,56 @@ jobs:
 
       # ── Apply fixes ──────────────────────────────────────────
       - name: Apply fixes with Claude
+        id: claude
         if: steps.extract.outputs.has_comments == 'true'
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
+          touch claude-output.txt
+          EXIT_CODE=0
           claude --dangerously-skip-permissions \
             --model sonnet \
             --max-turns 30 \
             --output-format text \
             -p "$(cat review-context/prompt.md)" \
-            > claude-output.txt 2>&1 || true
+            > claude-output.txt 2>&1 || EXIT_CODE=$?
 
-          echo "=== Claude finished ==="
+          echo "=== Claude finished (exit code: ${EXIT_CODE}) ==="
           echo "Lines of output: $(wc -l < claude-output.txt)"
+
+          if [ "$EXIT_CODE" -ne 0 ]; then
+            echo "claude_failed=true" >> "$GITHUB_OUTPUT"
+            echo "::warning::Claude exited with code ${EXIT_CODE}"
+          else
+            echo "claude_failed=false" >> "$GITHUB_OUTPUT"
+          fi
 
       # ── Commit and push ──────────────────────────────────────
       - name: Commit and push fixes
         id: push
-        if: steps.extract.outputs.has_comments == 'true'
+        if: steps.extract.outputs.has_comments == 'true' && steps.claude.outputs.claude_failed != 'true'
         env:
           PR_BRANCH: ${{ steps.pr.outputs.pr_branch }}
         run: |
-          if git diff --quiet && git diff --cached --quiet; then
+          if git diff --quiet && git diff --cached --quiet && [ -z "$(git ls-files --others --exclude-standard)" ]; then
             echo "No changes made by Claude"
             echo "pushed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
-          git add -u
-          git commit -m "$(cat <<'EOF'
-          fix: address review feedback
+          # Stage all changes but exclude workflow artifacts
+          git add -A
+          git reset -- review-context/ claude-output.txt
 
-          Applied fixes based on code review feedback.
-          Automated by sdk-review-fix workflow.
-          EOF
-          )"
+          # Log changed files for audit
+          echo "=== Files being committed ==="
+          git diff --cached --name-status
+          git diff --cached --name-status > review-context/committed-files.txt
+
+          git commit -m "fix: address review feedback
+
+Applied fixes based on code review feedback.
+Automated by sdk-review-fix workflow."
           git push origin "$PR_BRANCH"
 
           echo "pushed=true" >> "$GITHUB_OUTPUT"
@@ -392,34 +414,43 @@ jobs:
           RUN_URL="${{ github.server_url }}/${REPO}/actions/runs/${{ github.run_id }}"
 
           gh pr comment "$PR" \
-            --body "$(cat <<EOF
-          ### Review fixes applied
+            --body "### Review fixes applied
 
-          Addressed feedback from @${REVIEWER} in [\`${SHA:0:7}\`](https://github.com/${REPO}/commit/${SHA}).
+Addressed feedback from @${REVIEWER} in [\`${SHA:0:7}\`](https://github.com/${REPO}/commit/${SHA}).
 
-          _[Workflow run](${RUN_URL}) &#x2022; Claude output available in workflow artifacts_
-          EOF
-          )"
+_[Workflow run](${RUN_URL}) &#x2022; Claude output available in workflow artifacts_"
 
-      - name: Post no-changes notice
-        if: steps.extract.outputs.has_comments == 'true' && steps.push.outputs.pushed == 'false'
+      - name: Post Claude failure notice
+        if: steps.claude.outputs.claude_failed == 'true'
         env:
           GH_TOKEN: ${{ secrets.TOKEN_GITHUB_YENKINS_ADMIN }}
         run: |
-          REPO="${{ github.repository }}"
           PR="${{ steps.pr.outputs.pr_number }}"
           REVIEWER="${{ steps.pr.outputs.reviewer }}"
-          RUN_URL="${{ github.server_url }}/${REPO}/actions/runs/${{ github.run_id }}"
+          RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
           gh pr comment "$PR" \
-            --body "$(cat <<EOF
-          ### No changes applied
+            --body "### Review fix failed
 
-          Claude analyzed the review feedback from @${REVIEWER} but made no file changes. Manual intervention may be needed.
+Claude encountered an error while processing review feedback from @${REVIEWER}. Manual intervention is needed.
 
-          _[Workflow run](${RUN_URL}) &#x2022; Claude output available in workflow artifacts_
-          EOF
-          )"
+_[Workflow run](${RUN_URL}) &#x2022; Check workflow logs for details_"
+
+      - name: Post no-changes notice
+        if: steps.extract.outputs.has_comments == 'true' && steps.push.outputs.pushed == 'false' && steps.claude.outputs.claude_failed != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.TOKEN_GITHUB_YENKINS_ADMIN }}
+        run: |
+          PR="${{ steps.pr.outputs.pr_number }}"
+          REVIEWER="${{ steps.pr.outputs.reviewer }}"
+          RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+          gh pr comment "$PR" \
+            --body "### No changes applied
+
+Claude analyzed the review feedback from @${REVIEWER} but made no file changes. Manual intervention may be needed.
+
+_[Workflow run](${RUN_URL}) &#x2022; Claude output available in workflow artifacts_"
 
       # ── Artifacts (Claude output stays here, not in PR) ──────
       - name: Upload artifacts
@@ -430,4 +461,5 @@ jobs:
           path: |
             review-context/
             claude-output.txt
+          if-no-files-found: warn
           retention-days: 14
