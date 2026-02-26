@@ -190,13 +190,14 @@ class CatalogWorkspaceService(CatalogServiceBase):
         workspace_settings = load_all_entities(get_workspace_settings).data
         return [CatalogWorkspaceSetting.from_api(ws) for ws in workspace_settings]
 
-    def resolve_all_workspace_settings(self, workspace_id: str) -> dict:
+    def resolve_all_workspace_settings(self, workspace_id: str, exclude_user_settings: bool = False) -> dict:
         """
         Resolves values for all settings in a workspace by current user, workspace, organization, or default settings
         and return them as a dictionary. Proper parsing is up to the caller.
         TODO: long-term we should return a proper entity object.
 
         :param workspace_id: Workspace ID
+        :param exclude_user_settings: If True, user-level settings are skipped during resolution
         :return: Dict of settings
         """
         # note: in case some settings were recently added and the API client was not regenerated it can fail on
@@ -205,12 +206,15 @@ class CatalogWorkspaceService(CatalogServiceBase):
             setting.to_dict()
             for setting in self._client.actions_api.workspace_resolve_all_settings(
                 workspace_id,
+                exclude_user_settings=exclude_user_settings,
                 _check_return_type=False,
             )
         ]
         return {setting["type"]: setting for setting in resolved_workspace_settings}
 
-    def resolve_workspace_settings(self, workspace_id: str, settings: list) -> dict:
+    def resolve_workspace_settings(
+        self, workspace_id: str, settings: list, exclude_user_settings: bool = False
+    ) -> dict:
         """
         Resolves values for given settings in a workspace by current user, workspace, organization, or default settings
         and return them as a dictionary. Proper parsing is up to the caller.
@@ -218,6 +222,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
 
         :param workspace_id: Workspace ID
         :param settings: List of settings to resolve
+        :param exclude_user_settings: If True, user-level settings are skipped during resolution
         :return: Dict of settings
         """
         resolved_workspace_settings = [
@@ -225,6 +230,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
             for setting in self._client.actions_api.workspace_resolve_settings(
                 workspace_id,
                 ResolveSettingsRequest(settings=settings),
+                exclude_user_settings=exclude_user_settings,
                 _check_return_type=False,
             )
         ]
