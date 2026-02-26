@@ -45,8 +45,8 @@ interactions:
       body:
         string:
           userGroups:
-            - id: visitorsGroup
-              name: visitors
             - id: demoGroup
               name: demo group
+            - id: visitorsGroup
+              name: visitors
           users: []

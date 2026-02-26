@@ -67,6 +67,7 @@ class Operation(ModelNormal):
         ('kind',): {
             'PROVISION-DATABASE': "provision-database",
             'DEPROVISION-DATABASE': "deprovision-database",
+            'RUN-SERVICE-COMMAND': "run-service-command",
         },
     }
 
@@ -105,9 +106,6 @@ class Operation(ModelNormal):
     def discriminator():
         lazy_import()
         val = {
-            'FailedOperation': FailedOperation,
-            'PendingOperation': PendingOperation,
-            'SucceededOperation': SucceededOperation,
             'failed': FailedOperation,
             'pending': PendingOperation,
             'succeeded': SucceededOperation,
@@ -134,7 +132,7 @@ class Operation(ModelNormal):
 
         Args:
             id (str): Id of the operation
-            kind (str): Type of the long-running operation.  * `provision-database` — Provisioning of an AI Lake database.  * `deprovision-database` — Deprovisioning (deletion) of an AI Lake database. 
+            kind (str): Type of the long-running operation. * `provision-database` — Provisioning of an AI Lake database. * `deprovision-database` — Deprovisioning (deletion) of an AI Lake database. * `run-service-command` — Running a command in a particular AI Lake service. 
             status (str):
 
         Keyword Args:
@@ -227,7 +225,7 @@ class Operation(ModelNormal):
 
         Args:
             id (str): Id of the operation
-            kind (str): Type of the long-running operation.  * `provision-database` — Provisioning of an AI Lake database.  * `deprovision-database` — Deprovisioning (deletion) of an AI Lake database. 
+            kind (str): Type of the long-running operation. * `provision-database` — Provisioning of an AI Lake database. * `deprovision-database` — Deprovisioning (deletion) of an AI Lake database. * `run-service-command` — Running a command in a particular AI Lake service. 
             status (str):
 
         Keyword Args:

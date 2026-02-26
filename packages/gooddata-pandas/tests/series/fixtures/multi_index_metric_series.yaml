@@ -75,7 +75,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-Gdc-Cancel-Token:
-          - dced2a10-2f1c-4426-80c5-9a893f7e980e
+          - a0c75617-88f6-457b-9b66-1aed2e0e9aaf
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - '0'
@@ -120,7 +120,7 @@ interactions:
                       valueType: TEXT
                 localIdentifier: dim_1
             links:
-              executionResult: 0d3ff0d5531a4cd0aff6e1b6927044567eef4ec3:e47757b868dfedbedee0651d92f5c81a65e0db36ee4a329ac2c4bd1596785975
+              executionResult: 61f4421c6062670bcb644d23be49da3f27796cc8:8327ebaf42a3816bf2d74be9359c3c2c39325c6b16a932e2620ae8ac351325c2
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3Din%3D%28region%2Cproducts.category%29&page=0&size=500
@@ -142,7 +142,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '2689'
+          - '2761'
         Content-Type:
           - application/json
         DATE: *id001
@@ -172,6 +172,7 @@ interactions:
                 areRelationsValid: true
                 sourceColumn: category
                 sourceColumnDataType: STRING
+                isNullable: true
               id: products.category
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/products.category
@@ -197,6 +198,7 @@ interactions:
                 areRelationsValid: true
                 sourceColumn: region
                 sourceColumnDataType: STRING
+                isNullable: true
               id: region
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/region
@@ -241,6 +243,7 @@ interactions:
                 sourceColumn: region
                 sourceColumnDataType: STRING
                 valueType: TEXT
+                isNullable: true
               id: region
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/region
@@ -254,6 +257,7 @@ interactions:
                 sourceColumn: category
                 sourceColumnDataType: STRING
                 valueType: TEXT
+                isNullable: true
               id: products.category
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/products.category
@@ -280,7 +284,7 @@ interactions:
             next: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3Din%3D%28%27region%27%2C%27products.category%27%29&page=1&size=500
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/0d3ff0d5531a4cd0aff6e1b6927044567eef4ec3%3Ae47757b868dfedbedee0651d92f5c81a65e0db36ee4a329ac2c4bd1596785975?offset=0%2C0&limit=1%2C1000
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/61f4421c6062670bcb644d23be49da3f27796cc8%3A8327ebaf42a3816bf2d74be9359c3c2c39325c6b16a932e2620ae8ac351325c2?offset=0%2C0&limit=1%2C1000
       body: null
       headers:
         Accept:

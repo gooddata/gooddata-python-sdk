@@ -16,11 +16,15 @@ Method | HTTP request | Description
 [**created_by**](SmartFunctionsApi.md#created_by) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/createdBy | Get Analytics Catalog CreatedBy Users
 [**forecast**](SmartFunctionsApi.md#forecast) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/{resultId} | (BETA) Smart functions - Forecast
 [**forecast_result**](SmartFunctionsApi.md#forecast_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/result/{resultId} | (BETA) Smart functions - Forecast Result
+[**generate_description**](SmartFunctionsApi.md#generate_description) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/generateDescription | Generate Description for Analytics Object
+[**generate_title**](SmartFunctionsApi.md#generate_title) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/generateTitle | Generate Title for Analytics Object
 [**get_quality_issues**](SmartFunctionsApi.md#get_quality_issues) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/issues | Get Quality Issues
 [**get_quality_issues_calculation_status**](SmartFunctionsApi.md#get_quality_issues_calculation_status) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/issues/status/{processId} | Get Quality Issues Calculation Status
 [**memory_created_by_users**](SmartFunctionsApi.md#memory_created_by_users) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/memory/createdBy | Get AI Memory CreatedBy Users
 [**resolve_llm_endpoints**](SmartFunctionsApi.md#resolve_llm_endpoints) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/resolveLlmEndpoints | Get Active LLM Endpoints for this workspace
 [**tags**](SmartFunctionsApi.md#tags) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/tags | Get Analytics Catalog Tags
+[**test_llm_provider**](SmartFunctionsApi.md#test_llm_provider) | **POST** /api/v1/actions/ai/llmProvider/test | Test LLM Provider
+[**test_llm_provider_by_id**](SmartFunctionsApi.md#test_llm_provider_by_id) | **POST** /api/v1/actions/ai/llmProvider/{llmProviderId}/test | Test LLM Provider By Id
 [**trigger_quality_issues_calculation**](SmartFunctionsApi.md#trigger_quality_issues_calculation) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/issues/triggerCheck | Trigger Quality Issues Calculation
 [**validate_llm_endpoint**](SmartFunctionsApi.md#validate_llm_endpoint) | **POST** /api/v1/actions/ai/llmEndpoint/test | Validate LLM Endpoint
 [**validate_llm_endpoint_by_id**](SmartFunctionsApi.md#validate_llm_endpoint_by_id) | **POST** /api/v1/actions/ai/llmEndpoint/{llmEndpointId}/test | Validate LLM Endpoint By Id
@@ -1032,6 +1036,152 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **generate_description**
+> GenerateDescriptionResponse generate_description(workspace_id, generate_description_request)
+
+Generate Description for Analytics Object
+
+Generates a description for the specified analytics object. Returns description and a note with details if generation was not performed.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import smart_functions_api
+from gooddata_api_client.model.generate_description_request import GenerateDescriptionRequest
+from gooddata_api_client.model.generate_description_response import GenerateDescriptionResponse
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = smart_functions_api.SmartFunctionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    generate_description_request = GenerateDescriptionRequest(
+        object_id="object_id_example",
+        object_type="Visualization",
+    ) # GenerateDescriptionRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Generate Description for Analytics Object
+        api_response = api_instance.generate_description(workspace_id, generate_description_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling SmartFunctionsApi->generate_description: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **generate_description_request** | [**GenerateDescriptionRequest**](GenerateDescriptionRequest.md)|  |
+
+### Return type
+
+[**GenerateDescriptionResponse**](GenerateDescriptionResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **generate_title**
+> GenerateTitleResponse generate_title(workspace_id, generate_title_request)
+
+Generate Title for Analytics Object
+
+Generates a title for the specified analytics object. Returns title and a note with details if generation was not performed.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import smart_functions_api
+from gooddata_api_client.model.generate_title_request import GenerateTitleRequest
+from gooddata_api_client.model.generate_title_response import GenerateTitleResponse
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = smart_functions_api.SmartFunctionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    generate_title_request = GenerateTitleRequest(
+        object_id="object_id_example",
+        object_type="Visualization",
+    ) # GenerateTitleRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Generate Title for Analytics Object
+        api_response = api_instance.generate_title(workspace_id, generate_title_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling SmartFunctionsApi->generate_title: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **generate_title_request** | [**GenerateTitleRequest**](GenerateTitleRequest.md)|  |
+
+### Return type
+
+[**GenerateTitleResponse**](GenerateTitleResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **get_quality_issues**
 > GetQualityIssuesResponse get_quality_issues(workspace_id)
 
@@ -1350,6 +1500,149 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**AnalyticsCatalogTags**](AnalyticsCatalogTags.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **test_llm_provider**
+> TestLlmProviderResponse test_llm_provider(test_llm_provider_definition_request)
+
+Test LLM Provider
+
+Tests LLM provider connectivity with a full definition.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import smart_functions_api
+from gooddata_api_client.model.test_llm_provider_response import TestLlmProviderResponse
+from gooddata_api_client.model.test_llm_provider_definition_request import TestLlmProviderDefinitionRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = smart_functions_api.SmartFunctionsApi(api_client)
+    test_llm_provider_definition_request = TestLlmProviderDefinitionRequest(
+        models=[
+            LlmModel(
+                family="OPENAI",
+                id="id_example",
+            ),
+        ],
+        provider_config=TestLlmProviderDefinitionRequestProviderConfig(None),
+    ) # TestLlmProviderDefinitionRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Test LLM Provider
+        api_response = api_instance.test_llm_provider(test_llm_provider_definition_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling SmartFunctionsApi->test_llm_provider: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **test_llm_provider_definition_request** | [**TestLlmProviderDefinitionRequest**](TestLlmProviderDefinitionRequest.md)|  |
+
+### Return type
+
+[**TestLlmProviderResponse**](TestLlmProviderResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **test_llm_provider_by_id**
+> TestLlmProviderResponse test_llm_provider_by_id(llm_provider_id)
+
+Test LLM Provider By Id
+
+Tests an existing LLM provider connectivity by its ID.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import smart_functions_api
+from gooddata_api_client.model.test_llm_provider_response import TestLlmProviderResponse
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = smart_functions_api.SmartFunctionsApi(api_client)
+    llm_provider_id = "llmProviderId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Test LLM Provider By Id
+        api_response = api_instance.test_llm_provider_by_id(llm_provider_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling SmartFunctionsApi->test_llm_provider_by_id: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **llm_provider_id** | **str**|  |
+
+### Return type
+
+[**TestLlmProviderResponse**](TestLlmProviderResponse.md)
 
 ### Authorization
 

@@ -145,7 +145,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: f7f8ef5d6322257623163d7951267938
+          traceId: c657d9dc47cadc6183b4ac712f500926
   - request:
       method: DELETE
       uri: http://localhost:3000/api/v1/entities/llmEndpoints/endpoint1
