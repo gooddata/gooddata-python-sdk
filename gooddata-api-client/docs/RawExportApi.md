@@ -73,6 +73,21 @@ with gooddata_api_client.ApiClient() as api_client:
             filters=[
                 FilterDefinition(),
             ],
+            measure_definition_overrides=[
+                MetricDefinitionOverride(
+                    definition=InlineMeasureDefinition(
+                        inline=InlineMeasureDefinitionInline(
+                            maql="maql_example",
+                        ),
+                    ),
+                    item=AfmObjectIdentifierCore(
+                        identifier=AfmObjectIdentifierCoreIdentifier(
+                            id="sample_item.price",
+                            type="attribute",
+                        ),
+                    ),
+                ),
+            ],
             measures=[
                 MeasureItem(
                     definition=MeasureDefinition(),

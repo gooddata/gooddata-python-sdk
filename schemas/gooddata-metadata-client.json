@@ -70,6 +70,13 @@
             },
             "type": "array"
           },
+          "measureDefinitionOverrides": {
+            "description": "(EXPERIMENTAL) Override definitions of catalog metrics for this request. Allows substituting a catalog metric's MAQL definition without modifying the stored definition.",
+            "items": {
+              "$ref": "#/components/schemas/MetricDefinitionOverride"
+            },
+            "type": "array"
+          },
           "measures": {
             "description": "Metrics to be computed.",
             "items": {
@@ -4459,6 +4466,16 @@
               "dataset": {
                 "$ref": "#/components/schemas/AfmObjectIdentifierDataset"
               },
+              "emptyValueHandling": {
+                "default": "EXCLUDE",
+                "description": "Specifies how rows with empty (null/missing) date values should be handled. INCLUDE includes empty dates in addition to the date range restriction, EXCLUDE removes rows with empty dates (default), ONLY keeps only rows with empty dates.",
+                "enum": [
+                  "INCLUDE",
+                  "EXCLUDE",
+                  "ONLY"
+                ],
+                "type": "string"
+              },
               "from": {
                 "example": "2020-07-01 18:23",
                 "pattern": "^\\d{4}-\\d{1,2}-\\d{1,2}( \\d{1,2}:\\d{1,2})?$",
@@ -4474,9 +4491,9 @@
               }
             },
             "required": [
+              "dataset",
               "from",
-              "to",
-              "dataset"
+              "to"
             ],
             "type": "object"
           }
@@ -4752,6 +4769,69 @@
           {
             "$ref": "#/components/schemas/Value"
           }
+        ],
+        "type": "object"
+      },
+      "AllTimeDateFilter": {
+        "description": "An all-time date filter that does not restrict by date range. Controls how rows with empty (null/missing) date values are handled.",
+        "properties": {
+          "allTimeDateFilter": {
+            "properties": {
+              "applyOnResult": {
+                "type": "boolean"
+              },
+              "dataset": {
+                "$ref": "#/components/schemas/AfmObjectIdentifierDataset"
+              },
+              "emptyValueHandling": {
+                "default": "INCLUDE",
+                "description": "Specifies how rows with empty (null/missing) date values should be handled. INCLUDE means no filtering effect (default), EXCLUDE removes rows with null dates, ONLY keeps only rows with null dates.",
+                "enum": [
+                  "INCLUDE",
+                  "EXCLUDE",
+                  "ONLY"
+                ],
+                "type": "string"
+              },
+              "granularity": {
+                "default": "DAY",
+                "description": "Date granularity used to resolve the date attribute label for null value checks. Defaults to DAY if not specified.",
+                "enum": [
+                  "MINUTE",
+                  "HOUR",
+                  "DAY",
+                  "WEEK",
+                  "MONTH",
+                  "QUARTER",
+                  "YEAR",
+                  "MINUTE_OF_HOUR",
+                  "HOUR_OF_DAY",
+                  "DAY_OF_WEEK",
+                  "DAY_OF_MONTH",
+                  "DAY_OF_QUARTER",
+                  "DAY_OF_YEAR",
+                  "WEEK_OF_YEAR",
+                  "MONTH_OF_YEAR",
+                  "QUARTER_OF_YEAR",
+                  "FISCAL_MONTH",
+                  "FISCAL_QUARTER",
+                  "FISCAL_YEAR"
+                ],
+                "example": "DAY",
+                "type": "string"
+              },
+              "localIdentifier": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "dataset"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "allTimeDateFilter"
         ],
         "type": "object"
       },
@@ -5288,6 +5368,146 @@
         ],
         "type": "object"
       },
+      "AwsBedrockAccessKeyAuth": {
+        "allOf": [
+          {
+            "properties": {
+              "accessKeyId": {
+                "description": "AWS Access Key ID.",
+                "maxLength": 255,
+                "nullable": true,
+                "type": "string",
+                "writeOnly": true
+              },
+              "secretAccessKey": {
+                "description": "AWS Secret Access Key.",
+                "maxLength": 10000,
+                "nullable": true,
+                "type": "string",
+                "writeOnly": true
+              },
+              "sessionToken": {
+                "description": "AWS Session Token (for temporary credentials).",
+                "maxLength": 10000,
+                "nullable": true,
+                "type": "string",
+                "writeOnly": true
+              },
+              "type": {
+                "description": "Authentication type.",
+                "enum": [
+                  "ACCESS_KEY"
+                ],
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "type"
+        ],
+        "type": "object"
+      },
+      "AwsBedrockProviderConfig": {
+        "description": "Configuration for AWS Bedrock provider.",
+        "properties": {
+          "auth": {
+            "$ref": "#/components/schemas/BedrockProviderAuth"
+          },
+          "region": {
+            "description": "AWS region for Bedrock.",
+            "example": "us-east-1",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "type": {
+            "description": "Provider type.",
+            "enum": [
+              "AWS_BEDROCK"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "auth",
+          "region",
+          "type"
+        ],
+        "type": "object"
+      },
+      "AzureFoundryApiKeyAuth": {
+        "allOf": [
+          {
+            "properties": {
+              "apiKey": {
+                "description": "Azure API key.",
+                "maxLength": 255,
+                "nullable": true,
+                "type": "string",
+                "writeOnly": true
+              },
+              "type": {
+                "description": "Authentication type.",
+                "enum": [
+                  "API_KEY"
+                ],
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "type"
+        ],
+        "type": "object"
+      },
+      "AzureFoundryProviderAuth": {
+        "description": "Authentication configuration.",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/AzureFoundryApiKeyAuth"
+          }
+        ],
+        "type": "object"
+      },
+      "AzureFoundryProviderConfig": {
+        "description": "Configuration for Azure Foundry provider.",
+        "properties": {
+          "auth": {
+            "$ref": "#/components/schemas/AzureFoundryProviderAuth"
+          },
+          "endpoint": {
+            "description": "Azure AI inference endpoint URL.",
+            "example": "https://my-resource.services.ai.azure.com/models",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "type": {
+            "description": "Provider type.",
+            "enum": [
+              "AZURE_FOUNDRY"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "auth",
+          "endpoint",
+          "type"
+        ],
+        "type": "object"
+      },
+      "BedrockProviderAuth": {
+        "description": "Authentication configuration.",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/AwsBedrockAccessKeyAuth"
+          }
+        ],
+        "type": "object"
+      },
       "BoundedFilter": {
         "description": "Bounding filter for this relative date filter. This can be used to limit the range of the relative date filter to a specific date range.",
         "properties": {
@@ -5484,9 +5704,9 @@
               }
             },
             "required": [
+              "measure",
               "operator",
-              "value",
-              "measure"
+              "value"
             ],
             "type": "object"
           }
@@ -5715,6 +5935,14 @@
               },
               "dataSet": {
                 "$ref": "#/components/schemas/IdentifierRef"
+              },
+              "emptyValueHandling": {
+                "enum": [
+                  "INCLUDE",
+                  "EXCLUDE",
+                  "ONLY"
+                ],
+                "type": "string"
               },
               "from": {
                 "oneOf": [
@@ -6129,6 +6357,9 @@
           },
           {
             "$ref": "#/components/schemas/RelativeDateFilter"
+          },
+          {
+            "$ref": "#/components/schemas/AllTimeDateFilter"
           }
         ],
         "type": "object"
@@ -6216,6 +6447,27 @@
       },
       "DeclarativeAnalyticalDashboard": {
         "properties": {
+          "certification": {
+            "description": "Certification status of the entity.",
+            "enum": [
+              "CERTIFIED"
+            ],
+            "type": "string"
+          },
+          "certificationMessage": {
+            "description": "Optional message associated with the certification.",
+            "nullable": true,
+            "type": "string"
+          },
+          "certifiedAt": {
+            "description": "Time when the certification was set.",
+            "nullable": true,
+            "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
+            "type": "string"
+          },
+          "certifiedBy": {
+            "$ref": "#/components/schemas/DeclarativeUserIdentifier"
+          },
           "content": {
             "$ref": "#/components/schemas/JsonNode"
           },
@@ -6603,7 +6855,7 @@
           },
           "createdAt": {
             "description": "Time of the entity creation.",
-            "example": "[\"2023-07-20 12:30\"]",
+            "example": "2023-07-20 12:30",
             "nullable": true,
             "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
             "type": "string"
@@ -6625,7 +6877,7 @@
           },
           "modifiedAt": {
             "description": "Time of the last entity modification.",
-            "example": "[\"2023-07-20 12:30\"]",
+            "example": "2023-07-20 12:30",
             "nullable": true,
             "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
             "type": "string"
@@ -6991,7 +7243,7 @@
           },
           "createdAt": {
             "description": "Time of the entity creation.",
-            "example": "[\"2023-07-20 12:30\"]",
+            "example": "2023-07-20 12:30",
             "nullable": true,
             "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
             "type": "string"
@@ -7013,7 +7265,7 @@
           },
           "modifiedAt": {
             "description": "Time of the last entity modification.",
-            "example": "[\"2023-07-20 12:30\"]",
+            "example": "2023-07-20 12:30",
             "nullable": true,
             "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
             "type": "string"
@@ -7481,7 +7733,7 @@
         "properties": {
           "createdAt": {
             "description": "Time of the entity creation.",
-            "example": "[\"2023-07-20 12:30\"]",
+            "example": "2023-07-20 12:30",
             "nullable": true,
             "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
             "type": "string"
@@ -7503,7 +7755,7 @@
           },
           "modifiedAt": {
             "description": "Time of the last entity modification.",
-            "example": "[\"2023-07-20 12:30\"]",
+            "example": "2023-07-20 12:30",
             "nullable": true,
             "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
             "type": "string"
@@ -8175,12 +8427,33 @@
       },
       "DeclarativeMetric": {
         "properties": {
+          "certification": {
+            "description": "Certification status of the entity.",
+            "enum": [
+              "CERTIFIED"
+            ],
+            "type": "string"
+          },
+          "certificationMessage": {
+            "description": "Optional message associated with the certification.",
+            "nullable": true,
+            "type": "string"
+          },
+          "certifiedAt": {
+            "description": "Time when the certification was set.",
+            "nullable": true,
+            "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
+            "type": "string"
+          },
+          "certifiedBy": {
+            "$ref": "#/components/schemas/DeclarativeUserIdentifier"
+          },
           "content": {
             "$ref": "#/components/schemas/JsonNode"
           },
           "createdAt": {
             "description": "Time of the entity creation.",
-            "example": "[\"2023-07-20 12:30\"]",
+            "example": "2023-07-20 12:30",
             "nullable": true,
             "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
             "type": "string"
@@ -8212,7 +8485,7 @@
           },
           "modifiedAt": {
             "description": "Time of the last entity modification.",
-            "example": "[\"2023-07-20 12:30\"]",
+            "example": "2023-07-20 12:30",
             "nullable": true,
             "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
             "type": "string"
@@ -8751,6 +9024,7 @@
               "ACTIVE_THEME",
               "ACTIVE_COLOR_PALETTE",
               "ACTIVE_LLM_ENDPOINT",
+              "ACTIVE_LLM_PROVIDER",
               "ACTIVE_CALENDARS",
               "WHITE_LABELING",
               "LOCALE",
@@ -8793,7 +9067,8 @@
               "ENABLE_NULL_JOINS",
               "EXPORT_CSV_CUSTOM_DELIMITER",
               "ENABLE_QUERY_TAGS",
-              "RESTRICT_BASE_UI"
+              "RESTRICT_BASE_UI",
+              "CERTIFY_PARENT_OBJECTS"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -8819,6 +9094,8 @@
               "EXPORT_PDF",
               "CREATE_AUTOMATION",
               "USE_AI_ASSISTANT",
+              "WRITE_KNOWLEDGE_DOCUMENTS",
+              "READ_KNOWLEDGE_DOCUMENTS",
               "CREATE_FILTER_VIEW",
               "VIEW"
             ],
@@ -9256,12 +9533,33 @@
       },
       "DeclarativeVisualizationObject": {
         "properties": {
+          "certification": {
+            "description": "Certification status of the entity.",
+            "enum": [
+              "CERTIFIED"
+            ],
+            "type": "string"
+          },
+          "certificationMessage": {
+            "description": "Optional message associated with the certification.",
+            "nullable": true,
+            "type": "string"
+          },
+          "certifiedAt": {
+            "description": "Time when the certification was set.",
+            "nullable": true,
+            "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
+            "type": "string"
+          },
+          "certifiedBy": {
+            "$ref": "#/components/schemas/DeclarativeUserIdentifier"
+          },
           "content": {
             "$ref": "#/components/schemas/JsonNode"
           },
           "createdAt": {
             "description": "Time of the entity creation.",
-            "example": "[\"2023-07-20 12:30\"]",
+            "example": "2023-07-20 12:30",
             "nullable": true,
             "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
             "type": "string"
@@ -9288,7 +9586,7 @@
           },
           "modifiedAt": {
             "description": "Time of the last entity modification.",
-            "example": "[\"2023-07-20 12:30\"]",
+            "example": "2023-07-20 12:30",
             "nullable": true,
             "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
             "type": "string"
@@ -9612,6 +9910,8 @@
               "EXPORT_PDF",
               "CREATE_AUTOMATION",
               "USE_AI_ASSISTANT",
+              "WRITE_KNOWLEDGE_DOCUMENTS",
+              "READ_KNOWLEDGE_DOCUMENTS",
               "CREATE_FILTER_VIEW",
               "VIEW"
             ],
@@ -9777,6 +10077,15 @@
               "$ref": "#/components/schemas/EntityIdentifier"
             },
             "type": "array"
+          },
+          "relation": {
+            "default": "DEPENDENTS",
+            "description": "Entity relation for graph traversal from the entry points. DEPENDENTS returns entities that depend on the entry points. DEPENDENCIES returns entities that the entry points depend on.",
+            "enum": [
+              "DEPENDENTS",
+              "DEPENDENCIES"
+            ],
+            "type": "string"
           }
         },
         "required": [
@@ -10109,6 +10418,9 @@
           },
           {
             "$ref": "#/components/schemas/RelativeDateFilter"
+          },
+          {
+            "$ref": "#/components/schemas/AllTimeDateFilter"
           },
           {
             "$ref": "#/components/schemas/NegativeAttributeFilter"
@@ -10936,6 +11248,26 @@
               "areRelationsValid": {
                 "type": "boolean"
               },
+              "certification": {
+                "description": "Certification status of the entity.",
+                "enum": [
+                  "CERTIFIED"
+                ],
+                "type": "string"
+              },
+              "certificationMessage": {
+                "description": "Optional message associated with the certification.",
+                "nullable": true,
+                "type": "string"
+              },
+              "certifiedAt": {
+                "description": "Time when the certification was set.",
+                "example": "2023-07-20 12:30",
+                "format": "date-time",
+                "nullable": true,
+                "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
+                "type": "string"
+              },
               "content": {
                 "description": "Free-form JSON content. Maximum supported length is 250000 characters.",
                 "example": {
@@ -10949,6 +11281,7 @@
               },
               "createdAt": {
                 "description": "Time of the entity creation.",
+                "example": "2023-07-20 12:30",
                 "format": "date-time",
                 "nullable": true,
                 "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
@@ -10960,6 +11293,7 @@
               },
               "modifiedAt": {
                 "description": "Time of the last entity modification.",
+                "example": "2023-07-20 12:30",
                 "format": "date-time",
                 "nullable": true,
                 "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
@@ -11048,6 +11382,17 @@
                 "properties": {
                   "data": {
                     "$ref": "#/components/schemas/JsonApiAnalyticalDashboardToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "certifiedBy": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserIdentifierToOneLinkage"
                   }
                 },
                 "required": [
@@ -11668,6 +12013,7 @@
               },
               "createdAt": {
                 "description": "Time of the entity creation.",
+                "example": "2023-07-20 12:30",
                 "format": "date-time",
                 "nullable": true,
                 "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
@@ -11679,6 +12025,7 @@
               },
               "modifiedAt": {
                 "description": "Time of the last entity modification.",
+                "example": "2023-07-20 12:30",
                 "format": "date-time",
                 "nullable": true,
                 "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
@@ -12691,6 +13038,7 @@
               },
               "createdAt": {
                 "description": "Time of the entity creation.",
+                "example": "2023-07-20 12:30",
                 "format": "date-time",
                 "nullable": true,
                 "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
@@ -12778,6 +13126,7 @@
               },
               "modifiedAt": {
                 "description": "Time of the last entity modification.",
+                "example": "2023-07-20 12:30",
                 "format": "date-time",
                 "nullable": true,
                 "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
@@ -14677,6 +15026,7 @@
               },
               "createdAt": {
                 "description": "Time of the entity creation.",
+                "example": "2023-07-20 12:30",
                 "format": "date-time",
                 "nullable": true,
                 "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
@@ -14688,6 +15038,7 @@
               },
               "modifiedAt": {
                 "description": "Time of the last entity modification.",
+                "example": "2023-07-20 12:30",
                 "format": "date-time",
                 "nullable": true,
                 "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
@@ -16391,6 +16742,7 @@
               },
               "createdAt": {
                 "description": "Time of the entity creation.",
+                "example": "2023-07-20 12:30",
                 "format": "date-time",
                 "nullable": true,
                 "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
@@ -16402,6 +16754,7 @@
               },
               "modifiedAt": {
                 "description": "Time of the last entity modification.",
+                "example": "2023-07-20 12:30",
                 "format": "date-time",
                 "nullable": true,
                 "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
@@ -20362,6 +20715,369 @@
         ],
         "type": "object"
       },
+      "JsonApiLlmProviderIn": {
+        "description": "LLM Provider configuration for connecting to LLM services.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "defaultModelId": {
+                "description": "ID of the default model to use from the models list.",
+                "maxLength": 255,
+                "nullable": true,
+                "type": "string"
+              },
+              "description": {
+                "description": "Description of the LLM Provider.",
+                "maxLength": 10000,
+                "nullable": true,
+                "type": "string"
+              },
+              "models": {
+                "description": "List of LLM models available for this provider.",
+                "items": {
+                  "description": "LLM Model configuration (id, family) within a provider.",
+                  "properties": {
+                    "family": {
+                      "description": "Family of LLM models.",
+                      "enum": [
+                        "OPENAI",
+                        "ANTHROPIC",
+                        "META",
+                        "MISTRAL",
+                        "AMAZON",
+                        "GOOGLE",
+                        "COHERE"
+                      ],
+                      "type": "string"
+                    },
+                    "id": {
+                      "description": "Unique identifier of the model (e.g., gpt-5.3, claude-4.6).",
+                      "maxLength": 255,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "family",
+                    "id"
+                  ],
+                  "type": "object"
+                },
+                "nullable": true,
+                "type": "array"
+              },
+              "name": {
+                "maxLength": 255,
+                "nullable": true,
+                "type": "string"
+              },
+              "providerConfig": {
+                "description": "Provider-specific configuration including authentication.",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/AwsBedrockProviderConfig"
+                  },
+                  {
+                    "$ref": "#/components/schemas/AzureFoundryProviderConfig"
+                  },
+                  {
+                    "$ref": "#/components/schemas/OpenAIProviderConfig"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "models",
+              "providerConfig"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "llmProvider"
+            ],
+            "example": "llmProvider",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiLlmProviderInDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiLlmProviderIn"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiLlmProviderOut": {
+        "description": "LLM Provider configuration for connecting to LLM services.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "defaultModelId": {
+                "description": "ID of the default model to use from the models list.",
+                "maxLength": 255,
+                "nullable": true,
+                "type": "string"
+              },
+              "description": {
+                "description": "Description of the LLM Provider.",
+                "maxLength": 10000,
+                "nullable": true,
+                "type": "string"
+              },
+              "models": {
+                "description": "List of LLM models available for this provider.",
+                "items": {
+                  "description": "LLM Model configuration (id, family) within a provider.",
+                  "properties": {
+                    "family": {
+                      "description": "Family of LLM models.",
+                      "enum": [
+                        "OPENAI",
+                        "ANTHROPIC",
+                        "META",
+                        "MISTRAL",
+                        "AMAZON",
+                        "GOOGLE",
+                        "COHERE"
+                      ],
+                      "type": "string"
+                    },
+                    "id": {
+                      "description": "Unique identifier of the model (e.g., gpt-5.3, claude-4.6).",
+                      "maxLength": 255,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "family",
+                    "id"
+                  ],
+                  "type": "object"
+                },
+                "nullable": true,
+                "type": "array"
+              },
+              "name": {
+                "maxLength": 255,
+                "nullable": true,
+                "type": "string"
+              },
+              "providerConfig": {
+                "description": "Provider-specific configuration including authentication.",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/AwsBedrockProviderConfig"
+                  },
+                  {
+                    "$ref": "#/components/schemas/AzureFoundryProviderConfig"
+                  },
+                  {
+                    "$ref": "#/components/schemas/OpenAIProviderConfig"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "models",
+              "providerConfig"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "llmProvider"
+            ],
+            "example": "llmProvider",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiLlmProviderOutDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiLlmProviderOut"
+          },
+          "links": {
+            "$ref": "#/components/schemas/ObjectLinks"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiLlmProviderOutList": {
+        "description": "A JSON:API document with a list of resources",
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/JsonApiLlmProviderOutWithLinks"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "links": {
+            "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiLlmProviderOutWithLinks": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiLlmProviderOut"
+          },
+          {
+            "$ref": "#/components/schemas/ObjectLinksContainer"
+          }
+        ]
+      },
+      "JsonApiLlmProviderPatch": {
+        "description": "LLM Provider configuration for connecting to LLM services.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "defaultModelId": {
+                "description": "ID of the default model to use from the models list.",
+                "maxLength": 255,
+                "nullable": true,
+                "type": "string"
+              },
+              "description": {
+                "description": "Description of the LLM Provider.",
+                "maxLength": 10000,
+                "nullable": true,
+                "type": "string"
+              },
+              "models": {
+                "description": "List of LLM models available for this provider.",
+                "items": {
+                  "description": "LLM Model configuration (id, family) within a provider.",
+                  "properties": {
+                    "family": {
+                      "description": "Family of LLM models.",
+                      "enum": [
+                        "OPENAI",
+                        "ANTHROPIC",
+                        "META",
+                        "MISTRAL",
+                        "AMAZON",
+                        "GOOGLE",
+                        "COHERE"
+                      ],
+                      "type": "string"
+                    },
+                    "id": {
+                      "description": "Unique identifier of the model (e.g., gpt-5.3, claude-4.6).",
+                      "maxLength": 255,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "family",
+                    "id"
+                  ],
+                  "type": "object"
+                },
+                "nullable": true,
+                "type": "array"
+              },
+              "name": {
+                "maxLength": 255,
+                "nullable": true,
+                "type": "string"
+              },
+              "providerConfig": {
+                "description": "Provider-specific configuration including authentication.",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/AwsBedrockProviderConfig"
+                  },
+                  {
+                    "$ref": "#/components/schemas/AzureFoundryProviderConfig"
+                  },
+                  {
+                    "$ref": "#/components/schemas/OpenAIProviderConfig"
+                  }
+                ]
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "llmProvider"
+            ],
+            "example": "llmProvider",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiLlmProviderPatchDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiLlmProviderPatch"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
       "JsonApiMemoryItemIn": {
         "description": "JSON:API representation of memoryItem entity.",
         "properties": {
@@ -20458,6 +21174,7 @@
               },
               "createdAt": {
                 "description": "Time of the entity creation.",
+                "example": "2023-07-20 12:30",
                 "format": "date-time",
                 "nullable": true,
                 "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
@@ -20485,6 +21202,7 @@
               },
               "modifiedAt": {
                 "description": "Time of the last entity modification.",
+                "example": "2023-07-20 12:30",
                 "format": "date-time",
                 "nullable": true,
                 "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
@@ -20944,6 +21662,26 @@
               "areRelationsValid": {
                 "type": "boolean"
               },
+              "certification": {
+                "description": "Certification status of the entity.",
+                "enum": [
+                  "CERTIFIED"
+                ],
+                "type": "string"
+              },
+              "certificationMessage": {
+                "description": "Optional message associated with the certification.",
+                "nullable": true,
+                "type": "string"
+              },
+              "certifiedAt": {
+                "description": "Time when the certification was set.",
+                "example": "2023-07-20 12:30",
+                "format": "date-time",
+                "nullable": true,
+                "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
+                "type": "string"
+              },
               "content": {
                 "properties": {
                   "format": {
@@ -20972,6 +21710,7 @@
               },
               "createdAt": {
                 "description": "Time of the entity creation.",
+                "example": "2023-07-20 12:30",
                 "format": "date-time",
                 "nullable": true,
                 "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
@@ -20989,6 +21728,7 @@
               },
               "modifiedAt": {
                 "description": "Time of the last entity modification.",
+                "example": "2023-07-20 12:30",
                 "format": "date-time",
                 "nullable": true,
                 "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
@@ -21048,6 +21788,17 @@
                 "properties": {
                   "data": {
                     "$ref": "#/components/schemas/JsonApiAttributeToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "certifiedBy": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserIdentifierToOneLinkage"
                   }
                 },
                 "required": [
@@ -22391,6 +23142,7 @@
                   "ACTIVE_THEME",
                   "ACTIVE_COLOR_PALETTE",
                   "ACTIVE_LLM_ENDPOINT",
+                  "ACTIVE_LLM_PROVIDER",
                   "ACTIVE_CALENDARS",
                   "WHITE_LABELING",
                   "LOCALE",
@@ -22433,7 +23185,8 @@
                   "ENABLE_NULL_JOINS",
                   "EXPORT_CSV_CUSTOM_DELIMITER",
                   "ENABLE_QUERY_TAGS",
-                  "RESTRICT_BASE_UI"
+                  "RESTRICT_BASE_UI",
+                  "CERTIFY_PARENT_OBJECTS"
                 ],
                 "type": "string"
               }
@@ -22488,6 +23241,7 @@
                   "ACTIVE_THEME",
                   "ACTIVE_COLOR_PALETTE",
                   "ACTIVE_LLM_ENDPOINT",
+                  "ACTIVE_LLM_PROVIDER",
                   "ACTIVE_CALENDARS",
                   "WHITE_LABELING",
                   "LOCALE",
@@ -22530,7 +23284,8 @@
                   "ENABLE_NULL_JOINS",
                   "EXPORT_CSV_CUSTOM_DELIMITER",
                   "ENABLE_QUERY_TAGS",
-                  "RESTRICT_BASE_UI"
+                  "RESTRICT_BASE_UI",
+                  "CERTIFY_PARENT_OBJECTS"
                 ],
                 "type": "string"
               }
@@ -22625,6 +23380,7 @@
                   "ACTIVE_THEME",
                   "ACTIVE_COLOR_PALETTE",
                   "ACTIVE_LLM_ENDPOINT",
+                  "ACTIVE_LLM_PROVIDER",
                   "ACTIVE_CALENDARS",
                   "WHITE_LABELING",
                   "LOCALE",
@@ -22667,7 +23423,8 @@
                   "ENABLE_NULL_JOINS",
                   "EXPORT_CSV_CUSTOM_DELIMITER",
                   "ENABLE_QUERY_TAGS",
-                  "RESTRICT_BASE_UI"
+                  "RESTRICT_BASE_UI",
+                  "CERTIFY_PARENT_OBJECTS"
                 ],
                 "type": "string"
               }
@@ -24128,6 +24885,7 @@
                   "ACTIVE_THEME",
                   "ACTIVE_COLOR_PALETTE",
                   "ACTIVE_LLM_ENDPOINT",
+                  "ACTIVE_LLM_PROVIDER",
                   "ACTIVE_CALENDARS",
                   "WHITE_LABELING",
                   "LOCALE",
@@ -24170,7 +24928,8 @@
                   "ENABLE_NULL_JOINS",
                   "EXPORT_CSV_CUSTOM_DELIMITER",
                   "ENABLE_QUERY_TAGS",
-                  "RESTRICT_BASE_UI"
+                  "RESTRICT_BASE_UI",
+                  "CERTIFY_PARENT_OBJECTS"
                 ],
                 "type": "string"
               }
@@ -24225,6 +24984,7 @@
                   "ACTIVE_THEME",
                   "ACTIVE_COLOR_PALETTE",
                   "ACTIVE_LLM_ENDPOINT",
+                  "ACTIVE_LLM_PROVIDER",
                   "ACTIVE_CALENDARS",
                   "WHITE_LABELING",
                   "LOCALE",
@@ -24267,7 +25027,8 @@
                   "ENABLE_NULL_JOINS",
                   "EXPORT_CSV_CUSTOM_DELIMITER",
                   "ENABLE_QUERY_TAGS",
-                  "RESTRICT_BASE_UI"
+                  "RESTRICT_BASE_UI",
+                  "CERTIFY_PARENT_OBJECTS"
                 ],
                 "type": "string"
               }
@@ -24464,6 +25225,26 @@
               "areRelationsValid": {
                 "type": "boolean"
               },
+              "certification": {
+                "description": "Certification status of the entity.",
+                "enum": [
+                  "CERTIFIED"
+                ],
+                "type": "string"
+              },
+              "certificationMessage": {
+                "description": "Optional message associated with the certification.",
+                "nullable": true,
+                "type": "string"
+              },
+              "certifiedAt": {
+                "description": "Time when the certification was set.",
+                "example": "2023-07-20 12:30",
+                "format": "date-time",
+                "nullable": true,
+                "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
+                "type": "string"
+              },
               "content": {
                 "description": "Free-form JSON content. Maximum supported length is 250000 characters.",
                 "example": {
@@ -24477,6 +25258,7 @@
               },
               "createdAt": {
                 "description": "Time of the entity creation.",
+                "example": "2023-07-20 12:30",
                 "format": "date-time",
                 "nullable": true,
                 "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
@@ -24491,6 +25273,7 @@
               },
               "modifiedAt": {
                 "description": "Time of the last entity modification.",
+                "example": "2023-07-20 12:30",
                 "format": "date-time",
                 "nullable": true,
                 "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
@@ -24550,6 +25333,17 @@
                 "properties": {
                   "data": {
                     "$ref": "#/components/schemas/JsonApiAttributeToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "certifiedBy": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserIdentifierToOneLinkage"
                   }
                 },
                 "required": [
@@ -26203,6 +26997,8 @@
                     "EXPORT_PDF",
                     "CREATE_AUTOMATION",
                     "USE_AI_ASSISTANT",
+                    "WRITE_KNOWLEDGE_DOCUMENTS",
+                    "READ_KNOWLEDGE_DOCUMENTS",
                     "CREATE_FILTER_VIEW",
                     "VIEW"
                   ],
@@ -26443,6 +27239,7 @@
                   "ACTIVE_THEME",
                   "ACTIVE_COLOR_PALETTE",
                   "ACTIVE_LLM_ENDPOINT",
+                  "ACTIVE_LLM_PROVIDER",
                   "ACTIVE_CALENDARS",
                   "WHITE_LABELING",
                   "LOCALE",
@@ -26485,7 +27282,8 @@
                   "ENABLE_NULL_JOINS",
                   "EXPORT_CSV_CUSTOM_DELIMITER",
                   "ENABLE_QUERY_TAGS",
-                  "RESTRICT_BASE_UI"
+                  "RESTRICT_BASE_UI",
+                  "CERTIFY_PARENT_OBJECTS"
                 ],
                 "type": "string"
               }
@@ -26540,6 +27338,7 @@
                   "ACTIVE_THEME",
                   "ACTIVE_COLOR_PALETTE",
                   "ACTIVE_LLM_ENDPOINT",
+                  "ACTIVE_LLM_PROVIDER",
                   "ACTIVE_CALENDARS",
                   "WHITE_LABELING",
                   "LOCALE",
@@ -26582,7 +27381,8 @@
                   "ENABLE_NULL_JOINS",
                   "EXPORT_CSV_CUSTOM_DELIMITER",
                   "ENABLE_QUERY_TAGS",
-                  "RESTRICT_BASE_UI"
+                  "RESTRICT_BASE_UI",
+                  "CERTIFY_PARENT_OBJECTS"
                 ],
                 "type": "string"
               }
@@ -26703,6 +27503,7 @@
                   "ACTIVE_THEME",
                   "ACTIVE_COLOR_PALETTE",
                   "ACTIVE_LLM_ENDPOINT",
+                  "ACTIVE_LLM_PROVIDER",
                   "ACTIVE_CALENDARS",
                   "WHITE_LABELING",
                   "LOCALE",
@@ -26745,7 +27546,8 @@
                   "ENABLE_NULL_JOINS",
                   "EXPORT_CSV_CUSTOM_DELIMITER",
                   "ENABLE_QUERY_TAGS",
-                  "RESTRICT_BASE_UI"
+                  "RESTRICT_BASE_UI",
+                  "CERTIFY_PARENT_OBJECTS"
                 ],
                 "type": "string"
               }
@@ -26800,6 +27602,7 @@
                   "ACTIVE_THEME",
                   "ACTIVE_COLOR_PALETTE",
                   "ACTIVE_LLM_ENDPOINT",
+                  "ACTIVE_LLM_PROVIDER",
                   "ACTIVE_CALENDARS",
                   "WHITE_LABELING",
                   "LOCALE",
@@ -26842,7 +27645,8 @@
                   "ENABLE_NULL_JOINS",
                   "EXPORT_CSV_CUSTOM_DELIMITER",
                   "ENABLE_QUERY_TAGS",
-                  "RESTRICT_BASE_UI"
+                  "RESTRICT_BASE_UI",
+                  "CERTIFY_PARENT_OBJECTS"
                 ],
                 "type": "string"
               }
@@ -26937,6 +27741,17 @@
           }
         ]
       },
+      "LlmProviderAuth": {
+        "properties": {
+          "type": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "type": "object"
+      },
       "LocalIdentifier": {
         "properties": {
           "format": {
@@ -27018,9 +27833,9 @@
               }
             },
             "required": [
+              "label",
               "literal",
-              "matchType",
-              "label"
+              "matchType"
             ],
             "type": "object"
           }
@@ -27094,6 +27909,22 @@
         ],
         "type": "object"
       },
+      "MetricDefinitionOverride": {
+        "description": "(EXPERIMENTAL) Override for a catalog metric definition.",
+        "properties": {
+          "definition": {
+            "$ref": "#/components/schemas/InlineMeasureDefinition"
+          },
+          "item": {
+            "$ref": "#/components/schemas/AfmObjectIdentifierCore"
+          }
+        },
+        "required": [
+          "definition",
+          "item"
+        ],
+        "type": "object"
+      },
       "NegativeAttributeFilter": {
         "description": "Filter able to limit element values by label and related selected negated elements.",
         "properties": {
@@ -27113,8 +27944,8 @@
               }
             },
             "required": [
-              "notIn",
-              "label"
+              "label",
+              "notIn"
             ],
             "type": "object"
           }
@@ -27210,6 +28041,75 @@
             "$ref": "#/components/schemas/ObjectLinks"
           }
         },
+        "type": "object"
+      },
+      "OpenAIProviderConfig": {
+        "description": "Configuration for OpenAI provider.",
+        "properties": {
+          "auth": {
+            "$ref": "#/components/schemas/OpenAiProviderAuth"
+          },
+          "baseUrl": {
+            "default": "https://api.openai.com",
+            "description": "Custom base URL for OpenAI API.",
+            "maxLength": 255,
+            "nullable": true,
+            "type": "string"
+          },
+          "organization": {
+            "description": "OpenAI organization ID.",
+            "maxLength": 255,
+            "nullable": true,
+            "type": "string"
+          },
+          "type": {
+            "description": "Provider type.",
+            "enum": [
+              "OPENAI"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "auth",
+          "type"
+        ],
+        "type": "object"
+      },
+      "OpenAiApiKeyAuth": {
+        "allOf": [
+          {
+            "properties": {
+              "apiKey": {
+                "description": "OpenAI API key.",
+                "maxLength": 255,
+                "nullable": true,
+                "type": "string",
+                "writeOnly": true
+              },
+              "type": {
+                "description": "Authentication type.",
+                "enum": [
+                  "API_KEY"
+                ],
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "type"
+        ],
+        "type": "object"
+      },
+      "OpenAiProviderAuth": {
+        "description": "Authentication configuration.",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/OpenAiApiKeyAuth"
+          }
+        ],
         "type": "object"
       },
       "OrganizationAutomationIdentifier": {
@@ -27771,9 +28671,9 @@
             },
             "required": [
               "from",
+              "measure",
               "operator",
-              "to",
-              "measure"
+              "to"
             ],
             "type": "object"
           }
@@ -28081,6 +28981,16 @@
               "dataset": {
                 "$ref": "#/components/schemas/AfmObjectIdentifierDataset"
               },
+              "emptyValueHandling": {
+                "default": "EXCLUDE",
+                "description": "Specifies how rows with empty (null/missing) date values should be handled. INCLUDE includes empty dates in addition to the date range restriction, EXCLUDE removes rows with empty dates (default), ONLY keeps only rows with empty dates.",
+                "enum": [
+                  "INCLUDE",
+                  "EXCLUDE",
+                  "ONLY"
+                ],
+                "type": "string"
+              },
               "from": {
                 "description": "Start of the filtering interval. Specified by number of periods (with respect to given granularity). Typically negative (historical time interval like -2 for '2 days/weeks, ... ago').",
                 "example": -6,
@@ -28124,10 +29034,10 @@
               }
             },
             "required": [
+              "dataset",
               "from",
               "granularity",
-              "to",
-              "dataset"
+              "to"
             ],
             "type": "object"
           }
@@ -28185,6 +29095,7 @@
               "ACTIVE_THEME",
               "ACTIVE_COLOR_PALETTE",
               "ACTIVE_LLM_ENDPOINT",
+              "ACTIVE_LLM_PROVIDER",
               "ACTIVE_CALENDARS",
               "WHITE_LABELING",
               "LOCALE",
@@ -28227,7 +29138,8 @@
               "ENABLE_NULL_JOINS",
               "EXPORT_CSV_CUSTOM_DELIMITER",
               "ENABLE_QUERY_TAGS",
-              "RESTRICT_BASE_UI"
+              "RESTRICT_BASE_UI",
+              "CERTIFY_PARENT_OBJECTS"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -28252,6 +29164,8 @@
             "type": "string"
           },
           "kid": {
+            "maxLength": 255,
+            "pattern": "^[^.]",
             "type": "string"
           },
           "kty": {
@@ -28343,6 +29257,43 @@
             "$ref": "#/components/schemas/RunningSection"
           }
         },
+        "type": "object"
+      },
+      "SetCertificationRequest": {
+        "description": "Request to set or clear the certification of a workspace entity.",
+        "properties": {
+          "id": {
+            "description": "ID of the entity.",
+            "example": "total-sales",
+            "type": "string"
+          },
+          "message": {
+            "description": "Optional message associated with the certification.",
+            "nullable": true,
+            "type": "string"
+          },
+          "status": {
+            "description": "Certification status of the entity.",
+            "enum": [
+              "CERTIFIED"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
+          "type": {
+            "description": "Type of the entity.",
+            "enum": [
+              "metric",
+              "visualizationObject",
+              "analyticalDashboard"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
         "type": "object"
       },
       "Settings": {
@@ -29039,6 +29990,8 @@
                 "EXPORT_PDF",
                 "CREATE_AUTOMATION",
                 "USE_AI_ASSISTANT",
+                "WRITE_KNOWLEDGE_DOCUMENTS",
+                "READ_KNOWLEDGE_DOCUMENTS",
                 "CREATE_FILTER_VIEW",
                 "VIEW"
               ],
@@ -29063,6 +30016,8 @@
                 "EXPORT_PDF",
                 "CREATE_AUTOMATION",
                 "USE_AI_ASSISTANT",
+                "WRITE_KNOWLEDGE_DOCUMENTS",
+                "READ_KNOWLEDGE_DOCUMENTS",
                 "CREATE_FILTER_VIEW",
                 "VIEW"
               ],
@@ -29337,6 +30292,8 @@
                 "EXPORT_PDF",
                 "CREATE_AUTOMATION",
                 "USE_AI_ASSISTANT",
+                "WRITE_KNOWLEDGE_DOCUMENTS",
+                "READ_KNOWLEDGE_DOCUMENTS",
                 "CREATE_FILTER_VIEW",
                 "VIEW"
               ],
@@ -29354,6 +30311,8 @@
                 "EXPORT_PDF",
                 "CREATE_AUTOMATION",
                 "USE_AI_ASSISTANT",
+                "WRITE_KNOWLEDGE_DOCUMENTS",
+                "READ_KNOWLEDGE_DOCUMENTS",
                 "CREATE_FILTER_VIEW",
                 "VIEW"
               ],
@@ -31502,6 +32461,48 @@
           "description": "Minimal permission required to use this endpoint.",
           "permissions": [
             "VIEW"
+          ]
+        }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/setCertification": {
+      "post": {
+        "description": "Set or clear the certification (e.g. CERTIFIED) of a workspace entity. Requires MANAGE permission.",
+        "operationId": "setCertification",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetCertificationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "summary": "Set Certification",
+        "tags": [
+          "actions",
+          "Certification"
+        ],
+        "x-gdc-security-info": {
+          "description": "Minimal permission required to use this endpoint.",
+          "permissions": [
+            "MANAGE"
           ]
         }
       }
@@ -34704,7 +35705,7 @@
         "parameters": [
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "title==someString;provider==LLMProviderValue",
+            "example": "title==someString;provider==LlmEndpointProviderValue",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -34818,7 +35819,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "title==someString;provider==LLMProviderValue",
+            "example": "title==someString;provider==LlmEndpointProviderValue",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -34845,7 +35846,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "title==someString;provider==LLMProviderValue",
+            "example": "title==someString;provider==LlmEndpointProviderValue",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -34885,7 +35886,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "title==someString;provider==LLMProviderValue",
+            "example": "title==someString;provider==LlmEndpointProviderValue",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -34940,7 +35941,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "title==someString;provider==LLMProviderValue",
+            "example": "title==someString;provider==LlmEndpointProviderValue",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -34983,6 +35984,298 @@
         "summary": "PUT LLM endpoint entity",
         "tags": [
           "LLM Endpoints",
+          "entities",
+          "organization-model-controller"
+        ]
+      }
+    },
+    "/api/v1/entities/llmProviders": {
+      "get": {
+        "operationId": "getAllEntities@LlmProviders",
+        "parameters": [
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "name==someString;description==someString",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/size"
+          },
+          {
+            "$ref": "#/components/parameters/sort"
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=page,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "page",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiLlmProviderOutList"
+                }
+              },
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiLlmProviderOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Get all LLM Provider entities",
+        "tags": [
+          "LLM Providers",
+          "entities",
+          "organization-model-controller"
+        ]
+      },
+      "post": {
+        "description": "LLM Provider - connection configuration for LLM services",
+        "operationId": "createEntity@LlmProviders",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiLlmProviderInDocument"
+              }
+            },
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiLlmProviderInDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiLlmProviderOutDocument"
+                }
+              },
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiLlmProviderOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Post LLM Provider entities",
+        "tags": [
+          "LLM Providers",
+          "entities",
+          "organization-model-controller"
+        ]
+      }
+    },
+    "/api/v1/entities/llmProviders/{id}": {
+      "delete": {
+        "operationId": "deleteEntity@LlmProviders",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPathParameter"
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "name==someString;description==someString",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "$ref": "#/components/responses/Deleted"
+          }
+        },
+        "summary": "Delete LLM Provider entity",
+        "tags": [
+          "LLM Providers",
+          "entities",
+          "organization-model-controller"
+        ]
+      },
+      "get": {
+        "operationId": "getEntity@LlmProviders",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPathParameter"
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "name==someString;description==someString",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiLlmProviderOutDocument"
+                }
+              },
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiLlmProviderOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Get LLM Provider entity",
+        "tags": [
+          "LLM Providers",
+          "entities",
+          "organization-model-controller"
+        ]
+      },
+      "patch": {
+        "operationId": "patchEntity@LlmProviders",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPathParameter"
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "name==someString;description==someString",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiLlmProviderPatchDocument"
+              }
+            },
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiLlmProviderPatchDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiLlmProviderOutDocument"
+                }
+              },
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiLlmProviderOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Patch LLM Provider entity",
+        "tags": [
+          "LLM Providers",
+          "entities",
+          "organization-model-controller"
+        ]
+      },
+      "put": {
+        "operationId": "updateEntity@LlmProviders",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPathParameter"
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "name==someString;description==someString",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiLlmProviderInDocument"
+              }
+            },
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiLlmProviderInDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiLlmProviderOutDocument"
+                }
+              },
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiLlmProviderOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "PUT LLM Provider entity",
+        "tags": [
+          "LLM Providers",
           "entities",
           "organization-model-controller"
         ]
@@ -38490,7 +39783,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "createdBy,modifiedBy,visualizationObjects,analyticalDashboards,labels,metrics,datasets,filterContexts,dashboardPlugins",
+            "example": "createdBy,modifiedBy,certifiedBy,visualizationObjects,analyticalDashboards,labels,metrics,datasets,filterContexts,dashboardPlugins",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -38508,6 +39801,7 @@
                   "dashboardPlugins",
                   "createdBy",
                   "modifiedBy",
+                  "certifiedBy",
                   "ALL"
                 ],
                 "type": "string"
@@ -38603,7 +39897,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "createdBy,modifiedBy,visualizationObjects,analyticalDashboards,labels,metrics,datasets,filterContexts,dashboardPlugins",
+            "example": "createdBy,modifiedBy,certifiedBy,visualizationObjects,analyticalDashboards,labels,metrics,datasets,filterContexts,dashboardPlugins",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -38621,6 +39915,7 @@
                   "dashboardPlugins",
                   "createdBy",
                   "modifiedBy",
+                  "certifiedBy",
                   "ALL"
                 ],
                 "type": "string"
@@ -38857,7 +40152,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "createdBy,modifiedBy,visualizationObjects,analyticalDashboards,labels,metrics,datasets,filterContexts,dashboardPlugins",
+            "example": "createdBy,modifiedBy,certifiedBy,visualizationObjects,analyticalDashboards,labels,metrics,datasets,filterContexts,dashboardPlugins",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -38875,6 +40170,7 @@
                   "dashboardPlugins",
                   "createdBy",
                   "modifiedBy",
+                  "certifiedBy",
                   "ALL"
                 ],
                 "type": "string"
@@ -38977,7 +40273,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "createdBy,modifiedBy,visualizationObjects,analyticalDashboards,labels,metrics,datasets,filterContexts,dashboardPlugins",
+            "example": "createdBy,modifiedBy,certifiedBy,visualizationObjects,analyticalDashboards,labels,metrics,datasets,filterContexts,dashboardPlugins",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -38995,6 +40291,7 @@
                   "dashboardPlugins",
                   "createdBy",
                   "modifiedBy",
+                  "certifiedBy",
                   "ALL"
                 ],
                 "type": "string"
@@ -39079,7 +40376,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "createdBy,modifiedBy,visualizationObjects,analyticalDashboards,labels,metrics,datasets,filterContexts,dashboardPlugins",
+            "example": "createdBy,modifiedBy,certifiedBy,visualizationObjects,analyticalDashboards,labels,metrics,datasets,filterContexts,dashboardPlugins",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -39097,6 +40394,7 @@
                   "dashboardPlugins",
                   "createdBy",
                   "modifiedBy",
+                  "certifiedBy",
                   "ALL"
                 ],
                 "type": "string"
@@ -46637,7 +47935,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "createdBy,modifiedBy,facts,attributes,labels,metrics,datasets",
+            "example": "createdBy,modifiedBy,certifiedBy,facts,attributes,labels,metrics,datasets",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -46653,6 +47951,7 @@
                   "datasets",
                   "createdBy",
                   "modifiedBy",
+                  "certifiedBy",
                   "ALL"
                 ],
                 "type": "string"
@@ -46746,7 +48045,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "createdBy,modifiedBy,facts,attributes,labels,metrics,datasets",
+            "example": "createdBy,modifiedBy,certifiedBy,facts,attributes,labels,metrics,datasets",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -46762,6 +48061,7 @@
                   "datasets",
                   "createdBy",
                   "modifiedBy",
+                  "certifiedBy",
                   "ALL"
                 ],
                 "type": "string"
@@ -46996,7 +48296,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "createdBy,modifiedBy,facts,attributes,labels,metrics,datasets",
+            "example": "createdBy,modifiedBy,certifiedBy,facts,attributes,labels,metrics,datasets",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -47012,6 +48312,7 @@
                   "datasets",
                   "createdBy",
                   "modifiedBy",
+                  "certifiedBy",
                   "ALL"
                 ],
                 "type": "string"
@@ -47112,7 +48413,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "createdBy,modifiedBy,facts,attributes,labels,metrics,datasets",
+            "example": "createdBy,modifiedBy,certifiedBy,facts,attributes,labels,metrics,datasets",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -47128,6 +48429,7 @@
                   "datasets",
                   "createdBy",
                   "modifiedBy",
+                  "certifiedBy",
                   "ALL"
                 ],
                 "type": "string"
@@ -47212,7 +48514,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "createdBy,modifiedBy,facts,attributes,labels,metrics,datasets",
+            "example": "createdBy,modifiedBy,certifiedBy,facts,attributes,labels,metrics,datasets",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -47228,6 +48530,7 @@
                   "datasets",
                   "createdBy",
                   "modifiedBy",
+                  "certifiedBy",
                   "ALL"
                 ],
                 "type": "string"
@@ -47968,7 +49271,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "createdBy,modifiedBy,facts,attributes,labels,metrics,datasets",
+            "example": "createdBy,modifiedBy,certifiedBy,facts,attributes,labels,metrics,datasets",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -47984,6 +49287,7 @@
                   "datasets",
                   "createdBy",
                   "modifiedBy",
+                  "certifiedBy",
                   "ALL"
                 ],
                 "type": "string"
@@ -48077,7 +49381,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "createdBy,modifiedBy,facts,attributes,labels,metrics,datasets",
+            "example": "createdBy,modifiedBy,certifiedBy,facts,attributes,labels,metrics,datasets",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -48093,6 +49397,7 @@
                   "datasets",
                   "createdBy",
                   "modifiedBy",
+                  "certifiedBy",
                   "ALL"
                 ],
                 "type": "string"
@@ -48327,7 +49632,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "createdBy,modifiedBy,facts,attributes,labels,metrics,datasets",
+            "example": "createdBy,modifiedBy,certifiedBy,facts,attributes,labels,metrics,datasets",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -48343,6 +49648,7 @@
                   "datasets",
                   "createdBy",
                   "modifiedBy",
+                  "certifiedBy",
                   "ALL"
                 ],
                 "type": "string"
@@ -48443,7 +49749,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "createdBy,modifiedBy,facts,attributes,labels,metrics,datasets",
+            "example": "createdBy,modifiedBy,certifiedBy,facts,attributes,labels,metrics,datasets",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -48459,6 +49765,7 @@
                   "datasets",
                   "createdBy",
                   "modifiedBy",
+                  "certifiedBy",
                   "ALL"
                 ],
                 "type": "string"
@@ -48543,7 +49850,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "createdBy,modifiedBy,facts,attributes,labels,metrics,datasets",
+            "example": "createdBy,modifiedBy,certifiedBy,facts,attributes,labels,metrics,datasets",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -48559,6 +49866,7 @@
                   "datasets",
                   "createdBy",
                   "modifiedBy",
+                  "certifiedBy",
                   "ALL"
                 ],
                 "type": "string"

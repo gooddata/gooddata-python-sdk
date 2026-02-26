@@ -687,6 +687,21 @@ with gooddata_api_client.ApiClient() as api_client:
                                         filters=[
                                             FilterDefinition(),
                                         ],
+                                        measure_definition_overrides=[
+                                            MetricDefinitionOverride(
+                                                definition=InlineMeasureDefinition(
+                                                    inline=InlineMeasureDefinitionInline(
+                                                        maql="maql_example",
+                                                    ),
+                                                ),
+                                                item=AfmObjectIdentifierCore(
+                                                    identifier=AfmObjectIdentifierCoreIdentifier(
+                                                        id="sample_item.price",
+                                                        type="attribute",
+                                                    ),
+                                                ),
+                                            ),
+                                        ],
                                         measures=[
                                             MeasureItem(
                                                 definition=MeasureDefinition(),
@@ -859,6 +874,13 @@ with gooddata_api_client.ApiClient() as api_client:
                         ],
                         analytical_dashboards=[
                             DeclarativeAnalyticalDashboard(
+                                certification="CERTIFIED",
+                                certification_message="certification_message_example",
+                                certified_at="0480-72-88 80:01",
+                                certified_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
                                 content=JsonNode(),
                                 created_at="2023-07-20 12:30",
                                 created_by=DeclarativeUserIdentifier(
@@ -883,14 +905,14 @@ with gooddata_api_client.ApiClient() as api_client:
                         attribute_hierarchies=[
                             DeclarativeAttributeHierarchy(
                                 content=JsonNode(),
-                                created_at="["2023-07-20 12:30"]",
+                                created_at="2023-07-20 12:30",
                                 created_by=DeclarativeUserIdentifier(
                                     id="employee123",
                                     type="user",
                                 ),
                                 description="Simple number for total goods in current production.",
                                 id="hierarchy-1",
-                                modified_at="["2023-07-20 12:30"]",
+                                modified_at="2023-07-20 12:30",
                                 modified_by=DeclarativeUserIdentifier(
                                     id="employee123",
                                     type="user",
@@ -902,14 +924,14 @@ with gooddata_api_client.ApiClient() as api_client:
                         dashboard_plugins=[
                             DeclarativeDashboardPlugin(
                                 content=JsonNode(),
-                                created_at="["2023-07-20 12:30"]",
+                                created_at="2023-07-20 12:30",
                                 created_by=DeclarativeUserIdentifier(
                                     id="employee123",
                                     type="user",
                                 ),
                                 description="Three dimensional view of data.",
                                 id="dashboard-plugin-1",
-                                modified_at="["2023-07-20 12:30"]",
+                                modified_at="2023-07-20 12:30",
                                 modified_by=DeclarativeUserIdentifier(
                                     id="employee123",
                                     type="user",
@@ -920,14 +942,14 @@ with gooddata_api_client.ApiClient() as api_client:
                         ],
                         export_definitions=[
                             DeclarativeExportDefinition(
-                                created_at="["2023-07-20 12:30"]",
+                                created_at="2023-07-20 12:30",
                                 created_by=DeclarativeUserIdentifier(
                                     id="employee123",
                                     type="user",
                                 ),
                                 description="Simple number for total goods in current production.",
                                 id="export-definition-1",
-                                modified_at="["2023-07-20 12:30"]",
+                                modified_at="2023-07-20 12:30",
                                 modified_by=DeclarativeUserIdentifier(
                                     id="employee123",
                                     type="user",
@@ -972,8 +994,15 @@ with gooddata_api_client.ApiClient() as api_client:
                         ],
                         metrics=[
                             DeclarativeMetric(
+                                certification="CERTIFIED",
+                                certification_message="certification_message_example",
+                                certified_at="0480-72-88 80:01",
+                                certified_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
                                 content=JsonNode(),
-                                created_at="["2023-07-20 12:30"]",
+                                created_at="2023-07-20 12:30",
                                 created_by=DeclarativeUserIdentifier(
                                     id="employee123",
                                     type="user",
@@ -982,7 +1011,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                 id="total-sales",
                                 is_hidden=False,
                                 is_hidden_from_kda=False,
-                                modified_at="["2023-07-20 12:30"]",
+                                modified_at="2023-07-20 12:30",
                                 modified_by=DeclarativeUserIdentifier(
                                     id="employee123",
                                     type="user",
@@ -993,8 +1022,15 @@ with gooddata_api_client.ApiClient() as api_client:
                         ],
                         visualization_objects=[
                             DeclarativeVisualizationObject(
+                                certification="CERTIFIED",
+                                certification_message="certification_message_example",
+                                certified_at="0480-72-88 80:01",
+                                certified_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
                                 content=JsonNode(),
-                                created_at="["2023-07-20 12:30"]",
+                                created_at="2023-07-20 12:30",
                                 created_by=DeclarativeUserIdentifier(
                                     id="employee123",
                                     type="user",
@@ -1002,7 +1038,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                 description="Simple number for total goods in current production.",
                                 id="visualization-1",
                                 is_hidden=False,
-                                modified_at="["2023-07-20 12:30"]",
+                                modified_at="2023-07-20 12:30",
                                 modified_by=DeclarativeUserIdentifier(
                                     id="employee123",
                                     type="user",

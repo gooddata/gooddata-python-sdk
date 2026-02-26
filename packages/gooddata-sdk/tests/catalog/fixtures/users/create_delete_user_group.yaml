@@ -138,7 +138,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: c1580377051053ba828664b0e93b8523
+          traceId: 834a429917d4ee64a936a957b20b4a1e
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/userGroups

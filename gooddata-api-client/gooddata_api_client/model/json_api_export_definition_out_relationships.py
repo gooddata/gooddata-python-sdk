@@ -31,11 +31,11 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_created_by import JsonApiAnalyticalDashboardOutRelationshipsCreatedBy
+    from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_certified_by import JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy
     from gooddata_api_client.model.json_api_automation_in_relationships_analytical_dashboard import JsonApiAutomationInRelationshipsAnalyticalDashboard
     from gooddata_api_client.model.json_api_automation_result_out_relationships_automation import JsonApiAutomationResultOutRelationshipsAutomation
     from gooddata_api_client.model.json_api_export_definition_in_relationships_visualization_object import JsonApiExportDefinitionInRelationshipsVisualizationObject
-    globals()['JsonApiAnalyticalDashboardOutRelationshipsCreatedBy'] = JsonApiAnalyticalDashboardOutRelationshipsCreatedBy
+    globals()['JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy'] = JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy
     globals()['JsonApiAutomationInRelationshipsAnalyticalDashboard'] = JsonApiAutomationInRelationshipsAnalyticalDashboard
     globals()['JsonApiAutomationResultOutRelationshipsAutomation'] = JsonApiAutomationResultOutRelationshipsAutomation
     globals()['JsonApiExportDefinitionInRelationshipsVisualizationObject'] = JsonApiExportDefinitionInRelationshipsVisualizationObject
@@ -96,8 +96,8 @@ class JsonApiExportDefinitionOutRelationships(ModelNormal):
         return {
             'analytical_dashboard': (JsonApiAutomationInRelationshipsAnalyticalDashboard,),  # noqa: E501
             'automation': (JsonApiAutomationResultOutRelationshipsAutomation,),  # noqa: E501
-            'created_by': (JsonApiAnalyticalDashboardOutRelationshipsCreatedBy,),  # noqa: E501
-            'modified_by': (JsonApiAnalyticalDashboardOutRelationshipsCreatedBy,),  # noqa: E501
+            'created_by': (JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy,),  # noqa: E501
+            'modified_by': (JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy,),  # noqa: E501
             'visualization_object': (JsonApiExportDefinitionInRelationshipsVisualizationObject,),  # noqa: E501
         }
 
@@ -157,8 +157,8 @@ class JsonApiExportDefinitionOutRelationships(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             analytical_dashboard (JsonApiAutomationInRelationshipsAnalyticalDashboard): [optional]  # noqa: E501
             automation (JsonApiAutomationResultOutRelationshipsAutomation): [optional]  # noqa: E501
-            created_by (JsonApiAnalyticalDashboardOutRelationshipsCreatedBy): [optional]  # noqa: E501
-            modified_by (JsonApiAnalyticalDashboardOutRelationshipsCreatedBy): [optional]  # noqa: E501
+            created_by (JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy): [optional]  # noqa: E501
+            modified_by (JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy): [optional]  # noqa: E501
             visualization_object (JsonApiExportDefinitionInRelationshipsVisualizationObject): [optional]  # noqa: E501
         """
 
@@ -247,8 +247,8 @@ class JsonApiExportDefinitionOutRelationships(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             analytical_dashboard (JsonApiAutomationInRelationshipsAnalyticalDashboard): [optional]  # noqa: E501
             automation (JsonApiAutomationResultOutRelationshipsAutomation): [optional]  # noqa: E501
-            created_by (JsonApiAnalyticalDashboardOutRelationshipsCreatedBy): [optional]  # noqa: E501
-            modified_by (JsonApiAnalyticalDashboardOutRelationshipsCreatedBy): [optional]  # noqa: E501
+            created_by (JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy): [optional]  # noqa: E501
+            modified_by (JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy): [optional]  # noqa: E501
             visualization_object (JsonApiExportDefinitionInRelationshipsVisualizationObject): [optional]  # noqa: E501
         """
 

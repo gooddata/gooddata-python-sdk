@@ -35,10 +35,12 @@ def lazy_import():
     from gooddata_api_client.model.dim_attribute import DimAttribute
     from gooddata_api_client.model.metric import Metric
     from gooddata_api_client.model.suggestion import Suggestion
+    from gooddata_api_client.model.visualization_config import VisualizationConfig
     globals()['CreatedVisualizationFiltersInner'] = CreatedVisualizationFiltersInner
     globals()['DimAttribute'] = DimAttribute
     globals()['Metric'] = Metric
     globals()['Suggestion'] = Suggestion
+    globals()['VisualizationConfig'] = VisualizationConfig
 
 
 class CreatedVisualization(ModelNormal):
@@ -73,6 +75,7 @@ class CreatedVisualization(ModelNormal):
             'LINE': "LINE",
             'PIE': "PIE",
             'COLUMN': "COLUMN",
+            'SCATTER': "SCATTER",
         },
     }
 
@@ -109,6 +112,7 @@ class CreatedVisualization(ModelNormal):
             'suggestions': ([Suggestion],),  # noqa: E501
             'title': (str,),  # noqa: E501
             'visualization_type': (str,),  # noqa: E501
+            'config': (VisualizationConfig,),  # noqa: E501
             'saved_visualization_id': (str,),  # noqa: E501
         }
 
@@ -125,6 +129,7 @@ class CreatedVisualization(ModelNormal):
         'suggestions': 'suggestions',  # noqa: E501
         'title': 'title',  # noqa: E501
         'visualization_type': 'visualizationType',  # noqa: E501
+        'config': 'config',  # noqa: E501
         'saved_visualization_id': 'savedVisualizationId',  # noqa: E501
     }
 
@@ -178,6 +183,7 @@ class CreatedVisualization(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            config (VisualizationConfig): [optional]  # noqa: E501
             saved_visualization_id (str): Saved visualization ID.. [optional]  # noqa: E501
         """
 
@@ -280,6 +286,7 @@ class CreatedVisualization(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            config (VisualizationConfig): [optional]  # noqa: E501
             saved_visualization_id (str): Saved visualization ID.. [optional]  # noqa: E501
         """
 

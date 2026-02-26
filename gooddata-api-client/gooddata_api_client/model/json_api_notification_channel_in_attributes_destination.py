@@ -78,6 +78,10 @@ class JsonApiNotificationChannelInAttributesDestination(ModelComposed):
     }
 
     validations = {
+        ('has_secret_key',): {
+        },
+        ('has_token',): {
+        },
         ('secret_key',): {
             'max_length': 10000,
         },

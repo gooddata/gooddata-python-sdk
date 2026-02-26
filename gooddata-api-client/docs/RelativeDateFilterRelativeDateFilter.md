@@ -10,6 +10,7 @@ Name | Type | Description | Notes
 **to** | **int** | End of the filtering interval. Specified by number of periods (with respect to given granularity). Value &#39;O&#39; is representing current time-interval (current day, week, ...). | 
 **apply_on_result** | **bool** |  | [optional] 
 **bounded_filter** | [**BoundedFilter**](BoundedFilter.md) |  | [optional] 
+**empty_value_handling** | **str** | Specifies how rows with empty (null/missing) date values should be handled. INCLUDE includes empty dates in addition to the date range restriction, EXCLUDE removes rows with empty dates (default), ONLY keeps only rows with empty dates. | [optional]  if omitted the server will use the default value of "EXCLUDE"
 **local_identifier** | **str** |  | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 

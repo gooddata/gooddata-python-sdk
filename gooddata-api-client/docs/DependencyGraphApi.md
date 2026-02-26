@@ -111,6 +111,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 type="metric",
             ),
         ],
+        relation="DEPENDENTS",
     ) # DependentEntitiesRequest | 
 
     # example passing only required values which don't have defaults set

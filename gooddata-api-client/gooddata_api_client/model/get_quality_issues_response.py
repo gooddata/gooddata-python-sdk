@@ -65,6 +65,7 @@ class GetQualityIssuesResponse(ModelNormal):
             'SYNCING': "SYNCING",
             'COMPLETED': "COMPLETED",
             'FAILED': "FAILED",
+            'CANCELLED': "CANCELLED",
             'NOT_FOUND': "NOT_FOUND",
             'DISABLED': "DISABLED",
         },

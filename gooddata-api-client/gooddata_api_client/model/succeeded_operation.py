@@ -31,15 +31,9 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.failed_operation import FailedOperation
     from gooddata_api_client.model.operation import Operation
-    from gooddata_api_client.model.pending_operation import PendingOperation
-    from gooddata_api_client.model.succeeded_operation import SucceededOperation
     from gooddata_api_client.model.succeeded_operation_all_of import SucceededOperationAllOf
-    globals()['FailedOperation'] = FailedOperation
     globals()['Operation'] = Operation
-    globals()['PendingOperation'] = PendingOperation
-    globals()['SucceededOperation'] = SucceededOperation
     globals()['SucceededOperationAllOf'] = SucceededOperationAllOf
 
 
@@ -71,6 +65,7 @@ class SucceededOperation(ModelComposed):
         ('kind',): {
             'PROVISION-DATABASE': "provision-database",
             'DEPROVISION-DATABASE': "deprovision-database",
+            'RUN-SERVICE-COMMAND': "run-service-command",
         },
     }
 
@@ -108,11 +103,7 @@ class SucceededOperation(ModelComposed):
 
     @cached_property
     def discriminator():
-        lazy_import()
         val = {
-            'failed': FailedOperation,
-            'pending': PendingOperation,
-            'succeeded': SucceededOperation,
         }
         if not val:
             return None
@@ -135,7 +126,7 @@ class SucceededOperation(ModelComposed):
 
         Keyword Args:
             id (str): Id of the operation
-            kind (str): Type of the long-running operation.  * `provision-database` — Provisioning of an AI Lake database.  * `deprovision-database` — Deprovisioning (deletion) of an AI Lake database. 
+            kind (str): Type of the long-running operation. * `provision-database` — Provisioning of an AI Lake database. * `deprovision-database` — Deprovisioning (deletion) of an AI Lake database. * `run-service-command` — Running a command in a particular AI Lake service. 
             status (str):
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
@@ -242,7 +233,7 @@ class SucceededOperation(ModelComposed):
 
         Keyword Args:
             id (str): Id of the operation
-            kind (str): Type of the long-running operation.  * `provision-database` — Provisioning of an AI Lake database.  * `deprovision-database` — Deprovisioning (deletion) of an AI Lake database. 
+            kind (str): Type of the long-running operation. * `provision-database` — Provisioning of an AI Lake database. * `deprovision-database` — Deprovisioning (deletion) of an AI Lake database. * `run-service-command` — Running a command in a particular AI Lake service. 
             status (str):
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be

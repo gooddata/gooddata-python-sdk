@@ -397,6 +397,7 @@ services:
         condition: service_healthy
     environment:
       <<: [*java-opts, *quiver-env-vars]
+      JAVA_OPTS: "${JAVA_OPTS:--Xmx1G --add-opens=java.base/sun.net=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED}"
       GRPC_CALCIQUE_HOST: calcique
       GRPC_CALCIQUE_PORT: 6577
       GRPC_METADATA_HOST: metadata-api

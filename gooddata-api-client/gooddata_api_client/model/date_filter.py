@@ -31,16 +31,16 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.all_time_date_filter import AllTimeDateFilter
-    from gooddata_api_client.model.all_time_date_filter_all_time_date_filter import AllTimeDateFilterAllTimeDateFilter
     from gooddata_api_client.model.absolute_date_filter import AbsoluteDateFilter
     from gooddata_api_client.model.absolute_date_filter_absolute_date_filter import AbsoluteDateFilterAbsoluteDateFilter
+    from gooddata_api_client.model.all_time_date_filter import AllTimeDateFilter
+    from gooddata_api_client.model.all_time_date_filter_all_time_date_filter import AllTimeDateFilterAllTimeDateFilter
     from gooddata_api_client.model.relative_date_filter import RelativeDateFilter
     from gooddata_api_client.model.relative_date_filter_relative_date_filter import RelativeDateFilterRelativeDateFilter
-    globals()['AllTimeDateFilter'] = AllTimeDateFilter
-    globals()['AllTimeDateFilterAllTimeDateFilter'] = AllTimeDateFilterAllTimeDateFilter
     globals()['AbsoluteDateFilter'] = AbsoluteDateFilter
     globals()['AbsoluteDateFilterAbsoluteDateFilter'] = AbsoluteDateFilterAbsoluteDateFilter
+    globals()['AllTimeDateFilter'] = AllTimeDateFilter
+    globals()['AllTimeDateFilterAllTimeDateFilter'] = AllTimeDateFilterAllTimeDateFilter
     globals()['RelativeDateFilter'] = RelativeDateFilter
     globals()['RelativeDateFilterRelativeDateFilter'] = RelativeDateFilterRelativeDateFilter
 
@@ -98,9 +98,9 @@ class DateFilter(ModelComposed):
         """
         lazy_import()
         return {
-            'all_time_date_filter': (AllTimeDateFilterAllTimeDateFilter,),  # noqa: E501
             'absolute_date_filter': (AbsoluteDateFilterAbsoluteDateFilter,),  # noqa: E501
             'relative_date_filter': (RelativeDateFilterRelativeDateFilter,),  # noqa: E501
+            'all_time_date_filter': (AllTimeDateFilterAllTimeDateFilter,),  # noqa: E501
         }
 
     @cached_property
@@ -109,9 +109,9 @@ class DateFilter(ModelComposed):
 
 
     attribute_map = {
-        'all_time_date_filter': 'allTimeDateFilter',  # noqa: E501
         'absolute_date_filter': 'absoluteDateFilter',  # noqa: E501
         'relative_date_filter': 'relativeDateFilter',  # noqa: E501
+        'all_time_date_filter': 'allTimeDateFilter',  # noqa: E501
     }
 
     read_only_vars = {
@@ -155,6 +155,7 @@ class DateFilter(ModelComposed):
                                 _visited_composed_classes = (Animal,)
             absolute_date_filter (AbsoluteDateFilterAbsoluteDateFilter): [optional]  # noqa: E501
             relative_date_filter (RelativeDateFilterRelativeDateFilter): [optional]  # noqa: E501
+            all_time_date_filter (AllTimeDateFilterAllTimeDateFilter): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -260,6 +261,7 @@ class DateFilter(ModelComposed):
                                 _visited_composed_classes = (Animal,)
             absolute_date_filter (AbsoluteDateFilterAbsoluteDateFilter): [optional]  # noqa: E501
             relative_date_filter (RelativeDateFilterRelativeDateFilter): [optional]  # noqa: E501
+            all_time_date_filter (AllTimeDateFilterAllTimeDateFilter): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -331,8 +333,8 @@ class DateFilter(ModelComposed):
           'allOf': [
           ],
           'oneOf': [
-              AllTimeDateFilter,
               AbsoluteDateFilter,
+              AllTimeDateFilter,
               RelativeDateFilter,
           ],
         }

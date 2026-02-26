@@ -175,6 +175,7 @@ class WorkspaceObjectControllerApi(object):
                         "DASHBOARDPLUGINS": "dashboardPlugins",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
+                        "CERTIFIEDBY": "certifiedBy",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -1058,6 +1059,7 @@ class WorkspaceObjectControllerApi(object):
                         "DATASETS": "datasets",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
+                        "CERTIFIEDBY": "certifiedBy",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -1247,6 +1249,7 @@ class WorkspaceObjectControllerApi(object):
                         "DATASETS": "datasets",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
+                        "CERTIFIEDBY": "certifiedBy",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -2654,6 +2657,7 @@ class WorkspaceObjectControllerApi(object):
                         "DASHBOARDPLUGINS": "dashboardPlugins",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
+                        "CERTIFIEDBY": "certifiedBy",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -4346,6 +4350,7 @@ class WorkspaceObjectControllerApi(object):
                         "DATASETS": "datasets",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
+                        "CERTIFIEDBY": "certifiedBy",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -4597,6 +4602,7 @@ class WorkspaceObjectControllerApi(object):
                         "DATASETS": "datasets",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
+                        "CERTIFIEDBY": "certifiedBy",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -5157,6 +5163,7 @@ class WorkspaceObjectControllerApi(object):
                         "DASHBOARDPLUGINS": "dashboardPlugins",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
+                        "CERTIFIEDBY": "certifiedBy",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -6511,6 +6518,7 @@ class WorkspaceObjectControllerApi(object):
                         "DATASETS": "datasets",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
+                        "CERTIFIEDBY": "certifiedBy",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -6716,6 +6724,7 @@ class WorkspaceObjectControllerApi(object):
                         "DATASETS": "datasets",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
+                        "CERTIFIEDBY": "certifiedBy",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -7090,6 +7099,7 @@ class WorkspaceObjectControllerApi(object):
                         "DASHBOARDPLUGINS": "dashboardPlugins",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
+                        "CERTIFIEDBY": "certifiedBy",
                         "ALL": "ALL"
                     },
                 },
@@ -8263,6 +8273,7 @@ class WorkspaceObjectControllerApi(object):
                         "DATASETS": "datasets",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
+                        "CERTIFIEDBY": "certifiedBy",
                         "ALL": "ALL"
                     },
                 },
@@ -8440,6 +8451,7 @@ class WorkspaceObjectControllerApi(object):
                         "DATASETS": "datasets",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
+                        "CERTIFIEDBY": "certifiedBy",
                         "ALL": "ALL"
                     },
                 },
@@ -10391,6 +10403,7 @@ class WorkspaceObjectControllerApi(object):
                         "DASHBOARDPLUGINS": "dashboardPlugins",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
+                        "CERTIFIEDBY": "certifiedBy",
                         "ALL": "ALL"
                     },
                 },
@@ -11229,6 +11242,7 @@ class WorkspaceObjectControllerApi(object):
                         "DATASETS": "datasets",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
+                        "CERTIFIEDBY": "certifiedBy",
                         "ALL": "ALL"
                     },
                 },
@@ -11406,6 +11420,7 @@ class WorkspaceObjectControllerApi(object):
                         "DATASETS": "datasets",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
+                        "CERTIFIEDBY": "certifiedBy",
                         "ALL": "ALL"
                     },
                 },

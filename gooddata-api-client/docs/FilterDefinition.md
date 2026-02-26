@@ -12,6 +12,7 @@ Name | Type | Description | Notes
 **compound_measure_value_filter** | [**CompoundMeasureValueFilterCompoundMeasureValueFilter**](CompoundMeasureValueFilterCompoundMeasureValueFilter.md) |  | [optional] 
 **absolute_date_filter** | [**AbsoluteDateFilterAbsoluteDateFilter**](AbsoluteDateFilterAbsoluteDateFilter.md) |  | [optional] 
 **relative_date_filter** | [**RelativeDateFilterRelativeDateFilter**](RelativeDateFilterRelativeDateFilter.md) |  | [optional] 
+**all_time_date_filter** | [**AllTimeDateFilterAllTimeDateFilter**](AllTimeDateFilterAllTimeDateFilter.md) |  | [optional] 
 **negative_attribute_filter** | [**NegativeAttributeFilterNegativeAttributeFilter**](NegativeAttributeFilterNegativeAttributeFilter.md) |  | [optional] 
 **positive_attribute_filter** | [**PositiveAttributeFilterPositiveAttributeFilter**](PositiveAttributeFilterPositiveAttributeFilter.md) |  | [optional] 
 **match_attribute_filter** | [**MatchAttributeFilterMatchAttributeFilter**](MatchAttributeFilterMatchAttributeFilter.md) |  | [optional] 

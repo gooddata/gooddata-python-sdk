@@ -1,4 +1,8 @@
 # (C) 2023 GoodData Corporation
+# NOTE: If export tests fail with "Server was not able to return response. The last response status is '202'",
+# check the export-controller docker logs for AccessDeniedException on /tmp/exports/exports/.
+# The export-controller runs as uid=2 (bin) and needs write access to the mounted volume
+# (./packages/gooddata-sdk/tests/export -> /tmp/exports). Fix with: chmod -R 777 tests/export/exports/
 import os
 from pathlib import Path
 

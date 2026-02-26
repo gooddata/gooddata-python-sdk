@@ -60,6 +60,7 @@ class TriggerQualityIssuesCalculationResponse(ModelNormal):
             'RUNNING': "RUNNING",
             'COMPLETED': "COMPLETED",
             'FAILED': "FAILED",
+            'CANCELLED': "CANCELLED",
             'DISABLED': "DISABLED",
         },
     }

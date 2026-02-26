@@ -19,32 +19,21 @@ interactions:
         code: 404
         message: Not Found
       headers:
-        Cache-Control:
-          - max-age=5, private
         Content-Length:
           - '172'
         Content-Type:
-          - application/problem+json
+          - application/json
         DATE: &id001
           - PLACEHOLDER
-        Referrer-Policy:
-          - no-referrer
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
-          - '0'
       body:
         string:
           detail: The requested endpoint does not exist or you do not have permission
             to access it.
           status: 404
           title: Not Found
-          traceId: 4764599273a9738e8ae22f87615f0cf5
+          traceId: 99ab8b8998cae5573820bda78ff4e02a
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces

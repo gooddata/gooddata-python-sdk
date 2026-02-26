@@ -96,6 +96,11 @@ class DashboardDateFilterDateFilter(ModelNormal):
             'RELATIVE': "relative",
             'ABSOLUTE': "absolute",
         },
+        ('empty_value_handling',): {
+            'INCLUDE': "INCLUDE",
+            'EXCLUDE': "EXCLUDE",
+            'ONLY': "ONLY",
+        },
     }
 
     validations = {
@@ -129,6 +134,7 @@ class DashboardDateFilterDateFilter(ModelNormal):
             'attribute': (IdentifierRef,),  # noqa: E501
             'bounded_filter': (RelativeBoundedDateFilter,),  # noqa: E501
             'data_set': (IdentifierRef,),  # noqa: E501
+            'empty_value_handling': (str,),  # noqa: E501
             '_from': (AacDashboardFilterFrom,),  # noqa: E501
             'local_identifier': (str,),  # noqa: E501
             'to': (AacDashboardFilterFrom,),  # noqa: E501
@@ -145,6 +151,7 @@ class DashboardDateFilterDateFilter(ModelNormal):
         'attribute': 'attribute',  # noqa: E501
         'bounded_filter': 'boundedFilter',  # noqa: E501
         'data_set': 'dataSet',  # noqa: E501
+        'empty_value_handling': 'emptyValueHandling',  # noqa: E501
         '_from': 'from',  # noqa: E501
         'local_identifier': 'localIdentifier',  # noqa: E501
         'to': 'to',  # noqa: E501
@@ -198,6 +205,7 @@ class DashboardDateFilterDateFilter(ModelNormal):
             attribute (IdentifierRef): [optional]  # noqa: E501
             bounded_filter (RelativeBoundedDateFilter): [optional]  # noqa: E501
             data_set (IdentifierRef): [optional]  # noqa: E501
+            empty_value_handling (str): [optional]  # noqa: E501
             _from (AacDashboardFilterFrom): [optional]  # noqa: E501
             local_identifier (str): [optional]  # noqa: E501
             to (AacDashboardFilterFrom): [optional]  # noqa: E501
@@ -295,6 +303,7 @@ class DashboardDateFilterDateFilter(ModelNormal):
             attribute (IdentifierRef): [optional]  # noqa: E501
             bounded_filter (RelativeBoundedDateFilter): [optional]  # noqa: E501
             data_set (IdentifierRef): [optional]  # noqa: E501
+            empty_value_handling (str): [optional]  # noqa: E501
             _from (AacDashboardFilterFrom): [optional]  # noqa: E501
             local_identifier (str): [optional]  # noqa: E501
             to (AacDashboardFilterFrom): [optional]  # noqa: E501

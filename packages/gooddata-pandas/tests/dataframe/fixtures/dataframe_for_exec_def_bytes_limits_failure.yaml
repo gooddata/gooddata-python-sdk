@@ -90,7 +90,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-Gdc-Cancel-Token:
-          - 30a3cfc0-9dfc-4d06-92f5-bf61a6502fc3
+          - 6690b141-0765-4d58-bcf0-8b9ad41dd709
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - '0'
@@ -153,10 +153,10 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: 4c9a39e6a0b20cc55fb0811a27939b92fc5d49a4:bd02ea7028b8356e32e979c26f5ab0852511226ff47e4c9b3a6ba79c9678f704
+              executionResult: 4d70b2f5dc82de826023bd64a95a9b6cece1fc90:727263b01ce1783fb5c523537135e11e675307f8552f0094ccebb2e30d794188
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/4c9a39e6a0b20cc55fb0811a27939b92fc5d49a4%3Abd02ea7028b8356e32e979c26f5ab0852511226ff47e4c9b3a6ba79c9678f704/metadata
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/4d70b2f5dc82de826023bd64a95a9b6cece1fc90%3A727263b01ce1783fb5c523537135e11e675307f8552f0094ccebb2e30d794188/metadata
       body: null
       headers:
         Accept:
@@ -175,7 +175,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '2168'
+          - '2200'
         Content-Type:
           - application/json
         DATE: *id001
@@ -238,6 +238,7 @@ interactions:
                     computeRatio: false
                     filters: []
             auxMeasures: []
+            measureDefinitionOverrides: []
           executionResponse:
             dimensions:
               - headers:
@@ -295,7 +296,7 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: 4c9a39e6a0b20cc55fb0811a27939b92fc5d49a4:bd02ea7028b8356e32e979c26f5ab0852511226ff47e4c9b3a6ba79c9678f704
+              executionResult: 4d70b2f5dc82de826023bd64a95a9b6cece1fc90:727263b01ce1783fb5c523537135e11e675307f8552f0094ccebb2e30d794188
           resultSpec:
             dimensions:
               - localIdentifier: dim_0
@@ -312,7 +313,7 @@ interactions:
           resultSize: 4625
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/4c9a39e6a0b20cc55fb0811a27939b92fc5d49a4%3Abd02ea7028b8356e32e979c26f5ab0852511226ff47e4c9b3a6ba79c9678f704?offset=0%2C0&limit=100%2C100
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/4d70b2f5dc82de826023bd64a95a9b6cece1fc90%3A727263b01ce1783fb5c523537135e11e675307f8552f0094ccebb2e30d794188?offset=0%2C0&limit=100%2C100
       body: null
       headers:
         Accept:

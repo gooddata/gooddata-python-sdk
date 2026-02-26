@@ -26,6 +26,7 @@ from gooddata_api_client.api.attributes_api import AttributesApi
 from gooddata_api_client.api.automations_api import AutomationsApi
 from gooddata_api_client.api.available_drivers_api import AvailableDriversApi
 from gooddata_api_client.api.csp_directives_api import CSPDirectivesApi
+from gooddata_api_client.api.certification_api import CertificationApi
 from gooddata_api_client.api.computation_api import ComputationApi
 from gooddata_api_client.api.cookie_security_configuration_api import CookieSecurityConfigurationApi
 from gooddata_api_client.api.dashboards_api import DashboardsApi
@@ -49,6 +50,7 @@ from gooddata_api_client.api.invalidate_cache_api import InvalidateCacheApi
 from gooddata_api_client.api.jwks_api import JWKSApi
 from gooddata_api_client.api.ldm_declarative_apis_api import LDMDeclarativeAPIsApi
 from gooddata_api_client.api.llm_endpoints_api import LLMEndpointsApi
+from gooddata_api_client.api.llm_providers_api import LLMProvidersApi
 from gooddata_api_client.api.labels_api import LabelsApi
 from gooddata_api_client.api.manage_permissions_api import ManagePermissionsApi
 from gooddata_api_client.api.metadata_check_api import MetadataCheckApi

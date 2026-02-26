@@ -90,6 +90,7 @@ class DashboardsApi(object):
                         "DASHBOARDPLUGINS": "dashboardPlugins",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
+                        "CERTIFIEDBY": "certifiedBy",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -257,6 +258,7 @@ class DashboardsApi(object):
                         "DASHBOARDPLUGINS": "dashboardPlugins",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
+                        "CERTIFIEDBY": "certifiedBy",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -377,6 +379,7 @@ class DashboardsApi(object):
                         "DASHBOARDPLUGINS": "dashboardPlugins",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
+                        "CERTIFIEDBY": "certifiedBy",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -478,6 +481,7 @@ class DashboardsApi(object):
                         "DASHBOARDPLUGINS": "dashboardPlugins",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
+                        "CERTIFIEDBY": "certifiedBy",
                         "ALL": "ALL"
                     },
                 },
@@ -642,6 +646,7 @@ class DashboardsApi(object):
                         "DASHBOARDPLUGINS": "dashboardPlugins",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
+                        "CERTIFIEDBY": "certifiedBy",
                         "ALL": "ALL"
                     },
                 },

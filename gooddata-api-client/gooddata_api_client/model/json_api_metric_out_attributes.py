@@ -60,9 +60,17 @@ class JsonApiMetricOutAttributes(ModelNormal):
     """
 
     allowed_values = {
+        ('certification',): {
+            'CERTIFIED': "CERTIFIED",
+        },
     }
 
     validations = {
+        ('certified_at',): {
+            'regex': {
+                'pattern': r'[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}',  # noqa: E501
+            },
+        },
         ('created_at',): {
             'regex': {
                 'pattern': r'[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}',  # noqa: E501
@@ -106,6 +114,9 @@ class JsonApiMetricOutAttributes(ModelNormal):
         return {
             'content': (JsonApiMetricInAttributesContent,),  # noqa: E501
             'are_relations_valid': (bool,),  # noqa: E501
+            'certification': (str,),  # noqa: E501
+            'certification_message': (str, none_type,),  # noqa: E501
+            'certified_at': (datetime, none_type,),  # noqa: E501
             'created_at': (datetime, none_type,),  # noqa: E501
             'description': (str,),  # noqa: E501
             'is_hidden': (bool,),  # noqa: E501
@@ -123,6 +134,9 @@ class JsonApiMetricOutAttributes(ModelNormal):
     attribute_map = {
         'content': 'content',  # noqa: E501
         'are_relations_valid': 'areRelationsValid',  # noqa: E501
+        'certification': 'certification',  # noqa: E501
+        'certification_message': 'certificationMessage',  # noqa: E501
+        'certified_at': 'certifiedAt',  # noqa: E501
         'created_at': 'createdAt',  # noqa: E501
         'description': 'description',  # noqa: E501
         'is_hidden': 'isHidden',  # noqa: E501
@@ -177,6 +191,9 @@ class JsonApiMetricOutAttributes(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             are_relations_valid (bool): [optional]  # noqa: E501
+            certification (str): Certification status of the entity.. [optional] if omitted the server will use the default value of "CERTIFIED"  # noqa: E501
+            certification_message (str, none_type): Optional message associated with the certification.. [optional]  # noqa: E501
+            certified_at (datetime, none_type): Time when the certification was set.. [optional]  # noqa: E501
             created_at (datetime, none_type): Time of the entity creation.. [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             is_hidden (bool): [optional]  # noqa: E501
@@ -274,6 +291,9 @@ class JsonApiMetricOutAttributes(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             are_relations_valid (bool): [optional]  # noqa: E501
+            certification (str): Certification status of the entity.. [optional] if omitted the server will use the default value of "CERTIFIED"  # noqa: E501
+            certification_message (str, none_type): Optional message associated with the certification.. [optional]  # noqa: E501
+            certified_at (datetime, none_type): Time when the certification was set.. [optional]  # noqa: E501
             created_at (datetime, none_type): Time of the entity creation.. [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             is_hidden (bool): [optional]  # noqa: E501

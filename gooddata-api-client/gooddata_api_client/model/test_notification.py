@@ -31,13 +31,9 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.automation_notification import AutomationNotification
     from gooddata_api_client.model.notification_content import NotificationContent
-    from gooddata_api_client.model.test_notification import TestNotification
     from gooddata_api_client.model.test_notification_all_of import TestNotificationAllOf
-    globals()['AutomationNotification'] = AutomationNotification
     globals()['NotificationContent'] = NotificationContent
-    globals()['TestNotification'] = TestNotification
     globals()['TestNotificationAllOf'] = TestNotificationAllOf
 
 
@@ -100,10 +96,7 @@ class TestNotification(ModelComposed):
 
     @cached_property
     def discriminator():
-        lazy_import()
         val = {
-            'AUTOMATION': AutomationNotification,
-            'TEST': TestNotification,
         }
         if not val:
             return None

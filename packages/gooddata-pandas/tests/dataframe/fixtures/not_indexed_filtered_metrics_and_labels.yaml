@@ -85,7 +85,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-Gdc-Cancel-Token:
-          - 16f15c07-48f9-48bc-9a85-1e23af1e774e
+          - 9ae3d46c-ce4f-4647-b31c-47279d11a961
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - '0'
@@ -120,7 +120,7 @@ interactions:
                       valueType: TEXT
                 localIdentifier: dim_1
             links:
-              executionResult: 0aac874dbc43e290f41c6c249c71304ed77c0b64:49ba3843ff515b47cdc24b2204392baf6b68b393e4c57cccc65ecf94ad69c214
+              executionResult: 509a554f4b8d4a03e7bf47f091040b9e239b0f11:d1ddf33a20f776455c9bd4b5ce541a8252dd11fb4dd077dc936aaf2d243d88b9
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3Din%3D%28region%29&page=0&size=500
@@ -142,7 +142,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '1450'
+          - '1486'
         Content-Type:
           - application/json
         DATE: *id001
@@ -172,6 +172,7 @@ interactions:
                 areRelationsValid: true
                 sourceColumn: region
                 sourceColumnDataType: STRING
+                isNullable: true
               id: region
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/region
@@ -216,6 +217,7 @@ interactions:
                 sourceColumn: region
                 sourceColumnDataType: STRING
                 valueType: TEXT
+                isNullable: true
               id: region
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/region
@@ -225,7 +227,7 @@ interactions:
             next: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3D%3D%27region%27&page=1&size=500
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/0aac874dbc43e290f41c6c249c71304ed77c0b64%3A49ba3843ff515b47cdc24b2204392baf6b68b393e4c57cccc65ecf94ad69c214?offset=0%2C0&limit=2%2C1000
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/509a554f4b8d4a03e7bf47f091040b9e239b0f11%3Ad1ddf33a20f776455c9bd4b5ce541a8252dd11fb4dd077dc936aaf2d243d88b9?offset=0%2C0&limit=2%2C1000
       body: null
       headers:
         Accept:

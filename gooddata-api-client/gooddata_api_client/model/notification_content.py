@@ -98,9 +98,7 @@ class NotificationContent(ModelNormal):
         lazy_import()
         val = {
             'AUTOMATION': AutomationNotification,
-            'AutomationNotification': AutomationNotification,
             'TEST': TestNotification,
-            'TestNotification': TestNotification,
         }
         if not val:
             return None

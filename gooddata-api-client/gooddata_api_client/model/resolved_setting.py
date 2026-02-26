@@ -65,6 +65,7 @@ class ResolvedSetting(ModelNormal):
             'ACTIVE_THEME': "ACTIVE_THEME",
             'ACTIVE_COLOR_PALETTE': "ACTIVE_COLOR_PALETTE",
             'ACTIVE_LLM_ENDPOINT': "ACTIVE_LLM_ENDPOINT",
+            'ACTIVE_LLM_PROVIDER': "ACTIVE_LLM_PROVIDER",
             'ACTIVE_CALENDARS': "ACTIVE_CALENDARS",
             'WHITE_LABELING': "WHITE_LABELING",
             'LOCALE': "LOCALE",
@@ -108,6 +109,7 @@ class ResolvedSetting(ModelNormal):
             'EXPORT_CSV_CUSTOM_DELIMITER': "EXPORT_CSV_CUSTOM_DELIMITER",
             'ENABLE_QUERY_TAGS': "ENABLE_QUERY_TAGS",
             'RESTRICT_BASE_UI': "RESTRICT_BASE_UI",
+            'CERTIFY_PARENT_OBJECTS': "CERTIFY_PARENT_OBJECTS",
         },
     }
 
