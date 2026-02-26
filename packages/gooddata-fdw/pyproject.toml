@@ -65,6 +65,15 @@ allowed-unresolved-imports = ["multicorn"]
 [tool.hatch.build.targets.wheel]
 packages = ["src/gooddata_fdw"]
 
+[tool.coverage.run]
+source = ["gooddata_fdw"]
+
+[tool.coverage.paths]
+source = [
+    "src/gooddata_fdw",
+    "**/site-packages/gooddata_fdw",
+]
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"

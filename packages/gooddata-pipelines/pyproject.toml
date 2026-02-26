@@ -36,6 +36,15 @@ test = [
 [tool.ty.analysis]
 allowed-unresolved-imports = ["boto3.**", "botocore.**", "mypy_boto3_s3.**", "azure.**"]
 
+[tool.coverage.run]
+source = ["gooddata_pipelines"]
+
+[tool.coverage.paths]
+source = [
+    "src/gooddata_pipelines",
+    "**/site-packages/gooddata_pipelines",
+]
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"

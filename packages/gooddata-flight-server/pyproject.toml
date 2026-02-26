@@ -74,6 +74,15 @@ allowed-unresolved-imports = [
 [tool.hatch.build.targets.wheel]
 packages = ["src/gooddata_flight_server"]
 
+[tool.coverage.run]
+source = ["gooddata_flight_server"]
+
+[tool.coverage.paths]
+source = [
+    "src/gooddata_flight_server",
+    "**/site-packages/gooddata_flight_server",
+]
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
