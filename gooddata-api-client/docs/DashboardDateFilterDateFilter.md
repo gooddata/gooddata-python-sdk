@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **attribute** | [**IdentifierRef**](IdentifierRef.md) |  | [optional] 
 **bounded_filter** | [**RelativeBoundedDateFilter**](RelativeBoundedDateFilter.md) |  | [optional] 
 **data_set** | [**IdentifierRef**](IdentifierRef.md) |  | [optional] 
+**empty_value_handling** | **str** |  | [optional] 
 **_from** | [**AacDashboardFilterFrom**](AacDashboardFilterFrom.md) |  | [optional] 
 **local_identifier** | **str** |  | [optional] 
 **to** | [**AacDashboardFilterFrom**](AacDashboardFilterFrom.md) |  | [optional] 

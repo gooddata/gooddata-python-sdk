@@ -4,10 +4,13 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**deprovision_ai_lake_database_instance**](AILakeApi.md#deprovision_ai_lake_database_instance) | **DELETE** /api/v1/ailake/database/instance/{instanceId} | (BETA) Delete an existing AILake Database instance
-[**get_ai_lake_database_instance**](AILakeApi.md#get_ai_lake_database_instance) | **GET** /api/v1/ailake/database/instance/{instanceId} | (BETA) Get the specified AILake Database instance
-[**get_ai_lake_operation**](AILakeApi.md#get_ai_lake_operation) | **GET** /api/v1/ailake/operation/{operationId} | (BETA) Get Long Running Operation details
-[**provision_ai_lake_database_instance**](AILakeApi.md#provision_ai_lake_database_instance) | **POST** /api/v1/ailake/database/instance | (BETA) Create a new AILake Database instance
+[**deprovision_ai_lake_database_instance**](AILakeApi.md#deprovision_ai_lake_database_instance) | **DELETE** /api/v1/ailake/database/instances/{instanceId} | (BETA) Delete an existing AILake Database instance
+[**get_ai_lake_database_instance**](AILakeApi.md#get_ai_lake_database_instance) | **GET** /api/v1/ailake/database/instances/{instanceId} | (BETA) Get the specified AILake Database instance
+[**get_ai_lake_operation**](AILakeApi.md#get_ai_lake_operation) | **GET** /api/v1/ailake/operations/{operationId} | (BETA) Get Long Running Operation details
+[**list_ai_lake_database_instances**](AILakeApi.md#list_ai_lake_database_instances) | **GET** /api/v1/ailake/database/instances | (BETA) List AI Lake Database instances
+[**list_ai_lake_services**](AILakeApi.md#list_ai_lake_services) | **GET** /api/v1/ailake/services | (BETA) List AI Lake services
+[**provision_ai_lake_database_instance**](AILakeApi.md#provision_ai_lake_database_instance) | **POST** /api/v1/ailake/database/instances | (BETA) Create a new AILake Database instance
+[**run_ai_lake_service_command**](AILakeApi.md#run_ai_lake_service_command) | **POST** /api/v1/ailake/services/{serviceId}/commands/{commandName}/run | (BETA) Run an AI Lake services command
 
 
 # **deprovision_ai_lake_database_instance**
@@ -221,6 +224,154 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **list_ai_lake_database_instances**
+> ListDatabaseInstancesResponse list_ai_lake_database_instances()
+
+(BETA) List AI Lake Database instances
+
+(BETA) Lists database instances in the organization's AI Lake. Supports paging via size and offset query parameters. Use metaInclude=page to get total count.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import ai_lake_api
+from gooddata_api_client.model.list_database_instances_response import ListDatabaseInstancesResponse
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = ai_lake_api.AILakeApi(api_client)
+    size = 50 # int |  (optional) if omitted the server will use the default value of 50
+    offset = 0 # int |  (optional) if omitted the server will use the default value of 0
+    meta_include = [
+        "metaInclude_example",
+    ] # [str] |  (optional)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # (BETA) List AI Lake Database instances
+        api_response = api_instance.list_ai_lake_database_instances(size=size, offset=offset, meta_include=meta_include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling AILakeApi->list_ai_lake_database_instances: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **size** | **int**|  | [optional] if omitted the server will use the default value of 50
+ **offset** | **int**|  | [optional] if omitted the server will use the default value of 0
+ **meta_include** | **[str]**|  | [optional]
+
+### Return type
+
+[**ListDatabaseInstancesResponse**](ListDatabaseInstancesResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | AI Lake database instances successfully retrieved |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **list_ai_lake_services**
+> ListServicesResponse list_ai_lake_services()
+
+(BETA) List AI Lake services
+
+(BETA) Lists services configured for the organization's AI Lake. Returns only non-sensitive fields (id, name). Supports paging via size and offset query parameters. Use metaInclude=page to get total count.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import ai_lake_api
+from gooddata_api_client.model.list_services_response import ListServicesResponse
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = ai_lake_api.AILakeApi(api_client)
+    size = 50 # int |  (optional) if omitted the server will use the default value of 50
+    offset = 0 # int |  (optional) if omitted the server will use the default value of 0
+    meta_include = [
+        "metaInclude_example",
+    ] # [str] |  (optional)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # (BETA) List AI Lake services
+        api_response = api_instance.list_ai_lake_services(size=size, offset=offset, meta_include=meta_include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling AILakeApi->list_ai_lake_services: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **size** | **int**|  | [optional] if omitted the server will use the default value of 50
+ **offset** | **int**|  | [optional] if omitted the server will use the default value of 0
+ **meta_include** | **[str]**|  | [optional]
+
+### Return type
+
+[**ListServicesResponse**](ListServicesResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | AI Lake services successfully retrieved |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **provision_ai_lake_database_instance**
 > {str: (bool, date, datetime, dict, float, int, list, str, none_type)} provision_ai_lake_database_instance(provision_database_instance_request)
 
@@ -280,6 +431,93 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **provision_database_instance_request** | [**ProvisionDatabaseInstanceRequest**](ProvisionDatabaseInstanceRequest.md)|  |
+ **operation_id** | **str**|  | [optional]
+
+### Return type
+
+**{str: (bool, date, datetime, dict, float, int, list, str, none_type)}**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**202** | Accepted |  * operation-id - Operation ID to use for polling. <br>  * operation-location - Operation location URL that can be used for polling. <br>  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **run_ai_lake_service_command**
+> {str: (bool, date, datetime, dict, float, int, list, str, none_type)} run_ai_lake_service_command(service_id, command_name, run_service_command_request)
+
+(BETA) Run an AI Lake services command
+
+(BETA) Runs a specific AI Lake service command.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import ai_lake_api
+from gooddata_api_client.model.run_service_command_request import RunServiceCommandRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = ai_lake_api.AILakeApi(api_client)
+    service_id = "serviceId_example" # str | 
+    command_name = "commandName_example" # str | 
+    run_service_command_request = RunServiceCommandRequest(
+        context={
+            "key": "key_example",
+        },
+        payload=JsonNode(),
+    ) # RunServiceCommandRequest | 
+    operation_id = "operation-id_example" # str |  (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (BETA) Run an AI Lake services command
+        api_response = api_instance.run_ai_lake_service_command(service_id, command_name, run_service_command_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling AILakeApi->run_ai_lake_service_command: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # (BETA) Run an AI Lake services command
+        api_response = api_instance.run_ai_lake_service_command(service_id, command_name, run_service_command_request, operation_id=operation_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling AILakeApi->run_ai_lake_service_command: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **service_id** | **str**|  |
+ **command_name** | **str**|  |
+ **run_service_command_request** | [**RunServiceCommandRequest**](RunServiceCommandRequest.md)|  |
  **operation_id** | **str**|  | [optional]
 
 ### Return type

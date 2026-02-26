@@ -60,6 +60,10 @@ class DependentEntitiesRequest(ModelNormal):
     """
 
     allowed_values = {
+        ('relation',): {
+            'DEPENDENTS': "DEPENDENTS",
+            'DEPENDENCIES': "DEPENDENCIES",
+        },
     }
 
     validations = {
@@ -89,6 +93,7 @@ class DependentEntitiesRequest(ModelNormal):
         lazy_import()
         return {
             'identifiers': ([EntityIdentifier],),  # noqa: E501
+            'relation': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -98,6 +103,7 @@ class DependentEntitiesRequest(ModelNormal):
 
     attribute_map = {
         'identifiers': 'identifiers',  # noqa: E501
+        'relation': 'relation',  # noqa: E501
     }
 
     read_only_vars = {
@@ -144,6 +150,7 @@ class DependentEntitiesRequest(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            relation (str): Entity relation for graph traversal from the entry points. DEPENDENTS returns entities that depend on the entry points. DEPENDENCIES returns entities that the entry points depend on.. [optional] if omitted the server will use the default value of "DEPENDENTS"  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -233,6 +240,7 @@ class DependentEntitiesRequest(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            relation (str): Entity relation for graph traversal from the entry points. DEPENDENTS returns entities that depend on the entry points. DEPENDENCIES returns entities that the entry points depend on.. [optional] if omitted the server will use the default value of "DEPENDENTS"  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

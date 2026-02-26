@@ -62,11 +62,6 @@ class RelativeDateFilterRelativeDateFilter(ModelNormal):
     """
 
     allowed_values = {
-        ('empty_value_handling',): {
-            'INCLUDE': "INCLUDE",
-            'EXCLUDE': "EXCLUDE",
-            'ONLY': "ONLY",
-        },
         ('granularity',): {
             'MINUTE': "MINUTE",
             'HOUR': "HOUR",
@@ -87,6 +82,11 @@ class RelativeDateFilterRelativeDateFilter(ModelNormal):
             'FISCAL_MONTH': "FISCAL_MONTH",
             'FISCAL_QUARTER': "FISCAL_QUARTER",
             'FISCAL_YEAR': "FISCAL_YEAR",
+        },
+        ('empty_value_handling',): {
+            'INCLUDE': "INCLUDE",
+            'EXCLUDE': "EXCLUDE",
+            'ONLY': "ONLY",
         },
     }
 
@@ -120,9 +120,9 @@ class RelativeDateFilterRelativeDateFilter(ModelNormal):
             '_from': (int,),  # noqa: E501
             'granularity': (str,),  # noqa: E501
             'to': (int,),  # noqa: E501
-            'empty_value_handling': (str,),  # noqa: E501
             'apply_on_result': (bool,),  # noqa: E501
             'bounded_filter': (BoundedFilter,),  # noqa: E501
+            'empty_value_handling': (str,),  # noqa: E501
             'local_identifier': (str,),  # noqa: E501
         }
 
@@ -136,9 +136,9 @@ class RelativeDateFilterRelativeDateFilter(ModelNormal):
         '_from': 'from',  # noqa: E501
         'granularity': 'granularity',  # noqa: E501
         'to': 'to',  # noqa: E501
-        'empty_value_handling': 'emptyValueHandling',  # noqa: E501
         'apply_on_result': 'applyOnResult',  # noqa: E501
         'bounded_filter': 'boundedFilter',  # noqa: E501
+        'empty_value_handling': 'emptyValueHandling',  # noqa: E501
         'local_identifier': 'localIdentifier',  # noqa: E501
     }
 
@@ -191,6 +191,7 @@ class RelativeDateFilterRelativeDateFilter(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             apply_on_result (bool): [optional]  # noqa: E501
             bounded_filter (BoundedFilter): [optional]  # noqa: E501
+            empty_value_handling (str): Specifies how rows with empty (null/missing) date values should be handled. INCLUDE includes empty dates in addition to the date range restriction, EXCLUDE removes rows with empty dates (default), ONLY keeps only rows with empty dates.. [optional] if omitted the server will use the default value of "EXCLUDE"  # noqa: E501
             local_identifier (str): [optional]  # noqa: E501
         """
 
@@ -289,6 +290,7 @@ class RelativeDateFilterRelativeDateFilter(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             apply_on_result (bool): [optional]  # noqa: E501
             bounded_filter (BoundedFilter): [optional]  # noqa: E501
+            empty_value_handling (str): Specifies how rows with empty (null/missing) date values should be handled. INCLUDE includes empty dates in addition to the date range restriction, EXCLUDE removes rows with empty dates (default), ONLY keeps only rows with empty dates.. [optional] if omitted the server will use the default value of "EXCLUDE"  # noqa: E501
             local_identifier (str): [optional]  # noqa: E501
         """
 

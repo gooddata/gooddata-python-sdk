@@ -50,8 +50,8 @@ interactions:
               username: postgres
               authenticationType: USERNAME_PASSWORD
               alternativeDataSourceId: ds-put-abc-id
-              name: demo-test-ds
               type: POSTGRESQL
+              name: demo-test-ds
               schema: demo
             id: demo-test-ds
             type: dataSource
@@ -115,8 +115,8 @@ interactions:
               cacheStrategy: NEVER
               authenticationType: USERNAME_PASSWORD
               alternativeDataSourceId: ds-put-abc-id
-              name: demo-test-ds
               type: POSTGRESQL
+              name: demo-test-ds
               schema: demo
             id: demo-test-ds
             type: dataSource
@@ -171,8 +171,8 @@ interactions:
               cacheStrategy: NEVER
               authenticationType: USERNAME_PASSWORD
               alternativeDataSourceId: ds-put-abc-id
-              name: demo-test-ds
               type: POSTGRESQL
+              name: demo-test-ds
               schema: demo
             id: demo-test-ds
             type: dataSource

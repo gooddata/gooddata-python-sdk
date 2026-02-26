@@ -22,7 +22,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '1541'
+          - '1577'
         Content-Type:
           - application/json
         DATE: &id001
@@ -53,6 +53,7 @@ interactions:
                 areRelationsValid: true
                 sourceColumn: campaign_name
                 sourceColumnDataType: STRING
+                isNullable: true
               id: campaign_name
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_name
@@ -97,6 +98,7 @@ interactions:
                 sourceColumn: campaign_name
                 sourceColumnDataType: STRING
                 valueType: TEXT
+                isNullable: true
               id: campaign_name
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_name
@@ -125,7 +127,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '1450'
+          - '1486'
         Content-Type:
           - application/json
         DATE: *id001
@@ -155,6 +157,7 @@ interactions:
                 areRelationsValid: true
                 sourceColumn: region
                 sourceColumnDataType: STRING
+                isNullable: true
               id: region
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/region
@@ -199,6 +202,7 @@ interactions:
                 sourceColumn: region
                 sourceColumnDataType: STRING
                 valueType: TEXT
+                isNullable: true
               id: region
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/region

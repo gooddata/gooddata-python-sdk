@@ -24,7 +24,10 @@ from gooddata_api_client.model_utils import (  # noqa: F401
 )
 from gooddata_api_client.model.database_instance import DatabaseInstance
 from gooddata_api_client.model.get_ai_lake_operation200_response import GetAiLakeOperation200Response
+from gooddata_api_client.model.list_database_instances_response import ListDatabaseInstancesResponse
+from gooddata_api_client.model.list_services_response import ListServicesResponse
 from gooddata_api_client.model.provision_database_instance_request import ProvisionDatabaseInstanceRequest
+from gooddata_api_client.model.run_service_command_request import RunServiceCommandRequest
 
 
 class AILakeApi(object):
@@ -42,7 +45,7 @@ class AILakeApi(object):
             settings={
                 'response_type': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                 'auth': [],
-                'endpoint_path': '/api/v1/ailake/database/instance/{instanceId}',
+                'endpoint_path': '/api/v1/ailake/database/instances/{instanceId}',
                 'operation_id': 'deprovision_ai_lake_database_instance',
                 'http_method': 'DELETE',
                 'servers': None,
@@ -96,7 +99,7 @@ class AILakeApi(object):
             settings={
                 'response_type': (DatabaseInstance,),
                 'auth': [],
-                'endpoint_path': '/api/v1/ailake/database/instance/{instanceId}',
+                'endpoint_path': '/api/v1/ailake/database/instances/{instanceId}',
                 'operation_id': 'get_ai_lake_database_instance',
                 'http_method': 'GET',
                 'servers': None,
@@ -145,7 +148,7 @@ class AILakeApi(object):
             settings={
                 'response_type': (GetAiLakeOperation200Response,),
                 'auth': [],
-                'endpoint_path': '/api/v1/ailake/operation/{operationId}',
+                'endpoint_path': '/api/v1/ailake/operations/{operationId}',
                 'operation_id': 'get_ai_lake_operation',
                 'http_method': 'GET',
                 'servers': None,
@@ -190,11 +193,135 @@ class AILakeApi(object):
             },
             api_client=api_client
         )
+        self.list_ai_lake_database_instances_endpoint = _Endpoint(
+            settings={
+                'response_type': (ListDatabaseInstancesResponse,),
+                'auth': [],
+                'endpoint_path': '/api/v1/ailake/database/instances',
+                'operation_id': 'list_ai_lake_database_instances',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'size',
+                    'offset',
+                    'meta_include',
+                ],
+                'required': [],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                    'meta_include',
+                ]
+            },
+            root_map={
+                'validations': {
+                    ('meta_include',): {
+
+                    },
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'size':
+                        (int,),
+                    'offset':
+                        (int,),
+                    'meta_include':
+                        ([str],),
+                },
+                'attribute_map': {
+                    'size': 'size',
+                    'offset': 'offset',
+                    'meta_include': 'metaInclude',
+                },
+                'location_map': {
+                    'size': 'query',
+                    'offset': 'query',
+                    'meta_include': 'query',
+                },
+                'collection_format_map': {
+                    'meta_include': 'multi',
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.list_ai_lake_services_endpoint = _Endpoint(
+            settings={
+                'response_type': (ListServicesResponse,),
+                'auth': [],
+                'endpoint_path': '/api/v1/ailake/services',
+                'operation_id': 'list_ai_lake_services',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'size',
+                    'offset',
+                    'meta_include',
+                ],
+                'required': [],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                    'meta_include',
+                ]
+            },
+            root_map={
+                'validations': {
+                    ('meta_include',): {
+
+                    },
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'size':
+                        (int,),
+                    'offset':
+                        (int,),
+                    'meta_include':
+                        ([str],),
+                },
+                'attribute_map': {
+                    'size': 'size',
+                    'offset': 'offset',
+                    'meta_include': 'metaInclude',
+                },
+                'location_map': {
+                    'size': 'query',
+                    'offset': 'query',
+                    'meta_include': 'query',
+                },
+                'collection_format_map': {
+                    'meta_include': 'multi',
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
         self.provision_ai_lake_database_instance_endpoint = _Endpoint(
             settings={
                 'response_type': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                 'auth': [],
-                'endpoint_path': '/api/v1/ailake/database/instance',
+                'endpoint_path': '/api/v1/ailake/database/instances',
                 'operation_id': 'provision_ai_lake_database_instance',
                 'http_method': 'POST',
                 'servers': None,
@@ -230,6 +357,73 @@ class AILakeApi(object):
                 },
                 'location_map': {
                     'provision_database_instance_request': 'body',
+                    'operation_id': 'header',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [
+                    'application/json'
+                ]
+            },
+            api_client=api_client
+        )
+        self.run_ai_lake_service_command_endpoint = _Endpoint(
+            settings={
+                'response_type': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
+                'auth': [],
+                'endpoint_path': '/api/v1/ailake/services/{serviceId}/commands/{commandName}/run',
+                'operation_id': 'run_ai_lake_service_command',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'service_id',
+                    'command_name',
+                    'run_service_command_request',
+                    'operation_id',
+                ],
+                'required': [
+                    'service_id',
+                    'command_name',
+                    'run_service_command_request',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'service_id':
+                        (str,),
+                    'command_name':
+                        (str,),
+                    'run_service_command_request':
+                        (RunServiceCommandRequest,),
+                    'operation_id':
+                        (str,),
+                },
+                'attribute_map': {
+                    'service_id': 'serviceId',
+                    'command_name': 'commandName',
+                    'operation_id': 'operation-id',
+                },
+                'location_map': {
+                    'service_id': 'path',
+                    'command_name': 'path',
+                    'run_service_command_request': 'body',
                     'operation_id': 'header',
                 },
                 'collection_format_map': {
@@ -496,6 +690,168 @@ class AILakeApi(object):
             operation_id
         return self.get_ai_lake_operation_endpoint.call_with_http_info(**kwargs)
 
+    def list_ai_lake_database_instances(
+        self,
+        **kwargs
+    ):
+        """(BETA) List AI Lake Database instances  # noqa: E501
+
+        (BETA) Lists database instances in the organization's AI Lake. Supports paging via size and offset query parameters. Use metaInclude=page to get total count.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.list_ai_lake_database_instances(async_req=True)
+        >>> result = thread.get()
+
+
+        Keyword Args:
+            size (int): [optional] if omitted the server will use the default value of 50
+            offset (int): [optional] if omitted the server will use the default value of 0
+            meta_include ([str]): [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            ListDatabaseInstancesResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        return self.list_ai_lake_database_instances_endpoint.call_with_http_info(**kwargs)
+
+    def list_ai_lake_services(
+        self,
+        **kwargs
+    ):
+        """(BETA) List AI Lake services  # noqa: E501
+
+        (BETA) Lists services configured for the organization's AI Lake. Returns only non-sensitive fields (id, name). Supports paging via size and offset query parameters. Use metaInclude=page to get total count.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.list_ai_lake_services(async_req=True)
+        >>> result = thread.get()
+
+
+        Keyword Args:
+            size (int): [optional] if omitted the server will use the default value of 50
+            offset (int): [optional] if omitted the server will use the default value of 0
+            meta_include ([str]): [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            ListServicesResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        return self.list_ai_lake_services_endpoint.call_with_http_info(**kwargs)
+
     def provision_ai_lake_database_instance(
         self,
         provision_database_instance_request,
@@ -579,4 +935,96 @@ class AILakeApi(object):
         kwargs['provision_database_instance_request'] = \
             provision_database_instance_request
         return self.provision_ai_lake_database_instance_endpoint.call_with_http_info(**kwargs)
+
+    def run_ai_lake_service_command(
+        self,
+        service_id,
+        command_name,
+        run_service_command_request,
+        **kwargs
+    ):
+        """(BETA) Run an AI Lake services command  # noqa: E501
+
+        (BETA) Runs a specific AI Lake service command.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.run_ai_lake_service_command(service_id, command_name, run_service_command_request, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            service_id (str):
+            command_name (str):
+            run_service_command_request (RunServiceCommandRequest):
+
+        Keyword Args:
+            operation_id (str): [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            {str: (bool, date, datetime, dict, float, int, list, str, none_type)}
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['service_id'] = \
+            service_id
+        kwargs['command_name'] = \
+            command_name
+        kwargs['run_service_command_request'] = \
+            run_service_command_request
+        return self.run_ai_lake_service_command_endpoint.call_with_http_info(**kwargs)
 
