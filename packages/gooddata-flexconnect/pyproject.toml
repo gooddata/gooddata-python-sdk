@@ -67,6 +67,15 @@ allowed-unresolved-imports = ["jsonschema.**", "referencing"]
 [tool.hatch.build.targets.wheel]
 packages = ["src/gooddata_flexconnect"]
 
+[tool.coverage.run]
+source = ["gooddata_flexconnect"]
+
+[tool.coverage.paths]
+source = [
+    "src/gooddata_flexconnect",
+    "**/site-packages/gooddata_flexconnect",
+]
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
