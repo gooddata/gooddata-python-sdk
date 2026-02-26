@@ -47,6 +47,15 @@ allowed-unresolved-imports = ["deep_translator", "github"]
 [tool.hatch.build.targets.wheel]
 packages = ["src/gooddata_dbt"]
 
+[tool.coverage.run]
+source = ["gooddata_dbt"]
+
+[tool.coverage.paths]
+source = [
+    "src/gooddata_dbt",
+    "**/site-packages/gooddata_dbt",
+]
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
