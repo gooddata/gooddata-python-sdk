@@ -26,6 +26,7 @@ jobs:
     uses: ./.github/workflows/rw-python-tests.yaml
     with:
       changed-python-modules: ${{ needs.collect-changes.outputs.changed-python-modules }}
+    secrets: inherit
 
 
   status-check:
