@@ -7,6 +7,10 @@ Name | Type | Description | Notes
 **content** | [**JsonNode**](JsonNode.md) |  | 
 **id** | **str** | Visualization object ID. | 
 **title** | **str** | Visualization object title. | 
+**certification** | **str** | Certification status of the entity. | [optional]  if omitted the server will use the default value of "CERTIFIED"
+**certification_message** | **str, none_type** | Optional message associated with the certification. | [optional] 
+**certified_at** | **str, none_type** | Time when the certification was set. | [optional] 
+**certified_by** | [**DeclarativeUserIdentifier**](DeclarativeUserIdentifier.md) |  | [optional] 
 **created_at** | **str, none_type** | Time of the entity creation. | [optional] 
 **created_by** | [**DeclarativeUserIdentifier**](DeclarativeUserIdentifier.md) |  | [optional] 
 **description** | **str** | Visualization object description. | [optional] 

@@ -33,12 +33,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 def lazy_import():
     from gooddata_api_client.model.aac_dashboard_filter import AacDashboardFilter
     from gooddata_api_client.model.aac_dashboard_permissions import AacDashboardPermissions
-    from gooddata_api_client.model.aac_dashboard_plugin_link import AacDashboardPluginLink
     from gooddata_api_client.model.aac_section import AacSection
     from gooddata_api_client.model.aac_tab import AacTab
     globals()['AacDashboardFilter'] = AacDashboardFilter
     globals()['AacDashboardPermissions'] = AacDashboardPermissions
-    globals()['AacDashboardPluginLink'] = AacDashboardPluginLink
     globals()['AacSection'] = AacSection
     globals()['AacTab'] = AacTab
 

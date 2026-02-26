@@ -74,6 +74,12 @@ class JsonApiJwkInAttributesContent(ModelComposed):
     }
 
     validations = {
+        ('kid',): {
+            'max_length': 255,
+            'regex': {
+                'pattern': r'^[^.]',  # noqa: E501
+            },
+        },
     }
 
     @cached_property

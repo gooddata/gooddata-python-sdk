@@ -104,10 +104,10 @@ class AbsoluteDateFilterAbsoluteDateFilter(ModelNormal):
         lazy_import()
         return {
             'dataset': (AfmObjectIdentifierDataset,),  # noqa: E501
-            'empty_value_handling': (str,),  # noqa: E501
             '_from': (str,),  # noqa: E501
             'to': (str,),  # noqa: E501
             'apply_on_result': (bool,),  # noqa: E501
+            'empty_value_handling': (str,),  # noqa: E501
             'local_identifier': (str,),  # noqa: E501
         }
 
@@ -118,10 +118,10 @@ class AbsoluteDateFilterAbsoluteDateFilter(ModelNormal):
 
     attribute_map = {
         'dataset': 'dataset',  # noqa: E501
-        'empty_value_handling': 'emptyValueHandling',  # noqa: E501
         '_from': 'from',  # noqa: E501
         'to': 'to',  # noqa: E501
         'apply_on_result': 'applyOnResult',  # noqa: E501
+        'empty_value_handling': 'emptyValueHandling',  # noqa: E501
         'local_identifier': 'localIdentifier',  # noqa: E501
     }
 
@@ -172,6 +172,7 @@ class AbsoluteDateFilterAbsoluteDateFilter(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             apply_on_result (bool): [optional]  # noqa: E501
+            empty_value_handling (str): Specifies how rows with empty (null/missing) date values should be handled. INCLUDE includes empty dates in addition to the date range restriction, EXCLUDE removes rows with empty dates (default), ONLY keeps only rows with empty dates.. [optional] if omitted the server will use the default value of "EXCLUDE"  # noqa: E501
             local_identifier (str): [optional]  # noqa: E501
         """
 
@@ -267,6 +268,7 @@ class AbsoluteDateFilterAbsoluteDateFilter(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             apply_on_result (bool): [optional]  # noqa: E501
+            empty_value_handling (str): Specifies how rows with empty (null/missing) date values should be handled. INCLUDE includes empty dates in addition to the date range restriction, EXCLUDE removes rows with empty dates (default), ONLY keeps only rows with empty dates.. [optional] if omitted the server will use the default value of "EXCLUDE"  # noqa: E501
             local_identifier (str): [optional]  # noqa: E501
         """
 

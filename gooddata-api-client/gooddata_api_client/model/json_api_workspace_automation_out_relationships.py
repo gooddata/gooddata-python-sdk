@@ -31,14 +31,14 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_created_by import JsonApiAnalyticalDashboardOutRelationshipsCreatedBy
+    from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_certified_by import JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy
     from gooddata_api_client.model.json_api_automation_in_relationships_analytical_dashboard import JsonApiAutomationInRelationshipsAnalyticalDashboard
     from gooddata_api_client.model.json_api_automation_in_relationships_export_definitions import JsonApiAutomationInRelationshipsExportDefinitions
     from gooddata_api_client.model.json_api_automation_in_relationships_notification_channel import JsonApiAutomationInRelationshipsNotificationChannel
     from gooddata_api_client.model.json_api_automation_in_relationships_recipients import JsonApiAutomationInRelationshipsRecipients
     from gooddata_api_client.model.json_api_automation_out_relationships_automation_results import JsonApiAutomationOutRelationshipsAutomationResults
     from gooddata_api_client.model.json_api_workspace_automation_out_relationships_workspace import JsonApiWorkspaceAutomationOutRelationshipsWorkspace
-    globals()['JsonApiAnalyticalDashboardOutRelationshipsCreatedBy'] = JsonApiAnalyticalDashboardOutRelationshipsCreatedBy
+    globals()['JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy'] = JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy
     globals()['JsonApiAutomationInRelationshipsAnalyticalDashboard'] = JsonApiAutomationInRelationshipsAnalyticalDashboard
     globals()['JsonApiAutomationInRelationshipsExportDefinitions'] = JsonApiAutomationInRelationshipsExportDefinitions
     globals()['JsonApiAutomationInRelationshipsNotificationChannel'] = JsonApiAutomationInRelationshipsNotificationChannel
@@ -102,9 +102,9 @@ class JsonApiWorkspaceAutomationOutRelationships(ModelNormal):
         return {
             'analytical_dashboard': (JsonApiAutomationInRelationshipsAnalyticalDashboard,),  # noqa: E501
             'automation_results': (JsonApiAutomationOutRelationshipsAutomationResults,),  # noqa: E501
-            'created_by': (JsonApiAnalyticalDashboardOutRelationshipsCreatedBy,),  # noqa: E501
+            'created_by': (JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy,),  # noqa: E501
             'export_definitions': (JsonApiAutomationInRelationshipsExportDefinitions,),  # noqa: E501
-            'modified_by': (JsonApiAnalyticalDashboardOutRelationshipsCreatedBy,),  # noqa: E501
+            'modified_by': (JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy,),  # noqa: E501
             'notification_channel': (JsonApiAutomationInRelationshipsNotificationChannel,),  # noqa: E501
             'recipients': (JsonApiAutomationInRelationshipsRecipients,),  # noqa: E501
             'workspace': (JsonApiWorkspaceAutomationOutRelationshipsWorkspace,),  # noqa: E501
@@ -169,9 +169,9 @@ class JsonApiWorkspaceAutomationOutRelationships(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             analytical_dashboard (JsonApiAutomationInRelationshipsAnalyticalDashboard): [optional]  # noqa: E501
             automation_results (JsonApiAutomationOutRelationshipsAutomationResults): [optional]  # noqa: E501
-            created_by (JsonApiAnalyticalDashboardOutRelationshipsCreatedBy): [optional]  # noqa: E501
+            created_by (JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy): [optional]  # noqa: E501
             export_definitions (JsonApiAutomationInRelationshipsExportDefinitions): [optional]  # noqa: E501
-            modified_by (JsonApiAnalyticalDashboardOutRelationshipsCreatedBy): [optional]  # noqa: E501
+            modified_by (JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy): [optional]  # noqa: E501
             notification_channel (JsonApiAutomationInRelationshipsNotificationChannel): [optional]  # noqa: E501
             recipients (JsonApiAutomationInRelationshipsRecipients): [optional]  # noqa: E501
             workspace (JsonApiWorkspaceAutomationOutRelationshipsWorkspace): [optional]  # noqa: E501
@@ -262,9 +262,9 @@ class JsonApiWorkspaceAutomationOutRelationships(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             analytical_dashboard (JsonApiAutomationInRelationshipsAnalyticalDashboard): [optional]  # noqa: E501
             automation_results (JsonApiAutomationOutRelationshipsAutomationResults): [optional]  # noqa: E501
-            created_by (JsonApiAnalyticalDashboardOutRelationshipsCreatedBy): [optional]  # noqa: E501
+            created_by (JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy): [optional]  # noqa: E501
             export_definitions (JsonApiAutomationInRelationshipsExportDefinitions): [optional]  # noqa: E501
-            modified_by (JsonApiAnalyticalDashboardOutRelationshipsCreatedBy): [optional]  # noqa: E501
+            modified_by (JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy): [optional]  # noqa: E501
             notification_channel (JsonApiAutomationInRelationshipsNotificationChannel): [optional]  # noqa: E501
             recipients (JsonApiAutomationInRelationshipsRecipients): [optional]  # noqa: E501
             workspace (JsonApiWorkspaceAutomationOutRelationshipsWorkspace): [optional]  # noqa: E501
