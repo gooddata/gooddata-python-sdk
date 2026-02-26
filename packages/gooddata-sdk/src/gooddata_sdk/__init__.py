@@ -276,6 +276,7 @@ from gooddata_sdk.compute.model.metric import (
     PopDatesetMetric,
     SimpleMetric,
 )
+from gooddata_api_client.model.allowed_relationship_type import AllowedRelationshipType
 from gooddata_sdk.compute.service import ComputeService
 from gooddata_sdk.sdk import GoodDataSdk
 from gooddata_sdk.table import ExecutionTable, TableService
