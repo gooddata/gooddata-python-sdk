@@ -25,6 +25,13 @@
             },
             "type": "array"
           },
+          "measureDefinitionOverrides": {
+            "description": "(EXPERIMENTAL) Override definitions of catalog metrics for this request. Allows substituting a catalog metric's MAQL definition without modifying the stored definition.",
+            "items": {
+              "$ref": "#/components/schemas/MetricDefinitionOverride"
+            },
+            "type": "array"
+          },
           "measures": {
             "description": "Metrics to be computed.",
             "items": {
@@ -76,9 +83,9 @@
               }
             },
             "required": [
+              "dataset",
               "from",
-              "to",
-              "dataset"
+              "to"
             ],
             "type": "object"
           }
@@ -598,6 +605,24 @@
         ],
         "type": "object"
       },
+      "AnomalyDetectionConfig": {
+        "description": "Anomaly detection configuration.",
+        "properties": {
+          "sensitivity": {
+            "description": "Outlier sensitivity level.",
+            "enum": [
+              "LOW",
+              "MEDIUM",
+              "HIGH"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "sensitivity"
+        ],
+        "type": "object"
+      },
       "AnomalyDetectionRequest": {
         "properties": {
           "sensitivity": {
@@ -927,6 +952,146 @@
         "required": [
           "labelValue",
           "primaryLabelValue"
+        ],
+        "type": "object"
+      },
+      "AwsBedrockAccessKeyAuth": {
+        "allOf": [
+          {
+            "properties": {
+              "accessKeyId": {
+                "description": "AWS Access Key ID.",
+                "maxLength": 255,
+                "nullable": true,
+                "type": "string",
+                "writeOnly": true
+              },
+              "secretAccessKey": {
+                "description": "AWS Secret Access Key.",
+                "maxLength": 10000,
+                "nullable": true,
+                "type": "string",
+                "writeOnly": true
+              },
+              "sessionToken": {
+                "description": "AWS Session Token (for temporary credentials).",
+                "maxLength": 10000,
+                "nullable": true,
+                "type": "string",
+                "writeOnly": true
+              },
+              "type": {
+                "description": "Authentication type.",
+                "enum": [
+                  "ACCESS_KEY"
+                ],
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "type"
+        ],
+        "type": "object"
+      },
+      "AwsBedrockProviderConfig": {
+        "description": "Configuration for AWS Bedrock provider.",
+        "properties": {
+          "auth": {
+            "$ref": "#/components/schemas/BedrockProviderAuth"
+          },
+          "region": {
+            "description": "AWS region for Bedrock.",
+            "example": "us-east-1",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "type": {
+            "description": "Provider type.",
+            "enum": [
+              "AWS_BEDROCK"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "auth",
+          "region",
+          "type"
+        ],
+        "type": "object"
+      },
+      "AzureFoundryApiKeyAuth": {
+        "allOf": [
+          {
+            "properties": {
+              "apiKey": {
+                "description": "Azure API key.",
+                "maxLength": 255,
+                "nullable": true,
+                "type": "string",
+                "writeOnly": true
+              },
+              "type": {
+                "description": "Authentication type.",
+                "enum": [
+                  "API_KEY"
+                ],
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "type"
+        ],
+        "type": "object"
+      },
+      "AzureFoundryProviderAuth": {
+        "description": "Authentication configuration.",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/AzureFoundryApiKeyAuth"
+          }
+        ],
+        "type": "object"
+      },
+      "AzureFoundryProviderConfig": {
+        "description": "Configuration for Azure Foundry provider.",
+        "properties": {
+          "auth": {
+            "$ref": "#/components/schemas/AzureFoundryProviderAuth"
+          },
+          "endpoint": {
+            "description": "Azure AI inference endpoint URL.",
+            "example": "https://my-resource.services.ai.azure.com/models",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "type": {
+            "description": "Provider type.",
+            "enum": [
+              "AZURE_FOUNDRY"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "auth",
+          "endpoint",
+          "type"
+        ],
+        "type": "object"
+      },
+      "BedrockProviderAuth": {
+        "description": "Authentication configuration.",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/AwsBedrockAccessKeyAuth"
+          }
         ],
         "type": "object"
       },
@@ -1427,6 +1592,26 @@
         ],
         "type": "object"
       },
+      "ClusteringConfig": {
+        "description": "Clustering configuration.",
+        "properties": {
+          "numberOfClusters": {
+            "description": "Number of clusters to create",
+            "format": "int32",
+            "type": "integer"
+          },
+          "threshold": {
+            "description": "Clustering algorithm threshold",
+            "format": "float",
+            "type": "number"
+          }
+        },
+        "required": [
+          "numberOfClusters",
+          "threshold"
+        ],
+        "type": "object"
+      },
       "ClusteringRequest": {
         "properties": {
           "numberOfClusters": {
@@ -1580,9 +1765,9 @@
               }
             },
             "required": [
+              "measure",
               "operator",
-              "value",
-              "measure"
+              "value"
             ],
             "type": "object"
           }
@@ -1638,9 +1823,67 @@
         ],
         "type": "object"
       },
+      "CreateKnowledgeDocumentRequestDto": {
+        "properties": {
+          "content": {
+            "type": "string"
+          },
+          "filename": {
+            "type": "string"
+          },
+          "pageBoundaries": {
+            "items": {
+              "format": "int32",
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "scopes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "title": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "content",
+          "filename"
+        ],
+        "type": "object"
+      },
+      "CreateKnowledgeDocumentResponseDto": {
+        "properties": {
+          "filename": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "numChunks": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "success": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "filename",
+          "message",
+          "numChunks",
+          "success"
+        ],
+        "type": "object"
+      },
       "CreatedVisualization": {
         "description": "List of created visualization objects",
         "properties": {
+          "config": {
+            "$ref": "#/components/schemas/VisualizationConfig"
+          },
           "dimensionality": {
             "description": "List of attributes representing the dimensionality of the new visualization",
             "items": {
@@ -1707,7 +1950,8 @@
               "BAR",
               "LINE",
               "PIE",
-              "COLUMN"
+              "COLUMN",
+              "SCATTER"
             ],
             "example": "TABLE",
             "type": "string"
@@ -1863,6 +2107,9 @@
           },
           {
             "$ref": "#/components/schemas/RelativeDateFilter"
+          },
+          {
+            "$ref": "#/components/schemas/AllTimeDateFilter"
           }
         ],
         "type": "object"
@@ -1918,6 +2165,21 @@
           "granularity",
           "to",
           "using"
+        ],
+        "type": "object"
+      },
+      "DeleteKnowledgeDocumentResponseDto": {
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "success": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "message",
+          "success"
         ],
         "type": "object"
       },
@@ -2523,10 +2785,10 @@
             "$ref": "#/components/schemas/AbsoluteDateFilter"
           },
           {
-            "$ref": "#/components/schemas/AllTimeDateFilter"
+            "$ref": "#/components/schemas/RelativeDateFilter"
           },
           {
-            "$ref": "#/components/schemas/RelativeDateFilter"
+            "$ref": "#/components/schemas/AllTimeDateFilter"
           },
           {
             "$ref": "#/components/schemas/NegativeAttributeFilter"
@@ -2549,6 +2811,31 @@
           {
             "$ref": "#/components/schemas/AttributeFilter"
           }
+        ],
+        "type": "object"
+      },
+      "ForecastConfig": {
+        "description": "Forecast configuration.",
+        "properties": {
+          "confidenceLevel": {
+            "description": "Confidence interval boundary value.",
+            "format": "float",
+            "type": "number"
+          },
+          "forecastPeriod": {
+            "description": "Number of future periods that should be forecasted",
+            "format": "int32",
+            "type": "integer"
+          },
+          "seasonal": {
+            "description": "Whether the input data is seasonal",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "confidenceLevel",
+          "forecastPeriod",
+          "seasonal"
         ],
         "type": "object"
       },
@@ -2647,6 +2934,80 @@
         ],
         "type": "object"
       },
+      "GenerateDescriptionRequest": {
+        "properties": {
+          "objectId": {
+            "description": "Identifier of the object to describe",
+            "type": "string"
+          },
+          "objectType": {
+            "description": "Type of the object to describe. One of: visualization, dashboard, metric, fact, attribute",
+            "enum": [
+              "Visualization",
+              "Dashboard",
+              "Metric",
+              "Fact",
+              "Attribute"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "objectId",
+          "objectType"
+        ],
+        "type": "object"
+      },
+      "GenerateDescriptionResponse": {
+        "properties": {
+          "description": {
+            "description": "Generated description of the requested object",
+            "type": "string"
+          },
+          "note": {
+            "description": "Additional note with details in case generation was not performed",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "GenerateTitleRequest": {
+        "properties": {
+          "objectId": {
+            "description": "Identifier of the object to title",
+            "type": "string"
+          },
+          "objectType": {
+            "description": "Type of the object to title. Matches chat-search object types.",
+            "enum": [
+              "Visualization",
+              "Dashboard",
+              "Metric",
+              "Fact",
+              "Attribute"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "objectId",
+          "objectType"
+        ],
+        "type": "object"
+      },
+      "GenerateTitleResponse": {
+        "properties": {
+          "note": {
+            "description": "Additional note with details in case generation was not performed",
+            "type": "string"
+          },
+          "title": {
+            "description": "Generated title of the requested object",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "GeoAreaConfig": {
         "description": "Configuration specific to geo area labels.",
         "properties": {
@@ -2697,6 +3058,7 @@
               "SYNCING",
               "COMPLETED",
               "FAILED",
+              "CANCELLED",
               "NOT_FOUND",
               "DISABLED"
             ],
@@ -2775,6 +3137,11 @@
         "required": [
           "inline"
         ],
+        "type": "object"
+      },
+      "JsonNode": {
+        "description": "The payload to pass to the command",
+        "nullable": true,
         "type": "object"
       },
       "KeyDriversDimension": {
@@ -2895,6 +3262,168 @@
         ],
         "type": "object"
       },
+      "KnowledgeDocumentMetadataDto": {
+        "properties": {
+          "createdAt": {
+            "type": "string"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "filename": {
+            "type": "string"
+          },
+          "isDisabled": {
+            "type": "boolean"
+          },
+          "numChunks": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "scopes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "title": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          },
+          "updatedBy": {
+            "type": "string"
+          },
+          "workspaceId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "createdAt",
+          "createdBy",
+          "filename",
+          "numChunks",
+          "scopes",
+          "updatedAt",
+          "updatedBy"
+        ],
+        "type": "object"
+      },
+      "KnowledgeSearchResultDto": {
+        "properties": {
+          "chunkIndex": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "content": {
+            "type": "string"
+          },
+          "filename": {
+            "type": "string"
+          },
+          "pageNumbers": {
+            "items": {
+              "format": "int32",
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "scopes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "score": {
+            "format": "float",
+            "type": "number"
+          },
+          "title": {
+            "type": "string"
+          },
+          "totalChunks": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "workspaceId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "chunkIndex",
+          "content",
+          "filename",
+          "pageNumbers",
+          "scopes",
+          "score",
+          "totalChunks"
+        ],
+        "type": "object"
+      },
+      "ListKnowledgeDocumentsResponseDto": {
+        "properties": {
+          "documents": {
+            "items": {
+              "$ref": "#/components/schemas/KnowledgeDocumentMetadataDto"
+            },
+            "type": "array"
+          },
+          "nextPageToken": {
+            "type": "string"
+          },
+          "totalCount": {
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "documents"
+        ],
+        "type": "object"
+      },
+      "LlmModel": {
+        "description": "LLM Model configuration (id, family) within a provider.",
+        "properties": {
+          "family": {
+            "description": "Family of LLM models.",
+            "enum": [
+              "OPENAI",
+              "ANTHROPIC",
+              "META",
+              "MISTRAL",
+              "AMAZON",
+              "GOOGLE",
+              "COHERE"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the model (e.g., gpt-5.3, claude-4.6).",
+            "maxLength": 255,
+            "type": "string"
+          }
+        },
+        "required": [
+          "family",
+          "id"
+        ],
+        "type": "object"
+      },
+      "LlmProviderConfig": {
+        "description": "Provider configuration to test.",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/AwsBedrockProviderConfig"
+          },
+          {
+            "$ref": "#/components/schemas/AzureFoundryProviderConfig"
+          },
+          {
+            "$ref": "#/components/schemas/OpenAIProviderConfig"
+          }
+        ]
+      },
       "MatchAttributeFilter": {
         "description": "Filter via label with given match type and literal value.",
         "properties": {
@@ -2935,9 +3464,9 @@
               }
             },
             "required": [
+              "label",
               "literal",
-              "matchType",
-              "label"
+              "matchType"
             ],
             "type": "object"
           }
@@ -3154,6 +3683,22 @@
         ],
         "type": "object"
       },
+      "MetricDefinitionOverride": {
+        "description": "(EXPERIMENTAL) Override for a catalog metric definition.",
+        "properties": {
+          "definition": {
+            "$ref": "#/components/schemas/InlineMeasureDefinition"
+          },
+          "item": {
+            "$ref": "#/components/schemas/AfmObjectIdentifierCore"
+          }
+        },
+        "required": [
+          "definition",
+          "item"
+        ],
+        "type": "object"
+      },
       "MetricValueChange": {
         "description": "Individual change analysis data item",
         "properties": {
@@ -3225,6 +3770,29 @@
         ],
         "type": "object"
       },
+      "ModelTestResult": {
+        "description": "Per-model test results.",
+        "properties": {
+          "message": {
+            "description": "Message about the model test result.",
+            "type": "string"
+          },
+          "modelId": {
+            "description": "The model ID that was tested.",
+            "type": "string"
+          },
+          "successful": {
+            "description": "Whether the model test was successful.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "message",
+          "modelId",
+          "successful"
+        ],
+        "type": "object"
+      },
       "NegativeAttributeFilter": {
         "description": "Filter able to limit element values by label and related selected negated elements.",
         "properties": {
@@ -3244,14 +3812,83 @@
               }
             },
             "required": [
-              "notIn",
-              "label"
+              "label",
+              "notIn"
             ],
             "type": "object"
           }
         },
         "required": [
           "negativeAttributeFilter"
+        ],
+        "type": "object"
+      },
+      "OpenAIProviderConfig": {
+        "description": "Configuration for OpenAI provider.",
+        "properties": {
+          "auth": {
+            "$ref": "#/components/schemas/OpenAiProviderAuth"
+          },
+          "baseUrl": {
+            "default": "https://api.openai.com",
+            "description": "Custom base URL for OpenAI API.",
+            "maxLength": 255,
+            "nullable": true,
+            "type": "string"
+          },
+          "organization": {
+            "description": "OpenAI organization ID.",
+            "maxLength": 255,
+            "nullable": true,
+            "type": "string"
+          },
+          "type": {
+            "description": "Provider type.",
+            "enum": [
+              "OPENAI"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "auth",
+          "type"
+        ],
+        "type": "object"
+      },
+      "OpenAiApiKeyAuth": {
+        "allOf": [
+          {
+            "properties": {
+              "apiKey": {
+                "description": "OpenAI API key.",
+                "maxLength": 255,
+                "nullable": true,
+                "type": "string",
+                "writeOnly": true
+              },
+              "type": {
+                "description": "Authentication type.",
+                "enum": [
+                  "API_KEY"
+                ],
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "type"
+        ],
+        "type": "object"
+      },
+      "OpenAiProviderAuth": {
+        "description": "Authentication configuration.",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/OpenAiApiKeyAuth"
+          }
         ],
         "type": "object"
       },
@@ -3271,10 +3908,11 @@
             "type": "string"
           },
           "kind": {
-            "description": "Type of the long-running operation. \n* `provision-database` — Provisioning of an AI Lake database. \n* `deprovision-database` — Deprovisioning (deletion) of an AI Lake database.\n",
+            "description": "Type of the long-running operation.\n* `provision-database` — Provisioning of an AI Lake database.\n* `deprovision-database` — Deprovisioning (deletion) of an AI Lake database.\n* `run-service-command` — Running a command in a particular AI Lake service.\n",
             "enum": [
               "provision-database",
-              "deprovision-database"
+              "deprovision-database",
+              "run-service-command"
             ],
             "type": "string"
           },
@@ -3459,6 +4097,23 @@
           "offset",
           "total"
         ],
+        "type": "object"
+      },
+      "PatchKnowledgeDocumentRequestDto": {
+        "properties": {
+          "isDisabled": {
+            "type": "boolean"
+          },
+          "scopes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "title": {
+            "type": "string"
+          }
+        },
         "type": "object"
       },
       "PendingOperation": {
@@ -3729,6 +4384,7 @@
               "SYNCING",
               "COMPLETED",
               "FAILED",
+              "CANCELLED",
               "NOT_FOUND",
               "DISABLED"
             ],
@@ -3820,9 +4476,9 @@
             },
             "required": [
               "from",
+              "measure",
               "operator",
-              "to",
-              "measure"
+              "to"
             ],
             "type": "object"
           }
@@ -3993,10 +4649,10 @@
               }
             },
             "required": [
+              "dataset",
               "from",
               "granularity",
-              "to",
-              "dataset"
+              "to"
             ],
             "type": "object"
           }
@@ -4162,6 +4818,25 @@
         ],
         "type": "object"
       },
+      "RunServiceCommandRequest": {
+        "description": "Request to run an AI Lake Service Command",
+        "properties": {
+          "context": {
+            "additionalProperties": {
+              "description": "The context to pass to the command",
+              "nullable": true,
+              "type": "string"
+            },
+            "description": "The context to pass to the command",
+            "nullable": true,
+            "type": "object"
+          },
+          "payload": {
+            "$ref": "#/components/schemas/JsonNode"
+          }
+        },
+        "type": "object"
+      },
       "SavedVisualization": {
         "description": "Created and saved visualization IDs.",
         "properties": {
@@ -4177,6 +4852,24 @@
         "required": [
           "createdVisualizationId",
           "savedVisualizationId"
+        ],
+        "type": "object"
+      },
+      "SearchKnowledgeResponseDto": {
+        "properties": {
+          "results": {
+            "items": {
+              "$ref": "#/components/schemas/KnowledgeSearchResultDto"
+            },
+            "type": "array"
+          },
+          "statistics": {
+            "$ref": "#/components/schemas/SearchStatisticsDto"
+          }
+        },
+        "required": [
+          "results",
+          "statistics"
         ],
         "type": "object"
       },
@@ -4417,7 +5110,42 @@
         ],
         "type": "object"
       },
+      "SearchStatisticsDto": {
+        "properties": {
+          "averageSimilarityScore": {
+            "format": "float",
+            "type": "number"
+          },
+          "totalResults": {
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "averageSimilarityScore",
+          "totalResults"
+        ],
+        "type": "object"
+      },
       "ServerSentEventChatResult": {
+        "type": "object"
+      },
+      "ServiceInfo": {
+        "description": "Non-sensitive metadata for an AI Lake pipeline",
+        "properties": {
+          "name": {
+            "description": "Human-readable name of the service",
+            "type": "string"
+          },
+          "serviceId": {
+            "description": "Internal identifier for the service configuration (UUID)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "serviceId"
+        ],
         "type": "object"
       },
       "SimpleMeasureDefinition": {
@@ -4634,6 +5362,59 @@
         ],
         "type": "object"
       },
+      "TestLlmProviderDefinitionRequest": {
+        "properties": {
+          "models": {
+            "description": "Models to test.",
+            "items": {
+              "$ref": "#/components/schemas/LlmModel"
+            },
+            "type": "array"
+          },
+          "providerConfig": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AwsBedrockProviderConfig"
+              },
+              {
+                "$ref": "#/components/schemas/AzureFoundryProviderConfig"
+              },
+              {
+                "$ref": "#/components/schemas/OpenAIProviderConfig"
+              }
+            ]
+          }
+        },
+        "required": [
+          "providerConfig"
+        ],
+        "type": "object"
+      },
+      "TestLlmProviderResponse": {
+        "properties": {
+          "modelResults": {
+            "description": "Per-model test results.",
+            "items": {
+              "$ref": "#/components/schemas/ModelTestResult"
+            },
+            "type": "array"
+          },
+          "providerMessage": {
+            "description": "Message about the provider connectivity test.",
+            "type": "string"
+          },
+          "providerReachable": {
+            "description": "Whether the LLM provider is reachable.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "modelResults",
+          "providerMessage",
+          "providerReachable"
+        ],
+        "type": "object"
+      },
       "Thought": {
         "description": "Detailed thoughts/messages within this step.",
         "properties": {
@@ -4749,6 +5530,7 @@
               "RUNNING",
               "COMPLETED",
               "FAILED",
+              "CANCELLED",
               "DISABLED"
             ],
             "type": "string"
@@ -4761,6 +5543,61 @@
         "type": "object"
       },
       "Unit": {
+        "type": "object"
+      },
+      "UpsertKnowledgeDocumentRequestDto": {
+        "properties": {
+          "content": {
+            "type": "string"
+          },
+          "filename": {
+            "type": "string"
+          },
+          "pageBoundaries": {
+            "items": {
+              "format": "int32",
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "scopes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "title": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "content",
+          "filename"
+        ],
+        "type": "object"
+      },
+      "UpsertKnowledgeDocumentResponseDto": {
+        "properties": {
+          "filename": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "numChunks": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "success": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "filename",
+          "message",
+          "numChunks",
+          "success"
+        ],
         "type": "object"
       },
       "UserContext": {
@@ -4864,6 +5701,89 @@
           "successful"
         ],
         "type": "object"
+      },
+      "VisualizationConfig": {
+        "description": "Visualization config for smart-function rendering.",
+        "properties": {
+          "anomalyDetection": {
+            "$ref": "#/components/schemas/AnomalyDetectionConfig"
+          },
+          "clustering": {
+            "$ref": "#/components/schemas/ClusteringConfig"
+          },
+          "forecast": {
+            "$ref": "#/components/schemas/ForecastConfig"
+          },
+          "whatIf": {
+            "$ref": "#/components/schemas/WhatIfScenarioConfig"
+          }
+        },
+        "type": "object"
+      },
+      "WhatIfMeasureAdjustmentConfig": {
+        "description": "Measure adjustments for this scenario",
+        "properties": {
+          "metricId": {
+            "description": "ID of the metric or fact to adjust",
+            "type": "string"
+          },
+          "metricType": {
+            "description": "Type: metric or fact",
+            "type": "string"
+          },
+          "scenarioMaql": {
+            "description": "Alternative MAQL expression for this scenario",
+            "type": "string"
+          }
+        },
+        "required": [
+          "metricId",
+          "metricType",
+          "scenarioMaql"
+        ],
+        "type": "object"
+      },
+      "WhatIfScenarioConfig": {
+        "description": "What-if scenario configuration.",
+        "properties": {
+          "includeBaseline": {
+            "description": "Whether baseline (unmodified) values are included",
+            "type": "boolean"
+          },
+          "scenarios": {
+            "description": "Scenarios with alternative measure calculations",
+            "items": {
+              "$ref": "#/components/schemas/WhatIfScenarioItem"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "includeBaseline",
+          "scenarios"
+        ],
+        "type": "object"
+      },
+      "WhatIfScenarioItem": {
+        "description": "Scenarios with alternative measure calculations",
+        "properties": {
+          "adjustments": {
+            "description": "Measure adjustments for this scenario",
+            "items": {
+              "$ref": "#/components/schemas/WhatIfMeasureAdjustmentConfig"
+            },
+            "type": "array"
+          },
+          "label": {
+            "description": "Human-readable scenario label",
+            "type": "string"
+          }
+        },
+        "required": [
+          "adjustments",
+          "label"
+        ],
+        "type": "object"
       }
     }
   },
@@ -4948,6 +5868,72 @@
         ]
       }
     },
+    "/api/v1/actions/ai/llmProvider/test": {
+      "post": {
+        "description": "Tests LLM provider connectivity with a full definition.",
+        "operationId": "testLlmProvider",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TestLlmProviderDefinitionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TestLlmProviderResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Test LLM Provider",
+        "tags": [
+          "Smart Functions",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/ai/llmProvider/{llmProviderId}/test": {
+      "post": {
+        "description": "Tests an existing LLM provider connectivity by its ID.",
+        "operationId": "testLlmProviderById",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "llmProviderId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TestLlmProviderResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Test LLM Provider By Id",
+        "tags": [
+          "Smart Functions",
+          "actions"
+        ]
+      }
+    },
     "/api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/createdBy": {
       "get": {
         "description": "Returns a list of Users who created any object for this workspace",
@@ -4977,6 +5963,96 @@
           }
         },
         "summary": "Get Analytics Catalog CreatedBy Users",
+        "tags": [
+          "Smart Functions",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/generateDescription": {
+      "post": {
+        "description": "Generates a description for the specified analytics object. Returns description and a note with details if generation was not performed.",
+        "operationId": "generateDescription",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateDescriptionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenerateDescriptionResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Generate Description for Analytics Object",
+        "tags": [
+          "Smart Functions",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/generateTitle": {
+      "post": {
+        "description": "Generates a title for the specified analytics object. Returns title and a note with details if generation was not performed.",
+        "operationId": "generateTitle",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateTitleRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenerateTitleResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Generate Title for Analytics Object",
         "tags": [
           "Smart Functions",
           "actions"
@@ -5300,6 +6376,352 @@
         "summary": "Trigger Quality Issues Calculation",
         "tags": [
           "Smart Functions",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/knowledge/documents": {
+      "get": {
+        "operationId": "listDocuments",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "scopes",
+            "required": false,
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "pageToken",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListKnowledgeDocumentsResponseDto"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      },
+      "post": {
+        "operationId": "createDocument",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateKnowledgeDocumentRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateKnowledgeDocumentResponseDto"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      },
+      "put": {
+        "operationId": "upsertDocument",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertKnowledgeDocumentRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpsertKnowledgeDocumentResponseDto"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/knowledge/documents/{filename}": {
+      "delete": {
+        "operationId": "deleteDocument",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "filename",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteKnowledgeDocumentResponseDto"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      },
+      "get": {
+        "operationId": "getDocument",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "filename",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KnowledgeDocumentMetadataDto"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      },
+      "patch": {
+        "operationId": "patchDocument",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "filename",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PatchKnowledgeDocumentRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KnowledgeDocumentMetadataDto"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/knowledge/search": {
+      "get": {
+        "operationId": "searchKnowledge",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 10,
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "minScore",
+            "required": false,
+            "schema": {
+              "default": 0.0,
+              "format": "double",
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "scopes",
+            "required": false,
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchKnowledgeResponseDto"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
           "actions"
         ]
       }
@@ -6689,7 +8111,36 @@
         ]
       }
     },
-    "/api/v1/ailake/database/instance": {
+    "/api/v1/ailake/database/instances": {
+      "get": {
+        "description": "(BETA) Lists database instances in the organization's AI Lake.",
+        "operationId": "listAiLakeDatabaseInstances",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/DatabaseInstance"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "AI Lake database instances successfully retrieved"
+          }
+        },
+        "summary": "(BETA) List AI Lake Database instances",
+        "tags": [
+          "AI Lake"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to list AI Lake database instances.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      },
       "post": {
         "description": "(BETA) Creates a new database in the organization's AI Lake. Returns an operation-id in the operation-id header the client can use to poll for the progress.",
         "operationId": "provisionAiLakeDatabaseInstance",
@@ -6735,7 +8186,7 @@
               },
               "operation-location": {
                 "description": "Operation location URL that can be used for polling.",
-                "example": "/api/v1/ailake/operation/e9fd5d74-8a1b-46bd-ac60-bd91e9206897",
+                "example": "/api/v1/ailake/operations/e9fd5d74-8a1b-46bd-ac60-bd91e9206897",
                 "required": true,
                 "schema": {
                   "type": "string"
@@ -6757,7 +8208,7 @@
         }
       }
     },
-    "/api/v1/ailake/database/instance/{instanceId}": {
+    "/api/v1/ailake/database/instances/{instanceId}": {
       "delete": {
         "description": "(BETA) Deletes an existing database in the organization's AI Lake. Returns an operation-id in the operation-id header the client can use to poll for the progress.",
         "operationId": "deprovisionAiLakeDatabaseInstance",
@@ -6801,7 +8252,7 @@
               },
               "operation-location": {
                 "description": "Operation location URL that can be used for polling.",
-                "example": "/api/v1/ailake/operation/e9fd5d74-8a1b-46bd-ac60-bd91e9206897",
+                "example": "/api/v1/ailake/operations/e9fd5d74-8a1b-46bd-ac60-bd91e9206897",
                 "required": true,
                 "schema": {
                   "type": "string"
@@ -6859,7 +8310,7 @@
         }
       }
     },
-    "/api/v1/ailake/operation/{operationId}": {
+    "/api/v1/ailake/operations/{operationId}": {
       "get": {
         "description": "(BETA) Retrieves details of a Long Running Operation specified by the operation-id.",
         "operationId": "getAiLakeOperation",
@@ -6903,6 +8354,121 @@
         ],
         "x-gdc-security-info": {
           "description": "Permissions required to get details of a Long Running Operation.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
+    "/api/v1/ailake/services": {
+      "get": {
+        "description": "(BETA) Lists services configured for the organization's AI Lake. Returns only non-sensitive fields (id, name).",
+        "operationId": "listAiLakeServices",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ServiceInfo"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "AI Lake services successfully retrieved"
+          }
+        },
+        "summary": "(BETA) List AI Lake services",
+        "tags": [
+          "AI Lake"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to list AI Lake services.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
+    "/api/v1/ailake/services/{serviceId}/commands/{commandName}/run": {
+      "post": {
+        "description": "(BETA) Runs a specific AI Lake service command.",
+        "operationId": "runAiLakeServiceCommand",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "serviceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "commandName",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "operation-id",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RunServiceCommandRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unit"
+                }
+              }
+            },
+            "description": "Accepted",
+            "headers": {
+              "operation-id": {
+                "description": "Operation ID to use for polling.",
+                "example": "e9fd5d74-8a1b-46bd-ac60-bd91e9206897",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                },
+                "style": "simple"
+              },
+              "operation-location": {
+                "description": "Operation location URL that can be used for polling.",
+                "example": "/api/v1/ailake/operations/e9fd5d74-8a1b-46bd-ac60-bd91e9206897",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                },
+                "style": "simple"
+              }
+            }
+          }
+        },
+        "summary": "(BETA) Run an AI Lake services command",
+        "tags": [
+          "AI Lake"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to run AI Lake service commands.",
           "permissions": [
             "MANAGE"
           ]

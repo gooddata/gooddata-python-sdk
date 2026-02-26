@@ -88,6 +88,7 @@ class MetricsApi(object):
                         "DATASETS": "datasets",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
+                        "CERTIFIEDBY": "certifiedBy",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -251,6 +252,7 @@ class MetricsApi(object):
                         "DATASETS": "datasets",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
+                        "CERTIFIEDBY": "certifiedBy",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -367,6 +369,7 @@ class MetricsApi(object):
                         "DATASETS": "datasets",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
+                        "CERTIFIEDBY": "certifiedBy",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -464,6 +467,7 @@ class MetricsApi(object):
                         "DATASETS": "datasets",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
+                        "CERTIFIEDBY": "certifiedBy",
                         "ALL": "ALL"
                     },
                 },
@@ -626,6 +630,7 @@ class MetricsApi(object):
                         "DATASETS": "datasets",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
+                        "CERTIFIEDBY": "certifiedBy",
                         "ALL": "ALL"
                     },
                 },

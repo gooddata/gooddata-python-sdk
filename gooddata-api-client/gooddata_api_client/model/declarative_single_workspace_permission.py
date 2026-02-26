@@ -68,6 +68,8 @@ class DeclarativeSingleWorkspacePermission(ModelNormal):
             'EXPORT_PDF': "EXPORT_PDF",
             'CREATE_AUTOMATION': "CREATE_AUTOMATION",
             'USE_AI_ASSISTANT': "USE_AI_ASSISTANT",
+            'WRITE_KNOWLEDGE_DOCUMENTS': "WRITE_KNOWLEDGE_DOCUMENTS",
+            'READ_KNOWLEDGE_DOCUMENTS': "READ_KNOWLEDGE_DOCUMENTS",
             'CREATE_FILTER_VIEW': "CREATE_FILTER_VIEW",
             'VIEW': "VIEW",
         },

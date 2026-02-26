@@ -64,6 +64,9 @@ class DeclarativeAnalyticalDashboard(ModelNormal):
     """
 
     allowed_values = {
+        ('certification',): {
+            'CERTIFIED': "CERTIFIED",
+        },
     }
 
     validations = {
@@ -74,6 +77,11 @@ class DeclarativeAnalyticalDashboard(ModelNormal):
         },
         ('title',): {
             'max_length': 255,
+        },
+        ('certified_at',): {
+            'regex': {
+                'pattern': r'[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}',  # noqa: E501
+            },
         },
         ('created_at',): {
             'regex': {
@@ -121,6 +129,10 @@ class DeclarativeAnalyticalDashboard(ModelNormal):
             'content': (JsonNode,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'title': (str,),  # noqa: E501
+            'certification': (str,),  # noqa: E501
+            'certification_message': (str, none_type,),  # noqa: E501
+            'certified_at': (str, none_type,),  # noqa: E501
+            'certified_by': (DeclarativeUserIdentifier,),  # noqa: E501
             'created_at': (str, none_type,),  # noqa: E501
             'created_by': (DeclarativeUserIdentifier,),  # noqa: E501
             'description': (str,),  # noqa: E501
@@ -140,6 +152,10 @@ class DeclarativeAnalyticalDashboard(ModelNormal):
         'content': 'content',  # noqa: E501
         'id': 'id',  # noqa: E501
         'title': 'title',  # noqa: E501
+        'certification': 'certification',  # noqa: E501
+        'certification_message': 'certificationMessage',  # noqa: E501
+        'certified_at': 'certifiedAt',  # noqa: E501
+        'certified_by': 'certifiedBy',  # noqa: E501
         'created_at': 'createdAt',  # noqa: E501
         'created_by': 'createdBy',  # noqa: E501
         'description': 'description',  # noqa: E501
@@ -196,6 +212,10 @@ class DeclarativeAnalyticalDashboard(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            certification (str): Certification status of the entity.. [optional] if omitted the server will use the default value of "CERTIFIED"  # noqa: E501
+            certification_message (str, none_type): Optional message associated with the certification.. [optional]  # noqa: E501
+            certified_at (str, none_type): Time when the certification was set.. [optional]  # noqa: E501
+            certified_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
             created_at (str, none_type): Time of the entity creation.. [optional]  # noqa: E501
             created_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
             description (str): Analytical dashboard description.. [optional]  # noqa: E501
@@ -297,6 +317,10 @@ class DeclarativeAnalyticalDashboard(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            certification (str): Certification status of the entity.. [optional] if omitted the server will use the default value of "CERTIFIED"  # noqa: E501
+            certification_message (str, none_type): Optional message associated with the certification.. [optional]  # noqa: E501
+            certified_at (str, none_type): Time when the certification was set.. [optional]  # noqa: E501
+            certified_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
             created_at (str, none_type): Time of the entity creation.. [optional]  # noqa: E501
             created_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
             description (str): Analytical dashboard description.. [optional]  # noqa: E501
