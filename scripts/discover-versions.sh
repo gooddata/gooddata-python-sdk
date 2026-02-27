@@ -10,20 +10,22 @@ num_versions=${2:-4}
 
 git fetch "$remote_name" 2>/dev/null
 
-# Build a map of section -> branch, keeping only the latest minor per section.
-# Associative arrays preserve last-write-wins semantics, matching the original
-# generate.sh behavior where later branches overwrite earlier ones.
+# Build a map of section -> branch, keeping only the latest patch per section.
+# Branches are three-part versions (e.g. rel/1.60.0). We strip the patch to get
+# the section (e.g. 1.60), matching the original generate.sh behavior where
+# ${target_section%.*} strips the patch component.
 declare -A section_map
 declare -a section_order
 
 while IFS= read -r vers; do
+    # Strip patch: 1.60.0 -> 1.60
     section="${vers%.*}"
     if [ -z "${section_map[$section]+x}" ]; then
         section_order+=("$section")
     fi
-    # Later (higher minor) versions overwrite earlier ones for the same major
+    # Later (higher patch) versions overwrite earlier ones for the same major.minor
     section_map["$section"]="rel/$vers"
-done < <(git branch -rl "$remote_name/rel/*" | sed 's|.*/rel/||' | grep -E '^[0-9]+\.[0-9]+$' | sort -t. -k1,1n -k2,2n | tail -n"$num_versions")
+done < <(git branch -rl "$remote_name/rel/*" | sed 's|.*/rel/||' | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -n"$num_versions")
 
 # Add dev branch if it exists
 if git branch -rl "$remote_name/rel/dev" | grep -q "rel/dev"; then
