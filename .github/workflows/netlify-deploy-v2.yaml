@@ -1,0 +1,134 @@
+name: Netlify Deploy V2 (Draft)
+on:
+  workflow_dispatch:
+
+jobs:
+  # Job 1: Discover which version branches to build
+  discover-versions:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.versions.outputs.matrix }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Fetch remote refs
+        run: git fetch origin
+      - name: Discover versions
+        id: versions
+        run: |
+          MATRIX=$(bash scripts/discover-versions.sh origin 4)
+          echo "matrix=$MATRIX" >> $GITHUB_OUTPUT
+          echo "Discovered versions: $MATRIX"
+
+  # Job 2: Generate docs for each version (matrix — runs in parallel across versions)
+  # Each version gets its own runner with that branch's SDK installed.
+  # Per-version caching means released branches (which rarely change) are instant cache hits.
+  generate-version:
+    needs: [discover-versions]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version: ${{ fromJson(needs.discover-versions.outputs.matrix) }}
+      fail-fast: false
+    steps:
+      - name: Get branch commit SHA
+        id: sha
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          SHA=$(gh api "repos/${{ github.repository }}/git/ref/heads/${{ matrix.version.branch }}" -q '.object.sha')
+          echo "sha=$SHA" >> $GITHUB_OUTPUT
+          echo "Branch ${{ matrix.version.branch }} -> section ${{ matrix.version.section }} (SHA: $SHA)"
+      - name: Cache version docs
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: docs/versioned_docs/${{ matrix.version.section }}
+          key: version-docs-${{ matrix.version.section }}-${{ steps.sha.outputs.sha }}
+      - name: Checkout
+        if: steps.cache.outputs.cache-hit != 'true'
+        uses: actions/checkout@v4
+      - name: Fetch target branch
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: git fetch origin ${{ matrix.version.branch }}
+      - name: Checkout branch packages
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          git checkout origin/${{ matrix.version.branch }} -- gooddata-api-client/ packages/gooddata-sdk/ packages/gooddata-pandas/ scripts/script-requirements.txt
+      - name: Setup Python
+        if: steps.cache.outputs.cache-hit != 'true'
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: ".python-version"
+          cache: 'pip'
+          cache-dependency-path: scripts/script-requirements.txt
+      - name: Install Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r scripts/script-requirements.txt
+      - name: Generate version docs
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: bash scripts/generate-single-version.sh "origin/${{ matrix.version.branch }}" "${{ matrix.version.section }}"
+      - name: Upload version artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: version-${{ matrix.version.section }}
+          path: docs/versioned_docs/${{ matrix.version.section }}
+          retention-days: 1
+
+  # Job 3: Assemble all versions, build Hugo site, and deploy to Netlify (draft)
+  build-and-deploy:
+    needs: [generate-version]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Setup GO
+        uses: actions/setup-go@v5
+        with:
+          go-version: '>=1.20.1'
+          cache: false
+      - name: Cache Go modules
+        uses: actions/cache@v4
+        with:
+          path: ~/go/pkg/mod
+          key: go-mod-${{ hashFiles('docs/go.sum') }}
+          restore-keys: go-mod-
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: docs/package-lock.json
+      - name: Install Hugo
+        run: npm install -g hugo-extended@0.117.0
+      - name: Install Dependencies
+        working-directory: ./docs
+        run: npm ci
+      - name: Download version artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: version-*
+          path: docs/versioned_docs-raw/
+      - name: Assemble versioned docs
+        working-directory: ./docs
+        run: bash ../scripts/assemble-versions.sh
+      - name: Cache Hugo resources
+        uses: actions/cache@v4
+        with:
+          path: docs/resources/_gen
+          key: hugo-resources-${{ hashFiles('docs/go.sum', 'docs/config/**') }}
+          restore-keys: hugo-resources-
+      - name: Build documentation
+        working-directory: ./docs
+        run: hugo --minify --baseURL https://www.gooddata.com/docs/python-sdk
+      - name: Publish (draft)
+        uses: netlify/actions/cli@master
+        with:
+          args: deploy -d docs/public
+        env:
+          NETLIFY_SITE_ID: 93e23db0-d31a-4a12-801a-b9479ffef486 # Not a secret
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
