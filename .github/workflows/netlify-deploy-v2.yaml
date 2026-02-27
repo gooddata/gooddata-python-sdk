@@ -124,6 +124,8 @@ jobs:
           restore-keys: hugo-resources-
       - name: Build documentation
         working-directory: ./docs
+        env:
+          HUGO_ENV: production
         run: hugo --minify --baseURL https://www.gooddata.com/docs/python-sdk
       - name: Publish (draft)
         uses: netlify/actions/cli@master
