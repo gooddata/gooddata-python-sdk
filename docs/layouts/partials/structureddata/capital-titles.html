@@ -1,0 +1,23 @@
+{{/* Returns a slice of unique, capitalized page titles from the site.
+     Called via partialCached — computed once per build, not per page. */}}
+{{- $pageTitles := slice -}}
+{{- range .Pages -}}
+  {{- $pageTitles = $pageTitles | append .Title -}}
+{{- end -}}
+
+{{- $uniquePageTitles := slice -}}
+{{- range $pageTitles -}}
+  {{- if not (in $uniquePageTitles .) -}}
+    {{- $uniquePageTitles = $uniquePageTitles | append . -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $capitalTitles := slice -}}
+{{- range $uniquePageTitles -}}
+  {{- $firstChar := substr . 0 1 -}}
+  {{- if eq $firstChar (upper $firstChar) -}}
+    {{- $capitalTitles = $capitalTitles | append . -}}
+  {{- end -}}
+{{- end -}}
+
+{{- return $capitalTitles -}}

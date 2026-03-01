@@ -1,0 +1,4 @@
+{{/* Cached chevron SVG icon — loaded and minified once per build. */}}
+{{- $icon := resources.Get "icons/chevron-menu.svg" -}}
+{{- $svg := $icon | minify -}}
+{{- return (replace $svg.Content "<svg " "<svg aria-hidden=\"true\" focusable=\"false\" ") -}}
