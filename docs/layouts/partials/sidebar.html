@@ -70,11 +70,7 @@
                       aria-controls="section-{{ $pageId }}"
                       aria-label="{{ if $activeSection }}Collapse{{ else }}Expand{{ end }} {{ $page.LinkTitle }} section">
                       <span class="gd-docs-menu-page__chevron">
-                        {{ with resources.Get "icons/chevron-menu.svg" }}
-                          {{ $svg := . | minify }}
-                          {{ $svg := replace $svg.Content "<svg " "<svg aria-hidden=\"true\" focusable=\"false\" " }}
-                          {{ $svg | safeHTML }}
-                        {{ end }}
+                        {{ partialCached "chevron-svg.html" . "chevron" | safeHTML }}
                       </span>
                     </button>
                 {{ end }}
