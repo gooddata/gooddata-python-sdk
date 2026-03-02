@@ -2,9 +2,8 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Optional
 
-import attr
+from attrs import define, field
 from gooddata_api_client.model.declarative_user_group import DeclarativeUserGroup
 from gooddata_api_client.model.declarative_user_group_permission import DeclarativeUserGroupPermission
 from gooddata_api_client.model.declarative_user_groups import DeclarativeUserGroups
@@ -17,9 +16,9 @@ LAYOUT_USER_GROUPS_DIR = "user_groups"
 LAYOUT_USER_GROUPS_FILE = "user_groups.yaml"
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class CatalogDeclarativeUserGroups(Base):
-    user_groups: list[CatalogDeclarativeUserGroup] = attr.field(factory=list)
+    user_groups: list[CatalogDeclarativeUserGroup] = field(factory=list)
 
     @staticmethod
     def client_class() -> type[DeclarativeUserGroups]:
@@ -41,21 +40,21 @@ class CatalogDeclarativeUserGroups(Base):
         write_layout_to_file(user_groups_file, user_groups, sort=sort)
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class CatalogDeclarativeUserGroup(Base):
     id: str
-    name: Optional[str] = None
-    parents: Optional[list[CatalogDeclarativeUserGroupIdentifier]] = None
-    permissions: list[CatalogDeclarativeUserGroupPermission] = attr.field(factory=list)
+    name: str | None = None
+    parents: list[CatalogDeclarativeUserGroupIdentifier] | None = None
+    permissions: list[CatalogDeclarativeUserGroupPermission] = field(factory=list)
 
     @staticmethod
     def client_class() -> type[DeclarativeUserGroup]:
         return DeclarativeUserGroup
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class CatalogDeclarativeUserGroupPermission(Base):
-    name: str = attr.field(validator=value_in_allowed)
+    name: str = field(validator=value_in_allowed)
     assignee: CatalogAssigneeIdentifier
 
     @staticmethod

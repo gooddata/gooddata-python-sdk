@@ -1,9 +1,8 @@
 # (C) 2024 GoodData Corporation
 import os
-from typing import Any, Optional, TypeVar
+from typing import Any, TypeVar
 
-import attrs
-from attrs import define
+from attrs import asdict, define
 from cattrs import structure
 from cattrs.errors import ClassValidationError
 from dotenv import load_dotenv
@@ -14,7 +13,7 @@ T = TypeVar("T", bound="ConfigBase")
 @define
 class ConfigBase:
     def to_dict(self) -> dict[str, str]:
-        return attrs.asdict(self)
+        return asdict(self)
 
     @classmethod
     def from_dict(cls: type[T], data: dict[str, Any]) -> T:
@@ -33,18 +32,18 @@ class ConfigBase:
 class Profile(ConfigBase):
     host: str
     token: str
-    custom_headers: Optional[dict[str, str]] = None
-    extra_user_agent: Optional[str] = None
-    ssl_ca_cert: Optional[str] = None
+    custom_headers: dict[str, str] | None = None
+    extra_user_agent: str | None = None
+    ssl_ca_cert: str | None = None
 
     def to_dict(self, use_env: bool = False) -> dict[str, str]:
         load_dotenv()
         if not use_env:
-            return attrs.asdict(self)
+            return asdict(self)
         env_var = self.token[1:]
         if env_var not in os.environ:
             raise ValueError(f"Environment variable {env_var} not found")
-        return {**attrs.asdict(self), "token": os.environ[env_var]}
+        return {**asdict(self), "token": os.environ[env_var]}
 
 
 @define

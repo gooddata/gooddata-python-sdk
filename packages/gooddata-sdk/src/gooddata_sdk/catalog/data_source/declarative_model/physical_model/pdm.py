@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import attr
+from attrs import define, field
 from gooddata_api_client.model.declarative_tables import DeclarativeTables
 
 from gooddata_sdk.catalog.base import Base
@@ -17,9 +17,9 @@ def get_pdm_folder(data_source_folder: Path) -> Path:
     return data_source_folder / LAYOUT_PDM_DIR
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class CatalogDeclarativeTables(Base):
-    tables: list[CatalogDeclarativeTable] = attr.field(factory=list)
+    tables: list[CatalogDeclarativeTable] = field(factory=list)
 
     @staticmethod
     def client_class() -> type[DeclarativeTables]:
@@ -39,8 +39,8 @@ class CatalogDeclarativeTables(Base):
         return cls(tables=tables)
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class CatalogScanResultPdm(Base):
     pdm: CatalogDeclarativeTables = CatalogDeclarativeTables()
     # Just informative hints. Create appropriate classes later if needed.
-    warnings: list[dict] = attr.field(factory=list)
+    warnings: list[dict] = field(factory=list)

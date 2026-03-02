@@ -1,5 +1,5 @@
 # (C) 2023 GoodData Corporation
-from typing import Literal, Optional
+from typing import Literal
 
 from attrs import define
 from gooddata_api_client.model.custom_label import CustomLabel as ApiCustomLabel
@@ -13,7 +13,7 @@ from gooddata_api_client.model.visual_export_request import VisualExportRequest 
 from gooddata_sdk.catalog.base import Base
 
 
-@define(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class ExportCustomLabel(Base):
     title: str
 
@@ -22,7 +22,7 @@ class ExportCustomLabel(Base):
         return ApiCustomLabel
 
 
-@define(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class ExportCustomMetric(Base):
     title: str
     format: str
@@ -32,17 +32,17 @@ class ExportCustomMetric(Base):
         return ApiCustomMetric
 
 
-@define(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class ExportCustomOverride(Base):
-    labels: Optional[dict[str, ExportCustomLabel]] = None
-    metrics: Optional[dict[str, ExportCustomMetric]] = None
+    labels: dict[str, ExportCustomLabel] | None = None
+    metrics: dict[str, ExportCustomMetric] | None = None
 
     @staticmethod
     def client_class() -> type[ApiCustomOverride]:
         return ApiCustomOverride
 
 
-@define(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class ExportSettings(Base):
     merge_headers: bool
     show_filters: bool
@@ -52,7 +52,7 @@ class ExportSettings(Base):
         return ApiSettings
 
 
-@define(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class ExportRequest(Base):
     """
     ExportRequest class is used to create an export request in the desired format, filename, and settings.
@@ -66,10 +66,10 @@ class ExportRequest(Base):
 
     format: str
     file_name: str
-    execution_result: Optional[str] = None
-    visualization_object: Optional[str] = None
-    settings: Optional[ExportSettings] = None
-    custom_override: Optional[ExportCustomOverride] = None
+    execution_result: str | None = None
+    visualization_object: str | None = None
+    settings: ExportSettings | None = None
+    custom_override: ExportCustomOverride | None = None
 
     def __attrs_post_init__(self) -> None:
         """
@@ -100,7 +100,7 @@ class ExportRequest(Base):
         return f"{self.file_name}.{self.format.lower()}"
 
 
-@define(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class VisualExportRequest(Base):
     """
     ExportRequest class is used to create an export request in the desired format, filename, and settings.
@@ -112,7 +112,7 @@ class VisualExportRequest(Base):
 
     dashboard_id: str
     file_name: str
-    metadata: Optional[dict] = None
+    metadata: dict | None = None
 
     @staticmethod
     def client_class() -> type[VisualExportRequestApi]:
@@ -124,7 +124,7 @@ class VisualExportRequest(Base):
         return VisualExportRequestApi
 
 
-@define(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class SlidesExportRequest(Base):
     """
     SlidesExportRequest class is used to create a slide export request in the desired format, filename, and settings.
@@ -136,11 +136,11 @@ class SlidesExportRequest(Base):
 
     file_name: str
     format: Literal["PDF", "PPTX"]
-    dashboard_id: Optional[str] = None
-    widget_ids: Optional[list[str]] = None
-    visualization_ids: Optional[list[str]] = None
-    metadata: Optional[dict] = None
-    templateId: Optional[str] = None
+    dashboard_id: str | None = None
+    widget_ids: list[str] | None = None
+    visualization_ids: list[str] | None = None
+    metadata: dict | None = None
+    templateId: str | None = None
 
     @staticmethod
     def client_class() -> type[SlidesExportRequestApi]:

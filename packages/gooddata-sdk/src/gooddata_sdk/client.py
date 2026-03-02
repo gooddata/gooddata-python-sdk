@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Optional
 
 import gooddata_api_client as api_client
 import requests
@@ -23,10 +22,10 @@ class GoodDataApiClient:
         self,
         host: str,
         token: str,
-        custom_headers: Optional[dict[str, str]] = None,
-        extra_user_agent: Optional[str] = None,
+        custom_headers: dict[str, str] | None = None,
+        extra_user_agent: str | None = None,
         executions_cancellable: bool = False,
-        ssl_ca_cert: Optional[str] = None,
+        ssl_ca_cert: str | None = None,
     ) -> None:
         """Take url, token for connecting to GoodData.CN.
 

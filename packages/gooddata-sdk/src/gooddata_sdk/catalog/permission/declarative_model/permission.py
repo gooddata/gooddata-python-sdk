@@ -1,7 +1,7 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-import attr
+from attrs import define, field
 from gooddata_api_client.model.declarative_analytical_dashboard_permission_for_assignee import (
     DeclarativeAnalyticalDashboardPermissionForAssignee,
 )
@@ -20,9 +20,9 @@ from gooddata_sdk.catalog.identifier import CatalogAssigneeIdentifier
 from gooddata_sdk.catalog.rule import CatalogAssigneeRule
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class CatalogDeclarativeSingleWorkspacePermission(Base):
-    name: str = attr.field(validator=value_in_allowed)
+    name: str = field(validator=value_in_allowed)
     assignee: CatalogAssigneeIdentifier
 
     @staticmethod
@@ -30,9 +30,9 @@ class CatalogDeclarativeSingleWorkspacePermission(Base):
         return DeclarativeSingleWorkspacePermission
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class CatalogDeclarativeWorkspaceHierarchyPermission(Base):
-    name: str = attr.field(validator=value_in_allowed)
+    name: str = field(validator=value_in_allowed)
     assignee: CatalogAssigneeIdentifier
 
     @staticmethod
@@ -40,9 +40,9 @@ class CatalogDeclarativeWorkspaceHierarchyPermission(Base):
         return DeclarativeWorkspaceHierarchyPermission
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class CatalogDeclarativeDataSourcePermission(Base):
-    name: str = attr.field(validator=value_in_allowed)
+    name: str = field(validator=value_in_allowed)
     assignee: CatalogAssigneeIdentifier
 
     @staticmethod
@@ -50,19 +50,19 @@ class CatalogDeclarativeDataSourcePermission(Base):
         return DeclarativeDataSourcePermission
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class CatalogDeclarativeWorkspacePermissions(Base):
-    permissions: list[CatalogDeclarativeSingleWorkspacePermission] = attr.field(factory=list)
-    hierarchy_permissions: list[CatalogDeclarativeWorkspaceHierarchyPermission] = attr.field(factory=list)
+    permissions: list[CatalogDeclarativeSingleWorkspacePermission] = field(factory=list)
+    hierarchy_permissions: list[CatalogDeclarativeWorkspaceHierarchyPermission] = field(factory=list)
 
     @staticmethod
     def client_class() -> type[DeclarativeWorkspacePermissions]:
         return DeclarativeWorkspacePermissions
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class CatalogDeclarativeDashboardPermissionsForAssignee(Base):
-    name: str = attr.field(validator=value_in_allowed)
+    name: str = field(validator=value_in_allowed)
     assignee: CatalogAssigneeIdentifier
 
     @staticmethod
@@ -70,9 +70,9 @@ class CatalogDeclarativeDashboardPermissionsForAssignee(Base):
         return DeclarativeAnalyticalDashboardPermissionForAssignee
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class CatalogDeclarativeDashboardPermissionsForAssigneeRule(Base):
-    name: str = attr.field(validator=value_in_allowed)
+    name: str = field(validator=value_in_allowed)
     assignee_rule: CatalogAssigneeRule
 
     @staticmethod
@@ -80,9 +80,9 @@ class CatalogDeclarativeDashboardPermissionsForAssigneeRule(Base):
         return DeclarativeAnalyticalDashboardPermissionForAssigneeRule
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class CatalogDeclarativeOrganizationPermission(Base):
-    name: str = attr.field(validator=value_in_allowed)
+    name: str = field(validator=value_in_allowed)
     assignee: CatalogAssigneeIdentifier
 
     @staticmethod
@@ -90,10 +90,10 @@ class CatalogDeclarativeOrganizationPermission(Base):
         return DeclarativeOrganizationPermission
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class CatalogOrganizationPermissionAssignment(Base):
     assignee_identifier: CatalogAssigneeIdentifier
-    permissions: list[str] = attr.field(factory=list)
+    permissions: list[str] = field(factory=list)
 
     @staticmethod
     def client_class() -> type[OrganizationPermissionAssignment]:

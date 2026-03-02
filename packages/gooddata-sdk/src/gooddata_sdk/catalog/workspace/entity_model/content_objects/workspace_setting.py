@@ -4,7 +4,7 @@ from __future__ import annotations
 import functools
 from typing import Any, Union
 
-import attr
+from attrs import Factory, define, field
 from gooddata_api_client.model.json_api_organization_setting_in_attributes import JsonApiOrganizationSettingInAttributes
 from gooddata_api_client.model.json_api_workspace_setting_in import JsonApiWorkspaceSettingIn
 from gooddata_api_client.model.json_api_workspace_setting_in_document import JsonApiWorkspaceSettingInDocument
@@ -18,15 +18,15 @@ from gooddata_sdk.catalog.base import Base, value_in_allowed
 from gooddata_sdk.utils import safeget
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class CatalogWorkspaceSetting(Base):
-    id: str = attr.field(default=None)
-    setting_type: str = attr.field(
+    id: str = field(default=None)
+    setting_type: str = field(
         validator=functools.partial(value_in_allowed, client_class=JsonApiOrganizationSettingInAttributes)
     )
-    content: dict = attr.field(
+    content: dict = field(
         repr=False,
-        default=attr.Factory(lambda self: safeget(self.json_api_entity.attributes, ["content"]), takes_self=True),
+        default=Factory(lambda self: safeget(self.json_api_entity.attributes, ["content"]), takes_self=True),
     )
 
     @staticmethod
