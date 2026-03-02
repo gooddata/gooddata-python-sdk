@@ -5,9 +5,9 @@ import base64
 import builtins
 import os
 from pathlib import Path
-from typing import Any, ClassVar, Optional, TypeVar, Union
+from typing import Any, ClassVar, TypeVar, Union
 
-import attr
+from attrs import Factory, asdict, define, field
 
 from gooddata_sdk.catalog.base import Base, JsonApiEntityBase
 from gooddata_sdk.compute.model.base import ObjId
@@ -16,11 +16,11 @@ from gooddata_sdk.utils import AllPagedEntities, safeget_list
 T = TypeVar("T", bound="AttrCatalogEntity")
 
 
-@attr.s(auto_attribs=True)
+@define
 class AttrCatalogEntity:
     id: str
 
-    type: str = attr.field(default=attr.Factory(lambda self: self._get_type(), takes_self=True))
+    type: str = field(default=Factory(lambda self: self._get_type(), takes_self=True))
 
     def _get_type(self) -> str:
         allowed_values = getattr(self.client_class(), "allowed_values")
@@ -32,10 +32,10 @@ class AttrCatalogEntity:
 
     # Optional, because write use case -
     # we need to pass only ID and some properties in attributes when creating an instance of this class
-    json_api_entity: Optional[JsonApiEntityBase] = None
-    title: Optional[str] = None
-    description: Optional[str] = None
-    tags: Optional[list[str]] = None
+    json_api_entity: JsonApiEntityBase | None = None
+    title: str | None = None
+    description: str | None = None
+    tags: list[str] | None = None
 
     @property
     def json_api_attributes(self) -> dict[str, Any]:
@@ -65,8 +65,8 @@ class AttrCatalogEntity:
     def from_api(
         cls: builtins.type[T],
         entity: dict[str, Any],
-        side_loads: Optional[list[Any]] = None,
-        related_entities: Optional[AllPagedEntities] = None,
+        side_loads: list[Any] | None = None,
+        related_entities: AllPagedEntities | None = None,
     ) -> T:
         """
         Creates GoodData object from AttrCatalogEntityJsonApi.
@@ -104,12 +104,12 @@ class CatalogEntity:
         return self._entity["type"]
 
     @property
-    def title(self) -> Optional[str]:
+    def title(self) -> str | None:
         # Optional, not all metadata objects contain title
         return self._e.get("title")
 
     @property
-    def description(self) -> Optional[str]:
+    def description(self) -> str | None:
         # Optional, not all metadata objects contain description
         return self._e.get("description")
 
@@ -118,7 +118,7 @@ class CatalogEntity:
         return self._obj_id
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class Credentials(Base):
     TOKEN_KEY: ClassVar[str] = "token"
     USER_KEY: ClassVar[str] = "username"
@@ -129,7 +129,7 @@ class Credentials(Base):
     CLIENT_SECRET: ClassVar[str] = "client_secret"
 
     def to_api_args(self) -> dict[str, Any]:
-        return attr.asdict(self)
+        return asdict(self)
 
     @classmethod
     def is_part_of_api(cls, entity: dict[str, Any]) -> bool:
@@ -151,9 +151,9 @@ class Credentials(Base):
             raise ValueError(f"Unsupported credentials type. Pick one of {classes_as_str}")
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class TokenCredentials(Credentials):
-    token: str = attr.field(repr=lambda value: "***")
+    token: str = field(repr=lambda value: "***")
 
     @classmethod
     def is_part_of_api(cls, entity: dict[str, Any]) -> bool:
@@ -165,10 +165,10 @@ class TokenCredentials(Credentials):
         return cls(token="")
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class TokenCredentialsFromFile(Credentials):
     file_path: Path
-    token: str = attr.field(init=False, repr=lambda value: "***")
+    token: str = field(init=False, repr=lambda value: "***")
 
     def __attrs_post_init__(self) -> None:
         self.token = self.token_from_file(self.file_path)
@@ -205,10 +205,10 @@ class TokenCredentialsFromFile(Credentials):
             return base64.b64encode(content).decode("utf-8") if base64_encode else content.decode("utf-8")
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class TokenCredentialsFromEnvVar(Credentials):
     env_var_name: str
-    token: str = attr.field(init=False, repr=lambda value: "***")
+    token: str = field(init=False, repr=lambda value: "***")
 
     def __attrs_post_init__(self) -> None:
         self.token = self.token_from_env_var(self.env_var_name)
@@ -246,10 +246,10 @@ class TokenCredentialsFromEnvVar(Credentials):
         return base64.b64encode(token.encode("utf-8")).decode("utf-8") if base64_encode else token
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class BasicCredentials(Credentials):
     username: str
-    password: str = attr.field(repr=lambda value: "***")
+    password: str = field(repr=lambda value: "***")
 
     @classmethod
     def is_part_of_api(cls, entity: dict[str, Any]) -> bool:
@@ -266,11 +266,11 @@ class BasicCredentials(Credentials):
         )
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class KeyPairCredentials(Credentials):
     username: str
-    private_key: str = attr.field(repr=lambda value: "***")
-    private_key_passphrase: Optional[str] = attr.field(repr=lambda value: "***", default=None)
+    private_key: str = field(repr=lambda value: "***")
+    private_key_passphrase: str | None = field(repr=lambda value: "***", default=None)
 
     @classmethod
     def is_part_of_api(cls, entity: dict[str, Any]) -> bool:
@@ -287,10 +287,10 @@ class KeyPairCredentials(Credentials):
         )
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class ClientSecretCredentials(Credentials):
     client_id: str
-    client_secret: str = attr.field(repr=lambda value: "***")
+    client_secret: str = field(repr=lambda value: "***")
 
     @classmethod
     def is_part_of_api(cls, entity: dict[str, Any]) -> bool:
@@ -307,10 +307,10 @@ class ClientSecretCredentials(Credentials):
         )
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class ClientSecretCredentialsFromFile(Credentials):
     file_path: Path
-    client_secret: str = attr.field(init=False, repr=lambda value: "***")
+    client_secret: str = field(init=False, repr=lambda value: "***")
 
     def __attrs_post_init__(self) -> None:
         self.client_secret = self.client_secret_from_file(self.file_path)

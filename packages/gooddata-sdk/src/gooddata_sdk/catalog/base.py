@@ -2,9 +2,9 @@
 from __future__ import annotations
 
 import builtins
-from typing import Any, Optional, TypeVar
+from typing import Any, TypeVar
 
-import attr
+from attrs import Attribute, asdict, define, field
 from cattrs import structure
 
 from gooddata_sdk.utils import AllPagedEntities
@@ -13,9 +13,7 @@ T = TypeVar("T", bound="Base")
 U = TypeVar("U", bound="JsonApiEntityBase")
 
 
-def value_in_allowed(
-    instance: type[Base], attribute: attr.Attribute, value: str, client_class: Optional[Any] = None
-) -> None:
+def value_in_allowed(instance: type[Base], attribute: Attribute, value: str, client_class: Any | None = None) -> None:
     if client_class is None:
         client_class = instance.client_class()
     allowed_values = client_class.allowed_values.get((attribute.name,))
@@ -26,7 +24,7 @@ def value_in_allowed(
         )
 
 
-@attr.s
+@define
 class Base:
     @classmethod
     def from_api(cls: type[T], entity: dict[str, Any]) -> T:
@@ -55,11 +53,11 @@ class Base:
         return self.to_api().to_dict(camel_case)
 
     @staticmethod
-    def _is_attribute_private(attribute: attr.Attribute) -> bool:
+    def _is_attribute_private(attribute: Attribute) -> bool:
         return attribute.name.startswith("_")
 
     def _get_snake_dict(self) -> dict[str, Any]:
-        return attr.asdict(
+        return asdict(
             self, filter=lambda attribute, value: value is not None and not self._is_attribute_private(attribute)
         )
 
@@ -72,24 +70,24 @@ class Base:
         return self.client_class().from_dict(dictionary, camel_case=False)
 
 
-@attr.s(auto_attribs=True)
+@define
 class JsonApiEntityBase:
     id: str
     type: str
-    attributes: dict[str, Any] = attr.field(repr=False)
-    relationships: Optional[dict[str, Any]] = attr.field(repr=False, default=None)
-    meta: Optional[dict[str, Any]] = attr.field(repr=False, default=None)
-    links: Optional[dict[str, Any]] = attr.field(repr=False, default=None)
-    related_entities_data: list[dict[str, Any]] = attr.field(repr=False, factory=list)
-    related_entities_side_loads: list[dict[str, Any]] = attr.field(repr=False, factory=list)
-    side_loads: list[dict[str, Any]] = attr.field(repr=False, factory=list)
+    attributes: dict[str, Any] = field(repr=False)
+    relationships: dict[str, Any] | None = field(repr=False, default=None)
+    meta: dict[str, Any] | None = field(repr=False, default=None)
+    links: dict[str, Any] | None = field(repr=False, default=None)
+    related_entities_data: list[dict[str, Any]] = field(repr=False, factory=list)
+    related_entities_side_loads: list[dict[str, Any]] = field(repr=False, factory=list)
+    side_loads: list[dict[str, Any]] = field(repr=False, factory=list)
 
     @classmethod
     def from_api(
         cls,
         entity: dict[str, Any],
-        side_loads: Optional[list[Any]] = None,
-        related_entities: Optional[AllPagedEntities] = None,
+        side_loads: list[Any] | None = None,
+        related_entities: AllPagedEntities | None = None,
     ) -> JsonApiEntityBase:
         """
         Creates object from entity passed by client class, which represents it as dictionary.

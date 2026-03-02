@@ -2,16 +2,16 @@
 from __future__ import annotations
 
 import builtins
-from typing import Any, Optional
+from typing import Any
 
-import attr
+from attrs import define
 from gooddata_api_client.model.json_api_organization_setting_in import JsonApiOrganizationSettingIn
 from gooddata_api_client.model.json_api_organization_setting_in_attributes import JsonApiOrganizationSettingInAttributes
 
 from gooddata_sdk.catalog.base import Base
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class CatalogOrganizationSetting(Base):
     id: str
     attributes: CatalogOrganizationSettingAttributes
@@ -25,9 +25,9 @@ class CatalogOrganizationSetting(Base):
         return JsonApiOrganizationSettingIn
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class CatalogOrganizationSettingAttributes(Base):
-    type: Optional[str]
+    type: str | None
     content: dict[str, Any]
 
     @staticmethod

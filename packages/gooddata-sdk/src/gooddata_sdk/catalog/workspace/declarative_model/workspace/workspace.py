@@ -3,9 +3,9 @@ from __future__ import annotations
 
 import copy
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
-import attr
+from attrs import define, field
 from gooddata_api_client.model.declarative_filter_view import DeclarativeFilterView
 from gooddata_api_client.model.declarative_user_data_filter import DeclarativeUserDataFilter
 from gooddata_api_client.model.declarative_user_data_filters import DeclarativeUserDataFilters
@@ -45,10 +45,10 @@ def get_workspace_folder(workspace_id: str, layout_organization_folder: Path) ->
     return layout_organization_folder / LAYOUT_WORKSPACES_DIR / workspace_id
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class CatalogDeclarativeWorkspaceModel(Base):
-    ldm: Optional[CatalogDeclarativeLdm] = None
-    analytics: Optional[CatalogDeclarativeAnalyticsLayer] = None
+    ldm: CatalogDeclarativeLdm | None = None
+    analytics: CatalogDeclarativeAnalyticsLayer | None = None
 
     @staticmethod
     def client_class() -> type[DeclarativeWorkspaceModel]:
@@ -75,21 +75,21 @@ class CatalogDeclarativeWorkspaceModel(Base):
             self.ldm.change_wdf_refs_id(mapping)
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class CatalogDeclarativeWorkspace(Base):
     id: str
     name: str
-    description: Optional[str] = None
-    model: Optional[CatalogDeclarativeWorkspaceModel] = None
-    parent: Optional[CatalogWorkspaceIdentifier] = None
-    permissions: list[CatalogDeclarativeSingleWorkspacePermission] = attr.field(factory=list)
-    hierarchy_permissions: list[CatalogDeclarativeWorkspaceHierarchyPermission] = attr.field(factory=list)
-    early_access: Optional[str] = None
-    settings: list[CatalogDeclarativeSetting] = attr.field(factory=list)
-    user_data_filters: list[CatalogDeclarativeUserDataFilter] = attr.field(factory=list)
-    custom_application_settings: list[CatalogDeclarativeCustomApplicationSetting] = attr.field(factory=list)
-    automations: list[CatalogDeclarativeAutomation] = attr.field(factory=list)
-    filter_views: list[CatalogDeclarativeFilterView] = attr.field(factory=list)
+    description: str | None = None
+    model: CatalogDeclarativeWorkspaceModel | None = None
+    parent: CatalogWorkspaceIdentifier | None = None
+    permissions: list[CatalogDeclarativeSingleWorkspacePermission] = field(factory=list)
+    hierarchy_permissions: list[CatalogDeclarativeWorkspaceHierarchyPermission] = field(factory=list)
+    early_access: str | None = None
+    settings: list[CatalogDeclarativeSetting] = field(factory=list)
+    user_data_filters: list[CatalogDeclarativeUserDataFilter] = field(factory=list)
+    custom_application_settings: list[CatalogDeclarativeCustomApplicationSetting] = field(factory=list)
+    automations: list[CatalogDeclarativeAutomation] = field(factory=list)
+    filter_views: list[CatalogDeclarativeFilterView] = field(factory=list)
 
     @staticmethod
     def client_class() -> type[DeclarativeWorkspace]:
@@ -124,20 +124,20 @@ class CatalogDeclarativeWorkspace(Base):
         return workspace_layout
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class CatalogDeclarativeWorkspaceDataFilterSetting(Base):
     id: str
     title: str
     filter_values: list[str]
     workspace: CatalogWorkspaceIdentifier
-    description: Optional[str] = None
+    description: str | None = None
 
     @staticmethod
     def client_class() -> type[DeclarativeWorkspaceDataFilterSetting]:
         return DeclarativeWorkspaceDataFilterSetting
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class CatalogDeclarativeWorkspaceDataFilters(Base):
     workspace_data_filters: list[CatalogDeclarativeWorkspaceDataFilter]
 
@@ -191,14 +191,14 @@ class CatalogDeclarativeWorkspaceDataFilters(Base):
         return self_copy, wdf_ref_mapping
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class CatalogDeclarativeWorkspaceDataFilter(Base):
     id: str
     title: str
     column_name: str
     workspace_data_filter_settings: list[CatalogDeclarativeWorkspaceDataFilterSetting]
-    description: Optional[str] = None
-    workspace: Optional[CatalogWorkspaceIdentifier] = None
+    description: str | None = None
+    workspace: CatalogWorkspaceIdentifier | None = None
 
     @staticmethod
     def client_class() -> type[DeclarativeWorkspaceDataFilter]:
@@ -228,7 +228,7 @@ class CatalogDeclarativeWorkspaceDataFilter(Base):
         return cls.from_api(declarative_workspace_data_filter)
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class CatalogDeclarativeUserDataFilters(Base):
     user_data_filters: list[CatalogDeclarativeUserDataFilter]
 
@@ -254,14 +254,14 @@ class CatalogDeclarativeUserDataFilters(Base):
         return cls(user_data_filters=user_data_filters)
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class CatalogDeclarativeUserDataFilter(Base):
     id: str
     title: str
     maql: str
-    user: Optional[CatalogUserIdentifier] = None
-    user_group: Optional[CatalogDeclarativeUserGroupIdentifier] = None
-    description: Optional[str] = None
+    user: CatalogUserIdentifier | None = None
+    user_group: CatalogDeclarativeUserGroupIdentifier | None = None
+    description: str | None = None
 
     @staticmethod
     def client_class() -> type[DeclarativeUserDataFilter]:
@@ -291,16 +291,16 @@ class CatalogDeclarativeUserDataFilter(Base):
         return cls.from_api(declarative_user_data_filter)
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class CatalogDeclarativeFilterView(Base):
     id: str
     title: str
-    analytical_dashboard: Optional[CatalogDeclarativeAnalyticalDashboardIdentifier] = None
-    content: Optional[dict[str, Any]] = None
-    description: Optional[str] = None
-    is_default: Optional[bool] = None
-    tags: Optional[list[str]] = None
-    user: Optional[CatalogUserIdentifier] = None
+    analytical_dashboard: CatalogDeclarativeAnalyticalDashboardIdentifier | None = None
+    content: dict[str, Any] | None = None
+    description: str | None = None
+    is_default: bool | None = None
+    tags: list[str] | None = None
+    user: CatalogUserIdentifier | None = None
 
     @staticmethod
     def client_class() -> type[DeclarativeFilterView]:
@@ -334,7 +334,7 @@ class CatalogDeclarativeFilterView(Base):
         ]
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class CatalogDeclarativeWorkspaces(Base):
     workspaces: list[CatalogDeclarativeWorkspace]
     workspace_data_filters: list[CatalogDeclarativeWorkspaceDataFilter]

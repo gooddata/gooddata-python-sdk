@@ -1,7 +1,7 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import Optional, Union
+from typing import Union
 
 import gooddata_api_client.models as afm_models
 from gooddata_api_client.model_utils import OpenApiModel
@@ -53,9 +53,9 @@ class SimpleMetric(Metric):
         self,
         local_id: str,
         item: ObjId,
-        aggregation: Optional[str] = None,
+        aggregation: str | None = None,
         compute_ratio: bool = False,
-        filters: Optional[list[Filter]] = None,
+        filters: list[Filter] | None = None,
     ) -> None:
         super().__init__(local_id)
 
@@ -86,7 +86,7 @@ class SimpleMetric(Metric):
         return self._item
 
     @property
-    def aggregation(self) -> Optional[str]:
+    def aggregation(self) -> str | None:
         return self._aggregation
 
     @property

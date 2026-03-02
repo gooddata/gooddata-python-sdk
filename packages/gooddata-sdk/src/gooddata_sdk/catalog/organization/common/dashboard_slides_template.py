@@ -1,5 +1,5 @@
 # (C) 2025 GoodData Corporation
-from typing import Literal, Optional
+from typing import Literal
 
 from attrs import define
 
@@ -14,7 +14,7 @@ from gooddata_sdk.catalog.organization.common.slide_template import (
 @define
 class CatalogDashboardSlidesTemplate:
     applied_on: list[Literal["PDF", "PPTX"]]
-    cover_slide: Optional[CatalogCoverSlideTemplate] = None
-    intro_slide: Optional[CatalogIntroSlideTemplate] = None
-    section_slide: Optional[CatalogSectionSlideTemplate] = None
-    content_slide: Optional[CatalogContentSlideTemplate] = None
+    cover_slide: CatalogCoverSlideTemplate | None = None
+    intro_slide: CatalogIntroSlideTemplate | None = None
+    section_slide: CatalogSectionSlideTemplate | None = None
+    content_slide: CatalogContentSlideTemplate | None = None
