@@ -1,9 +1,9 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import Any, Optional
+from typing import Any
 
-import attr
+from attrs import define
 from gooddata_api_client.model.json_api_identity_provider_to_one_linkage import JsonApiIdentityProviderToOneLinkage
 from gooddata_api_client.model.json_api_organization_in import JsonApiOrganizationIn
 from gooddata_api_client.model.json_api_organization_in_attributes import JsonApiOrganizationInAttributes
@@ -17,7 +17,7 @@ from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.utils import safeget
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class CatalogOrganizationDocument(Base):
     data: CatalogOrganization
 
@@ -25,18 +25,18 @@ class CatalogOrganizationDocument(Base):
     def client_class() -> type[JsonApiOrganizationInDocument]:
         return JsonApiOrganizationInDocument
 
-    def to_api(self, oauth_client_secret: Optional[str] = None) -> JsonApiOrganizationInDocument:
+    def to_api(self, oauth_client_secret: str | None = None) -> JsonApiOrganizationInDocument:
         dictionary = self._get_snake_dict()
         if oauth_client_secret is not None:
             dictionary["data"]["attributes"]["oauth_client_secret"] = oauth_client_secret
         return self.client_class().from_dict(dictionary, camel_case=False)
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class CatalogOrganization(Base):
     id: str
     attributes: CatalogOrganizationAttributes
-    identity_provider_id: Optional[str] = None
+    identity_provider_id: str | None = None
 
     @staticmethod
     def client_class() -> type[JsonApiOrganizationIn]:
@@ -80,13 +80,13 @@ class CatalogOrganization(Base):
         )
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class CatalogOrganizationAttributes(Base):
-    name: Optional[str] = None
-    hostname: Optional[str] = None
-    allowed_origins: Optional[list[str]] = None
-    oauth_issuer_location: Optional[str] = None
-    oauth_client_id: Optional[str] = None
+    name: str | None = None
+    hostname: str | None = None
+    allowed_origins: list[str] | None = None
+    oauth_issuer_location: str | None = None
+    oauth_client_id: str | None = None
 
     @staticmethod
     def client_class() -> type[JsonApiOrganizationInAttributes]:

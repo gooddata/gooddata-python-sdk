@@ -2,9 +2,8 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Optional
 
-import attr
+from attrs import define, field
 from gooddata_api_client.model.declarative_user import DeclarativeUser
 from gooddata_api_client.model.declarative_user_permission import DeclarativeUserPermission
 from gooddata_api_client.model.declarative_users import DeclarativeUsers
@@ -18,7 +17,7 @@ LAYOUT_USERS_DIR = "users"
 LAYOUT_USERS_FILE = "users.yaml"
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class CatalogDeclarativeUsers(Base):
     users: list[CatalogDeclarativeUser]
 
@@ -42,25 +41,25 @@ class CatalogDeclarativeUsers(Base):
         write_layout_to_file(users_file, users, sort=sort)
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class CatalogDeclarativeUser(Base):
     id: str
-    email: Optional[str] = None
-    firstname: Optional[str] = None
-    lastname: Optional[str] = None
-    auth_id: Optional[str] = None
-    user_groups: list[CatalogDeclarativeUserGroupIdentifier] = attr.field(factory=list)
-    settings: list[CatalogDeclarativeSetting] = attr.field(factory=list)
-    permissions: list[CatalogDeclarativeUserPermission] = attr.field(factory=list)
+    email: str | None = None
+    firstname: str | None = None
+    lastname: str | None = None
+    auth_id: str | None = None
+    user_groups: list[CatalogDeclarativeUserGroupIdentifier] = field(factory=list)
+    settings: list[CatalogDeclarativeSetting] = field(factory=list)
+    permissions: list[CatalogDeclarativeUserPermission] = field(factory=list)
 
     @staticmethod
     def client_class() -> type[DeclarativeUser]:
         return DeclarativeUser
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class CatalogDeclarativeUserPermission(Base):
-    name: str = attr.field(validator=value_in_allowed)
+    name: str = field(validator=value_in_allowed)
     assignee: CatalogAssigneeIdentifier
 
     @staticmethod

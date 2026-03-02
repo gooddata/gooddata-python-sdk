@@ -1,14 +1,14 @@
 # (C) 2023 GoodData Corporation
 from __future__ import annotations
 
-import attr
+from attrs import define
 from gooddata_api_client.model.json_api_csp_directive_in import JsonApiCspDirectiveIn
 from gooddata_api_client.model.json_api_csp_directive_in_attributes import JsonApiCspDirectiveInAttributes
 
 from gooddata_sdk.catalog.base import Base
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class CatalogCspDirective(Base):
     id: str
     attributes: CatalogCspDirectiveAttributes
@@ -22,7 +22,7 @@ class CatalogCspDirective(Base):
         return JsonApiCspDirectiveIn
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class CatalogCspDirectiveAttributes(Base):
     sources: list[str]
 

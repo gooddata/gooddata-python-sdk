@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import functools
-from typing import Optional, Union
+from typing import Union
 
 from gooddata_sdk.catalog.types import ValidObjects
 from gooddata_sdk.catalog.workspace.entity_model.content_objects.dataset import (
@@ -29,7 +29,7 @@ ValidObjectsInputType = Union[ValidObjectTypes, list[ValidObjectTypes], Executio
 class CatalogWorkspaceContent:
     def __init__(
         self,
-        valid_obj_fun: Optional[functools.partial[dict[str, set[str]]]],
+        valid_obj_fun: functools.partial[dict[str, set[str]]] | None,
         datasets: list[CatalogDataset],
         metrics: list[CatalogMetric],
     ) -> None:
@@ -166,7 +166,7 @@ class CatalogWorkspaceContent:
     @classmethod
     def create_workspace_content_catalog(
         cls,
-        valid_obj_fun: Optional[functools.partial[dict[str, set[str]]]],
+        valid_obj_fun: functools.partial[dict[str, set[str]]] | None,
         datasets: AllPagedEntities,
         attributes: AllPagedEntities,
         metrics: AllPagedEntities,
