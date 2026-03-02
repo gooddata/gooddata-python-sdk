@@ -1,7 +1,7 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import Optional, Union
+from typing import Union
 
 import gooddata_api_client.models as afm_models
 
@@ -9,7 +9,7 @@ from gooddata_sdk.compute.model.base import ExecModelEntity, ObjId
 
 
 class Attribute(ExecModelEntity):
-    def __init__(self, local_id: str, label: Union[ObjId, str], show_all_values: Optional[bool] = None) -> None:
+    def __init__(self, local_id: str, label: Union[ObjId, str], show_all_values: bool | None = None) -> None:
         """
         Creates new attribute that can be used to slice or dice metric values during computation.
 
@@ -33,7 +33,7 @@ class Attribute(ExecModelEntity):
         return self._label
 
     @property
-    def show_all_values(self) -> Optional[bool]:
+    def show_all_values(self) -> bool | None:
         return self._show_all_values
 
     def has_same_label(self, other: ExecModelEntity) -> bool:

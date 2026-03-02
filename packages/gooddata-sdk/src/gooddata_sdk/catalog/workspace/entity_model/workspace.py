@@ -1,9 +1,9 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import Any, Optional
+from typing import Any
 
-import attr
+from attrs import Factory, define, field
 from gooddata_api_client.model.json_api_workspace_automation_out_relationships_workspace import (
     JsonApiWorkspaceAutomationOutRelationshipsWorkspace,
 )
@@ -17,13 +17,13 @@ from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.utils import safeget
 
 
-@attr.s(auto_attribs=True)
+@define
 class CatalogWorkspace(Base):
     workspace_id: str
-    id: str = attr.field(init=False, default=attr.Factory(lambda self: self.workspace_id, takes_self=True))
+    id: str = field(init=False, default=Factory(lambda self: self.workspace_id, takes_self=True))
     name: str
-    parent_id: Optional[str] = attr.field(default=None)
-    description: Optional[str] = attr.field(default=None)
+    parent_id: str | None = field(default=None)
+    description: str | None = field(default=None)
 
     @classmethod
     def from_api(cls, entity: dict[str, Any]) -> CatalogWorkspace:

@@ -4,7 +4,7 @@ from __future__ import annotations
 import copy
 import functools
 from pathlib import Path
-from typing import Literal, Optional, Union, cast
+from typing import Literal, Union, cast
 
 import gooddata_api_client.models as afm_models
 from gooddata_api_client.model.elements_request import ElementsRequest
@@ -105,7 +105,7 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         return CatalogWorkspaceContent.create_workspace_content_catalog(valid_obj_fun, datasets, attributes, metrics)
 
     def get_attributes_catalog(
-        self, workspace_id: str, include: Optional[list[str]] = None, rsql_filter: Optional[str] = None
+        self, workspace_id: str, include: list[str] | None = None, rsql_filter: str | None = None
     ) -> list[CatalogAttribute]:
         """Retrieve all attributes in a given workspace.
 
@@ -270,7 +270,7 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         self,
         workspace_id: str,
         ldm: CatalogDeclarativeModel,
-        validator: Optional[DataSourceValidator] = None,
+        validator: DataSourceValidator | None = None,
         standalone_copy: bool = False,
     ) -> None:
         """Set declarative logical data model for a given workspace.
@@ -334,7 +334,7 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         self,
         workspace_id: str,
         layout_root_path: Path = Path.cwd(),
-        validator: Optional[DataSourceValidator] = None,
+        validator: DataSourceValidator | None = None,
         standalone_copy: bool = False,
     ) -> None:
         """This method combines load_declarative_ldm and put_declarative_ldm
@@ -393,7 +393,7 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
     # Declarative methods for analytics model
 
     def get_declarative_analytics_model(
-        self, workspace_id: str, exclude: Optional[list[str]] = None
+        self, workspace_id: str, exclude: list[str] | None = None
     ) -> CatalogDeclarativeAnalytics:
         """Retrieves declarative analytics model. The model is tied to the workspace and organization.
 
@@ -481,7 +481,7 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         self.put_declarative_analytics_model(workspace_id, declarative_analytics_model)
 
     def store_analytics_model_to_disk(
-        self, workspace_id: str, path: Path = Path.cwd(), exclude: Optional[list[str]] = None, sort: bool = False
+        self, workspace_id: str, path: Path = Path.cwd(), exclude: list[str] | None = None, sort: bool = False
     ) -> None:
         """Store analytics model for a given workspace in directory hierarchy.This method does not tie the declarative
             analytics model to the workspace and organization, thus it is recommended for migration between workspaces.
@@ -600,15 +600,15 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         self,
         workspace_id: str,
         label_id: LabelElementsInputType,
-        depends_on: Optional[list[DependsOnItem]] = None,
-        validate_by: Optional[list[CatalogValidateByItem]] = None,
-        exact_filter: Optional[list[str]] = None,
-        filter_by: Optional[CatalogFilterBy] = None,
-        pattern_filter: Optional[str] = None,
-        complement_filter: Optional[bool] = False,
-        sort_order: Optional[Literal["ASC", "DESC"]] = None,
-        offset: Optional[int] = None,
-        limit: Optional[int] = None,
+        depends_on: list[DependsOnItem] | None = None,
+        validate_by: list[CatalogValidateByItem] | None = None,
+        exact_filter: list[str] | None = None,
+        filter_by: CatalogFilterBy | None = None,
+        pattern_filter: str | None = None,
+        complement_filter: bool | None = False,
+        sort_order: Literal["ASC", "DESC"] | None = None,
+        offset: int | None = None,
+        limit: int | None = None,
     ) -> list[str]:
         """
         Get existing values for a label.

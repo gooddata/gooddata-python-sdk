@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import functools
 from pathlib import Path
-from typing import Any, Optional, Union
+from typing import Any, Union
 
 from gooddata_api_client.exceptions import NotFoundException
 
@@ -153,8 +153,8 @@ class CatalogDataSourceService(CatalogServiceBase):
     def put_declarative_data_sources(
         self,
         declarative_data_sources: CatalogDeclarativeDataSources,
-        credentials_path: Optional[Path] = None,
-        config_file: Optional[Union[str, Path]] = None,
+        credentials_path: Path | None = None,
+        config_file: Union[str, Path] | None = None,
         test_data_sources: bool = False,
     ) -> None:
         """Set all data sources, including their related physical data model.
@@ -221,8 +221,8 @@ class CatalogDataSourceService(CatalogServiceBase):
     def load_and_put_declarative_data_sources(
         self,
         layout_root_path: Path = Path.cwd(),
-        credentials_path: Optional[Path] = None,
-        config_file: Optional[Union[str, Path]] = None,
+        credentials_path: Path | None = None,
+        config_file: Union[str, Path] | None = None,
         test_data_sources: bool = False,
     ) -> None:
         """Loads and sets layouts stored using `store_declarative_data_sources`.
@@ -307,7 +307,7 @@ class CatalogDataSourceService(CatalogServiceBase):
     def scan_pdm_and_generate_logical_model(
         self,
         data_source_id: str,
-        generate_ldm_request: Optional[CatalogGenerateLdmRequest] = None,
+        generate_ldm_request: CatalogGenerateLdmRequest | None = None,
         scan_request: CatalogScanModelRequest = CatalogScanModelRequest(),
         report_warnings: bool = False,
     ) -> tuple[CatalogDeclarativeModel, CatalogScanResultPdm]:
@@ -432,8 +432,8 @@ class CatalogDataSourceService(CatalogServiceBase):
     def test_data_sources_connection(
         self,
         declarative_data_sources: CatalogDeclarativeDataSources,
-        credentials_path: Optional[Path] = None,
-        config_file: Optional[Union[str, Path]] = None,
+        credentials_path: Path | None = None,
+        config_file: Union[str, Path] | None = None,
     ) -> None:
         """Tests connection to declarative data sources.
 

@@ -3,9 +3,8 @@ from __future__ import annotations
 
 import builtins
 from pathlib import Path
-from typing import Optional
 
-import attr
+from attrs import define
 from gooddata_api_client.model.declarative_table import DeclarativeTable
 
 from gooddata_sdk.catalog.base import Base
@@ -13,13 +12,13 @@ from gooddata_sdk.catalog.data_source.declarative_model.physical_model.column im
 from gooddata_sdk.utils import read_layout_from_file, write_layout_to_file
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class CatalogDeclarativeTable(Base):
     id: str
     type: str
     path: list[str]
     columns: list[CatalogDeclarativeColumn]
-    name_prefix: Optional[str] = None
+    name_prefix: str | None = None
 
     @staticmethod
     def client_class() -> builtins.type[DeclarativeTable]:

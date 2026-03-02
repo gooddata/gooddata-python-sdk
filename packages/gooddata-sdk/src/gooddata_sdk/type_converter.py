@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from datetime import date, datetime
-from typing import Any, Callable, Optional
+from typing import Any, Callable
 
 from dateutil.parser import parse
 
@@ -15,7 +15,7 @@ class Converter:
 
     DEFAULT_DB_DATA_TYPE = "VARCHAR(255)"
 
-    _EXTERNAL_CONVERSION_FNC: Optional[Callable[[object, Any], Any]] = None
+    _EXTERNAL_CONVERSION_FNC: Callable[[object, Any], Any] | None = None
 
     @classmethod
     def set_external_fnc(cls, fnc: Callable[[object, Any], Any]) -> None:
@@ -126,9 +126,9 @@ class TypeConverterRegistry:
         """
         self._type_name = type_name
         self._converters: dict[str, Converter] = {}
-        self._default_converter: Optional[Converter] = None
+        self._default_converter: Converter | None = None
 
-    def register(self, converter: Converter, sub_type: Optional[str]) -> None:
+    def register(self, converter: Converter, sub_type: str | None) -> None:
         """
         Register converter instance for given sub-type (granularity). If sub-type is not specified, converter is
         registered as the default one for the whole type. Default converter can be registered only once.
@@ -174,7 +174,7 @@ class TypeConverterRegistry:
             )
         self._default_converter = converter
 
-    def converter(self, sub_type: Optional[str]) -> Converter:
+    def converter(self, sub_type: str | None) -> Converter:
         """
         Find and return converter instance for a given sub-type. Default converter instance is returned
         if the sub-type is not found or not provided. When a default converter is not registered, ValueError
@@ -230,7 +230,7 @@ class ConverterRegistryStore:
             return cls._TYPE_REGISTRIES[type_name]
 
     @classmethod
-    def register(cls, type_name: str, class_converter: type[Converter], sub_types: Optional[list[str]] = None) -> None:
+    def register(cls, type_name: str, class_converter: type[Converter], sub_types: list[str] | None = None) -> None:
         """
         Register Converter instance created from provided Converter class to given type and list of sub types.
         When sub types are not provided, converter is registered as the default one for given type.
@@ -247,7 +247,7 @@ class ConverterRegistryStore:
                 registry.register(class_converter(), sub_type)
 
     @classmethod
-    def find_converter(cls, type_name: str, sub_type: Optional[str] = None) -> Converter:
+    def find_converter(cls, type_name: str, sub_type: str | None = None) -> Converter:
         """
         Find Converter for given type and sub type.
 

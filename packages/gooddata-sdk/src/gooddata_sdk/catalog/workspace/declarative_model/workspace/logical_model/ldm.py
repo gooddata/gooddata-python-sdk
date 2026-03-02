@@ -2,9 +2,8 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Optional
 
-import attr
+from attrs import define, field
 from gooddata_api_client.model.declarative_ldm import DeclarativeLdm
 from gooddata_api_client.model.declarative_model import DeclarativeModel
 
@@ -26,9 +25,9 @@ from gooddata_sdk.utils import create_directory, get_sorted_yaml_files
 LAYOUT_LDM_DIR = "ldm"
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class CatalogDeclarativeModel(Base):
-    ldm: Optional[CatalogDeclarativeLdm] = None
+    ldm: CatalogDeclarativeLdm | None = None
 
     @staticmethod
     def client_class() -> type[DeclarativeModel]:
@@ -52,11 +51,11 @@ class CatalogDeclarativeModel(Base):
             self.ldm.change_wdf_refs_id(mapping)
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+@define(kw_only=True)
 class CatalogDeclarativeLdm(Base):
-    datasets: list[CatalogDeclarativeDataset] = attr.field(factory=list)
-    date_instances: list[CatalogDeclarativeDateDataset] = attr.field(factory=list)
-    dataset_extensions: Optional[list[CatalogDeclarativeDatasetExtension]] = None
+    datasets: list[CatalogDeclarativeDataset] = field(factory=list)
+    date_instances: list[CatalogDeclarativeDateDataset] = field(factory=list)
+    dataset_extensions: list[CatalogDeclarativeDatasetExtension] | None = None
 
     @staticmethod
     def client_class() -> type[DeclarativeLdm]:
@@ -147,7 +146,7 @@ class CatalogDeclarativeLdm(Base):
         )
         return cls(datasets=datasets, date_instances=date_instances, dataset_extensions=dataset_extensions)
 
-    def modify_mapped_data_source(self, data_source_mapping: Optional[dict]) -> CatalogDeclarativeLdm:
+    def modify_mapped_data_source(self, data_source_mapping: dict | None) -> CatalogDeclarativeLdm:
         """LDM contains data source ID - is mapped to this data source.
         You may decide to migrate to different data source containing the same physical data model
         (e.g. change the DB engine, but keep the model).
@@ -201,7 +200,7 @@ class CatalogDeclarativeLdm(Base):
         else:
             return object_name.lower()
 
-    def change_tables_columns_case(self, upper_case: Optional[bool] = None) -> CatalogDeclarativeLdm:
+    def change_tables_columns_case(self, upper_case: bool | None = None) -> CatalogDeclarativeLdm:
         """Change case (to lower/upper-case) of all physical objects mapped in the LDM.
         Namely mapped table names and column names.
         Default is to change everything to upper-case.
