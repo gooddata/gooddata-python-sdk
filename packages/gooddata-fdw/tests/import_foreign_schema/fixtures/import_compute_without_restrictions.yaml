@@ -600,15 +600,15 @@ interactions:
                     type: attribute
                 referenceProperties:
                   - identifier:
-                      id: campaigns
+                      id: date
                       type: dataset
                     multivalue: false
                     sources:
-                      - column: campaign_id
-                        dataType: INT
+                      - column: date
+                        dataType: DATE
                         target:
-                          id: campaign_id
-                          type: attribute
+                          id: date
+                          type: date
                         isNullable: null
                         nullValue: null
                     sourceColumns: null
@@ -628,6 +628,20 @@ interactions:
                     sourceColumns: null
                     sourceColumnDataTypes: null
                   - identifier:
+                      id: campaigns
+                      type: dataset
+                    multivalue: false
+                    sources:
+                      - column: campaign_id
+                        dataType: INT
+                        target:
+                          id: campaign_id
+                          type: attribute
+                        isNullable: null
+                        nullValue: null
+                    sourceColumns: null
+                    sourceColumnDataTypes: null
+                  - identifier:
                       id: customers
                       type: dataset
                     multivalue: false
@@ -637,20 +651,6 @@ interactions:
                         target:
                           id: customer_id
                           type: attribute
-                        isNullable: null
-                        nullValue: null
-                    sourceColumns: null
-                    sourceColumnDataTypes: null
-                  - identifier:
-                      id: date
-                      type: dataset
-                    multivalue: false
-                    sources:
-                      - column: date
-                        dataType: DATE
-                        target:
-                          id: date
-                          type: date
                         isNullable: null
                         nullValue: null
                     sourceColumns: null
@@ -666,14 +666,14 @@ interactions:
                     dataType: STRING
                 workspaceDataFilterReferences:
                   - filterId:
-                      id: wdf__state
-                      type: workspaceDataFilter
-                    filterColumn: wdf__state
-                    filterColumnDataType: STRING
-                  - filterId:
                       id: wdf__region
                       type: workspaceDataFilter
                     filterColumn: wdf__region
+                    filterColumnDataType: STRING
+                  - filterId:
+                      id: wdf__state
+                      type: workspaceDataFilter
+                    filterColumn: wdf__state
                     filterColumnDataType: STRING
                 type: NORMAL
               id: order_lines
@@ -1262,15 +1262,15 @@ interactions:
                     type: attribute
                 referenceProperties:
                   - identifier:
-                      id: campaigns
+                      id: date
                       type: dataset
                     multivalue: false
                     sources:
-                      - column: campaign_id
-                        dataType: INT
+                      - column: date
+                        dataType: DATE
                         target:
-                          id: campaign_id
-                          type: attribute
+                          id: date
+                          type: date
                         isNullable: null
                         nullValue: null
                     sourceColumns: null
@@ -1290,6 +1290,20 @@ interactions:
                     sourceColumns: null
                     sourceColumnDataTypes: null
                   - identifier:
+                      id: campaigns
+                      type: dataset
+                    multivalue: false
+                    sources:
+                      - column: campaign_id
+                        dataType: INT
+                        target:
+                          id: campaign_id
+                          type: attribute
+                        isNullable: null
+                        nullValue: null
+                    sourceColumns: null
+                    sourceColumnDataTypes: null
+                  - identifier:
                       id: customers
                       type: dataset
                     multivalue: false
@@ -1299,20 +1313,6 @@ interactions:
                         target:
                           id: customer_id
                           type: attribute
-                        isNullable: null
-                        nullValue: null
-                    sourceColumns: null
-                    sourceColumnDataTypes: null
-                  - identifier:
-                      id: date
-                      type: dataset
-                    multivalue: false
-                    sources:
-                      - column: date
-                        dataType: DATE
-                        target:
-                          id: date
-                          type: date
                         isNullable: null
                         nullValue: null
                     sourceColumns: null
@@ -1329,14 +1329,14 @@ interactions:
                     dataType: STRING
                 workspaceDataFilterReferences:
                   - filterId:
-                      id: wdf__state
-                      type: workspaceDataFilter
-                    filterColumn: wdf__state
-                    filterColumnDataType: STRING
-                  - filterId:
                       id: wdf__region
                       type: workspaceDataFilter
                     filterColumn: wdf__region
+                    filterColumnDataType: STRING
+                  - filterId:
+                      id: wdf__state
+                      type: workspaceDataFilter
+                    filterColumn: wdf__state
                     filterColumnDataType: STRING
                 type: NORMAL
               id: order_lines

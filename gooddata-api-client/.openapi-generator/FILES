@@ -1193,8 +1193,9 @@ docs/TabularExportRequest.md
 docs/TestConnectionApi.md
 docs/TestDefinitionRequest.md
 docs/TestDestinationRequest.md
+docs/TestLlmProviderByIdRequest.md
+docs/TestLlmProviderByIdRequestProviderConfig.md
 docs/TestLlmProviderDefinitionRequest.md
-docs/TestLlmProviderDefinitionRequestProviderConfig.md
 docs/TestLlmProviderResponse.md
 docs/TestNotification.md
 docs/TestNotificationAllOf.md
@@ -1207,6 +1208,8 @@ docs/TotalDimension.md
 docs/TotalExecutionResultHeader.md
 docs/TotalResultHeader.md
 docs/TranslationsApi.md
+docs/TrendingObjectItem.md
+docs/TrendingObjectsResult.md
 docs/TriggerAutomationRequest.md
 docs/TriggerQualityIssuesCalculationResponse.md
 docs/UpsertKnowledgeDocumentRequestDto.md
@@ -2487,8 +2490,9 @@ gooddata_api_client/model/table_warning.py
 gooddata_api_client/model/tabular_export_request.py
 gooddata_api_client/model/test_definition_request.py
 gooddata_api_client/model/test_destination_request.py
+gooddata_api_client/model/test_llm_provider_by_id_request.py
+gooddata_api_client/model/test_llm_provider_by_id_request_provider_config.py
 gooddata_api_client/model/test_llm_provider_definition_request.py
-gooddata_api_client/model/test_llm_provider_definition_request_provider_config.py
 gooddata_api_client/model/test_llm_provider_response.py
 gooddata_api_client/model/test_notification.py
 gooddata_api_client/model/test_notification_all_of.py
@@ -2500,6 +2504,8 @@ gooddata_api_client/model/total.py
 gooddata_api_client/model/total_dimension.py
 gooddata_api_client/model/total_execution_result_header.py
 gooddata_api_client/model/total_result_header.py
+gooddata_api_client/model/trending_object_item.py
+gooddata_api_client/model/trending_objects_result.py
 gooddata_api_client/model/trigger_automation_request.py
 gooddata_api_client/model/trigger_quality_issues_calculation_response.py
 gooddata_api_client/model/upsert_knowledge_document_request_dto.py
