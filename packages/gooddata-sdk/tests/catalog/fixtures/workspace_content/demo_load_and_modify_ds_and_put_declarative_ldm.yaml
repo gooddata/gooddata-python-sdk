@@ -44,7 +44,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 673fd5f14dd7d3ae0d362c0982d29b02
+          traceId: 4605938b5a43b95f116f3af4b7287b18
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces
@@ -556,8 +556,8 @@ interactions:
                 username: postgres
                 authenticationType: USERNAME_PASSWORD
                 alternativeDataSourceId: ds-put-abc-id
-                type: POSTGRESQL
                 name: demo-test-ds
+                type: POSTGRESQL
                 schema: demo
               id: demo-test-ds
               links:
@@ -1011,8 +1011,8 @@ interactions:
                 username: postgres
                 authenticationType: USERNAME_PASSWORD
                 alternativeDataSourceId: ds-put-abc-id
-                type: POSTGRESQL
                 name: demo-test-ds
+                type: POSTGRESQL
                 schema: demo
               id: demo-test-ds
               links:

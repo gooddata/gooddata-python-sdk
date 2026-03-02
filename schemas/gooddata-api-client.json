@@ -10874,6 +10874,7 @@
               "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
               "MAX_ZOOM_LEVEL",
               "SORT_CASE_SENSITIVE",
+              "SORT_COLLATION",
               "METRIC_FORMAT_OVERRIDE",
               "ENABLE_AI_ON_DATA",
               "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
@@ -26000,6 +26001,7 @@
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
                   "MAX_ZOOM_LEVEL",
                   "SORT_CASE_SENSITIVE",
+                  "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
@@ -26099,6 +26101,7 @@
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
                   "MAX_ZOOM_LEVEL",
                   "SORT_CASE_SENSITIVE",
+                  "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
@@ -26238,6 +26241,7 @@
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
                   "MAX_ZOOM_LEVEL",
                   "SORT_CASE_SENSITIVE",
+                  "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
@@ -27743,6 +27747,7 @@
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
                   "MAX_ZOOM_LEVEL",
                   "SORT_CASE_SENSITIVE",
+                  "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
@@ -27842,6 +27847,7 @@
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
                   "MAX_ZOOM_LEVEL",
                   "SORT_CASE_SENSITIVE",
+                  "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
@@ -30097,6 +30103,7 @@
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
                   "MAX_ZOOM_LEVEL",
                   "SORT_CASE_SENSITIVE",
+                  "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
@@ -30196,6 +30203,7 @@
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
                   "MAX_ZOOM_LEVEL",
                   "SORT_CASE_SENSITIVE",
+                  "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
@@ -30361,6 +30369,7 @@
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
                   "MAX_ZOOM_LEVEL",
                   "SORT_CASE_SENSITIVE",
+                  "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
@@ -30460,6 +30469,7 @@
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
                   "MAX_ZOOM_LEVEL",
                   "SORT_CASE_SENSITIVE",
+                  "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
@@ -30882,7 +30892,7 @@
         "type": "object"
       },
       "LlmProviderConfig": {
-        "description": "Provider configuration to test.",
+        "description": "Provider configuration overrides.",
         "oneOf": [
           {
             "$ref": "#/components/schemas/AwsBedrockProviderConfig"
@@ -33143,6 +33153,7 @@
               "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
               "MAX_ZOOM_LEVEL",
               "SORT_CASE_SENSITIVE",
+              "SORT_COLLATION",
               "METRIC_FORMAT_OVERRIDE",
               "ENABLE_AI_ON_DATA",
               "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
@@ -34663,6 +34674,31 @@
         ],
         "type": "object"
       },
+      "TestLlmProviderByIdRequest": {
+        "properties": {
+          "models": {
+            "description": "Models overrides.",
+            "items": {
+              "$ref": "#/components/schemas/LlmModel"
+            },
+            "type": "array"
+          },
+          "providerConfig": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AwsBedrockProviderConfig"
+              },
+              {
+                "$ref": "#/components/schemas/AzureFoundryProviderConfig"
+              },
+              {
+                "$ref": "#/components/schemas/OpenAIProviderConfig"
+              }
+            ]
+          }
+        },
+        "type": "object"
+      },
       "TestLlmProviderDefinitionRequest": {
         "properties": {
           "models": {
@@ -34930,6 +34966,112 @@
         },
         "required": [
           "function"
+        ],
+        "type": "object"
+      },
+      "TrendingObjectItem": {
+        "description": "Trending analytics catalog objects",
+        "properties": {
+          "createdAt": {
+            "description": "Timestamp when object was created.",
+            "format": "date-time",
+            "type": "string"
+          },
+          "createdBy": {
+            "description": "ID of the user who created the object.",
+            "type": "string"
+          },
+          "datasetId": {
+            "description": "ID of the associated dataset, if applicable.",
+            "type": "string"
+          },
+          "datasetTitle": {
+            "description": "Title of the associated dataset, if applicable.",
+            "type": "string"
+          },
+          "datasetType": {
+            "description": "Type of the associated dataset, if applicable.",
+            "type": "string"
+          },
+          "description": {
+            "description": "Object description.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Object ID.",
+            "type": "string"
+          },
+          "isHidden": {
+            "description": "If true, this object is hidden from AI search results by default.",
+            "type": "boolean"
+          },
+          "isHiddenFromKda": {
+            "description": "If true, this object is hidden from KDA.",
+            "type": "boolean"
+          },
+          "metricType": {
+            "description": "Type of the metric (e.g. MAQL), if applicable.",
+            "type": "string"
+          },
+          "modifiedAt": {
+            "description": "Timestamp when object was last modified.",
+            "format": "date-time",
+            "type": "string"
+          },
+          "modifiedBy": {
+            "description": "ID of the user who last modified the object.",
+            "type": "string"
+          },
+          "tags": {
+            "items": {
+              "description": "Tags assigned to the object.",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "title": {
+            "description": "Object title.",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type, e.g. dashboard, visualization, metric.",
+            "type": "string"
+          },
+          "usageCount": {
+            "description": "Number of times this object has been used/referenced.",
+            "format": "int32",
+            "type": "integer"
+          },
+          "visualizationUrl": {
+            "description": "URL of the visualization, if applicable.",
+            "type": "string"
+          },
+          "workspaceId": {
+            "description": "Workspace ID the object belongs to.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "tags",
+          "title",
+          "type",
+          "usageCount",
+          "workspaceId"
+        ],
+        "type": "object"
+      },
+      "TrendingObjectsResult": {
+        "properties": {
+          "objects": {
+            "items": {
+              "$ref": "#/components/schemas/TrendingObjectItem"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "objects"
         ],
         "type": "object"
       },
@@ -36453,6 +36595,15 @@
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TestLlmProviderByIdRequest"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "content": {
@@ -38338,6 +38489,41 @@
           }
         },
         "summary": "Get Analytics Catalog Tags",
+        "tags": [
+          "Smart Functions",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/trendingObjects": {
+      "get": {
+        "description": "Returns a list of trending objects for this workspace",
+        "operationId": "trendingObjects",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrendingObjectsResult"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Get Trending Analytics Catalog Objects",
         "tags": [
           "Smart Functions",
           "actions"

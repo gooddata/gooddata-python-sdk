@@ -421,6 +421,7 @@ Class | Method | HTTP request | Description
 *SmartFunctionsApi* | [**tags**](docs/SmartFunctionsApi.md#tags) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/tags | Get Analytics Catalog Tags
 *SmartFunctionsApi* | [**test_llm_provider**](docs/SmartFunctionsApi.md#test_llm_provider) | **POST** /api/v1/actions/ai/llmProvider/test | Test LLM Provider
 *SmartFunctionsApi* | [**test_llm_provider_by_id**](docs/SmartFunctionsApi.md#test_llm_provider_by_id) | **POST** /api/v1/actions/ai/llmProvider/{llmProviderId}/test | Test LLM Provider By Id
+*SmartFunctionsApi* | [**trending_objects**](docs/SmartFunctionsApi.md#trending_objects) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/trendingObjects | Get Trending Analytics Catalog Objects
 *SmartFunctionsApi* | [**trigger_quality_issues_calculation**](docs/SmartFunctionsApi.md#trigger_quality_issues_calculation) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/issues/triggerCheck | Trigger Quality Issues Calculation
 *SmartFunctionsApi* | [**validate_llm_endpoint**](docs/SmartFunctionsApi.md#validate_llm_endpoint) | **POST** /api/v1/actions/ai/llmEndpoint/test | Validate LLM Endpoint
 *SmartFunctionsApi* | [**validate_llm_endpoint_by_id**](docs/SmartFunctionsApi.md#validate_llm_endpoint_by_id) | **POST** /api/v1/actions/ai/llmEndpoint/{llmEndpointId}/test | Validate LLM Endpoint By Id
@@ -618,6 +619,7 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**test_llm_provider**](docs/ActionsApi.md#test_llm_provider) | **POST** /api/v1/actions/ai/llmProvider/test | Test LLM Provider
 *ActionsApi* | [**test_llm_provider_by_id**](docs/ActionsApi.md#test_llm_provider_by_id) | **POST** /api/v1/actions/ai/llmProvider/{llmProviderId}/test | Test LLM Provider By Id
 *ActionsApi* | [**test_notification_channel**](docs/ActionsApi.md#test_notification_channel) | **POST** /api/v1/actions/notificationChannels/test | Test notification channel.
+*ActionsApi* | [**trending_objects**](docs/ActionsApi.md#trending_objects) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/trendingObjects | Get Trending Analytics Catalog Objects
 *ActionsApi* | [**trigger_automation**](docs/ActionsApi.md#trigger_automation) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/trigger | Trigger automation.
 *ActionsApi* | [**trigger_existing_automation**](docs/ActionsApi.md#trigger_existing_automation) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/{automationId}/trigger | Trigger existing automation.
 *ActionsApi* | [**trigger_quality_issues_calculation**](docs/ActionsApi.md#trigger_quality_issues_calculation) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/issues/triggerCheck | Trigger Quality Issues Calculation
@@ -2306,8 +2308,9 @@ Class | Method | HTTP request | Description
  - [TabularExportRequest](docs/TabularExportRequest.md)
  - [TestDefinitionRequest](docs/TestDefinitionRequest.md)
  - [TestDestinationRequest](docs/TestDestinationRequest.md)
+ - [TestLlmProviderByIdRequest](docs/TestLlmProviderByIdRequest.md)
+ - [TestLlmProviderByIdRequestProviderConfig](docs/TestLlmProviderByIdRequestProviderConfig.md)
  - [TestLlmProviderDefinitionRequest](docs/TestLlmProviderDefinitionRequest.md)
- - [TestLlmProviderDefinitionRequestProviderConfig](docs/TestLlmProviderDefinitionRequestProviderConfig.md)
  - [TestLlmProviderResponse](docs/TestLlmProviderResponse.md)
  - [TestNotification](docs/TestNotification.md)
  - [TestNotificationAllOf](docs/TestNotificationAllOf.md)
@@ -2319,6 +2322,8 @@ Class | Method | HTTP request | Description
  - [TotalDimension](docs/TotalDimension.md)
  - [TotalExecutionResultHeader](docs/TotalExecutionResultHeader.md)
  - [TotalResultHeader](docs/TotalResultHeader.md)
+ - [TrendingObjectItem](docs/TrendingObjectItem.md)
+ - [TrendingObjectsResult](docs/TrendingObjectsResult.md)
  - [TriggerAutomationRequest](docs/TriggerAutomationRequest.md)
  - [TriggerQualityIssuesCalculationResponse](docs/TriggerQualityIssuesCalculationResponse.md)
  - [UpsertKnowledgeDocumentRequestDto](docs/UpsertKnowledgeDocumentRequestDto.md)

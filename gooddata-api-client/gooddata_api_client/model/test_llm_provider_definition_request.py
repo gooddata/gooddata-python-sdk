@@ -32,9 +32,9 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.llm_model import LlmModel
-    from gooddata_api_client.model.test_llm_provider_definition_request_provider_config import TestLlmProviderDefinitionRequestProviderConfig
+    from gooddata_api_client.model.test_llm_provider_by_id_request_provider_config import TestLlmProviderByIdRequestProviderConfig
     globals()['LlmModel'] = LlmModel
-    globals()['TestLlmProviderDefinitionRequestProviderConfig'] = TestLlmProviderDefinitionRequestProviderConfig
+    globals()['TestLlmProviderByIdRequestProviderConfig'] = TestLlmProviderByIdRequestProviderConfig
 
 
 class TestLlmProviderDefinitionRequest(ModelNormal):
@@ -90,7 +90,7 @@ class TestLlmProviderDefinitionRequest(ModelNormal):
         """
         lazy_import()
         return {
-            'provider_config': (TestLlmProviderDefinitionRequestProviderConfig,),  # noqa: E501
+            'provider_config': (TestLlmProviderByIdRequestProviderConfig,),  # noqa: E501
             'models': ([LlmModel],),  # noqa: E501
         }
 
@@ -115,7 +115,7 @@ class TestLlmProviderDefinitionRequest(ModelNormal):
         """TestLlmProviderDefinitionRequest - a model defined in OpenAPI
 
         Args:
-            provider_config (TestLlmProviderDefinitionRequestProviderConfig):
+            provider_config (TestLlmProviderByIdRequestProviderConfig):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -205,7 +205,7 @@ class TestLlmProviderDefinitionRequest(ModelNormal):
         """TestLlmProviderDefinitionRequest - a model defined in OpenAPI
 
         Args:
-            provider_config (TestLlmProviderDefinitionRequestProviderConfig):
+            provider_config (TestLlmProviderByIdRequestProviderConfig):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types

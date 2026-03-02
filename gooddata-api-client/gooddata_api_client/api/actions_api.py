@@ -112,10 +112,12 @@ from gooddata_api_client.model.switch_identity_provider_request import SwitchIde
 from gooddata_api_client.model.tabular_export_request import TabularExportRequest
 from gooddata_api_client.model.test_definition_request import TestDefinitionRequest
 from gooddata_api_client.model.test_destination_request import TestDestinationRequest
+from gooddata_api_client.model.test_llm_provider_by_id_request import TestLlmProviderByIdRequest
 from gooddata_api_client.model.test_llm_provider_definition_request import TestLlmProviderDefinitionRequest
 from gooddata_api_client.model.test_llm_provider_response import TestLlmProviderResponse
 from gooddata_api_client.model.test_request import TestRequest
 from gooddata_api_client.model.test_response import TestResponse
+from gooddata_api_client.model.trending_objects_result import TrendingObjectsResult
 from gooddata_api_client.model.trigger_automation_request import TriggerAutomationRequest
 from gooddata_api_client.model.trigger_quality_issues_calculation_response import TriggerQualityIssuesCalculationResponse
 from gooddata_api_client.model.upsert_knowledge_document_request_dto import UpsertKnowledgeDocumentRequestDto
@@ -6057,6 +6059,7 @@ class ActionsApi(object):
             params_map={
                 'all': [
                     'llm_provider_id',
+                    'test_llm_provider_by_id_request',
                 ],
                 'required': [
                     'llm_provider_id',
@@ -6076,12 +6079,15 @@ class ActionsApi(object):
                 'openapi_types': {
                     'llm_provider_id':
                         (str,),
+                    'test_llm_provider_by_id_request':
+                        (TestLlmProviderByIdRequest,),
                 },
                 'attribute_map': {
                     'llm_provider_id': 'llmProviderId',
                 },
                 'location_map': {
                     'llm_provider_id': 'path',
+                    'test_llm_provider_by_id_request': 'body',
                 },
                 'collection_format_map': {
                 }
@@ -6090,7 +6096,9 @@ class ActionsApi(object):
                 'accept': [
                     'application/json'
                 ],
-                'content_type': [],
+                'content_type': [
+                    'application/json'
+                ]
             },
             api_client=api_client
         )
@@ -6141,6 +6149,62 @@ class ActionsApi(object):
                 'content_type': [
                     'application/json'
                 ]
+            },
+            api_client=api_client
+        )
+        self.trending_objects_endpoint = _Endpoint(
+            settings={
+                'response_type': (TrendingObjectsResult,),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/trendingObjects',
+                'operation_id': 'trending_objects',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                ],
+                'required': [
+                    'workspace_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                    'workspace_id',
+                ]
+            },
+            root_map={
+                'validations': {
+                    ('workspace_id',): {
+
+                        'regex': {
+                            'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+                        },
+                    },
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
             },
             api_client=api_client
         )
@@ -15536,6 +15600,7 @@ class ActionsApi(object):
             llm_provider_id (str):
 
         Keyword Args:
+            test_llm_provider_by_id_request (TestLlmProviderByIdRequest): [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -15683,6 +15748,89 @@ class ActionsApi(object):
         kwargs['test_destination_request'] = \
             test_destination_request
         return self.test_notification_channel_endpoint.call_with_http_info(**kwargs)
+
+    def trending_objects(
+        self,
+        workspace_id,
+        **kwargs
+    ):
+        """Get Trending Analytics Catalog Objects  # noqa: E501
+
+        Returns a list of trending objects for this workspace  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.trending_objects(workspace_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str): Workspace identifier
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            TrendingObjectsResult
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        return self.trending_objects_endpoint.call_with_http_info(**kwargs)
 
     def trigger_automation(
         self,
