@@ -1,6 +1,6 @@
 # (C) 2022 GoodData Corporation
 from pathlib import Path
-from typing import Literal, Optional
+from typing import Literal
 
 import pytest
 from gooddata_pandas import DataFrameFactory
@@ -27,11 +27,11 @@ def _run_and_validate_results(
     gdf: DataFrameFactory,
     exec_def: ExecutionDefinition,
     expected: tuple[int, int],
-    expected_row_totals: Optional[list[list[int]]] = None,
-    expected_column_totals: Optional[list[list[int]]] = None,
+    expected_row_totals: list[list[int]] | None = None,
+    expected_column_totals: list[list[int]] | None = None,
     page_size: int = 100,
     optimized: bool = False,
-    grand_totals_position: Optional[Literal["pinnedBottom", "pinnedTop", "bottom", "top"]] = "bottom",
+    grand_totals_position: Literal["pinnedBottom", "pinnedTop", "bottom", "top"] | None = "bottom",
 ) -> str:
     # generate dataframe from exec_def
     result, result_metadata = gdf.for_exec_def(

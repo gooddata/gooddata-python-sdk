@@ -12,7 +12,7 @@ _ERROR_INFO_MAX_MSG = 256
 _ERROR_INFO_MAX_DETAIL = 512
 
 
-def _truncate_str_value(val: Optional[str], max_len: int) -> Optional[str]:
+def _truncate_str_value(val: str | None, max_len: int) -> str | None:
     if val is None:
         return None
 
@@ -34,13 +34,13 @@ class ErrorInfo:
     def __init__(
         self,
         msg: str,
-        detail: Optional[str] = None,
-        body: Optional[bytes] = None,
+        detail: str | None = None,
+        body: bytes | None = None,
         code: int = 0,
     ) -> None:
         self._msg = cast(str, _truncate_str_value(msg, _ERROR_INFO_MAX_MSG))
-        self._detail: Optional[str] = _truncate_str_value(detail, _ERROR_INFO_MAX_DETAIL)
-        self._body: Optional[bytes] = body
+        self._detail: str | None = _truncate_str_value(detail, _ERROR_INFO_MAX_DETAIL)
+        self._body: bytes | None = body
         self._code: int = code
 
     @property
@@ -58,14 +58,14 @@ class ErrorInfo:
         return self._code
 
     @property
-    def detail(self) -> Optional[str]:
+    def detail(self) -> str | None:
         """
         :return: a human-readable error detail; if included may help with error diagnostics
         """
         return self._detail
 
     @property
-    def body(self) -> Optional[bytes]:
+    def body(self) -> bytes | None:
         """
         :return: error body, suitable for programmatic consumption; used by server to send structured information
          which the client code may want to work with
@@ -83,7 +83,7 @@ class ErrorInfo:
 
         return self
 
-    def with_detail(self, detail: Optional[str] = None) -> "ErrorInfo":
+    def with_detail(self, detail: str | None = None) -> "ErrorInfo":
         """
         Updates or resets the error detail.
 
@@ -95,7 +95,7 @@ class ErrorInfo:
 
         return self
 
-    def with_body(self, body: Optional[Union[bytes, str]]) -> "ErrorInfo":
+    def with_body(self, body: Union[bytes, str] | None) -> "ErrorInfo":
         """
         Updates or resets the error body.
 
@@ -200,7 +200,7 @@ class ErrorInfo:
 
     def to_flight_error(
         self,
-        error_factory: Callable[[str, Optional[bytes]], pyarrow.flight.FlightError],
+        error_factory: Callable[[str, bytes | None], pyarrow.flight.FlightError],
     ) -> pyarrow.flight.FlightError:
         """
         Uses the provided error factory - which can be for example the FlightError subclass, to create an
@@ -221,7 +221,7 @@ class ErrorInfo:
         """
         try:
             _json = orjson.loads(val)
-            body: Optional[bytes] = base64.b64decode(_json["body"]) if _json.get("body") is not None else None
+            body: bytes | None = base64.b64decode(_json["body"]) if _json.get("body") is not None else None
 
             return ErrorInfo(
                 msg=_json.get("msg"),
@@ -283,7 +283,7 @@ class ErrorInfo:
     def for_exc(
         code: int,
         e: BaseException,
-        extra_msg: Optional[str] = None,
+        extra_msg: str | None = None,
         include_traceback: bool = True,
     ) -> "ErrorInfo":
         """
@@ -314,7 +314,7 @@ class ErrorInfo:
             msg = f"{extra_msg}: {msg}"
 
         if include_traceback:
-            detail: Optional[str] = "".join(traceback.format_exception(None, e, e.__traceback__))
+            detail: str | None = "".join(traceback.format_exception(None, e, e.__traceback__))
         else:
             detail = None
 
@@ -362,9 +362,9 @@ class ErrorInfo:
 
     @staticmethod
     def poll(
-        flight_info: Optional[pyarrow.flight.FlightInfo] = None,
-        retry_descriptor: Optional[pyarrow.flight.FlightDescriptor] = None,
-        cancel_descriptor: Optional[pyarrow.flight.FlightDescriptor] = None,
+        flight_info: pyarrow.flight.FlightInfo | None = None,
+        retry_descriptor: pyarrow.flight.FlightDescriptor | None = None,
+        cancel_descriptor: pyarrow.flight.FlightDescriptor | None = None,
     ) -> pyarrow.flight.FlightTimedOutError:
         """
         Convenience factory that creates FlightTimedOut error with POLL error code and `RetryInfo` which
@@ -402,16 +402,16 @@ class RetryInfo:
 
     def __init__(
         self,
-        flight_info: Optional[pyarrow.flight.FlightInfo] = None,
-        retry_descriptor: Optional[pyarrow.flight.FlightDescriptor] = None,
-        cancel_descriptor: Optional[pyarrow.flight.FlightDescriptor] = None,
+        flight_info: pyarrow.flight.FlightInfo | None = None,
+        retry_descriptor: pyarrow.flight.FlightDescriptor | None = None,
+        cancel_descriptor: pyarrow.flight.FlightDescriptor | None = None,
     ) -> None:
         self._flight_info = flight_info
         self._retry_descriptor = retry_descriptor
         self._cancel_descriptor = cancel_descriptor
 
     @property
-    def flight_info(self) -> Optional[pyarrow.flight.FlightInfo]:
+    def flight_info(self) -> pyarrow.flight.FlightInfo | None:
         """
         FlightInfo available at the time of the poll timeout. The information
         may be incomplete. The full FlightInfo is built in cumulative fashion - the subsequent
@@ -425,7 +425,7 @@ class RetryInfo:
         return self._flight_info
 
     @property
-    def retry_descriptor(self) -> Optional[pyarrow.flight.FlightDescriptor]:
+    def retry_descriptor(self) -> pyarrow.flight.FlightDescriptor | None:
         """
         Returns descriptor that the client should use to retry the GetFlightInfo call
         in order to see whether the command has completed.
@@ -437,7 +437,7 @@ class RetryInfo:
         return self._retry_descriptor
 
     @property
-    def cancel_descriptor(self) -> Optional[pyarrow.flight.FlightDescriptor]:
+    def cancel_descriptor(self) -> pyarrow.flight.FlightDescriptor | None:
         """
         Returns descriptor that the client can use to cancel the command that is
         in progress.

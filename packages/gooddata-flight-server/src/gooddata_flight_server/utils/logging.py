@@ -5,7 +5,7 @@ Logging configuration helper functions
 
 import os
 from logging.config import fileConfig
-from typing import Any, Optional, Union
+from typing import Any, Union
 
 import orjson
 import structlog
@@ -13,7 +13,7 @@ from opentelemetry import trace
 from structlog.typing import EventDict, WrappedLogger
 
 
-def _resolve_config(logging_ini: str, for_module: Optional[str]) -> str:
+def _resolve_config(logging_ini: str, for_module: str | None) -> str:
     if os.path.isabs(logging_ini):
         return logging_ini
     else:
@@ -47,7 +47,7 @@ class _OtelTraceContextInjector:
 
     __slots__ = ("_trace_id_key", "_span_id_key", "_parent_span_id_key")
 
-    def __init__(self, trace_ctx_keys: Optional[dict[str, str]] = None) -> None:
+    def __init__(self, trace_ctx_keys: dict[str, str] | None = None) -> None:
         _keys = trace_ctx_keys or {}
 
         # do one-time lookup of the actual key names under which the different
@@ -76,7 +76,7 @@ class _OtelTraceContextInjector:
         event_dict[self._trace_id_key] = f"{span_ctx.trace_id:x}"
         event_dict[self._span_id_key] = f"{span_ctx.span_id:x}"
 
-        parent_ctx: Optional[trace.SpanContext] = getattr(span, "parent", None)
+        parent_ctx: trace.SpanContext | None = getattr(span, "parent", None)
         if parent_ctx:
             event_dict[self._parent_span_id_key] = f"{parent_ctx.span_id:x}"
 
@@ -87,7 +87,7 @@ def _configure_structlog(
     dev_log: bool,
     event_key: str,
     add_trace_ctx: bool = False,
-    trace_ctx_keys: Optional[dict[str, str]] = None,
+    trace_ctx_keys: dict[str, str] | None = None,
 ) -> None:
     common_processors: list[Any] = [
         structlog.stdlib.filter_by_level,
@@ -129,9 +129,9 @@ def init_logging(
     logging_ini: str,
     dev_log: bool = False,
     event_key: str = "event",
-    for_module: Optional[str] = None,
+    for_module: str | None = None,
     add_trace_ctx: bool = False,
-    trace_ctx_keys: Optional[dict[str, str]] = None,
+    trace_ctx_keys: dict[str, str] | None = None,
 ) -> str:
     """
     Initializes python logging from the file on the provided path. If the path is absolute, then it is

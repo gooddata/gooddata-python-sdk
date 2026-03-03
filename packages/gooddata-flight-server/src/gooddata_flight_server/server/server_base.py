@@ -5,7 +5,7 @@ import platform
 import signal
 from abc import abstractmethod
 from threading import Condition, Thread
-from typing import Any, Optional
+from typing import Any
 
 import pyarrow
 import structlog
@@ -61,7 +61,7 @@ class ServerBase(abc.ABC):
         # main server notifies on this condition once all sub-services are started
         self._start_cond = Condition()
         self._started = False
-        self._startup_interrupted: Optional[Exception] = None
+        self._startup_interrupted: Exception | None = None
         self._stop = False
         self._abort = False
 
@@ -233,7 +233,7 @@ class ServerBase(abc.ABC):
         """
         return self._abort
 
-    def wait_for_start(self, timeout: Optional[float] = None) -> bool:
+    def wait_for_start(self, timeout: float | None = None) -> bool:
         """
         Waits until server and all its services are up and running.
 
@@ -253,7 +253,7 @@ class ServerBase(abc.ABC):
 
             return True
 
-    def wait_for_stop(self, timeout: Optional[float] = None) -> bool:
+    def wait_for_stop(self, timeout: float | None = None) -> bool:
         """
         Waits until the main server thread stops. If the server startup encountered error (and never started), then
         that error will be raised.

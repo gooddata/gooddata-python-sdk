@@ -1,7 +1,7 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import Optional, Union
+from typing import Union
 
 import gooddata_sdk as sdk
 from gooddata_sdk import Attribute, CatalogAttribute, Metric
@@ -26,7 +26,7 @@ def table_col_as_computable(col: ColumnDefinition) -> Union[Attribute, Metric]:
         )
 
 
-def column_data_type_for(attribute: Optional[CatalogAttribute]) -> str:
+def column_data_type_for(attribute: CatalogAttribute | None) -> str:
     """
     Determine what postgres type should be used for `attribute`.
 

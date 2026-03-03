@@ -1,6 +1,5 @@
 # (C) 2024 GoodData Corporation
 import pytest
-
 from gooddata_flexconnect.function.execution_context import (
     ExecutionContext,
     ExecutionContextAttribute,

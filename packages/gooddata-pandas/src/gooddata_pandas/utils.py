@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import hashlib
 import uuid
-from typing import Any, Optional, Union
+from typing import Any, Union
 
 import pandas
 from gooddata_sdk import (
@@ -74,7 +74,7 @@ def _val_to_hash(val: str) -> str:
     return hash_object.hexdigest()
 
 
-def _str_to_obj_id(val: DataItemDef) -> Optional[ObjId]:
+def _str_to_obj_id(val: DataItemDef) -> ObjId | None:
     """
     Convert a value to ObjId if it is in one of ["label", "metric", "fact"] types.
 
@@ -110,7 +110,7 @@ def _try_obj_id(val: DataItemDef) -> DataItemDef:
         return val
 
 
-def _to_item(val: DataItemDef, local_id: Optional[str] = None) -> Union[Attribute, Metric]:
+def _to_item(val: DataItemDef, local_id: str | None = None) -> Union[Attribute, Metric]:
     """
     Convert a DataItemDef value to either an Attribute or a Metric based on its type.
 
@@ -136,7 +136,7 @@ def _to_item(val: DataItemDef, local_id: Optional[str] = None) -> Union[Attribut
     raise ValueError(f"Invalid column_by item {val}")
 
 
-def _to_attribute(val: LabelItemDef, local_id: Optional[str] = None) -> Attribute:
+def _to_attribute(val: LabelItemDef, local_id: str | None = None) -> Attribute:
     """
     Convert a LabelItemDef value to an Attribute.
 
@@ -169,7 +169,7 @@ def _typed_attribute_value(ct_attr: CatalogAttribute, value: Any) -> Any:
     return converter.to_external_type(value)
 
 
-def make_pandas_index(index: dict) -> Optional[Union[Index, MultiIndex]]:
+def make_pandas_index(index: dict) -> Union[Index, MultiIndex] | None:
     """
     Create a pandas index or multi-index based on the input index dictionary.
 
