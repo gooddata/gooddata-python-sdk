@@ -40,6 +40,7 @@ class DbtModelMetaGoodDataColumnProps(Base):
     sort_column: str | None = None
     sort_direction: GoodDataSortDirection | None = None
     default_view: bool | None = None
+    geo_area_config: dict[str, dict[str, str]] | None = None
 
     @property
     def gooddata_ref_table_ldm_id(self) -> str | None:
@@ -392,17 +393,18 @@ class DbtModelTables:
         default_view = None
         for column in table.columns.values():
             if column.gooddata_is_label(attribute_column.name):
-                labels.append(
-                    {
-                        "id": column.ldm_id,
-                        "title": column.gooddata_ldm_title,
-                        "description": column.gooddata_ldm_description,
-                        "source_column": column.name,
-                        "source_column_data_type": column.data_type,
-                        "value_type": column.label_type,
-                        "tags": [table.gooddata_ldm_title] + column.tags,
-                    }
-                )
+                label_dict: dict = {
+                    "id": column.ldm_id,
+                    "title": column.gooddata_ldm_title,
+                    "description": column.gooddata_ldm_description,
+                    "source_column": column.name,
+                    "source_column_data_type": column.data_type,
+                    "value_type": column.label_type,
+                    "tags": [table.gooddata_ldm_title] + column.tags,
+                }
+                if column.meta.gooddata.geo_area_config is not None:
+                    label_dict["geo_area_config"] = column.meta.gooddata.geo_area_config
+                labels.append(label_dict)
                 if column.meta.gooddata.default_view:
                     default_view = {
                         "id": column.ldm_id,
