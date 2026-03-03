@@ -2,7 +2,7 @@
 import argparse
 import os
 import re
-from typing import Optional, Union
+from typing import Union
 from urllib.parse import quote_plus
 
 import attrs
@@ -97,7 +97,7 @@ class DbtOutputSnowflake(Base):
     database: str
     warehouse: str
     schema: str
-    query_tag: Optional[str] = None
+    query_tag: str | None = None
 
     def to_gooddata(self, data_source_id: str, schema_name: str) -> CatalogDataSourceSnowflake:
         return CatalogDataSourceSnowflake(
@@ -222,7 +222,7 @@ class DbtProfiles:
             # else do nothing, real value seems to be stored in dbt profile
 
     @staticmethod
-    def to_data_class(output: str, output_def: dict) -> Optional[DbtOutput]:
+    def to_data_class(output: str, output_def: dict) -> DbtOutput | None:
         db_type = output_def["type"]
         if db_type == "postgres":
             return DbtOutputPostgreSQL.from_dict({"name": output, **output_def})

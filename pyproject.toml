@@ -106,8 +106,6 @@ lint.ignore = [
     "SIM105",
     # ignore the rule (import from `collections.abc` instead: `Callable`)
     "UP035",
-    #  ignore the rule (use `X | Y` in `isinstance` call instead of `(X, Y)`)
-    "UP038",
 ]
 target-version = "py310"
 

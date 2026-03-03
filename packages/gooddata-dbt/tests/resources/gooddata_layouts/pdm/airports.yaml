@@ -23,6 +23,9 @@ columns:
     name: name
   - dataType: STRING
     isPrimaryKey: false
+    name: country
+  - dataType: STRING
+    isPrimaryKey: false
     name: state
 id: airports
 path:

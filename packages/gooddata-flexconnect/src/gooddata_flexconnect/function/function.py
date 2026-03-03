@@ -1,6 +1,5 @@
 #  (C) 2024 GoodData Corporation
 import abc
-from typing import Optional
 
 import pyarrow
 from gooddata_flight_server import ArrowData, ServerContext
@@ -37,17 +36,17 @@ class FlexConnectFunction(abc.ABC):
     for every call using the `create` method.
     """
 
-    Name: Optional[str] = None
+    Name: str | None = None
     """
     Function MUST define a unique name
     """
 
-    Schema: Optional[pyarrow.Schema] = None
+    Schema: pyarrow.Schema | None = None
     """
     Function MUST define schema describing its data.
     """
 
-    Metadata: Optional[dict] = None
+    Metadata: dict | None = None
     """
     Function MAY provide additional metadata about themselves. These then
     influence how the function is used by and called from GoodData Cloud & FlexQuery.
@@ -79,7 +78,7 @@ class FlexConnectFunction(abc.ABC):
     def call(
         self,
         parameters: dict,
-        columns: Optional[tuple[str, ...]],
+        columns: tuple[str, ...] | None,
         headers: dict[str, list[str]],
     ) -> ArrowData:
         """

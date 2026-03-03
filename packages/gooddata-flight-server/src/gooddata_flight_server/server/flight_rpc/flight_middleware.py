@@ -1,5 +1,5 @@
 #  (C) 2024 GoodData Corporation
-from typing import Any, Callable, Optional
+from typing import Any, Callable
 
 import opentelemetry.context as otelctx
 import opentelemetry.propagate as otelpropagate
@@ -46,7 +46,7 @@ class CallInfo(pyarrow.flight.ServerMiddleware):
         return self._headers
 
 
-OnEndCallbackFn: TypeAlias = Callable[[Optional[pyarrow.ArrowException]], Any]
+OnEndCallbackFn: TypeAlias = Callable[[pyarrow.ArrowException | None], Any]
 
 
 class CallFinalizer(pyarrow.flight.ServerMiddleware):
@@ -85,7 +85,7 @@ class CallFinalizer(pyarrow.flight.ServerMiddleware):
         """
         self._on_end.append(fun)
 
-    def call_completed(self, exception: Optional[pyarrow.lib.ArrowException]) -> None:
+    def call_completed(self, exception: pyarrow.lib.ArrowException | None) -> None:
         try:
             for fun in self._on_end:
                 fun(exception)
@@ -132,7 +132,7 @@ class OtelMiddleware(pyarrow.flight.ServerMiddleware):
         """
         return self._otel_ctx, self._otel_span
 
-    def call_completed(self, exception: Optional[pyarrow.lib.ArrowException]) -> None:
+    def call_completed(self, exception: pyarrow.lib.ArrowException | None) -> None:
         # OpenTelemetry context/span restore;
         #
         # this has to happen because this method is done from thread managed

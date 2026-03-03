@@ -1,6 +1,5 @@
 # (C) 2024 GoodData Corporation
 from collections.abc import Generator
-from typing import Optional
 
 import pyarrow.flight
 import structlog
@@ -104,7 +103,7 @@ class FlightServerMethods:
 
             rlock, data = result.acquire_data()
 
-            def _on_end(_: Optional[pyarrow.ArrowException]) -> None:
+            def _on_end(_: pyarrow.ArrowException | None) -> None:
                 """
                 Once the request that streams the data out is done, make sure
                 to release the read-lock. Single-use results are closed at

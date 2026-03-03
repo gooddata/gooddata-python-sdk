@@ -5,7 +5,7 @@ import json
 import os
 import typing
 from json import JSONDecodeError
-from typing import Any, Optional
+from typing import Any
 
 import vcr
 import yaml
@@ -88,8 +88,8 @@ def custom_before_request(request, headers_str: str = HEADERS_STR):
 def custom_before_response(
     response: dict[str, Any],
     headers_str: str = HEADERS_STR,
-    non_static_headers: Optional[list[str]] = None,
-    placeholder: Optional[list[str]] = None,
+    non_static_headers: list[str] | None = None,
+    placeholder: list[str] | None = None,
 ):
     if non_static_headers is None:
         non_static_headers = NON_STATIC_HEADERS

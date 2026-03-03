@@ -3,7 +3,7 @@ import abc
 import threading
 import uuid
 from concurrent.futures import CancelledError
-from typing import Optional, Union, final
+from typing import Union, final
 
 from gooddata_flight_server.tasks.task_error import TaskError
 from gooddata_flight_server.tasks.task_result import TaskResult
@@ -46,7 +46,7 @@ class Task(abc.ABC):
         self,
         cmd: bytes,
         cancellable: bool = True,
-        task_id: Optional[str] = None,
+        task_id: str | None = None,
     ):
         self._task_id = task_id or uuid.uuid4().hex
         self._cmd = cmd
@@ -142,7 +142,7 @@ class Task(abc.ABC):
         """
         return
 
-    def on_task_error(self, error: TaskError) -> Optional[TaskError]:
+    def on_task_error(self, error: TaskError) -> TaskError | None:
         """
         This method will be called when a task fails with and raises an exception. It
         will be called after executor creates an instance of TaskError from the

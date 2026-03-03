@@ -1,5 +1,4 @@
 #  (C) 2024 GoodData Corporation
-from typing import Optional
 
 import pyarrow
 from gooddata_flexconnect.function.function import FlexConnectFunction
@@ -13,7 +12,7 @@ class Fun1(FlexConnectFunction):
     def call(
         self,
         parameters: dict,
-        columns: Optional[tuple[str, ...]],
+        columns: tuple[str, ...] | None,
         headers: dict[str, list[str]],
     ) -> ArrowData:
         pass
@@ -28,7 +27,7 @@ class Fun2(FlexConnectFunction):
     def call(
         self,
         parameters: dict,
-        columns: Optional[tuple[str, ...]],
+        columns: tuple[str, ...] | None,
         headers: dict[str, list[str]],
     ) -> ArrowData:
         pass

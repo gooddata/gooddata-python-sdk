@@ -1,5 +1,5 @@
 #  (C) 2024 GoodData Corporation
-from typing import Any, Literal, Optional
+from typing import Any, Literal
 
 from typing_extensions import TypeAlias
 
@@ -36,13 +36,13 @@ _FlagsMapping: dict[_RetryFlagsLiteral, int] = {
 }
 
 
-def _get_flags(retry: Optional[_RetryFlagsLiteral] = None) -> int:
+def _get_flags(retry: _RetryFlagsLiteral | None = None) -> int:
     if retry is None:
         return 0x0
     return _FlagsMapping.get(retry, 0x0)
 
 
-def _error_code(code: int, retry: Optional[_RetryFlagsLiteral] = None) -> int:
+def _error_code(code: int, retry: _RetryFlagsLiteral | None = None) -> int:
     return _get_flags(retry) | code
 
 
